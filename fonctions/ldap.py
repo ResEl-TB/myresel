@@ -1,6 +1,5 @@
 from ldap3 import Server, Connection
-
-LDAP = 'ldap.resel.fr'
+from inscription.constantes import *
 
 def search(dn, query):
     """ Fonction pour rechercher dans le ldap une entrée particulière 

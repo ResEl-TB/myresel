@@ -13,9 +13,9 @@ class Inscription(TemplateView):
     On lui affiche le réglement intérieur, et un formulaire pour remplir les champs LDAP
     """
 
-    rech = ldap.search("ou=people,dc=maisel,dc=enst-bretagne,dc=fr" , "(&(uid=%s))" % self.request.user)
+    rech = ldap.search(DN_PEOPLE, "(&(uid=%s))" % self.request.user)
     if len(rech) != 0:
         # L'utilisateur est déjà présent dans le LDAP, on le redirige sur une page d'erreur
         pass
 
-    # On ajoute l'utilisateur
+    # On ajoute l'utilisateur au LDAP
