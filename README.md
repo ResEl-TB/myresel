@@ -21,3 +21,4 @@ TODO
 - gestion-personnes :
     - inscription dans le LDAP
 - internationalisation
+- page d'erreur générique
