@@ -17,5 +17,5 @@ from django.conf.urls import url
 from .views import *
 
 urlpatterns = [
-    url(r'^inscription$' Inscription.as_view(), name = 'inscription'),
+    url(r'^inscription$', Inscription.as_view(), name = 'inscription'),
 ]
