@@ -1,5 +1,5 @@
 from ldap3 import Server, Connection
-from inscription.constantes import *
+from myresel.constantes import *
 
 def search(dn, query):
     """ Fonction pour rechercher dans le ldap une entrée particulière 
