@@ -4,6 +4,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 
 from fonctions import ldap
+from .forms import *
 
 # Pour la traduction - sert à marquer les chaînes de caractères à traduire
 from django.utils.translation import ugettext_lazy as _
@@ -28,8 +29,9 @@ class Inscription(TemplateView):
             # L'utilisateur est déjà présent dans le LDAP, on le redirige sur une page d'erreur
             pass
 
-        # On affiche le règlement intérieur
-        return render(request, self.template_name)
+        # On affiche le règlement intérieur, et on demande les infos de l'utilisateur
+        form = self.form_class(request.user)
+        return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
         # On ajoute la personne au LDAP
