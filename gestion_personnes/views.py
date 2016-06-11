@@ -24,15 +24,15 @@ class Inscription(TemplateView):
         return super(Inscription, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        rech = ldap.search(DN_PEOPLE, '(&(uid=%s))' % request.user)
-        if len(rech) != 0:
-            # L'utilisateur est déjà présent dans le LDAP, on le redirige sur une page d'erreur
-            pass
-
-        # On affiche le règlement intérieur, et on demande les infos de l'utilisateur
-        form = self.form_class(request.user)
+        form = self.form_class()
         return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
-        # On ajoute la personne au LDAP
-        pass
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            # On process les données
+
+            return 
+
+        return render(request, self.template_name, {'form': form})
