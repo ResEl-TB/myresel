@@ -4,6 +4,7 @@ from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage
 from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 
 from fonctions import ldap, generic
 from .forms import *
@@ -64,6 +65,6 @@ class Inscription(TemplateView):
             )
             mail.send()
 
-            return HttpResponseRedirect(""" Insérer lien de redirection ici """)
+            return HttpResponseRedirect(reverse('home'))
 
         return render(request, self.template_name, {'form': form})
