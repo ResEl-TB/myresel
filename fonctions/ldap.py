@@ -8,21 +8,9 @@ def search(dn, query):
         - query : la recherche en elle-même (uid, host, ip, mac, etc.)
     """
 
+    res = False
     l = Connection(Server(LDAP, use_ssl = True), auto_bind = True)
-
-    # On effectue la recherche des machines actives sur Brest
-    l.search(dn, query)
-    res = l.entries
-    l.unbind()
-
-    # On retourne les résultats
-    return res
-
-def search_ecole(uid):
-    """ Cherche dans le LDAP école des infos sur les user """
-
-    l = Connection(Server(LDAP_ECOLE), auto_bind = True)
-    l.search(DN_ECOLE, '(&(uid=%s))' % uid, attributes = ['cn', 'mail'])
-    res = l.entries
+    if l.search(dn, query):
+        res = l.entries
     l.unbind()
     return res
