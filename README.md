@@ -26,3 +26,4 @@ TODO
 Pense-bête
 ==========
 - prendre en compte les messages d'erreur sur le template de la page d'accueil
+- dans la page d'ajout, checker en javascript si l'alias de la machine est valide et disponible
