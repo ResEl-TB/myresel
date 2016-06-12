@@ -83,7 +83,40 @@ class Ajout(TemplateView):
             network.update_all()
 
             messages.success(request, _("Votre machine a bien été ajoutée. Veuillez ré-initialiser votre connexion en débranchant/rebranchant le câble ou en vous déconnectant/reconnectant au Wi-Fi."))
-            return HttpResponseRedirect(reverse('home'))
+            return HttpResponseRedirect(reverse('news'))
+
+        return render(request, self.template_name, {'form': form})
+
+class AjoutManuel(TemplateView):
+    """ Vue appelée pour que l'utilisateur fasse une demande d'ajout de machine (PS4, Xboite, etc.) """
+
+    template_name = 'gestion_machines/ajout-manuel.html'
+    form_class = AjoutManuelForm
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(AjoutManuel, self).dispatch(*args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            # Envoi d'un mail à support
+            mail = EmailMessage(
+                subject = "Demande d'ajout d'une machine",
+                body = "L'utilisateur %(user)s souhaite ajouter une machine à son compte.\n\n MAC : %(mac)s\nDescription de la demande :\n%(desc)s" % {'user': request.user, 'mac': form.cleaned_data['mac'], 'desc': form.cleaned_data['description']},
+                from_email = "myresel@resel.fr",
+                reply_to = ["noreply@resel.fr"],
+                to = ["support@resel.fr"],
+            )
+            mail.send()
+
+            messages.success(request, _("Votre demande a été envoyée aux administrateurs. L'un d'eux vous contactera d'ici peu de temps."))
+            return HttpResponseRedirect(reverse('news'))
 
         return render(request, self.template_name, {'form': form})
 
@@ -97,5 +130,10 @@ class ChangementCampus(TemplateView):
         return super(ChangementCampus, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
+        # Mise à jour de la fiche LDAP
         ldap.update_campus(request.META['REMOTE_ADDR'])
+
+        # Re-boot des services DNS, DHCP et FW
+        network.update_all()
+
         return render(request, self.template_name)
