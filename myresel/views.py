@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
-from fonctions import ldap
+from fonctions import ldap, network
 
 # Create your views here.
 class Home(TemplateView):
@@ -12,6 +12,10 @@ class Home(TemplateView):
     template_name = 'myresel/home.html'
 
     def get(self, request, *args, **kwargs):
+        # On regarde déjà si l'ip est une ip interne ou pas
+        if not network.is_resel_ip(request.META['REMOTE_ADDR']):
+            return HttpResponseRedirect(reverse('news'))
+
         # On vérifie que la machine n'est pas desactivée.
         # Si oui, on bascule vers la page de réactivation
         status = ldap.get_status(request.META['REMOTE_ADDR'])
@@ -20,15 +24,15 @@ class Home(TemplateView):
             # La machine existe dans le LDAP
             if status == 'inactive':
                 # La machine est inactive
-                return HttpRespondeRedirect(reverse('gestion_machines:reactivation'))
+                return HttpResponseRedirect(reverse('gestion_machines:reactivation'))
 
             elif status == 'mauvais_campus':
                 # La machine n'est pas dans le bon campus
-                return HttpRespondeRedirect(reverse('gestion_machines:changement-campus'))
+                return HttpResponseRedirect(reverse('gestion_machines:changement-campus'))
 
             else:
                 # La machine est active, on affiche la page de news
-                return HttpRespondeRedirect(reverse('news'))
+                return HttpResponseRedirect(reverse('news'))
 
         """ La machine n'existe pas dans le LDAP, donc deux cas de figure :
             - l'utilisateur est nouveau, dans ce cas il faut l'ajouter
