@@ -22,3 +22,7 @@ TODO
     - inscription dans le LDAP
 - internationalisation
 - page d'erreur générique
+
+Pense-bête
+==========
+- prendre en compte les messages d'erreur sur le template de la page d'accueil
