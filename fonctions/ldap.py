@@ -1,6 +1,6 @@
 from ldap3 import Server, Connection
 from myresel.constantes import *
-import network
+from .network import *
 
 def search(dn, query, attr = None):
     """ Fonction pour rechercher dans le ldap une entrée particulière 
@@ -32,10 +32,10 @@ def get_status(ip):
     """
 
     # Identification du campus
-    campus = network.get_campus(ip)
+    campus = get_campus(ip)
 
     # Récupération de l'adresse mac associée à l'IP
-    mac = network.get_mac(ip)
+    mac = get_mac(ip)
 
     res = search(DN_MACHINES, '(&(macaddress=%s))' % mac, ['zone'])
     if res:
