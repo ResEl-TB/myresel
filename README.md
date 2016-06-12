@@ -18,6 +18,8 @@ Se connecter ensuite en localhost:8000 pour visualiser
 
 TODO
 ====
+- paiement
+- gestion du compte MyResEl de l'utilisateur
 - page 404
 - page 500
 - contact
