@@ -13,7 +13,7 @@ class Home(TemplateView):
     def get(self, request, *args, **kwargs):
         # On vérifie que la machine n'est pas desactivée.
         # Si oui, on bascule vers la page de réactivation
-        status = ldap.get_status(request.META['HTTP_X_FORWARDED_FOR'])
+        status = ldap.get_status(request.META['REMOTE_ADDR'])
 
         if status:
             # La machine existe dans le LDAP
