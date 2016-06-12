@@ -21,12 +21,12 @@ class Reactivation(TemplateView):
     def dispatch(self, *args, **kwargs):
         return super(Reactivation, self).dispatch(*args, **kwargs)
 
-	def get(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         ldap.reactivation(request.META['REMOTE_ADDR'])
         return render(request, self.template_name)
 
 class Ajout(TemplateView):
-	template_name = 'gestion_machines/ajout.html'
+    template_name = 'gestion_machines/ajout.html'
     form_class = AjoutForm
 
     @method_decorator(login_required)
@@ -84,7 +84,7 @@ class Ajout(TemplateView):
         return render(request, self.template_name, {'form': form})
 
 class ChangementCampus(TemplateView):
-	template_name = 'gestion_machines/changement-campus.html'
+    template_name = 'gestion_machines/changement-campus.html'
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
