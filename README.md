@@ -1,5 +1,12 @@
-Inscription.resel.fr
-====================
+my.resel.fr
+===========
+
+Paquets à installer
+-------------------
+- django
+
+Mise en marche
+--------------
 
 ```
 ./manage.py runserver
