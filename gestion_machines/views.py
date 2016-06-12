@@ -15,6 +15,8 @@ from fonctions import ldap, network
 
 # Create your views here.
 class Reactivation(TemplateView):
+    """ Vue appelée pour ré-activer une machine d'un utilisateur absent trop longtemps du campus """
+
     template_name = 'gestion_machines/reactivation.html'
 
     @method_decorator(login_required)
@@ -26,6 +28,8 @@ class Reactivation(TemplateView):
         return render(request, self.template_name)
 
 class Ajout(TemplateView):
+    """ Vue appelée pour l'ajout d'une nouvelle machine """
+
     template_name = 'gestion_machines/ajout.html'
     form_class = AjoutForm
 
@@ -84,6 +88,8 @@ class Ajout(TemplateView):
         return render(request, self.template_name, {'form': form})
 
 class ChangementCampus(TemplateView):
+    """ Vue appelée lorsque qu'une machine provient d'un campus différent """
+    
     template_name = 'gestion_machines/changement-campus.html'
 
     @method_decorator(login_required)
