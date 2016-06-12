@@ -4,6 +4,10 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
 from fonctions import ldap, network
+from .forms import *
+
+# Pour la traduction - sert à marquer les chaînes de caractères à traduire
+from django.utils.translation import ugettext_lazy as _
 
 # Create your views here.
 class Home(TemplateView):
@@ -46,3 +50,31 @@ class News(TemplateView):
     """ Vue appelée pour afficher les news au niveau du ResEl """
 
     template_name = 'myresel/news.html'
+
+class Contact(TemplateView):
+    """ Vue appelée pour contacter les admin en cas de soucis """
+
+    template_name = 'myresel/contact.html'
+    form_class = ContactForm
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            # Envoi d'un mail à support
+            mail = EmailMessage(
+                subject = "Message de la part d'un utilisateur",
+                body = "%(nom)s souhaite vous contacter\n\nChambre : %(chambre)s\nDemande :\n%(demande)s" % {'nom': form.cleaned_data['nom'], 'chambre': form.cleaned_data['chambre'], 'demande': form.cleaned_data['demande']},
+                from_email = "myresel@resel.fr",
+                reply_to = [form.cleaned_data['mail']],
+                to = ["support@resel.fr"],
+            )
+            mail.send()
+
+            messages.success(_("Votre demande a bien été envoyée aux administrateurs. L'un d'eux vous répondra d'ici peu."))
+            return HttpResponseRedirect(reverse('news'))
+        return render(request, self.template_name, {'form': form})
