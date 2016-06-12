@@ -27,7 +27,7 @@ class Home(TemplateView):
 
             else:
                 # La machine est active, on affiche la page d'accueil traditionnelle
-                return render(self.template_name)
+                return render(request, self.template_name)
 
         # La machine n'existe pas dans le LDAP, on renvoit vers la page d'ajout de machine
         return HttpRespondeRedirect(reverse('gestion_machines:ajout'))
