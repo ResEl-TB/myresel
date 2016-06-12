@@ -87,3 +87,36 @@ def reactivation(ip):
              {'zone': [(MODIFY_REPLACE, ['User', campus])]})
     l.unbind()
     update_all()
+
+def get_free_ip(low, high):
+    """ Récupère une IP libre pour une nouvelle machine à partir du LDAP """
+
+    rang = low - 1
+    again = True
+
+    while ((rang < high) and again):
+        rang += 1
+        item = 2
+
+        while ((item < 254) and again):
+            item +=1
+            if not search(DN_MACHINES, '(&(ipHostNumber={}.{}))'.format(rang, item)):
+                again = False
+
+    return "{}.{}".format(rang, item)
+
+def get_free_alias(uid):
+    """ Récupère un nom d'alias libre pour la machine """
+
+    again = True
+    alias = 'pc' + uid
+    i = 1
+
+    while again:
+        if not search(DN_MACHINES, '(|(host=%(alias)s)(hostalias=%(alias)s))' % {'alias': alias}):
+            again = False
+        else:
+            i += 1
+            alias = 'pc' + uid + str(i)
+
+    return alias
