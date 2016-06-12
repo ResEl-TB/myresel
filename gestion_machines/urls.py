@@ -19,5 +19,5 @@ from .views import *
 urlpatterns = [
     url(r'^réactivation$', Reactivation.as_view(), name = 'reactivation'),
     url(r'^ajout$', Ajout.as_view(), name = 'ajout'),
-    url(r'^changement-campus$', Campus.as_view(), name = 'changement-campus')
+    url(r'^changement-campus$', ChangementCampus.as_view(), name = 'changement-campus')
 ]
