@@ -53,3 +53,37 @@ def get_status(ip):
 
     # Machine inexistante dans le LDAP
     return False
+
+def update_campus(ip):
+    """ Modifie le LDAP pour attribuer le bon campus à la machine qui possède l'ip fournie """
+
+    CAMPUS = ['Brest', 'Rennes']
+
+    mac = get_mac(ip)
+    campus = get_campus(ip)
+    machine = search(DN_MACHINES, '(&(macaddress=%s))' % mac, ['zone', 'host'])[0]
+
+    # Récupération de l'ancien campus de la machine
+    for z in machine.zone:
+        if z.capitalize() in CAMPUS:
+            old_campus = z.capitalize()
+
+    # Update de la fiche LDAP
+    l = Connection(Server(LDAP, use_ssl = True), user = DN_ADMIN, password = PASSWD_ADMIN)
+    l.modify('host=%s,' % machine.host[0] + DN_MACHINES,
+             {'zone': [(MODIFY_REPLACE, ['User', campus])]})
+    l.unbind()
+    update_all()
+
+def reactivation(ip):
+    """ Modifie le LDAP pour réactiver la machine de l'utilisateur """
+
+    mac = get_mac(ip)
+    campus = get_campus(ip)
+    machine = search(DN_MACHINES, '(&(macaddress=%s))' % mac, ['host'])[0]
+
+    l = Connection(Server(LDAP, use_ssl = True), user = DN_ADMIN, password = PASSWD_ADMIN)
+    l.modify('host=%s,' % machine.host[0] + DN_MACHINES,
+             {'zone': [(MODIFY_REPLACE, ['User', campus])]})
+    l.unbind()
+    update_all()
