@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.contrib import messages
 
 from fonctions import ldap, generic, network
 from .forms import *
@@ -65,6 +66,7 @@ class Inscription(TemplateView):
             )
             mail.send()
 
+            messages.success(request, _("Vous êtes désormais inscrit au ResEl. Vous pouvez dès à présent inscrire votre machine."))
             return HttpResponseRedirect(reverse('home'))
 
         return render(request, self.template_name, {'form': form})
