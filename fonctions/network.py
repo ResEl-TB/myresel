@@ -1,4 +1,5 @@
 import subprocess
+import os
 
 def get_mac(ip):
     """ Fonction qui récupère l'addresse MAC associée à l'IP de l'utilisateur """
@@ -17,3 +18,9 @@ def get_campus(ip):
         return 'Rennes'
     else:
         return False
+
+def update_all():
+    """ Relance le DNS, le DHCP et le firewall """
+    os.system('ssh -t reloader@dynasty')
+    os.system('ssh -t reloader@saymyname')
+    os.system('ssh -t updatefirewall@zahia -p 2222')
