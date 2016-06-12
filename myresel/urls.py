@@ -24,5 +24,5 @@ urlpatterns = [
     url(r'^news$', News.as_view(), name = 'news'),
     url(r'^machines/', include('gestion_machines.urls', namespace = 'gestion-machines')),
     url(r'^personnes/', include('gestion_personnes.urls', namespace = 'gestion-personnes')),
-    url(r'^contact/', include('contact.urls', namespace = 'contact'))
+    url(r'^contact$', Contact.as_view(), name = 'contact')
 ]
