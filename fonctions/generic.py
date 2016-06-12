@@ -12,13 +12,6 @@ def get_year():
 
     return year
 
-def get_campus(ip):
-    """ Détermine le campus en fonction de l'ip de l'utilisateur """
-    if '172.22' in ip:
-        return 'Brest'
-    else:
-        return 'Rennes'
-
 def hash_to_passwd(password):
     """ Fourni un hash du passwd utilisateur pour le stocker dans le LDAP """
     salt = os.urandom(4)
