@@ -34,6 +34,7 @@ TODO
 
 Pense-bête
 ==========
-- prendre en compte les messages d'erreur sur le template de la page d'accueil (home)
+- prendre en compte les messages (error, success, info, etc.) sur le template de la page de news (page de base, sur laquelle tout est redirigé)
 - dans la page d'ajout, checker en javascript si l'alias de la machine est valide et disponible
 - dans la page d'ajout d'une personne, check en javascript si le pseudo choisi est valide et dispo
+- dans la page de demande d'ajout de machine, vérifier que la MAC est valide en javascript
