@@ -6,7 +6,7 @@ from django.core.mail import EmailMessage
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
-from fonctions import ldap, generic
+from fonctions import ldap, generic, network
 from .forms import *
 
 # Pour la traduction - sert à marquer les chaînes de caractères à traduire
@@ -44,7 +44,7 @@ class Inscription(TemplateView):
                 'anneeScolaire': '{}/{}'.format(year, year+1),
                 'dateInscr': time.strftime('%Y%m%d%H%M%S') + 'Z',
                 'objectClass': ['genericPerson','enstbPerson','reselPerson', 'maiselPerson'],
-                'campus': generic.get_campus(request.META['HTTP_X_FORWARDED_FOR']),
+                'campus': network.get_campus(request.META['HTTP_X_FORWARDED_FOR']),
                 'userPassword': generic.hash_passwd(form.cleaned_data['mot_de_passe']),
                 'ntPassword': generic.hash_to_ntpass(form.cleaned_data['mot_de_passe']),
                 'batiment': form.cleaned_data['batiment'],
