@@ -17,7 +17,10 @@ class Transaction(models.Model):
     total = models.FloatField()
     commentaire = models.TextField(blank = True, null = True)
 
-    def __init__(self, user, montant):
-        super().__init__()
-        self.utilisateur = models.CharField(default = user)
-        self.total = models.FloatField(default = montant)
+class Mensualisation(models.Model):
+    """ Modèle pour la gestion de la mensualisation """
+
+    utilisateur = models.CharField()
+    nb_m = models.IntegerField() # Nombre de mensualités à payer
+    nb_p = models.IntegerField(default = 0) # Nombre de mensualités payées
+    customer = models.IntegerField() # ID de l'objet customer associé à l'utilisateur
