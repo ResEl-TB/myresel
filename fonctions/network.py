@@ -24,3 +24,11 @@ def update_all():
     os.system('ssh -t reloader@dynasty')
     os.system('ssh -t reloader@saymyname')
     os.system('ssh -t updatefirewall@zahia -p 2222')
+
+def is_resel_ip(ip):
+    """ Check si l'IP est ResEl """
+
+    if '172.22' in ip or '172.23' in ip:
+        return True
+
+    return False
