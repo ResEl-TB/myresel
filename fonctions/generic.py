@@ -1,9 +1,10 @@
 import binascii, hashlib, os
 from base64 import encodestring
-from datetime import datetime
+from datetime import datetime, timedelta
 
 def get_year():
     """ Fonction qui calcule l'année scolaire en cours """
+
     year = datetime.now().year
     month = datetime.now().month
 
@@ -12,8 +13,16 @@ def get_year():
 
     return year
 
+def get_end_date(duree):
+    """ Fonction qui renvoie la date actuelle + la durée en jours """
+
+    date = datetime.now() + timedelta(days = duree)
+    return date.strftime('%d/%m/%Y')
+
+
 def hash_to_passwd(password):
     """ Fourni un hash du passwd utilisateur pour le stocker dans le LDAP """
+
     salt = os.urandom(4)
     h = hashlib.sha1(password.encode('utf-8'))
     h.update(salt)
@@ -21,4 +30,5 @@ def hash_to_passwd(password):
 
 def hash_to_ntpass(password):
     """ Fourni un hash du mdp pour correspondre avec le loggin over Wi-Fi """
+
     return binascii.hexlify(hashlib.new('md4', password.encode('utf-16le')).digest()).upper()
