@@ -50,7 +50,9 @@ class Inscription(View):
                 'ntPassword': generic.hash_to_ntpass(form.cleaned_data['mot_de_passe']),
                 'batiment': form.cleaned_data['batiment'],
                 'roomNumber': form.cleaned_data['chambre'],
-                'mobile': form.cleaned_data['telephone']
+                'mobile': form.cleaned_data['telephone'],
+                'cotiz': '0',
+                'endcotiz': '0'
             }
 
             # Ajout de la fiche au LDAP
