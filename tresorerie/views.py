@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import View, TemplateView
+from django.views.generic import View, ListView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
@@ -13,7 +13,7 @@ from .models import *
 from fonctions import ldap, generic
 
 # Create your views here.
-class Home(TemplateView):
+class Home(View):
     """ Vue index de la section paiement. C'est cette page qui gère le paiement d'un user """
 
     template_name = 'paiement/home.html'
@@ -134,7 +134,7 @@ class Home(TemplateView):
                 messages.error(_("Votre carte bancaire a été refusée, veuillez ré-essayer ou contacter un administrateur."))
                 return render(request, self.template_name)
 
-class Historique(View):
+class Historique(ListView):
     """ Vue qui affiche un historique des paiements de l'uitlisateur """
 
     template_name = 'paiement/historique.html'
@@ -142,3 +142,6 @@ class Historique(View):
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(Historique, self).dispatch(*args, **kwargs)
+
+    def get_queryset(self):
+        return Transaction.objects.using('admin').all().filter(utilisateur__exact = request.user)
