@@ -1,6 +1,7 @@
-from ldap3 import Server, Connection
+from ldap3 import Server, Connection, MODIFY_REPLACE
 from myresel.constantes import *
 from .network import *
+from .generic import get_year
 
 def search(dn, query, attr = None):
     """ Fonction pour rechercher dans le ldap une entrée particulière 
@@ -23,6 +24,7 @@ def add(dn, object_class, attributes):
     l = Connection(Server(LDAP, use_ssl = True), user = DN_ADMIN, password = PASSWD_ADMIN)
     l.add(dn, object_class, attributes)
     l.unbind()
+    network.update_all()
 
 def get_status(ip):
     """ Fonction pour trouver le status d'une machine :
@@ -120,3 +122,15 @@ def get_free_alias(uid):
             alias = 'pc' + uid + str(i)
 
     return alias
+
+def cotisation(user, duree):
+    """ On stocke dans le LDAP la date de fin de cotisation """
+
+    l = Connection(Server(LDAP, use_ssl = True), user = DN_ADMIN, password = PASSWD_ADMIN)
+    l.modify(
+        'uid=%s,' % user + DN_PEOPLE,
+        {'cotiz': [(MODIFY_REPLACE, [str(generic.get_year())])],
+         'endcotiz': [(MODIFY_REPLACE, [generic.get_end_date(duree)])]}
+    )
+    l.unbind()
+    update_all()
