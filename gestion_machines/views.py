@@ -79,9 +79,6 @@ class Ajout(View):
             # Ajout de la fiche au LDAP
             ldap.add(dn, object_class, attributes)
 
-            # Re-boot du DNS, DHCP et FW
-            network.update_all()
-
             messages.success(request, _("Votre machine a bien été ajoutée. Veuillez ré-initialiser votre connexion en débranchant/rebranchant le câble ou en vous déconnectant/reconnectant au Wi-Fi."))
             return HttpResponseRedirect(reverse('news'))
 
@@ -132,8 +129,5 @@ class ChangementCampus(View):
     def get(self, request, *args, **kwargs):
         # Mise à jour de la fiche LDAP
         ldap.update_campus(request.META['REMOTE_ADDR'])
-
-        # Re-boot des services DNS, DHCP et FW
-        network.update_all()
 
         return render(request, self.template_name)
