@@ -1,6 +1,15 @@
+# Config file
+
 # Python related stuff
 __pycache__
 *.pyc
 
 # Django related stuff
+db.sqlite3
+migrations/
 
+# Editor auto save file
+*~
+\#*\#
+.\#*
+.swp
