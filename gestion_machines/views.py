@@ -10,7 +10,7 @@ from django.core.mail import EmailMessage
 # Pour la traduction - sert à marquer les chaînes de caractères à traduire
 from django.utils.translation import ugettext_lazy as _
 
-from .forms import AjoutForm
+from .forms import *
 from fonctions import ldap, network
 
 # Create your views here.
