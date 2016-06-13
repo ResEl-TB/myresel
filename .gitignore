@@ -1,0 +1,6 @@
+# Python related stuff
+__pycache__
+*.pyc
+
+# Django related stuff
+
