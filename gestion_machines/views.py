@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.views.generic import View
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -14,7 +14,7 @@ from .forms import AjoutForm
 from fonctions import ldap, network
 
 # Create your views here.
-class Reactivation(TemplateView):
+class Reactivation(View):
     """ Vue appelée pour ré-activer une machine d'un utilisateur absent trop longtemps du campus """
 
     template_name = 'gestion_machines/reactivation.html'
@@ -27,7 +27,7 @@ class Reactivation(TemplateView):
         ldap.reactivation(request.META['REMOTE_ADDR'])
         return render(request, self.template_name)
 
-class Ajout(TemplateView):
+class Ajout(View):
     """ Vue appelée pour l'ajout d'une nouvelle machine """
 
     template_name = 'gestion_machines/ajout.html'
@@ -87,7 +87,7 @@ class Ajout(TemplateView):
 
         return render(request, self.template_name, {'form': form})
 
-class AjoutManuel(TemplateView):
+class AjoutManuel(View):
     """ Vue appelée pour que l'utilisateur fasse une demande d'ajout de machine (PS4, Xboite, etc.) """
 
     template_name = 'gestion_machines/ajout-manuel.html'
@@ -120,7 +120,7 @@ class AjoutManuel(TemplateView):
 
         return render(request, self.template_name, {'form': form})
 
-class ChangementCampus(TemplateView):
+class ChangementCampus(View):
     """ Vue appelée lorsque qu'une machine provient d'un campus différent """
     
     template_name = 'gestion_machines/changement-campus.html'

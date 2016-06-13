@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.views.generic import View
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage
@@ -14,7 +14,7 @@ from .forms import *
 from django.utils.translation import ugettext_lazy as _
 
 # Create your views here.
-class Inscription(TemplateView):
+class Inscription(View):
     """
     Vue appelée pour que l'user s'inscrive au ResEl
     C'est cette vue qui créer la fiche LDAP de l'user

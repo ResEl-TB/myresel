@@ -1,4 +1,4 @@
-from django.views.generic import TemplateView
+from django.views.generic import View, TemplateView
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
@@ -10,7 +10,7 @@ from .forms import *
 from django.utils.translation import ugettext_lazy as _
 
 # Create your views here.
-class Home(TemplateView):
+class Home(View):
     """ Vue d'index, qui se charge de rediriger l'utilisateur sur la bonne page """
 
     template_name = 'myresel/home.html'
@@ -51,7 +51,7 @@ class News(TemplateView):
 
     template_name = 'myresel/news.html'
 
-class Contact(TemplateView):
+class Contact(View):
     """ Vue appelée pour contacter les admin en cas de soucis """
 
     template_name = 'myresel/contact.html'
