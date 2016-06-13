@@ -47,3 +47,4 @@ Pense-bête
 - dans la page de demande d'ajout de machine, vérifier que la MAC est valide en javascript
 - système de questions déroulantes en javascript pour le montant de la cotiz à payer
 - script qui gère le paiement auto des autres mensualisations
+- générer des factures pour les paiements
