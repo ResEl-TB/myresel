@@ -85,10 +85,12 @@ DATABASES = {
     },
     'admin': {
         'NAME': 'admin',
-        'ENGINE': 'django.db.backends.mysql',
-        'USER': 'myresel',
-        'PASSWORD': 'yaRvQt5sIViQc1Gm',
-        'HOST': 'maia.adm.resel.fr'
+        #'ENGINE': 'django.db.backends.mysql',
+        #'USER': 'myresel',
+        #'PASSWORD': 'yaRvQt5sIViQc1Gm',
+        #'HOST': 'maia.adm.resel.fr'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3_admin'),
     }
 }
 
