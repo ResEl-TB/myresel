@@ -16,6 +16,7 @@ Paquets à installer
 -------------------
 - django
 - stripe
+- ldap
 
 ```
 pip3 -r requirements.txt
