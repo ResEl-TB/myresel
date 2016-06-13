@@ -84,7 +84,7 @@ class Home(View):
                 user.save(using = 'admin')
 
                 # On crée l'objet transaction dans l'interface de tréso admin
-                t = Transaction.create(
+                t = Transaction.objects.create(
                     utilisateur = request.user, 
                     total = montant, 
                     commentaire = "Paiement mensuel en %d fois - Mensualité %d/%d" % (nb_m, user.nb_p, nb_m)
@@ -119,7 +119,7 @@ class Home(View):
                 }
 
                 # On crée l'objet transaction dans l'interface de tréso admin
-                t = Transaction.create(utilisateur = request.user, total = montant, commentaire = COTISATIONS[montant][0])
+                t = Transaction.objects.create(utilisateur = request.user, total = montant, commentaire = COTISATIONS[montant][0])
                 t.save(using = 'admin')
 
                 # Récupération du type de produit et link du produit avec la transaction
