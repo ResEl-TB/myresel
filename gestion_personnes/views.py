@@ -24,6 +24,12 @@ class Inscription(View):
     form_class = InscriptionForm
 
     def get(self, request, *args, **kwargs):
+        # On vérifie que la machine est inconnue
+        status = ldap.get_status(request.META['REMOTE_ADDR'])
+        if status:
+            messages.info(_("Votre machine est déjà enregistrée."))
+            return HttpResponseRedirect(reverse('news'))
+            
         form = self.form_class()
         return render(request, self.template_name, {'form': form})
 
