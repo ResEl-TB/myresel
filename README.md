@@ -1,10 +1,26 @@
 my.resel.fr
 ===========
 
+Environnement de travail
+------------------------
+
+Définir un environnement virtuel python, avec python3.
+
+```
+pip3 install virtualenv
+virtualenv -p python3 .
+source bin/activate
+```
+
 Paquets à installer
 -------------------
 - django
 - stripe
+- ldap
+
+```
+pip3 -r requirements.txt
+```
 
 Mise en marche
 --------------
