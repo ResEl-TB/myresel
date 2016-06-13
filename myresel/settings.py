@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'gestion_machines',
     'gestion_personnes',
     'myresel',
-    'paiement',
+    'tresorerie',
 ]
 
 MIDDLEWARE_CLASSES = [
