@@ -4,6 +4,7 @@ my.resel.fr
 Paquets à installer
 -------------------
 - django
+- stripe
 
 Mise en marche
 --------------
@@ -32,6 +33,9 @@ TODO
     - inscription machine
 - gestion-personnes :
     - inscription dans le LDAP
+- tresorerie :
+    - historique des transactions de l'user
+    - paiement en ligne de la cotiz
 - internationalisation
 
 Pense-bête
@@ -41,3 +45,5 @@ Pense-bête
 - dans la page d'ajout, checker en javascript si l'alias de la machine est valide et disponible
 - dans la page d'ajout d'une personne, check en javascript si le pseudo choisi est valide et dispo
 - dans la page de demande d'ajout de machine, vérifier que la MAC est valide en javascript
+- système de questions déroulantes en javascript pour le montant de la cotiz à payer
+- script qui gère le paiement auto des autres mensualisations
