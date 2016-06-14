@@ -4,7 +4,7 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 
 class AjoutForm(forms.Form):
-    alias = forms.CharField(label = _("Alias de la machine"), required = False)
+    alias = forms.CharField(label = _("Alias de la machine"), required = False, widget = forms.TextInput(attrs = {'class': 'form-control'}))
     
 class AjoutManuelForm(forms.Form):
     mac = forms.CharField(label = _("Adresse MAC de la machine"), widget = forms.TextInput(attrs = {'class': 'form-control', 'placeholder': 'xx:xx:xx:xx:xx:xx'}))
