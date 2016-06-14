@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block titre %}{% trans "Changement de campus" %}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">{% trans "Changement de campus" %}</h1>
+            <p>{% blocktrans %}Votre machine a été détectée comme provenant d'un campus différent de celui-ci. Sa localisation a été mise à jour automatiquement, mais vous devez ré-initialiser votre connexion.{% endblocktrans %}</p>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+{% endblock %}
