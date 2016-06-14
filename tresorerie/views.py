@@ -144,4 +144,4 @@ class Historique(ListView):
         return super(Historique, self).dispatch(*args, **kwargs)
 
     def get_queryset(self):
-        return Transaction.objects.using('admin').all().filter(utilisateur__exact = request.user)
+        return Transaction.objects.using('admin').all().filter(utilisateur__exact = self.request.user)
