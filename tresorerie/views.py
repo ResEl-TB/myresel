@@ -16,7 +16,7 @@ from fonctions import ldap, generic
 class Home(View):
     """ Vue index de la section paiement. C'est cette page qui gère le paiement d'un user """
 
-    template_name = 'paiement/home.html'
+    template_name = 'tresorerie/home.html'
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
@@ -137,7 +137,7 @@ class Home(View):
 class Historique(ListView):
     """ Vue qui affiche un historique des paiements de l'uitlisateur """
 
-    template_name = 'paiement/historique.html'
+    template_name = 'tresorerie/historique.html'
     context_object_name = 'transactions'
 
     @method_decorator(login_required)
