@@ -24,6 +24,18 @@ class Reactivation(View):
         return super(Reactivation, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
+        # Vérification que la machine est bien à l'user
+        machine = search(DN_MACHINES, '(&(macaddress=%s))' % network.get_mac(request.META['REMOTE_ADDR']), ['uidproprio'])[0]
+        if request.user not in machine.uidproprio[0]:
+            messages.error(_("Cette machine n'est pas censée vous appartenir. Veuillez contacter un administrateur afin de la transférer."))
+            return HttpResponseRedirect(reverse('news'))
+            
+        # Vérification que la machine est bien dans le mauvais campus
+        status = ldap.get_status(request.META['REMOTE_ADDR'])
+        if status != 'mauvais_campus':
+            messages.info(_("Votre machine n'a pas besoin d'être ré-activée."))
+            return HttpResponseRedirect(reverse('news'))
+
         ldap.reactivation(request.META['REMOTE_ADDR'])
         return render(request, self.template_name)
 
