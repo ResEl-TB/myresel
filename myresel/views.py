@@ -29,17 +29,17 @@ class Home(View):
             # La machine existe dans le LDAP
             if status == 'inactive':
                 # La machine est inactive
-                return HttpResponseRedirect(reverse('gestion_machines:reactivation'))
+                return HttpResponseRedirect(reverse('gestion-machines:reactivation'))
 
             elif status == 'mauvais_campus':
                 # La machine n'est pas dans le bon campus
-                return HttpResponseRedirect(reverse('gestion_machines:changement-campus'))
+                return HttpResponseRedirect(reverse('gestion-machines:changement-campus'))
 
             else:
                 # La machine est active, on affiche la page de news
                 return HttpResponseRedirect(reverse('news'))
 
-        return HttpResponseRedirect(reverse('gestion_machines:ajout'))
+        return HttpResponseRedirect(reverse('gestion-machines:ajout'))
 
 class News(ListView):
     """ Vue appelée pour afficher les news au niveau du ResEl """
