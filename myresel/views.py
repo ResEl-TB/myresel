@@ -1,10 +1,11 @@
-from django.views.generic import View, TemplateView
+from django.views.generic import View, ListView
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
 from fonctions import ldap, network
 from .forms import *
+from .models import *
 
 # Pour la traduction - sert à marquer les chaînes de caractères à traduire
 from django.utils.translation import ugettext_lazy as _
@@ -46,10 +47,14 @@ class Home(View):
         """
         return render(request, self.template_name)
 
-class News(TemplateView):
+class News(ListView):
     """ Vue appelée pour afficher les news au niveau du ResEl """
 
     template_name = 'myresel/news.html'
+    context_object_name = 'derniers_billets'
+
+    def get_queryset(self):
+        return Billet.objects.all().order_by('-id')[:5]
 
 class Contact(View):
     """ Vue appelée pour contacter les admin en cas de soucis """
