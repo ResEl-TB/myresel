@@ -1,4 +1,4 @@
-from django.views.generic import View, ListView
+from django.views.generic import View, ListView, DetailView
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
