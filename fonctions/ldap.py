@@ -30,6 +30,7 @@ def get_status(ip):
     """ Fonction pour trouver le status d'une machine :
         - active
         - inactive
+        - mauvais campus
         - inexistante
     """
 
