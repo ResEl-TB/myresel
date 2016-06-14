@@ -66,26 +66,34 @@
                         </li>
 
                         {% if request.user.is_authenticated %}
-                        <!-- Gestion Machines -->
+                        <!-- Gestion du compte de l'user -->
                         <li>
-                            <a href=""><b><i class="fa fa-laptop fa-fw" aria-hidden="true"></i> Gérer mes machines</b></a>
+                            <a href=""><b><i class="fa fa-user fa-fw" aria-hidden="true"></i> Gérer mon compte</b></a>
                             <ul class="nav nav-second-level">
+
+                                <!-- Gestion des machines -->
                                 <li>
-                                    <a href="{% url 'gestion-machines:reactivation' %}">Réactiver cette machine</a>
+                                    <a href=""><i class="fa fa-laptop fa-fw" aria-hidden="true"></i> Gérer mes machines</a>
+                                    <ul class="nav nav-third-level">
+                                        <li>
+                                            <a href="{% url 'gestion-machines:reactivation' %}"><i>Réactiver cette machine</i></a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'gestion-machines:ajout' %}"><i>Ajouter cette machine</i></a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'gestion-machines:ajout-manuel' %}"><i>Ajouter une machine manuellement</i></a>
+                                        </li>
+                                    </ul>
                                 </li>
+
+                                <!-- Paiements -->
                                 <li>
-                                    <a href="{% url 'gestion-machines:ajout' %}">Ajouter cette machine</a>
+                                    <a href="{% url 'tresorerie:historique' %}"><i class="fa fa-money fa-fw" aria-hidden="true"></i> Historique de mes paiements</a>
                                 </li>
-                                <li>
-                                    <a href="{% url 'gestion-machines:ajout-manuel' %}">Ajouter une machine manuellement</a>
-                                </li>
+
                             </ul>
                             <!-- /.nav-second-level -->
-                        </li>
-
-                        <!-- Paiements -->
-                        <li>
-                            <a href="{% url 'tresorerie:historique' %}"><b><i class="fa fa-money fa-fw" aria-hidden="true"></i> Historique de mes paiements</b></a>
                         </li>
                         {% endif %}
                     </ul>
