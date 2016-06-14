@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block titre %}{% trans "Erreur interne" %}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">{% trans "Erreur interne" %}</h1>
+            <div class="col-lg-12 text-center"><a type="button" href="{% url 'home' %}">{% trans "Retour à la page d'accueil" %}</a></div>
+            <div class="col-lg-12 text-center">
+                <p>{% blocktrans %}Une erreur s'est produite. Cela ne devrait pas se produire... Si le problème persiste, contactez un administrateur.{% endblocktrans %}</p>
+                <img style="width: 80%; height: auto;" class="img-responsive" src="{% static 'images/server_error.png' %}"/>
+            </div>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+{% endblock %}

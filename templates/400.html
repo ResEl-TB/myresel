@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block titre %}{% trans "Erreur de syntaxe" %}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">{% trans "Erreur de syntaxe" %}</h1>
+            <div class="col-lg-12 text-center"><a type="button" href="{% url 'home' %}">{% trans "Retour à la page d'accueil" %}</a></div>
+            <div class="col-lg-12 text-center">
+                <p>{% blocktrans %}Une erreur s'est produite dans la requête de la page. Veuillez ré-essayer.{% endblocktrans %}</p>
+                <img style="width: 80%; height: auto;" class="img-responsive" src="{% static 'images/bad_request.png' %}"/>
+            </div>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+{% endblock %}

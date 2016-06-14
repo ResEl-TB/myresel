@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib.auth import views as auth_views
 from django.contrib import admin
+from django.conf.urls import handler400, handler403, handler404, handler500
 from .views import *
 
 urlpatterns = [
@@ -29,3 +30,8 @@ urlpatterns = [
     url(r'^paiement/', include('tresorerie.urls', namespace = 'tresorerie')),
     url(r'^contact$', Contact.as_view(), name = 'contact')
 ]
+
+handler400 = 'myresel.error_views.bad_request'
+handler403 = 'myresel.error_views.permission_denied'
+handler404 = 'myresel.error_views.page_not_found'
+handler500 = 'myresel.error_views.server_error'
