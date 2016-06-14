@@ -12,6 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from .forms import *
 from fonctions import ldap, network
+from myresel.constantes import DN_MACHINES, DN_PEOPLE
 
 # Create your views here.
 class Reactivation(View):
@@ -25,7 +26,7 @@ class Reactivation(View):
 
     def get(self, request, *args, **kwargs):
         # Vérification que la machine est bien à l'user
-        machine = search(DN_MACHINES, '(&(macaddress=%s))' % network.get_mac(request.META['REMOTE_ADDR']), ['uidproprio'])[0]
+        machine = ldap.search(DN_MACHINES, '(&(macaddress=%s))' % network.get_mac(request.META['REMOTE_ADDR']), ['uidproprio'])[0]
         if request.user not in machine.uidproprio[0]:
             messages.error(_("Cette machine n'est pas censée vous appartenir. Veuillez contacter un administrateur afin de la transférer."))
             return HttpResponseRedirect(reverse('news'))
