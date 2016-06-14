@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
+{% block titre %}{% trans "Connexion" %}{% endblock %}
+
 {% block content %}
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">{% trans "Connection requise" %}</h1>
+        <h1 class="page-header">{% trans "Connexion requise" %}</h1>
         <form class="form col-lg-8 col-lg-offset-2 text-center" action="/login/" method="post">
         {% csrf_token %}
         {% if next %}
@@ -22,8 +24,10 @@
                 <input type="password" class="form-control" name="password" placeholder="{% trans 'Mot de passe' %}">
             </div>
         </div>
-        <div class="form-group">
-            <input type="submit" class="btn btn-info" value="{% trans 'Se connecter' %}">
+        <div class="btn-group" role="button" aria-label="login">
+            <button type="submit" class="btn btn-info">{% trans 'Se connecter' %}</button>
+            <button type="button" class="btn btn-default disabled">{% trans "OU" %}</button>
+            <button class="btn btn-info"><a style="color: white;" href="{% url 'gestion-personnes:inscription' %}">{% trans "Créer un compte" %}</a></button>
         </div>
         </form>
     </div>
