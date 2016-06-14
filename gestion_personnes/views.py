@@ -24,12 +24,6 @@ class Inscription(View):
     form_class = InscriptionForm
 
     def get(self, request, *args, **kwargs):
-        # On vérifie que la machine est inconnue
-        status = ldap.get_status(request.META['REMOTE_ADDR'])
-        if status:
-            messages.info(_("Votre machine est déjà enregistrée."))
-            return HttpResponseRedirect(reverse('news'))
-            
         form = self.form_class()
         return render(request, self.template_name, {'form': form})
 
@@ -58,7 +52,7 @@ class Inscription(View):
                 'roomNumber': form.cleaned_data['chambre'],
                 'mobile': form.cleaned_data['telephone'],
                 'cotiz': '0',
-                'endcotiz': '0'
+                'endInternet': '0/0/0'
             }
 
             # Ajout de la fiche au LDAP
