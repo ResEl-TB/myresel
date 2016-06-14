@@ -39,13 +39,7 @@ class Home(View):
                 # La machine est active, on affiche la page de news
                 return HttpResponseRedirect(reverse('news'))
 
-        """ La machine n'existe pas dans le LDAP, donc deux cas de figure :
-            - l'utilisateur est nouveau, dans ce cas il faut l'ajouter
-            - la machine est inconnue
-
-            La page affichée permet à l'utilisateur de choisir s'il doit s'inscrire lui ou sa machine
-        """
-        return render(request, self.template_name)
+        return HttpResponseRedirect(reverse('gestion_machines:ajout'))
 
 class News(ListView):
     """ Vue appelée pour afficher les news au niveau du ResEl """
