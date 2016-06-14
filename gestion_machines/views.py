@@ -27,7 +27,7 @@ class Reactivation(View):
     def get(self, request, *args, **kwargs):
         # Vérification que la machine est bien à l'user
         machine = ldap.search(DN_MACHINES, '(&(macaddress=%s))' % network.get_mac(request.META['REMOTE_ADDR']), ['uidproprio'])[0]
-        if request.user not in machine.uidproprio[0]:
+        if str(request.user) not in machine.uidproprio[0]:
             messages.error(_("Cette machine n'est pas censée vous appartenir. Veuillez contacter un administrateur afin de la transférer."))
             return HttpResponseRedirect(reverse('news'))
             
@@ -69,9 +69,9 @@ class Ajout(View):
             # Gestion du nom de l'host
             if form.cleaned_data['alias'] != '':
                 host = form.cleaned_data['alias']
-                alias = ldap.get_free_alias(request.user)
+                alias = ldap.get_free_alias(str(request.user))
             else:
-                host = ldap.get_free_alias(request.user)
+                host = ldap.get_free_alias(str(request.user))
                 alias = False
 
             # Mise en forme du DN et des attributs de la fiche LDAP
@@ -79,7 +79,7 @@ class Ajout(View):
             object_class = ['reselMachine']
             attributes = {
                 'host': host,
-                'uidproprio': 'uid=%s,' % request.user + DN_PEOPLE,
+                'uidproprio': 'uid=%s,' % str(request.user) + DN_PEOPLE,
                 'iphostnumber': ldap.get_free_ip(200,223),
                 'macaddress': network.get_mac(request.META['REMOTE_ADDR']),
                 'zone': ['User', network.get_campus(request.META['REMOTE_ADDR'])],
@@ -118,7 +118,7 @@ class AjoutManuel(View):
             # Envoi d'un mail à support
             mail = EmailMessage(
                 subject = "Demande d'ajout d'une machine",
-                body = "L'utilisateur %(user)s souhaite ajouter une machine à son compte.\n\n MAC : %(mac)s\nDescription de la demande :\n%(desc)s" % {'user': request.user, 'mac': form.cleaned_data['mac'], 'desc': form.cleaned_data['description']},
+                body = "L'utilisateur %(user)s souhaite ajouter une machine à son compte.\n\n MAC : %(mac)s\nDescription de la demande :\n%(desc)s" % {'user': str(request.user), 'mac': form.cleaned_data['mac'], 'desc': form.cleaned_data['description']},
                 from_email = "myresel@resel.fr",
                 reply_to = ["noreply@resel.fr"],
                 to = ["support@resel.fr"],
