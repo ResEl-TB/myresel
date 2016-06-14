@@ -6,6 +6,7 @@ __pycache__
 
 # Django related stuff
 migrations/
+uwsgi.*
 
 # Editor auto save file
 .DS_Store
