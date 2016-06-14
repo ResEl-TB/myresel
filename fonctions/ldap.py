@@ -21,7 +21,7 @@ def search(dn, query, attr = None):
 def add(dn, object_class, attributes):
     """ Fonction qui ajoute une fiche au LDAP """
 
-    l = Connection(Server(LDAP, use_ssl = True), user = DN_ADMIN, password = PASSWD_ADMIN).bind()
+    l = Connection(Server(LDAP, use_ssl = True), user = DN_ADMIN, password = PASSWD_ADMIN, auto_bind = True)
     l.add(dn, object_class, attributes)
     l.unbind()
     network.update_all()
@@ -72,7 +72,7 @@ def update_campus(ip):
             old_campus = z.capitalize()
 
     # Update de la fiche LDAP
-    l = Connection(Server(LDAP, use_ssl = True), user = DN_ADMIN, password = PASSWD_ADMIN).bind()
+    l = Connection(Server(LDAP, use_ssl = True), user = DN_ADMIN, password = PASSWD_ADMIN, auto_bind = True)
     l.modify('host=%s,' % machine.host[0] + DN_MACHINES,
              {'zone': [(MODIFY_REPLACE, ['User', campus])]})
     l.unbind()
@@ -85,7 +85,7 @@ def reactivation(ip):
     campus = get_campus(ip)
     machine = search(DN_MACHINES, '(&(macaddress=%s))' % mac, ['host'])[0]
 
-    l = Connection(Server(LDAP, use_ssl = True), user = DN_ADMIN, password = PASSWD_ADMIN).bind()
+    l = Connection(Server(LDAP, use_ssl = True), user = DN_ADMIN, password = PASSWD_ADMIN, auto_bind = True)
     l.modify('host=%s,' % machine.host[0] + DN_MACHINES,
              {'zone': [(MODIFY_REPLACE, ['User', campus])]})
     l.unbind()
@@ -127,7 +127,7 @@ def get_free_alias(uid):
 def cotisation(user, duree):
     """ On stocke dans le LDAP la date de fin de cotisation """
 
-    l = Connection(Server(LDAP, use_ssl = True), user = DN_ADMIN, password = PASSWD_ADMIN)
+    l = Connection(Server(LDAP, use_ssl = True), user = DN_ADMIN, password = PASSWD_ADMIN, auto_bind = True)
     l.modify(
         'uid=%s,' % user + DN_PEOPLE,
         {'cotiz': [(MODIFY_REPLACE, [str(generic.get_year())])],
