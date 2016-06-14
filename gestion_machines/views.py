@@ -31,9 +31,9 @@ class Reactivation(View):
             messages.error(_("Cette machine n'est pas censée vous appartenir. Veuillez contacter un administrateur afin de la transférer."))
             return HttpResponseRedirect(reverse('news'))
             
-        # Vérification que la machine est bien dans le mauvais campus
+        # Vérification que la machine est bien désactivée
         status = ldap.get_status(request.META['REMOTE_ADDR'])
-        if status != 'mauvais_campus':
+        if status != 'inactive':
             messages.info(_("Votre machine n'a pas besoin d'être ré-activée."))
             return HttpResponseRedirect(reverse('news'))
 
@@ -58,7 +58,7 @@ class Ajout(View):
 
         # La machine est déjà inscrite, on redirige sur la page d'accueil
         messages.error(request, _("Cette machine est déjà enregistrée sur notre réseau."))
-        return HttpResponseRedirect(reverse('home'))
+        return HttpResponseRedirect(reverse('news'))
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
@@ -140,7 +140,13 @@ class ChangementCampus(View):
         return super(ChangementCampus, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        # Mise à jour de la fiche LDAP
-        ldap.update_campus(request.META['REMOTE_ADDR'])
+        # Vérification du statut de la machine dans le LDAP
+        if ldap.get_status(request.META['REMOTE_ADDR']) == 'mauvais_campus':
+            # Mise à jour de la fiche LDAP
+            ldap.update_campus(request.META['REMOTE_ADDR'])
 
-        return render(request, self.template_name)
+            return render(request, self.template_name)
+
+        # La machine est déjà dans le bon campus, on redirige sur la page d'accueil
+        messages.info(request, _("Cette machine est déjà enregistrée comme étant dans le bon campus."))
+        return HttpResponseRedirect(reverse('news'))
