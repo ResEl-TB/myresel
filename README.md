@@ -39,26 +39,24 @@ TODO
 - gestion du compte MyResEl de l'utilisateur
 - page 404
 - page 500
-- contact
+- [OK] contact
 - myresel :
-    - news
-    - home
+    - [OK] news
+    - [OK] home
 - gestion-machines :
-    - reactivation
-    - changement de campus
+    - [OK] ré-activation
+    - [OK] changement de campus
     - inscription machine
 - gestion-personnes :
     - inscription dans le LDAP
-- tresorerie :
+- trésorerie :
     - historique des transactions de l'user
     - paiement en ligne de la cotiz
 - internationalisation
 
 Pense-bête
 ==========
-- prendre en compte les messages (error, success, info, etc.) sur le template de la page de news (page de base, sur laquelle tout est redirigé)
-- prise en compte de ces messages aussi sur la page Home
-- dans la page d'ajout, checker en javascript si l'alias de la machine est valide et disponible
+- [OK] prendre en compte les messages (error, success, info, etc.) sur le template de la page de news (page de base, sur laquelle tout est redirigé)
 - dans la page d'ajout d'une personne, check en javascript si le pseudo choisi est valide et dispo
 - dans la page de demande d'ajout de machine, vérifier que la MAC est valide en javascript
 - système de questions déroulantes en javascript pour le montant de la cotiz à payer
