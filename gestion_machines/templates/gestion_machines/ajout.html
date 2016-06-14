@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block titre %}{% trans "Ajout de machine" %}{% endblock %}
+
+{% block css %}<link href="{% static 'jquery/jquery-ui.min.css' %}" rel="Stylesheet"></link>{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">{% trans "Ajout de votre machine" %}</h1>
+            <p>{% blocktrans %}Votre machine est nouvelle sur notre réseau. Il vous faut l'enregistrer pour avoir accès à Internet. Vous pouvez choisir de lui attribuer un nom, ou simplement laisser le champ vide afin d'en obtenir un automatiquement.{% endblocktrans %}</p>
+            <form action="" method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                <fieldset class="form-group">
+                    <label>{{ field.label }}</label>
+                    {{ field }}
+                </fieldset>
+                {% endfor %}
+                <div class="form-group text-center">
+                    <input id="bouton" type="submit" class="btn btn-info" value="{% trans 'Inscrire ma machine' %}">
+                </div>
+            </form>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+{% endblock %}
+
+{% block javascript %}
+<script src="{% static 'jquery/jquery-ui.min.js' %}"></script>
+<script src="{% static 'js/gestion_machines/ajout.js' %}"></script>
+{% endblock %}
