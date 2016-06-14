@@ -1,0 +1,112 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>My ResEl | {% block titre %}{% endblock %}</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="{% static 'boostrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="{% static 'css/base.css' %}" rel="stylesheet">
+    {% block css %}{% endblock %}
+
+    <!-- Custom Fonts -->
+    <link href="{% static 'font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+
+    <!-- MetisMenu CSS -->
+    <link href="{% static 'metisMenu/css/metisMenu.min.css' %}" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{% url 'home' %}"><img src="{% static 'images/logo_resel.png' %}" alt="logo_resel"></a>
+            </div>
+            <!-- /.navbar-header -->
+
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav metismenu" id="side-menu">
+
+                        {% if request.user.is_authenticated %}
+                        <!-- Gestion Machines -->
+                        <li>
+                            <a href=""><b><i class="fa fa-laptop fa-fw"></i> Gérer mes machines</b></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="{% url 'gestion-machines:reactivation' %}">Réactiver cette machine</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'gestion-machines:ajout' %}">Ajouter cette machine</a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'gestion-machines:ajout-manuel' %}">Ajouter une machine manuellement</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+
+                        <!-- Paiements -->
+                        <li>
+                            <a href="{% url 'tresorerie:historique' %}"><b><i class="fa fa-money fa-fw"></i> Historique de mes paiements</b></a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+
+        <div id="page-wrapper">
+        {% block content %}{% endblock %}
+        </div>
+        <!-- /#page-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="{% static 'jquery/jquery.min.js' %}"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{% static 'boostrap/js/bootstrap.min.js' %}"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="{% static 'js/base.js' %}"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="{% static 'metisMenu/js/metisMenu.min.js' %}"></script>
+
+    <!-- Custom Javascript -->
+    {% block javascript %}{% endblock %}
+
+   </body>
+
+</html>
