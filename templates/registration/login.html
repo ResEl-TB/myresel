@@ -27,7 +27,7 @@
         <div class="btn-group" role="button" aria-label="login">
             <button type="submit" class="btn btn-info">{% trans 'Se connecter' %}</button>
             <button type="button" class="btn btn-default disabled">{% trans "OU" %}</button>
-            <button class="btn btn-info"><a style="color: white;" href="{% url 'gestion-personnes:inscription' %}">{% trans "Créer un compte" %}</a></button>
+            <a type="button" class="btn btn-info" href="{% url 'gestion-personnes:inscription' %}">{% trans "Créer un compte" %}</a>
         </div>
         </form>
     </div>
