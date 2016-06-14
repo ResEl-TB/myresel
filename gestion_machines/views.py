@@ -28,13 +28,13 @@ class Reactivation(View):
         # Vérification que la machine est bien à l'user
         machine = ldap.search(DN_MACHINES, '(&(macaddress=%s))' % network.get_mac(request.META['REMOTE_ADDR']), ['uidproprio'])[0]
         if str(request.user) not in machine.uidproprio[0]:
-            messages.error(_("Cette machine n'est pas censée vous appartenir. Veuillez contacter un administrateur afin de la transférer."))
+            messages.error(request, _("Cette machine n'est pas censée vous appartenir. Veuillez contacter un administrateur afin de la transférer."))
             return HttpResponseRedirect(reverse('news'))
             
         # Vérification que la machine est bien désactivée
         status = ldap.get_status(request.META['REMOTE_ADDR'])
         if status != 'inactive':
-            messages.info(_("Votre machine n'a pas besoin d'être ré-activée."))
+            messages.info(request, _("Votre machine n'a pas besoin d'être ré-activée."))
             return HttpResponseRedirect(reverse('news'))
 
         ldap.reactivation(request.META['REMOTE_ADDR'])
