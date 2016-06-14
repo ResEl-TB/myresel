@@ -138,6 +138,7 @@ class Historique(ListView):
     """ Vue qui affiche un historique des paiements de l'uitlisateur """
 
     template_name = 'paiement/historique.html'
+    context_object_name = 'transactions'
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
