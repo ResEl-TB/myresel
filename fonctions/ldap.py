@@ -24,7 +24,7 @@ def add(dn, object_class, attributes):
     l = Connection(Server(LDAP, use_ssl = True), user = DN_ADMIN, password = PASSWD_ADMIN, auto_bind = True)
     l.add(dn, object_class, attributes)
     l.unbind()
-    network.update_all()
+    update_all()
 
 def get_status(ip):
     """ Fonction pour trouver le status d'une machine :
