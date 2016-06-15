@@ -48,5 +48,5 @@ class ModifierForm(forms.Form):
                 alias = a
         return alias
 
-    host = forms.CharField(label = _("Nom de la machine"), initial = get_hostname(), widget = forms.TextInput(attrs = {'class': 'form-control'}))
-    alias = forms.CharField(label = _("Alias de la machine"), intial = get_alias(), required = False, widget = forms.TextInput(attrs = {'class': 'form-control'}))
+    host = forms.CharField(label = _("Nom de la machine"), initial = get_hostname, widget = forms.TextInput(attrs = {'class': 'form-control'}))
+    alias = forms.CharField(label = _("Alias de la machine"), intial = get_alias, required = False, widget = forms.TextInput(attrs = {'class': 'form-control'}))
