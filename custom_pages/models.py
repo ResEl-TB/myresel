@@ -24,7 +24,7 @@ class Category(models.Model):
 # a partir d'une url avec, trouver cette category
 
 class Article(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.Cascade)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     name = models.CharField(max_length=64, unique=True)
     text = RichTextField()
     date_creation = models.DateField(auto_now_add=True)
