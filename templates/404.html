@@ -9,11 +9,15 @@
         <div class="col-lg-12">
             <h1 class="page-header">{% trans "Page non trouvée" %}</h1>
             <div class="col-lg-12 text-center">
-                <a type="button" class="btn btn-info" href="{% url 'home' %}">{% trans "Retour à la page d'accueil" %}</a>
-            </div>
-            <div class="col-lg-12 text-center">
-                <p>{% blocktrans %}La page que vous cherchez n'existe pas.{% endblocktrans %}</p>
-                <img style="width: 200px; height: auto; margin: auto;" class="img-responsive" src="{% static 'images/deadlink.png' %}"/>
+                <div class="panel panel-warning">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">{% blocktrans %}La page que vous cherchez n'existe pas.{% endblocktrans %}</h3>
+                    </div>
+                    <div class="panel-body">
+                        <a type="button" class="btn btn-info" href="{% url 'home' %}">{% trans "Retour à la page d'accueil" %}</a>
+                    </div>
+                </div>
+                <img style="width: 400px; height: auto; margin: auto;" class="img-responsive" src="{% static 'images/deadlink.png' %}"/>
             </div>
         </div>
         <!-- /.col-lg-12 -->
