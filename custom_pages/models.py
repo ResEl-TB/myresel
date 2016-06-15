@@ -39,7 +39,7 @@ class Article(models.Model):
         super(Article, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse ('show-article', args = [self.category.slug, self.slug])
+        return reverse ('custom-pages:show-article', args = [self.category.slug, self.slug])
 
     def __str__(self):
         return self.name
