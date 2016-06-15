@@ -13,14 +13,15 @@ class AjoutForm(forms.Form):
     def clean_alias(self):
         alias = self.cleaned_data['alias']
 
-        if len(alias) < 5:
-            raise forms.ValidationError(_("Longueur d'alias trop courte"), code = 'invalid')
+        if len(alias) != 0:
+            if len(alias) < 5:
+                raise forms.ValidationError(_("Longueur d'alias trop courte"), code = 'invalid')
 
-        if not re.match(r'^[a-z0-9-]{5,}$', alias):
-            raise forms.ValidationError(_("Alias non conforme"), code = 'invalid')
+            if not re.match(r'^[a-z0-9-]{5,}$', alias):
+                raise forms.ValidationError(_("Alias non conforme"), code = 'invalid')
 
-        if not ldap.search(DN_MACHINES, '(|(host=%(alias)s)(hostalias=%(alias)s))' % {'alias': alias}):
-            raise forms.ValidationError(_("Alias non disponible"), code = 'invalid')
+            if not ldap.search(DN_MACHINES, '(|(host=%(alias)s)(hostalias=%(alias)s))' % {'alias': alias}):
+                raise forms.ValidationError(_("Alias non disponible"), code = 'invalid')
 
         return alias
     
