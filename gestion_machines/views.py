@@ -180,7 +180,7 @@ class Modifier(View):
         return super(Modifier, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        host = request.GET.get('host', '')
+        host = self.kwargs.get('host', '')
         messages.info(request, "Le host trouvé est " + host)
 
         # Vérification que la mac fournie est connue, et que la machine appartient à l'user
