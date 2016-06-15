@@ -103,7 +103,7 @@
 			<!-- Catégories des pages customisées-->
 			{% for category in categories %}
 			    <li>
-		                    <a href=""><i class="fa {{ category.fa_icon_name }} fa-fw" aria-hidden="true"></i> <b>{{ category.name }}</b></a>
+		                <a href="{% url 'custom-pages:show-category' slug=category.slug %}"><i class="fa {{ category.fa_icon_name }} fa-fw" aria-hidden="true"></i> <b>{{ category.name }}</b></a>
 				<ul class="nav nav-second-level">
 				    <li>
 				        {% for article in category.article_set.all %}
