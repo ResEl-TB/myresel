@@ -84,12 +84,17 @@ def reactivation(ip):
     mac = get_mac(ip)
     campus = get_campus(ip)
     machine = search(DN_MACHINES, '(&(macaddress=%s))' % mac, ['host'])[0]
+    dn = 'host=%s,' % machine.host[0] + DN_MACHINES
+    modifs = {'zone': [(MODIFY_REPLACE, ['User', campus])]}
+    modify(dn, modifs)
+    update_all()
+
+def modify(dn, modifs):
+    """ Modifie une fiche LDAP """
 
     l = Connection(Server(LDAP, use_ssl = True), user = DN_ADMIN, password = PASSWD_ADMIN, auto_bind = True)
-    l.modify('host=%s,' % machine.host[0] + DN_MACHINES,
-             {'zone': [(MODIFY_REPLACE, ['User', campus])]})
+    l.modify(dn, modifs)
     l.unbind()
-    update_all()
 
 def get_free_ip(low, high):
     """ Récupère une IP libre pour une nouvelle machine à partir du LDAP """

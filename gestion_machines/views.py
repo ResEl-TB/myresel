@@ -179,16 +179,18 @@ class Modifier(View):
 
     template_name = 'gestion_machines/modifier.html'
     form_class = ModifierForm
+    host = None
+    old_alias = None
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(Modifier, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        host = self.kwargs.get('host', '')
+        self.host = self.kwargs.get('host', '')
 
         # Vérification que la mac fournie est connue, et que la machine appartient à l'user
-        machine = ldap.search(DN_MACHINES, '(&(host=%s))' % host, ['uidproprio', 'hostalias'])
+        machine = ldap.search(DN_MACHINES, '(&(host=%s))' % self.host, ['uidproprio', 'hostalias'])
         if machine:
             if str(request.user) not in machine[0].entry_to_json():
                 messages.error(request, _("Cette machine ne vous appartient pas."))
@@ -199,11 +201,28 @@ class Modifier(View):
                 for a in machine[0].hostalias:
                     if 'pc' + str(request.user) not in a:
                         alias = a
+                    else:
+                        self.old_alias = a
             except:
                 alias = ''
 
-            form = self.form_class({'host': host, 'alias': alias})
+            form = self.form_class({'alias': alias})
             return render(request, self.template_name, {'form': form})
         else:
             messages.error(request, _("Cette machine n'est pas connue sur notre réseau."))
             return HttpResponseRedirect(reverse('news'))
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            dn = 'host=%s,' % self.host + DN_MACHINES
+            from ldap3 import MODIFY_REPLACE
+            modifs = {'hostalias': [(MODIFY_REPLACE, [self.old_alias, form.cleaned_data['alias']])]}
+            ldap.modify(dn, modifs)
+            network.update_all()
+
+            messages.success(request, _("L'alias de la machine a bien été modifié."))
+            return HttpResponseRedirect(reverse('news'))
+
+        return render(request, self.template_name, {'form': form})
