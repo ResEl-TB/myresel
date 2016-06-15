@@ -188,4 +188,4 @@ class Modifier(View):
             return HttpResponseRedirect(reverse('news'))
 
         form = self.form_class(mac)
-        return render(request, self.template_name)p
+        return render(request, self.template_name)
