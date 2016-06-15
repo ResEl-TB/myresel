@@ -1,13 +1,13 @@
 from django.shortcuts import render
 from django.views.generic import View
 from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 
 from fonctions import ldap, generic, network
+from fonctions.decorators import resel_required
 from .forms import *
 
 # Pour la traduction - sert à marquer les chaînes de caractères à traduire
@@ -23,7 +23,15 @@ class Inscription(View):
     template_name = 'gestion_personnes/inscription.html'
     form_class = InscriptionForm
 
+    @method_decorator(resel_required)
+    def dispatch(self, *args, **kwargs):
+        return super(Inscription, self).dispatch(*args, **kwargs)
+
     def get(self, request, *args, **kwargs):
+        # Test si la personne a bien une ip ResEl
+
+        # Test si la machine est bien inconnue
+
         form = self.form_class()
         return render(request, self.template_name, {'form': form})
 
