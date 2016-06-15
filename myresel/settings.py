@@ -70,7 +70,7 @@ LOCALE_PATHS = (
 # Application definition
 
 INSTALLED_APPS = [
-    'modeltranslation',
+    'modeltranslation', #Must be before contrib.admin 
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
