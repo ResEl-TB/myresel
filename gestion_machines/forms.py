@@ -46,11 +46,12 @@ class ModifierForm(forms.Form):
 
         if len(alias) < 5:
             raise forms.ValidationError(_("Longueur d'alias trop courte"), code = 'invalid')
+            return alias
 
         if not re.match(r'^[a-z0-9-]{5,}$', alias):
             raise forms.ValidationError(_("Alias non conforme"), code = 'invalid')
+            return alias
 
         if not ldap.search(DN_MACHINES, '(|(host=%(alias)s)(hostalias=%(alias)s))' % {'alias': alias}):
             raise forms.ValidationError(_("Alias non disponible"), code = 'invalid')
-
-        return alias
+            return alias
