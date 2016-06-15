@@ -162,7 +162,7 @@ class Liste(ListView):
 
     def get_queryset(self):
         uid = str(self.request.user)
-        res = ldap.search(DN_MACHINES, '(&(uidproprio=uid=%s,' % uid + DN_PEOPLE, ['host', 'macaddress'])
+        res = ldap.search(DN_MACHINES, '(&(uidproprio=uid=%(uid)s,%(dn_people)s))' % {'uid': uid, 'dn_people': DN_PEOPLE}, ['host', 'macaddress'])
         machines = []
         if res:
             for machine in res:
