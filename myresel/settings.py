@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'gestion_personnes',
     'myresel',
     'tresorerie',
+    'custom_pages',
 ]
 
 MIDDLEWARE_CLASSES = [
