@@ -12,6 +12,7 @@
                 <table class="table table-hover">
                     <thead>
                         <th><i class="fa fa-desktop" aria-hidden="true"></i> {% trans "Nom de la machine" %}</th>
+                        <th><i class="fa fa-clone" aria-hidden="true"></i> {% trans "Alias de la machine" %}</th>
                         <th><i class="fa fa-server" aria-hidden="true"></i> {% trans "Adresse MAC" %}</th>
                         <th><i class="fa fa-info" aria-hidden="true"></i> {% trans "Statut de la machine" %}</th>
                     </thead>
@@ -19,7 +20,8 @@
                     <tbody>
                 {% endif %}
                         <tr>
-                            <td><a href="{% url 'gestion-machines:modifier' m.host %}">{{ m.host|capfirst }}</a></td>
+                            <td>{{ m.host|capfirst }}</td>
+                            <td><a href="{% url 'gestion-machines:modifier' m.host %}">{{ m.alias|capfirst }}</a></td>
                             <td>{{ m.macaddress|upper }}</td>
                             <td>{{ m.statut|capfirst }}</td>
                         </tr>
