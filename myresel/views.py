@@ -41,14 +41,14 @@ class Home(View):
 
         return HttpResponseRedirect(reverse('gestion-machines:ajout'))
 
-class News(ListView):
+class NewsListe(ListView):
     """ Vue appelée pour afficher les news au niveau du ResEl """
 
     template_name = 'myresel/news.html'
     context_object_name = 'derniers_billets'
 
     def get_queryset(self):
-        return Billet.objects.all().order_by('-id')[:5]
+        return News.objects.all()
 
 class Contact(View):
     """ Vue appelée pour contacter les admin en cas de soucis """

@@ -25,7 +25,7 @@ urlpatterns = [
     url(r'^login/', auth_views.login),
     url(r'^logout/', auth_views.logout, {'next_page': '/'}),
     url(r'^gestion/', admin.site.urls),
-    url(r'^news$', News.as_view(), name = 'news'),
+    url(r'^news$', NewsListe.as_view(), name = 'news'),
     url(r'^machines/', include('gestion_machines.urls', namespace = 'gestion-machines')),
     url(r'^personnes/', include('gestion_personnes.urls', namespace = 'gestion-personnes')),
     url(r'^paiement/', include('tresorerie.urls', namespace = 'tresorerie')),
