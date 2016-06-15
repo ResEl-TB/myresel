@@ -18,11 +18,11 @@
 
                     <tbody>
                 {% endif %}
-                        <a href="{% url 'gestion-machines:modifier' m.host %}"><tr>
-                            <td>{{ m.host }}</td>
-                            <td>{{ m.macaddress }}</td>
-                            <td>{{ m.statut }}</td>
-                        </tr></a>
+                        <tr>
+                            <td><a href="{% url 'gestion-machines:modifier' m.host %}">{{ m.host|capfirst }}</a></td>
+                            <td>{{ m.macaddress|upper }}</td>
+                            <td>{{ m.statut|capfirst }}</td>
+                        </tr>
                 {% if forloop.last %}
                     </tbody>
                 </table>
