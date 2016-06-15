@@ -32,7 +32,7 @@ urlpatterns = [
 
     url(r'^400$', 'myresel.error_views.bad_request'),
     url(r'^403$', 'myresel.error_views.permission_denied'),
-    url(r'^500$', 'myresel.error_views.error_server'),
+    url(r'^500$', 'myresel.error_views.server_error'),
 ]
 
 handler400 = 'myresel.error_views.bad_request'
