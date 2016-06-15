@@ -59,6 +59,7 @@ TODO
 Pense-bête
 ==========
 - [OK] prendre en compte les messages (error, success, info, etc.) sur le template de la page de news (page de base, sur laquelle tout est redirigé)
+- lors d'une erreur de validation du formulaire, afficher l'erreur à l'utilisateur pour lui dire quoi changer
 - dans la page d'ajout d'une personne, check en javascript si le pseudo choisi est valide et dispo
 - dans la page de demande d'ajout de machine, vérifier que la MAC est valide en javascript
 - système de questions déroulantes en javascript pour le montant de la cotiz à payer
