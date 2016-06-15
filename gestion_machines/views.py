@@ -181,6 +181,7 @@ class Modifier(View):
 
     def get(self, request, *args, **kwargs):
         host = request.GET.get('host', '')
+        messages.info(request, "Le host trouvé est " + host)
 
         # Vérification que la mac fournie est connue, et que la machine appartient à l'user
         machine = ldap.search(DN_MACHINES, '(&(host=%s))' % host, ['uidproprio'])
