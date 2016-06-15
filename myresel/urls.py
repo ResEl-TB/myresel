@@ -21,6 +21,7 @@ from .views import *
 
 urlpatterns = [
     url(r'^$', Home.as_view(), name = 'home'),
+    url(r'^ckeditor/', include('ckeditor_uploader.urls')),
     url(r'^login/', auth_views.login),
     url(r'^logout/', auth_views.logout, {'next_page': '/'}),
     url(r'^gestion/', admin.site.urls),
