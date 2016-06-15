@@ -33,9 +33,9 @@ class ModifierForm(forms.Form):
     machine = None
     uid = None
 
-    def __init__(self, mac, uid):
+    def __init__(self, host, uid):
         super().__init__()
-        self.machine = ldap.search(DN_MACHINES, '(&(macaddress=%s))' % mac, ['host', 'hostalias'])[0]
+        self.machine = ldap.search(DN_MACHINES, '(&(host=%s))' % host, ['host', 'hostalias'])[0]
         self.uid = uid
 
     def get_hostname(self):
