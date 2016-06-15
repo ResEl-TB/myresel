@@ -9,7 +9,7 @@
             <h1 class="page-header">{% trans "Mes machines" %}</h1>
             {% for m in machines %}
             <div class="col-lg-6">
-                <a href="{% url 'gestion-machines:modifier' m.macaddress %}">
+                <a href="{% url 'gestion-machines:modifier' m.host %}">
                     <div class="panel panel-info">
                         <div class="panel-heading"><h3 class="panel-title text-center">{{ m.host|capfirst }} - {{ m.macaddress|upper }}</h3></div>
                         <div class="panel-body">
