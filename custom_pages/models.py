@@ -11,8 +11,10 @@ from django.core.urlresolvers import reverse
 class Category(models.Model):
     name = models.CharField(max_length=64, unique=True)
     description = RichTextUploadingField()
+    fa_icon_name = models.CharField(max_length=64, blank=True)
     slug = models.SlugField(max_length=255, blank=True, unique=True)
 
+    
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         super(Category, self).save(*args, **kwargs)

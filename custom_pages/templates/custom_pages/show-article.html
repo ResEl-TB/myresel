@@ -1,5 +1,15 @@
-<h1>{{ object.name }}</h1>
-<p>{{ object.text }}</p>
-<p>Published: {{ object.date_creation|date }}<br/>
-Last edit: {{ object.date_last_edit|date }}</p>
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block titre %}{{object.name}}{% endblock %}
+
+{% block content %}
+<div class"row">
+    <div class="col-lg-12">
+        <h1 class="page-header">{{object.name}}</h1>
+        <p>{{ object.text|safe }}</p>
+        <p>{% trans 'Publié' %} : {{ object.date_creation|date }}<br/>{% trans "Dernière modification" %}: {{ object.date_last_edit|date }}</p>
+    </div>
+</div>
+{% endblock %}
 

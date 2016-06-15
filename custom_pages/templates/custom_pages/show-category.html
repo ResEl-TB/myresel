@@ -1,8 +1,15 @@
-<h1>{{object.name}}</h1>
-<ul>
-{% for article in object.article_set.all %}
-    <li><a href="{{ article.get_absolute_url }}">{{ article.date_creation|date }}/{{ article.date_last_edit|date }} - {{ article.name }}</a></li>
-{% empty %}
-    <li>No articles yet.</li>
-{% endfor %}
-</ul>
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block titre %}{{object.name}}{% endblock %}
+
+{% block content %}
+    <ul>
+      {# Pour chaque article dans le "set d'article" de la catégorie #}
+      {% for article in object.article_set.all %}
+      <li><a href="{{ article.get_absolute_url }}">{{ article.date_creation|date }}/{{ article.date_last_edit|date }} - {{ article.name }}</a></li>
+      {% empty %}
+      <li>No articles yet.</li>
+      {% endfor %}
+    </ul>
+{% endblock %}

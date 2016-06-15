@@ -69,39 +69,50 @@
             <div class="navbar-default sidebar" role="navigation">
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav metismenu" id="side-menu">
-
                         <!-- Pages accessibles à tout le monde -->
                         <li>
                             <a href="{% url 'news' %}"><b><i class="fa fa-newspaper-o" aria-hidden="true"></i> {% trans "Les nouvelles" %}</b></a>
                         </li>
-
+		      
                         {% if request.user.is_authenticated %}
-                        <!-- Gestion du compte de l'user -->
-                        <li>
-                            <a href=""><b><i class="fa fa-user fa-fw" aria-hidden="true"></i> {% trans "Gérer mon compte" %}</b></a>
-                            <ul class="nav nav-second-level">
-
-                                <!-- Gestion des machines -->
-                                <li>
-                                    <a href=""><i class="fa fa-laptop fa-fw" aria-hidden="true"></i> {% trans "Gérer mes machines" %}</a>
-                                    <ul class="nav nav-third-level">
-                                        <li>
-                                            <a href="{% url 'gestion-machines:liste' %}"><i>{% trans "Toutes mes machines" %}</i></a>
-                                        <li>
-                                            <a href="{% url 'gestion-machines:ajout-manuel' %}"><i>{% trans "Ajouter une machine manuellement" %}</i></a>
-                                        </li>
-                                    </ul>
-                                </li>
-
-                                <!-- Paiements -->
-                                <li>
-                                    <a href="{% url 'tresorerie:historique' %}"><i class="fa fa-money fa-fw" aria-hidden="true"></i> {% trans "Historique de mes paiements" %}</a>
-                                </li>
-
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
+                            <!-- Gestion du compte de l'user -->
+                            <li>
+                                <a href=""><b><i class="fa fa-user fa-fw" aria-hidden="true"></i> {% trans "Gérer mon compte" %}</b></a>
+				<ul class="nav nav-second-level">
+				  
+				   <!-- Gestion des machines -->
+				   <li>
+                                       <a href=""><i class="fa fa-laptop fa-fw" aria-hidden="true"></i> {% trans "Gérer mes machines" %}</a>
+                                        <ul class="nav nav-third-level">
+					    <li>
+                                                <a href="{% url 'gestion-machines:liste' %}"><i>{% trans "Toutes mes machines" %}</i></a>
+					    <li>
+                                                <a href="{% url 'gestion-machines:ajout-manuel' %}"><i>{% trans "Ajouter une machine manuellement" %}</i></a>
+					    </li>
+					</ul>
+                                   </li>
+                                   <!-- Paiements -->
+                                   <li>
+                                       <a href="{% url 'tresorerie:historique' %}"><i class="fa fa-money fa-fw" aria-hidden="true"></i> {% trans "Historique de mes paiements" %}</a>
+                                   </li>
+			      </ul>
+                              <!-- /.nav-second-level -->
+                            </li>
                         {% endif %}
+
+			<!-- Catégories des pages customisées-->
+			{% for category in categories %}
+			    <li>
+		                    <a href=""><i class="fa {{ category.fa_icon_name }} fa-fw" aria-hidden="true"></i> <b>{{ category.name }}</b></a>
+				<ul class="nav nav-second-level">
+				    <li>
+				        {% for article in category.article_set.all %}
+					    <a href="{{ article.get_absolute_url }}">{{ article.name }}</a>
+					{% endfor %}
+				    </li>	
+				</ul>
+			    </li>
+			{% endfor %}
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->
