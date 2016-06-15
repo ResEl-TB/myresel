@@ -1,5 +1,5 @@
-from modeltranslation.translator import translator, TranslationOptions
-from news.models import Article, Category
+from modeltranslation.translator import register, TranslationOptions
+from .models import Article, Category
 
 @register(Article)
 class ArticleTranslationOptions(TranslationOptions):
