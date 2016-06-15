@@ -30,23 +30,5 @@ class AjoutManuelForm(forms.Form):
     description = forms.CharField(label = _("Description de l'équipement à ajouter"), widget = forms.Textarea(attrs = {'class': 'form-control', 'style': 'resize:none;'}))
 
 class ModifierForm(forms.Form):
-    machine = None
-    uid = None
-
-    def __init__(self, host, uid):
-        super().__init__()
-        self.machine = ldap.search(DN_MACHINES, '(&(host=%s))' % host, ['host', 'hostalias'])[0]
-        self.uid = uid
-
-    def get_hostname(self):
-        return self.machine.host[0]
-
-    def get_alias(self):
-        alias = ''
-        for a in self.machine.hostalias:
-            if 'pc' + uid not in alias:
-                alias = a
-        return alias
-
-    host = forms.CharField(label = _("Nom de la machine"), initial = get_hostname, widget = forms.TextInput(attrs = {'class': 'form-control'}))
-    alias = forms.CharField(label = _("Alias de la machine"), initial = get_alias, required = False, widget = forms.TextInput(attrs = {'class': 'form-control'}))
+    host = forms.CharField(label = _("Nom de la machine"), widget = forms.TextInput(attrs = {'class': 'form-control'}))
+    alias = forms.CharField(label = _("Alias de la machine"), required = False, widget = forms.TextInput(attrs = {'class': 'form-control'}))

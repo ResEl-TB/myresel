@@ -183,14 +183,19 @@ class Modifier(View):
         host = self.kwargs.get('host', '')
 
         # Vérification que la mac fournie est connue, et que la machine appartient à l'user
-        machine = ldap.search(DN_MACHINES, '(&(host=%s))' % host, ['uidproprio'])
+        machine = ldap.search(DN_MACHINES, '(&(host=%s))' % host, ['uidproprio', 'hostalias'])
         if machine:
             if str(request.user) not in machine[0].entry_to_json():
                 messages.error(request, _("Cette machine ne vous appartient pas."))
                 return HttpResponseRedirect(reverse('news'))
+
+            alias = ''
+            for a in machine[0].hostalias:
+                if 'pc' + str(request.user) not in a:
+                    alias = a
+
+            form = self.form_class({'host': host, 'alias': alias})
+            return render(request, self.template_name, {'form': form})
         else:
             messages.error(request, _("Cette machine n'est pas connue sur notre réseau."))
             return HttpResponseRedirect(reverse('news'))
-
-        form = self.form_class(host, str(request.user))
-        return render(request, self.template_name)
