@@ -188,16 +188,17 @@ class Modifier(View):
     template_name = 'gestion_machines/modifier.html'
     form_class = ModifierForm
     old_alias = None
+    host = None
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(Modifier, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        host = self.kwargs.get('host', '')
+        self.host = self.kwargs.get('host', '')
 
         # Vérification que la mac fournie est connue, et que la machine appartient à l'user
-        machine = ldap.search(DN_MACHINES, '(&(host=%s))' % host, ['uidproprio', 'hostalias'])
+        machine = ldap.search(DN_MACHINES, '(&(host=%s))' % self.host, ['uidproprio', 'hostalias'])
         if machine:
             if str(request.user) not in machine[0].entry_to_json():
                 messages.error(request, _("Cette machine ne vous appartient pas."))
