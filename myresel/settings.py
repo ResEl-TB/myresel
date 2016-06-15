@@ -43,6 +43,16 @@ AUTH_LDAP_USER_DN_TEMPLATE = "uid=%(user)s,ou=people,dc=maisel,dc=enst-bretagne,
 # Ckeditor
 CKEDITOR_UPLOAD_PATH = 'uploads/'
 
+CKEDITOR_IMAGE_BACKEND = "pillow"
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'height': 600,
+        'width': 1000,
+    },
+}
+
 # Application definition
 
 INSTALLED_APPS = [
