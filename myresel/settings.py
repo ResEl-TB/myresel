@@ -40,6 +40,9 @@ AUTHENTICATION_BACKENDS = (
 AUTH_LDAP_SERVER_URI = "ldap://ldap.resel.fr:389"
 AUTH_LDAP_USER_DN_TEMPLATE = "uid=%(user)s,ou=people,dc=maisel,dc=enst-bretagne,dc=fr"
 
+# Ckeditor
+CKEDITOR_UPLOAD_PATH = 'uploads/'
+
 # Application definition
 
 INSTALLED_APPS = [
