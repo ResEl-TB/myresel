@@ -1,6 +1,6 @@
 from django.db import models
 from django.template.defaultfilters import slugify
-from ckeditor.fields import RichTextField
+from ckeditor_uploader.fields import RichTextUploadingField
 from django.core.urlresolvers import reverse
 
 # Classe pour les catégories d'article
@@ -10,7 +10,7 @@ from django.core.urlresolvers import reverse
 
 class Category(models.Model):
     name = models.CharField(max_length=64, unique=True)
-    description = RichTextField()
+    description = RichTextUploadingField()
     slug = models.SlugField(max_length=255, blank=True, unique=True)
 
     def save(self, *args, **kwargs):
@@ -26,7 +26,7 @@ class Category(models.Model):
 class Article(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     name = models.CharField(max_length=64, unique=True)
-    text = RichTextField()
+    text = RichTextUploadingField()
     date_creation = models.DateField(auto_now_add=True)
     date_last_edit = models.DateField(auto_now=True)
     slug = models.SlugField(max_length=255, blank=True, unique=True)
