@@ -29,10 +29,6 @@ urlpatterns = [
     url(r'^personnes/', include('gestion_personnes.urls', namespace = 'gestion-personnes')),
     url(r'^paiement/', include('tresorerie.urls', namespace = 'tresorerie')),
     url(r'^contact$', Contact.as_view(), name = 'contact'),
-
-    url(r'^400$', 'myresel.error_views.bad_request'),
-    url(r'^403$', 'myresel.error_views.permission_denied'),
-    url(r'^500$', 'myresel.error_views.server_error'),
 ]
 
 handler400 = 'myresel.error_views.bad_request'

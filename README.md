@@ -37,8 +37,10 @@ TODO
 ====
 - paiement
 - gestion du compte MyResEl de l'utilisateur
-- page 404
-- page 500
+- [OK] page 400
+- [OK] page 403
+- [OK] page 404
+- [OK] page 500
 - [OK] contact
 - myresel :
     - [OK] news
