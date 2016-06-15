@@ -9,12 +9,14 @@
             <h1 class="page-header">{% trans "Mes machines" %}</h1>
             {% for m in machines %}
             <div class="col-lg-6">
-                <div class="panel panel-info">
-                    <div class="panel-heading"><h3 class="panel-title text-center">{{ m.host|capfirst }} - {{ m.macaddress|upper }}</h3></div>
-                    <div class="panel-body">
-                        <p>Insérer graphes ici</p>
+                <a href="{% url 'gestion_machines:modifier' {{ m.macaddress }} %}">
+                    <div class="panel panel-info">
+                        <div class="panel-heading"><h3 class="panel-title text-center">{{ m.host|capfirst }} - {{ m.macaddress|upper }}</h3></div>
+                        <div class="panel-body">
+                            <p>Insérer graphes ici</p>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
             {% empty %}
             <p>{% blocktrans %}Nous n'avons trouvé aucune machine enregistrée à votre nom.{% endblocktrans %}</p>
