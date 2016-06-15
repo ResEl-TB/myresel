@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block titre %}{% trans "Paiement" %}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">{% trans "Paiement de votre accès internet" %}</h1>
+            <p>{% blocktrans %}Afin de bénéficier de votre accès à internet, vous devez vous acquitter d'un certain montant, dépendant du temps que vous passerez sur le campus cette année. Le questionnaire ci-dessous va nous permettre de vous indiquer le montant que vous devrez payer.{% endblocktrans %}</p>
+            <form action="" method="post">
+                {% csrftoken %}
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <input type="radio" aria-label="...">
+                        </span>
+                        <p class="form-control">FIP</p>
+                    </div><!-- /input-group -->
+                </div><!-- /.col-lg-6 -->
+                <div class="col-lg-6">
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <input type="radio" aria-label="...">
+                        </span>
+                        <p class="form-control">FIP</p>
+                    </div><!-- /input-group -->
+                </div><!-- /.col-lg-6 -->
+            </form>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+{% endblock %}
