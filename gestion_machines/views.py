@@ -167,10 +167,10 @@ class Liste(ListView):
         if res:
             for machine in res:
                 statut = None
-                if 'user' in [z.lower() for z in machine.zone]:
-                    statut = 'active'
-                elif 'inactive' in [z.lower() for z in machine.zone]:
+                if 'inactive' in [z.lower() for z in machine.zone]:
                     statut = 'inactive'
+                else:
+                    statut = 'active'
                 machines.append({'host': machine.host[0], 'macaddress': machine.macaddress[0], 'statut': statut})
         return machines
 
