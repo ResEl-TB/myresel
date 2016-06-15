@@ -214,7 +214,11 @@ class Modifier(View):
             except:
                 alias = ''
 
-            form = self.form_class({'alias': alias})
+            if alias != '':
+                form = self.form_class({'alias': alias})
+            else:
+                form = self.form_class()
+                
             return render(request, self.template_name, {'form': form})
         else:
             messages.error(request, _("Cette machine n'est pas connue sur notre réseau."))
