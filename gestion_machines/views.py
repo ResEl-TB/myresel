@@ -199,6 +199,8 @@ class Modifier(View):
                 for a in machine[0].hostalias:
                     if 'pc' + str(request.user) not in a:
                         alias = a
+            except:
+                alias = ''
 
             form = self.form_class({'host': host, 'alias': alias})
             return render(request, self.template_name, {'form': form})
