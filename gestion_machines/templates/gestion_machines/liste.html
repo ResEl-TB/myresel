@@ -8,10 +8,12 @@
         <div class="col-lg-12">
             <h1 class="page-header">{% trans "Mes machines" %}</h1>
             {% for m in machines %}
-            <div class="panel panel-info col-lg-6">
-                <div class="panel-heading"><h3 class="panel-title text-center">{{ m.host|capfirst }} - {{ m.macaddress|upper }}</h3></div>
-                <div class="panel-body">
-                    <p>Insérer graphes ici</p>
+            <div class="col-lg-6">
+                <div class="panel panel-info">
+                    <div class="panel-heading"><h3 class="panel-title text-center">{{ m.host|capfirst }} - {{ m.macaddress|upper }}</h3></div>
+                    <div class="panel-body">
+                        <p>Insérer graphes ici</p>
+                    </div>
                 </div>
             </div>
             {% empty %}
