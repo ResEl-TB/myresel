@@ -7,7 +7,7 @@ from django.core.urlresolvers import reverse
 from django.contrib import messages
 
 from fonctions import ldap, generic, network
-from fonctions.decorators import resel_required
+from fonctions.decorators import resel_required, unknown_machine
 from .forms import *
 
 # Pour la traduction - sert à marquer les chaînes de caractères à traduire
@@ -24,14 +24,11 @@ class Inscription(View):
     form_class = InscriptionForm
 
     @method_decorator(resel_required)
+    @method_decorator(unknown_machine)
     def dispatch(self, *args, **kwargs):
         return super(Inscription, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        # Test si la personne a bien une ip ResEl
-
-        # Test si la machine est bien inconnue
-
         form = self.form_class()
         return render(request, self.template_name, {'form': form})
 
