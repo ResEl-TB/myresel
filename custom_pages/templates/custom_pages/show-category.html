@@ -1,6 +1,6 @@
-<h1>Articles</h1>
+<h1>{{object.name}}</h1>
 <ul>
-{% for article in article_set.all %}
+{% for article in object.article_set.all %}
     <li><a href="{{ article.get_absolute_url }}">{{ article.date_creation|date }}/{{ article.date_last_edit|date }} - {{ article.name }}</a></li>
 {% empty %}
     <li>No articles yet.</li>
