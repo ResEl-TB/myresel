@@ -186,7 +186,7 @@ class Modifier(View):
         machine = ldap.search(DN_MACHINES, '(&(host=%s))' % host, ['uidproprio'])
         if machine:
             if str(request.user) not in machine[0].entry_to_json():
-                messages.warning(request, _("Cette machine ne vous appartient pas."))
+                messages.error(request, _("Cette machine ne vous appartient pas."))
                 return HttpResponseRedirect(reverse('news'))
         else:
             messages.error(request, _("Cette machine n'est pas connue sur notre réseau."))
