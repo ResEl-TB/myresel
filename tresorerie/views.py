@@ -11,6 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from .models import *
 from fonctions import ldap, generic
+from fonctions.decorators import resel_required, unknown_machine, need_to_pay
 
 # Create your views here.
 class Home(View):
@@ -18,7 +19,9 @@ class Home(View):
 
     template_name = 'tresorerie/home.html'
 
+    @method_decorator(resel_required)
     @method_decorator(login_required)
+    @method_decorator(need_to_pay)
     def dispatch(self, *args, **kwargs):
         return super(Home, self).dispatch(*args, **kwargs)
 

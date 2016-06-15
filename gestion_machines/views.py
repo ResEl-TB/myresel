@@ -12,6 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from .forms import *
 from fonctions import ldap, network
+from fonctions.decorators import resel_required, unknown_machine
 from myresel.constantes import DN_MACHINES, DN_PEOPLE
 
 # Create your views here.
@@ -20,6 +21,7 @@ class Reactivation(View):
 
     template_name = 'gestion_machines/reactivation.html'
 
+    @method_decorator(resel_required)
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(Reactivation, self).dispatch(*args, **kwargs)
@@ -46,19 +48,15 @@ class Ajout(View):
     template_name = 'gestion_machines/ajout.html'
     form_class = AjoutForm
 
+    @method_decorator(resel_required)
+    @method_decorator(unknown_machine)
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(Ajout, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        # Vérification que la machine n'est pas déjà présente dans le LDAP
-        if ldap.get_status(request.META['REMOTE_ADDR']) == False:
-            form = self.form_class()
-            return render(request, self.template_name, {'form': form})
-
-        # La machine est déjà inscrite, on redirige sur la page d'accueil
-        messages.error(request, _("Cette machine est déjà enregistrée sur notre réseau."))
-        return HttpResponseRedirect(reverse('news'))
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
@@ -135,6 +133,7 @@ class ChangementCampus(View):
     
     template_name = 'gestion_machines/changement-campus.html'
 
+    @method_decorator(resel_required)
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(ChangementCampus, self).dispatch(*args, **kwargs)
