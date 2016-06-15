@@ -22,6 +22,9 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name = "Catégorie"
+        
     
 # Classe pour les articles
 # La category, le name et le texte sont plutôt explicites
@@ -31,6 +34,7 @@ class Category(models.Model):
 class Article(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     name = models.CharField(max_length=64, unique=True)
+    description = models.CharField(max_length=255, null=True)
     text = RichTextUploadingField()
     date_creation = models.DateField(auto_now_add=True)
     date_last_edit = models.DateField(auto_now=True)
