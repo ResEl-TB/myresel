@@ -21,7 +21,7 @@
                 {% endif %}
                         <tr>
                             <td>{{ m.host|capfirst }}</td>
-                            <td><a href="{% url 'gestion-machines:modifier' m.host %}">{{ m.alias|capfirst }}</a></td>
+                            <td><a href="{% url 'gestion-machines:modifier' m.host %}">{% if m.alias %}{{ m.alias }}{% else %}Définir un alias{% endif %}</a></td>
                             <td>{{ m.macaddress|upper }}</td>
                             <td>{{ m.statut|capfirst }}</td>
                         </tr>
