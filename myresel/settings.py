@@ -55,12 +55,17 @@ CKEDITOR_CONFIGS = {
 }
 
 # Languages
+
 LANGUAGES = [
     ('fr', _("Français")),
     ('en', _("Anglais")),
 ]
 
 MODELTRANSLATION_DEFAULT_LANGUAGE = 'fr'
+
+LOCALE_PATHS = (
+    os.path.join(BASE_DIR, 'locale/'),
+)
 
 # Application definition
 
@@ -90,6 +95,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 ]
 
 ROOT_URLCONF = 'myresel.urls'
