@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import View
+from django.views.generic import View, ListView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -149,3 +149,22 @@ class ChangementCampus(View):
         # La machine est déjà dans le bon campus, on redirige sur la page d'accueil
         messages.info(request, _("Cette machine est déjà enregistrée comme étant dans le bon campus."))
         return HttpResponseRedirect(reverse('news'))
+
+class Liste(ListView):
+    """ Vue appelée pour afficher la liste des machines d'un user """
+
+    template_name = 'gestion_machines/liste.html'
+    context_object_name = 'machines'
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(Liste, self).dispatch(*args, **kwargs)
+
+    def get_queryset(self):
+        uid = str(self.request.user)
+        res = search(DN_MACHINES, '(&(uidproprio=uid=%s,' % uid + DN_PEOPLE, ['host', 'macaddress'])
+        machines = []
+        if res:
+            for machine in res:
+                machines.append({'host': machine.host[0], 'macaddress': machine.macaddress[0]})
+        return machines

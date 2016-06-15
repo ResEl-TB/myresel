@@ -20,5 +20,6 @@ urlpatterns = [
     url(r'^réactivation$', Reactivation.as_view(), name = 'reactivation'),
     url(r'^ajout$', Ajout.as_view(), name = 'ajout'),
     url(r'^ajout-manuel$', AjoutManuel.as_view(), name = 'ajout-manuel'),
-    url(r'^changement-campus$', ChangementCampus.as_view(), name = 'changement-campus')
+    url(r'^changement-campus$', ChangementCampus.as_view(), name = 'changement-campus'),
+    url(r'^liste$', Liste.as_view(), name = 'liste')
 ]
