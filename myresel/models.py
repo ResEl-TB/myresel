@@ -5,3 +5,6 @@ from ckeditor.fields import RichTextField
 class Billet(models.Model):
     titre = models.CharField(max_length = 100)
     contenu = RichTextField()
+
+    def __str__(self):
+        return self.titre
