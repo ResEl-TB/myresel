@@ -19,9 +19,9 @@
 
                     <tbody>
                 {% endif %}
-                        <tr>
+                        <tr class="clickable" data-href="{% url 'gestion-machines:modifier' m.host %}">
                             <td>{{ m.host|capfirst }}</td>
-                            <td><a href="{% url 'gestion-machines:modifier' m.host %}">{% if m.alias %}{{ m.alias }}{% else %}Définir un alias{% endif %}</a></td>
+                            <td>{{ m.alias|join:" - " }}</td>
                             <td>{{ m.macaddress|upper }}</td>
                             <td>{{ m.statut|capfirst }}</td>
                         </tr>
@@ -36,4 +36,14 @@
         <!-- /.col-lg-12 -->
     </div>
     <!-- /.row -->
+{% endblock %}
+
+{% block javascript %}
+<script>
+    jQuery(document).ready(function($) {
+        $(".clickable").click(function() {
+            window.document.location = $(this).data("href");
+        });
+    });
+</script>
 {% endblock %}

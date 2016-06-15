@@ -10,6 +10,8 @@ from django.core.mail import EmailMessage
 # Pour la traduction - sert à marquer les chaînes de caractères à traduire
 from django.utils.translation import ugettext_lazy as _
 
+from ldap3 import MODIFY_REPLACE
+
 from .forms import *
 from fonctions import ldap, network
 from fonctions.decorators import resel_required, unknown_machine
@@ -172,13 +174,11 @@ class Liste(ListView):
                 else:
                     statut = 'active'
 
-                alias = ''
                 try:
-                    for a in machine[0].hostalias:
-                        if 'pc' + str(request.user) not in a:
-                            alias = a
+                    alias = machine.hostalias
                 except:
                     alias = ''
+                    
                 machines.append({'host': machine.host[0], 'macaddress': machine.macaddress[0], 'statut': statut, 'alias': alias})
         return machines
 
@@ -187,18 +187,16 @@ class Modifier(View):
 
     template_name = 'gestion_machines/modifier.html'
     form_class = ModifierForm
-    generic_alias = None
-    host = None
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(Modifier, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        self.host = self.kwargs.get('host', '')
+        host = self.kwargs.get('host', '')
 
         # Vérification que la mac fournie est connue, et que la machine appartient à l'user
-        machine = ldap.search(DN_MACHINES, '(&(host=%s))' % self.host, ['uidproprio', 'hostalias'])
+        machine = ldap.search(DN_MACHINES, '(&(host=%s))' % host, ['uidproprio', 'hostalias'])
         if machine:
             if str(request.user) not in machine[0].entry_to_json():
                 messages.error(request, _("Cette machine ne vous appartient pas."))
@@ -208,12 +206,13 @@ class Modifier(View):
             try:
                 for a in machine[0].hostalias:
                     if 'pc' + str(request.user) in a:
-                        self.generic_alias = a
+                        request.session['generic_alias'] = a
                     else:
                         alias = a
+
             except:
                 alias = ''
-                self.generic_alias = machine[0].host[0]
+                request.session['generic_alias'] = machine[0].host[0]
 
             if alias != '':
                 form = self.form_class({'alias': alias})
@@ -229,13 +228,14 @@ class Modifier(View):
         form = self.form_class(request.POST)
 
         if form.is_valid():
-            dn = 'host=%s,' % self.host + DN_MACHINES
-            from ldap3 import MODIFY_REPLACE
-            modifs = {'hostAlias': [(MODIFY_REPLACE, [self.generic_alias, form.cleaned_data['alias']])]}
+            dn = 'host=%s,' % self.kwargs.get('host', '') + DN_MACHINES
+            modifs = {'hostAlias': [(MODIFY_REPLACE, [request.session['generic_alias'], form.cleaned_data['alias']])]}
+            print(modifs)
             ldap.modify(dn, modifs)
             network.update_all()
 
+            del(request.session['generic_alias'])
             messages.success(request, _("L'alias de la machine a bien été modifié."))
-            return HttpResponseRedirect(reverse('news'))
+            return HttpResponseRedirect(reverse('gestion-machines:liste'))
 
         return render(request, self.template_name, {'form': form})
