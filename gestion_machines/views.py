@@ -187,7 +187,6 @@ class Modifier(View):
 
     template_name = 'gestion_machines/modifier.html'
     form_class = ModifierForm
-    host = None
     old_alias = None
 
     @method_decorator(login_required)
@@ -195,10 +194,10 @@ class Modifier(View):
         return super(Modifier, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        self.host = self.kwargs.get('host', '')
+        host = self.kwargs.get('host', '')
 
         # Vérification que la mac fournie est connue, et que la machine appartient à l'user
-        machine = ldap.search(DN_MACHINES, '(&(host=%s))' % self.host, ['uidproprio', 'hostalias'])
+        machine = ldap.search(DN_MACHINES, '(&(host=%s))' % host, ['uidproprio', 'hostalias'])
         if machine:
             if str(request.user) not in machine[0].entry_to_json():
                 messages.error(request, _("Cette machine ne vous appartient pas."))
@@ -207,12 +206,13 @@ class Modifier(View):
             alias = ''
             try:
                 for a in machine[0].hostalias:
-                    if 'pc' + str(request.user) not in a:
-                        alias = a
+                    if 'pc' + str(request.user) in a:
+                        self.generic_alias = a
                     else:
-                        self.old_alias = a
+                        alias = a
             except:
                 alias = ''
+                self.generic_alias = machine[0].host[0]
 
             if alias != '':
                 form = self.form_class({'alias': alias})
@@ -230,7 +230,7 @@ class Modifier(View):
         if form.is_valid():
             dn = 'host=%s,' % self.host + DN_MACHINES
             from ldap3 import MODIFY_REPLACE
-            modifs = {'hostalias': [(MODIFY_REPLACE, [self.old_alias, form.cleaned_data['alias']])]}
+            modifs = {'hostAlias': [(MODIFY_REPLACE, [self.generic_alias, form.cleaned_data['alias']])]}
             ldap.modify(dn, modifs)
             network.update_all()
 
