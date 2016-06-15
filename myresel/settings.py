@@ -28,8 +28,26 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 # Login
+
 LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/'
+
+AUTHENTICATION_BACKENDS = (
+    'django_auth_ldap.backend.LDAPBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+AUTH_LDAP_SERVER_URI = "ldap://ldap.resel.fr:389"
+AUTH_LDAP_USER_DN_TEMPLATE = "uid=%(user)s,ou=people,dc=maisel,dc=enst-bretagne,dc=fr"
+
+import ldap
+from django_auth_ldap.config import PosixGroupType, LDAPSearch
+AUTH_LDAP_REQUIRE_GROUP = "cn=admin,ou=groups,dc=maisel,dc=enst-bretagne,dc=fr"
+AUTH_LDAP_USER_ATTR_MAP = {"first_name": "firstName", "last_name": "lastName"}
+AUTH_LDAP_USER_FLAGS_BY_GROUP = {
+    "is_staff" : "cn=admin,ou=groups,dc=maisel,dc=enst-bretagne,dc=fr",
+    "is_superuser": "cn=admin,ou=groups,dc=maisel,dc=enst-bretagne,dc=fr"
+}
 
 # Application definition
 
