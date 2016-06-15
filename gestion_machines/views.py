@@ -168,3 +168,24 @@ class Liste(ListView):
             for machine in res:
                 machines.append({'host': machine.host[0], 'macaddress': machine.macaddress[0]})
         return machines
+
+class Modifier(View):
+    """ Vue appelée pour modifier le nom et l'alias de sa machine """
+
+    template_name = 'gestion_machines/modifier.html'
+    form_class = ModifierForm
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(Modifier, self).dispatch(*args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        mac = request.GET['mac']
+
+        # Vérification que la mac fournie appartient à l'user
+        if not str(request.user) in ldap.search(DN_MACHINES, '(&(macaddress=%s))' % mac, ['uidproprio'])[0].entry_to_json():
+            messages.warning(_("Cette machine ne vous appartient pas."))
+            return HttpResponseRedirect(reverse('news'))
+
+        form = self.form_class(mac)
+        return render(request, self.template_name)
