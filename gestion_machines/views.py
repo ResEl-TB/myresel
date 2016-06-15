@@ -177,8 +177,6 @@ class Liste(ListView):
                     for a in machine[0].hostalias:
                         if 'pc' + str(request.user) not in a:
                             alias = a
-                        else:
-                            self.old_alias = a
                 except:
                     alias = ''
                 machines.append({'host': machine.host[0], 'macaddress': machine.macaddress[0], 'statut': statut, 'alias': alias})
