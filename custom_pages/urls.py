@@ -3,7 +3,7 @@ custom_pages URL Conf
 """
 
 from django.conf.urls import url
-from .view import seeCategory, seeArticle
+from .views import seeCategory, seeArticle
 
 urlpatterns = [
     url(r'(?P<slug>[-\w]+)$', CategoryView.as_view(), name = 'show-category' ),
