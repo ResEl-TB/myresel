@@ -28,7 +28,7 @@ urlpatterns = [
     url(r'^machines/', include('gestion_machines.urls', namespace = 'gestion-machines')),
     url(r'^personnes/', include('gestion_personnes.urls', namespace = 'gestion-personnes')),
     url(r'^paiement/', include('tresorerie.urls', namespace = 'tresorerie')),
-    url(r'^pages/', include('custom_pages.urls', namespace = 'custom-pages'))
+    url(r'^pages/', include('custom_pages.urls', namespace = 'custom-pages')),
     url(r'^contact$', Contact.as_view(), name = 'contact'),
 ]
 
