@@ -180,7 +180,7 @@ class Modifier(View):
         return super(Modifier, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        mac = request.GET['mac']
+        mac = request.GET.get('mac', '')
 
         # Vérification que la mac fournie appartient à l'user
         if not str(request.user) in ldap.search(DN_MACHINES, '(&(macaddress=%s))' % mac, ['uidproprio'])[0].entry_to_json():
