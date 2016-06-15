@@ -187,7 +187,7 @@ class Modifier(View):
 
     template_name = 'gestion_machines/modifier.html'
     form_class = ModifierForm
-    old_alias = None
+    generic_alias = None
     host = None
 
     @method_decorator(login_required)
@@ -219,7 +219,7 @@ class Modifier(View):
                 form = self.form_class({'alias': alias})
             else:
                 form = self.form_class()
-                
+            
             return render(request, self.template_name, {'form': form})
         else:
             messages.error(request, _("Cette machine n'est pas connue sur notre réseau."))
