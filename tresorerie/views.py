@@ -25,22 +25,6 @@ class Home(View):
     def dispatch(self, *args, **kwargs):
         return super(Home, self).dispatch(*args, **kwargs)
 
-    def get(self, request, *args, **kwargs):
-        """ Vérification que la cotiz n'est pas déjà payée """
-
-        user = ldap.search(DN_PEOPLE, '(&(uid=%s))' % request.user, ['cotiz', 'endcotiz'])[0]
-        if 'cotiz' in user.entry_to_json().lower() and 'endcotiz' in user.entry_to_json().lower():
-            # Les attributs 'cotiz' ET 'endcotiz' sont présents
-            from datetime import datetime
-
-            end_date = datetime.strptime(user.endcotiz[0], '%d/%m/%Y')
-            if end_date > datetime.now():
-                # Cotisation déjà payée
-                messages.info(_("Vous avez déjà payé votre cotisation."))
-                return HttpResponseRedirect(reverse('news'))
-
-        return render(request, self.template_name)
-
     def post(self, request, *args, **kwargs):
         """ Plusieurs cas de figure
             1) L'utilisateur paye en intégralité sa cotisation :
@@ -99,7 +83,7 @@ class Home(View):
                 t.add(p)
 
                 # Modif du LDAP
-                ldap.cotisation(user = request.user, duree = 30)
+                ldap.cotisation(user = str(request.user), duree = 30)
 
             except stripe.error.CardError:
                 # Carte refusée, on supprime la mensualisation si l'user veut recommencer
