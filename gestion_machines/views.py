@@ -182,9 +182,14 @@ class Modifier(View):
     def get(self, request, *args, **kwargs):
         mac = request.GET.get('mac', '')
 
-        # Vérification que la mac fournie appartient à l'user
-        if not str(request.user) in ldap.search(DN_MACHINES, '(&(macaddress=%s))' % mac, ['uidproprio'])[0].entry_to_json():
-            messages.warning(_("Cette machine ne vous appartient pas."))
+        # Vérification que la mac fournie est connue, et que la machine appartient à l'user
+        machine = ldap.search(DN_MACHINES, '(&(macaddress=%s))' % mac, ['uidproprio'])
+        if machine:
+            if str(request.user) not in machine[0].entry_to_json():
+                messages.warning(request, _("Cette machine ne vous appartient pas."))
+                return HttpResponseRedirect(reverse('news'))
+        else:
+            messages.error(request, _("Cette machine n'est pas connue sur notre réseau."))
             return HttpResponseRedirect(reverse('news'))
 
         form = self.form_class(mac)
