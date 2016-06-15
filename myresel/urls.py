@@ -31,6 +31,7 @@ urlpatterns = [
     url(r'^paiement/', include('tresorerie.urls', namespace = 'tresorerie')),
     url(r'^pages/', include('custom_pages.urls', namespace = 'custom-pages')),
     url(r'^contact$', Contact.as_view(), name = 'contact'),
+    url(r'^lang/', include('django.conf.urls.i18n')),
 ]
 
 handler400 = 'myresel.error_views.bad_request'

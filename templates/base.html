@@ -128,6 +128,35 @@
     </div>
     <!-- /#wrapper -->
 
+    <hr/>
+    <footer class="footer">
+	<!-- Container for setting locale language -->
+        <div class="container text-right">
+	    <form action="{% url 'set_language' %}" method="post" class="form-group form-inline">
+		{% csrf_token %}
+		<input name="next" type="hidden" value="{{ redirect_to }}"/>
+		<label>
+		    {% trans "Switch Language" %}
+		    <select name="language" class="form-control">
+			{% get_current_language as LANGUAGE_CODE %}
+			{% get_available_languages as LANGUAGES %}
+			{% get_language_info_list for LANGUAGES as languages %}
+			{% for language in languages %}
+			<option value="{{ language.code }}"
+				{% if language.code == LANGUAGE_CODE %} selected="selected" {% endif %}
+			>
+			    {{ language.name_local }} ({{ language.code }})
+			</option>
+			{% endfor %}
+		    </select>
+		</label>
+		<input type="submit" value="Go"/>
+	    </form>
+        </div>
+    </footer>
+
+
+    
     <!-- jQuery -->
     <script src="{% static 'jquery/jquery.min.js' %}"></script>
 
@@ -143,6 +172,6 @@
     <!-- Custom Javascript -->
     {% block javascript %}{% endblock %}
 
-   </body>
+</body>
 
 </html>
