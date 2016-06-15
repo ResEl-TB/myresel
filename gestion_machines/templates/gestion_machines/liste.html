@@ -11,7 +11,7 @@
             <div class="col-lg-6">
                 <a href="{% url 'gestion-machines:modifier' m.host %}">
                     <div class="panel panel-info">
-                        <div class="panel-heading"><h3 class="panel-title text-center">{{ m.host|capfirst }} - {{ m.macaddress|upper }}</h3></div>
+                        <div class="panel-heading"><h3 class="panel-title text-center">{{ m.host|capfirst }} - {{ m.macaddress|upper }} - {{ m.statut }}</h3></div>
                         <div class="panel-body">
                             <p>Insérer graphes ici</p>
                         </div>

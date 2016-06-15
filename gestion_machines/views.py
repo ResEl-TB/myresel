@@ -162,11 +162,16 @@ class Liste(ListView):
 
     def get_queryset(self):
         uid = str(self.request.user)
-        res = ldap.search(DN_MACHINES, '(&(uidproprio=uid=%(uid)s,%(dn_people)s))' % {'uid': uid, 'dn_people': DN_PEOPLE}, ['host', 'macaddress'])
+        res = ldap.search(DN_MACHINES, '(&(uidproprio=uid=%(uid)s,%(dn_people)s))' % {'uid': uid, 'dn_people': DN_PEOPLE}, ['host', 'macaddress', 'zone'])
         machines = []
         if res:
             for machine in res:
-                machines.append({'host': machine.host[0], 'macaddress': machine.macaddress[0]})
+                statut = None
+                if 'User' in [z.lower() for z in machine.zone]:
+                    statut = 'active'
+                elif 'Inactive' in [z.lower() for z in machine.zone]:
+                    statut = 'inactive'
+                machines.append({'host': machine.host[0], 'macaddress': machine.macaddress[0], 'statut': statut})
         return machines
 
 class Modifier(View):
