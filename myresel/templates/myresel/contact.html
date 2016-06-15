@@ -13,6 +13,7 @@
                 <fieldset class="form-group">
                     <label>{{ field.label }}</label>
                     {{ field }}
+                    {% if field.errors %}{{ field.errors }}{% endif %}
                 </fieldset>
                 {% endfor %}
                 <div class="form-group text-center">

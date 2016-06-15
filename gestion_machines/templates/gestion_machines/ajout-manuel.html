@@ -10,7 +10,7 @@
             <form action="" method="post">
                 {% csrf_token %}
                 {% for field in form %}
-                <fieldset class="form-group{% if field.errors %} has-danger{% endif %}">
+                <fieldset class="form-group">
                     <label>{{ field.label }}</label>
                     {{ field }}
                     {% if field.errors %}{{ field.errors }}{% endif %}
