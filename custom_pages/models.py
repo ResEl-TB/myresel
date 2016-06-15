@@ -17,7 +17,10 @@ class Category(models.Model):
         self.slug = slugify(self.name)
         super(Category, self).save(*args, **kwargs)
 
+    def __str__(self):
+        return self.name
 
+    
 # Classe pour les articles
 # La category, le name et le texte sont plutôt explicites
 # Le slug sert de nom transformé pour que django puisse
@@ -37,3 +40,6 @@ class Article(models.Model):
 
     def get_absolute_url(self):
         return reverse ('show-article', args = [self.category.slug, self.slug])
+
+    def __str__(self):
+        return self.name
