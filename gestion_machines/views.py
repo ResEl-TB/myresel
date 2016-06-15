@@ -194,10 +194,12 @@ class Modifier(View):
                 messages.error(request, _("Cette machine ne vous appartient pas."))
                 return HttpResponseRedirect(reverse('news'))
 
-            alias = ''
-            for a in machine[0].hostalias:
-                if 'pc' + str(request.user) not in a:
-                    alias = a
+            try:
+                for a in machine[0].hostalias:
+                    if 'pc' + str(request.user) not in a:
+                        alias = a
+            except:
+                alias = ''
 
             form = self.form_class({'host': host, 'alias': alias})
             return render(request, self.template_name, {'form': form})
