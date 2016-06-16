@@ -30,7 +30,7 @@ class Reactivation(View):
 
     def get(self, request, *args, **kwargs):
         # Vérification que la machine est bien à l'user
-        machine = ldap.search(DN_MACHINES, '(&(macaddress=%s))' % network.get_mac(request.META['REMOTE_ADDR']), ['uidproprio'])[0]
+        machine = ldap.search(DN_MACHINES, '(&(macaddress=%s))' % network.get_mac(request.META['REMOTE_ADDR']), ['uidproprio', 'host', 'iphostnumber', 'macaddress'])[0]
         if str(request.user) not in machine.uidproprio[0]:
             messages.error(request, _("Cette machine n'est pas censée vous appartenir. Veuillez contacter un administrateur afin de la transférer."))
             return HttpResponseRedirect(reverse('news'))
@@ -42,6 +42,17 @@ class Reactivation(View):
             return HttpResponseRedirect(reverse('news'))
 
         ldap.reactivation(request.META['REMOTE_ADDR'])
+
+        mail = EmailMessage(
+                subject="[Reactivation Brest] La machine {} [172.22.{} - {}] par {}".format(machine.host[0], machine.iphostnumber[0], machine.macaddress[0], str(request.user)),
+                body="Reactivation de la machine {} appartenant à {}\n\nIP : 172.22.{}\nMAC : {}".format(machine.host[0], str(request.user), machine.iphostnumber[0], machine.macaddress[0]),
+                from_email="inscription-bot@resel.fr",
+                reply_to=["inscription-bot@resel.fr"],
+                to=["inscription-bot@resel.fr", "botanik@resel.fr"],
+                headers={'Cc': 'botanik@resel.fr'}
+            )
+        mail.send()
+        
         return render(request, self.template_name)
 
 class Ajout(View):
