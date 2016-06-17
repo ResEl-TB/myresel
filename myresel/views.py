@@ -10,16 +10,26 @@ from .models import *
 # Pour la traduction - sert à marquer les chaînes de caractères à traduire
 from django.utils.translation import ugettext_lazy as _
 
+
 # Create your views here.
 class Home(View):
-    """ Vue d'index, qui se charge de rediriger l'utilisateur sur la bonne page """
+    """
+    La première vue que l'utilisateur va ouvrir lorsqu'il arrive sur le site. L'objectif de cette page est d'être d'être
+    la plus simple pour tous les types d'utilisations.
+
+    Du fait des différentes origines et objectifs des utilisateurs il y a plusieurs vues possible :
+        - Nouvel utilisateur sur le campus, on lui propose de s'inscrire
+        - Utilisateur connecté sur le campus, on lui propose des options pour son compte
+        - la personne exterieure qui veut en savoir plus sur le ResEl
+        - L'utilsateur à l'exterieur qui veut avoir des infos sur son compte
+    """
 
     template_name = 'myresel/home.html'
 
     def get(self, request, *args, **kwargs):
-        # On regarde déjà si l'ip est une ip interne ou pas
+        # Check if the ip is inside the network :
         if not network.is_resel_ip(request.META['REMOTE_ADDR']):
-            return HttpResponseRedirect(reverse('news'))
+            return render(request, self.template_name)
 
         # On vérifie que la machine n'est pas desactivée.
         # Si oui, on bascule vers la page de réactivation
@@ -41,6 +51,7 @@ class Home(View):
 
         return HttpResponseRedirect(reverse('gestion-machines:ajout'))
 
+
 class NewsListe(ListView):
     """ Vue appelée pour afficher les news au niveau du ResEl """
 
@@ -49,6 +60,7 @@ class NewsListe(ListView):
 
     def get_queryset(self):
         return News.objects.all()
+
 
 class Contact(View):
     """ Vue appelée pour contacter les admin en cas de soucis """

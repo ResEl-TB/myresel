@@ -22,7 +22,7 @@
     {# MetisMenu CSS #}
     <link href="{% static 'metisMenu/css/metisMenu.min.css' %}" rel="stylesheet">
 
-    {# Custom CSS leave it last #}
+    {# Custom CSS, leave it last #}
     <link href="{% static 'css/base.css' %}" rel="stylesheet">
     {% block css %}{% endblock %}
 
@@ -40,15 +40,11 @@
         <!-- Navigation -->
         <nav class="navbar navbar-main navbar-static-top" role="navigation">
             <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="{% url 'home' %}"><img src="{% static 'images/logo_resel.png' %}" alt="logo ResEl"></a>
-                </div>
+                <ul class="nav navbar-left">
+                    <li>
+                        <a class="navbar-brand" href="{% url 'home' %}">ResEl</a>
+                    </li>
+                </ul>
                 <ul class="nav navbar-top-links navbar-right">
                     <li>
                         <a href="#">{% trans "L'association" %}</a>
@@ -78,97 +74,40 @@
                 </ul>
             </div>
             <!-- /.navbar-header -->
-
-            <div class="navbar-default sidebar" role="navigation">
-                <div class="sidebar-nav navbar-collapse">
-                    <ul class="nav metismenu" id="side-menu">
-                        <!-- Pages accessibles à tout le monde -->
-                        <li>
-                            <a href="{% url 'news' %}"><b><i class="fa fa-newspaper-o" aria-hidden="true"></i> {% trans "Les nouvelles" %}</b></a>
-                        </li>
-		      
-                        {% if request.user.is_authenticated %}
-                            <!-- Gestion du compte de l'user -->
-                            <li>
-                                <a href=""><b><i class="fa fa-user fa-fw" aria-hidden="true"></i> {% trans "Gérer mon compte" %}</b></a>
-				<ul class="nav nav-second-level">
-				  
-				   <!-- Gestion des machines -->
-				   <li>
-                                       <a href=""><i class="fa fa-laptop fa-fw" aria-hidden="true"></i> {% trans "Gérer mes machines" %}</a>
-                                        <ul class="nav nav-third-level">
-					    <li>
-                                                <a href="{% url 'gestion-machines:liste' %}"><i>{% trans "Toutes mes machines" %}</i></a>
-					    <li>
-                                                <a href="{% url 'gestion-machines:ajout-manuel' %}"><i>{% trans "Ajouter une machine manuellement" %}</i></a>
-					    </li>
-					</ul>
-                                   </li>
-                                   <!-- Paiements -->
-                                   <li>
-                                       <a href="{% url 'tresorerie:historique' %}"><i class="fa fa-money fa-fw" aria-hidden="true"></i> {% trans "Historique de mes paiements" %}</a>
-                                   </li>
-			      </ul>
-                              <!-- /.nav-second-level -->
-                            </li>
-                        {% endif %}
-
-			<!-- Catégories des pages customisées-->
-{#			{% for category in categories %}#}
-{#			    <li>#}
-{#		                <a href="{% url 'custom-pages:show-category' slug=category.slug %}"><i class="fa {{ category.fa_icon_name }} fa-fw" aria-hidden="true"></i> <b>{{ category.name }}</b></a>#}
-{#				<ul class="nav nav-second-level">#}
-{#				    <li>#}
-{#				        {% for article in category.article_set.all %}#}
-{#					    <a href="{{ article.get_absolute_url }}">{{ article.name }}</a>#}
-{#					{% endfor %}#}
-{#				    </li>	#}
-{#				</ul>#}
-{#			    </li>#}
-{#			{% endfor %}#}
-                    </ul>
-                </div>
-                <!-- /.sidebar-collapse -->
-            </div>
-            <!-- /.navbar-static-side -->
         </nav>
 
         <div id="page-wrapper">
         {% block content %}{% endblock %}
         </div>
         <!-- /#page-wrapper -->
-
     </div>
     <!-- /#wrapper -->
 
-    <hr/>
     <footer class="footer">
-	<!-- Container for setting locale language -->
+        <!-- Container for setting locale language -->
         <div class="container text-right">
-	    <form action="{% url 'set_language' %}" method="post" class="form-group form-inline">
-		{% csrf_token %}
-		<input name="next" type="hidden" value="{{ redirect_to }}"/>
-		<label>
-		    {% trans "Switch Language" %}
-		    <select name="language" class="form-control">
-			{% get_current_language as LANGUAGE_CODE %}
-			{% get_available_languages as LANGUAGES %}
-			{% get_language_info_list for LANGUAGES as languages %}
-			{% for language in languages %}
-			<option value="{{ language.code }}"
-				{% if language.code == LANGUAGE_CODE %} selected="selected" {% endif %}
-			>
-			    {{ language.name_local }} ({{ language.code }})
-			</option>
-			{% endfor %}
-		    </select>
-		</label>
-		<input type="submit" value="Go"/>
-	    </form>
+            <form action="{% url 'set_language' %}" method="post" class="form-group form-inline">
+                {% csrf_token %}
+                <input name="next" type="hidden" value="{{ redirect_to }}"/>
+                <label>
+                    {% trans "Switch Language" %}
+                    <select name="language" class="form-control">
+                        {% get_current_language as LANGUAGE_CODE %}
+                        {% get_available_languages as LANGUAGES %}
+                        {% get_language_info_list for LANGUAGES as languages %}
+                        {% for language in languages %}
+                            <option value="{{ language.code }}"
+                                    {% if language.code == LANGUAGE_CODE %} selected="selected" {% endif %}
+                            >
+                                {{ language.name_local }} ({{ language.code }})
+                            </option>
+                        {% endfor %}
+                    </select>
+                </label>
+                <input type="submit" value="Go"/>
+            </form>
         </div>
     </footer>
-
-
     
     <!-- jQuery -->
     <script src="{% static 'jquery/jquery.min.js' %}"></script>
@@ -186,5 +125,4 @@
     {% block javascript %}{% endblock %}
 
 </body>
-
 </html>
