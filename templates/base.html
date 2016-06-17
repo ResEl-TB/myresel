@@ -6,24 +6,25 @@
 
 <head>
 
+    <link rel="stylesheet" type="text/css" href="static/css/base.css"/>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>My ResEl | {% block titre %}{% endblock %}</title>
+    <title>Le ResEl | {% block titre %}{% endblock %}</title>
 
-    <!-- Bootstrap Core CSS -->
+    {# Bootstrap #}
     <link href="{% static 'boostrap/css/bootstrap.min.css' %}" rel="stylesheet">
 
-    <!-- Custom CSS -->
-    <link href="{% static 'css/base.css' %}" rel="stylesheet">
-    {% block css %}{% endblock %}
-
-    <!-- Custom Fonts -->
+    {# Custom Fonts #}
     <link href="{% static 'font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
 
-    <!-- MetisMenu CSS -->
+    {# MetisMenu CSS #}
     <link href="{% static 'metisMenu/css/metisMenu.min.css' %}" rel="stylesheet">
+
+    {# Custom CSS leave it last #}
+    <link href="{% static 'css/base.css' %}" rel="stylesheet">
+    {% block css %}{% endblock %}
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -35,35 +36,47 @@
 </head>
 
 <body>
-
     <div id="wrapper">
-
         <!-- Navigation -->
-        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="{% url 'home' %}"><img src="{% static 'images/logo_resel.png' %}" alt="logo_resel"></a>
-            </div>
+        <nav class="navbar navbar-main navbar-static-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="{% url 'home' %}"><img src="{% static 'images/logo_resel.png' %}" alt="logo ResEl"></a>
+                </div>
+                <ul class="nav navbar-top-links navbar-right">
+                    <li>
+                        <a href="#">{% trans "L'association" %}</a>
+                    </li>
 
-            <ul class="nav navbar-top-links navbar-right">
-                {% if request.user.is_authenticated %}
-                <li>
-                    <a href="/logout"><i class="fa fa-sign-out fa-fw"></i> {% trans "Déconnexion" %}</a>
-                </li>
-                {% else %}
-                <li>
-                    <a href="/login"><i class="fa fa-sign-in fa-fw"></i> {% trans "Connexion" %}</a>
-                </li>
-                {% endif %}
-                <li>
-                    <a href="{% url 'contact' %}"><i class="fa fa-comment-o fa-fw"></i> {% trans "Contact" %}</a>
-                </li>
-            </ul>
+                    <li>
+                        <a href="#">{% trans "Les services" %}</a>
+                    </li>
+
+                    <li>
+                        <a href="#">{% trans "Blog" %}</a>
+                    </li>
+
+                    <li>
+                        <a href="{% url 'contact' %}"><i class="fa fa-comment-o fa-fw"></i> {% trans "Contact" %}</a>
+                    </li>
+
+                    {% if request.user.is_authenticated %}
+                    <li>
+                        <a href="/logout"><i class="fa fa-sign-out fa-fw"></i> {% trans "Déconnexion" %}</a>
+                    </li>
+                    {% else %}
+                    <li>
+                        <a href="/login"><i class="fa fa-sign-in fa-fw"></i> {% trans "Connexion" %}</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
             <!-- /.navbar-header -->
 
             <div class="navbar-default sidebar" role="navigation">
@@ -101,18 +114,18 @@
                         {% endif %}
 
 			<!-- Catégories des pages customisées-->
-			{% for category in categories %}
-			    <li>
-		                <a href="{% url 'custom-pages:show-category' slug=category.slug %}"><i class="fa {{ category.fa_icon_name }} fa-fw" aria-hidden="true"></i> <b>{{ category.name }}</b></a>
-				<ul class="nav nav-second-level">
-				    <li>
-				        {% for article in category.article_set.all %}
-					    <a href="{{ article.get_absolute_url }}">{{ article.name }}</a>
-					{% endfor %}
-				    </li>	
-				</ul>
-			    </li>
-			{% endfor %}
+{#			{% for category in categories %}#}
+{#			    <li>#}
+{#		                <a href="{% url 'custom-pages:show-category' slug=category.slug %}"><i class="fa {{ category.fa_icon_name }} fa-fw" aria-hidden="true"></i> <b>{{ category.name }}</b></a>#}
+{#				<ul class="nav nav-second-level">#}
+{#				    <li>#}
+{#				        {% for article in category.article_set.all %}#}
+{#					    <a href="{{ article.get_absolute_url }}">{{ article.name }}</a>#}
+{#					{% endfor %}#}
+{#				    </li>	#}
+{#				</ul>#}
+{#			    </li>#}
+{#			{% endfor %}#}
                     </ul>
                 </div>
                 <!-- /.sidebar-collapse -->
