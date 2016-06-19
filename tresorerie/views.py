@@ -19,11 +19,14 @@ class Home(View):
 
     template_name = 'tresorerie/home.html'
 
-    @method_decorator(resel_required)
-    @method_decorator(login_required)
-    @method_decorator(need_to_pay)
+    #@method_decorator(resel_required)
+    #@method_decorator(login_required)
+    #@method_decorator(need_to_pay)
     def dispatch(self, *args, **kwargs):
         return super(Home, self).dispatch(*args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name)
 
     def post(self, request, *args, **kwargs):
         """ Plusieurs cas de figure
