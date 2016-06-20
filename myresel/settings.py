@@ -28,6 +28,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['my.resel.fr']
 
+# Mails
+
+SERVER_EMAIL = 'inscription@inscription.resel.fr'
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'pegase.adm.resel.fr'
+EMAIL_SUBJECT_PREFIX = ''
+
 # Login
 
 LOGIN_URL = '/login'
