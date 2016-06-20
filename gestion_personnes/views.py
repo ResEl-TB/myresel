@@ -23,8 +23,8 @@ class Inscription(View):
     template_name = 'gestion_personnes/inscription.html'
     form_class = InscriptionForm
 
-    @method_decorator(resel_required)
-    @method_decorator(unknown_machine)
+    #@method_decorator(resel_required)
+    #@method_decorator(unknown_machine)
     def dispatch(self, *args, **kwargs):
         return super(Inscription, self).dispatch(*args, **kwargs)
 

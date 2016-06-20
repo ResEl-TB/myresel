@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block titre %}Inscription{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+    <div class="container">
+        <h1>{% trans "Complète le formulaire ;)" %}</h1>
+    </div> <!-- /.container -->
+</div> <!-- /.jumbotron -->
+
+<div class="container">
+    <form action="" method="POST" class="form">
+        <div class="row">
+            {% csrf_token %}
+            <div class="col-sm-6">
+            {% for field in form %}
+                <fieldset class="form-group">
+                    <label class="form-control-label">{{ field.label }}</label>
+                    {{ field }}
+                </fieldset>
+                {% if forloop.counter|divisibleby:"3" and not forloop.last %}
+                </div> <!-- /.col-sm-6 -->
+                <div class="col-sm-6">
+                {% elif forloop.last %}
+                </div> <!-- /.col-sm-6 -->
+                {% endif %}
+            {% endfor %}
+        </div> <!-- /.row -->
+        <div class="row">
+            <div class="text-center">
+                <button type="submit" class="btn btn-info">{% trans "Envoyer" %}</button>
+            </div>
+        </div> <!-- /.row -->
+    </form>
+</div> <!-- /.container -->
+{% endblock %}
