@@ -34,12 +34,17 @@
     margin: 20px;
 }
 
+.home-presentation {
+    box-shadow: inset 0 5px 6px 0 #80817b;
+    padding: 50px;
+
+}
 .home-services {
     background: #1695A3;
     color: #ffffff;
     padding-top: 20px;
     padding-bottom: 50px;
-    box-shadow: inset 0 5px 6px 0 #16354b;
+    box-shadow: inset 0 5px 6px 0 #0f6670;
 }
 
 .home-services .row {
@@ -59,4 +64,10 @@ h3 .service-title {
 
 .home-services p {
     font-size: 1.1em;
+}
+
+
+.home-blog {
+    box-shadow: inset 0 5px 6px 0 #80817b;
+    padding: 50px;
 }
