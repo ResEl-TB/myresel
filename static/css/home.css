@@ -1,9 +1,62 @@
 .jumbotron {
-    padding-top: 70px;
+    padding-top: 100px;
+    padding-bottom: 100px;
+    margin-bottom: 0;
+    background: #ffffff;
+    text-align: center;
+
+}
+
+.jumbotron p {
+    margin-top: 20px;
+
 }
 
 .home-user-management {
-    background: #4458ff;
+    background: #225378;
     padding-top: 50px;
     padding-bottom: 50px;
+    color: #F3FFE2;
+    box-shadow: inset 0 5px 6px 0 #122a3c;
+    text-align: center;
+}
+
+.home-user-management .btn {
+    background: none;
+    color: #EB7F00;
+    border-color: #EB7F00;
+    margin: 20px;
+}
+
+.home-user-management .btn:hover {
+    border-color: #b96400;
+    color: #b96400;
+    margin: 20px;
+}
+
+.home-services {
+    background: #1695A3;
+    color: #ffffff;
+    padding-top: 20px;
+    padding-bottom: 50px;
+    box-shadow: inset 0 5px 6px 0 #16354b;
+}
+
+.home-services .row {
+    margin-top: 20px;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.service-icon {
+    font-size: 7em;
+}
+
+h3 .service-title {
+    font-size: 1.3em;
+    display: block;
+}
+
+.home-services p {
+    font-size: 1.1em;
 }

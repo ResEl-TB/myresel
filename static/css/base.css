@@ -1,8 +1,9 @@
 
 /* General CSS */
 body {
-    /*background-color: #f8f8f8;*/
+    font-family: 'Roboto', 'sans-serif';
 }
+
 
 #wrapper {
     /*width: 100%;*/
@@ -76,4 +77,11 @@ body {
     .navbar-top-links .dropdown-alerts {
         margin-left: auto;
     }
+}
+
+
+.footer {
+    background: #ACF0F2;
+    box-shadow: inset 0 5px 6px 0 #577a7c;
+    padding: 20px;
 }
