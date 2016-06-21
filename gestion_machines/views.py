@@ -12,7 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from ldap3 import MODIFY_REPLACE
 
-from .forms import *
+from .forms import AjoutForm, AjoutManuelForm, ModifierForm
 from fonctions import ldap, network
 from fonctions.decorators import resel_required, unknown_machine
 from myresel.constantes import DN_MACHINES, DN_PEOPLE
