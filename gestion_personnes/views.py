@@ -61,7 +61,7 @@ class Inscription(View):
                 # reselPerson
                 'dateInscr': time.strftime('%Y%m%d%H%M%S') + 'Z',
                 'cotiz': '0',
-                'endCotiz': '0/0/0',
+                'endCotiz': time.strftime('%Y%m%d%H%M%S') + 'Z',
 
                 # maiselPerson
                 'campus': network.get_campus(request.META['REMOTE_HOST']),
