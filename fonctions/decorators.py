@@ -2,7 +2,6 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 
-# Pour la traduction - sert à marquer les chaînes de caractères à traduire
 from django.utils.translation import ugettext_lazy as _
 
 from .network import is_resel_ip, get_mac
@@ -10,7 +9,8 @@ from .ldap import search
 from myresel.constantes import DN_MACHINES, DN_PEOPLE
 from datetime import datetime
 
-def resel_required(function = None, redirect_to = 'news'):
+
+def resel_required(function=None, redirect_to='pages:news'):
     """ Vérifie que l'user a une IP resel
 
     Ce décorateur s'assure que l'user a bien une IP ResEl.
@@ -42,6 +42,7 @@ def resel_required(function = None, redirect_to = 'news'):
     else:
         return _dec(function)
 
+
 def unknown_machine(function = None, redirect_to = 'news'):
     """ Vérifie que la machine de l'user est inconnue.
 
@@ -71,7 +72,8 @@ def unknown_machine(function = None, redirect_to = 'news'):
     else:
         return _dec(function)
 
-def need_to_pay(function = None, redirect_to = 'news'):
+
+def need_to_pay(function=None, redirect_to='news'):
     """ Vérifie que l'utilisateur n'a pas payé son accès Internet.
 
     Ce décorateur s'assure que l'utilisateur doit payer son accès Internet.

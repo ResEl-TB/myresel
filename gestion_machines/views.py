@@ -17,6 +17,7 @@ from fonctions import ldap, network
 from fonctions.decorators import resel_required, unknown_machine
 from myresel.constantes import DN_MACHINES, DN_PEOPLE
 
+
 # Create your views here.
 class Reactivation(View):
     """ Vue appelée pour ré-activer une machine d'un utilisateur absent trop longtemps du campus """
@@ -33,13 +34,13 @@ class Reactivation(View):
         machine = ldap.search(DN_MACHINES, '(&(macaddress=%s))' % network.get_mac(request.META['REMOTE_ADDR']), ['uidproprio', 'host', 'iphostnumber', 'macaddress'])[0]
         if str(request.user) not in machine.uidproprio[0]:
             messages.error(request, _("Cette machine n'est pas censée vous appartenir. Veuillez contacter un administrateur afin de la transférer."))
-            return HttpResponseRedirect(reverse('news'))
+            return HttpResponseRedirect(reverse('pages:news'))
             
         # Vérification que la machine est bien désactivée
         status = ldap.get_status(request.META['REMOTE_ADDR'])
         if status != 'inactive':
             messages.info(request, _("Votre machine n'a pas besoin d'être ré-activée."))
-            return HttpResponseRedirect(reverse('news'))
+            return HttpResponseRedirect(reverse('pages:news'))
 
         ldap.reactivation(request.META['REMOTE_ADDR'])
 
@@ -104,7 +105,7 @@ class Ajout(View):
             ldap.add(dn, object_class, attributes)
 
             messages.success(request, _("Votre machine a bien été ajoutée. Veuillez ré-initialiser votre connexion en débranchant/rebranchant le câble ou en vous déconnectant/reconnectant au Wi-Fi."))
-            return HttpResponseRedirect(reverse('news'))
+            return HttpResponseRedirect(reverse('pages:news'))
 
         return render(request, self.template_name, {'form': form})
 
@@ -137,7 +138,7 @@ class AjoutManuel(View):
             mail.send()
 
             messages.success(request, _("Votre demande a été envoyée aux administrateurs. L'un d'eux vous contactera d'ici peu de temps."))
-            return HttpResponseRedirect(reverse('news'))
+            return HttpResponseRedirect(reverse('pages:news'))
 
         return render(request, self.template_name, {'form': form})
 
@@ -161,7 +162,7 @@ class ChangementCampus(View):
 
         # La machine est déjà dans le bon campus, on redirige sur la page d'accueil
         messages.info(request, _("Cette machine est déjà enregistrée comme étant dans le bon campus."))
-        return HttpResponseRedirect(reverse('news'))
+        return HttpResponseRedirect(reverse('pages:news'))
 
 class Liste(ListView):
     """ Vue appelée pour afficher la liste des machines d'un user """
@@ -211,7 +212,7 @@ class Modifier(View):
         if machine:
             if str(request.user) not in machine[0].entry_to_json():
                 messages.error(request, _("Cette machine ne vous appartient pas."))
-                return HttpResponseRedirect(reverse('news'))
+                return HttpResponseRedirect(reverse('pages:news'))
 
             alias = ''
             try:
@@ -233,7 +234,7 @@ class Modifier(View):
             return render(request, self.template_name, {'form': form})
         else:
             messages.error(request, _("Cette machine n'est pas connue sur notre réseau."))
-            return HttpResponseRedirect(reverse('news'))
+            return HttpResponseRedirect(reverse('pages:news'))
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
