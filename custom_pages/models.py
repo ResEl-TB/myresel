@@ -2,6 +2,8 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.core.urlresolvers import reverse
+from ckeditor.fields import RichTextField
+
 
 # Classe pour les catégories d'article
 # Le name et la description sont plutôt explicites
@@ -49,3 +51,15 @@ class Article(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class News(models.Model):
+    class Meta:
+        verbose_name = 'news'
+        verbose_name_plural = 'news'
+
+    titre = models.CharField(max_length = 100)
+    contenu = RichTextField()
+
+    def __str__(self):
+        return self.titre

@@ -10,10 +10,9 @@ from fonctions import ldap, generic, network
 from fonctions.decorators import resel_required, unknown_machine
 from .forms import *
 
-# Pour la traduction - sert à marquer les chaînes de caractères à traduire
 from django.utils.translation import ugettext_lazy as _
 
-# Create your views here.
+
 class Inscription(View):
     """
     Vue appelée pour que l'user s'inscrive au ResEl
