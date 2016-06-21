@@ -1,6 +1,6 @@
 from ldap3 import Server, Connection, MODIFY_REPLACE
-from myresel.constantes import *
-from .network import *
+from myresel.constantes import LDAP, DN_ADMIN, DN_MACHINES, DN_PEOPLE, PASSWD_ADMIN
+from .network import get_campus, get_mac, update_all
 from .generic import get_year
 
 def search(dn, query, attr = None):

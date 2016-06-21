@@ -8,7 +8,7 @@ from django.contrib import messages
 
 from fonctions import ldap, generic, network
 from fonctions.decorators import resel_required, unknown_machine
-from .forms import *
+from .forms import InscriptionForm
 
 from django.utils.translation import ugettext_lazy as _
 
@@ -22,8 +22,8 @@ class Inscription(View):
     template_name = 'gestion_personnes/inscription.html'
     form_class = InscriptionForm
 
-    #@method_decorator(resel_required)
-    #@method_decorator(unknown_machine)
+    @method_decorator(resel_required)
+    @method_decorator(unknown_machine)
     def dispatch(self, *args, **kwargs):
         return super(Inscription, self).dispatch(*args, **kwargs)
 
@@ -59,7 +59,7 @@ class Inscription(View):
 
                 # reselPerson
                 'dateInscr': time.strftime('%Y%m%d%H%M%S') + 'Z',
-                'cotiz': 'BLACKLIST' + year,
+                'cotiz': 'BLACKLIST' + str(year),
                 'endCotiz': time.strftime('%Y%m%d%H%M%S') + 'Z',
 
                 # maiselPerson
@@ -67,7 +67,6 @@ class Inscription(View):
                 'batiment': 'I' + form.cleaned_data['batiment'],
                 'roomNumber': str(form.cleaned_data['chambre']),
             }
-            print(dn, object_class, attributes)
 
             # Ajout de la fiche au LDAP
             ldap.add(dn, object_class, attributes)
