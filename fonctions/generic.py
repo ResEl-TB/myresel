@@ -20,7 +20,7 @@ def get_end_date(duree):
     return date.strftime('%d/%m/%Y')
 
 
-def hash_to_passwd(password):
+def hash_passwd(password):
     """ Fourni un hash du passwd utilisateur pour le stocker dans le LDAP """
 
     salt = os.urandom(4)
@@ -31,4 +31,4 @@ def hash_to_passwd(password):
 def hash_to_ntpass(password):
     """ Fourni un hash du mdp pour correspondre avec le loggin over Wi-Fi """
 
-    return binascii.hexlify(hashlib.new('md4', password.encode('utf-16le')).digest()).upper()
+    return str(binascii.hexlify(hashlib.new('md4', password.encode('utf-16le')).digest()).upper()).split('\'')[1]

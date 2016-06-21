@@ -40,30 +40,40 @@ class Inscription(View):
             year = generic.get_year()
 
             # Mise en forme du DN et des attributs de la fiche LDAP
-            dn = 'uid=%s,ou=people,dc=maisel,dc=enst-bretagne,dc=fr' % form.cleaned_data['pseudo']
+            dn = 'uid=%s,ou=people,dc=maisel,dc=enst-bretagne,dc=fr' % form.cleaned_data['pseudo'].lower()
             object_class = ['genericPerson','enstbPerson','reselPerson', 'maiselPerson']
             attributes = {
-                'uid': form.cleaned_data['pseudo'],
+                # Attributs genericPerson
+                'uid': form.cleaned_data['pseudo'].lower(),
                 'firstname': form.cleaned_data['prenom'],
                 'lastname': form.cleaned_data['nom'],
-                'mail': form.cleaned_data['mail'],
-                'anneeScolaire': '{}/{}'.format(year, year+1),
-                'dateInscr': time.strftime('%Y%m%d%H%M%S') + 'Z',
-                'objectClass': ['genericPerson','enstbPerson','reselPerson', 'maiselPerson'],
-                'campus': network.get_campus(request.META['HTTP_X_FORWARDED_FOR']),
+                'displayname': form.cleaned_data['prenom'] + ' ' + form.cleaned_data['nom'],
                 'userPassword': generic.hash_passwd(form.cleaned_data['mot_de_passe']),
                 'ntPassword': generic.hash_to_ntpass(form.cleaned_data['mot_de_passe']),
-                'batiment': form.cleaned_data['batiment'],
-                'roomNumber': form.cleaned_data['chambre'],
+
+                # enstbPerson
+                'promo': str(year + 3),
+                'mail': form.cleaned_data['mail'],
+                'anneeScolaire': '{}/{}'.format(year, year+1),
                 'mobile': form.cleaned_data['telephone'],
+                'option': network.get_campus(request.META['REMOTE_HOST']),
+
+                # reselPerson
+                'dateInscr': time.strftime('%Y%m%d%H%M%S') + 'Z',
                 'cotiz': '0',
-                'endInternet': '0/0/0'
+                'endCotiz': '0/0/0',
+
+                # maiselPerson
+                'campus': network.get_campus(request.META['REMOTE_HOST']),
+                'batiment': 'I' + form.cleaned_data['batiment'],
+                'roomNumber': str(form.cleaned_data['chambre']),
             }
+            print(dn, object_class, attributes)
 
             # Ajout de la fiche au LDAP
             ldap.add(dn, object_class, attributes)
 
-            # Inscription de la personne à la ML campus
+            """# Inscription de la personne à la ML campus
             mail = EmailMessage(
                 subject = "SUBSCRIBE campus {} {}".format(form.cleaned_data['prenom'], form.cleaned_data['nom']),
                 body = "Inscription automatique de {} a campus".format(form.cleaned_data['pseudo']),
@@ -74,6 +84,6 @@ class Inscription(View):
             mail.send()
 
             messages.success(request, _("Vous êtes désormais inscrit au ResEl. Vous pouvez dès à présent inscrire votre machine."))
-            return HttpResponseRedirect(reverse('home'))
+            return HttpResponseRedirect(reverse('home'))"""
 
         return render(request, self.template_name, {'form': form})

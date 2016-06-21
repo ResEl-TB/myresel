@@ -6,11 +6,12 @@
 {% block content %}
 <div class="jumbotron">
     <div class="container">
-        <h1>{% trans "Complète le formulaire ;)" %}</h1>
+        <h1>{% trans "Bienvenue au ResEl !" %}</h1>
+        <p>{% blocktrans %}Avant de pouvoir avoir accès au net, il faut que tu t'inscrives !{% endblocktrans %}</p>
     </div> <!-- /.container -->
 </div> <!-- /.jumbotron -->
 
-<div class="container">
+<div class="container well">
     <form action="" method="POST" class="form">
         <div class="row">
             {% csrf_token %}
@@ -19,6 +20,7 @@
                 <fieldset class="form-group">
                     <label class="form-control-label">{{ field.label }}</label>
                     {{ field }}
+                    {% if field.errors %}{{ field.errors }}{% endif %}
                 </fieldset>
                 {% if forloop.counter|divisibleby:"3" and not forloop.last %}
                 </div> <!-- /.col-sm-6 -->
