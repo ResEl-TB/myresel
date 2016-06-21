@@ -136,7 +136,7 @@ def cotisation(user, duree):
     l.modify(
         'uid=%s,' % user + DN_PEOPLE,
         {'cotiz': [(MODIFY_REPLACE, [str(generic.get_year())])],
-         'endInternet': [(MODIFY_REPLACE, [generic.get_end_date(duree)])]}
+         'endCotiz': [(MODIFY_REPLACE, [generic.get_end_date(duree)])]}
     )
     l.unbind()
     update_all()

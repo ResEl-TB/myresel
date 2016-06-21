@@ -60,7 +60,7 @@ class Inscription(View):
 
                 # reselPerson
                 'dateInscr': time.strftime('%Y%m%d%H%M%S') + 'Z',
-                'cotiz': '0',
+                'cotiz': 'BLACKLIST' + year,
                 'endCotiz': time.strftime('%Y%m%d%H%M%S') + 'Z',
 
                 # maiselPerson
@@ -73,7 +73,7 @@ class Inscription(View):
             # Ajout de la fiche au LDAP
             ldap.add(dn, object_class, attributes)
 
-            """# Inscription de la personne à la ML campus
+            # Inscription de la personne à la ML campus
             mail = EmailMessage(
                 subject = "SUBSCRIBE campus {} {}".format(form.cleaned_data['prenom'], form.cleaned_data['nom']),
                 body = "Inscription automatique de {} a campus".format(form.cleaned_data['pseudo']),
@@ -84,6 +84,6 @@ class Inscription(View):
             mail.send()
 
             messages.success(request, _("Vous êtes désormais inscrit au ResEl. Vous pouvez dès à présent inscrire votre machine."))
-            return HttpResponseRedirect(reverse('home'))"""
+            return HttpResponseRedirect(reverse('home'))
 
         return render(request, self.template_name, {'form': form})

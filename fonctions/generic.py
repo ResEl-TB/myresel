@@ -17,7 +17,7 @@ def get_end_date(duree):
     """ Fonction qui renvoie la date actuelle + la durée en jours """
 
     date = datetime.now() + timedelta(days = duree)
-    return date.strftime('%d/%m/%Y')
+    return date.strftime('%Y%m%d%H%M%S') + 'Z'
 
 
 def hash_passwd(password):
