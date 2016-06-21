@@ -1,8 +1,10 @@
 
 /* General CSS */
 body {
-    /*background-color: #f8f8f8;*/
+    font-family: 'Roboto', 'sans-serif';
+    font-size: 1.4em;
 }
+
 
 #wrapper {
     /*width: 100%;*/
@@ -76,4 +78,10 @@ body {
     .navbar-top-links .dropdown-alerts {
         margin-left: auto;
     }
+}
+
+
+.footer {
+    background: #ACF0F2;
+    padding: 20px;
 }

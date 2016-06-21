@@ -22,6 +22,9 @@
     {# MetisMenu CSS #}
     <link href="{% static 'metisMenu/css/metisMenu.min.css' %}" rel="stylesheet">
 
+    {# fonts #}
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet">
+
     {# Custom CSS, leave it last #}
     <link href="{% static 'css/base.css' %}" rel="stylesheet">
     {% block css %}{% endblock %}
@@ -85,7 +88,7 @@
 
     <footer class="footer">
         <!-- Container for setting locale language -->
-        <div class="container text-right">
+        <div class="container-fluid text-right">
             <form action="{% url 'set_language' %}" method="post" class="form-group form-inline">
                 {% csrf_token %}
                 <input name="next" type="hidden" value="{{ redirect_to }}"/>

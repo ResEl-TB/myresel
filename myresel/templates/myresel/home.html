@@ -42,11 +42,11 @@
     <div class="jumbotron">
         <div class="container">
         <div class="row">
-        <div class="col-lg-3 col-lg-offset-1">
+        <div class="col-md-4 col-md-offset-1">
             <h1>{% trans "Le ResEl" %}</h1>
-            <p>Le réseau des élèves de Télécom Bretagne</p>
+            <p>Le Réseau des Élèves de Télécom Bretagne</p>
         </div>
-        <div class="col-lg-5 col-lg-offset-3">
+        <div class="col-md-7">
             <img src="{% static "images/logo_resel.png" %}" alt="logo ResEl" height="200">
         </div>
         </div>
@@ -63,21 +63,85 @@
     {% else %}
         <div class="container">
             <div class="row">
-                <div class="col-lg-3">
-                    <span>{% trans "Nouveau sur le campus ?" %}</span>
-                    <a href="#" class="btn btn-default btn-lg ">{%  trans "Inscription"%}</a>
+                <div class="col-md-4 col-md-offset-1">
+                    <h3>{% trans "Nouveau sur le campus ?" %}</h3>
+                    <a href="{% url 'gestion-personnes:inscription' %}" class="btn btn-default btn-lg ">{%  trans "Inscription"%}</a>
+                    <p>En vous inscrivant au ResEl vous pourrez dès à présent vous connecter à internet et utiliser les services du ResEl.</p>
                 </div>
 
-                <div class="col-lg-3">
-                    <span>{% trans "Déjà inscrit au ResEl ?" %}</span>
-                    <a href="#" class="btn btn-default btn-lg">{%  trans "Connexion"%}</a>
+                <div class="col-md-4 col-md-offset-2">
+                    <h3>{% trans "Déjà inscrit au ResEl ?" %}</h3>
+                    <a href="{% url 'login' %}" class="btn btn-default btn-lg">{%  trans "Connexion"%}</a>
                 </div>
             </div>
         </div>
     {% endif %}
-
+    </div>
+    <div class="home-presentation">
+        <div class="container">
+            <h2>L'association qui gère le réseau sur le campus de Télécom Bretagne</h2>
+            <p>Occaecati doloremque fugit nesciunt doloribus quia eos. Quis tenetur voluptas officia atque sit. Doloribus facilis quas consequatur ea reprehenderit vel.
+            <p>Voluptates est ut unde quibusdam assumenda. Voluptatibus sint non similique totam. Officiis est animi sint dicta tempore optio ad. Assumenda quidem fuga cumque rem quasi. Repellendus perferendis sapiente nam ut perferendis eaque quia. Magnam ut nesciunt enim nostrum id id architecto.</p>
+            <p>Reprehenderit quia repudiandae dolorem et assumenda omnis error consequatur. Quas officiis aliquam et sint earum sint. Corporis porro asperiores culpa neque et voluptas velit. Quisquam dolorum quos perferendis provident voluptatum. Aut incidunt molestias numquam rerum. Aspernatur quia qui voluptate a.</p>
+            <p>Voluptate tempore consectetur minus ipsam et molestiae omnis illo. Magnam et perspiciatis delectus maiores eum dolor reprehenderit aspernatur. Earum ea dolorem quia est deleniti incidunt tempore quis. Voluptas quam sapiente ut rerum ab dolor. Ratione eius voluptates eum et in dolores maiores id. Magnam quas modi sit.</p>
+        </div>
+    </div>
 
     <div class="home-services">
-    <h2>Les services du ResEl</h2>
+        <div class="container">
+            <h2>Les services du ResEl</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <span class="glyphicon glyphicon-flash service-icon" aria-hidden="true"></span>
+                    <h3 class="service-title">Internet très au débit</h3>
+                    <p>Le ResEl propose un internet neutre à tous ses adhérents</p>
+                </div>
+                <div class="col-md-4">
+                    <span class="glyphicon glyphicon-film service-icon" aria-hidden="true"></span>
+                    <h3 class="service-title">La télévision</h3>
+                    <p>Grâce au ResEl il est possible de regarder plus de 15 chaines en direct sur son ordinateur</p>
+                </div>
+                <div class="col-md-4">
+                    <span class="glyphicon glyphicon-cloud service-icon" aria-hidden="true"></span>
+                    <h3 class="service-title">Hébergement web</h3>
+                    <p>Hebergez tous vos sites ou applications web pour votre club ou association</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <span class="glyphicon glyphicon-envelope service-icon" aria-hidden="true"></span>
+                    <h3 class="service-title">Les mails</h3>
+                    <p>Les mailing list ResEl permettent de faire vitre le campus de Télécom Bretagne !</p>
+                </div>
+                <div class="col-md-4">
+                    <span class="glyphicon glyphicon-education service-icon" aria-hidden="true"></span>
+                    <h3 class="service-title">Les clubs</h3>
+                    <p>On héberge tous les clubs</p>
+                </div>
+                <div class="col-md-4">
+                    <span class="glyphicon glyphicon-download service-icon" aria-hidden="true"></span>
+                    <h3 class="service-title">Garbage</h3>
+                    <p>Chuuuut...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="home-blog">
+        <div class="container">
+            <h2>Les dernières nouvelles</h2>
+            <article>
+                <h3>Un nouveau site ResEl</h3>
+                <p>Le site du ResEl est à nouveau un site digne de ce nom. En effet...</p>
+            </article>
+            <hr />
+            <article>
+                <h3>Le chien du ResEl est arrivé</h3>
+                <p>Intérogeons dès maintenant ce mystérieux spécimen...</p>
+            </article>
+
+        </div>
+
     </div>
 {% endblock %}
