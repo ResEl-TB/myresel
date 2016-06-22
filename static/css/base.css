@@ -76,8 +76,39 @@ body {
     }
 }
 
-
 .footer {
-    background: #ACF0F2;
+    background-color: #225378;
+    /*background: #ACF0F2;*/
     padding: 20px;
+    color: #ffffff;
+}
+
+/* Alerts */
+.alert-info {
+    background-color: #1695A3;
+    color: #F3FFE2;
+    border-color: transparent;
+}
+
+
+/* btn */
+.btn-info {
+    background-color: #225378;
+    border-color: #225378;
+}
+
+.btn-info:hover {
+    background-color: #3179ad;
+    border-color: #3179ad;
+}
+
+.btn-info:focus {
+    background-color: #3179ad;
+    border-color: #3179ad;
+}
+
+
+
+.alert-info a {
+    color: #1de1f4;
 }
