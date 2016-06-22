@@ -22,6 +22,11 @@
                             {{ form.first_name }}
                             {% if form.first_name.errors %}<span class="help-block">{{ form.first_name.errors }}</span>{% endif %}
                         </fieldset>
+
+                        <fieldset class="form-group col-sm-6 {% if form.formation.errors %}has-error{% endif %}">
+                            {{ form.formation }}
+                            {% if form.formation.errors %}<span class="help-block">{{ form.formation.errors }}</span>{% endif %}
+                        </fieldset>
                     </div>
                 </div>
 

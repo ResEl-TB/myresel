@@ -9,6 +9,13 @@ from phonenumber_field.formfields import PhoneNumberField
 class InscriptionForm(forms.Form):
     BUILDINGS = [(0, _("Selectionnez un Bâtiment"))]
     BUILDINGS += [(i, 'I%d' % i) for i in range(1, 13)]
+    FORMATIONS = [
+        (0, _("Indiquez votre Formation")),
+        ('FIG', _("Ingénieur généraliste (FIG)")),
+        ('FIP', _("Ingénieur par alternance (FIP)")),
+        ('Master', _("Master spécialisé")),
+        ('Other', _("Autre"))
+    ]
 
     last_name = forms.CharField(
         widget=forms.TextInput(attrs={
@@ -24,6 +31,14 @@ class InscriptionForm(forms.Form):
             'placeholder': _("Prénom"),
         }),
         validators=[MaxLengthValidator(50)],
+    )
+
+    formation = forms.ChoiceField(
+        choices=FORMATIONS,
+        widget=forms.Select(attrs={
+            'class': 'form-control',
+            'placeholder': _("Formation"),
+        })
     )
 
     username = forms.CharField(
@@ -98,5 +113,12 @@ class InscriptionForm(forms.Form):
         building = self.cleaned_data['building']
 
         if building == '0':
-            raise ValidationError(message=_("Veuillez selectionner un bâtiment"), code="NO BUILDING")
+            raise ValidationError(message=_("Veuillez sélectionner un bâtiment"), code="NO BUILDING")
         return building
+
+    def clean_formation(self):
+        formation = self.cleaned_data['formation']
+
+        if formation == '0':
+            raise ValidationError(message=_("Veuillez sélectionner une formation"), code="NO FORMATION")
+        return formation
