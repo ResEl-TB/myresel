@@ -4,37 +4,93 @@
 {% block titre %}Inscription{% endblock %}
 
 {% block content %}
-<div class="jumbotron">
     <div class="container">
-        <h1>{% trans "Bienvenue au ResEl !" %}</h1>
-        <p>{% blocktrans %}Avant de pouvoir avoir accès au net, il faut que tu t'inscrives !{% endblocktrans %}</p>
-    </div> <!-- /.container -->
-</div> <!-- /.jumbotron -->
+        <h1 class="page-header">Inscription au ResEl</h1>
+        <div class="alert alert-warning">Vous êtes sur le point de créer un compte Resel, si vous en avez déjà un veuillez vous <a href="{% url "login" %}">connecter</a>.</div>
+        <div class="col-md-8">
+            <form action="" method="POST" class="form">
+                {% csrf_token %}
+                <div class="form-category">
+                    <p>{% trans "Veuillez renseigner vos informations personnelles :" %}</p>
+                    <div class="row">
+                        <fieldset class="form-group col-sm-6 {% if form.last_name.errors %}has-error{% endif %}" >
+                            {{ form.last_name }}
+                            {% if form.last_name.errors %}<span class="help-block">{{ form.last_name.errors }}</span>{% endif %}
+                        </fieldset>
 
-<div class="container well">
-    <form action="" method="POST" class="form">
-        <div class="row">
-            {% csrf_token %}
-            <div class="col-sm-6">
-            {% for field in form %}
-                <fieldset class="form-group">
-                    <label class="form-control-label">{{ field.label }}</label>
-                    {{ field }}
-                    {% if field.errors %}{{ field.errors }}{% endif %}
-                </fieldset>
-                {% if forloop.counter|divisibleby:"3" and not forloop.last %}
-                </div> <!-- /.col-sm-6 -->
-                <div class="col-sm-6">
-                {% elif forloop.last %}
-                </div> <!-- /.col-sm-6 -->
-                {% endif %}
-            {% endfor %}
-        </div> <!-- /.row -->
-        <div class="row">
-            <div class="text-center">
-                <button type="submit" class="btn btn-info">{% trans "Envoyer" %}</button>
-            </div>
-        </div> <!-- /.row -->
-    </form>
-</div> <!-- /.container -->
+                        <fieldset class="form-group col-sm-6 {% if form.first_name.errors %}has-error{% endif %}">
+                            {{ form.first_name }}
+                            {% if form.first_name.errors %}<span class="help-block">{{ form.first_name.errors }}</span>{% endif %}
+                        </fieldset>
+                    </div>
+                </div>
+
+                <div class="form-category">
+                    <p>{% trans "Veuillez renseigner vos informations de compte :" %}</p>
+                    <div class="row">
+                        <fieldset class="form-group col-sm-6 {% if form.username.errors %}has-error{% endif %}">
+                            {{ form.username }}
+                            {% if form.username.errors %}<span class="help-block">{{ form.username.errors }}</span>{% endif %}
+                        </fieldset>
+                    </div>
+
+                    <div class="row">
+                        <fieldset class="form-group col-sm-6 {% if form.email.errors %}has-error{% endif %}">
+                            {{ form.email }}
+                            {% if form.email.errors %}<span class="help-block">{{ form.email.errors }}</span>{% endif %}
+                        </fieldset>
+                    </div>
+
+                    <div class="row">
+                        <fieldset class="form-group col-sm-6 {% if form.password.errors %}has-error{% endif %}">
+                            {{ form.password }}
+                            {% if form.password.errors %}<span class="help-block">{{ form.password.errors }}</span>{% endif %}
+                        </fieldset>
+                        <fieldset class="form-group col-sm-6 {% if form.password_verification.errors %}has-error{% endif %}">
+                            {{ form.password_verification }}
+                            {% if form.password_verification.errors %}<span class="help-block">{{ form.password_verification.errors }}</span>{% endif %}
+                        </fieldset>
+                    </div>
+                </div>
+
+                <div class="form-category">
+                    <p>{% trans "Nous avons de besoin de votre numéro de bâtiment, votre numéro de chambre et votre numéro de téléphone afin de vous contacter" %}</p>
+                    <div class="row">
+                        <fieldset class="form-group col-sm-6 {% if form.building.errors %}has-error{% endif %}">
+                            {{ form.building }}
+                            {% if form.building.errors %}<span class="help-block">{{ form.building.errors }}</span>{% endif %}
+                        </fieldset>
+                        <fieldset class="form-group col-sm-6 {% if form.room.errors %}has-error{% endif %}">
+                            {{ form.room }}
+                            {% if form.room.errors %}<span class="help-block">{{ form.room.errors }}</span>{% endif %}
+                        </fieldset>
+                    </div>
+
+                    <div class="row">
+                        <fieldset class="form-group col-sm-6 {% if form.phone.errors %}has-error{% endif %}">
+                            {{ form.phone }}
+                            {% if form.phone.errors %}<span class="help-block">{{ form.phone.errors }}</span>{% endif %}
+                        </fieldset>
+                    </div>
+                </div>
+
+                <div class="form-category">
+
+                    <div class="row">
+                        <fieldset class="checkbox form-group col-sm-10 col-sm-offset-2 {% if form.certify_truth.errors %}has-error{% endif %}">
+                            {{ form.certify_truth }}{{ form.certify_truth.label_tag }}
+                            {% if form.certify_truth.errors %}<span class="help-block">{{ form.certify_truth.errors }}</span>{% endif %}
+                        </fieldset>
+                    </div>
+                </div>
+
+                <div class="form-category">
+                    <div class="row">
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-info">{% trans "Créer un compte" %}</button>
+                        </div>
+                    </div> <!-- /.row -->
+                </div>
+            </form>
+        </div> <!-- /.container -->
 {% endblock %}

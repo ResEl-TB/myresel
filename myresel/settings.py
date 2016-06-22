@@ -86,6 +86,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'ckeditor',
     'ckeditor_uploader',
+    'phonenumber_field',
     'gestion_machines',
     'gestion_personnes',
     'myresel',
@@ -197,3 +198,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = '/media/'
 
 ADMIN_MEDIA_PREFIX = '/media/adm/'
+
+# Phone numbers
+PHONENUMBER_DB_FORMAT = "E164"
+PHONENUMBER_DEFAULT_REGION = "FR"

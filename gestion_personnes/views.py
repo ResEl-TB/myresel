@@ -39,22 +39,22 @@ class Inscription(View):
             year = generic.get_year()
 
             # Mise en forme du DN et des attributs de la fiche LDAP
-            dn = 'uid=%s,ou=people,dc=maisel,dc=enst-bretagne,dc=fr' % form.cleaned_data['pseudo'].lower()
+            dn = 'uid=%s,ou=people,dc=maisel,dc=enst-bretagne,dc=fr' % form.cleaned_data["username"].lower()
             object_class = ['genericPerson','enstbPerson','reselPerson', 'maiselPerson']
             attributes = {
                 # Attributs genericPerson
-                'uid': form.cleaned_data['pseudo'].lower(),
-                'firstname': form.cleaned_data['prenom'],
-                'lastname': form.cleaned_data['nom'],
-                'displayname': form.cleaned_data['prenom'] + ' ' + form.cleaned_data['nom'],
-                'userPassword': generic.hash_passwd(form.cleaned_data['mot_de_passe']),
-                'ntPassword': generic.hash_to_ntpass(form.cleaned_data['mot_de_passe']),
+                'uid': form.cleaned_data["username"].lower(),
+                'firstname': form.cleaned_data["first_name"],
+                'lastname': form.cleaned_data["last_name"],
+                'displayname': form.cleaned_data["first_name"] + ' ' + form.cleaned_data["last_name"],
+                'userPassword': generic.hash_passwd(form.cleaned_data["password"]),
+                'ntPassword': generic.hash_to_ntpass(form.cleaned_data["password"]),
 
                 # enstbPerson
                 'promo': str(year + 3),
-                'mail': form.cleaned_data['mail'],
+                'mail': form.cleaned_data["email"],
                 'anneeScolaire': '{}/{}'.format(year, year+1),
-                'mobile': form.cleaned_data['telephone'],
+                'mobile': form.cleaned_data["phone"],
                 'option': network.get_campus(request.META['REMOTE_HOST']),
 
                 # reselPerson
@@ -64,8 +64,8 @@ class Inscription(View):
 
                 # maiselPerson
                 'campus': network.get_campus(request.META['REMOTE_HOST']),
-                'batiment': 'I' + form.cleaned_data['batiment'],
-                'roomNumber': str(form.cleaned_data['chambre']),
+                'batiment': 'I' + form.cleaned_data["building"],
+                'roomNumber': str(form.cleaned_data["room"]),
             }
 
             # Ajout de la fiche au LDAP
@@ -73,9 +73,9 @@ class Inscription(View):
 
             # Inscription de la personne à la ML campus
             mail = EmailMessage(
-                subject = "SUBSCRIBE campus {} {}".format(form.cleaned_data['prenom'], form.cleaned_data['nom']),
-                body = "Inscription automatique de {} a campus".format(form.cleaned_data['pseudo']),
-                from_email = form.cleaned_data['mail'],
+                subject = "SUBSCRIBE campus {} {}".format(form.cleaned_data["first_name"], form.cleaned_data["last_name"]),
+                body = "Inscription automatique de {} a campus".format(form.cleaned_data["username"]),
+                from_email = form.cleaned_data["email"],
                 reply_to = ["listmaster@resel.fr"],
                 to = ["sympa@resel.fr"],
             )

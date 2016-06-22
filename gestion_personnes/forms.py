@@ -1,16 +1,102 @@
 from django import forms
+from django.core.exceptions import ValidationError
+from django.core.validators import MaxLengthValidator, MinLengthValidator
 
-# Pour la traduction - sert à marquer les chaînes de caractères à traduire
 from django.utils.translation import ugettext_lazy as _
+from phonenumber_field.formfields import PhoneNumberField
+
 
 class InscriptionForm(forms.Form):
-    BATIMENTS = [(i, 'I%d' % i) for i in range(1, 13)]
+    BUILDINGS = [(0, _("Selectionnez un Bâtiment"))]
+    BUILDINGS += [(i, 'I%d' % i) for i in range(1, 13)]
 
-    pseudo = forms.CharField(label = _("Pseudo"), widget = forms.TextInput(attrs = {'class': 'form-control'}))
-    nom = forms.CharField(label = _("Nom"), widget = forms.TextInput(attrs = {'class': 'form-control'}))
-    batiment = forms.ChoiceField(label = _("Bâtiment"), choices = BATIMENTS, widget = forms.Select(attrs = {'class': 'form-control'}))
-    mail = forms.EmailField(label = _("Adresse mail"), widget = forms.EmailInput(attrs = {'class': 'form-control'}))
-    prenom = forms.CharField(label = _("Prénom"), widget = forms.TextInput(attrs = {'class': 'form-control'}))
-    chambre = forms.IntegerField(label = _("Chambre"), min_value = 0, max_value = 330, widget = forms.NumberInput(attrs = {'class': 'form-control'}))
-    telephone = forms.RegexField(label = _("Numéro de téléphone"), regex = r'^0[6-7]([0-9]{2}){4}$', widget = forms.TextInput(attrs = {'class': 'form-control'}))
-    mot_de_passe = forms.CharField(widget = forms.PasswordInput(attrs = {'class': 'form-control'})) 
+    last_name = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': _("Nom de famille"),
+        }),
+        validators=[MaxLengthValidator(50)],
+    )
+
+    first_name = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': _("Prénom"),
+        }),
+        validators=[MaxLengthValidator(50)],
+    )
+
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': _("Choisissez un nom d'utilisateur"),
+        }),
+        validators=[MaxLengthValidator(20)],
+    )
+
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+            'placeholder': _("Addresse e-mail"),
+        }),
+    )
+
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': _("Choisissez un mot de passe sécurisé"),
+        }),
+        validators=[MinLengthValidator(8)],
+    )
+
+    password_verification = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': _("Retapez votre mot de passe")
+        }),
+        validators=[],
+    )
+
+    building = forms.ChoiceField(
+        choices=BUILDINGS,
+        widget=forms.Select(attrs={
+            'class': 'form-control',
+            'placeholder': _("Bâtiment"),
+        })
+    )
+
+    room = forms.IntegerField(
+        min_value=0,
+        max_value=330,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': _("N° de Chambre"),
+        })
+    )
+
+    phone = PhoneNumberField(
+        widget=PhoneNumberField.widget(attrs={
+            'class': 'form-control',
+            'placeholder': _("Numéro de téléphone"),
+        })
+    )
+
+    certify_truth = forms.BooleanField(
+        label=_("Je certifie sur l'honneur que les informations saisies sont correctes."),
+        widget=forms.CheckboxInput()
+    )
+
+    def clean_password_verification(self):
+        password1 = self.cleaned_data['password']
+        password2 = self.cleaned_data['password_verification']
+
+        if password1 == password2:
+            return password2
+        raise ValidationError(message=_("Les mots de passes sont différents."), code="NOT SAME PASSWORD")
+
+    def clean_building(self):
+        building = self.cleaned_data['building']
+
+        if building == '0':
+            raise ValidationError(message=_("Veuillez selectionner un bâtiment"), code="NO BUILDING")
+        return building

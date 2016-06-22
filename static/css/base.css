@@ -7,7 +7,7 @@ body {
 
 
 #page-wrapper {
-    min-height: 568px;
+    min-height: 700px;
     background-color: #fff;
 }
 
@@ -78,16 +78,27 @@ body {
 
 .footer {
     background-color: #225378;
-    /*background: #ACF0F2;*/
-    padding: 20px;
     color: #ffffff;
+    padding-top: 15px;
 }
+
 
 /* Alerts */
 .alert-info {
     background-color: #1695A3;
     color: #F3FFE2;
     border-color: transparent;
+}
+
+.alert-warning {
+    background-color: #EB7F00;
+    color: #ffffff;
+    border: none;
+    color: #000000;
+}
+
+.alert-warning a {
+    color: #3c9ada;
 }
 
 
@@ -108,7 +119,17 @@ body {
 }
 
 
+/* inscription specific style */
+.form-category {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
 
-.alert-info a {
-    color: #1de1f4;
+.form-category fieldset {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.help-block ul {
+    list-style-type: none;
 }
