@@ -14,7 +14,7 @@ class InscriptionForm(forms.Form):
         ('FIG', _("Ingénieur généraliste (FIG)")),
         ('FIP', _("Ingénieur par alternance (FIP)")),
         ('Master', _("Master spécialisé")),
-        ('Other', _("Autre"))
+        ('Autre', _("Autre"))
     ]
 
     last_name = forms.CharField(
