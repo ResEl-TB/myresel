@@ -8,7 +8,7 @@ def get_year():
     year = datetime.now().year
     month = datetime.now().month
 
-    if month < 6:
+    if month <= 7:
         year -= 1
 
     return year
