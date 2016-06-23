@@ -18,4 +18,3 @@ def resel_context(request):
         'is_ip_in_resel': ip_in_resel,
         'machine_status': status,
     }
-

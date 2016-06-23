@@ -6,8 +6,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from .network import is_resel_ip, get_mac
 from .ldap import search
-from myresel.constantes import DN_MACHINES, DN_PEOPLE
 from datetime import datetime
+from django.conf import settings
 
 
 def resel_required(function=None, redirect_to='home'):
@@ -55,7 +55,7 @@ def unknown_machine(function = None, redirect_to = 'news'):
         def _view(request, *args, **kwargs):
             mac = get_mac(request.META['REMOTE_ADDR'])
 
-            if search(DN_MACHINES, '(&(macaddress=%s))' % mac):
+            if search(settings.LDAP_DN_MACHINES, '(&(macaddress=%s))' % mac):
                 messages.error(request, _("Votre machine est déjà connue par notre réseau. Par conséquent, vous n'avez pas besoin d'accéder à cette page."))
                 return HttpResponseRedirect(reverse(redirect_to))
             else:
@@ -83,7 +83,7 @@ def need_to_pay(function=None, redirect_to='news'):
 
     def _dec(view_func):
         def _view(request, *args, **kwargs):
-            user = search(DN_PEOPLE, '(&(uid=%s))' % request.user, ['cotiz', 'endinternet'])[0]
+            user = search(settings.LDAP_DN_PEOPLE, '(&(uid=%s))' % request.user, ['cotiz', 'endinternet'])[0]
             if 'cotiz' in user.entry_to_json().lower() and 'endinternet' in user.entry_to_json().lower():
                 end_date = datetime.strptime(user.endinternet[0], '%d/%m/%Y')
                 if end_date > datetime.now():

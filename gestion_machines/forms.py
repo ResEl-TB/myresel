@@ -1,6 +1,6 @@
 from django import forms
-from myresel.constantes import DN_MACHINES
 from fonctions import ldap
+from django.conf import settings
 
 import re
 
@@ -20,7 +20,7 @@ class AjoutForm(forms.Form):
             if not re.match(r'^[a-z0-9-]{5,}$', alias):
                 raise forms.ValidationError(_("Alias non conforme"), code = 'invalid')
 
-            if not ldap.search(DN_MACHINES, '(|(host=%(alias)s)(hostalias=%(alias)s))' % {'alias': alias}):
+            if not ldap.search(settings.LDAP_DN_MACHINES, '(|(host=%(alias)s)(hostalias=%(alias)s))' % {'alias': alias}):
                 raise forms.ValidationError(_("Alias non disponible"), code = 'invalid')
 
         return alias
@@ -34,7 +34,7 @@ class AjoutManuelForm(forms.Form):
 
         if not re.match(r'^([a-f0-9]{2}:){5}[a-f0-9]{2}$', mac):
             raise forms.ValidationError(_("Adresse MAC non valide"), code = 'invalid')
-        if ldap.search(DN_MACHINES, '(&(macaddress=%s))' % mac):
+        if ldap.search(settings.LDAP_DN_MACHINES, '(&(macaddress=%s))' % mac):
             raise forms.ValidationError(_("Cette machine est déjà enregistrée sur notre réseau."), code = 'invalid')
         return mac
 
@@ -50,7 +50,7 @@ class ModifierForm(forms.Form):
         if not re.match(r'^[a-z0-9-]{5,}$', alias):
             raise forms.ValidationError(_("Alias non conforme"), code = 'invalid')
 
-        if ldap.search(DN_MACHINES, '(|(host=%(alias)s)(hostalias=%(alias)s))' % {'alias': alias}):
+        if ldap.search(settings.LDAP_DN_MACHINES, '(|(host=%(alias)s)(hostalias=%(alias)s))' % {'alias': alias}):
             raise forms.ValidationError(_("Alias non disponible"), code = 'invalid')
 
         return alias

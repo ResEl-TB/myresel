@@ -15,8 +15,7 @@ from ldap3 import MODIFY_REPLACE
 from .forms import AjoutForm, AjoutManuelForm, ModifierForm
 from fonctions import ldap, network
 from fonctions.decorators import resel_required, unknown_machine
-from myresel.constantes import DN_MACHINES, DN_PEOPLE
-
+from django.conf import settings
 
 # Create your views here.
 class Reactivation(View):
@@ -31,7 +30,7 @@ class Reactivation(View):
 
     def get(self, request, *args, **kwargs):
         # Vérification que la machine est bien à l'user
-        machine = ldap.search(DN_MACHINES, '(&(macaddress=%s))' % network.get_mac(request.META['REMOTE_ADDR']), ['uidproprio', 'host', 'iphostnumber', 'macaddress'])[0]
+        machine = ldap.search(settings.LDAP_DN_MACHINES, '(&(macaddress=%s))' % network.get_mac(request.META['REMOTE_ADDR']), ['uidproprio', 'host', 'iphostnumber', 'macaddress'])[0]
         if str(request.user) not in machine.uidproprio[0]:
             messages.error(request, _("Cette machine n'est pas censée vous appartenir. Veuillez contacter un administrateur afin de la transférer."))
             return HttpResponseRedirect(reverse('pages:news'))
@@ -91,7 +90,7 @@ class Ajout(View):
             object_class = ['reselMachine']
             attributes = {
                 'host': host,
-                'uidproprio': 'uid=%s,' % str(request.user) + DN_PEOPLE,
+                'uidproprio': 'uid=%s,' % str(request.user) + settings.LDAP_DN_PEOPLE,
                 'iphostnumber': ldap.get_free_ip(200,223),
                 'macaddress': network.get_mac(request.META['REMOTE_ADDR']),
                 'zone': ['User', network.get_campus(request.META['REMOTE_ADDR'])],
@@ -176,7 +175,7 @@ class Liste(ListView):
 
     def get_queryset(self):
         uid = str(self.request.user)
-        res = ldap.search(DN_MACHINES, '(&(uidproprio=uid=%(uid)s,%(dn_people)s))' % {'uid': uid, 'dn_people': DN_PEOPLE}, ['host', 'macaddress', 'zone', 'hostalias'])
+        res = ldap.search(settings.LDAP_DN_MACHINES, '(&(uidproprio=uid=%(uid)s,%(dn_people)s))' % {'uid': uid, 'dn_people': settings.LDAP_DN_PEOPLE}, ['host', 'macaddress', 'zone', 'hostalias'])
         machines = []
         if res:
             for machine in res:
@@ -208,7 +207,7 @@ class Modifier(View):
         host = self.kwargs.get('host', '')
 
         # Vérification que la mac fournie est connue, et que la machine appartient à l'user
-        machine = ldap.search(DN_MACHINES, '(&(host=%s))' % host, ['uidproprio', 'hostalias'])
+        machine = ldap.search(settings.LDAP_DN_MACHINES, '(&(host=%s))' % host, ['uidproprio', 'hostalias'])
         if machine:
             if str(request.user) not in machine[0].entry_to_json():
                 messages.error(request, _("Cette machine ne vous appartient pas."))
@@ -240,7 +239,7 @@ class Modifier(View):
         form = self.form_class(request.POST)
 
         if form.is_valid():
-            dn = 'host=%s,' % self.kwargs.get('host', '') + DN_MACHINES
+            dn = 'host=%s,' % self.kwargs.get('host', '') + settings.LDAP_DN_MACHINES
             modifs = {'hostAlias': [(MODIFY_REPLACE, [request.session['generic_alias'], form.cleaned_data['alias']])]}
             print(modifs)
             ldap.modify(dn, modifs)

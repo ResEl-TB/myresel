@@ -11,7 +11,6 @@ from django.utils.translation import ugettext_lazy as _
 
 from .models import *
 from fonctions import ldap, generic
-from myresel.constantes import DN_PEOPLE
 from fonctions.decorators import resel_required, unknown_machine, need_to_pay
 
 # Create your views here.

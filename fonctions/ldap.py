@@ -1,7 +1,21 @@
+import itertools
 from ldap3 import Server, Connection, MODIFY_REPLACE
-from myresel.constantes import LDAP, DN_ADMIN, DN_MACHINES, DN_PEOPLE, PASSWD_ADMIN
 from .network import get_campus, get_mac, update_all
 from .generic import get_year
+from django.conf import settings
+
+
+def new_connection():
+    """
+    Return a new connection to the database, must be unbind after all
+    :return:
+    """
+    return Connection(
+        Server(settings.LDAP_URL, use_ssl=True),
+        user=settings.LDAP_DN_ADMIN,
+        password=settings.LDAP_PASSWD,
+        auto_bind=True
+    )
 
 
 def search(dn, query, attr=None):
@@ -13,8 +27,8 @@ def search(dn, query, attr=None):
     """
 
     res = False
-    l = Connection(Server(LDAP, use_ssl = True), auto_bind = True)
-    if l.search(dn, query, attributes = attr):
+    l = new_connection()
+    if l.search(dn, query, attributes=attr):
         res = l.entries
     l.unbind()
     return res
@@ -23,7 +37,7 @@ def search(dn, query, attr=None):
 def add(dn, object_class, attributes):
     """ Fonction qui ajoute une fiche au LDAP """
 
-    l = Connection(Server(LDAP, use_ssl = True), user = DN_ADMIN, password = PASSWD_ADMIN, auto_bind = True)
+    l = new_connection()
     l.add(dn, object_class, attributes)
     l.unbind()
     update_all()
@@ -43,7 +57,7 @@ def get_status(ip):
     # Récupération de l'adresse mac associée à l'IP
     mac = get_mac(ip)
 
-    res = search(DN_MACHINES, '(&(macaddress=%s))' % mac, ['zone'])
+    res = search(settings.LDAP_settings.LDAP_DN_MACHINES, '(&(macaddress=%s))' % mac, ['zone'])
     if res:
         if 'inactive' in [z.lower() for z in res[0].zone]:
             # Machine inactive, on renvoit le status 'inactif'
@@ -68,7 +82,7 @@ def update_campus(ip):
 
     mac = get_mac(ip)
     campus = get_campus(ip)
-    machine = search(DN_MACHINES, '(&(macaddress=%s))' % mac, ['zone', 'host'])[0]
+    machine = search(settings.LDAP_DN_MACHINES, '(&(macaddress=%s))' % mac, ['zone', 'host'])[0]
 
     # Récupération de l'ancien campus de la machine
     for z in machine.zone:
@@ -76,46 +90,42 @@ def update_campus(ip):
             old_campus = z.capitalize()
 
     # Update de la fiche LDAP
-    l = Connection(Server(LDAP, use_ssl = True), user = DN_ADMIN, password = PASSWD_ADMIN, auto_bind = True)
-    l.modify('host=%s,' % machine.host[0] + DN_MACHINES,
+    l = new_connection()
+    l.modify('host=%s,' % machine.host[0] + settings.LDAP_DN_MACHINES,
              {'zone': [(MODIFY_REPLACE, ['User', campus])]})
     l.unbind()
     update_all()
+
 
 def reactivation(ip):
     """ Modifie le LDAP pour réactiver la machine de l'utilisateur """
 
     mac = get_mac(ip)
     campus = get_campus(ip)
-    machine = search(DN_MACHINES, '(&(macaddress=%s))' % mac, ['host'])[0]
-    dn = 'host=%s,' % machine.host[0] + DN_MACHINES
+    machine = search(settings.LDAP_DN_MACHINES, '(&(macaddress=%s))' % mac, ['host'])[0]
+    dn = 'host=%s,' % machine.host[0] + settings.LDAP_DN_MACHINES
     modifs = {'zone': [(MODIFY_REPLACE, ['User', campus])]}
     modify(dn, modifs)
     update_all()
 
+
 def modify(dn, modifs):
     """ Modifie une fiche LDAP """
 
-    l = Connection(Server(LDAP, use_ssl = True), user = DN_ADMIN, password = PASSWD_ADMIN, auto_bind = True)
+    l = new_connection()
     l.modify(dn, modifs)
     l.unbind()
 
+
 def get_free_ip(low, high):
-    """ Récupère une IP libre pour une nouvelle machine à partir du LDAP """
+    """ Retreive a free ip from the ldap """
 
-    rang = low - 1
-    again = True
+    return next(
+        "%i.%i" % ip
+        for ip in itertools.product(range(low - 1, high), range(2, 254))
+        if not search(settings.LDAP_DN_MACHINES, '(&(ipHostNumber=%i.%i))' % ip)
+    )
 
-    while ((rang < high) and again):
-        rang += 1
-        item = 2
-
-        while ((item < 254) and again):
-            item +=1
-            if not search(DN_MACHINES, '(&(ipHostNumber={}.{}))'.format(rang, item)):
-                again = False
-
-    return "{}.{}".format(rang, item)
 
 def get_free_alias(uid):
     """ Récupère un nom d'alias libre pour la machine """
@@ -125,7 +135,7 @@ def get_free_alias(uid):
     i = 1
 
     while again:
-        if not search(DN_MACHINES, '(|(host=%(alias)s)(hostalias=%(alias)s))' % {'alias': alias}):
+        if not search(settings.LDAP_DN_MACHINES, '(|(host=%(alias)s)(hostalias=%(alias)s))' % {'alias': alias}):
             again = False
         else:
             i += 1
@@ -133,12 +143,13 @@ def get_free_alias(uid):
 
     return alias
 
+
 def cotisation(user, duree):
     """ On stocke dans le LDAP la date de fin de cotisation """
 
-    l = Connection(Server(LDAP, use_ssl = True), user = DN_ADMIN, password = PASSWD_ADMIN, auto_bind = True)
+    l = new_connection()
     l.modify(
-        'uid=%s,' % user + DN_PEOPLE,
+        'uid=%s,' % user + settings.LDAP_DN_PEOPLE,
         {'cotiz': [(MODIFY_REPLACE, [str(generic.get_year())])],
          'endCotiz': [(MODIFY_REPLACE, [generic.get_end_date(duree)])]}
     )
