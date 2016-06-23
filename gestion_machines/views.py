@@ -154,7 +154,7 @@ class ChangementCampus(View):
 
     def get(self, request, *args, **kwargs):
         # Vérification du statut de la machine dans le LDAP
-        if ldap.get_status(request.META['REMOTE_ADDR']) == 'mauvais_campus':
+        if ldap.get_status(request.META['REMOTE_ADDR']) == 'wrong_campus':
             # Mise à jour de la fiche LDAP
             ldap.update_campus(request.META['REMOTE_ADDR'])
 

@@ -116,6 +116,7 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'custom_pages.context_processors.articles_in_menu',
+                'myresel.context_processors.resel_context',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
