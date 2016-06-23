@@ -49,7 +49,7 @@ class Home(View):
                 # La machine est inactive
                 return HttpResponseRedirect(reverse('gestion-machines:reactivation'))
 
-            elif computer_status == 'mauvais_campus':
+            elif computer_status == 'wrong_campus':
                 # La machine n'est pas dans le bon campus
                 return HttpResponseRedirect(reverse('gestion-machines:changement-campus'))
 

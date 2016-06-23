@@ -90,9 +90,12 @@ body {
     border-color: transparent;
 }
 
+.alert-info a {
+    color: #a4f1ff;
+}
+
 .alert-warning {
     background-color: #EB7F00;
-    color: #ffffff;
     border: none;
     color: #000000;
 }

@@ -3,7 +3,8 @@ from myresel.constantes import LDAP, DN_ADMIN, DN_MACHINES, DN_PEOPLE, PASSWD_AD
 from .network import get_campus, get_mac, update_all
 from .generic import get_year
 
-def search(dn, query, attr = None):
+
+def search(dn, query, attr=None):
     """ Fonction pour rechercher dans le ldap une entrée particulière 
         
         - dn : le DN dans lequel faire la recherche
@@ -18,6 +19,7 @@ def search(dn, query, attr = None):
     l.unbind()
     return res
 
+
 def add(dn, object_class, attributes):
     """ Fonction qui ajoute une fiche au LDAP """
 
@@ -25,6 +27,7 @@ def add(dn, object_class, attributes):
     l.add(dn, object_class, attributes)
     l.unbind()
     update_all()
+
 
 def get_status(ip):
     """ Fonction pour trouver le status d'une machine :
@@ -48,7 +51,7 @@ def get_status(ip):
 
         elif campus.lower() not in [z.lower() for z in res[0].zone]:
             # Machine sur le mauvais campus
-            return 'mauvais_campus'
+            return 'wrong_campus'
 
         else:
             # Machine présente dans le LDAP, marquée comme active
@@ -56,6 +59,7 @@ def get_status(ip):
 
     # Machine inexistante dans le LDAP
     return False
+
 
 def update_campus(ip):
     """ Modifie le LDAP pour attribuer le bon campus à la machine qui possède l'ip fournie """

@@ -10,7 +10,7 @@ from myresel.constantes import DN_MACHINES, DN_PEOPLE
 from datetime import datetime
 
 
-def resel_required(function=None, redirect_to='pages:news'):
+def resel_required(function=None, redirect_to='home'):
     """ Vérifie que l'user a une IP resel
 
     Ce décorateur s'assure que l'user a bien une IP ResEl.
