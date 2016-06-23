@@ -14,6 +14,8 @@ import os
 
 from django.utils.translation import ugettext_lazy as _
 
+from myresel.credentials import *
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -26,18 +28,22 @@ SECRET_KEY = '6_gz^zjk+lj+72utudq+l(xd-!@3xlo5c*20&dz$mdgn2p22g-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['my.resel.fr']
+ALLOWED_HOSTS = ['my.resel.fr', 'resel.fr']
 
 # Mails
 
 SERVER_EMAIL = 'inscription@inscription.resel.fr'
+
 EMAIL_USE_TLS = True
+
 EMAIL_HOST = 'pegase.adm.resel.fr'
+
 EMAIL_SUBJECT_PREFIX = ''
 
 # Login
 
 LOGIN_URL = '/login'
+
 LOGIN_REDIRECT_URL = '/'
 
 AUTHENTICATION_BACKENDS = (
@@ -45,9 +51,9 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-LDAP_AUTH_URL = "ldap://ldap.resel.fr:389"
+LDAP_AUTH_URL = "ldap://%s:%s" % (LDAP_URL, LDAP_PORT)
 LDAP_AUTH_USE_TLS = False
-LDAP_AUTH_SEARCH_BASE = "ou=people,dc=maisel,dc=enst-bretagne,dc=fr"
+LDAP_AUTH_SEARCH_BASE = LDAP_DN_PEOPLE
 LDAP_AUTH_OBJECT_CLASS = "genericPerson"
 LDAP_AUTH_USER_FIELDS = {
     "username": "uid",
@@ -57,6 +63,7 @@ LDAP_AUTH_USER_FIELDS = {
 }
 
 # Ckeditor
+
 CKEDITOR_UPLOAD_PATH = 'uploads/'
 
 CKEDITOR_IMAGE_BACKEND = "pillow"
@@ -149,9 +156,9 @@ DATABASES = {
     'admin': {
         'NAME': 'admin',
         #'ENGINE': 'django.db.backends.mysql',
-        #'USER': 'myresel',
-        #'PASSWORD': 'yaRvQt5sIViQc1Gm',
-        #'HOST': 'maia.adm.resel.fr'
+        #'USER': DB_ADMIN_USER,
+        #'PASSWORD': DB_ADMIN_PASSWORD,
+        #'HOST': DB_ADMIN_HOST
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3_admin'),
     }
@@ -203,6 +210,7 @@ STATICFILES_DIRS = [
 ]
 
 # Media files
+
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 MEDIA_URL = '/media/'
@@ -210,5 +218,7 @@ MEDIA_URL = '/media/'
 ADMIN_MEDIA_PREFIX = '/media/adm/'
 
 # Phone numbers
+
 PHONENUMBER_DB_FORMAT = "E164"
+
 PHONENUMBER_DEFAULT_REGION = "FR"

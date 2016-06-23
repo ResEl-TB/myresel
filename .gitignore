@@ -16,3 +16,6 @@ db.sqlite3_admin
 \#*\#
 .\#*
 .swp
+
+# Settings file
+/myresel/credentials.py
