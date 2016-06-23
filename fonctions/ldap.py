@@ -57,7 +57,7 @@ def get_status(ip):
     # Récupération de l'adresse mac associée à l'IP
     mac = get_mac(ip)
 
-    res = search(settings.LDAP_settings.LDAP_DN_MACHINES, '(&(macaddress=%s))' % mac, ['zone'])
+    res = search(settings.LDAP_DN_MACHINES, '(&(macaddress=%s))' % mac, ['zone'])
     if res:
         if 'inactive' in [z.lower() for z in res[0].zone]:
             # Machine inactive, on renvoit le status 'inactif'
