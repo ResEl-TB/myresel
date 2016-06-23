@@ -27,7 +27,19 @@ class Home(View):
         return super(Home, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        return render(request, self.template_name)
+        user = ldap.search(DN_PEOPLE, '&(uid=%s)' % str(request.user), ['formation', 'cotiz'])
+        if user:
+            formation = 'unknown'
+            if 'formation' in user[0].entry_to_json().lower():
+                formation = user[0].formation[0]
+            cotiz = user[0].cotiz[0]
+            member = 'false'
+            if cotiz == generic.get_year():
+                member = 'true'
+            return render(request, self.template_name, {'member': member, 'formation': formation})
+        else:
+            messages.error(request, _("Vous n'êtes pas inscrit dans notre base de données."))
+            return HttpResponseRedirect(reverse('home'))
 
     def post(self, request, *args, **kwargs):
         """ Plusieurs cas de figure
