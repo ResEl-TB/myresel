@@ -37,7 +37,7 @@
                     />
                 </div>
                 <br>
-                <p class="reset">{% blocktrans %}Si vous avez fait une erreur, vous pouvez <a style="cursor: pointer;" onclick="main('IG 2A', 'false');">recommencer</a>{% endblocktrans %}</p>
+                <p class="reset">{% blocktrans %}Si vous avez fait une erreur, vous pouvez <a style="cursor: pointer;" onclick="main('{{ formation }}', '{{ member }}');">recommencer</a>{% endblocktrans %}</p>
             </form>
         </div> <!-- /.col-lg-12 -->
     </div> <!-- /.row -->
@@ -50,7 +50,7 @@
 <script type="text/javascript" src="https://checkout.stripe.com/checkout.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        main('IG 2A', 'false');
+        main('{{ formation|safe }}', '{{ member|safe }}');
 
         $('.choices').on('click', '.selector', function () {
             var tree = trees[parseInt($(this).attr('tree'))];
