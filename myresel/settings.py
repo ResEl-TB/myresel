@@ -41,12 +41,20 @@ LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = '/'
 
 AUTHENTICATION_BACKENDS = (
-    #'django_auth_ldap.backend.LDAPBackend',
+    #'django_python3_ldap.auth.LDAPBackend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
-AUTH_LDAP_SERVER_URI = "ldap://ldap.resel.fr:389"
-AUTH_LDAP_USER_DN_TEMPLATE = "uid=%(user)s,ou=people,dc=maisel,dc=enst-bretagne,dc=fr"
+LDAP_AUTH_URL = "ldap://ldap.resel.fr:389"
+LDAP_AUTH_USE_TLS = False
+LDAP_AUTH_SEARCH_BASE = "ou=people,dc=maisel,dc=enst-bretagne,dc=fr"
+LDAP_AUTH_OBJECT_CLASS = "genericPerson"
+LDAP_AUTH_USER_FIELDS = {
+    "username": "uid",
+    "first_name": "firstName",
+    "last_name": "lastName",
+    "email": "mail",
+}
 
 # Ckeditor
 CKEDITOR_UPLOAD_PATH = 'uploads/'
@@ -84,6 +92,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_python3_ldap',
     'ckeditor',
     'ckeditor_uploader',
     'phonenumber_field',
