@@ -5,24 +5,77 @@
 {% block titre %}{% trans "Paiement" %}{% endblock %}
 
 {% block content %}
+<div class="container">
     <div class="row">
         <div class="col-lg-12">
             <h1 class="page-header">{% trans "Paiement de votre accès internet" %}</h1>
-            <p>{% blocktrans %}Afin de bénéficier de votre accès à internet, vous devez vous acquitter d'un certain montant, dépendant du temps que vous passerez sur le campus cette année. Le questionnaire ci-dessous va nous permettre de vous indiquer le montant que vous devrez payer.{% endblocktrans %}</p>
+            {% blocktrans %}
+            <div class="alert alert-info">
+                <p>Afin de bénéficier de votre accès à internet, vous devez vous acquitter d'un certain montant, dépendant du temps que vous passerez sur le campus cette année.</p>
+                <p>Ce montant est séparé en deux :
+                    <ul>
+                        <li> 1 € pour payer votre cotisation et donc votre adhésion à notre association (indispensable pour bénéficier de nos services d'accès à Internet)</li>
+                        <li> une somme variable suivant votre formation et votre temps de présence sur le campus, correspondant aux frais d'accès à Internet</li>
+                    </ul>
+                </p>
+            </div>
+            {% endblocktrans %}
             <hr>
             <form action="" method="post" class="col-lg-6 col-lg-offset-3 text-center form-horizontal">
                 {% csrf_token %}
-                <div id='formation'></div>
-                <div id='pricing'></div>
-                <div id='stripe'></div>
+                <div class="choices"></div>
+                <div class="stripe hidden">
+                    <input 
+                        type="submit"
+                        class="btn btn-info"
+                        value="{% trans 'Payer par carte' %}"
+                        data-key="pk_test_KE9qQquz3hhdRI54CcfBaukl"
+                        data-currency="eur"
+                        data-name="Association ResEl"
+                        data-image="{% static 'images/tresorerie/marketplace.png' %}"
+                        data-locale="auto"
+                    />
+                </div>
+                <br>
+                <p class="reset">{% blocktrans %}Si vous avez fait une erreur, vous pouvez <a style="cursor: pointer;" onclick="main('IG 2A', 'false');">recommencer</a>{% endblocktrans %}</p>
             </form>
-        </div>
-        <!-- /.col-lg-12 -->
-    </div>
-    <!-- /.row -->
+        </div> <!-- /.col-lg-12 -->
+    </div> <!-- /.row -->
+</div> <!-- /.container -->
 {% endblock %}
 
 {% block javascript %}
 <script type="text/javascript" src="{% url 'javascript-catalog' %}"></script>
 <script type="text/javascript" src="{% static 'js/tresorerie/home.js' %}"></script>
+<script type="text/javascript" src="https://checkout.stripe.com/checkout.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        main('IG 2A', 'false');
+
+        $('.choices').on('click', '.selector', function () {
+            var tree = trees[parseInt($(this).attr('tree'))];
+
+            if ('children' in tree) {
+                show(tree);
+            } else {
+                var price = tree['price'];
+                $('.choices').addClass('hidden');
+                $('input:submit').attr('data-amount', price);
+                $('.stripe').removeClass('hidden');
+            }
+        });
+
+        $(':submit').on('click', function(event) {
+            event.preventDefault();
+            var $button = $(this),
+                $form = $button.parents('form');
+            var opts = $.extend({}, $button.data(), {
+                token: function(result) {
+                    $form.append($('<input>').attr({ type: 'hidden', name: 'stripeToken', value: result.id })).submit();
+                }
+            });
+            StripeCheckout.open(opts);
+        });
+    });
+</script>
 {% endblock %}
