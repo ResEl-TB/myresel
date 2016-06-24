@@ -141,7 +141,7 @@ class Home(View):
                 )
 
             # Updating the LDAP to set the correct limit for the Internet Access
-            #ldap.cotisation(utilisateur=str(request.user), duree=days)
+            ldap.cotisation(user=str(request.user), duree=days)
 
             messages.success(request, _("Votre accès a bien été réglé"))
             return HttpResponseRedirect(reverse('home'))

@@ -3,6 +3,7 @@ from ldap3 import Server, Connection, MODIFY_REPLACE
 from .network import get_campus, get_mac, update_all
 from .generic import get_year
 from django.conf import settings
+from fonctions import generic
 
 
 def new_connection():
