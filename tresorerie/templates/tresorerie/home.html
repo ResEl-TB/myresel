@@ -34,10 +34,12 @@
                         data-name="Association ResEl"
                         data-image="{% static 'images/tresorerie/marketplace.png' %}"
                         data-locale="auto"
+                        data-email="{{ request.session.mail }}"
                     />
                 </div>
                 <br>
                 <p class="reset">{% blocktrans %}Si vous avez fait une erreur, vous pouvez <a class="reset-link">recommencer</a>{% endblocktrans %}</p>
+                <input name='price' type='hidden'>
             </form>
         </div> <!-- /.col-lg-12 -->
     </div> <!-- /.row -->
@@ -50,7 +52,7 @@
 <script type="text/javascript" src="https://checkout.stripe.com/checkout.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
-        main('{{ formation }}', '{{ member }}');
+        main('{{ request.session.formation }}', '{{ request.session.member }}');
         $('.reset-link').css('cursor', 'pointer');
 
         $('.reset-link').on('click', function () {
@@ -67,6 +69,7 @@
                 $('.choices').addClass('hidden');
                 $('input:submit').attr('data-amount', price);
                 $('.stripe').removeClass('hidden');
+                $('input[name=price]').attr('value', price);
             }
         });
 

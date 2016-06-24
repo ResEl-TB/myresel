@@ -1,5 +1,6 @@
 from django.apps import AppConfig
 
 
-class PaiementConfig(AppConfig):
-    name = 'paiement'
+class TresorerieConfig(AppConfig):
+    name = 'tresorerie'
+    verbose_name = 'trésorerie'

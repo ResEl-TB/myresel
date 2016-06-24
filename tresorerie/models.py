@@ -1,26 +1,27 @@
 from django.db import models
-
-# Create your models here.
-class Produit(models.Model):
-    """ Modèle pour la gestion des stocks sur les produits que l'on vend, ici une cotisation """
-
-    nom = models.CharField(max_length = 50)
-    prix = models.FloatField()
+from datetime import datetime
 
 class Transaction(models.Model):
-    """ Modèle pour la gestion des transactions réalisées """
+    """ Model used to save a transaction made with the user """
 
-    utilisateur = models.CharField(max_length = 50)
-    moyen = models.CharField(default = 'CB', max_length = 2)
-    date = models.DateField(auto_now_add = True)
-    produit = models.ManyToManyField(Produit)
+    utilisateur = models.CharField(max_length=50)
+    moyen = models.CharField(default='CB', max_length=2)
+    date = models.DateField(auto_now_add=True)
     total = models.FloatField()
-    commentaire = models.TextField(blank = True, null = True)
+    commentaire = models.TextField(blank=True, null=True)
 
-class Mensualisation(models.Model):
-    """ Modèle pour la gestion de la mensualisation """
+    def __str__(self):
+        return "%s - %s" % (self.utilisateur, self.commentaire)
 
-    utilisateur = models.CharField(max_length = 50)
-    nb_m = models.IntegerField() # Nombre de mensualités à payer
-    nb_p = models.IntegerField(default = 0) # Nombre de mensualités payées
-    customer = models.IntegerField() # ID de l'objet customer associé à l'utilisateur
+class MonthlyPayment(models.Model):
+    """ Model used to say if the user is doing monthly payments """
+
+    user = models.CharField(max_length = 50)
+    months_to_pay = models.IntegerField()
+    months_paid = models.IntegerField(default = 0)
+    customer = models.CharField(max_length=50)
+    last_paid = models.DateField(default=datetime.now())
+    amount_to_pay = models.FloatField()
+
+    def __str__(self):
+        return "%s - Payment %d/%d" % (self.user, self.months_paid, self.months_to_pay)
