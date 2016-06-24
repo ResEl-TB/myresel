@@ -148,19 +148,21 @@ WSGI_APPLICATION = 'myresel.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
+DATABASE_ROUTERS = ['myresel.routers.TresorerieRouter']
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     },
+
     'admin': {
-        'NAME': 'admin',
         #'ENGINE': 'django.db.backends.mysql',
         #'USER': DB_ADMIN_USER,
         #'PASSWORD': DB_ADMIN_PASSWORD,
         #'HOST': DB_ADMIN_HOST
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3_admin'),
+        'NAME': os.path.join(BASE_DIR, 'admin.sqlite3'),
     }
 }
 
