@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.contrib import messages
+from django.conf import settings
 
 # Pour la traduction - sert à marquer les chaînes de caractères à traduire
 from django.utils.translation import ugettext_lazy as _
@@ -26,14 +27,14 @@ class Home(View):
         return super(Home, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        user = ldap.search(DN_PEOPLE, '&(uid=%s)' % str(request.user), ['formation', 'cotiz'])
+        user = ldap.search(settings.LDAP_DN_PEOPLE, '(&(uid=%s))' % str(request.user), ['formation', 'cotiz'])
         if user:
             formation = 'unknown'
             if 'formation' in user[0].entry_to_json().lower():
                 formation = user[0].formation[0]
-            cotiz = user[0].cotiz[0]
+            cotiz = user[0].cotiz[-1]
             member = 'false'
-            if cotiz == generic.get_year():
+            if cotiz == str(generic.get_year()):
                 member = 'true'
             return render(request, self.template_name, {'member': member, 'formation': formation})
         else:
