@@ -1,14 +1,17 @@
 from django.shortcuts import render
 from django.views.generic import View
 from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib import messages
+from django.conf import settings
 
 from fonctions import ldap, generic, network
 from fonctions.decorators import resel_required, unknown_machine
-from .forms import InscriptionForm
+from .forms import InscriptionForm, ModPasswdForm
+from ldap3 import MODIFY_REPLACE
 
 from django.utils.translation import ugettext_lazy as _
 
@@ -82,6 +85,35 @@ class Inscription(View):
             mail.send()
 
             messages.success(request, _("Vous êtes désormais inscrit au ResEl. Vous pouvez dès à présent inscrire votre machine."))
+            return HttpResponseRedirect(reverse('home'))
+
+        return render(request, self.template_name, {'form': form})
+
+class ModPasswd(View):
+    template_name = 'gestion_personnes/mod-passwd.html'
+    form_class = ModPasswdForm
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(ModPasswd, self).dispatch(*args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+
+        if form.is_valid:
+            print(form)
+            dn = 'uid=%s,' % request.user + settings.LDAP_DN_PEOPLE
+            modifs = {
+                'userpassword': [(MODIFY_REPLACE, [generic.hash_passwd(form.cleaned_data["password"])])],
+                'ntpassword': [(MODIFY_REPLACE, [generic.hash_to_ntpass(form.cleaned_data["password"])])],
+            }
+            ldap.modify(dn, modifs)
+
+            messages.success(request, _("Votre mot de passe a été modifié"))
             return HttpResponseRedirect(reverse('home'))
 
         return render(request, self.template_name, {'form': form})

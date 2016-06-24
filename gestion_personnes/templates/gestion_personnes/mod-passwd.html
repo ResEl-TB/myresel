@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block titre %}{% trans "Changement de votre mot de passe" %}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">{% trans "Changement de mot de passe" %}</div>
+    <div class="alert alert-warning">
+        {% blocktrans %}
+        <p>Vous êtes sur le point de modifier votre mot de passe ResEl.</p>
+        <p>Gardez en tête qu'il faudra ensuite changer votre configuration Wi-Fi pour utiliser ce nouveau mot de passe</p>
+        {% endblocktrans %}
+    </div>
+    <div class="col-md-8">
+        <form action="" method="POST" class="form">
+            {% csrf_token %}
+            <div class="form-category">
+                <p>{% trans "Veuillez renseigner votre nouveau mot de passe :" %}</p>
+                <div class="row">
+                    <fieldset class="form-group col-sm-6 {% if form.password.errors %}has-error{% endif %}">
+                        {{ form.password }}
+                        {% if form.password.errors %}<span class="help-block">{{ form.password.errors }}</span>{% endif %}
+                    </fieldset>
+                    <fieldset class="form-group col-sm-6 {% if form.password_verification.errors %}has-error{% endif %}">
+                        {{ form.password_verification }}
+                        {% if form.password_verification.errors %}<span class="help-block">{{ form.password_verification.errors }}</span>{% endif %}
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="form-category">
+                <div class="row">
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-info">{% trans "Changer mon mot de passe" %}</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div> <!-- /.container -->
+{% endblock %}

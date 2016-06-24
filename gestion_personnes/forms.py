@@ -122,3 +122,28 @@ class InscriptionForm(forms.Form):
         if formation == '0':
             raise ValidationError(message=_("Veuillez sélectionner une formation"), code="NO FORMATION")
         return formation
+
+class ModPasswdForm(forms.Form):
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': _("Choisissez un mot de passe sécurisé"),
+        }),
+        validators=[MinLengthValidator(8)],
+    )
+
+    password_verification = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': _("Retapez votre mot de passe")
+        }),
+        validators=[],
+    )
+
+    def clean_password_verification(self):
+        password1 = self.cleaned_data['password']
+        password2 = self.cleaned_data['password_verification']
+
+        if password1 == password2:
+            return password2
+        raise ValidationError(message=_("Les mots de passes sont différents."), code="NOT SAME PASSWORD")
