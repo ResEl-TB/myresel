@@ -20,7 +20,7 @@ class Home(View):
         - Nouvel utilisateur sur le campus, on lui propose de s'inscrire
         - Utilisateur connecté sur le campus, on lui propose des options pour son compte
         - la personne exterieure qui veut en savoir plus sur le ResEl
-        - L'utilsateur à l'exterieur qui veut avoir des infos sur son compte
+        - L'utilisateur à l'exterieur qui veut avoir des infos sur son compte
     """
 
     template_name = 'pages/home.html'
