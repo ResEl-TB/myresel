@@ -16,6 +16,10 @@ class Transaction(models.Model):
 class MonthlyPayment(models.Model):
     """ Model used to say if the user is doing monthly payments """
 
+    class META:
+        verbose_name = "paiement mensuel"
+        verbose_name_plural = "paiements mensuels"
+
     user = models.CharField(max_length = 50)
     months_to_pay = models.IntegerField()
     months_paid = models.IntegerField(default = 0)
