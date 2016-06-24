@@ -59,9 +59,6 @@
 				    {% trans "Aucun article" %}
 				</li>
 			    {% endfor %}
-			    {% if category.length < nbCategories %}
-			        <p><a href="{% url 'pages:show-category' slug=category.slug%}">{% trans "... plus d'articles"%}</a></p>
-			    {% endif %}
 			</ul>
 		    </li>
 		{% endfor %}
