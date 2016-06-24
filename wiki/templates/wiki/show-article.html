@@ -1,15 +1,26 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% load staticfiles %}
 
 {% block titre %}{{object.name}}{% endblock %}
 
+{% block css %}
+    <link href="{% static 'css/home.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
-<div class="row">
-    <div class="col-lg-12">
-        <h1 class="page-header"><i class="fa fa-angle-right"></i> {{object.name}}</h1>
-        <p>{{ object.text|safe }}</p>
-        <p>{% trans "Publié" %} : {{ object.date_creation|date }}<br/>{% trans "Dernière modification" %}: {{ object.date_last_edit|date }}</p>
+    <div class="home-user-management">
+        <div class="container">
+            <h2>{{ object.name }}</h2>
+	    <p>{{ object.description|safe }}</p>
+        </div>
     </div>
-</div>
+
+    <div class="home-presentation">
+        <div class="container">
+	    <p>{{ object.text|safe }}</p>
+            <p>{% trans "Publié" %} : {{ object.date_creation|date }}<br/>{% trans "Dernière modification" %}: {{ object.date_last_edit|date }}
+	</div>
+    </div>    
 {% endblock %}
 

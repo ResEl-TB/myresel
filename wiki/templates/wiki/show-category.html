@@ -1,21 +1,31 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% load staticfiles %}
 
 {% block titre %}{{object.name}}{% endblock %}
 
+{% block css %}
+    <link href="{% static 'css/home.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
-<div class="row">
-    <div class="col-lg-12">
-        <h1 class="page-header">{{ object.name }}</h1>
-        <p>{{ object.description|safe }}</p>
-        <ul>
-            {# Pour chaque article dans le "set d'article" de la catégorie #}
-            {% for article in object.article_set.all %}
-                <li><a href="{{ article.get_absolute_url }}">{{ article.name }}</a> : {{ article.description }}</li>
-            {% empty %}
-                <li>No articles yet.</li>
-            {% endfor %}
-        </ul>
+    <div class="home-user-management">
+        <div class="container">
+            <h2>{{ object.name }}</h2>
+	    <p>{{ object.description|safe }}</p>
+        </div>
     </div>
-</div>
+
+    <div class="home-presentation">
+        <div class="container">
+	    <ul>
+		{# Pour chaque article dans le "set d'article" de la catégorie #}
+		{% for article in object.article_set.all %}
+                <li><a href="{{ article.get_absolute_url }}">{{ article.name }}</a> : {{ article.description }}</li>
+		{% empty %}
+                <p>{% trans "Aucun article disponible." %}</p>
+		{% endfor %}
+	    </ul>
+	</div>
+    </div>    
 {% endblock %}
