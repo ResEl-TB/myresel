@@ -27,8 +27,8 @@ js_info_dict = {
 urlpatterns = [
     url(r'^jsi18n/$', javascript_catalog, js_info_dict, name='javascript-catalog'),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
-    url(r'^login/', auth_views.login, name='login'),
-    url(r'^logout/', auth_views.logout, {'next_page': '/'}, name='logout'),
+    url(r'^login', auth_views.login, name='login'),
+    url(r'^logout', auth_views.logout, {'next_page': '/'}, name='logout'),
     url(r'^gestion/', admin.site.urls),
     url(r'^machines/', include('gestion_machines.urls', namespace='gestion-machines')),
     url(r'^personnes/', include('gestion_personnes.urls', namespace='gestion-personnes')),
