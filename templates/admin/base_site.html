@@ -1,6 +1,12 @@
 {% extends "admin/base.html" %}
+{% load staticfiles %}
+{% load i18n %}
 
 {% block title %}Administration | My ResEl{% endblock %}
+
+{% block extrastyle %}
+<link href="{% static 'css/admin/base.css' %}" rel="stylesheet">
+{% endblock %}
 
 {% block branding %}
 <h1 id="site-name"><a href="{% url 'admin:index' %}">Administration | My ResEl</a></h1>

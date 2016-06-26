@@ -1,0 +1,32 @@
+/* bleu: #225378 ; bleu-clair : #1695A3 ; orange : #EB7F00 */
+
+/* General CSS */
+body {
+    font-family: 'Roboto', 'sans-serif';
+    font-size: 1.4em;
+}
+
+#header {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    background: #225378 !important;
+    color: #EB7F00;
+}
+
+#branding h1, #branding h1 a:link, #branding h1 a:visited {
+    color: #EB7F00;
+}
+
+#content-related {
+    margin-right: -340px;
+}
+
+caption {
+    background-color: #225378 !important;
+}
+
+.footer {
+    background-color: #225378;
+    color: #ffffff;
+    padding-top: 15px;
+}
