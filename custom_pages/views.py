@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
 from fonctions import network, ldap
-from myresel.forms import ContactForm
+from custom_pages.forms import ContactForm
 from .models import Category, Article, News
 from django.views.generic import DetailView, ListView, View
 from django.utils.translation import ugettext_lazy as _
