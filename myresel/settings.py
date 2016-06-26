@@ -107,7 +107,8 @@ INSTALLED_APPS = [
     'gestion_personnes',
     'myresel',
     'tresorerie',
-    'custom_pages',
+    'wiki',
+    'pages',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -131,7 +132,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                'custom_pages.context_processors.articles_in_menu',
+                'wiki.context_processors.articles_in_menu',
                 'myresel.context_processors.resel_context',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',

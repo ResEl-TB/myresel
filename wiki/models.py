@@ -1,8 +1,7 @@
-from django.db import models
-from django.template.defaultfilters import slugify
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.core.urlresolvers import reverse
-from ckeditor.fields import RichTextField
+from django.db import models
+from django.template.defaultfilters import slugify
 
 
 # Classe pour les catégories d'article
@@ -47,19 +46,7 @@ class Article(models.Model):
         super(Article, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
-        return reverse('custom-pages:show-article', args=[self.category.slug, self.slug])
+        return reverse('wiki:show-article', args=[self.category.slug, self.slug])
 
     def __str__(self):
         return self.name
-
-
-class News(models.Model):
-    class Meta:
-        verbose_name = 'news'
-        verbose_name_plural = 'news'
-
-    titre = models.CharField(max_length = 100)
-    contenu = RichTextField()
-
-    def __str__(self):
-        return self.titre

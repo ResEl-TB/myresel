@@ -3,21 +3,12 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
-from fonctions import network, ldap
-from custom_pages.forms import ContactForm
-from .models import Category, Article, News
-from django.views.generic import DetailView, ListView, View
 from django.utils.translation import ugettext_lazy as _
+from django.views.generic import View, ListView
 
-
-class CategoryView(DetailView):
-    model = Category
-    template_name = 'custom_pages/show-category.html'
-
-
-class ArticleView(DetailView):
-    model = Article
-    template_name = 'custom_pages/show-article.html'
+from pages.forms import ContactForm
+from fonctions import network, ldap
+from pages.models import News
 
 
 class Home(View):
@@ -32,7 +23,7 @@ class Home(View):
         - L'utilsateur à l'exterieur qui veut avoir des infos sur son compte
     """
 
-    template_name = 'myresel/home.html'
+    template_name = 'pages/home.html'
 
     def get(self, request, *args, **kwargs):
         # Check if the ip is inside the network :
@@ -59,7 +50,7 @@ class Home(View):
 class NewsListe(ListView):
     """ Vue appelée pour afficher les news au niveau du ResEl """
 
-    template_name = 'myresel/news.html'
+    template_name = 'pages/news.html'
     context_object_name = 'derniers_billets'
 
     def get_queryset(self):
@@ -69,7 +60,7 @@ class NewsListe(ListView):
 class Contact(View):
     """ Vue appelée pour contacter les admin en cas de soucis """
 
-    template_name = 'myresel/contact.html'
+    template_name = 'pages/contact.html'
     form_class = ContactForm
 
     def get(self, request, *args, **kwargs):
