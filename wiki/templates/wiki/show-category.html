@@ -9,14 +9,14 @@
 {% endblock %}
 
 {% block content %}
-    <div class="home-user-management">
+    <div class="home-fragment home-user-management">
         <div class="container">
             <h2>{{ object.name }}</h2>
 	    <p>{{ object.description|safe }}</p>
         </div>
     </div>
 
-    <div class="home-presentation">
+    <div class="home-fragment home-presentation">
         <div class="container">
 	    <ul>
 		{# Pour chaque article dans le "set d'article" de la catégorie #}
