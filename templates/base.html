@@ -48,7 +48,7 @@
 		<!-- Lists of categories -->
 		{% for category in categories %}		 
 		    <li class="dropdown">
-		        <a href="{% url 'pages:show-category' slug=category.slug %}" class="dropdown-toggle" data-toggle="dropdown"><i class="fa {{ category.fa_icon_name }} fa-fw" aria-hidden="true"></i> {{ category.name }}</a>
+		        <a href="{% url 'wiki:show-category' slug=category.slug %}" class="dropdown-toggle" data-toggle="dropdown"><i class="fa {{ category.fa_icon_name }} fa-fw" aria-hidden="true"></i> {{ category.name }}</a>
 			<ul class="dropdown-menu">
 			    {% for article in category.article_set.all %}
 			        <li>
@@ -59,6 +59,10 @@
 				    {% trans "Aucun article" %}
 				</li>
 			    {% endfor %}
+			    {% if category|length < nbCategories %}
+			        <p><a href="{% url 'wiki:show-category' slug=category.slug%}">{% trans "... plus d'articles"%}</a></p>
+			    {% endif %}
+
 			</ul>
 		    </li>
 		{% endfor %}
