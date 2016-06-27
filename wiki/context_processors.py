@@ -1,6 +1,7 @@
 from django.conf import settings
 from .models import Category
-from myresel.constantes import NB_ARTICLES_TO_DISPLAY_IN_SUBMENU
+
+NB_ARTICLES_TO_DISPLAY_IN_SUBMENU = 5 # TODO : refactor this
 
 def articles_in_menu(request):
     """Fonction pour générer les catégories et leurs articles dans la navbar
@@ -8,5 +9,8 @@ def articles_in_menu(request):
     Appellée automatiquement en tant que context processor
     """
     categories = Category.objects.all().order_by('-id')
-    return {'categories': categories[:NB_ARTICLES_TO_DISPLAY_IN_SUBMENU], 'nbCategories': len(categories)}
+    # Good to know : django's queryset are lazy, so by slicing, not all results are asked
+    
+    return {'categories': categories, 'nbArticlesToDisplay': NB_ARTICLES_TO_DISPLAY_IN_SUBMENU, 'nbArticlesSlicer': ":"+str(NB_ARTICLES_TO_DISPLAY_IN_SUBMENU)}
 
+ 
