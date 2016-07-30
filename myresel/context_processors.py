@@ -8,7 +8,11 @@ def resel_context(request):
     :param request:
     :return: dict : a context with the machine ip, if the ip belongs to the resel and the machine status
     """
-    ip = request.META['REMOTE_ADDR']
+    if 'HTTP_X_FORWARDED_FOR' in request.META:
+        ip = request.META['HTTP_X_FORWARDED_FOR']
+    else:
+        ip = request.META['REMOTE_ADDR']
+
     status = None
     ip_in_resel = network.is_resel_ip(ip)
     if ip_in_resel:
