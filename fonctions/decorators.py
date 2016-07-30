@@ -103,6 +103,11 @@ def need_to_pay(function=None, redirect_to='home'):
 
         return _view
 
+    if function is None:
+        return _dec
+    else:
+        return _dec(function)
+
 def correct_vlan(function=None, redirect_to='home'):
     """ Informe l'user de changer de vlan si sa machine est déjà inscrite.
 
@@ -121,11 +126,16 @@ def correct_vlan(function=None, redirect_to='home'):
             if is_resel_ip(ip) and not re.match(r'^172.22.22[4-5]', ip) and request.META['VLAN'] == '995':
                 messages.error(request, _("Votre machine est déjà inscrite. Veuillez vous connecter sur le réseau Wi-Fi ResEl Secure."))
                 return HttpResponseRedirect(reverse(redirect_to))
-            else:
-                return view_func(request, *args, **kwargs)
+            
+            return view_func(request, *args, **kwargs)
 
         _view.__name__ = view_func.__name__
         _view.__dict__ = view_func.__dict__
         _view.__doc__ = view_func.__doc__
 
         return _view
+
+    if function is None:
+        return _dec
+    else:
+        return _dec(function)
