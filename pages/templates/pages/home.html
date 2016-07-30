@@ -39,7 +39,11 @@
                         <h2>My ResEl <small>Gestion de mon compte ResEl</small></h2>
                     </div>
                     <div class="row">
-                        <span class="label label-success">Cotisation payée jusqu'au 18/08/16</span>
+                        {% if end_fee %}
+                            <span class="label label-success">Cotisation payée jusqu'au {{ end_fee }}</span>
+                        {% else %}
+                            <span class="label label-default">Pas d'infos sur la cotisation</span>
+                        {% endif %}
                         {% if is_ip_in_resel %}
                             <span class="label label-success">Machine activée</span>
                         {% else %}

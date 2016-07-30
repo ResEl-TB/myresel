@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
+from django.conf import settings
 
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import View, ListView
@@ -11,6 +12,7 @@ from pages.forms import ContactForm
 from fonctions import network, ldap, decorators
 from pages.models import News
 
+from datetime import datetime
 
 class Home(View):
     """
@@ -31,13 +33,14 @@ class Home(View):
         return super(Home, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        # Check if the ip is inside the network :
-        if not network.is_resel_ip(request.META['REMOTE_ADDR']):
-            return render(request, self.template_name)
-
+        if 'HTTP_X_FORWARDED_FOR' in request.META:
+            ip = request.META['HTTP_X_FORWARDED_FOR']
+        else:
+            ip = request.META['REMOTE_ADDR']
+       
         # On vérifie que la machine n'est pas desactivée.
         # Si oui, on bascule vers la page de réactivation
-        computer_status = ldap.get_status(request.META['REMOTE_ADDR'])
+        computer_status = ldap.get_status(ip)
 
         if computer_status:
             # La machine existe dans le LDAP
@@ -49,7 +52,14 @@ class Home(View):
                 # La machine n'est pas dans le bon campus
                 return HttpResponseRedirect(reverse('gestion-machines:changement-campus'))
 
-        return render(request, self.template_name)
+        # Si user loggé, on regarde jusqu'à quand il a payé
+        end_fee = False
+        if request.user:
+            user = ldap.search(settings.LDAP_DN_PEOPLE, '(&(uid=%s))' % str(request.user), ['endCotiz'])[0]
+            if user:
+                end_fee = datetime.strptime(str(user.endCotiz), '%Y%m%d%H%M%SZ') if 'endcotiz' in user.entry_to_json().lower() else False
+
+        return render(request, self.template_name, {'end_fee': end_fee})
 
 
 class NewsListe(ListView):
