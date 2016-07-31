@@ -1,19 +1,21 @@
-from django.shortcuts import render
-from django.views.generic import View
-from django.utils.decorators import method_decorator
+import time
+
+from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import EmailMessage
-from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
-from django.contrib import messages
-from django.conf import settings
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from django.utils.decorators import method_decorator
+from django.utils.translation import ugettext_lazy as _
+from django.views.generic import View
+from ldap3 import MODIFY_REPLACE
 
 from fonctions import ldap, generic, network
 from fonctions.decorators import resel_required, unknown_machine
+from gestion_personnes.models import LdapUser
 from .forms import InscriptionForm, ModPasswdForm
-from ldap3 import MODIFY_REPLACE
-
-from django.utils.translation import ugettext_lazy as _
 
 
 class Inscription(View):
@@ -22,6 +24,12 @@ class Inscription(View):
     C'est cette vue qui créer la fiche LDAP de l'user
     On lui affiche le réglement intérieur, et un formulaire pour remplir les champs LDAP
     """
+    # TODO: gestion des batiments de Rennes
+    # Ne plus laisser le choix de l'uid pour l'utilisateur (afficher une page avec la confirmation
+    # Envoyer un email à l'utilisateur
+    # Refactoriser la création de l'utilsateur ailleurs
+    # Choix de la promo
+
     template_name = 'gestion_personnes/inscription.html'
     form_class = InscriptionForm
 
@@ -38,49 +46,39 @@ class Inscription(View):
         form = self.form_class(request.POST)
 
         if form.is_valid():
-            import time
-            year = generic.get_year()
+            current_year = generic.current_year()
 
-            # Mise en forme du DN et des attributs de la fiche LDAP
-            dn = 'uid=%s,ou=people,dc=maisel,dc=enst-bretagne,dc=fr' % form.cleaned_data["username"].lower()
-            object_class = ['genericPerson','enstbPerson','reselPerson', 'maiselPerson']
-            attributes = {
-                # Attributs genericPerson
-                'uid': form.cleaned_data["username"].lower(),
-                'firstname': form.cleaned_data["first_name"],
-                'lastname': form.cleaned_data["last_name"],
-                'displayname': form.cleaned_data["first_name"] + ' ' + form.cleaned_data["last_name"],
-                'userPassword': generic.hash_passwd(form.cleaned_data["password"]),
-                'ntPassword': generic.hash_to_ntpass(form.cleaned_data["password"]),
+            user = LdapUser()
+            user.uid = form.cleaned_data["username"].lower()
+            user.firstname = form.cleaned_data["first_name"]
+            user.lastname = form.cleaned_data["last_name"]
+            user.displayname = form.cleaned_data["first_name"] + ' ' + form.cleaned_data["last_name"]
+            user.userPassword = generic.hash_passwd(form.cleaned_data["password"])
+            user.ntPassword = generic.hash_to_ntpass(form.cleaned_data["password"])
 
-                # enstbPerson
-                'promo': str(year + 3),
-                'mail': form.cleaned_data["email"],
-                'anneeScolaire': '{}/{}'.format(year, year+1),
-                'mobile': form.cleaned_data["phone"],
-                'option': network.get_campus(request.META['REMOTE_HOST']),
+            user.promo = str(current_year + 3)
+            user.mail = form.cleaned_data["email"]
+            user.anneeScolaire = form.cleaned_data["email"]
+            user.mobile = form.cleaned_data["phone"]
+            user.option = network.get_campus(request.META['REMOTE_HOST'])
 
-                # reselPerson
-                'dateInscr': time.strftime('%Y%m%d%H%M%S') + 'Z',
-                'cotiz': 'BLACKLIST' + str(year),
-                'endCotiz': time.strftime('%Y%m%d%H%M%S') + 'Z',
+            user.dateInscr = time.strftime('%Y%m%d%H%M%S') + 'Z'
+            user.cotiz = 'BLACKLIST' + str(current_year)
+            user.endCotiz = time.strftime('%Y%m%d%H%M%S') + 'Z'
 
-                # maiselPerson
-                'campus': network.get_campus(request.META['REMOTE_HOST']),
-                'batiment': 'I' + form.cleaned_data["building"],
-                'roomNumber': str(form.cleaned_data["room"]),
-            }
+            user.campus = network.get_campus(request.META['REMOTE_HOST'])
+            user.batiment = 'I' + form.cleaned_data["building"]
+            user.roomNumber = str(form.cleaned_data["room"])
 
-            # Ajout de la fiche au LDAP
-            ldap.add(dn, object_class, attributes)
+            user.save()
 
             # Inscription de la personne à la ML campus
             mail = EmailMessage(
-                subject = "SUBSCRIBE campus {} {}".format(form.cleaned_data["first_name"], form.cleaned_data["last_name"]),
-                body = "Inscription automatique de {} a campus".format(form.cleaned_data["username"]),
-                from_email = form.cleaned_data["email"],
-                reply_to = ["listmaster@resel.fr"],
-                to = ["sympa@resel.fr"],
+                subject="SUBSCRIBE campus {} {}".format(form.cleaned_data["first_name"], form.cleaned_data["last_name"]),
+                body="Inscription automatique de {} a campus".format(form.cleaned_data["username"]),
+                from_email=form.cleaned_data["email"],
+                reply_to=["listmaster@resel.fr"],
+                to=["sympa@resel.fr"],
             )
             mail.send()
 
