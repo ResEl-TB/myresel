@@ -4,11 +4,11 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MaxLengthValidator, MinLengthValidator
 
 from django.utils.translation import ugettext_lazy as _
-from django.views import generic
 from phonenumber_field.formfields import PhoneNumberField
 
 from fonctions.generic import current_year
 from gestion_personnes.models import LdapUser
+from myresel.fonctions import generic
 
 
 class InscriptionForm(forms.Form):
