@@ -17,8 +17,10 @@ def resel_context(request):
     ip_in_resel = network.is_resel_ip(ip)
     if ip_in_resel:
         status = ldap.get_status(ip)
+        
     return {
         'machine_ip': ip,
         'is_ip_in_resel': ip_in_resel,
         'machine_status': status,
+        'need_to_pay': ldap.need_to_pay(request.user.username) if request.user.is_authenticated() else False,
     }
