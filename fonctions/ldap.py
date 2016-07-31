@@ -4,7 +4,7 @@ from .network import get_campus, get_mac, update_all
 from .generic import current_year
 from django.conf import settings
 from fonctions import generic
-from datetime import datetime
+from datetime import datetime, timedelta
 
 def new_connection():
     """
@@ -164,8 +164,10 @@ def need_to_pay(username):
     if 'cotiz' in user.entry_to_json().lower() and 'endcotiz' in user.entry_to_json().lower():
         end_date = datetime.strptime(user.endcotiz[0], '%Y%m%d%H%M%SZ')
         if end_date < datetime.now():
-            return True
+            return 'danger'
+        elif end_date < (datetime.now() + timedelta(days=7)):
+            return 'warning'
         else:
-            return False
+            return 'success'
     else:
-        return True
+        return 'danger'

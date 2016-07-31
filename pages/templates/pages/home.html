@@ -40,7 +40,7 @@
                     </div>
                     <div class="row">
                         {% if end_fee %}
-                            <span class="label {% if need_to_pay %}label-danger{% else %}label-success{% endif %}">{% blocktrans %}Cotisation payée jusqu'au {{ end_fee }}{% endblocktrans %}</span>
+                            <span class="label label-{{ need_to_pay }}">{% blocktrans %}Cotisation payée jusqu'au {{ end_fee }}{% endblocktrans %}</span>
                         {% else %}
                             <span class="label label-default">{% trans "Pas d'infos sur la cotisation" %}</span>
                         {% endif %}
