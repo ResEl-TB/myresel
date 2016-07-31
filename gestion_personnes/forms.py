@@ -168,7 +168,8 @@ class InscriptionForm(forms.Form):
         building = cleaned_data.get("building")
         address = cleaned_data.get("address")
         room = cleaned_data.get("room")
-        if campus == "Brest" or campus == "Rennes" and room == "":
+
+        if (campus == "Brest" or campus == "Rennes") and room == "":
             self.add_error("room", _("Ce champ est obligatoire"))
         if campus == "Brest" and building not in [a[0] for a in self.BUILDINGS_BREST]:
             self.add_error('building', _("Veuillez choisir un bâtiment du campus de Brest"))
