@@ -40,7 +40,11 @@
                     </div>
                     <div class="row">
                         {% if end_fee %}
-                            <span class="label label-{{ need_to_pay }}">{% blocktrans %}Cotisation payée jusqu'au {{ end_fee }}{% endblocktrans %}</span>
+                            {% if need_to_pay != 'success' %}
+                                <a href="{% url 'tresorerie:home' %}"><span class="label label-{{ need_to_pay }}">{% blocktrans %}Cotisation payée jusqu'au {{ end_fee }}{% endblocktrans %}</span></a>
+                            {% else %}
+                                <span class="label label-{{ need_to_pay }}">{% blocktrans %}Cotisation payée jusqu'au {{ end_fee }}{% endblocktrans %}</span>
+                            {% endif %}
                         {% else %}
                             <span class="label label-default">{% trans "Pas d'infos sur la cotisation" %}</span>
                         {% endif %}
@@ -71,8 +75,13 @@
                                 <a href="{% url 'gestion-machines:ajout' %}" class="btn btn-default btn-lg ">{%  trans "Inscription"%}</a>
                                 <p>{% trans "Votre machine est inconnue sur notre réseau. Vous devez l'inscrire afin de pouvoir bénéficier de votre accès internet et des services du ResEl." %}</p>
                             {% endif %}
+                            
+                            {% if need_to_pay != 'success' %}
+                                <h3>{% trans "Payer mon accès" %}</h3>
+                                <a href="{% url 'tresorerie:home' %}" class="btn btn-default btn-lg ">{%  trans "Payer"%}</a>
+                                <p>{% trans "Votre accès a expiré ou va bientôt expirer. Veuillez régulariser la situation si vous souhaitez conserver cet accès." %}</p>
+                            {% endif %}
                             {# TODO: if the device is registered, show its informations in a nice way #}
-                            {# TODO: if the device is unregistered, show a button to register it #}
                             {# TODO: if we are offcampus find something else to show... #}
                         </div>
                     </div>

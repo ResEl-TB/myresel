@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
 
 from .network import is_resel_ip, get_mac
-from .ldap import search
+from fonctions import ldap, network
 from django.conf import settings
 
 import re
@@ -26,7 +26,7 @@ def resel_required(function=None, redirect_to='home'):
             else:
                 ip = request.META['REMOTE_ADDR']
 
-            if is_resel_ip(ip):
+            if network.is_resel_ip(ip):
                 return view_func(request, *args, **kwargs)
             else:
                 messages.error(request, _("Vous devez vous trouver sur le réseau du ResEl pour accéder à cette page."))
@@ -54,10 +54,10 @@ def unknown_machine(function=None, redirect_to='home'):
 
     def _dec(view_func):
         def _view(request, *args, **kwargs):
-            return view_func(request, *args, **kwargs)
-            mac = get_mac(request.META['REMOTE_ADDR'])
+            #return view_func(request, *args, **kwargs)
+            mac = network.get_mac(request.META['REMOTE_ADDR'])
 
-            if search(settings.LDAP_DN_MACHINES, '(&(macaddress=%s))' % mac):
+            if ldap.search(settings.LDAP_DN_MACHINES, '(&(macaddress=%s))' % mac):
                 messages.error(request, _("Votre machine est déjà connue par notre réseau. Par conséquent, vous n'avez pas besoin d'accéder à cette page."))
                 return HttpResponseRedirect(reverse(redirect_to))
             else:
@@ -85,7 +85,7 @@ def need_to_pay(function=None, redirect_to='home'):
 
     def _dec(view_func):
         def _view(request, *args, **kwargs):
-            if not ldap.need_to_pay(request.user.username):
+            if ldap.need_to_pay(request.user.username) == 'success':
                 # Cotisation déjà payée
                 messages.info(_("Vous avez déjà payé votre cotisation."))
                 return HttpResponseRedirect(reverse(redirect_to))
@@ -119,7 +119,7 @@ def correct_vlan(function=None, redirect_to='home'):
             else:
                 ip = request.META['REMOTE_ADDR']
 
-            if is_resel_ip(ip) and not re.match(r'^172.22.22[4-5]', ip) and request.META['VLAN'] == '995':
+            if network.is_resel_ip(ip) and not re.match(r'^172.22.22[4-5]', ip) and request.META['VLAN'] == '995':
                 messages.error(request, _("Votre machine est déjà inscrite. Veuillez vous connecter sur le réseau Wi-Fi ResEl Secure."))
                 return HttpResponseRedirect(reverse(redirect_to))
             
