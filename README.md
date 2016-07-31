@@ -50,7 +50,7 @@ TODO
     - [OK] changement de campus
     - [OK] inscription machine
 - gestion-personnes :
-    - inscription dans le LDAP
+    - [A tester] inscription dans le LDAP
 - trésorerie :
     - historique des transactions de l'user
     - paiement en ligne de la cotiz
@@ -62,6 +62,6 @@ Pense-bête
 - [OK] lors d'une erreur de validation du formulaire, afficher l'erreur à l'utilisateur pour lui dire quoi changer
 - dans la page d'ajout d'une personne, check en javascript si le pseudo choisi est valide et dispo
 - [OK] dans la page de demande d'ajout de machine, vérifier que la MAC est valide en javascript
-- système de questions déroulantes en javascript pour le montant de la cotiz à payer
+- [OK] système de questions déroulantes en javascript pour le montant de la cotiz à payer
 - script qui gère le paiement auto des autres mensualisations
 - générer des factures pour les paiements
