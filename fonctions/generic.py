@@ -2,7 +2,7 @@ import binascii, hashlib, os
 from base64 import encodestring
 from datetime import datetime, timedelta
 
-def get_year():
+def current_year():
     """ Fonction qui calcule l'année scolaire en cours """
 
     year = datetime.now().year

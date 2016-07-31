@@ -108,6 +108,7 @@ def need_to_pay(function=None, redirect_to='home'):
     else:
         return _dec(function)
 
+
 def correct_vlan(function=None, redirect_to='home'):
     """ Informe l'user de changer de vlan si sa machine est déjà inscrite.
 

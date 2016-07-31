@@ -33,7 +33,7 @@ class Home(View):
                 formation = user[0].formation[0]
             cotiz = user[0].cotiz[-1]
             member = 'false'
-            if cotiz == str(generic.get_year()):
+            if cotiz == str(generic.current_year()):
                 member = 'true'
             request.session['mail'] = user[0].mail[0]
             request.session['formation'] = formation

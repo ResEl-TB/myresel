@@ -1,7 +1,7 @@
 import itertools
 from ldap3 import Server, Connection, MODIFY_REPLACE
 from .network import get_campus, get_mac, update_all
-from .generic import get_year
+from .generic import current_year
 from django.conf import settings
 from fonctions import generic
 
@@ -151,7 +151,7 @@ def cotisation(user, duree):
     l = new_connection()
     l.modify(
         'uid=%s,' % user + settings.LDAP_DN_PEOPLE,
-        {'cotiz': [(MODIFY_REPLACE, [str(generic.get_year())])],
+        {'cotiz': [(MODIFY_REPLACE, [str(generic.current_year())])],
          'endCotiz': [(MODIFY_REPLACE, [generic.get_end_date(duree)])]}
     )
     l.unbind()
