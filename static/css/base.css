@@ -136,3 +136,7 @@ body {
 .help-block ul {
     list-style-type: none;
 }
+
+#unregistered-device:hover {
+    background-color: #a94442 !important;
+}
