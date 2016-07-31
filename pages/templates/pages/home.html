@@ -45,7 +45,11 @@
                             <span class="label label-default">Pas d'infos sur la cotisation</span>
                         {% endif %}
                         {% if is_ip_in_resel %}
-                            <span class="label label-success">Machine activée</span>
+                            {% if not machine_status %}
+                                <a href="{% url 'gestion-machines:ajout' %}"><span class="label label-warning" id="unregistered-device">Machine non enregistrée</span></a>
+                            {% elif machine_status == 'active' %}
+                                <span class="label label-success">Machine activée</span>
+                            {% endif %}
                         {% else %}
                             <span class="label label-default">Non connecté au ResEl</span>
                         {% endif %}
