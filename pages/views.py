@@ -54,8 +54,8 @@ class Home(View):
 
         # Si user loggé, on regarde jusqu'à quand il a payé
         end_fee = False
-        if request.user:
-            user = ldap.search(settings.LDAP_DN_PEOPLE, '(&(uid=%s))' % str(request.user), ['endCotiz'])[0]
+        if request.user.is_authenticated():
+            user = ldap.search(settings.LDAP_DN_PEOPLE, '(&(uid=%s))' % str(request.user.username), ['endCotiz'])[0]
             if user:
                 end_fee = datetime.strptime(str(user.endCotiz), '%Y%m%d%H%M%SZ') if 'endcotiz' in user.entry_to_json().lower() else False
 

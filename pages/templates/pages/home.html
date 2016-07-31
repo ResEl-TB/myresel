@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load staticfiles %}
 
-{% block titre %}Acceuil{% endblock %}
+{% block titre %}Accueil{% endblock %}
 
 {% block css %}
     <link href="{% static 'css/home.css' %}" rel="stylesheet">
@@ -85,7 +85,7 @@
                         <div class="col-md-5 text-center">
                             <h3>{% trans "Vous possédez un compte ResEl ?" %}</h3>
                             <a href="{% url 'login' %}" class="btn btn-default btn-lg">{%  trans "Connexion"%}</a>
-                            <p>{% trans "En vous connectant, vous pouvez accéder aux services du ResEl ouverts à l'extérieur." %}</p>
+                            <p>{% trans "En vous connectant, vous pouvez accéder aux services du ResEl ouvert à l'extérieur." %}</p>
                         </div>
                     </div>
 
@@ -121,7 +121,7 @@
                 <div class="col-md-4">
                     <span class="glyphicon glyphicon-cloud service-icon" aria-hidden="true"></span>
                     <h3 class="service-title">Hébergement web</h3>
-                    <p>{% blocktrans %}Hebergez tous vos sites ou applications web pour votre club ou association{% endblocktrans %}</p>
+                    <p>{% blocktrans %}Hébergez tous vos sites ou applications web pour votre club ou association{% endblocktrans %}</p>
                 </div>
             </div>
 
@@ -129,7 +129,7 @@
                 <div class="col-md-4">
                     <span class="glyphicon glyphicon-envelope service-icon" aria-hidden="true"></span>
                     <h3 class="service-title">Les mails</h3>
-                    <p>{% blocktrans %}Les mailing list ResEl permettent de faire vitre le campus de Télécom Bretagne !{% endblocktrans %}</p>
+                    <p>{% blocktrans %}Les mailing listes ResEl permettent de faire vivre le campus de Télécom Bretagne !{% endblocktrans %}</p>
                 </div>
                 <div class="col-md-4">
                     <span class="glyphicon glyphicon-education service-icon" aria-hidden="true"></span>
