@@ -152,7 +152,7 @@ def cotisation(user, duree):
     l.modify(
         'uid=%s,' % user + settings.LDAP_DN_PEOPLE,
         {'cotiz': [(MODIFY_REPLACE, [str(generic.current_year())])],
-         'endCotiz': [(MODIFY_REPLACE, [generic.get_end_date(duree)])]}
+         'endInternet': [(MODIFY_REPLACE, [generic.get_end_date(duree)])]}
     )
     l.unbind()
     update_all()
@@ -160,9 +160,9 @@ def cotisation(user, duree):
 def need_to_pay(username):
     """ Check is the user needs to pay his fee or not """
 
-    user = search(settings.LDAP_DN_PEOPLE, '(&(uid=%s))' % username, ['cotiz', 'endcotiz'])[0]
-    if 'cotiz' in user.entry_to_json().lower() and 'endcotiz' in user.entry_to_json().lower():
-        end_date = datetime.strptime(user.endcotiz[0], '%Y%m%d%H%M%SZ')
+    user = search(settings.LDAP_DN_PEOPLE, '(&(uid=%s))' % username, ['cotiz', 'endinternet'])[0]
+    if 'cotiz' in user.entry_to_json().lower() and 'endinternet' in user.entry_to_json().lower():
+        end_date = datetime.strptime(user.endinternet[0], '%Y%m%d%H%M%SZ')
         if end_date < datetime.now():
             return 'danger'
         elif end_date < (datetime.now() + timedelta(days=7)):

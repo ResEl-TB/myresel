@@ -4,13 +4,13 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.conf import settings
-
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import View, ListView
 
 from pages.forms import ContactForm
 from fonctions import network, ldap, decorators
 from pages.models import News
+from gestion_personnes.models import LdapUser
 
 from datetime import datetime
 
@@ -37,10 +37,12 @@ class Home(View):
             ip = request.META['HTTP_X_FORWARDED_FOR']
         else:
             ip = request.META['REMOTE_ADDR']
-       
+
         # On vérifie que la machine n'est pas desactivée.
         # Si oui, on bascule vers la page de réactivation
-        computer_status = ldap.get_status(ip)
+        computer_status = False
+        if network.is_resel_ip(ip):
+            computer_status = ldap.get_status(ip)
 
         if computer_status:
             # La machine existe dans le LDAP
@@ -57,7 +59,7 @@ class Home(View):
         if request.user.is_authenticated():
             user = ldap.search(settings.LDAP_DN_PEOPLE, '(&(uid=%s))' % str(request.user.username), ['endCotiz'])[0]
             if user:
-                end_fee = datetime.strptime(str(user.endCotiz), '%Y%m%d%H%M%SZ') if 'endcotiz' in user.entry_to_json().lower() else False
+                end_fee = datetime.strptime(str(user.endCotiz), '%Y%m%d%H%M%SZ') if 'endinternet' in user.entry_to_json().lower() else False
 
         return render(request, self.template_name, {'end_fee': end_fee})
 
@@ -79,7 +81,15 @@ class Contact(View):
     form_class = ContactForm
 
     def get(self, request, *args, **kwargs):
-        form = self.form_class()
+        try:
+            user = LdapUser.objects.get(uid=request.user.username)
+            form = self.form_class(
+                nom=user.displayName,
+                chambre=[user.batiment, user.roomNumber].join(' '),
+                mail=user.mail
+            )
+        except:
+            form = self.form_class()
         return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
