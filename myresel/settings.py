@@ -121,6 +121,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    'myresel.middleware.DatMiddleware',
 ]
 
 ROOT_URLCONF = 'myresel.urls'
