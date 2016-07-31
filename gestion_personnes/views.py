@@ -89,6 +89,7 @@ class Inscription(View):
 
         return render(request, self.template_name, {'form': form})
 
+
 class ModPasswd(View):
     template_name = 'gestion_personnes/mod-passwd.html'
     form_class = ModPasswdForm

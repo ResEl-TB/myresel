@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
-{% block titre %}Inscription{% endblock %}
+{% block titre %}{%  trans "Inscription" %}{% endblock %}
 
 {% block content %}
     <div class="container">
         <h1 class="page-header">{% trans "Inscription au ResEl" %}</h1>
-        <div class="alert alert-warning">{% blocktrans %}Vous êtes sur le point de créer un compte Resel, si vous en avez déjà un veuillez vous <a href="{% url "login" %}">connecter</a>.{% endblocktrans %}</div>
+        <div class="alert alert-warning">{% trans "Vous êtes sur le point de créer un compte Resel, si vous en avez déjà un veuillez vous" %} <a href="{% url "login" %}">{% trans "connecter" %}</a>.</div>
         <div class="col-md-8">
             <form action="" method="POST" class="form">
                 {% csrf_token %}

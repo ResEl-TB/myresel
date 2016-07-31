@@ -45,7 +45,7 @@ def resel_required(function=None, redirect_to='home'):
         return _dec(function)
 
 
-def unknown_machine(function = None, redirect_to = 'home'):
+def unknown_machine(function=None, redirect_to='home'):
     """ Vérifie que la machine de l'user est inconnue.
 
     Ce décorateur s'assure que la machine de l'user est bien inconnue dans le LDAP.
