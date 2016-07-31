@@ -109,7 +109,6 @@ INSTALLED_APPS = [
     'tresorerie',
     'wiki',
     'pages',
-    'organization',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -150,24 +149,22 @@ WSGI_APPLICATION = 'myresel.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
-DATABASE_ROUTERS = ['myresel.routers.TresorerieRouter']
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': DB_NAME,
+        'USER': DB_USER,
+        'PASSWORD': DB_PASSWORD,
+        'HOST': DB_HOST,
     },
-
-    'admin': {
-        #'ENGINE': 'django.db.backends.mysql',
-        #'USER': DB_ADMIN_USER,
-        #'PASSWORD': DB_ADMIN_PASSWORD,
-        #'HOST': DB_ADMIN_HOST
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'admin.sqlite3'),
-    }
+    'ldap': {
+        'ENGINE': 'ldapdb.backends.ldap',
+        'NAME': 'ldap://%s:%s' % (LDAP_URL, LDAP_PORT),
+        'USER': LDAP_DN_ADMIN,
+        'PASSWORD': LDAP_PASSWD,
+     },
 }
-
+DATABASE_ROUTERS = ['ldapdb.router.Router']
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators

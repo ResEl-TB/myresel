@@ -26,7 +26,7 @@ class LdapUser(ldapdb.models.Model):
     promo = CharField(db_column='promo', max_length=100)
     mail = CharField(db_column='mail')
     anneeScolaire = CharField(db_column='anneeScolaire')
-    mobile = CharField(db_column='phone')
+    mobile = CharField(db_column='telephoneNumber', max_length=32)
     option = CharField(db_column='option')
 
     # reselPerson attributes

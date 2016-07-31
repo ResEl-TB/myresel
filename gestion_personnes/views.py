@@ -59,14 +59,14 @@ class Inscription(View):
             user.promo = str(current_year + 3)
             user.mail = form.cleaned_data["email"]
             user.anneeScolaire = form.cleaned_data["email"]
-            user.mobile = form.cleaned_data["phone"]
-            user.option = network.get_campus(request.META['REMOTE_HOST'])
+            user.mobile = str(form.cleaned_data["phone"])
+            user.option = network.get_campus(request.META['REMOTE_ADDR'])
 
             user.dateInscr = time.strftime('%Y%m%d%H%M%S') + 'Z'
             user.cotiz = 'BLACKLIST' + str(current_year)
             user.endCotiz = time.strftime('%Y%m%d%H%M%S') + 'Z'
 
-            user.campus = network.get_campus(request.META['REMOTE_HOST'])
+            user.campus = network.get_campus(request.META['REMOTE_ADDR'])
             user.batiment = 'I' + form.cleaned_data["building"]
             user.roomNumber = str(form.cleaned_data["room"])
 
