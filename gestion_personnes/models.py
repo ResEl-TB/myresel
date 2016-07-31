@@ -16,14 +16,14 @@ class LdapUser(ldapdb.models.Model):
 
     # genericPerson attributes
     uid = CharField(db_column='uid', max_length=12, primary_key=True)
-    firstname = CharField(db_column='firstname', max_lenght=50)
-    lastname = CharField(db_column='lastname', max_lenght=50)
-    displayname = CharField(db_column='displayname', max_lenght=100)
-    userPassword = CharField(db_column='userPassword', max_lenght=100)
-    ntPassword = CharField(db_column='ntPassword', max_lenght=100)
+    firstname = CharField(db_column='firstname', max_length=50)
+    lastname = CharField(db_column='lastname', max_length=50)
+    displayname = CharField(db_column='displayname', max_length=100)
+    userPassword = CharField(db_column='userPassword', max_length=100)
+    ntPassword = CharField(db_column='ntPassword', max_length=100)
 
     # enstPerson attributes
-    promo = CharField(db_column='promo', max_lenght=100)
+    promo = CharField(db_column='promo', max_length=100)
     mail = CharField(db_column='mail')
     anneeScolaire = CharField(db_column='anneeScolaire')
     mobile = CharField(db_column='phone')
