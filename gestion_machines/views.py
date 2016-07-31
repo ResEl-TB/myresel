@@ -104,7 +104,7 @@ class Ajout(View):
             ldap.add(dn, object_class, attributes)
 
             messages.success(request, _("Votre machine a bien été ajoutée. Veuillez ré-initialiser votre connexion en débranchant/rebranchant le câble ou en vous déconnectant/reconnectant au Wi-Fi."))
-            return HttpResponseRedirect(reverse('pages:news'))
+            return HttpResponseRedirect(reverse('home'))
 
         return render(request, self.template_name, {'form': form})
 
