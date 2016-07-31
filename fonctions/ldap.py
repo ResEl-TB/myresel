@@ -4,7 +4,7 @@ from .network import get_campus, get_mac, update_all
 from .generic import current_year
 from django.conf import settings
 from fonctions import generic
-
+from datetime import datetime
 
 def new_connection():
     """
@@ -156,3 +156,16 @@ def cotisation(user, duree):
     )
     l.unbind()
     update_all()
+
+def need_to_pay(username):
+    """ Check is the user needs to pay his fee or not """
+
+    user = search(settings.LDAP_DN_PEOPLE, '(&(uid=%s))' % username, ['cotiz', 'endcotiz'])[0]
+    if 'cotiz' in user.entry_to_json().lower() and 'endcotiz' in user.entry_to_json().lower():
+        end_date = datetime.strptime(user.endcotiz[0], '%Y%m%d%H%M%SZ')
+        if end_date < datetime.now():
+            return True
+        else:
+            return False
+    else:
+        return True

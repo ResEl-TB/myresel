@@ -6,7 +6,6 @@ from django.utils.translation import ugettext_lazy as _
 
 from .network import is_resel_ip, get_mac
 from .ldap import search
-from datetime import datetime
 from django.conf import settings
 
 import re
@@ -55,6 +54,7 @@ def unknown_machine(function=None, redirect_to='home'):
 
     def _dec(view_func):
         def _view(request, *args, **kwargs):
+            return view_func(request, *args, **kwargs)
             mac = get_mac(request.META['REMOTE_ADDR'])
 
             if search(settings.LDAP_DN_MACHINES, '(&(macaddress=%s))' % mac):
@@ -85,15 +85,10 @@ def need_to_pay(function=None, redirect_to='home'):
 
     def _dec(view_func):
         def _view(request, *args, **kwargs):
-            user = search(settings.LDAP_DN_PEOPLE, '(&(uid=%s))' % request.user, ['cotiz', 'endinternet'])[0]
-            if 'cotiz' in user.entry_to_json().lower() and 'endinternet' in user.entry_to_json().lower():
-                end_date = datetime.strptime(user.endinternet[0], '%d/%m/%Y')
-                if end_date > datetime.now():
-                    # Cotisation déjà payée
-                    messages.info(_("Vous avez déjà payé votre cotisation."))
-                    return HttpResponseRedirect(reverse(redirect_to))
-                else:
-                    return view_func(request, *args, **kwargs)
+            if not ldap.need_to_pay(request.user.username):
+                # Cotisation déjà payée
+                messages.info(_("Vous avez déjà payé votre cotisation."))
+                return HttpResponseRedirect(reverse(redirect_to))
             else:
                 return view_func(request, *args, **kwargs)
 
