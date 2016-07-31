@@ -123,6 +123,7 @@ class InscriptionForm(forms.Form):
             raise ValidationError(message=_("Veuillez sélectionner une formation"), code="NO FORMATION")
         return formation
 
+
 class ModPasswdForm(forms.Form):
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={

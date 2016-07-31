@@ -32,7 +32,7 @@ ALLOWED_HOSTS = ['my.resel.fr', 'resel.fr']
 
 # Mails
 
-SERVER_EMAIL = 'inscription@inscription.resel.fr'
+SERVER_EMAIL = 'inscription@resel.fr'
 
 EMAIL_USE_TLS = True
 
@@ -109,6 +109,7 @@ INSTALLED_APPS = [
     'tresorerie',
     'wiki',
     'pages',
+    'organization',
 ]
 
 MIDDLEWARE_CLASSES = [
