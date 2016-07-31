@@ -73,7 +73,7 @@
                     </div>
 
                 {% elif is_ip_in_resel %}
-                    <div class="row">
+                    <div class="row home-login">
                         <div class="col-md-4 col-md-offset-1">
                             <h3>{% trans "Nouveau sur le campus ?" %}</h3>
                             <a href="{% url 'gestion-personnes:inscription' %}" class="btn btn-default btn-lg ">{%  trans "Inscription"%}</a>
@@ -84,15 +84,6 @@
                             <a href="{% url 'login' %}" class="btn btn-default btn-lg">{%  trans "Connexion"%}</a>
                         </div>
                     </div>
-                {% else %}
-                    <div class="row">
-                        <div class="col-md-5 text-center">
-                            <h3>{% trans "Vous possédez un compte ResEl ?" %}</h3>
-                            <a href="{% url 'login' %}" class="btn btn-default btn-lg">{%  trans "Connexion"%}</a>
-                            <p>{% trans "En vous connectant, vous pouvez accéder aux services du ResEl ouvert à l'extérieur." %}</p>
-                        </div>
-                    </div>
-
                 {% endif %}
             </div>
         </div>

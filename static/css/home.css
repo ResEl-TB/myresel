@@ -21,6 +21,10 @@
     box-shadow: inset 0 5px 6px 0 #122a3c;
 }
 
+.home-user-management .home-login {
+    text-align: center;
+}
+
 .home-user-management small {
     color: #c3ccb4;
 }
