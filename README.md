@@ -25,13 +25,7 @@ pip3 -r requirements.txt
 Mise en marche
 --------------
 
-```
-./manage.py runserver
-```
-
-Se connecter ensuite en localhost:8000 pour visualiser
-
---> enjoy !
+Faire un pull sur Skynet, et go sur https://my.resel.fr
 
 TODO
 ====
