@@ -6,9 +6,8 @@ from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.utils.translation import ugettext_lazy as _
 from phonenumber_field.formfields import PhoneNumberField
 
-from fonctions.generic import current_year
+from fonctions.generic import current_year, hash_passwd, hash_to_ntpass
 from gestion_personnes.models import LdapUser
-from myresel.fonctions import generic
 
 
 class InscriptionForm(forms.Form):
@@ -201,8 +200,8 @@ class InscriptionForm(forms.Form):
         user.firstname = self.cleaned_data["first_name"]
         user.lastname = self.cleaned_data["last_name"]
         user.displayname = self.cleaned_data["first_name"] + ' ' + self.cleaned_data["last_name"]
-        user.userPassword = generic.hash_passwd(self.cleaned_data["password"])
-        user.ntPassword = generic.hash_to_ntpass(self.cleaned_data["password"])
+        user.userPassword = hash_passwd(self.cleaned_data["password"])
+        user.ntPassword = hash_to_ntpass(self.cleaned_data["password"])
 
         user.promo = str(current_year() + 3)
         user.mail = self.cleaned_data["email"]
