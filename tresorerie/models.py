@@ -1,5 +1,5 @@
 from django.db import models
-from datetime import datetime
+from django.utils import timezone
 
 class Transaction(models.Model):
     """ Model used to save a transaction made with the user """
@@ -25,7 +25,7 @@ class MonthlyPayment(models.Model):
     months_to_pay = models.IntegerField()
     months_paid = models.IntegerField(default = 0)
     customer = models.CharField(max_length=50)
-    last_paid = models.DateField(default=datetime.now())
+    last_paid = models.DateField(default=timezone.now())
     amount_to_pay = models.FloatField()
 
     def __str__(self):
