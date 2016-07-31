@@ -61,7 +61,7 @@ class Home(View):
 
             # Membership payment
             if request.session['member'] == 'false':
-                Transaction.objects.using('admin').create(
+                Transaction.objects.create(
                     utilisateur=request.user,
                     total=1,
                     commentaire=_("Adhésion à l'Association")
@@ -73,7 +73,7 @@ class Home(View):
                 # Single payment for 1 month
                 days = 30
 
-                Transaction.objects.using('admin').create(
+                Transaction.objects.create(
                     utilisateur=request.user,
                     total=10,
                     commentaire=_("Accès Internet pour 1 mois")
@@ -88,7 +88,7 @@ class Home(View):
                     comment = _("Accès Internet pour 6 mois - 1ère mensualisation")
                     days = 6*30
 
-                MonthlyPayment.objects.using('admin').create(
+                MonthlyPayment.objects.create(
                     user=request.user,
                     months_to_pay=3,
                     months_paid=1,
@@ -96,7 +96,7 @@ class Home(View):
                     amount_to_pay=16.70
                 )
 
-                Transaction.objects.using('admin').create(
+                Transaction.objects.create(
                     utilisateur=request.user,
                     total=16.70,
                     commentaire=comment
@@ -106,7 +106,7 @@ class Home(View):
                 # Monthly payment for 1 year
                 days = 12*30
 
-                MonthlyPayment.objects.using('admin').create(
+                MonthlyPayment.objects.create(
                     user=request.user,
                     months_to_pay=3,
                     months_paid=1,
@@ -114,7 +114,7 @@ class Home(View):
                     amount_to_pay=28.40
                 )
 
-                Transaction.objects.using('admin').create(
+                Transaction.objects.create(
                     utilisateur=request.user,
                     total=28.40,
                     commentaire=_("Accès Internet pour 1 an - 1ère mensualisation")
@@ -124,7 +124,7 @@ class Home(View):
                 # Single payment for 6 months
                 days = 6*30
 
-                Transaction.objects.using('admin').create(
+                Transaction.objects.create(
                     utilisateur=request.user,
                     total=50,
                     commentaire=_("Accès Internet pour 6 mois")
@@ -134,7 +134,7 @@ class Home(View):
                 # Single payment for 1 year
                 days = 12*30
 
-                Transaction.objects.using('admin').create(
+                Transaction.objects.create(
                     utilisateur=request.user,
                     total=85,
                     commentaire=_("Accès Internet pour 1 an")
@@ -185,4 +185,4 @@ class Historique(ListView):
         return super(Historique, self).dispatch(*args, **kwargs)
 
     def get_queryset(self):
-        return Transaction.objects.using('admin').all().filter(utilisateur__exact = self.request.user).order_by('date')
+        return Transaction.objects.all().filter(utilisateur__exact = self.request.user).order_by('date')

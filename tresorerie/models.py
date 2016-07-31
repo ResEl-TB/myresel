@@ -7,6 +7,7 @@ class Transaction(models.Model):
     utilisateur = models.CharField(max_length=50)
     moyen = models.CharField(default='CB', max_length=2)
     date = models.DateField(auto_now_add=True)
+    admin = models.CharField(max_length=100, null=True, blank=True)
     total = models.FloatField()
     commentaire = models.TextField(blank=True, null=True)
 
