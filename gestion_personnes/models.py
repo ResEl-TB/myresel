@@ -12,7 +12,7 @@ class LdapUser(ldapdb.models.Model):
     """
 
     base_dn = LDAP_DN_PEOPLE
-    object_classes = ['genericPerson', 'enstbPerson', 'reselPerson', 'maiselPerson']
+    object_classes = ['genericPerson', 'enstbPerson', 'reselPerson']
 
     # genericPerson attributes
     uid = CharField(db_column='uid', max_length=12, primary_key=True)
