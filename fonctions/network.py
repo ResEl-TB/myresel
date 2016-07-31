@@ -1,11 +1,15 @@
 import subprocess
 import os
-
+import re
 
 def get_mac(ip):
     """ Fonction qui récupère l'addresse MAC associée à l'IP de l'utilisateur """
 
-    mac = str(subprocess.Popen(["ip neigh show | grep '{}\\s' | awk '{{print $5}}'".format(ip)], 
+    if re.match(r'172\.22\.22[4-5]', ip):
+        eth = 'eth3'
+    else:
+        eth = 'eth2'
+    mac = str(subprocess.Popen(["sudo arping -c 1 -i {} -a {} | awk 'NR == 2 {{print $4}}'".format(eth, ip)], 
                             stdout = subprocess.PIPE, 
                             shell=True).communicate()[0]).split('\'')[1].split('\\n')[0]
     return mac

@@ -103,7 +103,7 @@ class Ajout(View):
             # Ajout de la fiche au LDAP
             ldap.add(dn, object_class, attributes)
 
-            messages.success(request, _("Votre machine a bien été ajoutée. Veuillez ré-initialiser votre connexion en débranchant/rebranchant le câble ou en vous déconnectant/reconnectant au Wi-Fi."))
+            messages.success(request, _("Votre machine a bien été ajoutée. Veuillez ré-initialiser votre connexion en débranchant/rebranchant le câble ou en vous déconnectant/reconnectant au Wi-Fi ResEl Secure."))
             return HttpResponseRedirect(reverse('home'))
 
         return render(request, self.template_name, {'form': form})
