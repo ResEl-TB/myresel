@@ -46,30 +46,7 @@ class Inscription(View):
         form = self.form_class(request.POST)
 
         if form.is_valid():
-            current_year = generic.current_year()
-
-            user = LdapUser()
-            user.uid = form.cleaned_data["username"].lower()
-            user.firstname = form.cleaned_data["first_name"]
-            user.lastname = form.cleaned_data["last_name"]
-            user.displayname = form.cleaned_data["first_name"] + ' ' + form.cleaned_data["last_name"]
-            user.userPassword = generic.hash_passwd(form.cleaned_data["password"])
-            user.ntPassword = generic.hash_to_ntpass(form.cleaned_data["password"])
-
-            user.promo = str(current_year + 3)
-            user.mail = form.cleaned_data["email"]
-            user.anneeScolaire = form.cleaned_data["email"]
-            user.mobile = str(form.cleaned_data["phone"])
-            user.option = network.get_campus(request.META['REMOTE_ADDR'])
-
-            user.dateInscr = time.strftime('%Y%m%d%H%M%S') + 'Z'
-            user.cotiz = 'BLACKLIST' + str(current_year)
-            user.endCotiz = time.strftime('%Y%m%d%H%M%S') + 'Z'
-
-            user.campus = network.get_campus(request.META['REMOTE_ADDR'])
-            user.batiment = 'I' + form.cleaned_data["building"]
-            user.roomNumber = str(form.cleaned_data["room"])
-
+            user = form.to_ldap_user()
             user.save()
 
             # Inscription de la personne à la ML campus

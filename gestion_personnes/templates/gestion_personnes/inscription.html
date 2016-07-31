@@ -11,7 +11,7 @@
             <form action="" method="POST" class="form">
                 {% csrf_token %}
                 <div class="form-category">
-                    <p>{% trans "Veuillez renseigner vos informations personnelles :" %}</p>
+                    <p>{% trans "Veuillez renseigner vos informations personnelles" %}</p>
                     <div class="row">
                         <fieldset class="form-group col-sm-6 {% if form.last_name.errors %}has-error{% endif %}" >
                             {{ form.last_name }}
@@ -31,13 +31,7 @@
                 </div>
 
                 <div class="form-category">
-                    <p>{% trans "Veuillez renseigner vos informations de compte :" %}</p>
-                    <div class="row">
-                        <fieldset class="form-group col-sm-6 {% if form.username.errors %}has-error{% endif %}">
-                            {{ form.username }}
-                            {% if form.username.errors %}<span class="help-block">{{ form.username.errors }}</span>{% endif %}
-                        </fieldset>
-                    </div>
+                    <p>{% trans "Veuillez renseigner vos informations de compte" %}</p>
 
                     <div class="row">
                         <fieldset class="form-group col-sm-6 {% if form.email.errors %}has-error{% endif %}">
@@ -61,6 +55,12 @@
                 <div class="form-category">
                     <p>{% trans "Nous avons de besoin de votre numéro de bâtiment, votre numéro de chambre et votre numéro de téléphone afin de vous contacter" %}</p>
                     <div class="row">
+                    <fieldset class="form-group col-sm-6 {% if form.campus.errors %}has-error{% endif %}">
+                            {{ form.campus }}
+                            {% if form.campus.errors %}<span class="help-block">{{ form.campus.errors }}</span>{% endif %}
+                    </fieldset>
+                    </div>
+                    <div class="row" id="maisel-information">
                         <fieldset class="form-group col-sm-6 {% if form.building.errors %}has-error{% endif %}">
                             {{ form.building }}
                             {% if form.building.errors %}<span class="help-block">{{ form.building.errors }}</span>{% endif %}
@@ -68,6 +68,12 @@
                         <fieldset class="form-group col-sm-6 {% if form.room.errors %}has-error{% endif %}">
                             {{ form.room }}
                             {% if form.room.errors %}<span class="help-block">{{ form.room.errors }}</span>{% endif %}
+                        </fieldset>
+                    </div>
+                    <div class="row" id="home-address">
+                        <fieldset class="form-group col-sm-6 {% if form.address.errors %}has-error{% endif %}">
+                            {{ form.address }}
+                            {% if form.address.errors %}<span class="help-block">{{ form.address.errors }}</span>{% endif %}
                         </fieldset>
                     </div>
 
@@ -80,11 +86,9 @@
                 </div>
 
                 <div class="form-category">
-
                     <div class="row">
                         <fieldset class="checkbox form-group col-sm-10 col-sm-offset-2 {% if form.certify_truth.errors %}has-error{% endif %}">
                             {{ form.certify_truth }}{{ form.certify_truth.label_tag }}
-                            {% if form.certify_truth.errors %}<span class="help-block">{{ form.certify_truth.errors }}</span>{% endif %}
                         </fieldset>
                     </div>
                 </div>
@@ -98,4 +102,47 @@
                 </div>
             </form>
         </div> <!-- /.container -->
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        var brest_buildings = ['I1', 'I2', 'I3', 'I4', 'I5', 'I6', 'I7', 'I8', 'I9', 'I10', 'I11', 'I12'];
+        var rennes_buildings = ['Studios', 'Chambres'];
+
+        function update_buildings() {
+            var selected_campus = $("#id_campus").find("option:selected").text();
+            if (selected_campus === "Brest") {
+                $("#maisel-information").show();
+                $("#home-address").hide();
+                $("#id_building").find("option").each(function () {
+                    if(brest_buildings.indexOf($(this).text()) >= 0){
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                })
+            } else if (selected_campus === "Rennes") {
+                $("#maisel-information").show();
+                $("#home-address").hide();
+                $("#id_building").find("option").each(function () {
+                    if(rennes_buildings.indexOf($(this).text()) >= 0){
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                })
+            } else {
+                $("#maisel-information").hide();
+                $("#home-address").show();
+            }
+        }
+
+        $("#id_campus").on("change", function (event) {
+            update_buildings();
+        });
+
+        $( document ).on("ready", function( event ){
+            update_buildings();
+        });
+    </script>
 {% endblock %}
