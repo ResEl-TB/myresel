@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
+from django.http import HttpResponseBadRequest, HttpResponseRedirect
 
 from fonctions import ldap, network
 
@@ -25,27 +26,26 @@ class getAndCheckUsersNetworkData(object):
     """
     def process_request(self, request):
         # Get
-        request.network_data = []
+        request.network_data = {}
         if 'HTTP_X_FORWARDED_FOR' in request.META:
-            request.network_data.ip = request.META['HTTP_X_FORWARDED_FOR']
+            request.network_data['ip'] = request.META['HTTP_X_FORWARDED_FOR']
         else:
-            request.network_data.ip = request.META['REMOTE_ADDR']
-        request.network_data.vlan = request.META['VLAN']
-        request.network_data.host = request.META['HTTP_HOST']
-        request.network_data.zone = network.get_network_zone(ip)
-        request.network_data.mac = False
-        request.network_data.is_registered = 'Unknown'
-        request.network_data.is_logged_in = request.user.is_authenticated()
-        if "user" in request.network_data.zone or "inscription" in request.network_data.zone: # As the device is in an inscription or user zone, we can get its mac address
-            request.network_data.mac = network.get_mac(ip)
-            request.network_data.is_registered = ldap.get_status(ip)
+            request.network_data['ip'] = request.META['REMOTE_ADDR']
+        request.network_data['vlan'] = request.META['VLAN']
+        request.network_data['host'] = request.META['HTTP_HOST']
+        request.network_data['zone'] = network.get_network_zone(request.network_data['ip'])
+        request.network_data['mac'] = False
+        request.network_data['is_registered'] = 'Unknown'
+        request.network_data['is_logged_in'] = request.user.is_authenticated()
+        if "user" in request.network_data['zone'] or "inscription" in request.network_data['zone']: # As the device is in an inscription or user zone, we can get its mac address
+            request.network_data['mac'] = network.get_mac(ip)
+            request.network_data['is_registered'] = ldap.get_status(ip)
         
         # Check
-        if "user" in request.network_data.zone or "inscription" in request.network_data.zone:
-            if not mac:
-                # TODO: error ! couldn't have its mac address
-                pass
-
+        if "user" in request.network_data['zone'] or "inscription" in request.network_data['zone']:
+            if not request.network_data['mac']:
+                # Error ! couldn't have its mac address
+                return HttpResponseBadRequest(_("Impossible de détecter votre adresse mac, veuillez contacter un administrateur ResEl."))
 
 class inscriptionNetworkHandler(object):
     # Before the request is sent to the website, we need to handle if the user is in an inscription network
@@ -70,19 +70,13 @@ class inscriptionNetworkHandler(object):
         #        disconnect/reconnect to Wifi
 
         # First get device datas
-        if 'HTTP_X_FORWARDED_FOR' in request.META:
-            ip = request.META['HTTP_X_FORWARDED_FOR']
-        else:
-            ip = request.META['REMOTE_ADDR']
-        vlan = request.META['VLAN']
-        host = request.META['HTTP_HOST']
-        zone = network.get_network_zone(ip)
-        mac = False
-        is_registered = 'Unknown'
-        is_logged_in = request.user.is_authenticated()
-        if "user" in zone or "inscription" in zone: # As the device is in an inscription or user zone, we can get its mac address
-            mac = network.get_mac(ip)
-            is_registered = ldap.get_status(ip)
+        ip = request.network_data['ip']
+        vlan = request.network_data['vlan']
+        host = request.network_data['host']
+        zone = request.network_data['zone']
+        mac = request.network_data['mac']
+        is_registered = request.network_data['is_registered']
+        is_logged_in = request.network_data['is_logged_in']
 
         # Compile allowed URLs in inscription area
         INSCRIPTION_ZONE_ALLOWED_URLS = [re.compile(expr) for expr in settings.INSCRIPTION_ZONE_ALLOWED_URLS]
@@ -93,8 +87,8 @@ class inscriptionNetworkHandler(object):
             # Preliminary check
 
             if zone != 'Brest-inscription':
-                # TODO: error ! In vlan 995 without inscription IP address
-                pass
+                # Error ! In vlan 995 without inscription IP address
+                return HttpResponseBadRequest(_("Vous vous trouvez sur un réseau d'inscription mais ne possédez pas d'IP dans ce réseau. Veuillez contacter un administrateur."))
 
             # Check origin:
             if host not in settings.ALLOWED_HOSTS:
@@ -114,9 +108,9 @@ class inscriptionNetworkHandler(object):
         elif vlan == '999':
 
             if zone == 'Brest-user' or zone == 'Rennes-user' or zone == 'internet':
-                # TODO: zone internet shouldn't be on vlan 999 !
-                # Everything is fine
-                pass
+                # Error ! Zone internet shouldn't be on vlan 999 !
+                messages.error(request, _("Une erreur s'est glissée dans le traitement de votre requête. Si le problème persiste, contactez un administrateur."))
+                raise Exception
 
             elif zone == 'Brest-inscription-999' or zone == 'Rennes-inscription':
                 # Check origin:
@@ -125,7 +119,6 @@ class inscriptionNetworkHandler(object):
                 else:
                     # Check if logged in & registered:
                     if is_registered == 'active' and is_logged_in:
-                        # TODO:
                         messages.warning(request, _("Votre inscription n'est pas finie. Veuillez vous déconnecter puis vous reconnecter sur le réseau Wifi 'ResEl Secure'"))
                         pass
                     else:

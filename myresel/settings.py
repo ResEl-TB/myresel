@@ -128,6 +128,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'myresel.middleware.IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAReselAdminSoCheckTheLdapBeforeMiddleaware',
+    'myresel.middleware.getAndCheckUsersNetworkData',
     'myresel.middleware.inscriptionNetworkHandler',
 ]
 
