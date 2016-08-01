@@ -106,7 +106,7 @@
                 </div>
 
                 <div class="form-category">
-                    <div class="row">
+                    <div class="row checkbox">
                         <fieldset class="checkbox form-group col-sm-10 col-sm-offset-2 {% if form.certify_truth.errors %}has-error{% endif %}">
                             {{ form.certify_truth }}{{ form.certify_truth.label_tag }}
                         </fieldset>
@@ -122,13 +122,17 @@
                 </div>
             </form>
         </div>
-        <div class="col-md-5">
+        <div class="col-md-5 side-column">
             <h2>{% trans "En vous inscrivant..." %}</h2>
             <ul>
                 <li>{% trans "Vous deviendrez membre de l'association ResEl" %} </li>
                 <li>{% trans "Vous profiterez des nombreux services du ResEl" %} </li>
                 <li>{% trans "Vous pourrez participer aux évènements et aux activitées ResEl" %} </li>
             </ul>
+            <hr />
+            <h3>{% trans "Un problème pour s'inscrire ?" %}</h3>
+            <div><a href="{% url "contact" %}">{% trans "Contactez nous !" %}</a></div>
+            <div><a href="#">{% trans "Consulter la FAQ" %}</a></div>
         </div>
     </div>
 {% endblock %}

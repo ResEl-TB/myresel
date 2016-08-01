@@ -32,3 +32,13 @@
 .user-summary p {
     font-size: .8em;
 }
+
+.side-column {
+    padding-left: 40px;
+    margin-bottom: 50px;
+}
+
+.checkbox {
+    margin-left: 20px;
+    margin-right: 20px;
+}

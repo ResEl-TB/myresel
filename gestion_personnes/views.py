@@ -15,7 +15,7 @@ from ldap3 import MODIFY_REPLACE
 from fonctions import ldap, generic, network
 from gestion_personnes.models import LdapUser
 from myresel.settings import SERVER_EMAIL
-from .forms import InscriptionForm, ModPasswdForm, CGUForm
+from .forms import InscriptionForm, ModPasswdForm, CGUForm, InvalidUID
 
 
 class Inscription(View):
@@ -46,7 +46,12 @@ class Inscription(View):
         form = self.form_class(request.POST)
 
         if form.is_valid():
-            user = form.to_ldap_user()
+            try:
+                user = form.to_ldap_user()
+            except InvalidUID:
+                messages.error(request, _("Une erreur s'est produite lors de la création de vos identifiants. "
+                                          "Veuillez contacter un administeur."))
+                return render(request, self.template_name, {'form': form})
             request.session['logup_user'] = user.to_JSON()
             return HttpResponseRedirect(reverse('gestion-personnes:cgu'))
 
