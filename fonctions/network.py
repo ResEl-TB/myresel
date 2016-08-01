@@ -8,14 +8,20 @@ def get_mac(ip):
     """ Fonction qui récupère l'addresse MAC associée à l'IP de l'utilisateur """
 
     if re.match(r'^172\.22\.22[4-5]', ip):
+        eth = 'eth4'
+    elif re.match(r'^172\.22\.22[6-7]', ip):
         eth = 'eth3'
     else:
-        eth = 'eth2'
-   
-    subprocess.check_call(['ping', '-c', '1', '-I', eth, ip], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT) 
+        eth = 'eth2' 
+
+    try:   
+        subprocess.check_call(['fping', '-t', '100', '-c', '1', '-I', eth, ip], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+    except:
+        pass
     mac = str(subprocess.Popen(["arp -a | grep {} | awk '{{print $4}}'".format(ip)], 
-                            stdout = subprocess.PIPE, 
-                            shell=True).communicate()[0]).split('\'')[1].split('\\n')[0]
+                                stdout = subprocess.PIPE, 
+                                shell=True).communicate()[0]).split('\'')[1].split('\\n')[0]
+
     return mac
 
 def get_campus(ip):
