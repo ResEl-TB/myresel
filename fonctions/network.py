@@ -48,15 +48,15 @@ def get_network_zone(ip):
 
     if is_ip_in_subnet(ip, '172.22.224.0', 23):
         return "Brest-inscription"
-    else if is_ip_in_subnet(ip, '172.22.226.0', 23):
+    elif is_ip_in_subnet(ip, '172.22.226.0', 23):
         return "Brest-inscription-999"
-    else if ip.startswith(172.22.) and ip[7:10].isdigit() and 200 <= int(ip[7:10]) <= 223: # range 172.22.200.1 to 172.22.223.254 
+    elif ip.startswith(172.22.) and ip[7:10].isdigit() and 200 <= int(ip[7:10]) <= 223: # range 172.22.200.1 to 172.22.223.254 
         return "Brest-user"
-    else if ip.startswith('172.22.'):
+    elif ip.startswith('172.22.'):
         return "Brest-other"
-    else if is_ip_in_subnet(ip, '172.23.224.0', 23):
+    elif is_ip_in_subnet(ip, '172.23.224.0', 23):
         return "Rennes-inscription"
-    else if ip.startswith('172.23'): # TODO : check the full pattern
+    elif ip.startswith('172.23'): # TODO : check the full pattern
         return "Rennes-user"
 
     return "Internet"
