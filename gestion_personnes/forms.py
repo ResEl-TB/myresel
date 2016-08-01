@@ -1,7 +1,9 @@
 import time
+import re
 from django import forms
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxLengthValidator, MinLengthValidator
+from django.utils.text import slugify
 
 from django.utils.translation import ugettext_lazy as _
 from phonenumber_field.formfields import PhoneNumberField
@@ -10,8 +12,11 @@ from fonctions.generic import current_year, hash_passwd, hash_to_ntpass
 from gestion_personnes.models import LdapUser
 
 
-class InscriptionForm(forms.Form):
+class InvalidUID(Exception):
+    pass
 
+
+class InscriptionForm(forms.Form):
     CAMPUS = [('Brest', "Brest"), ('Rennes', 'Rennes'), ('None', _('Je n\'habite pas à la Maisel'))]
     BUILDINGS_BREST = [('I%d' % i, 'I%d' % i) for i in range(1, 13)]
     BUILDINGS_RENNES = [('S1', 'Studios'), ('C1', 'Chambres')]
@@ -64,7 +69,7 @@ class InscriptionForm(forms.Form):
             'class': 'form-control',
             'placeholder': _("Choisissez un mot de passe sécurisé"),
         }),
-        validators=[MinLengthValidator(8)],
+        validators=[MinLengthValidator(7)],
     )
 
     password_verification = forms.CharField(
@@ -123,6 +128,18 @@ class InscriptionForm(forms.Form):
         widget=forms.CheckboxInput()
     )
 
+    def clean_last_name(self):
+        last_name = self.cleaned_data['last_name']
+        if not re.match(r'\w+.*', last_name):
+            raise ValidationError(message=_("Nom de famille incorrect"), code="WRONG LASTNAME")
+        return last_name
+
+    def clean_first_name(self):
+        first_name = self.cleaned_data['first_name']
+        if not re.match(r'\w+.*', first_name) or first_name.startswith("_"):
+            raise ValidationError(message=_("Prénom incorrect"), code="WRONG FIRSTNAME")
+        return first_name
+
     def clean_campus(self):
         campus = self.cleaned_data['campus']
 
@@ -139,7 +156,7 @@ class InscriptionForm(forms.Form):
 
     def clean_email(self):
         email = self.cleaned_data['email']
-        # return email
+        # return email # TODO: debug
         if len(LdapUser.objects.filter(mail=email)) > 0:
             raise ValidationError(message=_("L'addresse email est déjà associée à un compte"), code="USED EMAIL")
         return email
@@ -163,8 +180,9 @@ class InscriptionForm(forms.Form):
         password1 = cleaned_data.get('password')
         password2 = cleaned_data.get('password_verification')
 
-        if password1 != password2:
-            self.add_error('password', ValidationError(message=_("Les mots de passes sont différents."), code="NOT SAME PASSWORD"))
+        if password1 is not None and password1 != password2:
+            self.add_error('password',
+                           ValidationError(message=_("Les mots de passes sont différents."), code="NOT SAME PASSWORD"))
 
     def get_free_uid(self, firstname, lastname):
         """
@@ -176,7 +194,12 @@ class InscriptionForm(forms.Form):
         :param lastname:
         :return:
         """
-        base_uid = firstname.lower()[0] + lastname.lower()[:8]
+        lastname = lastname.lower()
+        lastname = re.sub('(\W+|_)', '', lastname)
+        if len(lastname) == 0:
+            raise InvalidUID("The filtered lastname is empty, please use latin char")
+        base_uid = slugify(firstname.lower()[0] + lastname.lower()[:8])
+
         uid_incr = 0
         uid = base_uid
         # return uid  # TODO: debug
@@ -186,9 +209,14 @@ class InscriptionForm(forms.Form):
                 break
             uid_incr += 1
             if uid_incr < 10:
-                uid = base_uid + "0" +str(uid_incr)
+                uid = base_uid + "0" + str(uid_incr)
             else:
                 uid = base_uid + str(uid_incr)
+        else:
+            raise InvalidUID("You may have MAY people called %s %s in your database, please take action..."
+                             % (firstname, lastname)
+                             )
+
         return uid
 
     def to_ldap_user(self):
