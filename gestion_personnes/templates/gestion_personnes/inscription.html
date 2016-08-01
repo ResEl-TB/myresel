@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
 {% load i18n %}
 
 {% block titre %}{%  trans "Inscription" %}{% endblock %}
@@ -6,7 +7,7 @@
 {% block content %}
     <div class="container">
         <h1 class="page-header">{% trans "Inscription au ResEl" %}</h1>
-        <div class="alert alert-warning">{% trans "Vous êtes sur le point de créer un compte Resel, si vous en avez déjà un veuillez vous" %} <a href="{% url "login" %}">{% trans "connecter" %}</a>.</div>
+        <div class="alert alert-warning">{% trans "Vous êtes sur le point de créer un compte ResEl, si vous en possédez déjà un veuillez vous" %} <a href="{% url "login" %}">{% trans "connecter" %}</a>.</div>
         <div class="col-md-8">
             <form action="" method="POST" class="form">
                 {% csrf_token %}
@@ -43,6 +44,11 @@
                     <div class="row">
                         <fieldset class="form-group col-sm-6 {% if form.password.errors %}has-error{% endif %}">
                             {{ form.password }}
+                            <div class="progress password-strength">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0;">
+                                    <span>{% trans "Password strength" %}</span>
+                                </div>
+                            </div>
                             {% if form.password.errors %}<span class="help-block">{{ form.password.errors }}</span>{% endif %}
                         </fieldset>
                         <fieldset class="form-group col-sm-6 {% if form.password_verification.errors %}has-error{% endif %}">
@@ -50,8 +56,12 @@
                             {% if form.password_verification.errors %}<span class="help-block">{{ form.password_verification.errors }}</span>{% endif %}
                         </fieldset>
                     </div>
-                </div>
+                    <div class="row">
+                        <div class="col-sm-6">
 
+                        </div>
+                    </div>
+                </div>
                 <div class="form-category">
                     <p>{% trans "Nous avons de besoin de votre numéro de bâtiment, votre numéro de chambre et votre numéro de téléphone afin de vous contacter" %}</p>
                     <div class="row">
@@ -96,15 +106,17 @@
                 <div class="form-category">
                     <div class="row">
                         <div class="text-center">
-                            <button type="submit" class="btn btn-info">{% trans "Créer un compte" %}</button>
+                            <button type="submit" class="btn btn-info">{% trans "Continuer" %}</button>
                         </div>
                     </div> <!-- /.row -->
                 </div>
             </form>
-        </div> <!-- /.container -->
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascript %}
+    <script src="{% static 'js/zxcvbn.js' %}"></script>
     <script>
         var brest_buildings = ['I1', 'I2', 'I3', 'I4', 'I5', 'I6', 'I7', 'I8', 'I9', 'I10', 'I11', 'I12'];
         var rennes_buildings = ['Studios', 'Chambres'];
@@ -144,5 +156,68 @@
         $( document ).on("ready", function( event ){
             update_buildings();
         });
+
+        $("#id_password").on("keyup", function( event ) {
+            var customs = ['resel', 'tb', 'telecom', 'bretagne', 'maisel',
+            $("#id_email").val(),
+            $("#id_first_name").val(),
+            $("#id_last_name").val(),
+            ];
+
+            var result = zxcvbn($(this).val(), customs);
+            if( result.score == 0 ) {
+                $(".password-strength .progress-bar")
+                        .removeClass("progress-bar-success")
+                        .removeClass("progress-bar-info")
+                        .removeClass("progress-bar-warning")
+                        .addClass("progress-bar-danger")
+                        .attr("aria-valuenow", "1")
+                        .css("width", Math.ceil(1 / 5 * 100) + "%");
+                $(".password-strength .progress-bar span").text("{% trans "très faible" %}");
+
+            } else if ( result.score == 1 ) {
+                $(".password-strength .progress-bar")
+                        .removeClass("progress-bar-success")
+                        .removeClass("progress-bar-info")
+                        .addClass("progress-bar-warning")
+                        .removeClass("progress-bar-danger")
+                        .attr("aria-valuenow", "2")
+                        .css("width", Math.ceil(2 / 5 * 100) + "%");
+                $(".password-strength .progress-bar span").text("{% trans "faible" %}");
+
+            } else if ( result.score == 2 ) {
+                $(".password-strength .progress-bar")
+                        .removeClass("progress-bar-success")
+                        .addClass("progress-bar-info")
+                        .removeClass("progress-bar-warning")
+                        .removeClass("progress-bar-danger")
+                        .attr("aria-valuenow", "3")
+                        .css("width", Math.ceil(3 / 5 * 100) + "%");
+                $(".password-strength .progress-bar span").text("{% trans "Moyen" %}");
+
+            } else if ( result.score == 3 ) {
+                $(".password-strength .progress-bar")
+                        .addClass("progress-bar-success")
+                        .removeClass("progress-bar-info")
+                        .removeClass("progress-bar-warning")
+                        .removeClass("progress-bar-danger")
+                        .attr("aria-valuenow", "4")
+                        .css("width", Math.ceil(4 / 5 * 100) + "%");
+                $(".password-strength .progress-bar span").text("{% trans "Correct" %}");
+
+            } else if ( result.score == 4 ) {
+                $(".password-strength .progress-bar")
+                        .addClass("progress-bar-success")
+                        .removeClass("progress-bar-info")
+                        .removeClass("progress-bar-warning")
+                        .removeClass("progress-bar-danger")
+                        .attr("aria-valuenow", "5")
+                        .css("width", Math.ceil(5 / 5 * 100) + "%");
+                    $(".password-strength .progress-bar span").text("{% trans "Bon" %}");
+
+            }
+{#            $("#hack-time").text(result.crack_times_display.offline_slow_hashing_1e4_per_second);#}
+        })
+
     </script>
 {% endblock %}

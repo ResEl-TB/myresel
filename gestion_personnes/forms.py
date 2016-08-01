@@ -21,7 +21,7 @@ class InscriptionForm(forms.Form):
     BUILDINGS += BUILDINGS_RENNES
 
     FORMATIONS = [
-        (0, _('Indiquez votre Formation')),
+        (0, _('Indiquez votre formation')),
         ('FIG', _('Ingénieur généraliste (FIG)')),
         ('FIP', _('Ingénieur par alternance (FIP)')),
         ('Master', _('Master spécialisé')),
@@ -168,7 +168,7 @@ class InscriptionForm(forms.Form):
         address = cleaned_data.get("address")
         room = cleaned_data.get("room")
 
-        if (campus == "Brest" or campus == "Rennes") and room == "":
+        if (campus == "Brest" or campus == "Rennes") and room is None:
             self.add_error("room", _("Ce champ est obligatoire"))
         if campus == "Brest" and building not in [a[0] for a in self.BUILDINGS_BREST]:
             self.add_error('building', _("Veuillez choisir un bâtiment du campus de Brest"))
@@ -219,6 +219,13 @@ class InscriptionForm(forms.Form):
         user.address = self.cleaned_data["address"]
 
         return user
+
+
+class CGUForm(forms.Form):
+    have_read = forms.BooleanField(
+        label=_("En cochant cette case je certifie avoir lu et accepté les statuts et le règlement intérieur de l'association"),
+        widget=forms.CheckboxInput()
+    )
 
 
 class ModPasswdForm(forms.Form):
