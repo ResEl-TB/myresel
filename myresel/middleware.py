@@ -6,12 +6,12 @@ from fonctions import ldap, network
 
 import re
 
-class DatMiddleware(object):
+class IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAReselAdminSoCheckTheLdapBeforeMiddleaware(object):
     def process_request(self, request):
-        # Check if the user is a ResEl admin. If so, it's credentials will be updated to superuser and staff
-        if request.user.is_authenticated():
+        # Check if the user is a ResEl admin. If so, its credentials will be updated to superuser and staff
+        if request.user.is_authenticated() and not (request.user.is_staff and request.user.is_superuser):
             res = ldap.search(settings.LDAP_ADMIN, '(&(uid=%s))' % request.user.username)
-            if len(res) == 1:
+            if res:
                 user = User.objects.get(username=request.user.username)
                 user.is_staff = 1
                 user.is_superuser = 1
