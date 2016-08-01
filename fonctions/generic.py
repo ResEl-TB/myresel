@@ -35,7 +35,7 @@ def hash_to_ntpass(password):
 
 def ip_to_int(ip):
     """ Convert an IP in int"""
-    o = map(int, ip.split('.'))
+    o = list(map(int, ip.split('.'))
     res = (16777216 * o[0]) + (65536 * o[1]) + (256 * o[2]) + o[3]
     return res
 

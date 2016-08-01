@@ -112,19 +112,19 @@ class Contact(View):
 
 def InscriptionZoneInfo(request):
     # First get device datas
-        if 'HTTP_X_FORWARDED_FOR' in request.META:
-            ip = request.META['HTTP_X_FORWARDED_FOR']
-        else:
-            ip = request.META['REMOTE_ADDR']
-        vlan = request.META['VLAN']
-        host = request.META['HTTP_HOST']
-        zone = network.get_network_zone(ip)
-        mac = False
-        is_registered = 'Unknown'
-        is_logged_in = request.user.is_authenticated()
-        if "user" in zone or "inscription" in zone : # As the device is in an inscription or user zone, we can get its mac address
-            mac = network.get_mac(ip)
-            is_registered = ldap.get_status(ip) == 'active'
+    if 'HTTP_X_FORWARDED_FOR' in request.META:
+        ip = request.META['HTTP_X_FORWARDED_FOR']
+    else:
+        ip = request.META['REMOTE_ADDR']
+    vlan = request.META['VLAN']
+    host = request.META['HTTP_HOST']
+    zone = network.get_network_zone(ip)
+    mac = False
+    is_registered = 'Unknown'
+    is_logged_in = request.user.is_authenticated()
+    if "user" in zone or "inscription" in zone : # As the device is in an inscription or user zone, we can get its mac address
+        mac = network.get_mac(ip)
+        is_registered = ldap.get_status(ip) == 'active'
 
     if "inscription" not in zone:
         return HttpResponseRedirect(reverse('pages:news'))

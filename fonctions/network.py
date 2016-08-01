@@ -2,7 +2,7 @@ import subprocess
 import os
 import re
 
-from fonction.generic import is_ip_in_subnet
+from fonctions.generic import is_ip_in_subnet
 
 def get_mac(ip):
     """ Fonction qui récupère l'addresse MAC associée à l'IP de l'utilisateur """
@@ -50,7 +50,7 @@ def get_network_zone(ip):
         return "Brest-inscription"
     elif is_ip_in_subnet(ip, '172.22.226.0', 23):
         return "Brest-inscription-999"
-    elif ip.startswith(172.22.) and ip[7:10].isdigit() and 200 <= int(ip[7:10]) <= 223: # range 172.22.200.1 to 172.22.223.254 
+    elif ip.startswith('172.22.') and ip[7:10].isdigit() and 200 <= int(ip[7:10]) <= 223: # range 172.22.200.1 to 172.22.223.254 
         return "Brest-user"
     elif ip.startswith('172.22.'):
         return "Brest-other"

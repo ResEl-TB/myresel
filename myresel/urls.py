@@ -41,7 +41,7 @@ urlpatterns = [
 
     url(r'^news/', NewsListe.as_view(), name='news'),
     url(r'^contact/', Contact.as_view(), name='contact'),
-    url(r'^inscription_zone/' InscrptionZoneInfo, name="inscription-zone")
+    url(r'^inscription_zone/', InscriptionZoneInfo, name="inscription-zone"),
     url(r'^$', Home.as_view(), name='home'),
 ]
 
