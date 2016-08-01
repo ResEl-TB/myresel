@@ -6,6 +6,7 @@ from django.utils.decorators import method_decorator
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import View, ListView
+from django.contrib import messages
 
 from pages.forms import ContactForm
 from fonctions import network, ldap, decorators
@@ -106,7 +107,7 @@ class Contact(View):
             )
             mail.send()
 
-            messages.success(_("Votre demande a bien été envoyée aux administrateurs. L'un d'eux vous répondra d'ici peu."))
+            messages.success(request, _("Votre demande a bien été envoyée aux administrateurs. L'un d'eux vous répondra d'ici peu."))
             return HttpResponseRedirect(reverse('pages:news'))
         return render(request, self.template_name, {'form': form})
 
