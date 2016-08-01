@@ -26,18 +26,18 @@ class getAndCheckUsersNetworkData(object):
 		# Get
 		request.network_data = []
 		if 'HTTP_X_FORWARDED_FOR' in request.META:
-            request.network_data.ip = request.META['HTTP_X_FORWARDED_FOR']
+			request.network_data.ip = request.META['HTTP_X_FORWARDED_FOR']
         else:
-            request.network_data.ip = request.META['REMOTE_ADDR']
-        request.network_data.vlan = request.META['VLAN']
-        request.network_data.host = request.META['HTTP_HOST']
-        request.network_data.zone = network.get_network_zone(ip)
-        request.network_data.mac = False
+        	request.network_data.ip = request.META['REMOTE_ADDR']
+		request.network_data.vlan = request.META['VLAN']
+		request.network_data.host = request.META['HTTP_HOST']
+		request.network_data.zone = network.get_network_zone(ip)
+		request.network_data.mac = False
 		request.network_data.is_registered = 'Unknown'
 		request.network_data.is_logged_in = request.user.is_authenticated()
-        if "user" in request.network_data.zone or "inscription" in request.network_data.zone: # As the device is in an inscription or user zone, we can get its mac address
+		if "user" in request.network_data.zone or "inscription" in request.network_data.zone: # As the device is in an inscription or user zone, we can get its mac address
 			request.network_data.mac = network.get_mac(ip)
-        	request.network_data.is_registered = ldap.get_status(ip)
+			request.network_data.is_registered = ldap.get_status(ip)
 		
 		# Check
 		if "user" in request.network_data.zone or "inscription" in request.network_data.zone:
