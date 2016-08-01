@@ -14,9 +14,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url
-from .views import Inscription, ModPasswd
+from .views import Inscription, ModPasswd, InscriptionCGU
 
 urlpatterns = [
     url(r'^inscription$', Inscription.as_view(), name='inscription'),
+    url(r'^cgu', InscriptionCGU.as_view(), name='cgu'),
     url(r'^modification-passwd$', ModPasswd.as_view(), name='mod-passwd'),
 ]

@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.conf import settings
+
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import View, ListView
 from django.contrib import messages
@@ -14,6 +15,7 @@ from pages.models import News
 from gestion_personnes.models import LdapUser
 
 from datetime import datetime
+
 
 class Home(View):
     """
