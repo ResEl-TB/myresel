@@ -4,11 +4,21 @@
 
 {% block titre %}{%  trans "Inscription" %}{% endblock %}
 
+{% block css %}
+    <link href="{% static 'css/inscription.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
     <div class="container">
         <h1 class="page-header">{% trans "Inscription au ResEl" %}</h1>
         <div class="alert alert-warning">{% trans "Vous êtes sur le point de créer un compte ResEl, si vous en possédez déjà un veuillez vous" %} <a href="{% url "login" %}">{% trans "connecter" %}</a>.</div>
-        <div class="col-md-8">
+        <div class="signup-ariane">
+            <div class="step-pending"></div>
+            <div class="step-done"></div>
+            <div class="step-future"></div>
+        </div>
+
+        <div class="col-md-7 signup-form">
             <form action="" method="POST" class="form">
                 {% csrf_token %}
                 <div class="form-category">
@@ -106,11 +116,19 @@
                 <div class="form-category">
                     <div class="row">
                         <div class="text-center">
-                            <button type="submit" class="btn btn-info">{% trans "Continuer" %}</button>
+                            <button type="submit" class="btn btn-lg btn-info">{% trans "Continuer l'inscription" %}</button>
                         </div>
                     </div> <!-- /.row -->
                 </div>
             </form>
+        </div>
+        <div class="col-md-5">
+            <h2>{% trans "En vous inscrivant..." %}</h2>
+            <ul>
+                <li>{% trans "Vous deviendrez membre de l'association ResEl" %} </li>
+                <li>{% trans "Vous profitez des nombreux services du ResEl" %} </li>
+                <li>{% trans "Vous pourrez participer aux évènements et aux activitées ResEl" %} </li>
+            </ul>
         </div>
     </div>
 {% endblock %}
