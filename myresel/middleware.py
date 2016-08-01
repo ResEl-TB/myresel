@@ -138,3 +138,4 @@ class inscriptionNetworkHandler(object):
             else:
                 # Other possiblities: Brest-inscription, Brest-other.
                 # Should never happen... but ?
+                pass
