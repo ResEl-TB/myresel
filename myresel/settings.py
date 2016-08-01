@@ -21,6 +21,16 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['my.resel.fr', 'resel.fr']
 
+# SSL config
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTOCOL', 'https')
+
+SESSION_COOKIE_SECURE = True
+
+CSRF_COOKIE_SECURE = True
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
 # Mails
 
 SERVER_EMAIL = 'inscription@resel.fr'
