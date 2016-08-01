@@ -14,15 +14,15 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         stripe.api_key = settings.STRIPE_API_KEY
 
-        for payment in MonthlyPayment.objects.using('admin').all():
+        for payment in MonthlyPayment.objects.all():
             if payment.last_paid + timedelta(days=30) <= date.today():
                 user = ldap.search(settings.LDAP_DN_PEOPLE, '(&(uid=%s))' % payment.user, ['mail'])[0]
                 try:
                     stripe.Charge.create(amount=int(payment.amount_to_pay*100), currency="eur", customer=payment.customer)
                     payment.months_paid += 1
-                    payment.save(using='admin')
+                    payment.save()
 
-                    Transaction.objects.using('admin').create(
+                    Transaction.objects.create(
                         utilisateur=payment.user,
                         total=payment.amount_to_pay,
                         commentaire=_("Accès Internet - %se mensualisation" % payment.months_paid)
