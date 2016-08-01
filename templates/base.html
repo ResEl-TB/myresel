@@ -42,28 +42,35 @@
                 </li>
             </ul>
             <ul class="nav navbar-top-links navbar-right">
-		<!-- Lists of categories -->
-		{% for category in categories %}		 
-		    <li class="dropdown">
-		        <a href="{% url 'wiki:show-category' slug=category.slug %}" class="dropdown-toggle" data-toggle="dropdown"><i class="fa {{ category.fa_icon_name }} fa-fw" aria-hidden="true"></i> {{ category.name }}</a>
-			<ul class="dropdown-menu">
-			    {% for article in category.article_set.all|slice:nbArticlesSlicer %}
-			        <li>
-				    <a href="{{ article.get_absolute_url }}">{{ article.name }}</a>
-				</li>
-			    {% empty %}
-			        <li>
-				    {% trans "Aucun article" %}
-				</li>
-			    {% endfor %}
-			    {% if category.article_set.all|length > nbArticlesToDisplay %}
-			        <p><a href="{% url 'wiki:show-category' slug=category.slug%}">{% trans "... plus d'articles"%}</a></p>
-			    {% endif %}
+                {% if request.user.is_staff %}
+                <li>
+                    <a href="/gestion"><i class="fa fa-gears fa-fw"></i></a>
+                </li>
+                {% endif %}            
 
-			</ul>
-		    </li>
-		{% endfor %}
-		<li>
+		        <!-- Lists of categories -->
+		        {% for category in categories %}		 
+		        <li class="dropdown">
+		            <a href="{% url 'wiki:show-category' slug=category.slug %}" class="dropdown-toggle" data-toggle="dropdown"><i class="fa {{ category.fa_icon_name }} fa-fw" aria-hidden="true"></i> {{ category.name }}</a>
+			        <ul class="dropdown-menu">
+			        {% for article in category.article_set.all|slice:nbArticlesSlicer %}
+			            <li>
+				            <a href="{{ article.get_absolute_url }}">{{ article.name }}</a>
+				        </li>
+			        {% empty %}
+			            <li>
+				            {% trans "Aucun article" %}
+				        </li>
+			        {% endfor %}
+
+			        {% if category.article_set.all|length > nbArticlesToDisplay %}
+			            <p><a href="{% url 'wiki:show-category' slug=category.slug%}">{% trans "... plus d'articles"%}</a></p>
+			        {% endif %}
+			        </ul>
+		        </li>
+		        {% endfor %}
+
+		        <li>
                     <a href="{% url 'contact' %}"><i class="fa fa-comment-o fa-fw"></i> {% trans "Contact" %}</a>
                 </li>
 

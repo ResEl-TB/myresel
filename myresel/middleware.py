@@ -38,8 +38,8 @@ class getAndCheckUsersNetworkData(object):
         request.network_data['is_registered'] = 'Unknown'
         request.network_data['is_logged_in'] = request.user.is_authenticated()
         if "user" in request.network_data['zone'] or "inscription" in request.network_data['zone']: # As the device is in an inscription or user zone, we can get its mac address
-            request.network_data['mac'] = network.get_mac(ip)
-            request.network_data['is_registered'] = ldap.get_status(ip)
+            request.network_data['mac'] = network.get_mac(request.network_data['ip'])
+            request.network_data['is_registered'] = ldap.get_status(request.network_data['ip'])
         
         # Check
         if "user" in request.network_data['zone'] or "inscription" in request.network_data['zone']:
@@ -107,10 +107,9 @@ class inscriptionNetworkHandler(object):
 
         elif vlan == '999':
 
-            if zone == 'Brest-user' or zone == 'Rennes-user' or zone == 'internet':
+            if zone == 'internet':
                 # Error ! Zone internet shouldn't be on vlan 999 !
-                messages.error(request, _("Une erreur s'est glissée dans le traitement de votre requête. Si le problème persiste, contactez un administrateur."))
-                raise Exception
+                return HttpResponseBadRequest(_("Une erreur s'est glissée dans le traitement de votre requête. Si le problème persiste, contactez un administrateur."))
 
             elif zone == 'Brest-inscription-999' or zone == 'Rennes-inscription':
                 # Check origin:
