@@ -1,5 +1,5 @@
 import itertools
-from ldap3 import Server, Connection, MODIFY_REPLACE
+from ldap3 import Server, Connection, MODIFY_REPLACE, ALL_ATTRIBUTES
 from .network import get_campus, get_mac, update_all
 from .generic import current_year
 from django.conf import settings
@@ -34,6 +34,21 @@ def search(dn, query, attr=None):
     l.unbind()
     return res
 
+def search_ecole(query):
+    """ Fonction pour rechercher dans le ldap école une entrée particulière
+
+        query : la recherche
+    """
+
+    res = False
+    l = Connection(
+        Server(settings.LDAP_ECOLE, use_ssl=True),
+        auto_bind=True
+    )
+    if l.search(settings.LDAP_ECOLE_DN, query, attributes=ALL_ATTRIBUTES):
+        res = l.entries
+    l.unbind()
+    return res
 
 def add(dn, object_class, attributes):
     """ Fonction qui ajoute une fiche au LDAP """
