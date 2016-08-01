@@ -108,7 +108,7 @@ class Contact(View):
             mail.send()
 
             messages.success(request, _("Votre demande a bien été envoyée aux administrateurs. L'un d'eux vous répondra d'ici peu."))
-            return HttpResponseRedirect(reverse('pages:news'))
+            return HttpResponseRedirect(reverse('news'))
         return render(request, self.template_name, {'form': form})
 
 def InscriptionZoneInfo(request):
