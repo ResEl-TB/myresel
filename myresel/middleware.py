@@ -41,8 +41,8 @@ class getAndCheckUsersNetworkData(object):
         
         # Check
         if "user" in request.network_data.zone or "inscription" in request.network_data.zone:
-            if not mac :
-                # TODO : error ! couldn't have its mac address
+            if not mac:
+                # TODO: error ! couldn't have its mac address
                 pass
 
 
@@ -50,21 +50,21 @@ class inscriptionNetworkHandler(object):
     # Before the request is sent to the website, we need to handle if the user is in an inscription network
     def process_request(self, request):
 
-        # We need to check two things :
-        # 1. If the user is in vlan inscription (995) :
-        #  * He browse any non-resel page (but the DNS server sends him to r.f) :
+        # We need to check two things:
+        # 1. If the user is in vlan inscription (995):
+        #  * He browse any non-resel page (but the DNS server sends him to r.f):
         #    -> He is sent to an informative page that tell him either to subscribe/activate his device
         #        if his device is unknown, either change WLAN if his device is registered.
-        #  * He browse the ResEl :
-        #    + He is logged in & his device is registered :
+        #  * He browse the ResEl:
+        #    + He is logged in & his device is registered:
         #        -> Let him access the website but send a warning that he needs to log on the other network
-        #    + He isn't logged in / His device isn't registered :
+        #    + He isn't logged in / His device isn't registered:
         #       -> Let him access only the homepage the login page, and the activation page
         #
         # 2. If the user is in vlan user (999):
-        #    * If the device's IP is in user subnet :
+        #    * If the device's IP is in user subnet:
         #      -> Ok
-        #   * device's IP is in inscription-999 subnet :
+        #   * device's IP is in inscription-999 subnet:
         #     -> Same as 1 except if his device is registered, we tell him to plug/unplug ethernet jack or 
         #        disconnect/reconnect to Wifi
 
@@ -79,7 +79,7 @@ class inscriptionNetworkHandler(object):
         mac = False
         is_registered = 'Unknown'
         is_logged_in = request.user.is_authenticated()
-        if "user" in zone or "inscription" in zone : # As the device is in an inscription or user zone, we can get its mac address
+        if "user" in zone or "inscription" in zone: # As the device is in an inscription or user zone, we can get its mac address
             mac = network.get_mac(ip)
             is_registered = ldap.get_status(ip)
 
@@ -92,19 +92,20 @@ class inscriptionNetworkHandler(object):
             # Preliminary check
 
             if zone != 'Brest-inscription':
-                # TODO : error ! In vlan 995 without inscription IP address
+                # TODO: error ! In vlan 995 without inscription IP address
                 pass
 
-            # Check origin :
+            # Check origin:
             if host not in settings.ALLOWED_HOSTS:
                 return HttpResponseRedirect(settings.INSCRIPTION_ZONE_FALLBACK_URL) # Will bypass the normal view
-            else : 
+            else:
 
-                # Check if logged in & registered :
+                # Check if logged in & registered:
                 if is_registered == 'active' and is_logged_in:
-                    # TODO :
+                    # TODO:
                     # messages.alert(_("Vous êtes correctement inscrit, mais vous êtes sur le mauvais réseau. Veuillez vous connecter sur le réseau Wifi 'ResEl Secure'"))
-                else :
+                	pass
+                else:
                     # We check that he only browses intended part of the website
                     path = request.path_info.lstrip('/')
                     if not any(m.match(path) for m in INSCRIPTION_ZONE_ALLOWED_URLS):
@@ -114,26 +115,26 @@ class inscriptionNetworkHandler(object):
         elif vlan == '999':
 
             if zone == 'Brest-user' or zone == 'Rennes-user' or zone == 'internet':
-                # TODO : zone internet shouldn't be on vlan 999 !
+                # TODO: zone internet shouldn't be on vlan 999 !
                 # Everything is fine
                 pass
             elif zone == 'Brest-inscription-999' or zone == 'Rennes-inscription':
 
-                # Check origin :
+                # Check origin:
                 if host not in settings.ALLOWED_HOSTS:
                     return HttpResponseRedirect(settings.INSCRIPTION_ZONE_FALLBACK_URL) # Will bypass the normal view
-                else : 
-
-                    # Check if logged in & registered :
+                else:
+                    # Check if logged in & registered:
                     if is_registered == 'active' and is_logged_in:
-                        # TODO :
+                        # TODO:
                         # messages.alert(_("Votre inscription n'est pas finie. Veuillez vous déconnecter puis vous reconnecter sur le réseau Wifi 'ResEl Secure'"))
-                    else :
+                        pass
+                    else:
                         # We check that he only browses intended part of the website
                         path = request.path_info.lstrip('/')
                         if not any(m.match(path) for m in INSCRIPTION_ZONE_ALLOWED_URLS):
                             # messages.info(_("Vous devez vous inscrire au ResEl avant de pouvoir naviguer normalement."))
                             return HttpResponseRedirect(settings.LOGIN_URL)
-            else :
-                # Other possiblities : Brest-inscription, Brest-other.
+            else:
+                # Other possiblities: Brest-inscription, Brest-other.
                 # Should never happen... but ?
