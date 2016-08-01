@@ -11,16 +11,24 @@
 {% block content %}
     <div class="home-fragment home-user-management">
         <div class="container">
-            <h2>{{ object.name }}</h2>
-	    <p>{{ object.description|safe }}</p>
+            <div class="row">
+                <h2>{{ object.name }}</h2>
+	            <p>{{ object.description|safe }}</p>
+            </div>
         </div>
     </div>
 
     <div class="home-fragment home-presentation">
-        <div class="container">
-	    <p>{{ object.text|safe }}</p>
-            <p>{% trans "Publié" %} : {{ object.date_creation|date }}<br/>{% trans "Dernière modification" %}: {{ object.date_last_edit|date }}
-	</div>
+        <div class="container text-left">
+	        <div class="row">
+                <p>{{ object.text|safe }}</p>
+                <hr>
+                <p class="text-right">
+                    {% trans "Publié" %} : {{ object.date_creation|date:"DATE_FORMAT" }}<br/>
+                    {% trans "Dernière modification" %}: {{ object.date_last_edit|date:"DATE_FORMAT" }}
+                </p>
+            </div>
+	    </div>
     </div>    
 {% endblock %}
 
