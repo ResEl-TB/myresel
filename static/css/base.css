@@ -18,7 +18,11 @@ body {
 .nav li {
     display: inline-block;
 }
-
+@media(max-width:768px) {
+    .nav li {
+        display: block;
+    }
+}
 .nav li a {
     padding: 15px;
     min-height: 50px;
@@ -63,6 +67,12 @@ body {
 .navbar-top-links .dropdown-user {
     right: 0;
     left: auto;
+}
+
+.navbar-toggle {
+}
+.navbar-toggle span {
+    background-color: #225378;
 }
 
 @media(min-width:768px) {
