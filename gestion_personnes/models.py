@@ -1,3 +1,5 @@
+import json
+
 import ldapdb
 from django.db import models
 
@@ -36,3 +38,15 @@ class LdapUser(ldapdb.models.Model):
     campus = CharField(db_column='campus')
     batiment = CharField(db_column='batiment')
     roomNumber = CharField(db_column='roomNumber')
+
+    def to_JSON(self):
+        return json.dumps(self, default=lambda o: o.__dict__,
+                          sort_keys=True, indent=4)
+
+    @staticmethod
+    def from_JSON(json_input):
+        obj_dict = json.loads(json_input)
+        self = LdapUser()
+        for k, v in obj_dict.items():
+            self.__dict__[k] = v
+        return self

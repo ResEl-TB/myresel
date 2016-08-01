@@ -4,15 +4,26 @@
 
 {% block titre %}{%  trans "Inscription - CGU" %}{% endblock %}
 
+{% block css %}
+    <link href="{% static 'css/inscription.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
     <div class="container">
+
+        <h1>{% trans "Règlement intérieur du ResEl" %}</h1>
+
+        <hr />
+    <p>{%  trans "Afin de faire partie de l'association du ResEl vous devez lire attentivement son règlement intérieur et l'accepter." %}</p>
         <iframe src="https://resel.fr/association/docs/reglementinterieur.pdf" width="100%" height="800"></iframe>
+        <hr />
+        <h4>{% trans "Veuillez également lire attentivement"%} <a href="#">{%  trans "les statuts" %}</a> {% trans "de l'association avant de continuer" %}</h4>
         <form action="" method="POST" class="form">
             {% csrf_token %}
             <div class="form-category">
                 <div class="row">
-                    <fieldset class="checkbox form-group col-sm-10 col-sm-offset-2 {% if form.certify_truth.errors %}has-error{% endif %}">
-                        {{ form.certify_truth }}{{ form.certify_truth.label_tag }}
+                    <fieldset class="checkbox form-group col-sm-10 col-sm-offset-2 {% if form.have_read.errors %}has-error{% endif %}">
+                        {{ form.have_read }}{{ form.have_read.label_tag }}
                     </fieldset>
                 </div>
             </div>
@@ -20,7 +31,7 @@
             <div class="form-category">
                 <div class="row">
                     <div class="text-center">
-                        <button type="submit" class="btn btn-info">{% trans "Créer un compte" %}</button>
+                        <button type="submit" class="btn btn-info btn-lg">{% trans "Créer un compte" %}</button>
                     </div>
                 </div> <!-- /.row -->
             </div>

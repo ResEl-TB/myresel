@@ -13,6 +13,7 @@ from django.views.generic import View
 from ldap3 import MODIFY_REPLACE
 
 from fonctions import ldap, generic, network
+from gestion_personnes.models import LdapUser
 from myresel.settings import SERVER_EMAIL
 from .forms import InscriptionForm, ModPasswdForm, CGUForm
 
@@ -46,7 +47,7 @@ class Inscription(View):
 
         if form.is_valid():
             user = form.to_ldap_user()
-            request.session['logup_ldap_user'] = user
+            request.session['logup_user'] = user.to_JSON()
             return HttpResponseRedirect(reverse('gestion-personnes:cgu'))
 
         return render(request, self.template_name, {'form': form})
@@ -65,27 +66,27 @@ class InscriptionCGU(View):
     # @method_decorator(resel_required)
     # @method_decorator(unknown_machine)
     def get(self, request, *args, **kwargs):
-        if not self.request.session['logup_ldap_user']:
+        if not self.request.session['logup_user']:
             return HttpResponseRedirect(reverse('gestion-personnes:inscription'))
 
         form = self.form_class()
         return render(self.request, self.cgu_template, {'form': form})
 
     def post(self, request, *args, **kwargs):
-        if not self.request.session['logup_ldap_user']:
+        if not self.request.session['logup_user']:
             return HttpResponseRedirect(reverse('gestion-personnes:inscription'))
 
         form = self.form_class(request.POST)
         if form.is_valid():
-            user = self.request.session['logup_ldap_user']
-            user.save()
+            user = LdapUser.from_JSON(self.request.session['logup_user'])
+            # user.save() # TODO: debug
 
             # Subscribe to campus@resel.fr
             campus_email = EmailMessage(
                 subject="SUBSCRIBE campus {} {}".format(user.firstname,
                                                         user.lastname),
-                body="Inscription automatique de {} a campus".format(user.username),
-                from_email=user.email,
+                body="Inscription automatique de {} a campus".format(user.uid),
+                from_email=user.mail,
                 reply_to=["listmaster@resel.fr"],
                 to=["sympa@resel.fr"],
             )
@@ -95,21 +96,21 @@ class InscriptionCGU(View):
             # TODO: ajouter un email pour faire valider l'adresse email
             user_email = EmailMessage(
                 subject=_("Inscription au ResEl"),
-                body=_("Bonjour,") +
-                _("\nVous êtes désormais inscrit au ResEl, voici vos identifiants :") +
-                _("\nNom d'utilisateur : ") + user.username +
-                _("\nMot de passe : **** (celui que vous avez choisi lors de l'inscription)") +
-                _("\n\n En étant membre de l'association ResEl vous pouvez profiter de ses nombreux services et des "
-                  "activités que l'association propose."),
+                body="Bonjour," +
+                "\nVous êtes désormais inscrit au ResEl, voici vos identifiants :" +
+                "\nNom d'utilisateur : " + str(user.uid) +
+                "\nMot de passe : **** (celui que vous avez choisi lors de l'inscription)" +
+                "\n\n En étant membre de l'association ResEl vous pouvez profiter de ses nombreux services et des "
+                  "activités que l'association propose.",
                 from_email=SERVER_EMAIL,
                 reply_to=["support@resel.fr"],
-                to=[user.email],
+                to=[user.mail],
             )
 
             campus_email.send()
             user_email.send()
 
-            self.request.session['logup_ldap_user'] = None
+            self.request.session['logup_user'] = None
             return render(self.request, self.finalize_template, {'username': user.uid})
         return render(request, self.cgu_template, {'form': form})
 

@@ -89,7 +89,6 @@ class InscriptionForm(forms.Form):
             'class': 'form-control',
             'placeholder': _("Bâtiment"),
         }),
-
     )
 
     room = forms.IntegerField(
@@ -110,8 +109,6 @@ class InscriptionForm(forms.Form):
             'rows': '5'
         }),
         required=False,
-
-
     )
 
     phone = PhoneNumberField(
@@ -178,15 +175,28 @@ class InscriptionForm(forms.Form):
             self.add_error('address', _("Veuillez saisir votre addresse postale"))
 
     def get_free_uid(self, firstname, lastname):
-        base_uid = firstname.lower()[0] + lastname.lower()
+        """
+        Check the ldap to get a free uid in the form
+        firstname.lower()[0] + lastname.lower()[:8] + xx
+
+        where xx is 2 numbers incremented
+        :param firstname:
+        :param lastname:
+        :return:
+        """
+        base_uid = firstname.lower()[0] + lastname.lower()[:8]
         uid_incr = 0
         uid = base_uid
-        while True:
+        # return uid  # TODO: debug
+        while uid_incr < 100:
             user_in_db = LdapUser.objects.filter(uid=uid)
             if len(user_in_db) == 0:
                 break
             uid_incr += 1
-            uid = base_uid + str(uid_incr)
+            if uid_incr < 10:
+                uid = base_uid + "0" +str(uid_incr)
+            else:
+                uid = base_uid + str(uid_incr)
         return uid
 
     def to_ldap_user(self):
@@ -223,7 +233,7 @@ class InscriptionForm(forms.Form):
 
 class CGUForm(forms.Form):
     have_read = forms.BooleanField(
-        label=_("En cochant cette case je certifie avoir lu et accepté les statuts et le règlement intérieur de l'association"),
+        label=_("En cochant cette case je certifie avoir lu et accepté le règlement intérieur de l'association."),
         widget=forms.CheckboxInput()
     )
 
