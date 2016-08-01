@@ -17,6 +17,7 @@ from fonctions import ldap, network
 from fonctions.decorators import resel_required, unknown_machine
 from django.conf import settings
 
+
 # Create your views here.
 class Reactivation(View):
     """ Vue appelée pour ré-activer une machine d'un utilisateur absent trop longtemps du campus """
@@ -54,6 +55,7 @@ class Reactivation(View):
         mail.send()
         
         return render(request, self.template_name)
+
 
 class Ajout(View):
     """ Vue appelée pour l'ajout d'une nouvelle machine """
