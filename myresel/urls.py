@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.views.i18n import javascript_catalog
 
-from pages.views import Home, Contact, NewsListe
+from pages.views import Home, Contact, NewsListe, InscriptionZoneInfo
 
 js_info_dict = {
     'packages': ('tresorerie',),
@@ -27,16 +27,21 @@ js_info_dict = {
 urlpatterns = [
     url(r'^jsi18n/$', javascript_catalog, js_info_dict, name='javascript-catalog'),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
+    url(r'^lang/', include('django.conf.urls.i18n')),
+
     url(r'^login', auth_views.login, name='login'),
     url(r'^logout', auth_views.logout, {'next_page': '/'}, name='logout'),
     url(r'^gestion/', admin.site.urls),
+
     url(r'^machines/', include('gestion_machines.urls', namespace='gestion-machines')),
     url(r'^personnes/', include('gestion_personnes.urls', namespace='gestion-personnes')),
     url(r'^paiement/', include('tresorerie.urls', namespace='tresorerie')),
+
     url(r'^wiki/', include('wiki.urls', namespace='wiki')),
+
     url(r'^news/', NewsListe.as_view(), name='news'),
     url(r'^contact/', Contact.as_view(), name='contact'),
-    url(r'^lang/', include('django.conf.urls.i18n')),
+    url(r'^inscription_zone/' InscrptionZoneInfo, name="inscription-zone")
     url(r'^$', Home.as_view(), name='home'),
 ]
 

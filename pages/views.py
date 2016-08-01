@@ -109,3 +109,24 @@ class Contact(View):
             messages.success(_("Votre demande a bien été envoyée aux administrateurs. L'un d'eux vous répondra d'ici peu."))
             return HttpResponseRedirect(reverse('pages:news'))
         return render(request, self.template_name, {'form': form})
+
+def InscriptionZoneInfo(request):
+    # First get device datas
+        if 'HTTP_X_FORWARDED_FOR' in request.META:
+            ip = request.META['HTTP_X_FORWARDED_FOR']
+        else:
+            ip = request.META['REMOTE_ADDR']
+        vlan = request.META['VLAN']
+        host = request.META['HTTP_HOST']
+        zone = network.get_network_zone(ip)
+        mac = False
+        is_registered = 'Unknown'
+        is_logged_in = request.user.is_authenticated()
+        if "user" in zone or "inscription" in zone : # As the device is in an inscription or user zone, we can get its mac address
+            mac = network.get_mac(ip)
+            is_registered = ldap.get_status(ip) == 'active'
+
+    if "inscription" not in zone:
+        return HttpResponseRedirect(reverse('pages:news'))
+
+    return render(request, 'pages/inscription_zone_info.html', {'vlan': vlan, 'is_logged_in': is_logged_in, 'is_registered': is_registered})
