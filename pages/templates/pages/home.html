@@ -69,21 +69,24 @@
                             <div><a href="#">Voir ma consomation de bande passante</a></div>
                         </div>
 
+                        {% if not machine_status and is_ip_in_resel %}
                         <div class="col-md-4">
-                            {% if not machine_status %}
-                                <h3>{% trans "Inscrire ma machine" %}</h3>
-                                <a href="{% url 'gestion-machines:ajout' %}" class="btn btn-default btn-lg ">{%  trans "Inscription"%}</a>
-                                <p>{% trans "Votre machine est inconnue sur notre réseau. Vous devez l'inscrire afin de pouvoir bénéficier de votre accès internet et des services du ResEl." %}</p>
-                            {% endif %}
-                            
-                            {% if need_to_pay != 'success' %}
-                                <h3>{% trans "Payer mon accès" %}</h3>
-                                <a href="{% url 'tresorerie:home' %}" class="btn btn-default btn-lg ">{%  trans "Payer"%}</a>
-                                <p>{% trans "Votre accès a expiré ou va bientôt expirer. Veuillez régulariser la situation si vous souhaitez conserver cet accès." %}</p>
-                            {% endif %}
-                            {# TODO: if the device is registered, show its informations in a nice way #}
-                            {# TODO: if we are offcampus find something else to show... #}
+                            <h3>{% trans "Inscrire ma machine" %}</h3>
+                            <a href="{% url 'gestion-machines:ajout' %}" class="btn btn-default btn-lg ">{%  trans "Inscription"%}</a>
+                            <p>{% trans "Votre machine est inconnue sur notre réseau. Vous devez l'inscrire afin de pouvoir bénéficier de votre accès internet et des services du ResEl." %}</p>
                         </div>
+                        {% endif %}
+                            
+                        {% if need_to_pay != 'success' %}
+                        <div class="col-md-4">    
+                            <h3>{% trans "Payer mon accès" %}</h3>
+                            <a href="{% url 'tresorerie:home' %}" class="btn btn-default btn-lg ">{%  trans "Payer"%}</a>
+                            <p>{% trans "Votre accès a expiré ou va bientôt expirer. Veuillez régulariser la situation si vous souhaitez conserver cet accès." %}</p>
+                        </div>    
+                        {% endif %}
+                            
+                        {# TODO: if the device is registered, show its informations in a nice way #}
+                        {# TODO: if we are offcampus find something else to show... #}
                     </div>
 
                 {% elif is_ip_in_resel %}
