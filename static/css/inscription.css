@@ -16,6 +16,19 @@
 .signup-form {
     border: #d4d8d2 solid 1px;
     border-radius: 5px;
-    padding: 15px 30px;
+    padding: 15px 15px 15px 30px;
     margin: 5px 0 30px;
+}
+
+.user-summary {
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+    border-radius: 5px;
+    padding: 15px 30px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+    font-size: 1.2em;
+}
+
+.user-summary p {
+    font-size: .8em;
 }

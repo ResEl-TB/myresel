@@ -10,12 +10,22 @@
 
 {% block content %}
     <div class="container">
-        <p>Vous êtes désormais inscrit au ResEl.</p>
-        <p>Voici vos identifiants : </p>
-        <p>Nom d'utilisateur : {{ username }}</p>
-        <p>Mot de passe : ****** (mot de passe que vous avez choisi)</p>
-        <p>Conservez ces informations très précieusement, elles vous seront nécéssaire afin de vous connecter à tous les services du ResEl.</p>
-        <a href="{% url 'home' %}">Revenir à l'acceuil</a>
+        <h1>{% trans "Inscription terminée" %}</h1>
+        <hr />
+        <h3>{% trans "Vous êtes désormais membre de l'association ResEl" %}</h3>
+        <div class="row">
+            <div class="user-summary col-sm-6 col-sm-offset-3">
+                <h3>{% trans "Vos identifiants"%}</h3>
+                <hr />
+                <div>{% trans "Utilisateur :"%} <strong>{{ username }}</strong></div>
+                <hr />
+                <div>{% trans "Mot de passe :" %}<strong>******</strong> <small>{% trans "(précédement choisi)" %}</small></div>
+                <hr />
+                <p><strong>{% trans "Conservez très précieusement ces informations" %}</strong>, {%  trans "elles vous seront nécéssaire afin de vous connecter à tous les services du ResEl." %}</p>
+            </div>
+        </div>
+        <p>{% blocktrans %}Afin de finaliser votre inscription et profiter de tous les services du ResEl vous devez vous aquitter de la quotisation annuelle à l'association.{% endblocktrans %}</p>
+        <a href="{% url 'home' %}" class="btn btn-lg btn-link">{% trans "Revenir à l'accueil" %}</a>
     </div>
 
 {% endblock %}

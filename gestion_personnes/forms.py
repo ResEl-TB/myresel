@@ -123,27 +123,12 @@ class InscriptionForm(forms.Form):
         widget=forms.CheckboxInput()
     )
 
-    def clean_password_verification(self):
-        password1 = self.cleaned_data['password']
-        password2 = self.cleaned_data['password_verification']
-
-        if password1 == password2:
-            return password2
-        raise ValidationError(message=_("Les mots de passes sont différents."), code="NOT SAME PASSWORD")
-
     def clean_campus(self):
         campus = self.cleaned_data['campus']
 
         if campus == '0':
             raise ValidationError(message=_("Veuillez sélectionner un campus"), code="NO CAMPUS")
         return campus
-
-    # def clean_building(self):
-    #     building = self.cleaned_data['building']
-    #
-    #     if building == '0':
-    #         raise ValidationError(message=_("Veuillez sélectionner un bâtiment"), code="NO BUILDING")
-    #     return building
 
     def clean_formation(self):
         formation = self.cleaned_data['formation']
@@ -154,6 +139,7 @@ class InscriptionForm(forms.Form):
 
     def clean_email(self):
         email = self.cleaned_data['email']
+        # return email
         if len(LdapUser.objects.filter(mail=email)) > 0:
             raise ValidationError(message=_("L'addresse email est déjà associée à compte"), code="USED EMAIL")
         return email
@@ -173,6 +159,12 @@ class InscriptionForm(forms.Form):
             self.add_error('building', _("Veuillez choisir un bâtiment du campus de Rennes"))
         if campus == "None" and address == "":
             self.add_error('address', _("Veuillez saisir votre addresse postale"))
+
+        password1 = cleaned_data.get('password')
+        password2 = cleaned_data.get('password_verification')
+
+        if password1 != password2:
+            self.add_error('password', ValidationError(message=_("Les mots de passes sont différents."), code="NOT SAME PASSWORD"))
 
     def get_free_uid(self, firstname, lastname):
         """
