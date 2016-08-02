@@ -111,9 +111,12 @@ class InscriptionCGU(View):
                 reply_to=["support@resel.fr"],
                 to=[user.mail],
             )
-
-            campus_email.send()
-            user_email.send()
+            try:
+                campus_email.send()
+                user_email.send()
+            except Exception:
+                pass
+                # TODO: show error to user, and notify admin
 
             self.request.session['logup_user'] = None
             return render(self.request, self.finalize_template, {'username': user.uid})
