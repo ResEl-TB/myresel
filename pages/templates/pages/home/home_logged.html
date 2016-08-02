@@ -1,0 +1,63 @@
+{% extends 'pages/home/home.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block myresel %}
+    <div class="home-fragment home-user-management">
+        <div class="container">
+            <div class="row">
+                <h2>My ResEl <small>{% trans "Gestion de mon compte ResEl" %}</small></h2>
+            </div>
+            <div class="row">
+                {% if end_fee %}
+                    {% if need_to_pay != 'success' %}
+                        <a href="{% url 'tresorerie:home' %}"><span class="label label-{{ need_to_pay }}">{% blocktrans %}Cotisation payée jusqu'au {{ end_fee }}{% endblocktrans %}</span></a>
+                    {% else %}
+                        <span class="label label-{{ need_to_pay }}">{% blocktrans %}Cotisation payée jusqu'au {{ end_fee }}{% endblocktrans %}</span>
+                    {% endif %}
+                {% else %}
+                    <span class="label label-default">{% trans "Pas d'infos sur la cotisation" %}</span>
+                {% endif %}
+                {% if is_ip_in_resel %}
+                    {% if not machine_status %}
+                        <a href="{% url 'gestion-machines:ajout' %}"><span class="label label-warning" id="unregistered-device">Machine non enregistrée</span></a>
+                    {% elif machine_status == 'active' %}
+                        <span class="label label-success">{% trans "Machine activée" %}</span>
+                    {% endif %}
+                {% else %}
+                    <span class="label label-default">{% trans "Non connecté au ResEl" %}</span>
+                {% endif %}
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <h3>{% trans "Mes services" %}</h3>
+                    <div><a href="{% url 'gestion-personnes:mod-passwd' %}">Modifier mon mot de passe</a></div>
+                    <div><a href="{% url 'gestion-machines:liste' %}">Consulter toutes mes machines inscrites</a></div>
+                    <div><a href="#">Modifier mes informations personnelles</a></div>
+                    <div><a href="#">Gérer mes clubs et associations</a></div>
+                    <div><a href="#">Voir ma consomation de bande passante</a></div>
+                </div>
+
+                {% if not machine_status and is_ip_in_resel %}
+                    <div class="col-md-4">
+                        <h3>{% trans "Inscrire ma machine" %}</h3>
+                        <a href="{% url 'gestion-machines:ajout' %}" class="btn btn-default btn-lg ">{%  trans "Inscription"%}</a>
+                        <p>{% trans "Votre machine est inconnue sur notre réseau. Vous devez l'inscrire afin de pouvoir bénéficier de votre accès internet et des services du ResEl." %}</p>
+                    </div>
+                {% endif %}
+
+                {% if need_to_pay != 'success' %}
+                    <div class="col-md-4">
+                        <h3>{% trans "Payer mon accès" %}</h3>
+                        <a href="{% url 'tresorerie:home' %}" class="btn btn-default btn-lg ">{%  trans "Payer"%}</a>
+                        <p>{% trans "Votre accès a expiré ou va bientôt expirer. Veuillez régulariser la situation si vous souhaitez conserver cet accès." %}</p>
+                    </div>
+                {% endif %}
+
+                {# TODO: if the device is registered, show its informations in a nice way #}
+                {# TODO: if we are offcampus find something else to show... #}
+            </div>
+        </div>
+    </div>
+{% endblock %}

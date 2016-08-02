@@ -38,10 +38,13 @@
         <div class="container">
             <div class="nav navbar-left navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
+                    <span class="menu-text">Menu</span>
+                    <span class="menu-bar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </span>
                 </button>
                 <div>
                     <a class="navbar-brand" href="{% url 'home' %}"><img style="width: auto; height: 45px; margin-top: -13px;" src="{% static 'images/logo_resel_flat.png' %}"></a>
@@ -52,7 +55,7 @@
                 <li>
                     <a href="/gestion"><i class="fa fa-gears fa-fw"></i></a>
                 </li>
-                {% endif %}            
+                {% endif %}
 
 		        <!-- Lists of categories -->
 		        {% for category in categories %}
@@ -75,10 +78,10 @@
 			        </ul>
 		        </li>
 		        {% endfor %}
-
 		        <li>
                     <a href="{% url 'contact' %}"><i class="fa fa-comment-o fa-fw"></i> {% trans "Contact" %}</a>
                 </li>
+                <hr class="visible-xs"/>
 
                 {% if request.user.is_authenticated %}
                 <li>
@@ -89,12 +92,27 @@
                     <a href="/login"><i class="fa fa-sign-in fa-fw"></i> {% trans "Connexion" %}</a>
                 </li>
                 {% endif %}
+            <hr class="visible-xs"/>
+                <li class="dropdown">
+                    <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw" aria-hidden="true"></i> {% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE | upper }}</a>
+                    <div class="dropdown-menu">
+                        {% get_available_languages as LANGUAGES %}
+                        {% get_language_info_list for LANGUAGES as languages %}
+                        <form action="{% url 'set_language' %}" method="post">
+                            {% csrf_token %}
+                            <input name="next" type="hidden" value="{{ redirect_to }}"/>
+                            {% for language in languages %}
+                                    <button class="btn btn-link" name="language" type="submit" value="{{ language.code }}">{{ language.name_local }}</button>
+                            {% endfor %}
+                        </form>
+                    </div>
+                </li>
             </ul>
         </div><!-- /.container -->
     </nav>
+    {% if messages %}
     <div class="container">
             {# Gestion des messages d'erreur, d'info et de success #}
-                <br>
                 {% for message in messages %}
                     {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
                         <div class="panel panel-danger">
@@ -115,6 +133,7 @@
                 {% endfor %}
 
         </div>
+    {% endif %}
     <div id="page-wrapper">
     {% block content %}{% endblock %}
     </div>
@@ -125,30 +144,8 @@
         <!-- Container for setting locale language -->
         <div class="container text-right">
             <div class="row">
-                <div class="col-md-8">L'Association ResEl - http://resel.fr - 2003-2013 - Tous droits réservés</div>
-                <div class="col-md-3">
-                    <form action="{% url 'set_language' %}" method="post" class="form-group form-inline">
-                        {% csrf_token %}
-                        <input name="next" type="hidden" value="{{ redirect_to }}"/>
-                        <label>
-                            <select name="language" class="form-control ">
-                                {% get_current_language as LANGUAGE_CODE %}
-                                {% get_available_languages as LANGUAGES %}
-                                {% get_language_info_list for LANGUAGES as languages %}
-                                {% for language in languages %}
-                                    <option value="{{ language.code }}"
-                                            {% if language.code == LANGUAGE_CODE %} selected="selected" {% endif %}
-                                    >
-                                        {{ language.name_local }} ({{ language.code }})
-                                    </option>
-                                {% endfor %}
-                            </select>
-                        </label>
-                        <input type="submit" class="btn" value="Go"/>
-                    </form>
-                </div>
+                <div class="col-md-8">L'Association ResEl - http://resel.fr - 2003-2016 - Tous droits réservés</div>
             </div>
-            <div></div>
         </div>
     </footer>
 
