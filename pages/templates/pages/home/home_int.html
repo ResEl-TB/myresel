@@ -1,0 +1,21 @@
+{% extends 'pages/base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block myresel %}
+    <div class="home-fragment home-user-management">
+        <div class="container">
+            <div class="row home-login">
+                <div class="col-sm-4 col-sm-offset-1">
+                    <h3>{% trans "Nouveau sur le campus ?" %}</h3>
+                    <a href="{% url 'gestion-personnes:inscription' %}" class="btn btn-default btn-lg ">{%  trans "Inscription"%}</a>
+                    <p>{% trans "En vous inscrivant au ResEl vous pourrez dès à présent vous connecter à internet et utiliser les services du ResEl." %}</p>
+                </div>
+                <div class="col-sm-4 col-sm-offset-2">
+                    <h3>{% trans "Déjà inscrit au ResEl ?" %}</h3>
+                    <a href="{% url 'login' %}" class="btn btn-default btn-lg">{%  trans "Connexion"%}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

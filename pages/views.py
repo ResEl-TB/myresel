@@ -30,6 +30,9 @@ class Home(View):
     """
 
     template_name = 'pages/home.html'
+    exterior_template = 'pages/home/home_ext.html'
+    interior_template = 'pages/home/home_int.html'
+    logged_template = 'pages/home/home_logged.html'
 
     @method_decorator(decorators.correct_vlan)
     def dispatch(self, *args, **kwargs):
@@ -41,14 +44,11 @@ class Home(View):
         else:
             ip = request.META['REMOTE_ADDR']
 
-        # On vérifie que la machine n'est pas desactivée.
-        # Si oui, on bascule vers la page de réactivation
-        computer_status = False
-        if network.is_resel_ip(ip):
+        # Automatically active the computer if it is known
+        # Change campus automatically
+        is_in_resel = network.is_resel_ip(ip)
+        if is_in_resel:
             computer_status = ldap.get_status(ip)
-
-        if computer_status:
-            # La machine existe dans le LDAP
             if computer_status == 'inactive':
                 # La machine est inactive
                 return HttpResponseRedirect(reverse('gestion-machines:reactivation'))
@@ -57,14 +57,17 @@ class Home(View):
                 # La machine n'est pas dans le bon campus
                 return HttpResponseRedirect(reverse('gestion-machines:changement-campus'))
 
-        # Si user loggé, on regarde jusqu'à quand il a payé
-        end_fee = False
         if request.user.is_authenticated():
-            user = ldap.search(settings.LDAP_DN_PEOPLE, '(&(uid=%s))' % str(request.user.username), ['endInternet'])[0]
-            if user:
-                end_fee = datetime.strptime(str(user.endinternet), '%Y%m%d%H%M%SZ') if 'endinternet' in user.entry_to_json().lower() else False
-
-        return render(request, self.template_name, {'end_fee': end_fee})
+            # Check his end fees date
+            # user = ldap.search(settings.LDAP_DN_PEOPLE, '(&(uid=%s))' % str(request.user.username), ['endInternet'])[0]
+            # if user:
+            #     end_fee = datetime.strptime(str(user.endinternet), '%Y%m%d%H%M%SZ') if 'endinternet' in user.entry_to_json().lower() else False
+            end_fee = datetime.now()
+            return render(request, self.logged_template, {'end_fee': end_fee})
+        elif network.is_resel_ip(ip):
+            return render(request, self.interior_template)
+        else:
+            return render(request, self.exterior_template)
 
 
 class NewsListe(ListView):
