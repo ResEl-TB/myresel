@@ -59,10 +59,11 @@ class Home(View):
 
         if request.user.is_authenticated():
             # Check his end fees date
-            # user = ldap.search(settings.LDAP_DN_PEOPLE, '(&(uid=%s))' % str(request.user.username), ['endInternet'])[0]
-            # if user:
-            #     end_fee = datetime.strptime(str(user.endinternet), '%Y%m%d%H%M%SZ') if 'endinternet' in user.entry_to_json().lower() else False
-            end_fee = datetime.now()
+            end_fee = False
+            user = ldap.search(settings.LDAP_DN_PEOPLE, '(&(uid=%s))' % str(request.user.username), ['endInternet'])[0]
+            if user:
+                end_fee = datetime.strptime(str(user.endinternet), '%Y%m%d%H%M%SZ') if 'endinternet' in user.entry_to_json().lower() else False
+            # end_fee = datetime.now()  # TODO: DEBUG
             return render(request, self.logged_template, {'end_fee': end_fee})
         elif network.is_resel_ip(ip):
             return render(request, self.interior_template)

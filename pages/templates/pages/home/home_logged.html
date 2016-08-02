@@ -6,57 +6,138 @@
     <div class="home-fragment home-user-management">
         <div class="container">
             <div class="row">
-                <h2>My ResEl <small>{% trans "Gestion de mon compte ResEl" %}</small></h2>
+                <div class="col-sm-10">
+                    <h2>My ResEl <small>{% trans "Gestion de mon compte ResEl" %}</small></h2>
+                </div>
             </div>
-            <div class="row">
-                {% if end_fee %}
-                    {% if need_to_pay != 'success' %}
-                        <a href="{% url 'tresorerie:home' %}"><span class="label label-{{ need_to_pay }}">{% blocktrans %}Cotisation payée jusqu'au {{ end_fee }}{% endblocktrans %}</span></a>
-                    {% else %}
-                        <span class="label label-{{ need_to_pay }}">{% blocktrans %}Cotisation payée jusqu'au {{ end_fee }}{% endblocktrans %}</span>
-                    {% endif %}
-                {% else %}
-                    <span class="label label-default">{% trans "Pas d'infos sur la cotisation" %}</span>
-                {% endif %}
-                {% if is_ip_in_resel %}
-                    {% if not machine_status %}
-                        <a href="{% url 'gestion-machines:ajout' %}"><span class="label label-warning" id="unregistered-device">Machine non enregistrée</span></a>
-                    {% elif machine_status == 'active' %}
-                        <span class="label label-success">{% trans "Machine activée" %}</span>
-                    {% endif %}
-                {% else %}
-                    <span class="label label-default">{% trans "Non connecté au ResEl" %}</span>
-                {% endif %}
-            </div>
+{#            <div class="row">#}
+{#                <div class="col-sm-10">#}
+{#                    {% if end_fee %}#}
+{#                        {% if need_to_pay != 'success' %}#}
+{#                            <a href="{% url 'tresorerie:home' %}"><span class="label label-{{ need_to_pay }}">{% blocktrans %}Cotisation payée jusqu'au {{ end_fee }}{% endblocktrans %}</span></a>#}
+{#                        {% else %}#}
+{#                            <span class="label label-{{ need_to_pay }}">{% blocktrans %}Cotisation payée jusqu'au {{ end_fee }}{% endblocktrans %}</span>#}
+{#                        {% endif %}#}
+{#                    {% else %}#}
+{#                        <span class="label label-default">{% trans "Pas d'infos sur la cotisation" %}</span>#}
+{#                    {% endif %}#}
+{#                    {% if is_ip_in_resel %}#}
+{#                        {% if not machine_status %}#}
+{#                            <a href="{% url 'gestion-machines:ajout' %}"><span class="label label-warning" id="unregistered-device">Machine non enregistrée</span></a>#}
+{#                        {% elif machine_status == 'active' %}#}
+{#                            <span class="label label-success">{% trans "Machine activée" %}</span>#}
+{#                        {% endif %}#}
+{#                    {% else %}#}
+{#                        <span class="label label-default">{% trans "Non connecté au ResEl" %}</span>#}
+{#                    {% endif %}#}
+{#                </div>#}
+{#            </div>#}
 
             <div class="row">
                 <div class="col-md-4">
                     <h3>{% trans "Mes services" %}</h3>
-                    <div><a href="{% url 'gestion-personnes:mod-passwd' %}">Modifier mon mot de passe</a></div>
-                    <div><a href="{% url 'gestion-machines:liste' %}">Consulter toutes mes machines inscrites</a></div>
-                    <div><a href="#">Modifier mes informations personnelles</a></div>
-                    <div><a href="#">Gérer mes clubs et associations</a></div>
-                    <div><a href="#">Voir ma consomation de bande passante</a></div>
+                    <div class="services-group">
+                        <div><a href="{% url 'gestion-machines:liste' %}"><span class="fa fa-cubes fa-fw"></span> {% trans "Consulter toutes mes machines inscrites" %}</a></div>
+                        <div><a href="#"><span class="fa fa-comment-o fa-fw"></span> {% trans "Voir ma consomation de bande passante" %}</a></div>
+                    </div>
+                    <div class="services-group">
+                        <div><a href="#"><span class="fa fa-group fa-fw"></span> {% trans "Gérer mes clubs et associations" %}</a></div>
+                        <div><a href="#"><span class="fa fa-inbox fa-fw"></span> {% trans "Ma boîte mail ResEl" %}</a></div>
+                        <div><a href="https://mlistes.resel.fr"><span class="fa fa-feed fa-fw"></span> {% trans "Mes listes de diffusion" %}</a></div>
+                    </div>
+                    <div class="services-group">
+                        <div><a href="#"><span class="fa fa-user fa-fw"></span> {% trans "Modifier mes informations personnelles" %}</a></div>
+                        <div><a href="#"><span class="fa fa-sliders fa-fw"></span> {% trans "Paramètres de mon compte" %}</a></div>
+                        <div><a href="{% url 'gestion-personnes:mod-passwd' %}"><span class="fa fa-pencil-square fa-fw"></span> {% trans "Modifier mon mot de passe" %}</a></div>
+                        <div><a href="#"><span class="fa fa-history fa-fw"></span> {% trans "Historique de mes factures" %}</a></div>
+                    </div>
                 </div>
 
                 {% if not machine_status and is_ip_in_resel %}
-                    <div class="col-md-4">
-                        <h3>{% trans "Inscrire ma machine" %}</h3>
-                        <a href="{% url 'gestion-machines:ajout' %}" class="btn btn-default btn-lg ">{%  trans "Inscription"%}</a>
-                        <p>{% trans "Votre machine est inconnue sur notre réseau. Vous devez l'inscrire afin de pouvoir bénéficier de votre accès internet et des services du ResEl." %}</p>
+                    {# In the netwok but not saved #}
+                    <div class="col-md-6 col-md-offset-2">
+                        <div class="row">
+                            <div class="col-sm-4 computer-icon hidden-xs"><span class="fa fa-laptop"></span></div>
+                            <div class="col-sm-7">
+                                <h3>{% trans "Machine non enregistrée" %}</h3>
+                                <div>{% trans "Afin de pouvoir bénéficier des services du Resel, vous devez enregistrer votre machine sur le réseau." %}</div>
+                                <a href="{% url 'gestion-machines:ajout' %}" class="btn btn-default btn-lg">{%  trans "Enregistrer" %} <span class="hidden-xs"> {% trans "mon ordinateur"%}</span> </a>
+                            </div>
+                        </div>
+                    </div>
+                {% elif is_ip_in_resel %}
+                    In the netwok and saved
+                    <div class="col-md-6 col-md-offset-2">
+                        <div class="row">
+                            <div class="col-sm-4 computer-icon hidden-xs"><span class="fa fa-laptop"></span></div>
+                            <div class="col-sm-7">
+                                <div><h3>Arwen <small><a href="#" class="fa fa-pencil"></a></small></h3></div>
+                                <div><span class="fa fa-rocket"></span> <span class="label label-success">{% trans "Connecté" %}</span></div>
+                                <div><span class="fa fa-arrow-up"></span> 50 Mo</div>
+                                <div><span class="fa fa-arrow-down"></span> 30 Mo</div>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    Not in the network
+                    <div class="col-md-6 col-md-offset-2">
+                        <div class="row">
+                            <div class="col-xs-5 col-sm-3 computer-icon"><span class="fa fa-globe"></span></div>
+                            <div class="col-xs-7">
+                                <h3>{% trans "Hors campus" %}</h3>
+                                <div>{% trans "Vous êtes actuellement hors du campus de Télécom Bretagne." %}</div>
+                                <small>{% trans "Vos actions sont limitées" %}</small>
+                            </div>
+                        </div>
                     </div>
                 {% endif %}
-
-                {% if need_to_pay != 'success' %}
-                    <div class="col-md-4">
-                        <h3>{% trans "Payer mon accès" %}</h3>
-                        <a href="{% url 'tresorerie:home' %}" class="btn btn-default btn-lg ">{%  trans "Payer"%}</a>
-                        <p>{% trans "Votre accès a expiré ou va bientôt expirer. Veuillez régulariser la situation si vous souhaitez conserver cet accès." %}</p>
-                    </div>
+                {% if is_ip_in_resel %}
+                    <div class="col-sm-3 col-sm-offset-3 hidden-xs hidden-sm"> <hr /></div>
+                    {% if need_to_pay == 'success' %}
+                        <div class="col-md-6 col-md-offset-2 payement-block">
+                            <div class="row">
+                                <div class="col-xs-5 col-sm-4 computer-icon"><span class="fa fa-check"></span></div>
+                                <div class="col-xs-7">
+                                    <h3>{% trans "Facturation à jour" %}</h3>
+                                    <div>{% trans "Cotisation annuelle payée" %}</div>
+                                    <div>{% trans "Frais d'accès payés jusqu'au" %} {{ end_fee }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    {% elif need_to_pay == 'warning' %}
+                        <div class="col-md-6 col-md-offset-2">
+                            <div class="row">
+                                <div class="col-sm-4 computer-icon hidden-xs"><span class="fa fa-exclamation"></span></div>
+                                <div class="col-sm-7">
+                                    <h3>{% trans "Attention" %}</h3>
+                                    <div>{% trans "Votre abonnement arrive à échéance le " %}<a href="{% url 'tresorerie:home' %}">{{ end_fee|date:"j F Y" }}</a>.</div>
+                                    <a href="{% url 'tresorerie:home' %}" class="btn btn-default">{%  trans "Accéder à la trésorerie"%}</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% elif need_to_pay == 'danger' %}
+                        <div class="col-md-6 col-md-offset-2">
+                            <div class="row">
+                                <div class="col-xs-5 col-sm-4 computer-icon hidden-xs"><span class="fa fa-times"></span></div>
+                                <div class="col-sm-7">
+                                    <h3>{% trans "Aucun payement effectué" %}</h3>
+                                    <div>{% trans "Votre abonnement au Resel a expiré, pour pouvoir à nouveau utiliser les services du ResEl vous devez régulariser votre situation." %}</div>
+                                    <a href="{% url 'tresorerie:home' %}" class="btn btn-default btn-lg ">{%  trans "Accéder à la trésorerie"%}</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="col-md-6 col-md-offset-2">
+                            <div class="row">
+                                <div class="col-sm-4 computer-icon hidden-xs"><span class="fa fa-minus"></span></div>
+                                <div class="col-sm-7">
+                                    <h3>{% trans "Pas d'information de facturation" %}</h3>
+                                    <div>Vous ne semblez pas élibible à la cotisation ResEl.</div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
                 {% endif %}
-
-                {# TODO: if the device is registered, show its informations in a nice way #}
-                {# TODO: if we are offcampus find something else to show... #}
             </div>
         </div>
     </div>

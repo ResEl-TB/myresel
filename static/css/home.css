@@ -71,6 +71,22 @@
     color: #000000;
 }
 
+@media(min-width:768px) {
+    .home-user-management h2 {
+        margin-left: -20px;
+    }
+}
+
+.home-user-management .computer-icon {
+    font-size: 120px;
+    margin-top: 5px;
+    text-align: right;
+}
+
+.home-user-management .payement-block {
+    margin-top: 20px;
+}
+
 .home-services {
     background-color: #1695A3;
     color: #ffffff;
@@ -94,6 +110,14 @@ h3 .service-title {
 
 .home-services p {
     font-size: 1.1em;
+}
+
+.services-group {
+    margin-bottom: 28px;
+}
+
+.services-group div {
+    margin-bottom: 3px;
 }
 
 .home-blog {
