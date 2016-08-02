@@ -1,0 +1,56 @@
+\documentclass{invoice}
+
+\def \tab {\hspace*{3ex}}
+
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+
+\hfil{\Huge\bf Association ResEl}\hfil
+\bigskip\break
+\hrule
+
+Association ResEl - Télécom Bretagne \hfill (33) 2 29 00 15 76 \\
+655 avenue du Techn\^opole \hfill tresorier@resel.fr \\
+Plouzan\'e 29280
+France
+\\ \\
+{\bf D\'elivr\'ee \`a :}  Jane Doe \\
+\tab Batiment i42 chambre -8 - Maisel T\'el\'ecom Bretagne \\
+\tab 655 avenue du Technop\^ole - Plouzan\'e 29280
+
+{\bf Date :}  \today
+
+{\bf Num\'ero de facture :} 12
+
+{\bf Paiement effectu\'ee:}  Oui \\
+\tab Le \today \\
+\tab Virement bancaire 09876543345654 65
+\\ \\
+
+%----------------------------------------------------------------------------------------
+
+\begin{invoiceTable}
+
+\feetype{Cotisation}
+\feerow{Cotisation d'un an \`a l'association}{1}
+
+%------------------------------------------------
+
+\feetype{Internet}
+\feerow{Frais d'acc\`es \`a internet pour 1 an}{84}
+
+%------------------------------------------------
+
+\feetype{Divers}
+\feerow{C\^able ethernet (3m)}{2.5}
+
+%------------------------------------------------
+
+\end{invoiceTable}
+
+%----------------------------------------------------------------------------------------
+
+(TVA non applicable, art. 293 B du CGI )
+
+\end{document}
