@@ -34,7 +34,6 @@ body {
 
     .nav li {
         display: block;
-
     }
     .nav {
 
@@ -74,6 +73,10 @@ body {
     min-width: 0;
 }
 
+.navbar-collapse.in {
+    overflow-y: visible;
+}
+
 .navbar-top-links .dropdown-messages {
     margin-left: 5px;
 }
@@ -102,11 +105,26 @@ body {
 .menu-text, .menu-bar {
     display: inline-block;
 }
+
 .menu-text {
     color: #225378;
     vertical-align: middle;
     margin-top: -5px;
     margin-right: 5px;
+}
+
+.dropdown-menu {
+    min-width: 100px;
+    z-index: 2;
+}
+.navbar-top-links .dropdown-menu button {
+    display: block;
+
+    text-align: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 100%;
+
 }
 
 @media(min-width:768px) {

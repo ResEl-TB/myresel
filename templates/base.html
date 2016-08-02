@@ -93,6 +93,20 @@
                 </li>
                 {% endif %}
             <hr class="visible-xs"/>
+                <li class="dropdown">
+                    <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw" aria-hidden="true"></i> {% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE | upper }}</a>
+                    <div class="dropdown-menu">
+                        {% get_available_languages as LANGUAGES %}
+                        {% get_language_info_list for LANGUAGES as languages %}
+                        <form action="{% url 'set_language' %}" method="post">
+                            {% csrf_token %}
+                            <input name="next" type="hidden" value="{{ redirect_to }}"/>
+                            {% for language in languages %}
+                                    <button class="btn btn-link" name="language" type="submit" value="{{ language.code }}">{{ language.name_local }}</button>
+                            {% endfor %}
+                        </form>
+                    </div>
+                </li>
             </ul>
 
         </div><!-- /.container -->
@@ -131,28 +145,7 @@
         <!-- Container for setting locale language -->
         <div class="container text-right">
             <div class="row">
-                <div class="col-md-8">L'Association ResEl - http://resel.fr - 2003-2013 - Tous droits réservés</div>
-                <div class="col-md-3">
-                    <form action="{% url 'set_language' %}" method="post" class="form-group form-inline">
-                        {% csrf_token %}
-                        <input name="next" type="hidden" value="{{ redirect_to }}"/>
-                        <label>
-                            <select name="language" class="form-control ">
-                                {% get_current_language as LANGUAGE_CODE %}
-                                {% get_available_languages as LANGUAGES %}
-                                {% get_language_info_list for LANGUAGES as languages %}
-                                {% for language in languages %}
-                                    <option value="{{ language.code }}"
-                                            {% if language.code == LANGUAGE_CODE %} selected="selected" {% endif %}
-                                    >
-                                        {{ language.name_local }} ({{ language.code }})
-                                    </option>
-                                {% endfor %}
-                            </select>
-                        </label>
-                        <input type="submit" class="btn" value="Go"/>
-                    </form>
-                </div>
+                <div class="col-md-8">L'Association ResEl - http://resel.fr - 2003-2016 - Tous droits réservés</div>
             </div>
         </div>
     </footer>
