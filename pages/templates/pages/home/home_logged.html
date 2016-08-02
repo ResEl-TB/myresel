@@ -10,28 +10,6 @@
                     <h2>My ResEl <small>{% trans "Gestion de mon compte ResEl" %}</small></h2>
                 </div>
             </div>
-{#            <div class="row">#}
-{#                <div class="col-sm-10">#}
-{#                    {% if end_fee %}#}
-{#                        {% if need_to_pay != 'success' %}#}
-{#                            <a href="{% url 'tresorerie:home' %}"><span class="label label-{{ need_to_pay }}">{% blocktrans %}Cotisation payée jusqu'au {{ end_fee }}{% endblocktrans %}</span></a>#}
-{#                        {% else %}#}
-{#                            <span class="label label-{{ need_to_pay }}">{% blocktrans %}Cotisation payée jusqu'au {{ end_fee }}{% endblocktrans %}</span>#}
-{#                        {% endif %}#}
-{#                    {% else %}#}
-{#                        <span class="label label-default">{% trans "Pas d'infos sur la cotisation" %}</span>#}
-{#                    {% endif %}#}
-{#                    {% if is_ip_in_resel %}#}
-{#                        {% if not machine_status %}#}
-{#                            <a href="{% url 'gestion-machines:ajout' %}"><span class="label label-warning" id="unregistered-device">Machine non enregistrée</span></a>#}
-{#                        {% elif machine_status == 'active' %}#}
-{#                            <span class="label label-success">{% trans "Machine activée" %}</span>#}
-{#                        {% endif %}#}
-{#                    {% else %}#}
-{#                        <span class="label label-default">{% trans "Non connecté au ResEl" %}</span>#}
-{#                    {% endif %}#}
-{#                </div>#}
-{#            </div>#}
 
             <div class="row">
                 <div class="col-md-4">
@@ -66,7 +44,7 @@
                         </div>
                     </div>
                 {% elif is_ip_in_resel %}
-                    In the netwok and saved
+                    {# In the netwok and saved #}
                     <div class="col-md-6 col-md-offset-2">
                         <div class="row">
                             <div class="col-sm-4 computer-icon hidden-xs"><span class="fa fa-laptop"></span></div>
@@ -79,7 +57,7 @@
                         </div>
                     </div>
                 {% else %}
-                    Not in the network
+                    {# Not in the network #}
                     <div class="col-md-6 col-md-offset-2">
                         <div class="row">
                             <div class="col-xs-5 col-sm-3 computer-icon"><span class="fa fa-globe"></span></div>
