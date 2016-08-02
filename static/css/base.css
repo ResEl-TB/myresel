@@ -18,9 +18,31 @@ body {
 .nav li {
     display: inline-block;
 }
+
 @media(max-width:768px) {
+    body {
+        font-size: 1.3em;
+    }
+
+    h2 {
+        font-size: 2.5em;
+    }
+    h3 {
+        font-size: 1.8em;
+    }
+
+
     .nav li {
         display: block;
+
+    }
+    .nav {
+
+        text-align: center;
+    }
+    .nav hr {
+        margin-top: 0;
+        margin-bottom: 0;
     }
 }
 .nav li a {
@@ -71,8 +93,20 @@ body {
 
 .navbar-toggle {
 }
-.navbar-toggle span {
+
+.navbar-toggle .icon-bar {
     background-color: #225378;
+}
+
+
+.menu-text, .menu-bar {
+    display: inline-block;
+}
+.menu-text {
+    color: #225378;
+    vertical-align: middle;
+    margin-top: -5px;
+    margin-right: 5px;
 }
 
 @media(min-width:768px) {

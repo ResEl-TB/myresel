@@ -38,10 +38,13 @@
         <div class="container">
             <div class="nav navbar-left navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
+                    <span class="menu-text">Menu</span>
+                    <span class="menu-bar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </span>
                 </button>
                 <div>
                     <a class="navbar-brand" href="{% url 'home' %}"><img style="width: auto; height: 45px; margin-top: -13px;" src="{% static 'images/logo_resel_flat.png' %}"></a>
@@ -52,7 +55,7 @@
                 <li>
                     <a href="/gestion"><i class="fa fa-gears fa-fw"></i></a>
                 </li>
-                {% endif %}            
+                {% endif %}
 
 		        <!-- Lists of categories -->
 		        {% for category in categories %}
@@ -75,10 +78,10 @@
 			        </ul>
 		        </li>
 		        {% endfor %}
-
 		        <li>
                     <a href="{% url 'contact' %}"><i class="fa fa-comment-o fa-fw"></i> {% trans "Contact" %}</a>
                 </li>
+                <hr class="visible-xs"/>
 
                 {% if request.user.is_authenticated %}
                 <li>
@@ -89,12 +92,14 @@
                     <a href="/login"><i class="fa fa-sign-in fa-fw"></i> {% trans "Connexion" %}</a>
                 </li>
                 {% endif %}
+            <hr class="visible-xs"/>
             </ul>
+
         </div><!-- /.container -->
     </nav>
+    {% if messages %}
     <div class="container">
             {# Gestion des messages d'erreur, d'info et de success #}
-                <br>
                 {% for message in messages %}
                     {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
                         <div class="panel panel-danger">
@@ -115,6 +120,7 @@
                 {% endfor %}
 
         </div>
+    {% endif %}
     <div id="page-wrapper">
     {% block content %}{% endblock %}
     </div>
@@ -148,7 +154,6 @@
                     </form>
                 </div>
             </div>
-            <div></div>
         </div>
     </footer>
 
