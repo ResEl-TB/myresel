@@ -1,4 +1,9 @@
+{% autoescape off %} {# Disable automatic HTML escaping #}
 \documentclass{invoice}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[francais]{babel}
+\usepackage{lmodern}
 
 \def \tab {\hspace*{3ex}}
 
@@ -10,22 +15,22 @@
 \bigskip\break
 \hrule
 
-Association ResEl - Télécom Bretagne \hfill (33) 2 29 00 15 76 \\
+Association ResEl - T\'el\'ecom Bretagne \hfill (33) 2 29 00 15 76 \\
 655 avenue du Techn\^opole \hfill tresorier@resel.fr \\
 Plouzan\'e 29280
 France
 \\ \\
-{\bf D\'elivr\'ee \`a :}  Jane Doe \\
-\tab Batiment i42 chambre -8 - Maisel T\'el\'ecom Bretagne \\
-\tab 655 avenue du Technop\^ole - Plouzan\'e 29280
+{\bf D\'elivr\'ee \`a :}  {{ user_firstname }} {{ user_lastname }} \\
+\tab {{ address_firstpart}} \\
+\tab {{ address_lastpart }}
 
 {\bf Date :}  \today
 
-{\bf Num\'ero de facture :} 12
+{\bf Num\'ero de facture :} {{ invoice_id }}
 
-{\bf Paiement effectu\'ee:}  Oui \\
-\tab Le \today \\
-\tab Virement bancaire 09876543345654 65
+{\bf Paiement effectu\'ee:}  {{payment_done }} \\
+\tab Le {{ payment_date }} \\
+\tab {{ payment_info }}
 \\ \\
 
 %----------------------------------------------------------------------------------------
