@@ -2,7 +2,6 @@ import ldapdb
 import time
 from ldapdb.models.fields import CharField, ListField
 
-from fonctions.network import get_campus
 from myresel import settings
 from myresel.credentials import LDAP_DN_MACHINES
 

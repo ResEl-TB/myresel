@@ -8,6 +8,8 @@ from fonctions import ldap, network
 
 import re
 
+from gestion_machines.models import LdapDevice
+
 
 class IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAResElAdminSoCheckTheLdapBeforeMiddleware(object):
     def process_request(self, request):
@@ -51,6 +53,10 @@ class NetworkConfiguration(object):
             if not request.network_data['mac']:
                 # Error ! couldn't get its mac address
                 return HttpResponseBadRequest(_("Impossible de détecter votre adresse mac, veuillez contacter un administrateur ResEl."))
+
+        if request.network_data['is_registered'] != 'Unknown':
+            current_device = LdapDevice.objects.get(ip=ip)
+            request.network_data['device'] = current_device
 
 
 class inscriptionNetworkHandler(object):

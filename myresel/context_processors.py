@@ -1,4 +1,4 @@
-from fonctions import network, ldap
+from fonctions import ldap
 
 
 def resel_context(request):
