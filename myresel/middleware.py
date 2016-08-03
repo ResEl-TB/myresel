@@ -9,7 +9,7 @@ from fonctions import ldap, network
 import re
 
 
-class IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAReselAdminSoCheckTheLdapBeforeMiddleaware(object):
+class IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAResElAdminSoCheckTheLdapBeforeMiddleware(object):
     def process_request(self, request):
         # Check if the user is a ResEl admin. If so, its credentials will be updated to superuser and staff
         if request.user.is_authenticated() and not (request.user.is_staff and request.user.is_superuser):
