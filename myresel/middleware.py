@@ -29,21 +29,24 @@ class NetworkConfiguration(object):
     def process_request(self, request):
         request.network_data = {}
         if 'HTTP_X_FORWARDED_FOR' in request.META:
-            request.network_data['ip'] = request.META['HTTP_X_FORWARDED_FOR']
+            ip = request.META['HTTP_X_FORWARDED_FOR']
         else:
-            request.network_data['ip'] = request.META['REMOTE_ADDR']
+            ip = request.META['REMOTE_ADDR']
+        zone = network.get_network_zone(ip)
 
+        request.network_data['ip'] = ip
         request.network_data['vlan'] = request.META['VLAN']
         request.network_data['host'] = request.META['HTTP_HOST']
-        request.network_data['zone'] = network.get_network_zone(request.network_data['ip'])
+        request.network_data['zone'] = zone
         request.network_data['mac'] = None
         request.network_data['is_registered'] = 'Unknown'
         request.network_data['is_logged_in'] = request.user.is_authenticated()
+        request.network_data['is_resel'] = network.is_resel_ip(ip)
 
         # If the device in `user` or `inscription` zone, we can retrieve its mac address
-        if "user" in request.network_data['zone'] or "inscription" in request.network_data['zone']:
-            request.network_data['mac'] = network.get_mac(request.network_data['ip'])
-            request.network_data['is_registered'] = ldap.get_status(request.network_data['ip'])
+        if "user" in zone or "inscription" in zone:
+            request.network_data['mac'] = network.get_mac(ip)
+            request.network_data['is_registered'] = ldap.get_status(ip)
 
             if not request.network_data['mac']:
                 # Error ! couldn't get its mac address

@@ -7,7 +7,7 @@
     <div class="container" xmlns="http://www.w3.org/1999/html">
                 <h1 class="page-header">{% trans "Veuillez vous connecter" %}</h1>
     <div class="alert alert-info">{% trans "Afin de bénéficier des services du ResEl, vous devez vous connecter." %}
-        {% if is_ip_in_resel %}{% trans "Vous êtes nouveau ?" %} <a href="{% url "gestion-personnes:inscription" %}">{% trans "Créez un compte" %}</a>.{% endif %}
+        {% if is_resel %}{% trans "Vous êtes nouveau ?" %} <a href="{% url "gestion-personnes:inscription" %}">{% trans "Créez un compte" %}</a>.{% endif %}
     </div>
         <div class="row">
             <div class="col-md-5 col-md-offset-1">
@@ -32,7 +32,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div><a href="#">{% trans "Mot de passe oublié ?" %}</a></div>
-                            {% if is_ip_in_resel %}<div><a href="{% url 'gestion-personnes:inscription' %}">{% trans "Pas de compte ?" %}</a></div>{% endif %}
+                            {% if is_resel %}<div><a href="{% url 'gestion-personnes:inscription' %}">{% trans "Pas de compte ?" %}</a></div>{% endif %}
                         </div>
                         <div class="col-md-6">
                             <div class="form-group text-right">
