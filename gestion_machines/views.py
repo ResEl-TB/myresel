@@ -88,7 +88,7 @@ class AddDeviceView(View):
             # Hostname management
             hostname = ldap.get_free_alias(str(request.user))
             alias = form.cleaned_data['alias']
-            campus = get_campus(request.request.network_data['ip'])
+            campus = get_campus(request.network_data['ip'])
 
             # In case the user didn't specified any alias, don't make any
             if hostname == alias:
