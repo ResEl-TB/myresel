@@ -60,6 +60,10 @@ INSCRIPTION_ZONE_ALLOWED_URLS = [
                                 r'^contact/',
                                 ]
 
+# 
+
+NUMBER_NEWS_IN_HOME = 7
+
 #
 
 AUTHENTICATION_BACKENDS = (

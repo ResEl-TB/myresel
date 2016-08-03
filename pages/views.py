@@ -43,6 +43,13 @@ class Home(View):
             ip = request.META['HTTP_X_FORWARDED_FOR']
         else:
             ip = request.META['REMOTE_ADDR']
+        
+        template_for_response = self.exterior_template
+        args_for_response = {}
+
+        # Load some news
+        news = News.objects.all()[:settings.NUMBER_NEWS_IN_HOME]
+        args_for_response['news'] = news
 
         # Automatically active the computer if it is known
         # Change campus automatically
@@ -64,11 +71,12 @@ class Home(View):
             if user:
                 end_fee = datetime.strptime(str(user.endinternet), '%Y%m%d%H%M%SZ') if 'endinternet' in user.entry_to_json().lower() else False
             # end_fee = datetime.now()  # TODO: DEBUG
-            return render(request, self.logged_template, {'end_fee': end_fee})
+            template_for_response = self.logged_template
+            args_for_response['end_fee'] = end_fee
         elif network.is_resel_ip(ip):
-            return render(request, self.interior_template)
-        else:
-            return render(request, self.exterior_template)
+            template_for_response = self.interior_template
+
+        return render(request, template_for_response, args_for_response)
 
 
 class NewsListe(ListView):

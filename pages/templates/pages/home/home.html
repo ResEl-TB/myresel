@@ -110,15 +110,14 @@
     <div class="home-fragment home-blog">
         <div class="container">
             <h2>Les dernières nouvelles</h2>
-            <article>
-                <h3>Un nouveau site ResEl</h3>
-                <p>Le site du ResEl est à nouveau un site digne de ce nom. En effet...</p>
-            </article>
-            <hr />
-            <article>
-                <h3>Le chien du ResEl est arrivé</h3>
-                <p>Intérogeons dès maintenant ce mystérieux spécimen...</p>
-            </article>
+            {% for pieceofnews in news %}
+                {% if forloop.first %}<div class="panel panel-info">{% endif %}
+                <div class="panel-heading"><h3 class="panel-title">{{ pieceofnews.titre }}</h3></div>
+                <div class="panel-body">{{ pieceofnews.contenu|safe }}</div>
+                {% if forloop.last %}</div>{% endif %}
+            {% empty %}
+            <p>{% trans "Pas de news à l'horizon" %}</p>
+            {% endfor %}
         </div>
 
     </div>
