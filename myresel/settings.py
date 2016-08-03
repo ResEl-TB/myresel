@@ -49,7 +49,7 @@ LOGIN_REDIRECT_URL = '/'
 
 # Inscription zone 
 
-INSCRIPTION_ZONE_FALLBACK_URL = '/'
+INSCRIPTION_ZONE_FALLBACK_URL = '/inscription_zone/'
 
 INSCRIPTION_ZONE_ALLOWED_URLS = [
                                 r'^$',
@@ -58,6 +58,7 @@ INSCRIPTION_ZONE_ALLOWED_URLS = [
                                 r'^personnes/',
                                 r'^paiement/',
                                 r'^contact/',
+                                r'^' + INSCRIPTION_ZONE_FALLBACK_URL
                                 ]
 
 # 
