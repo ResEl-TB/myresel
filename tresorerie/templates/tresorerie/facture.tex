@@ -9,7 +9,28 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%
-% TO EDIT THE TEMPLATE, GO TO LINE ~115 
+% TO EDIT THE TEMPLATE, GO TO LINE ~136
+% Variables :
+% - confLang : 'en' or 'fr'
+% - user : object that contains
+%   - uid
+%   - firstName 
+%   - lastName
+%   - addressFirstPart
+%   - addressLastPart
+% - invoice : object that contains
+%   - id
+%   - date : generation date, should be `today`
+%   - internetFeesPrice : cost paid of internet fees
+%   - isPaid : true if invoice is paid
+%   - payment : object that contains
+%     - date : if paid : date of payment else : last date to pay
+%     - info : if paid : info of payment else : means of payment
+%%%%%
+
+%%%%%
+% TODO :
+% Improve payment of miscellaneous stuff like ethernet cable, routeur, ...
 %%%%%
 
 %--------------------------------------------------- Package includes & config
@@ -146,7 +167,7 @@ France
 
 \feetype{Internet}
 %title, unit quantity, unit rate, and unit name
-\unitrow{\ifthenelse{\equal{\confLang}{en}}{Access fees to Internet for one year}{Frais d'accès à internet pour 1 an}}{1}{ {{ invoice.internetFeesprice }} }{}
+\unitrow{\ifthenelse{\equal{\confLang}{en}}{Access fees to Internet for one year}{Frais d'accès à internet pour 1 an}}{1}{ {{ invoice.internetFeesPrice }} }{}
 
 %------------------------------------------------
 
