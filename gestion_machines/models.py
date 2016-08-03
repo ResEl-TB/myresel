@@ -13,12 +13,12 @@ class LdapDevice(ldapdb.models.Model):
     """
 
     base_dn = LDAP_DN_MACHINES
-    object_classes = ['reselMachine ']
+    object_classes = ['reselMachine']
 
     hostname = CharField(db_column='host', max_length=20, primary_key=True)
     owner = CharField(db_column='uidproprio', max_length=85)
-    ip = CharField(db_column='iphostnumber', max_length=7)
-    mac_address = CharField(db_column='macaddress', max_length=20)
+    ip = CharField(db_column='iphostnumber', max_length=7, unique=True)
+    mac_address = CharField(db_column='macaddress', max_length=20, unique=True)
     zone = ListField(db_column='zone')
     aliases = ListField(db_column='hostalias')
     last_date = CharField(db_column='lastdate', max_length=50)
