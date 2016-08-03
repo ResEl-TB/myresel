@@ -54,6 +54,7 @@
 
 \setlength{\doublerulesep}{\arrayrulewidth} % Double rules look like one thick one
 
+\def\confLang{% templatetag openbrace %}{{ confLang }}{% templatetag closebrace %}
 %--------------------------------------------------- Invoice command & env definitions
 % Command for setting a default hourly rate
 \newcommand{\hourlyrate}[1]{\def \@hourlyrate {#1}}
@@ -144,7 +145,7 @@ Association ResEl - Télécom Bretagne \hfill (33) 2 29 00 15 76 \\
 29280 Plouzané
 France
 \\ \\
-{\bf \ifthenelse{\equal{\confLang}{en}}{Invoice To}{Délivrée à} :}  {{user.firstName}} {{user.lastName}} \\
+{\bf \ifthenelse{\equal{\confLang}{en}}{Invoice To}{Délivrée à} :} {{user.firstName}} {{user.lastName}} \\
 \tab {{ user.addressFirstPart }} \\
 \tab {{ user.addressSecondPart }}
 

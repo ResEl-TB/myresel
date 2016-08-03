@@ -13,7 +13,7 @@ def generate_pdf(template_path, template_variable, dest_name, dest_folder):
     texfile, texfilename = mkstemp(dir=tmp_folder)
 
     # Render to template with var
-    os.write(texfile, render_to_string(template_path, template_variable))
+    os.write(texfile, render_to_string(template_path, template_variable).encode('utf-8'))
     os.close(texfile)
 
     # Compile the TeX file with PDFLaTeX
