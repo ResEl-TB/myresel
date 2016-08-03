@@ -8,7 +8,7 @@ class LdapDeviceAdmin(admin.ModelAdmin):
     list_display = (
         'hostname',
         'ip',
-        'uid',
+        'owner',
         'zone',
     )
     list_filter = ['zone']

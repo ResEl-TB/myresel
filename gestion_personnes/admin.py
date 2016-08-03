@@ -9,7 +9,6 @@ class LdapUserAdmin(admin.ModelAdmin):
         'uid',
         'displayname',
         'promo',
-        'state',
         'mail',
         'batiment',
     )
