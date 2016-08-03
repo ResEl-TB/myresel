@@ -7,11 +7,11 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.core.mail import EmailMessage
 
-# Pour la traduction - sert à marquer les chaînes de caractères à traduire
 from django.utils.translation import ugettext_lazy as _
 
 from ldap3 import MODIFY_REPLACE
 
+from gestion_machines.models import LdapDevice
 from .forms import AddDeviceForm, AjoutManuelForm, ModifierForm
 from fonctions import ldap, network
 from fonctions.decorators import resel_required, unknown_machine
@@ -83,7 +83,6 @@ class AddDeviceView(View):
         form = self.form_class(request.POST)
 
         if form.is_valid():
-            import time
 
             # Hostname management
             hostname = ldap.get_free_alias(str(request.user))
@@ -94,23 +93,17 @@ class AddDeviceView(View):
                 alias = False
 
             # Creating ldap form
-            dn = 'host=%s,ou=machines,dc=resel,dc=enst-bretagne,dc=fr' % hostname
-            object_class = ['reselMachine']
-            attributes = {
-                'host': hostname,
-                'uidproprio': 'uid=%s,' % str(request.user) + settings.LDAP_DN_PEOPLE,
-                'iphostnumber': ldap.get_free_ip(200, 223),
-                'macaddress': network.get_mac(request.META['REMOTE_ADDR']),
-                'zone': ['User', network.get_campus(request.META['REMOTE_ADDR'])],
-                'lastdate': time.strftime('%Y%m%d%H%M%S') + 'Z'
-            }
+            device = LdapDevice()
+            device.hostname = hostname
+            device.owner = request.user
+            device.ip = ldap.get_free_ip(200, 223)  # TODO: move that to setttings
+            device.mac_address = request.network_data['mac']
 
-            # Only if the default alias is not kept :
             if alias:
-                attributes['hostalias'] = alias
+                device.add_alias(alias)
 
-            # Ajout de la fiche au LDAP
-            ldap.add(dn, object_class, attributes)
+            device.activate()
+            device.save()
 
             messages.success(request, _("Votre machine a bien été ajoutée. Veuillez ré-initialiser votre connexion en débranchant/rebranchant le câble ou en vous déconnectant/reconnectant au Wi-Fi ResEl Secure."))
             return HttpResponseRedirect(reverse('home'))
