@@ -33,10 +33,12 @@
                     <span class="fa fa-heart-o service-icon" aria-hidden="true"></span>
                 </div>
                 <div class="col-sm-6">
-                    <h2>Le ResEl : l'association qui gère le réseau sur le campus de Télécom Bretagne</h2>
+                    <h2>{% blocktrans %}Le ResEl : l'association qui gère le réseau sur le campus de Télécom Bretagne{% endblocktrans %}</h2>
                     <br />
+                    {% blocktrans %}
                     <p>Le <strong>ResEl</strong> (pour Réseau des élèves de <a href="http://www.telecom-bretagne.eu">TÉLÉCOM Bretagne</a>) est l'association d'élèves qui gère le réseau informatique des résidences des élèves de Télécom Bretagne, l'une à Plouzané, près de Brest, et l'autre à Rennes.</p
                     <p>Ce réseau relie entre elles les 600 chambres du campus de Brest et les 100 chambres du campus de Rennes. Les élèves disposant d'un ordinateur bénéficient donc d'un accès permanent à Internet.<p>
+                    {% endblocktrans %}
                 </div>
             </div>
         </div>
@@ -44,41 +46,63 @@
 
     <div class="home-fragment home-services">
         <div class="container">
-            <h2>Les services du ResEl</h2>
+            <h2>{% trans "Les services du ResEl" %}</h2>
             <div class="row">
                 <div class="col-md-4">
-                    <span class="glyphicon glyphicon-flash service-icon" aria-hidden="true"></span>
-                    <h3 class="service-title">Internet très haut débit</h3>
-                    <p>{% blocktrans %}Le ResEl propose un internet neutre à tous ses adhérents{% endblocktrans %}</p>
+                    <a href="#">
+                        <span class="glyphicon glyphicon-flash service-icon" aria-hidden="true"></span>
+                        <h3 class="service-title">{% trans "Internet très haut débit" %}</h3>
+                        <p>{% blocktrans %}Le ResEl propose un internet neutre à tous ses adhérents{% endblocktrans %}</p>
+                    </a>
                 </div>
                 <div class="col-md-4">
-                    <span class="glyphicon glyphicon-film service-icon" aria-hidden="true"></span>
-                    <h3 class="service-title">La télévision</h3>
-                    <p>{% blocktrans %}Grâce au ResEl il est possible de regarder plus de 15 chaines en direct sur son ordinateur{% endblocktrans %}</p>
+                    <a href="#">
+                        <span class="glyphicon glyphicon-film service-icon" aria-hidden="true"></span>
+                        <h3 class="service-title">{% trans "La télévision" %}</h3>
+                        <p>{% blocktrans %}Grâce au ResEl il est possible de regarder plus de 15 chaines en direct sur son ordinateur{% endblocktrans %}</p>
+                    </a>
                 </div>
                 <div class="col-md-4">
-                    <span class="glyphicon glyphicon-cloud service-icon" aria-hidden="true"></span>
-                    <h3 class="service-title">Hébergement web</h3>
-                    <p>{% blocktrans %}Hébergez tous vos sites ou applications web pour votre club ou association{% endblocktrans %}</p>
+                    <a href="#">
+                        <span class="glyphicon glyphicon-cloud service-icon" aria-hidden="true"></span>
+                        <h3 class="service-title">{% trans "Hébergement web" %}</h3>
+                        <p>{% blocktrans %}Hébergez tous vos sites ou applications web pour votre club ou association{% endblocktrans %}</p>
+                    </a>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-4">
-                    <span class="glyphicon glyphicon-envelope service-icon" aria-hidden="true"></span>
-                    <h3 class="service-title">Les mails</h3>
-                    <p>{% blocktrans %}Les mailing listes ResEl permettent de faire vivre le campus de Télécom Bretagne !{% endblocktrans %}</p>
+                    <a href="#">
+                        <span class="glyphicon glyphicon-envelope service-icon" aria-hidden="true"></span>
+                        <h3 class="service-title">{% trans "Les mails"%}</h3>
+                        <p>{% blocktrans %}Les mailing listes ResEl permettent de faire vivre le campus de Télécom Bretagne !{% endblocktrans %}</p>
+                    </a>
                 </div>
                 <div class="col-md-4">
-                    <span class="glyphicon glyphicon-education service-icon" aria-hidden="true"></span>
-                    <h3 class="service-title">Les clubs</h3>
-                    <p>{% blocktrans %}On héberge tous les clubs{% endblocktrans %}</p>
+                    <a href="#">
+                        <span class="glyphicon glyphicon-education service-icon" aria-hidden="true"></span>
+                        <h3 class="service-title">{% trans "Les clubs" %}</h3>
+                        <p>{% blocktrans %}On héberge tous les clubs{% endblocktrans %}</p>
+                    </a>
                 </div>
-                <div class="col-md-4">
-                    <span class="glyphicon glyphicon-download service-icon" aria-hidden="true"></span>
-                    <h3 class="service-title">Garbage</h3>
-                    <p>{% blocktrans %}Chuuuut...{% endblocktrans %}</p>
-                </div>
+                {% if ip_in_resel %}
+                    <div class="col-md-4">
+                        <a href="#">
+                            <span class="glyphicon glyphicon-download service-icon" aria-hidden="true"></span>
+                            <h3 class="service-title">Garbage</h3>
+                            <p>{% blocktrans %}Chuuuut...{% endblocktrans %}</p>
+                        </a>
+                    </div>
+                {% else %}
+                    <div class="col-md-4">
+                        <a href="#">
+                            <span class="fa fa-rocket service-icon" aria-hidden="true"></span>
+                            <h3 class="service-title">{% trans "Et plein d'autres services" %}</h3>
+                            <p><span class="fa fa-ellipsis-h" aria-hidden="true"></span></p>
+                        </a>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>

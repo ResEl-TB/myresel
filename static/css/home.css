@@ -100,6 +100,19 @@
     box-shadow: inset 0 5px 6px 0 #0f6670;
 }
 
+.home-services h2 {
+    margin-bottom: 50px;
+}
+
+.home-services a {
+    color: #ffffff;
+}
+
+.home-services a:hover {
+    text-decoration: none;
+    color: #f1ffff;
+}
+
 .home-services .row {
     margin-top: 20px;
     margin-bottom: 40px;
