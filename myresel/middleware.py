@@ -55,7 +55,8 @@ class NetworkConfiguration(object):
                 return HttpResponseBadRequest(_("Impossible de détecter votre adresse mac, veuillez contacter un administrateur ResEl."))
 
         if request.network_data['is_registered'] != 'Unknown':
-            current_device = LdapDevice.objects.get(ip=ip[-7:])
+            end_ip = ".".join(ip.split(".")[-2:])
+            current_device = LdapDevice.objects.get(ip=end_ip)
             request.network_data['device'] = current_device
 
 
