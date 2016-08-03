@@ -64,11 +64,18 @@
     box-shadow: inset 0 5px 6px 0 #122a3c;
     text-align: center;
 }
+.home-presentation a{
+    color: #EB7F00;
+}
 
 .home-user-management~.home-presentation {
     box-shadow: inset 0 5px 6px 0 #80817b;
     background: #ffffff;
     color: #000000;
+}
+
+.home-user-management~.home-presentation a {
+    color: #2b669a;
 }
 
 @media(min-width:768px) {
