@@ -19,7 +19,7 @@ SECRET_KEY = '6_gz^zjk+lj+72utudq+l(xd-!@3xlo5c*20&dz$mdgn2p22g-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['my.resel.fr', 'resel.fr']
+ALLOWED_HOSTS = ['beta.resel.fr', 'my.resel.fr', 'resel.fr']
 
 # SSL config
 
@@ -49,7 +49,7 @@ LOGIN_REDIRECT_URL = '/'
 
 # Inscription zone 
 
-INSCRIPTION_ZONE_FALLBACK_URL = '/inscription_zone/'
+INSCRIPTION_ZONE_FALLBACK_URL = '/'
 
 INSCRIPTION_ZONE_ALLOWED_URLS = [
                                 r'^$',
