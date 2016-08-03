@@ -100,12 +100,12 @@ class inscriptionNetworkHandler(object):
                 # Check if logged in & registered:
                 if is_registered == 'active' and is_logged_in:
                     messages.warning(request, _("Vous êtes correctement inscrit, mais vous êtes sur le mauvais réseau. Veuillez vous connecter sur le réseau Wifi 'ResEl Secure'"))
-                else:
-                    # We check that he only browses intended part of the website
-                    path = request.path_info.lstrip('/')
-                    if not any(m.match(path) for m in INSCRIPTION_ZONE_ALLOWED_URLS):
-                        messages.info(request, _("Vous devez vous inscrire au ResEl avant de pouvoir naviguer normalement."))
-                        return HttpResponseRedirect(settings.LOGIN_URL)
+                # else:
+                #     # We check that he only browses intended part of the website
+                #     path = request.path_info.lstrip('/')
+                #     if not any(m.match(path) for m in INSCRIPTION_ZONE_ALLOWED_URLS):
+                #         messages.info(request, _("Vous devez vous inscrire au ResEl avant de pouvoir naviguer normalement."))
+                #         return HttpResponseRedirect(settings.LOGIN_URL)
 
         elif vlan == '999':
 
@@ -116,18 +116,18 @@ class inscriptionNetworkHandler(object):
             elif zone == 'Brest-inscription-999' or zone == 'Rennes-inscription':
                 # Check origin:
                 if host not in settings.ALLOWED_HOSTS:
-                    return HttpResponseRedirect(settings.INSCRIPTION_ZONE_FALLBACK_URL) # Will bypass the normal view
+                    return HttpResponseRedirect(settings.INSCRIPTION_ZONE_FALLBACK_URL)  # Will bypass the normal view
                 else:
                     # Check if logged in & registered:
                     if is_registered == 'active' and is_logged_in:
                         messages.warning(request, _("Votre inscription n'est pas finie. Veuillez vous déconnecter puis vous reconnecter sur le réseau Wifi 'ResEl Secure'"))
                         pass
-                    else:
-                        # We check that he only browses intended part of the website
-                        path = request.path_info.lstrip('/')
-                        if not any(m.match(path) for m in INSCRIPTION_ZONE_ALLOWED_URLS):
-                            messages.info(request, _("Vous devez vous inscrire au ResEl avant de pouvoir naviguer normalement."))
-                            return HttpResponseRedirect(settings.LOGIN_URL)
+                    # else:
+                    #     # We check that he only browses intended part of the website
+                    #     path = request.path_info.lstrip('/')
+                    #     if not any(m.match(path) for m in INSCRIPTION_ZONE_ALLOWED_URLS):
+                    #         messages.info(request, _("Vous devez vous inscrire au ResEl avant de pouvoir naviguer normalement."))
+                    #         return HttpResponseRedirect(settings.LOGIN_URL)
 
             else:
                 # Other possiblities: Brest-inscription, Brest-other.
