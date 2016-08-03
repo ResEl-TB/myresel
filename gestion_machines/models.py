@@ -23,8 +23,7 @@ class LdapDevice(ldapdb.models.Model):
     aliases = ListField(db_column='hostalias')
     last_date = CharField(db_column='lastdate', max_length=50)
 
-    @owner.setter
-    def owner(self, owner_uid):
+    def set_owner(self, owner_uid):
         self.owner = 'uid=%s,' % str(owner_uid) + settings.LDAP_DN_PEOPLE
 
     def add_zone(self, z):
@@ -45,14 +44,13 @@ class LdapDevice(ldapdb.models.Model):
         CAMPUS = ['Brest', 'Rennes']  # TODO: move that to settings
 
         if campus not in CAMPUS:
-            raise ValueError("campus %s doesn't exist" % campus)
+            raise ValueError("Campus %s doesn't exist" % campus)
 
         for i in range(len(self.zone)):
             if self.zone[i] in CAMPUS:
                 self.zone[i] = campus
 
-    def activate(self):
-        campus = get_campus(self.ip)
+    def activate(self, campus):
         self.zone = ['User']
         self.set_campus(campus)
         self.last_date = time.strftime('%Y%m%d%H%M%S') + 'Z'

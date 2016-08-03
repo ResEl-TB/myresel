@@ -11,6 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from ldap3 import MODIFY_REPLACE
 
+from fonctions.network import get_campus
 from gestion_machines.models import LdapDevice
 from .forms import AddDeviceForm, AjoutManuelForm, ModifierForm
 from fonctions import ldap, network
@@ -87,6 +88,7 @@ class AddDeviceView(View):
             # Hostname management
             hostname = ldap.get_free_alias(str(request.user))
             alias = form.cleaned_data['alias']
+            campus = get_campus(request.request.network_data['ip'])
 
             # In case the user didn't specified any alias, don't make any
             if hostname == alias:
@@ -95,14 +97,14 @@ class AddDeviceView(View):
             # Creating ldap form
             device = LdapDevice()
             device.hostname = hostname
-            device.owner = request.user
+            device.set_owner(request.user)
             device.ip = ldap.get_free_ip(200, 223)  # TODO: move that to setttings
             device.mac_address = request.network_data['mac']
 
             if alias:
                 device.add_alias(alias)
 
-            device.activate()
+            device.activate(campus)
             device.save()
 
             messages.success(request, _("Votre machine a bien été ajoutée. Veuillez ré-initialiser votre connexion en débranchant/rebranchant le câble ou en vous déconnectant/reconnectant au Wi-Fi ResEl Secure."))
