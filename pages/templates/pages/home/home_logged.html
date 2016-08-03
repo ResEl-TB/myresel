@@ -31,7 +31,7 @@
                     </div>
                 </div>
 
-                {% if not machine_status and is_ip_in_resel %}
+                {% if machine_status == 'unknown' and is_ip_in_resel %}
                     {# In the netwok but not saved #}
                     <div class="col-md-6 col-md-offset-2">
                         <div class="row">

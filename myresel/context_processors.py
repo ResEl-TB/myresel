@@ -13,7 +13,7 @@ def resel_context(request):
     else:
         ip = request.META['REMOTE_ADDR']
 
-    status = None
+    status = False
     ip_in_resel = network.is_resel_ip(ip)
     if ip_in_resel:
         status = ldap.get_status(ip)

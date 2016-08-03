@@ -66,7 +66,7 @@ def get_status(ip):
         - mauvais campus
         - inexistante
     """
-
+    # TODO: viruses computers
     # Identification du campus
     campus = get_campus(ip)
 
@@ -79,16 +79,15 @@ def get_status(ip):
             # Machine inactive, on renvoit le status 'inactif'
             return 'inactive'
 
-        elif campus.lower() not in [z.lower() for z in res[0].zone]:
-            # Machine sur le mauvais campus
-            return 'wrong_campus'
-
-        else:
-            # Machine présente dans le LDAP, marquée comme active
+        elif campus.lower() in [z.lower() for z in res[0].zone]:
             return 'active'
 
-    # Machine inexistante dans le LDAP
-    return False
+        else:
+            # Computer in the wrong campus
+            return 'disabled'
+
+    # Computer not in the ldap
+    return 'unknown'
 
 
 def update_campus(ip):
