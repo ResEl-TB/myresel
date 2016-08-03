@@ -1,18 +1,15 @@
 from django.contrib import admin
-from modeltranslation.admin import TranslationAdmin
 
 from gestion_machines.models import LdapDevice
 
 
+@admin.register(LdapDevice)
 class LdapDeviceAdmin(admin.ModelAdmin):
     list_display = (
+        'hostname',
+        'ip',
         'uid',
-        'displayname',
-        'promo',
-        'state',
-        'mail',
-        'batiment',
+        'zone',
     )
-    list_filter = ['promo', 'cotiz', 'batiment']
+    list_filter = ['zone']
 
-admin.site.register(LdapDevice, LdapDeviceAdmin)

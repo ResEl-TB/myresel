@@ -1,16 +1,16 @@
 from django.contrib import admin
-from modeltranslation.admin import TranslationAdmin
 
 from gestion_personnes.models import LdapUser
 
 
+@admin.register(LdapUser)
 class LdapUserAdmin(admin.ModelAdmin):
     list_display = (
-        'hostname',
-        'ip',
         'uid',
-        'zone',
+        'displayname',
+        'promo',
+        'state',
+        'mail',
+        'batiment',
     )
-    list_filter = ['zone']
-
-admin.site.register(LdapUser, LdapUserAdmin)
+    list_filter = ['promo', 'cotiz', 'batiment']
