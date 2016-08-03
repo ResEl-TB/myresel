@@ -21,31 +21,32 @@ class IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAResElAdmi
                 user.save()
 
 
-class getAndCheckUsersNetworkData(object):
+class NetworkConfiguration(object):
     """
-    Centralize and check network data of user.
+    Retrieve every useful piece of information about the device network configuration
+    To be available in every view
     """
     def process_request(self, request):
-        # Get
         request.network_data = {}
         if 'HTTP_X_FORWARDED_FOR' in request.META:
             request.network_data['ip'] = request.META['HTTP_X_FORWARDED_FOR']
         else:
             request.network_data['ip'] = request.META['REMOTE_ADDR']
+
         request.network_data['vlan'] = request.META['VLAN']
         request.network_data['host'] = request.META['HTTP_HOST']
         request.network_data['zone'] = network.get_network_zone(request.network_data['ip'])
-        request.network_data['mac'] = False
+        request.network_data['mac'] = None
         request.network_data['is_registered'] = 'Unknown'
         request.network_data['is_logged_in'] = request.user.is_authenticated()
-        if "user" in request.network_data['zone'] or "inscription" in request.network_data['zone']: # As the device is in an inscription or user zone, we can get its mac address
+
+        # If the device in `user` or `inscription` zone, we can retrieve its mac address
+        if "user" in request.network_data['zone'] or "inscription" in request.network_data['zone']:
             request.network_data['mac'] = network.get_mac(request.network_data['ip'])
             request.network_data['is_registered'] = ldap.get_status(request.network_data['ip'])
-        
-        # Check
-        if "user" in request.network_data['zone'] or "inscription" in request.network_data['zone']:
+
             if not request.network_data['mac']:
-                # Error ! couldn't have its mac address
+                # Error ! couldn't get its mac address
                 return HttpResponseBadRequest(_("Impossible de détecter votre adresse mac, veuillez contacter un administrateur ResEl."))
 
 
