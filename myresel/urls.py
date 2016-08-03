@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
+from django.views.generic import RedirectView
 from django.views.i18n import javascript_catalog
 
 from pages.views import Home, Contact, NewsListe, InscriptionZoneInfo
@@ -38,10 +39,12 @@ urlpatterns = [
     url(r'^paiement/', include('tresorerie.urls', namespace='tresorerie')),
 
     url(r'^wiki/', include('wiki.urls', namespace='wiki')),
-
     url(r'^news/', NewsListe.as_view(), name='news'),
     url(r'^contact/', Contact.as_view(), name='contact'),
+
+    # Subcription related urls
     url(r'^inscription_zone/', InscriptionZoneInfo, name="inscription-zone"),
+    url(r'^generate_204/', RedirectView.as_view(pattern_name="inscription-zone", permanent=False), name="generate_204"),
     url(r'^$', Home.as_view(), name='home'),
 ]
 
