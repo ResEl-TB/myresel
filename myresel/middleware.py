@@ -8,6 +8,7 @@ from fonctions import ldap, network
 
 import re
 
+
 class IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAReselAdminSoCheckTheLdapBeforeMiddleaware(object):
     def process_request(self, request):
         # Check if the user is a ResEl admin. If so, its credentials will be updated to superuser and staff
@@ -46,6 +47,7 @@ class getAndCheckUsersNetworkData(object):
             if not request.network_data['mac']:
                 # Error ! couldn't have its mac address
                 return HttpResponseBadRequest(_("Impossible de détecter votre adresse mac, veuillez contacter un administrateur ResEl."))
+
 
 class inscriptionNetworkHandler(object):
     # Before the request is sent to the website, we need to handle if the user is in an inscription network
@@ -92,7 +94,7 @@ class inscriptionNetworkHandler(object):
 
             # Check origin:
             if host not in settings.ALLOWED_HOSTS:
-                return HttpResponseRedirect(settings.INSCRIPTION_ZONE_FALLBACK_URL) # Will bypass the normal view
+                return HttpResponseRedirect(settings.INSCRIPTION_ZONE_FALLBACK_URL)  # Will bypass the normal view
 
             else:
                 # Check if logged in & registered:

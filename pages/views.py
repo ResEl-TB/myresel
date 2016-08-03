@@ -117,6 +117,7 @@ class Contact(View):
             return HttpResponseRedirect(reverse('news'))
         return render(request, self.template_name, {'form': form})
 
+
 def InscriptionZoneInfo(request):
     # First get device datas
     if 'HTTP_X_FORWARDED_FOR' in request.META:
@@ -129,7 +130,7 @@ def InscriptionZoneInfo(request):
     mac = False
     is_registered = 'Unknown'
     is_logged_in = request.user.is_authenticated()
-    if "user" in zone or "inscription" in zone : # As the device is in an inscription or user zone, we can get its mac address
+    if "user" in zone or "inscription" in zone:  # As the device is in an inscription or user zone, we can get its mac address
         mac = network.get_mac(ip)
         is_registered = ldap.get_status(ip) == 'active'
 
