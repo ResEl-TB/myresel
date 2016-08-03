@@ -12,7 +12,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from ldap3 import MODIFY_REPLACE
 
-from .forms import AjoutForm, AjoutManuelForm, ModifierForm
+from .forms import AddDeviceForm, AjoutManuelForm, ModifierForm
 from fonctions import ldap, network
 from fonctions.decorators import resel_required, unknown_machine
 from django.conf import settings
@@ -33,9 +33,9 @@ class Reactivation(View):
         # Vérification que la machine est bien à l'user
         machine = ldap.search(settings.LDAP_DN_MACHINES, '(&(macaddress=%s))' % network.get_mac(request.META['REMOTE_ADDR']), ['uidproprio', 'host', 'iphostnumber', 'macaddress'])[0]
         if str(request.user) not in machine.uidproprio[0]:
-            messages.error(request, _("Cette machine n'est pas censée vous appartenir. Veuillez contacter un administrateur afin de la transférer."))
+            messages.error(request, _("Cette machine ne semble pas vous appartenir. Veuillez contacter un administrateur afin de la transférer."))
             return HttpResponseRedirect(reverse('pages:news'))
-            
+
         # Vérification que la machine est bien désactivée
         status = ldap.get_status(request.META['REMOTE_ADDR'])
         if status != 'inactive':
@@ -57,20 +57,26 @@ class Reactivation(View):
         return render(request, self.template_name)
 
 
-class Ajout(View):
-    """ Vue appelée pour l'ajout d'une nouvelle machine """
+class AddDeviceView(View):
+    """
+    View called when a user want to add a new device to his account
+    He can choose an alias. If he leave the default alias, he will have no
+    alias.
+    """
 
-    template_name = 'gestion_machines/ajout.html'
-    form_class = AjoutForm
+    template_name = 'gestion_machines/add_device.html'
+    form_class = AddDeviceForm
 
     @method_decorator(resel_required)
     @method_decorator(unknown_machine)
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
-        return super(Ajout, self).dispatch(*args, **kwargs)
+        return super(AddDeviceView, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        form = self.form_class()
+        proposed_alias = ldap.get_free_alias(str(request.user))
+
+        form = self.form_class({'alias': proposed_alias})
         return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
@@ -79,26 +85,27 @@ class Ajout(View):
         if form.is_valid():
             import time
 
-            # Gestion du nom de l'host
-            if form.cleaned_data['alias'] != '':
-                host = form.cleaned_data['alias']
-                alias = ldap.get_free_alias(str(request.user))
-            else:
-                host = ldap.get_free_alias(str(request.user))
+            # Hostname management
+            hostname = ldap.get_free_alias(str(request.user))
+            alias = form.cleaned_data['alias']
+
+            # In case the user didn't specified any alias, don't make any
+            if hostname == alias:
                 alias = False
 
-            # Mise en forme du DN et des attributs de la fiche LDAP
-            dn = 'host=%s,ou=machines,dc=resel,dc=enst-bretagne,dc=fr' % host
+            # Creating ldap form
+            dn = 'host=%s,ou=machines,dc=resel,dc=enst-bretagne,dc=fr' % hostname
             object_class = ['reselMachine']
             attributes = {
-                'host': host,
+                'host': hostname,
                 'uidproprio': 'uid=%s,' % str(request.user) + settings.LDAP_DN_PEOPLE,
-                'iphostnumber': ldap.get_free_ip(200,223),
+                'iphostnumber': ldap.get_free_ip(200, 223),
                 'macaddress': network.get_mac(request.META['REMOTE_ADDR']),
                 'zone': ['User', network.get_campus(request.META['REMOTE_ADDR'])],
                 'lastdate': time.strftime('%Y%m%d%H%M%S') + 'Z'
             }
 
+            # Only if the default alias is not kept :
             if alias:
                 attributes['hostalias'] = alias
 
@@ -109,6 +116,7 @@ class Ajout(View):
             return HttpResponseRedirect(reverse('home'))
 
         return render(request, self.template_name, {'form': form})
+
 
 class AjoutManuel(View):
     """ Vue appelée pour que l'utilisateur fasse une demande d'ajout de machine (PS4, Xboite, etc.) """

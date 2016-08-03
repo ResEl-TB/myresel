@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block titre %}{% trans "Ajout de machine" %}{% endblock %}
+
+{% block content %}
+<div class="container">
+<h1 class="page-header">{% trans "Ajouter une machine à votre compte" %}</h1>
+    <p>{% blocktrans %}Votre machine est nouvelle sur notre réseau. Il vous faut l'enregistrer pour avoir accès à Internet. Vous pouvez choisir de lui attribuer un alias (en plus de son nom), ou simplement conserver celui qui vous a été attribué automatiquement.{% endblocktrans %}</p>
+    <div class="row">
+        <div class="col-sm-4 col-sm-offset-2">
+            <form action="" method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                    <fieldset class="form-group">
+                        <label>{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}{{ field.errors }}{% endif %}
+                    </fieldset>
+                {% endfor %}
+                <div class="form-group text-center">
+                    <input id="bouton" type="submit" class="btn btn-info" value="{% trans 'Inscrire ma machine' %}">
+                </div>
+            </form>
+        </div>
+    <div class="col-sm-5 col-sm-offset-1">
+        <div class="panel panel-info">
+            <div class="panel-heading">{% trans "Critères à respecter" %}</div>
+            <div class="panel-body">
+                <ul>
+                    <li>{% trans "Être un alias en minuscules" %}</li>
+                    <li>{% trans "Avoir entre 5 et 20 caractères" %}</li>
+                    <li>{% trans "Contenir uniquement des caractères alphanumériques" %}</li>
+                </ul>
+                </div>
+            </div>
+            <div class="panel panel-info">
+                <div class="panel-heading">{% trans "Exemples de noms valides" %}</div>
+            <div class="panel-body">
+                <ul>
+                    <li>{% trans "pc-thomas" %}</li>
+                    <li>{% trans "rasp5" %}</li>
+                    <li>{% trans "quantumofsolace" %}</li>
+                </ul>
+                </div>
+            </div>
+
+    </div>
+    </div> <!-- /.row -->
+</div> <!-- /.container -->
+{% endblock %}

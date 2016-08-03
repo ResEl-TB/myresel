@@ -143,11 +143,18 @@ def get_free_ip(low, high):
     )
 
 
-def get_free_alias(uid):
-    """ Récupère un nom d'alias libre pour la machine """
+def get_free_alias(name, prefix='pc'):
+    """
+    Get a free alias from the ldap in the form
+    prefix + name + nbr
+    :param name: name of the computer (for example the user uid)
+    :param prefix: machine prefix
+    :return:
+    """
 
     again = True
-    alias = 'pc' + uid
+    base_alias = prefix + name
+    alias = base_alias
     i = 1
 
     while again:
@@ -155,7 +162,7 @@ def get_free_alias(uid):
             again = False
         else:
             i += 1
-            alias = 'pc' + uid + str(i)
+            alias = base_alias + str(i)
 
     return alias
 
