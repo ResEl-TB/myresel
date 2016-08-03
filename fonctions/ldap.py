@@ -137,7 +137,7 @@ def get_free_ip(low, high):
 
     return next(
         "%i.%i" % ip
-        for ip in itertools.product(range(low - 1, high), range(2, 254))
+        for ip in itertools.product(range(low, high), range(2, 254))
         if not search(settings.LDAP_DN_MACHINES, '(&(ipHostNumber=%i.%i))' % ip)
     )
 
