@@ -1,114 +1,42 @@
-{% extends 'base.html' %}
+{% extends 'pages/home/home.html' %}
 {% load i18n %}
 {% load staticfiles %}
-
-{% block titre %}Accueil{% endblock %}
-
-{% block css %}
-    <link href="{% static 'css/home.css' %}" rel="stylesheet">
-{% endblock %}
-
-{% block content %}
-    {% if messages %}
-        <div class="row">
-
-            <!-- /.col-lg-12 -->
-        </div>
-    {% endif %}
-    <div class="jumbotron">
+{% block presentation %}
+    <div class="home-fragment home-presentation">
         <div class="container">
-            <div class="row">
-                <div class="col-md-4 col-md-offset-1">
-                    <h2>{% trans "Le Réseau des Élèves de Télécom Bretagne" %}</h2>
-                    <p>{% trans "Vous cherchez internet ?" %}</p>
-                </div>
-                <div class="col-md-7">
-                    <img src="{% static "images/logo_resel.png" %}" alt="logo ResEl" height="200">
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {% if is_registered %}
-        <div class="home-fragment home-presentation">
-            <div class="container">
+            {% if is_registered %}
                 <h2>{% trans "Erreur : mauvais réseau"%}</h2>
                 {% if vlan == "999" %}
-                    <p>{% blocktrans %}Bien que votre machine soit inscrite sur notre réseau, vous êtes toujours sur la zone d'inscription.
-                    Il semblerait que vous soyez connecté au réseau Wifi "ResEl inscription".
-                    Il est impossible d'avoir accès à internet depuis ce réseau Wifi pour des raisons de sécurité.<br/>
-                    Veuillez vous connecter sur le réseau Wifi "ResEl Secure".
+                    <p>{% blocktrans %}
+                        Bien que votre machine soit inscrite sur notre réseau, vous êtes toujours sur la zone d'inscription.
+                        Il semblerait que vous soyez connecté au réseau Wifi "ResEl inscription".
+                        Il est impossible d'avoir accès à internet depuis ce réseau Wifi pour des raisons de sécurité.<br/>
+                        Veuillez vous connecter sur le réseau Wifi "ResEl Secure".
                     {% endblocktrans %}</p>
                 {% elif vlan == "995" %}
-                    <p>{% blocktrans %}Bien que votre machine soit inscrite sur notre réseau, vous êtes toujours sur la zone d'inscription.
-                    Si vous venez de vous inscrire, c'est normal, vous devez avant débrancher puis rebrancher votre câble réseau, ou vous 
-                    déconnecter du réseau Wifi puis vous y reconnecter (sur le réseau Wifi "ResEl Secure").
+                    <p>{% blocktrans %}
+                        Bien que votre machine soit inscrite sur notre réseau, vous êtes toujours sur la zone d'inscription.
+                        Si vous venez de vous inscrire, c'est normal, vous devez avant débrancher puis rebrancher votre câble réseau, ou vous
+                        déconnecter du réseau Wifi puis vous y reconnecter (sur le réseau Wifi "ResEl Secure").
                     {% endblocktrans %}</p>
                 {% endif %}
-            </div>
-        </div>
-    {% endif %}
-    {% if is_logged_in %}
-        <div class="home-fragment home-presentation">
-            <div class="container">
+            {% endif %}
+            {% if is_logged_in %}
                 <h2>{% trans "Vous êtes sur la zone d'inscription"%}</h2>
-                <p>{% blocktrans %}Votre machine est actuellement connectée sur la zone inscription. Dans cette zone, vous n'avez pas accès à internet.
-                Avant d'avoir internet, passez sur notre site pour inscrire votre machine à votre compte sur notre réseau.
-                {% blocktrans %}</p>
-                <a href="{% url 'gestion-machines:ajout' %}" class="btn btn-default btn-lg ">{%  trans "Je fonce !"%}</a>
-            </div>
-        </div>
-    {% else %}
-        <div class="home-fragment home-presentation">
-            <div class="container">
-                <h2>{% trans "Vous êtes sur la zone d'inscription"%}</h2>
-                <p>{% blocktrans %}Votre machine est actuellement connectée sur la zone inscription. Dans cette zone, vous n'avez pas accès à internet.
-                Avant d'avoir internet, passez sur notre site pour vous inscrire à notre association.
+                <p>{% blocktrans %}
+                    Votre machine est actuellement connectée sur la zone inscription. Dans cette zone, vous n'avez pas accès à internet.
+                    Avant d'avoir internet, passez sur notre site pour inscrire votre machine à votre compte sur notre réseau.
                 {% endblocktrans %}</p>
                 <a href="{% url 'gestion-machines:ajout' %}" class="btn btn-default btn-lg ">{%  trans "Je fonce !"%}</a>
-            </div>
-        </div>
-    {% endif %}
+            {% else %}
+                <h2>{% trans "Vous êtes sur la zone d'inscription"%}</h2>
+                <p>{% blocktrans %}
+                    Votre machine est actuellement connectée sur la zone inscription. Dans cette zone, vous n'avez pas accès à internet.
+                    Avant d'avoir internet, passez sur notre site pour vous inscrire à notre association.
+                {% endblocktrans %}</p>
+                <a href="{% url 'gestion-machines:ajout' %}" class="btn btn-default btn-lg ">{%  trans "Je fonce !"%}</a>
+            {% endif %}
 
-
-    <div class="home-fragment home-services">
-        <div class="container">
-            <h2>Les services du ResEl</h2>
-            <div class="row">
-                <div class="col-md-4">
-                    <span class="glyphicon glyphicon-flash service-icon" aria-hidden="true"></span>
-                    <h3 class="service-title">Internet très haut débit</h3>
-                    <p>{% blocktrans %}Le ResEl propose un internet neutre à tous ses adhérents{% endblocktrans %}</p>
-                </div>
-                <div class="col-md-4">
-                    <span class="glyphicon glyphicon-film service-icon" aria-hidden="true"></span>
-                    <h3 class="service-title">La télévision</h3>
-                    <p>{% blocktrans %}Grâce au ResEl il est possible de regarder plus de 15 chaines en direct sur son ordinateur{% endblocktrans %}</p>
-                </div>
-                <div class="col-md-4">
-                    <span class="glyphicon glyphicon-cloud service-icon" aria-hidden="true"></span>
-                    <h3 class="service-title">Hébergement web</h3>
-                    <p>{% blocktrans %}Hébergez tous vos sites ou applications web pour votre club ou association{% endblocktrans %}</p>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-4">
-                    <span class="glyphicon glyphicon-envelope service-icon" aria-hidden="true"></span>
-                    <h3 class="service-title">Les mails</h3>
-                    <p>{% blocktrans %}Les mailing listes ResEl permettent de faire vivre le campus de Télécom Bretagne !{% endblocktrans %}</p>
-                </div>
-                <div class="col-md-4">
-                    <span class="glyphicon glyphicon-education service-icon" aria-hidden="true"></span>
-                    <h3 class="service-title">Les clubs</h3>
-                    <p>{% blocktrans %}On héberge tous les clubs{% endblocktrans %}</p>
-                </div>
-                <div class="col-md-4">
-                    <span class="glyphicon glyphicon-download service-icon" aria-hidden="true"></span>
-                    <h3 class="service-title">Garbage</h3>
-                    <p>{% blocktrans %}Chuuuut...{% endblocktrans %}</p>
-                </div>
-            </div>
         </div>
     </div>
 {% endblock %}

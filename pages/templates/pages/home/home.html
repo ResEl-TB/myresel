@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load staticfiles %}
 
-{% block titre %}Accueil{% endblock %}
+{% block titre %}{% trans "Accueil" %}{% endblock %}
 
 {% block css %}
     <link href="{% static 'css/home.css' %}" rel="stylesheet">
@@ -23,26 +23,29 @@
             </div>
         </div>
     </div>
+
     {% block myresel %}
     {% endblock %}
 
-    <div class="home-fragment home-presentation">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-4 col-sm-offset-1"><br /><br /><br /><br />{# TODO: mettre ça dans le css #}
-                    <span class="fa fa-heart-o service-icon" aria-hidden="true"></span>
-                </div>
-                <div class="col-sm-6">
-                    <h2>{% blocktrans %}Le ResEl : l'association qui gère le réseau sur le campus de Télécom Bretagne{% endblocktrans %}</h2>
-                    <br />
-                    {% blocktrans %}
-                    <p>Le <strong>ResEl</strong> (pour Réseau des élèves de <a href="http://www.telecom-bretagne.eu">TÉLÉCOM Bretagne</a>) est l'association d'élèves qui gère le réseau informatique des résidences des élèves de Télécom Bretagne, l'une à Plouzané, près de Brest, et l'autre à Rennes.</p
-                    <p>Ce réseau relie entre elles les 600 chambres du campus de Brest et les 100 chambres du campus de Rennes. Les élèves disposant d'un ordinateur bénéficient donc d'un accès permanent à Internet.<p>
-                    {% endblocktrans %}
+    {% block presentation %}
+        <div class="home-fragment home-presentation">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-4 col-sm-offset-1"><br /><br /><br /><br />{# TODO: mettre ça dans le css #}
+                        <span class="fa fa-heart-o service-icon" aria-hidden="true"></span>
+                    </div>
+                    <div class="col-sm-6">
+                        <h2>{% blocktrans %}Le ResEl : l'association qui gère le réseau sur le campus de Télécom Bretagne{% endblocktrans %}</h2>
+                        <br />
+                        {% blocktrans %}
+                            <p>Le <strong>ResEl</strong> (pour Réseau des élèves de <a href="http://www.telecom-bretagne.eu">TÉLÉCOM Bretagne</a>) est l'association d'élèves qui gère le réseau informatique des résidences des élèves de Télécom Bretagne, l'une à Plouzané, près de Brest, et l'autre à Rennes.</p
+                            <p>Ce réseau relie entre elles les 600 chambres du campus de Brest et les 100 chambres du campus de Rennes. Les élèves disposant d'un ordinateur bénéficient donc d'un accès permanent à Internet.<p>
+                        {% endblocktrans %}
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    {% endblock %}
 
     <div class="home-fragment home-services">
         <div class="container">
@@ -112,13 +115,12 @@
             <h2>Les dernières nouvelles</h2>
             {% for pieceofnews in news %}
                 {% if forloop.first %}<div class="panel panel-info">{% endif %}
-                <div class="panel-heading"><h3 class="panel-title">{{ pieceofnews.titre }}</h3></div>
-                <div class="panel-body">{{ pieceofnews.contenu|safe }}</div>
-                {% if forloop.last %}</div>{% endif %}
+            <div class="panel-heading"><h3 class="panel-title">{{ pieceofnews.titre }}</h3></div>
+            <div class="panel-body">{{ pieceofnews.contenu|safe }}</div>
+            {% if forloop.last %}</div>{% endif %}
             {% empty %}
-            <p>{% trans "Pas de news à l'horizon" %}</p>
+                <p>{% trans "Pas de news à l'horizon" %}</p>
             {% endfor %}
         </div>
-
     </div>
 {% endblock %}
