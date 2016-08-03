@@ -4,7 +4,7 @@ from modeltranslation.admin import TranslationAdmin
 from gestion_personnes.models import LdapUser
 
 
-class LdapUserAdmin(TranslationAdmin):
+class LdapUserAdmin(admin.ModelAdmin):
     list_display = (
         'hostname',
         'ip',

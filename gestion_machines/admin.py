@@ -4,7 +4,7 @@ from modeltranslation.admin import TranslationAdmin
 from gestion_machines.models import LdapDevice
 
 
-class LdapDeviceAdmin(TranslationAdmin):
+class LdapDeviceAdmin(admin.ModelAdmin):
     list_display = (
         'uid',
         'displayname',
