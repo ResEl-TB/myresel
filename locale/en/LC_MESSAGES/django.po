@@ -553,7 +553,9 @@ msgid ""
 "        <p>Gardez en tête qu'il faudra ensuite changer votre configuration "
 "Wi-Fi pour utiliser ce nouveau mot de passe</p>\n"
 "        "
-msgstr "<p>You are about to change your ResEl password.</p> As it is also used for Wi-Fi connection, you will have to change your Wi-Fi configuration to take change into account"
+msgstr ""
+"\n"
+"<p>You are about to change your ResEl password.</p> As it is also used for Wi-Fi connection, you will have to change your Wi-Fi configuration to take change into account"
 
 #: gestion_personnes/templates/gestion_personnes/mod-passwd.html:19
 msgid "Veuillez renseigner votre nouveau mot de passe :"
@@ -669,7 +671,9 @@ msgid ""
 "disposant d'un ordinateur bénéficient donc d'un accès permanent à Internet."
 "<p>\n"
 "                        "
-msgstr "<p>The <strong>ResEl</strong> is the association that manages the computer network in Télécom Bretagne dormitories.</p> This network connect the 600 rooms of the Brest campus with the 100 rooms of the Rennes campus."
+msgstr ""
+"\n"
+"<p>The <strong>ResEl</strong> is the association that manages the computer network in Télécom Bretagne dormitories.</p> This network connect the 600 rooms of the Brest campus with the 100 rooms of the Rennes campus."
 
 #: pages/templates/pages/home/home.html:52
 msgid "Les services du ResEl"
@@ -845,7 +849,9 @@ msgid ""
 "                        Veuillez vous connecter sur le réseau Wifi \"ResEl "
 "Secure\".\n"
 "                    "
-msgstr "Even though your device has been registered, it is still in Registration sub network. You seem to be connected in 'ResEl inscription' Wi-Fi hotspot. You cannot access the Internet using that hotspot.<br> Please connect to 'ResEl Secure' Wi-Fi hotspot."
+msgstr ""
+"\n"
+"Even though your device has been registered, it is still in Registration sub network. You seem to be connected in 'ResEl inscription' Wi-Fi hotspot. You cannot access the Internet using that hotspot.<br> Please connect to 'ResEl Secure' Wi-Fi hotspot."
 
 #: pages/templates/pages/inscription_zone_info.html:17
 msgid ""
@@ -857,7 +863,9 @@ msgid ""
 "                        déconnecter du réseau Wifi puis vous y reconnecter "
 "(sur le réseau Wifi \"ResEl Secure\").\n"
 "                    "
-msgstr "Even though your device has been registered, it is still in Registration sub network. If you've just registered your device, unplug/replug your Ethernet cable or disconnect Wi-Fi and reconnect to 'ResEl Secure' hotspot."
+msgstr ""
+"\n"
+"Even though your device has been registered, it is still in Registration sub network. If you've just registered your device, unplug/replug your Ethernet cable or disconnect Wi-Fi and reconnect to 'ResEl Secure' hotspot."
 
 #: pages/templates/pages/inscription_zone_info.html:25
 #: pages/templates/pages/inscription_zone_info.html:32
@@ -872,7 +880,9 @@ msgid ""
 "                    Avant d'avoir internet, passez sur notre site pour "
 "inscrire votre machine à votre compte sur notre réseau.\n"
 "                "
-msgstr "Your device is currently connected to Registration sub network. This network does not have access to the Internet. Register your device to get Internet."
+msgstr ""
+"\n"
+"Your device is currently connected to Registration sub network. This network does not have access to the Internet. Register your device to get Internet."
 
 #: pages/templates/pages/inscription_zone_info.html:30
 #: pages/templates/pages/inscription_zone_info.html:37
@@ -887,7 +897,9 @@ msgid ""
 "                    Avant d'avoir internet, passez sur notre site pour vous "
 "inscrire à notre association.\n"
 "                "
-msgstr "Your device is currently connected to Registration sub network. This network does not have access to the Internet. Sign up for a ResEl account to get Internet."
+msgstr ""
+"\n"
+"Your device is currently connected to Registration sub network. This network does not have access to the Internet. Sign up for a ResEl account to get Internet."
 
 #: pages/templates/pages/news.html:10
 msgid "Les dernières news"
@@ -1039,7 +1051,9 @@ msgstr "Monthly bill notification"
 msgid ""
 "Bonjour %s,\n"
 "\n"
-msgstr "Hello %s,"
+msgstr ""
+"Hello %s,\n"
+"\n"
 
 #: tresorerie/management/commands/check-payments.py:58 tresorerie/views.py:167
 msgid "Votre carte a expiré"
