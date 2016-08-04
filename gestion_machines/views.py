@@ -183,7 +183,7 @@ class Liste(ListView):
 
     def get_queryset(self):
         uid = str(self.request.user)
-        devices = LdapDevice.objects.search(owner='(&(uidproprio=uid=%(uid)s,%(dn_people)s))' % {'uid': uid, 'dn_people': settings.LDAP_DN_PEOPLE})
+        devices = LdapDevice.objects.filter(owner='(&(uidproprio=uid=%(uid)s,%(dn_people)s))' % {'uid': uid, 'dn_people': settings.LDAP_DN_PEOPLE})
 
         machines = []
         for device in devices:
