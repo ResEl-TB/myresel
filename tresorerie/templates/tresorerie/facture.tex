@@ -137,7 +137,7 @@
 
 %--------------------------------------------------- Beginning of template
 
-{\Huge\bf ResEl}\hfil{\Huge\bf Facture}
+{\Huge\bf ResEl}\hfil{\Huge\bf \ifthenelse{\equal{\confLang}{en}}{Invoice}{Facture}}
 \bigskip\break
 \hrule
 
@@ -181,7 +181,7 @@ France
 
 \end{invoiceTable}
 
-(TVA non applicable, art. 293 B du CGI )
+\ifthenelse{\equal{\confLang}{en}}{(VAT not applicable, article 293 B of the CGI)}{(TVA non applicable, art. 293 B du CGI)}
 \\ \\
 
 %----------------------------------------------------------------------------------------
