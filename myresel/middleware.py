@@ -48,7 +48,7 @@ class NetworkConfiguration(object):
         # If the device in `user` or `inscription` zone, we can retrieve its mac address
         if "user" in zone or "inscription" in zone:
             request.network_data['mac'] = network.get_mac(ip)
-            request.network_data['is_registered'] = ldap.get_status(ip)
+            request.network_data['is_registered'] = ldap.get_status(ip)  # TODO: possible bug
 
             if not request.network_data['mac']:
                 # Error ! couldn't get its mac address

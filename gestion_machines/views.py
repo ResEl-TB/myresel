@@ -168,8 +168,11 @@ class ChangementCampus(View):
         messages.info(request, _("Cette machine est déjà enregistrée comme étant dans le bon campus."))
         return HttpResponseRedirect(reverse('pages:news'))
 
+
 class Liste(ListView):
-    """ Vue appelée pour afficher la liste des machines d'un user """
+    """
+    View called to show user device list
+    """
 
     template_name = 'gestion_machines/liste.html'
     context_object_name = 'machines'
@@ -180,23 +183,16 @@ class Liste(ListView):
 
     def get_queryset(self):
         uid = str(self.request.user)
-        res = ldap.search(settings.LDAP_DN_MACHINES, '(&(uidproprio=uid=%(uid)s,%(dn_people)s))' % {'uid': uid, 'dn_people': settings.LDAP_DN_PEOPLE}, ['host', 'macaddress', 'zone', 'hostalias'])
-        machines = []
-        if res:
-            for machine in res:
-                statut = None
-                if 'inactive' in [z.lower() for z in machine.zone]:
-                    statut = 'inactive'
-                else:
-                    statut = 'active'
+        devices = LdapDevice.objects.search(owner='(&(uidproprio=uid=%(uid)s,%(dn_people)s))' % {'uid': uid, 'dn_people': settings.LDAP_DN_PEOPLE})
 
-                try:
-                    alias = machine.hostalias
-                except:
-                    alias = ''
-                    
-                machines.append({'host': machine.host[0], 'macaddress': machine.macaddress[0], 'statut': statut, 'alias': alias})
+        machines = []
+        for device in devices:
+            status = device.get_status()
+            alias = devices.aliases
+            machines.append(
+                {'host': device.hostname, 'macaddress': device.mac_address, 'statut': status, 'alias': alias})
         return machines
+
 
 class Modifier(View):
     """ Vue appelée pour modifier le nom et l'alias de sa machine """

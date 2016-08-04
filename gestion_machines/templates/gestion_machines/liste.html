@@ -4,46 +4,47 @@
 {% block titre %}{% trans "Mes machines" %}{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col-lg-12">
-            <h1 class="page-header">{% trans "Mes machines" %}</h1>
-            {% for m in machines %}
-                {% if forloop.first %}
-                <table class="table table-hover">
-                    <thead>
-                        <th><i class="fa fa-desktop" aria-hidden="true"></i> {% trans "Nom de la machine" %}</th>
-                        <th><i class="fa fa-clone" aria-hidden="true"></i> {% trans "Alias de la machine" %}</th>
-                        <th><i class="fa fa-server" aria-hidden="true"></i> {% trans "Adresse MAC" %}</th>
-                        <th><i class="fa fa-info" aria-hidden="true"></i> {% trans "Statut de la machine" %}</th>
-                    </thead>
-
-                    <tbody>
-                {% endif %}
-                        <tr style="cursor: pointer;" class="clickable" data-href="{% url 'gestion-machines:modifier' m.host %}">
-                            <td>{{ m.host|capfirst }}</td>
-                            <td>{{ m.alias|join:" - " }}</td>
-                            <td>{{ m.macaddress|upper }}</td>
-                            <td>{{ m.statut|capfirst }}</td>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">{% trans "Mes machines" %}</h1>
+                {% for m in machines %}
+                    {% if forloop.first %}
+                        <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th><i class="fa fa-desktop" aria-hidden="true"></i> {% trans "Nom de la machine" %}</th>
+                            <th><i class="fa fa-clone" aria-hidden="true"></i> {% trans "Alias de la machine" %}</th>
+                            <th><i class="fa fa-server" aria-hidden="true"></i> {% trans "Adresse MAC" %}</th>
+                            <th><i class="fa fa-info" aria-hidden="true"></i> {% trans "Statut de la machine" %}</th>
                         </tr>
+                        </thead>
+                        <tbody>
+                    {% endif %}
+                <tr style="cursor: pointer;" class="clickable" data-href="{% url 'gestion-machines:modifier' m.host %}">
+                    <td>{{ m.host|capfirst }}</td>
+                    <td>{{ m.alias|join:" - " }}</td>
+                    <td>{{ m.macaddress|upper }}</td>
+                    <td>{{ m.statut|capfirst }}</td>
+                </tr>
                 {% if forloop.last %}
                     </tbody>
-                </table>
+                    </table>
                 {% endif %}
-            {% empty %}
-            <p>{% blocktrans %}Nous n'avons trouvé aucune machine enregistrée à votre nom.{% endblocktrans %}</p>
-            {% endfor %}
-        </div> <!-- /.col-lg-12 -->
-    </div> <!-- /.row -->
-</div> <!-- /.container -->
+                {% empty %}
+                    <p>{% blocktrans %}Vous n'avez enregistré aucune machine à votre nom.{% endblocktrans %}</p>
+                {% endfor %}
+            </div> <!-- /.col-lg-12 -->
+        </div> <!-- /.row -->
+    </div> <!-- /.container -->
 {% endblock %}
 
 {% block javascript %}
-<script>
-    jQuery(document).ready(function($) {
-        $(".clickable").click(function() {
-            window.document.location = $(this).data("href");
+    <script>
+        jQuery(document).ready(function($) {
+            $(".clickable").click(function() {
+                window.document.location = $(this).data("href");
+            });
         });
-    });
-</script>
+    </script>
 {% endblock %}
