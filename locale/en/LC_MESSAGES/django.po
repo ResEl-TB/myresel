@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-04 10:55+0200\n"
+"POT-Creation-Date: 2016-08-05 00:39+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,7 +26,9 @@ msgstr "You must be on ResEl network to access that page."
 msgid ""
 "Votre machine est déjà connue par notre réseau. Par conséquent, vous n'avez "
 "pas besoin d'accéder à cette page."
-msgstr "Your device is already registered, therefore you do not need to access this page."
+msgstr ""
+"Your device is already registered, therefore you do not need to access this "
+"page."
 
 #: fonctions/decorators.py:90
 msgid "Vous avez déjà payé votre cotisation."
@@ -36,7 +38,9 @@ msgstr "You have already paid."
 msgid ""
 "Votre machine est déjà inscrite. Veuillez vous connecter sur le réseau Wi-Fi "
 "ResEl Secure."
-msgstr "Your device is already registered. Please connect to ResEl Secure Wi-Fi network."
+msgstr ""
+"Your device is already registered. Please connect to ResEl Secure Wi-Fi "
+"network."
 
 #: gestion_machines/forms.py:17 gestion_machines/forms.py:77
 #: gestion_machines/templates/gestion_machines/liste.html:17
@@ -105,7 +109,10 @@ msgid ""
 "avoir accès à Internet. Vous pouvez choisir de lui attribuer un alias (en "
 "plus de son nom), ou simplement conserver celui qui vous a été attribué "
 "automatiquement."
-msgstr "Your device is new on our network. You must register it to browse the Internet. You can choose a custom name for your device or keep the automatically generated one."
+msgstr ""
+"Your device is new on our network. You must register it to browse the "
+"Internet. You can choose a custom name for your device or keep the "
+"automatically generated one."
 
 #: gestion_machines/templates/gestion_machines/add_device.html:23
 msgid "Inscrire ma machine"
@@ -163,7 +170,9 @@ msgid ""
 "Votre machine a été détectée comme provenant d'un campus différent de celui-"
 "ci. Sa localisation a été mise à jour automatiquement, mais vous devez ré-"
 "initialiser votre connexion."
-msgstr "We detected that your device is from a different campus. Its location has been updated automatically, however you must reset your connection."
+msgstr ""
+"We detected that your device is from a different campus. Its location has "
+"been updated automatically, however you must reset your connection."
 
 #: gestion_machines/templates/gestion_machines/liste.html:4
 #: gestion_machines/templates/gestion_machines/liste.html:10
@@ -207,13 +216,18 @@ msgid ""
 "Votre machine était désactivée. Nous l'avons ré-activée automatiquement. "
 "Veuillez relancer votre connexion en débranchant/re-branchant le câble "
 "ethernet ou en vous déconnectant/re-connectant au Wi-Fi."
-msgstr "Your device had been deactivated. We have reactivated it automatically. Please reset your connection by unplugging/plugging your Ethernet cable or disconnect/reconnect to the Wi-Fi network."
+msgstr ""
+"Your device had been deactivated. We have reactivated it automatically. "
+"Please reset your connection by unplugging/plugging your Ethernet cable or "
+"disconnect/reconnect to the Wi-Fi network."
 
 #: gestion_machines/views.py:37
 msgid ""
 "Cette machine ne semble pas vous appartenir. Veuillez contacter un "
 "administrateur afin de la transférer."
-msgstr "This device doesn't seem to belong to you. Please contact an admin to make it over."
+msgstr ""
+"This device doesn't seem to belong to you. Please contact an admin to make "
+"it over."
 
 #: gestion_machines/views.py:43
 msgid "Votre machine n'a pas besoin d'être ré-activée."
@@ -224,7 +238,10 @@ msgid ""
 "Votre machine a bien été ajoutée. Veuillez ré-initialiser votre connexion en "
 "débranchant/rebranchant le câble ou en vous déconnectant/reconnectant au Wi-"
 "Fi ResEl Secure."
-msgstr "Your device has been registerd successfully. Please reset your connection by unplugging/plugging your Ethernet cable or disconnect/reconnect to the Wi-Fi network."
+msgstr ""
+"Your device has been registerd successfully. Please reset your connection by "
+"unplugging/plugging your Ethernet cable or disconnect/reconnect to the Wi-Fi "
+"network."
 
 #: gestion_machines/views.py:144
 msgid ""
@@ -382,7 +399,9 @@ msgstr "ResEl Rules of Procedure"
 msgid ""
 "Afin de faire partie de l'association du ResEl vous devez lire attentivement "
 "son règlement intérieur et l'accepter."
-msgstr "To join the ResEl Association you must carefully read Rules of Procedure and accept them."
+msgstr ""
+"To join the ResEl Association you must carefully read Rules of Procedure and "
+"accept them."
 
 #: gestion_personnes/templates/gestion_personnes/cgu.html:20
 msgid "Veuillez également lire attentivement"
@@ -442,7 +461,9 @@ msgstr "it will be required to log in to all ResEl services"
 msgid ""
 "Afin de finaliser votre inscription et profiter de tous les services du "
 "ResEl vous devez vous acquitter de la cotisation annuelle à l'association."
-msgstr "To complete your registration and enjoy all ResEl services you will have to pay the fee"
+msgstr ""
+"To complete your registration and enjoy all ResEl services you will have to "
+"pay the fee"
 
 #: gestion_personnes/templates/gestion_personnes/finalize_signup.html:28
 msgid "Revenir à l'accueil"
@@ -462,7 +483,8 @@ msgstr "Subscription to ResEl"
 msgid ""
 "Vous êtes sur le point de créer un compte ResEl, si vous en possédez déjà un "
 "veuillez vous"
-msgstr "You are about to create a ResEl account, if you already have one please"
+msgstr ""
+"You are about to create a ResEl account, if you already have one please"
 
 #: gestion_personnes/templates/gestion_personnes/inscription.html:14
 msgid "connecter"
@@ -555,7 +577,9 @@ msgid ""
 "        "
 msgstr ""
 "\n"
-"<p>You are about to change your ResEl password.</p> As it is also used for Wi-Fi connection, you will have to change your Wi-Fi configuration to take change into account"
+"<p>You are about to change your ResEl password.</p> As it is also used for "
+"Wi-Fi connection, you will have to change your Wi-Fi configuration to take "
+"change into account"
 
 #: gestion_personnes/templates/gestion_personnes/mod-passwd.html:19
 msgid "Veuillez renseigner votre nouveau mot de passe :"
@@ -569,7 +593,8 @@ msgstr "Change my password"
 msgid ""
 "Une erreur s'est produite lors de la création de vos identifiants. Veuillez "
 "contacter un administeur."
-msgstr "An error occured while creating login credentials. Please contact an admin."
+msgstr ""
+"An error occured while creating login credentials. Please contact an admin."
 
 #: gestion_personnes/views.py:150
 msgid "Votre mot de passe a été modifié"
@@ -585,25 +610,33 @@ msgstr "Unable to detect yout MAC address, please contact an admin."
 msgid ""
 "Vous vous trouvez sur un réseau d'inscription mais ne possédez pas d'IP dans "
 "ce réseau. Veuillez contacter un administrateur."
-msgstr "You are in the registration sub network but you don't have an IP address in this network. Please contact an admin."
+msgstr ""
+"You are in the registration sub network but you don't have an IP address in "
+"this network. Please contact an admin."
 
 #: myresel/middleware.py:113
 msgid ""
 "Vous êtes correctement inscrit, mais vous êtes sur le mauvais réseau. "
 "Veuillez vous connecter sur le réseau Wifi 'ResEl Secure'"
-msgstr "You have successfully registerd, but you are in the wrong sub network. Please connect to 'ResEl Secure' Wi-Fi hotspot."
+msgstr ""
+"You have successfully registerd, but you are in the wrong sub network. "
+"Please connect to 'ResEl Secure' Wi-Fi hotspot."
 
 #: myresel/middleware.py:125
 msgid ""
 "Une erreur s'est glissée dans le traitement de votre requête. Si le problème "
 "persiste, contactez un administrateur."
-msgstr "An error occured while processing your request. If you still encounter this problem, please contact an admin."
+msgstr ""
+"An error occured while processing your request. If you still encounter this "
+"problem, please contact an admin."
 
 #: myresel/middleware.py:134
 msgid ""
 "Votre inscription n'est pas finie. Veuillez vous déconnecter puis vous "
 "reconnecter sur le réseau Wifi 'ResEl Secure'"
-msgstr "Your registration is not complete. Please disconnect and reconnect to 'ResEl Secure' Wi-Fi hotspot."
+msgstr ""
+"Your registration is not complete. Please disconnect and reconnect to 'ResEl "
+"Secure' Wi-Fi hotspot."
 
 #: myresel/settings.py:103
 msgid "Français"
@@ -656,7 +689,9 @@ msgstr "Looking for Internet access? So are we…"
 #: pages/templates/pages/home/home.html:38
 msgid ""
 "Le ResEl : l'association qui gère le réseau sur le campus de Télécom Bretagne"
-msgstr "ResEl: the association that manages the Internet network on Télécom Bretagne campus"
+msgstr ""
+"ResEl: the association that manages the Internet network on Télécom Bretagne "
+"campus"
 
 #: pages/templates/pages/home/home.html:40
 msgid ""
@@ -673,7 +708,9 @@ msgid ""
 "                        "
 msgstr ""
 "\n"
-"<p>The <strong>ResEl</strong> is the association that manages the computer network in Télécom Bretagne dormitories.</p> This network connect the 600 rooms of the Brest campus with the 100 rooms of the Rennes campus."
+"<p>The <strong>ResEl</strong> is the association that manages the computer "
+"network in Télécom Bretagne dormitories.</p> This network connect the 600 "
+"rooms of the Brest campus with the 100 rooms of the Rennes campus."
 
 #: pages/templates/pages/home/home.html:52
 msgid "Les services du ResEl"
@@ -732,6 +769,10 @@ msgstr "Shhhh..."
 msgid "Et plein d'autres services"
 msgstr "And more"
 
+#: pages/templates/pages/home/home.html:115
+msgid "Les dernières nouvelles"
+msgstr "Last news"
+
 #: pages/templates/pages/home/home.html:122 pages/templates/pages/news.html:17
 msgid "Pas de news à l'horizon"
 msgstr "No fresh news in sight"
@@ -744,7 +785,8 @@ msgstr "New on campus?"
 msgid ""
 "En vous inscrivant au ResEl vous pourrez dès à présent vous connecter à "
 "internet et utiliser les services du ResEl."
-msgstr "By registering you will get an access to the Internet and ResEl services."
+msgstr ""
+"By registering you will get an access to the Internet and ResEl services."
 
 #: pages/templates/pages/home/home_int.html:15
 msgid "Déjà inscrit au ResEl ?"
@@ -807,7 +849,8 @@ msgstr "Device not registered"
 msgid ""
 "Afin de pouvoir bénéficier des services du Resel, vous devez enregistrer "
 "votre machine sur le réseau."
-msgstr "To get ResEl services on your device you must register it on the network"
+msgstr ""
+"To get ResEl services on your device you must register it on the network"
 
 #: pages/templates/pages/home/home_logged.html:42
 msgid "Enregistrer"
@@ -851,7 +894,10 @@ msgid ""
 "                    "
 msgstr ""
 "\n"
-"Even though your device has been registered, it is still in Registration sub network. You seem to be connected in 'ResEl inscription' Wi-Fi hotspot. You cannot access the Internet using that hotspot.<br> Please connect to 'ResEl Secure' Wi-Fi hotspot."
+"Even though your device has been registered, it is still in Registration sub "
+"network. You seem to be connected in 'ResEl inscription' Wi-Fi hotspot. You "
+"cannot access the Internet using that hotspot.<br> Please connect to 'ResEl "
+"Secure' Wi-Fi hotspot."
 
 #: pages/templates/pages/inscription_zone_info.html:17
 msgid ""
@@ -865,7 +911,9 @@ msgid ""
 "                    "
 msgstr ""
 "\n"
-"Even though your device has been registered, it is still in Registration sub network. If you've just registered your device, unplug/replug your Ethernet cable or disconnect Wi-Fi and reconnect to 'ResEl Secure' hotspot."
+"Even though your device has been registered, it is still in Registration sub "
+"network. If you've just registered your device, unplug/replug your Ethernet "
+"cable or disconnect Wi-Fi and reconnect to 'ResEl Secure' hotspot."
 
 #: pages/templates/pages/inscription_zone_info.html:25
 #: pages/templates/pages/inscription_zone_info.html:32
@@ -882,7 +930,8 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Your device is currently connected to Registration sub network. This network does not have access to the Internet. Register your device to get Internet."
+"Your device is currently connected to Registration sub network. This network "
+"does not have access to the Internet. Register your device to get Internet."
 
 #: pages/templates/pages/inscription_zone_info.html:30
 #: pages/templates/pages/inscription_zone_info.html:37
@@ -899,7 +948,9 @@ msgid ""
 "                "
 msgstr ""
 "\n"
-"Your device is currently connected to Registration sub network. This network does not have access to the Internet. Sign up for a ResEl account to get Internet."
+"Your device is currently connected to Registration sub network. This network "
+"does not have access to the Internet. Sign up for a ResEl account to get "
+"Internet."
 
 #: pages/templates/pages/news.html:10
 msgid "Les dernières news"
@@ -909,7 +960,8 @@ msgstr ""
 msgid ""
 "Votre demande a bien été envoyée aux administrateurs. L'un d'eux vous "
 "répondra d'ici peu."
-msgstr "Your request has been sent to ResEl staff. An admin will answer you soon."
+msgstr ""
+"Your request has been sent to ResEl staff. An admin will answer you soon."
 
 #: templates/400.html:5 templates/400.html:11
 msgid "Erreur de syntaxe"
@@ -986,6 +1038,11 @@ msgstr "Success"
 #: templates/base.html:132
 msgid "Info"
 msgstr "Info"
+
+#: templates/base.html:150
+msgid ""
+"L'Association ResEl - http://resel.fr - 2003-2016 - Tous droits réservés"
+msgstr "ResEl Association - http://resel.fr - 2003-2016 - All rights reserved""
 
 #: templates/registration/login.html:8
 msgid "Veuillez vous connecter"
@@ -1125,17 +1182,15 @@ msgid ""
 msgstr ""
 "\n"
 "            <div class=\"alert alert-info\">\n"
-"                <p>To access the Internet, you must "
-"pay fees that will depend on the length of your stay at "
-"the campus.</p>\n"
+"                <p>To access the Internet, you must pay fees that will "
+"depend on the length of your stay at the campus.</p>\n"
 "                <p>There are two fees:\n"
 "                    <ul>\n"
 "                        <li> A 1 euro fee to pay your subscription to the "
-"association (required to use our services "
-"and the Internet access)</li>\n"
-"                        <li> A variable fee that depends on your training and "
-"the length of your stay at the campus, that amount is to pay for "
-"the Internet access</li>\n"
+"association (required to use our services and the Internet access)</li>\n"
+"                        <li> A variable fee that depends on your training "
+"and the length of your stay at the campus, that amount is to pay for the "
+"Internet access</li>\n"
 "                    </ul>\n"
 "                </p>\n"
 "            </div>\n"

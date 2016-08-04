@@ -112,7 +112,7 @@
 
     <div class="home-fragment home-blog">
         <div class="container">
-            <h2>Les dernières nouvelles</h2>
+            <h2>{% trans "Les dernières nouvelles" %}</h2>
             {% for pieceofnews in news %}
                 {% if forloop.first %}<div class="panel panel-info">{% endif %}
             <div class="panel-heading"><h3 class="panel-title">{{ pieceofnews.titre }}</h3></div>
