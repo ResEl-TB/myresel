@@ -41,7 +41,7 @@ class NetworkConfiguration(object):
         request.network_data['host'] = request.META['HTTP_HOST']
         request.network_data['zone'] = zone
         request.network_data['mac'] = None
-        request.network_data['is_registered'] = 'Unknown'
+        request.network_data['is_registered'] = 'unknown'
         request.network_data['is_logged_in'] = request.user.is_authenticated()
         request.network_data['is_resel'] = network.is_resel_ip(ip)
 
@@ -54,7 +54,7 @@ class NetworkConfiguration(object):
                 # Error ! couldn't get its mac address
                 return HttpResponseBadRequest(_("Impossible de détecter votre adresse mac, veuillez contacter un administrateur ResEl."))
 
-        if request.network_data['is_registered'] != 'Unknown':
+        if request.network_data['is_registered'] != 'unknown':
             end_ip = ".".join(ip.split(".")[-2:])
             current_device = LdapDevice.objects.get(ip=end_ip)
             request.network_data['device'] = current_device
