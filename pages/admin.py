@@ -5,7 +5,10 @@ from pages.models import News
 
 
 class NewsAdmin(TranslationAdmin):
-    pass
 
+    def save_model(self, request, obj, form, change):
+        if getattr(obj, 'author', None) is None:
+            obj.author = request.user
+        obj.save()
 
 admin.site.register(News, NewsAdmin)
