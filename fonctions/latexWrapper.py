@@ -25,6 +25,7 @@ def generate_pdf(template_path, template_variable, dest_name, dest_folder):
     call(['pdflatex', '-interaction=batchmode', texfilename])
 
     # Make pdf permanent
+    # TODO : improve handle errors !
     copyfile(texfilename + '.pdf', os.path.join(dest_folder, dest_name + '.pdf'))
 
     # Cleanup
