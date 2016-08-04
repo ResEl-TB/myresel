@@ -143,6 +143,15 @@ class Home(View):
             # Updating the LDAP to set the correct limit for the Internet Access
             ldap.cotisation(user=str(request.user), duree=days)
 
+            # Generate invoice
+            #generate_pdf('tresorerie/facture.tex', {'confLang': 'fr', 'user': {'uid': 'tjacquin', 'firstName':'Théo', 'lastName': 'Jacquin', 'addressFirstPart': '3 rue Coquelicot', 'addressSecondPart': '97345 Guyane'}, 'invoice': {'id': 1234567, 'date':'\\today', 'internetFeesPrice': '84.5', 'isPaid':'yes', 'payment': {'date':'\\today', 'info': 'Carte Bleue, virement n 3456765432'}}}, 'test_facture', '/srv/www/resel.fr/media/invoices')
+
+            # Save it in DB
+            # TODO
+
+            # Send it by email
+            # TODO
+
             messages.success(request, _("Votre accès a bien été réglé"))
             return HttpResponseRedirect(reverse('home'))
 
