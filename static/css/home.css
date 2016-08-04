@@ -151,7 +151,7 @@ h3 .service-title {
     color: #122a3c;
 }
 
-#bigheart {
+#bigheart:hover {
     transform: scale(2.0);
 }
 
