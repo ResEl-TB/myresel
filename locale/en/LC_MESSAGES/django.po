@@ -1052,7 +1052,8 @@ msgid ""
 "Bonjour %s,\n"
 "\n"
 msgstr ""
-"Hello %s,"
+"Hello %s,\n"
+"\n"
 
 #: tresorerie/management/commands/check-payments.py:58 tresorerie/views.py:167
 msgid "Votre carte a expiré"
