@@ -9,7 +9,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%
-% TO EDIT THE TEMPLATE, GO TO LINE ~136
+% TO EDIT THE TEMPLATE, GO TO LINE ~138
 % Variables :
 % - confLang : 'en' or 'fr'
 % - user : object that contains
@@ -17,7 +17,7 @@
 %   - firstName 
 %   - lastName
 %   - addressFirstPart
-%   - addressLastPart
+%   - addressSecondPart
 % - invoice : object that contains
 %   - id
 %   - date : generation date, should be `today`
@@ -55,6 +55,7 @@
 \setlength{\doublerulesep}{\arrayrulewidth} % Double rules look like one thick one
 
 \def\confLang{% templatetag openbrace %}{{ confLang }}{% templatetag closebrace %}
+
 %--------------------------------------------------- Invoice command & env definitions
 % Command for setting a default hourly rate
 \newcommand{\hourlyrate}[1]{\def \@hourlyrate {#1}}
@@ -168,7 +169,7 @@ France
 
 \feetype{Internet}
 %title, unit quantity, unit rate, and unit name
-\unitrow{\ifthenelse{\equal{\confLang}{en}}{Access fees to Internet for one year}{Frais d'accès à internet pour 1 an}}{1}{ {{ invoice.internetFeesPrice }} }{}
+\unitrow{\ifthenelse{\equal{\confLang}{en}}{Access fees to Internet for one year}{Frais d'accès à internet pour 1 an}}{1}{% templatetag openbrace %}{{ invoice.internetFeesPrice }}{% templatetag closebrace %}{}
 
 %------------------------------------------------
 
