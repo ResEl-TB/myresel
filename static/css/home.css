@@ -150,3 +150,20 @@ h3 .service-title {
     background: #ACF0F2;
     color: #122a3c;
 }
+
+#bigheart {
+    transform: scale(2.0);
+}
+
+#bigheart {
+    transform: scale(1);
+    margin-top: 80px;
+    display: inline-block;
+    border: 0;
+    position: relative;
+    z-index: 2;
+}
+
+#bigheart {
+    transition: all 1200ms cubic-bezier(0.165, 0.84, 0.44, 1);
+}
