@@ -1052,7 +1052,6 @@ msgid ""
 "Bonjour %s,\n"
 "\n"
 msgstr ""
-"\n"
 "Hello %s,"
 
 #: tresorerie/management/commands/check-payments.py:58 tresorerie/views.py:167
