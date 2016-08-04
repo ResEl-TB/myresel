@@ -11,5 +11,5 @@ class LdapDeviceAdmin(admin.ModelAdmin):
         'owner',
         'zones',
     )
-    list_filter = ['zone']
+    list_filter = ['zones']
 
