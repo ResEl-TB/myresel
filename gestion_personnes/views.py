@@ -84,7 +84,7 @@ class InscriptionCGU(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             user = LdapUser.from_JSON(self.request.session['logup_user'])
-            # user.save() # TODO: debug
+            user.save()
 
             # Subscribe to campus@resel.fr
             campus_email = EmailMessage(
