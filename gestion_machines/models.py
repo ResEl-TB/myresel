@@ -55,6 +55,9 @@ class LdapDevice(ldapdb.models.Model):
         for i in range(len(self.zones)):
             if self.zones[i] in self.CAMPUS:
                 self.zones[i] = campus
+                break
+        else:
+            self.zones.append(campus)
 
     def get_campus(self):
         for zone in self.zones:
@@ -69,8 +72,8 @@ class LdapDevice(ldapdb.models.Model):
         :param campus:
         :return:
         """
-        self.zones = ['User']
         self.set_campus(campus)
+        self.zones = ['User']
         self.last_date = time.strftime('%Y%m%d%H%M%S') + 'Z'
 
     def add_alias(self, alias):
