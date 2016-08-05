@@ -7,6 +7,8 @@ from __future__ import unicode_literals
 import ldap
 import django
 
+from ldapdb.backends.ldap.validation import DatabaseValidation
+
 if django.VERSION < (1, 8):
     from django.db.backends import (BaseDatabaseFeatures, BaseDatabaseOperations,
                                     BaseDatabaseWrapper)
@@ -180,6 +182,7 @@ class DatabaseWrapper(BaseDatabaseWrapper):
         self.ops = DatabaseOperations(self)
         self.settings_dict['SUPPORTS_TRANSACTIONS'] = True
         self.autocommit = True
+        self.validation = DatabaseValidation(self)
 
     def close(self):
         if hasattr(self, 'validate_thread_sharing'):

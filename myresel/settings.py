@@ -195,7 +195,8 @@ DATABASES = {
         'PASSWORD': LDAP_PASSWD,
      },
 }
-# DATABASE_ROUTERS = ['ldapdb.router.Router']
+
+DATABASE_ROUTERS = ['ldapdb.router.Router']
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
