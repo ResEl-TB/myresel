@@ -78,6 +78,7 @@ apt-get -qq install texlive-latex-extra
 echo ">>> Installing other dependecies"
 apt-get -qq install libjpeg-dev
 apt-get -qq install libssl-dev
+apt-get -qq install gettext
 
 echo ">>> Installing Python requirements"
 pip3 install -r $ROOTDIR/requirements.txt
