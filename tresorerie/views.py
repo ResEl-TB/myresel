@@ -1,4 +1,4 @@
-import django_rq
+#import django_rq
 from django.shortcuts import render
 from django.views.generic import View, ListView
 from django.utils.decorators import method_decorator

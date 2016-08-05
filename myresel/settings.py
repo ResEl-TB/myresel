@@ -134,7 +134,7 @@ INSTALLED_APPS = [
     'tresorerie',
     'wiki',
     'pages',
-    'django_rq',
+#    'django_rq',
     'whoswho',
     'clubs',
 ]
@@ -258,10 +258,10 @@ PHONENUMBER_DEFAULT_REGION = "FR"
 
 # Redis conf
 
-RQ_QUEUES = {
-    'default': {
-        'HOST': REDIS_HOST,
-        'PORT': REDIS_PORT,
-        'DB': REDIS_DB,
-    },
-}
+#RQ_QUEUES = {
+#    'default': {
+#        'HOST': REDIS_HOST,
+#        'PORT': REDIS_PORT,
+#        'DB': REDIS_DB,
+#    },
+#}

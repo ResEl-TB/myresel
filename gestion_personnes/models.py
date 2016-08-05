@@ -14,7 +14,7 @@ class LdapUser(ldapdb.models.Model):
     """
 
     base_dn = LDAP_DN_PEOPLE
-    object_classes = ['genericPerson', 'enstbPerson', 'reselPerson']
+    object_classes = ['genericPerson', 'enstbPerson', 'reselPerson', 'maiselPerson']  # TODO: factorize that, and before people come back !
 
     # genericPerson attributes
     uid = CharField(db_column='uid', max_length=12, primary_key=True)
@@ -34,7 +34,7 @@ class LdapUser(ldapdb.models.Model):
     # reselPerson attributes
     dateInscr = CharField(db_column='dateInscr')
     cotiz = CharField(db_column='cotiz')
-    endCotiz = CharField(db_column='endCotiz')
+    endCotiz = CharField(db_column='endInternet')
     campus = CharField(db_column='campus')
     batiment = CharField(db_column='batiment')
     roomNumber = CharField(db_column='roomNumber')

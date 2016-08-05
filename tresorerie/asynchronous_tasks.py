@@ -1,10 +1,10 @@
 from django.conf import settings
 from django.utils import timezone
-from django_rq import job
+#from django_rq import job
 
 from fonctions.latexWrapper import generate_pdf 
 
-@job
+#@job
 def generate_and_email_invoice(user, invoice, lang='fr'):
     
     # Formatting address
@@ -16,13 +16,13 @@ def generate_and_email_invoice(user, invoice, lang='fr'):
 
     # Args for compilation
     generation_args = {
-        'confLang': lang 
+        'confLang': lang, 
         'user': {
             'uid': user.uid,
             'firstName': user.firstname,
             'lastName': user.lastname,
-            'addressFirstPart': ,
-            'addressSecondPart': 
+            'addressFirstPart': "",
+            'addressSecondPart': "",
         },
         'invoice': {
             'id': invoice.pk,
@@ -31,7 +31,7 @@ def generate_and_email_invoice(user, invoice, lang='fr'):
             'isPaid': 'yes',
             'payment': {
                 'date': invoice.date,
-                'info': invoice.moyen
+                'info': invoice.moyen,
             }
         }
     }
