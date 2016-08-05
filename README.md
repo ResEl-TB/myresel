@@ -18,10 +18,11 @@ Paquets à installer
 ### Paquets système :
 
 - python3
-- texlive-latex-extra (distribution latex)
+- texlive-latex-extra
+- redis-server
 
 ```
-apt install python3 texlive-latex-extra
+apt install python3 texlive-latex-extra redis-server
 ```
 
 ### Paquets python :

@@ -19,3 +19,10 @@ LDAP_DN_ADMIN = 'cn=admin,%s' % LDAP_DC
 DB_ADMIN_HOST = "maia.adm.resel.fr"
 DB_ADMIN_USER = "myresel"
 DB_ADMIN_PASSWORD = "blah"
+
+
+# REDIS
+
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+REDIS_DB = 0

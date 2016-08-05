@@ -130,6 +130,7 @@ INSTALLED_APPS = [
     'tresorerie',
     'wiki',
     'pages',
+    'django_rq',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -247,3 +248,14 @@ ADMIN_MEDIA_PREFIX = '/media/adm/'
 PHONENUMBER_DB_FORMAT = "E164"
 
 PHONENUMBER_DEFAULT_REGION = "FR"
+
+
+# Redis conf
+
+RQ_QUEUES = {
+    'default': {
+        'HOST': REDIS_HOST,
+        'PORT': REDIS_PORT,
+        'DB': REDIS_DB,
+    },
+}
