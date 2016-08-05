@@ -16,6 +16,10 @@ db.sqlite3_admin
 \#*\#
 .\#*
 .swp
+.idea
 
 # Settings file
 /myresel/credentials.py
+
+# Vagrant
+.vagrant
