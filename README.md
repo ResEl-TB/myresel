@@ -13,7 +13,7 @@ Install the dev environment :
 ````
 git clone ...
 cd myresel/
-cp myresel/credentials.py.tpl myresel/credentials.py
+cp myresel/settings_local.py.tpl myresel/settings_local.py
 vagrant up  # It might take a while, thanks to the LaTeX environment
 ````
 

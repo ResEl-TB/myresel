@@ -4,7 +4,7 @@ import ldapdb
 from django.db import models
 
 # Create your models here.
-from myresel.credentials import LDAP_DN_PEOPLE
+from myresel.settings import LDAP_DN_PEOPLE
 from ldapdb.models.fields import CharField, IntegerField, ListField
 
 

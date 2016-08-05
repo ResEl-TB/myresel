@@ -20,6 +20,7 @@ db.sqlite3_admin
 
 # Settings file
 /myresel/credentials.py
+/myresel/settings_local.py
 
 # Vagrant
 .vagrant

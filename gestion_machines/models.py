@@ -3,7 +3,7 @@ import time
 from ldapdb.models.fields import CharField, ListField
 
 from myresel import settings
-from myresel.credentials import LDAP_DN_MACHINES
+from myresel.settings import LDAP_DN_MACHINES
 
 
 class LdapDevice(ldapdb.models.Model):

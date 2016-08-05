@@ -8,16 +8,11 @@ import os
 
 from django.utils.translation import ugettext_lazy as _
 
-from myresel.credentials import *
+from myresel.settings_local import *
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '7_gz^zjk+lj+72utudq+l(xd-!@3xlo5c*20&dz$mdgn2p22g-'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
 # TODO: factorize this conf w/ vagrant conf
 DEBUG_SETTINGS = {
@@ -41,15 +36,6 @@ DEBUG_SETTINGS = {
 
 ALLOWED_HOSTS = ['beta.resel.fr', 'my.resel.fr', 'resel.fr']
 
-# SSL config
-
-# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTOCOL', 'https')
-
-# SESSION_COOKIE_SECURE = False
-
-# CSRF_COOKIE_SECURE = False 
-
-# SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 # Mails
 

@@ -15,7 +15,7 @@ class IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAResElAdmi
     def process_request(self, request):
         # Check if the user is a ResEl admin. If so, its credentials will be updated to superuser and staff
         if request.user.is_authenticated() and not (request.user.is_staff and request.user.is_superuser):
-            res = ldap.search(settings.LDAP_ADMIN, '(&(uid=%s))' % request.user.username)
+            res = ldap.search(settings.LDAP_DN_ADMIN, '(&(uid=%s))' % request.user.username)
             if res:
                 user = User.objects.get(username=request.user.username)
                 user.is_staff = 1
