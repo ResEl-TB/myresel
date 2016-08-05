@@ -148,16 +148,20 @@ class inscriptionNetworkHandler(object):
 
 class SimulateProductionNetwork(object):
 
-    def process_request(self, request):
+    @staticmethod
+    def process_request(request):
 
         if not settings.DEBUG:
             return
 
         host = request.META["HTTP_HOST"].split(":")[0]
 
-        client_fake_ip = settings.DEBUG_SETTINGS[host]['client_fake_ip']
-        client_fake_vlan = settings.DEBUG_SETTINGS[host]['vlan']
-
+        try:
+            client_fake_ip = settings.DEBUG_SETTINGS[host]['client_fake_ip']
+            client_fake_vlan = settings.DEBUG_SETTINGS[host]['vlan']
+        except KeyError:
+            client_fake_ip = '10.0.0.1'
+            client_fake_vlan = '994'
         request.META["REMOTE_ADDR"] = client_fake_ip
         request.META['VLAN'] = client_fake_vlan
 
