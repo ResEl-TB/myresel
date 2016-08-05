@@ -1,3 +1,4 @@
+import django_rq
 from django.shortcuts import render
 from django.views.generic import View, ListView
 from django.utils.decorators import method_decorator
@@ -6,13 +7,13 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.conf import settings
-
-# Pour la traduction - sert à marquer les chaînes de caractères à traduire
 from django.utils.translation import ugettext_lazy as _
 
-from .models import MonthlyPayment, Transaction
+import tresorerie.asynchronous_tasks as async_tasks
 from fonctions import ldap, generic
 from fonctions.decorators import resel_required, unknown_machine, need_to_pay
+from tresorerie.models import MonthlyPayment, Transaction
+
 
 class Home(View):
     """ Payment page """
@@ -61,7 +62,7 @@ class Home(View):
 
             # Membership payment
             if request.session['member'] == 'false':
-                Transaction.objects.create(
+                transaction = Transaction.objects.create(
                     utilisateur=request.user,
                     total=1,
                     commentaire=_("Adhésion à l'Association")
@@ -73,7 +74,7 @@ class Home(View):
                 # Single payment for 1 month
                 days = 30
 
-                Transaction.objects.create(
+                transaction = Transaction.objects.create(
                     utilisateur=request.user,
                     total=10,
                     commentaire=_("Accès Internet pour 1 mois")
@@ -96,7 +97,7 @@ class Home(View):
                     amount_to_pay=16.70
                 )
 
-                Transaction.objects.create(
+                transaction = Transaction.objects.create(
                     utilisateur=request.user,
                     total=16.70,
                     commentaire=comment
@@ -114,7 +115,7 @@ class Home(View):
                     amount_to_pay=28.40
                 )
 
-                Transaction.objects.create(
+                transaction = Transaction.objects.create(
                     utilisateur=request.user,
                     total=28.40,
                     commentaire=_("Accès Internet pour 1 an - 1ère mensualisation")
@@ -124,7 +125,7 @@ class Home(View):
                 # Single payment for 6 months
                 days = 6*30
 
-                Transaction.objects.create(
+                transaction = Transaction.objects.create(
                     utilisateur=request.user,
                     total=50,
                     commentaire=_("Accès Internet pour 6 mois")
@@ -134,7 +135,7 @@ class Home(View):
                 # Single payment for 1 year
                 days = 12*30
 
-                Transaction.objects.create(
+                transaction = Transaction.objects.create(
                     utilisateur=request.user,
                     total=85,
                     commentaire=_("Accès Internet pour 1 an")
@@ -143,14 +144,12 @@ class Home(View):
             # Updating the LDAP to set the correct limit for the Internet Access
             ldap.cotisation(user=str(request.user), duree=days)
 
-            # Generate invoice
-            #generate_pdf('tresorerie/facture.tex', {'confLang': 'fr', 'user': {'uid': 'tjacquin', 'firstName':'Théo', 'lastName': 'Jacquin', 'addressFirstPart': '3 rue Coquelicot', 'addressSecondPart': '97345 Guyane'}, 'invoice': {'id': 1234567, 'date':'\\today', 'internetFeesPrice': '84.5', 'isPaid':'yes', 'payment': {'date':'\\today', 'info': 'Carte Bleue, virement n 3456765432'}}}, 'test_facture', '/srv/www/resel.fr/media/invoices')
-
-            # Save it in DB
-            # TODO
-
-            # Send it by email
-            # TODO
+            # Asynchronously generate invoice and mail it to user & treasurer
+            queue = django_rq.get_queue()
+            queue.enqueue_call(
+                async_tasks.generate_and_email_invoice,
+                args=(request.user, transaction, 'fr'),
+            )
 
             messages.success(request, _("Votre accès a bien été réglé"))
             return HttpResponseRedirect(reverse('home'))
