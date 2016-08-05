@@ -23,6 +23,8 @@ apt-get -qq upgrade
 
 echo '>>> Installing : build-essential python-software-properties python3 python3-dev python3-pip'
 apt-get -qq install build-essential python-software-properties python3 python3-dev python3-pip vim
+easy_install3 -U pip  # Solve debian bug
+
 
 echo ">>> Installing mysql"
 echo "mysql-server mysql-server/root_password password $SQL_PASSWD" | debconf-set-selections
