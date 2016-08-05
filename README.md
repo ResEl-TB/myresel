@@ -2,8 +2,8 @@ my.resel.fr
 ===========
 
 
-Quick setup
--------------
+## Quick startup
+
 Install [Vagrant](https://www.vagrantup.com/)
 ```
 sudo apt install vagrant
@@ -20,60 +20,23 @@ vagrant up  # It might take a while, thanks to the LaTeX environment
 Launch the server :
 ````
 vagrant ssh
-cd /
+cd /myresel
+python3 makemigrations
+python3 migrate
 python3 runserver 0.0.0.0:8000
 ````
 
-Then launch your web browser to : `127.0.0.1:8000`
+Then launch your web browser to :
+`http://10.0.3.2:8000` to simulate the 994 VLAN (from the exterior)
+`http://10.0.3.3:8000` to simulate the 995 VLAN from the open Wi-Fi
+`http://10.0.3.4:8000` to simulate the 999 VLAN (with an unknown machine)
+`http://10.0.3.5:8000` to simulate the 994 VLAN (with a known machine)
 
-Done.
-
-
-If you don't like vagrant, follow the manual method :
-
-Environnement de travail
-------------------------
-
-Définir un environnement virtuel python, avec python3.
-
-```
-pip3 install virtualenv
-virtualenv -p python3 .
-source bin/activate
-```
+Your mac address will always be : "0a:00:27:00:00:10"
 
 
+## TODO
 
-Paquets à installer
--------------------
-
-### Paquets système :
-
-- python3
-- texlive-latex-extra
-- redis-server
-
-```
-apt install python3 texlive-latex-extra redis-server
-```
-
-### Paquets python :
-
-- django
-- stripe
-- ldap
-
-```
-pip3 -r requirements.txt
-```
-
-Mise en marche
---------------
-
-Faire un pull sur Skynet, et go sur https://my.resel.fr
-
-TODO
-====
 - paiement
 - gestion du compte MyResEl de l'utilisateur
 - [OK] page 400
