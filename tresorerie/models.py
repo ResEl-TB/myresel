@@ -21,11 +21,11 @@ class MonthlyPayment(models.Model):
         verbose_name = "paiement mensuel"
         verbose_name_plural = "paiements mensuels"
 
-    user = models.CharField(max_length = 50)
+    user = models.CharField(max_length=50)
     months_to_pay = models.IntegerField()
-    months_paid = models.IntegerField(default = 0)
+    months_paid = models.IntegerField(default=0)
     customer = models.CharField(max_length=50)
-    last_paid = models.DateField(default=timezone.now())
+    last_paid = models.DateField(default=timezone.now)
     amount_to_pay = models.FloatField()
 
     def __str__(self):
