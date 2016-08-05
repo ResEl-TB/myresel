@@ -48,7 +48,7 @@ class Home(View):
         args_for_response = {}
 
         # Load some news
-        news = News.objects.all()[:settings.NUMBER_NEWS_IN_HOME]
+        news = News.objects.order_by('-date').all()[:settings.NUMBER_NEWS_IN_HOME]
         args_for_response['news'] = news
 
         # Automatically active the computer if it is known
@@ -86,7 +86,7 @@ class NewsListe(ListView):
     context_object_name = 'derniers_billets'
 
     def get_queryset(self):
-        return News.objects.all()
+        return News.objects.ordery_by('-date').all()
 
 
 class Contact(View):
