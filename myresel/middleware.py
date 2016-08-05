@@ -56,7 +56,7 @@ class NetworkConfiguration(object):
 
         if request.network_data['is_registered'] != 'unknown':
             end_ip = ".".join(ip.split(".")[-2:])
-            current_device = LdapDevice.objects.get(ip=end_ip)
+            current_device = LdapDevice.objects.get(mac_address=request.network_data['mac'])
             request.network_data['device'] = current_device
 
 
