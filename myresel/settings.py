@@ -14,7 +14,7 @@ from myresel.credentials import *
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '6_gz^zjk+lj+72utudq+l(xd-!@3xlo5c*20&dz$mdgn2p22g-'
+SECRET_KEY = '7_gz^zjk+lj+72utudq+l(xd-!@3xlo5c*20&dz$mdgn2p22g-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -23,13 +23,13 @@ ALLOWED_HOSTS = ['beta.resel.fr', 'my.resel.fr', 'resel.fr']
 
 # SSL config
 
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTOCOL', 'https')
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTOCOL', 'https')
 
-SESSION_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = False
 
-CSRF_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = False 
 
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+# SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 # Mails
 
@@ -135,6 +135,8 @@ INSTALLED_APPS = [
     'wiki',
     'pages',
     'django_rq',
+    'whoswho',
+    'clubs',
 ]
 
 MIDDLEWARE_CLASSES = [
