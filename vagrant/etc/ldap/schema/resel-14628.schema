@@ -263,13 +263,6 @@ attributeType ( 1.3.6.1.4.1.14628.5.4 NAME 'mlCampus'
 # Attributs pour reselClub (deprecated - geekou 17/09/08) 
 #########################################################
 
-attributetype ( 1.3.6.1.4.1.14628.14.0 NAME 'visibility'
-        DESC 'Attribut permettant de définir une visibilité pour une OC'
-        EQUALITY caseIgnoreMatch
-        ORDERING caseIgnoreOrderingMatch
-        SUBSTR caseIgnoreSubstringsMatch
-        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 
-        SINGLE-VALUE )
 
 #
 # Attributs pour studentOrganisation/tbAsso/tbClub/tbCampagne
@@ -640,24 +633,6 @@ attributetype ( 1.3.6.1.4.1.14628.21.4 NAME 'channel'
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.36
         SINGLE-VALUE )
 
-# Attributs d'une Set Top Box (lboue - 27-08-10)
-########################
-attributetype ( 1.3.6.1.4.1.14628.22.1 NAME 'stbBrand'
-        DESC 'Marque de la STB'
-        EQUALITY numericStringMatch
-        ORDERING numericStringOrderingMatch
-        SUBSTR numericStringSubstringsMatch
-        SYNTAX 1.3.6.1.4.1.1466.115.121.1.36
-        SINGLE-VALUE )
-
-attributetype ( 1.3.6.1.4.1.14628.22.2 NAME 'stbType'
-        DESC 'Modele de STB'
-        EQUALITY numericStringMatch
-        ORDERING numericStringOrderingMatch
-        SUBSTR numericStringSubstringsMatch
-        SYNTAX 1.3.6.1.4.1.1466.115.121.1.36
-        SINGLE-VALUE )
-
 # Attributs de manipulation SNMP
 #################################
 
@@ -771,12 +746,6 @@ objectclass ( 1.3.6.1.4.1.14628.1.2 NAME 'maiselPerson' AUXILIARY
         MUST ( uid $ firstName $ lastName $ roomNumber $ batiment )
         MAY ( lastUpdate $ pabxId $ userPassword ) )
 
-##Club (deprecated - geekou 17/09/08)
-objectclass ( 1.3.6.1.4.1.14628.1.3 NAME 'reselClub'  STRUCTURAL
-	OBSOLETE
-        DESC 'Club ou association ENST Bretagne'
-        MUST ( cn )
-        MAY ( description $ batiment $ roomNumber $ telephoneNumber $ fax $ webPage $ mail $ visibility $ photoFile ) )
 
 ##Membres de l'AE
 objectclass ( 1.3.6.1.4.1.14628.1.23 NAME 'aePerson' AUXILIARY
@@ -900,10 +869,4 @@ objectclass ( 1.3.6.1.4.1.14628.1.21 NAME 'reselAP'  STRUCTURAL
         DESC 'Acces Point du ResEl'
         MUST ( cn $ machine $ channel )
         MAY ( switchType ) )
-
-# STB dans ou=stb,dc=resel...
-objectclass ( 1.3.6.1.4.1.14628.1.22 NAME 'reselSTB'  STRUCTURAL
-        DESC 'STB du ResEl'
-        MUST ( cn $ machine $ stbBrand )
-        MAY ( stbType ) )
 

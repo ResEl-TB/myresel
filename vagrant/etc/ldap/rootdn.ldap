@@ -1,3 +1,2 @@
 # Definition du hash SSHA du dn root et du mot de passe root du LDAP
 rootdn          "cn=admin,dc=maisel,dc=enst-bretagne,dc=fr"
-rootpw          "{SSHA}"
