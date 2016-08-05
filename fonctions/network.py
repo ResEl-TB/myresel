@@ -3,10 +3,15 @@ import os
 import re
 
 from fonctions.generic import is_ip_in_subnet
+from myresel import settings
+
 
 def get_mac(ip):
     """ Fonction qui récupère l'addresse MAC associée à l'IP de l'utilisateur """
 
+    if settings.DEBUG:
+        return "0a:00:27:00:00:10"
+    # TODO : move interfaces to configuration file
     if re.match(r'^172\.22\.22[4-5]', ip):
         eth = 'eth4'
     elif re.match(r'^172\.22\.22[6-7]', ip):

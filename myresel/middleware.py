@@ -35,12 +35,10 @@ class NetworkConfiguration(object):
         else:
             ip = request.META['REMOTE_ADDR']
         zone = network.get_network_zone(ip)
-
+        print(ip)
         request.network_data['ip'] = ip
-        # request.network_data['vlan'] = request.META['VLAN']
-        request.network_data['vlan'] = "999"
+        request.network_data['vlan'] = request.META['VLAN']
         request.network_data['host'] = request.META['HTTP_HOST']
-        # request.network_data['host'] = "127.0.0.1"
         request.network_data['zone'] = zone
         request.network_data['mac'] = None
         request.network_data['is_registered'] = 'unknown'
@@ -106,8 +104,8 @@ class inscriptionNetworkHandler(object):
                 return HttpResponseBadRequest(_("Vous vous trouvez sur un réseau d'inscription mais ne possédez pas d'IP dans ce réseau. Veuillez contacter un administrateur."))
 
             # Check origin:
-            if host not in settings.ALLOWED_HOSTS:
-                return HttpResponseRedirect(settings.INSCRIPTION_ZONE_FALLBACK_URL)  # Will bypass the normal view
+            # if host not in settings.ALLOWED_HOSTS:
+            #     return HttpResponseRedirect(settings.INSCRIPTION_ZONE_FALLBACK_URL)  # Will bypass the normal view
 
             else:
                 # Check if logged in & registered:
@@ -146,3 +144,20 @@ class inscriptionNetworkHandler(object):
                 # Other possiblities: Brest-inscription, Brest-other.
                 # Should never happen... but ?
                 pass
+
+
+class SimulateProductionNetwork(object):
+
+    def process_request(self, request):
+
+        if not settings.DEBUG:
+            return
+
+        host = request.META["HTTP_HOST"].split(":")[0]
+
+        client_fake_ip = settings.DEBUG_SETTINGS[host]['client_fake_ip']
+        client_fake_vlan = settings.DEBUG_SETTINGS[host]['vlan']
+
+        request.META["REMOTE_ADDR"] = client_fake_ip
+        request.META['VLAN'] = client_fake_vlan
+

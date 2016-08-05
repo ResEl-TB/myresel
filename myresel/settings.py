@@ -19,6 +19,26 @@ SECRET_KEY = '7_gz^zjk+lj+72utudq+l(xd-!@3xlo5c*20&dz$mdgn2p22g-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# TODO: factorize this conf w/ vagrant conf
+DEBUG_SETTINGS = {
+    '10.0.3.2': {  # VLAN 994 (exterior)
+        'vlan': '994',
+        'client_fake_ip': '10.0.0.1',
+    },
+    '10.0.3.3': {  # VLAN 995
+        'vlan': '995',
+        'client_fake_ip': '172.22.224.5'
+    },
+    '10.0.3.4': {  # VLAN 999 (unknown machine)
+        'vlan': '999',
+        'client_fake_ip': '172.22.226.2'
+    },
+    '10.0.3.5': {  # VLAN 999 (knwon machine)
+        'vlan': '999',
+        'client_fake_ip': '172.22.200.1'
+    },
+}
+
 ALLOWED_HOSTS = ['beta.resel.fr', 'my.resel.fr', 'resel.fr']
 
 # SSL config
@@ -149,6 +169,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    'myresel.middleware.SimulateProductionNetwork',
     'myresel.middleware.IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAResElAdminSoCheckTheLdapBeforeMiddleware',
     'myresel.middleware.NetworkConfiguration',
     'myresel.middleware.inscriptionNetworkHandler',
