@@ -117,7 +117,7 @@
                 {% if forloop.first %}<div class="panel panel-info">{% endif %}
             <div class="panel-heading"><h3 class="panel-title">{{ pieceofnews.title }}</h3></div>
             <div class="panel-body">{{ pieceofnews.content|safe }}</div>
-            <div class="panel-footer">{% blocktrans %}{{billet.author}}, le {{billet.date}}{% endblocktrans %}</div>
+            <div class="panel-footer">{% blocktrans with author=pieceofnews.author date=pieceofnews.date %}{{author}}, le {{date}}{% endblocktrans %}</div>
             {% if forloop.last %}</div>{% endif %}
             {% empty %}
                 <p>{% trans "Pas de news à l'horizon" %}</p>
