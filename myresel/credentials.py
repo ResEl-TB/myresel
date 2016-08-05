@@ -12,6 +12,7 @@ LDAP_DC = "dc=maisel,dc=enst-bretagne,dc=fr"
 LDAP_DN_PEOPLE = 'ou=people,%s' % LDAP_DC
 LDAP_DN_MACHINES = 'ou=machines,%s' % LDAP_DC
 LDAP_DN_ADMIN = 'cn=admin,%s' % LDAP_DC
+LDAP_ADMIN = 'cn=admin,%s' % LDAP_DC
 
 LDAP_ECOLE = "10.29.90.34"
 LDAP_ECOLE_DN = "ou=people,o=unix,dc=enst-bretagne,dc=fr"

@@ -9,8 +9,6 @@ LIBDIR=${ROOTDIR}vagrant/lib/
 
 # TODO: move that to python config
 LDAP_PASSWD=blah
-#LDAP_DOMAIN="maisel.enst-bretagne.fr"
-#LDAP_ORGANISATION="ou=people,dc=maisel,dc=enst-bretagne,dc=fr"
 
 SQL_HOST=localhost
 SQL_DBNAME=resel
@@ -19,7 +17,7 @@ SQL_PASSWD=blah
 
 export DEBIAN_FRONTEND=noninteractive
 
-echo '>>> apt-get update&upgrade'
+echo '>>> apt-get update & upgrade'
 apt-get -qq update
 apt-get -qq upgrade
 
@@ -34,8 +32,6 @@ apt-get -qq install libmysqlclient-dev
 
 echo -e ">>> Setting up MySQL"
 mysql -uroot -p${SQL_PASSWD} -e "CREATE DATABASE ${SQL_DBNAME}"
-#mysql -uroot -p${SQL_PASSWD} -e "CREATE USER 'root'@'localhost' IDENTIFIED BY '$SQL_PASSWD';"
-#mysql -uroot -p${SQL_PASSWD} -e "GRANT ALL PRIVILEGES ON * . * TO 'root'@'localhost';"
 mysql -uroot -p${SQL_PASSWD} -e "CREATE USER '$SQL_USER'@'localhost' IDENTIFIED BY '$SQL_PASSWD';"
 mysql -uroot -p${SQL_PASSWD} -e "GRANT ALL PRIVILEGES ON * . * TO '$SQL_USER'@'localhost';"
 
@@ -71,6 +67,11 @@ chown -R openldap:openldap /var/lib/ldap/
 
 service slapd start
 
+echo ">>> Installing redis"
+apt-get -qq install redis-server
+
+echo ">>> Installing LateX"
+apt-get -qq install texlive-latex-extra
 
 echo ">>> Installing other dependecies"
 apt-get -qq install libjpeg-dev

@@ -37,8 +37,10 @@ class NetworkConfiguration(object):
         zone = network.get_network_zone(ip)
 
         request.network_data['ip'] = ip
-        request.network_data['vlan'] = request.META['VLAN']
+        # request.network_data['vlan'] = request.META['VLAN']
+        request.network_data['vlan'] = "999"
         request.network_data['host'] = request.META['HTTP_HOST']
+        # request.network_data['host'] = "127.0.0.1"
         request.network_data['zone'] = zone
         request.network_data['mac'] = None
         request.network_data['is_registered'] = 'unknown'

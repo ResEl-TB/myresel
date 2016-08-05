@@ -1,6 +1,36 @@
 my.resel.fr
 ===========
 
+
+Quick setup
+-------------
+Install [Vagrant](https://www.vagrantup.com/)
+```
+sudo apt install vagrant
+```
+
+Install the dev environment :
+````
+git clone ...
+cd myresel/
+cp myresel/credentials.py.tpl myresel/credentials.py
+vagrant up  # It might take a while, thanks to the LaTeX environment
+````
+
+Launch the server :
+````
+vagrant ssh
+cd /
+python3 runserver 0.0.0.0:8000
+````
+
+Then launch your web browser to : `127.0.0.1:8000`
+
+Done.
+
+
+If you don't like vagrant, follow the manual method :
+
 Environnement de travail
 ------------------------
 
@@ -11,6 +41,8 @@ pip3 install virtualenv
 virtualenv -p python3 .
 source bin/activate
 ```
+
+
 
 Paquets à installer
 -------------------

@@ -12,7 +12,7 @@ def new_connection():
     :return:
     """
     return Connection(
-        Server(settings.LDAP_URL, use_ssl=True),
+        Server(settings.LDAP_URL, use_ssl=False),
         user=settings.LDAP_DN_ADMIN,
         password=settings.LDAP_PASSWD,
         auto_bind=True
