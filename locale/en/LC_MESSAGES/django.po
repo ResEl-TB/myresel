@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-05 00:39+0200\n"
+"POT-Creation-Date: 2016-08-05 05:21+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -596,7 +596,7 @@ msgid ""
 msgstr ""
 "An error occured while creating login credentials. Please contact an admin."
 
-#: gestion_personnes/views.py:150
+#: gestion_personnes/views.py:162
 msgid "Votre mot de passe a été modifié"
 msgstr "Your password has been modified."
 
@@ -773,7 +773,12 @@ msgstr "And more"
 msgid "Les dernières nouvelles"
 msgstr "Last news"
 
-#: pages/templates/pages/home/home.html:122 pages/templates/pages/news.html:17
+#: pages/templates/pages/home/home.html:120 pages/templates/pages/news.html:15
+#, python-format
+msgid "%(author)s, le %(date)s"
+msgstr "%(author)s, %(date)s"
+
+#: pages/templates/pages/home/home.html:123 pages/templates/pages/news.html:18
 msgid "Pas de news à l'horizon"
 msgstr "No fresh news in sight"
 
