@@ -24,17 +24,39 @@ class LdapDevice(ldapdb.models.Model):
     aliases = ListField(db_column='hostalias')
     last_date = CharField(db_column='lastdate', max_length=50)
 
+    @staticmethod
+    def _replace_or_add(field, value, old=None):
+        """
+        Simple method wrapper because ldapdb is caca
+        :param field:
+        :param value:
+        :return:
+        """
+        if len(field) == 0:
+            field = []
+        if old is None:
+            return LdapDevice._add(field, value)
+        else:
+            return [a for a in field if a != old] + [value]
+
+    @staticmethod
+    def _add(field, value):
+        if len(field) == 0:
+            field = []
+        return field + [value]
+
+    @staticmethod
+    def _delete(field, value):
+        return [a for a in field if a != value]
+
     def set_owner(self, owner_uid):
         self.owner = 'uid=%s,' % str(owner_uid) + settings.LDAP_DN_PEOPLE
 
     def add_zone(self, z):
-        if len(self.zones) == 0:
-            self.zones = [z]
-        else:
-            self.zones = [e for e in self.zones] + [z]
+        self.zones = self._add(self.zones, z)
 
     def replace_or_add_zone(self, old, new):
-        self.zones = [a for a in self.zones if a != old] + [new]
+        self.zones = self._replace_or_add(self.zones, new, old)
 
     def get_status(self):
         """
@@ -84,7 +106,7 @@ class LdapDevice(ldapdb.models.Model):
         self.last_date = time.strftime('%Y%m%d%H%M%S') + 'Z'
 
     def add_alias(self, alias):
-        self.aliases.append(alias)
+        self.aliases = self._add(self.aliases, alias)
 
     def remove_alias(self, alias):
-        self.aliases.remove(alias)
+        self.aliases = self._delete(self.aliases, alias)
