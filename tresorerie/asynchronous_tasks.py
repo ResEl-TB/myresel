@@ -2,11 +2,10 @@ from django.conf import settings
 from django.utils import timezone
 from django_rq import job
 
-import tresorerie.prices_table as pt
 from fonctions.latexWrapper import generate_pdf 
 
 #@job
-def generate_and_email_invoice(user, invoice, lang='fr'):
+def generate_and_email_invoice(user, price, invoice, lang='fr'):
     
     # Formatting address
     user_address_first = 'Bâtiment {}, Chambre {} - Maisel Télécom Bretagne'.format(user.batiment, user.roomNumber)
@@ -14,6 +13,30 @@ def generate_and_email_invoice(user, invoice, lang='fr'):
         user_address_second = '2, rue de la Châtaigneraie - 35576 - Cesson Sévigné'
     else: # If we don't know, we suppose it's Brest
         user_address_second = '655 avenue du Technopôle - 29280 - Plouzané'
+
+    invoice_categories = []
+
+    # Check if he paid the cotisation
+    if price in [1100, 1770, 2940, 5100, 8600]:
+        invoice_categories.append(
+            {
+                'name': _('Cotisation'),
+                'products': [[1, {'name': invoice.comment, 'price': invoice.total}],]
+            },
+        )
+
+    invoice_categories.append(
+        {
+            'name': _('Internet'),
+            'products': [[1, {'name': invoice.comment, 'price': invoice.total}],]
+        },
+    )
+
+    # TODO : add functionnality to invoice misc thing such as cable, router, etc...
+#    {
+#        'name': _('Divers'),
+#        'products': [[1, pt.ethernetCable3m], [1, pt.router],]
+#    },
 
     # Args for compilation
     generation_args = {
@@ -28,20 +51,7 @@ def generate_and_email_invoice(user, invoice, lang='fr'):
         'invoice': {
             'id': invoice.pk,
             'date': '\\today',
-            'categories': [
-                {
-                    'name': _('Cotisation'),
-                    'products': [[1, pt.cotisation],]
-                },
-                {
-                    'name': _('Internet'),
-                    'products': [[1, pt.accessFees],]
-                },
-                {
-                    'name': _('Divers'),
-                    'products': [[1, pt.ethernetCable3m], [1, pt.router],]
-                },
-            ],
+            'categories': invoice_categories,
             'payment': {
                 'isPaid': True,
                 'date': invoice.date,

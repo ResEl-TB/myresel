@@ -148,7 +148,7 @@ class Home(View):
             queue = django_rq.get_queue()
             queue.enqueue_call(
                 async_tasks.generate_and_email_invoice,
-                args=(request.user, transaction, 'fr'),
+                args=(request.user, price, transaction, 'fr'),
             )
 
             messages.success(request, _("Votre accès a bien été réglé"))
