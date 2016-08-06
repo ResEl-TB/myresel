@@ -129,7 +129,12 @@
                         </div>
                     {% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
                         <div class="panel panel-info">
-                            <div class="panel-heading"><h3 class="panel-title">{% trans "Info" %}</h3></div>
+                            <div class="panel-heading"><h3 class="panel-title">{% trans "Information" %}</h3></div>
+                            <div class="panel-body">{{ message }}</div>
+                        </div>
+                    {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+                        <div class="panel panel-warning">
+                            <div class="panel-heading"><h3 class="panel-title">{% trans "Attention" %}</h3></div>
                             <div class="panel-body">{{ message }}</div>
                         </div>
                     {% endif %}
