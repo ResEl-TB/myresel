@@ -123,7 +123,7 @@ LOCALE_PATHS = (
 # Application definition
 
 INSTALLED_APPS = [
-    'modeltranslation', #Must be before contrib.admin 
+    'modeltranslation',  #Must be before contrib.admin
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -140,7 +140,7 @@ INSTALLED_APPS = [
     'tresorerie',
     'wiki',
     'pages',
-   'django_rq',
+    'django_rq',
     'whoswho',
     'clubs',
 ]
@@ -170,10 +170,10 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                'wiki.context_processors.articles_in_menu',
                 'myresel.context_processors.resel_context',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
+                'django.template.context_processors.csrf',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],

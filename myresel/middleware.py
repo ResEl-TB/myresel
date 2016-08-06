@@ -126,13 +126,12 @@ class inscriptionNetworkHandler(object):
 
             elif zone == 'Brest-inscription-999' or zone == 'Rennes-inscription':
                 # Check origin:
-                if host not in settings.ALLOWED_HOSTS:
-                    return HttpResponseRedirect(settings.INSCRIPTION_ZONE_FALLBACK_URL)  # Will bypass the normal view
-                else:
-                    # Check if logged in & registered:
-                    if is_registered == 'active' and is_logged_in:
-                        messages.warning(request, _("Votre inscription n'est pas finie. Veuillez vous déconnecter puis vous reconnecter sur le réseau Wifi 'ResEl Secure'"))
-                        pass
+                # if host not in settings.ALLOWED_HOSTS:
+                #     return HttpResponseRedirect(settings.INSCRIPTION_ZONE_FALLBACK_URL)  # Will bypass the normal view
+                # else:
+                # Check if logged in & registered:
+                if is_registered == 'active' and is_logged_in:
+                    messages.warning(request, _("Votre inscription n'est pas finie. Veuillez vous déconnecter puis vous reconnecter sur le réseau Wifi 'ResEl Secure'"))
                     # else:
                     #     # We check that he only browses intended part of the website
                     #     path = request.path_info.lstrip('/')
