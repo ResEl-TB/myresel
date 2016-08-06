@@ -17,18 +17,23 @@
                     {% if next %}
                         <input type="hidden" name="next" value="{{ next }}">
                     {% endif %}
-                    <div class="form-group">
+                    <div class="form-group {% if form.username.errors %}has-error{% endif %}">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-user"></i></span>
                             <input type="text" class="form-control" name="username"  placeholder="{% trans "Nom d'utilisateur" %}">
                         </div>
+                        {% if form.username.errors %}<span class="help-block">{{ form.username.errors }}</span>{% endif %}
                     </div>
-                    <div class="form-group">
+                    <div class="form-group {% if form.password.errors %}has-error{% endif %}">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="fa fa-key"></i></span>
                             <input type="password" class="form-control" name="password" placeholder="{% trans "Mot de passe" %}">
                         </div>
+                        {% if form.password.errors %}<span class="help-block">{{ form.password.errors }}</span>{% endif %}
                     </div>
+                    {% if form.non_field_errors %}
+                        <div class="form-group has-error"><span class="help-block">{{ form.non_field_errors }}</span></div>
+                    {% endif %}
                     <div class="row">
                         <div class="col-md-6">
                             <div><a href="#">{% trans "Mot de passe oublié ?" %}</a></div>
@@ -47,11 +52,11 @@
             <div class="col-md-4 col-md-offset-1">
                 <h3>{% trans "Grâce à votre compte ResEl vous pourrez"%}</h3>
                 <ul>
-                    <li>Avoir accès à internet très haut débit sur le campus</li>
-                    <li>Regarder la télévision sur votre ordinateur</li>
-                    <li>Accéder aux e-mails de clubs et leurs sites</li>
-                    <li>Consulter vos statistiques d'utilisation</li>
-                    <li>Et plus encore !</li>
+                    <li>{% trans "Avoir accès à internet très haut débit sur le campus" %}</li>
+                    <li>{% trans "Regarder la télévision sur votre ordinateur" %}</li>
+                    <li>{% trans "Accéder aux e-mails de clubs et leurs sites" %}</li>
+                    <li>{% trans "Consulter vos statistiques d'utilisation" %}</li>
+                    <li>{% trans "Et plus encore !" %}</li>
                 </ul>
             </div>
         </div>
