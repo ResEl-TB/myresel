@@ -19,7 +19,7 @@ from django.contrib.auth import views as auth_views
 from django.views.generic import RedirectView
 from django.views.i18n import javascript_catalog
 
-from pages.views import Home, Contact, NewsListe, InscriptionZoneInfo
+from pages.views import Home, Contact, NewsListe, InscriptionZoneInfo 
 
 js_info_dict = {
     'packages': ('tresorerie',),
@@ -37,6 +37,7 @@ urlpatterns = [
     url(r'^machines/', include('gestion_machines.urls', namespace='gestion-machines')),
     url(r'^personnes/', include('gestion_personnes.urls', namespace='gestion-personnes')),
     url(r'^paiement/', include('tresorerie.urls', namespace='tresorerie')),
+    url(r'^who/', include('whoswho.urls', namespace='who')),
 
     url(r'^wiki/', include('wiki.urls', namespace='wiki')),
     url(r'^news/', NewsListe.as_view(), name='news'),
