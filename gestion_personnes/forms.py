@@ -239,7 +239,7 @@ class InscriptionForm(forms.Form):
         user.option = self.cleaned_data["campus"]
 
         user.dateInscr = time.strftime('%Y%m%d%H%M%S') + 'Z'
-        user.cotiz = 'BLACKLIST' + str(current_year())
+        user.cotiz = ''  # FIXME: ''BLACKLIST' + str(current_year()) no cotisation needed
         user.endCotiz = time.strftime('%Y%m%d%H%M%S') + 'Z'
 
         user.campus = self.cleaned_data["campus"]

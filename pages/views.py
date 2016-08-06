@@ -67,8 +67,9 @@ class Home(View):
         if request.user.is_authenticated():
             # Check his end fees date
             end_fee = False
-            user = ldap.search(settings.LDAP_DN_PEOPLE, '(&(uid=%s))' % str(request.user.username), ['endInternet'])[0]
+            user = ldap.search(settings.LDAP_DN_PEOPLE, '(&(uid=%s))' % str(request.user.username), ['endInternet'])
             if user:
+                user = user[0]
                 end_fee = datetime.strptime(str(user.endinternet), '%Y%m%d%H%M%SZ') if 'endinternet' in user.entry_to_json().lower() else False
             # end_fee = datetime.now()  # TODO: DEBUG
             template_for_response = self.logged_template
