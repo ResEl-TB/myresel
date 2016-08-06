@@ -170,6 +170,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'wiki.context_processors.articles_in_menu',
                 'myresel.context_processors.resel_context',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
