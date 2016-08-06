@@ -123,6 +123,11 @@ class inscriptionNetworkHandler(object):
                 # Error ! Zone internet shouldn't be on vlan 999 !
                 return HttpResponseBadRequest(_("Une erreur s'est glissée dans le traitement de votre requête. Si le problème persiste, contactez un administrateur."))
 
+            elif zone == 'Brest-user' or zone == 'Rennes-user':
+                # He can browse normally
+                # pass here, so the else block don't stuck normal user.
+                pass
+
             elif zone == 'Brest-inscription-999' or zone == 'Rennes-inscription':
                 # Check origin:
                 # if host not in settings.ALLOWED_HOSTS:
