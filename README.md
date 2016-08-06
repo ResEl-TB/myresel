@@ -21,16 +21,16 @@ Launch the server :
 ````
 vagrant ssh
 cd /myresel
-python3 makemigrations
-python3 migrate
-python3 runserver 0.0.0.0:8000
+python3 manage.py makemigrations
+python3 manage.py migrate
+python3 manage.py runserver 0.0.0.0:8000
 ````
 
 Then launch your web browser to :
-`http://10.0.3.2:8000` to simulate the 994 VLAN (from the exterior)
-`http://10.0.3.3:8000` to simulate the 995 VLAN from the open Wi-Fi
-`http://10.0.3.4:8000` to simulate the 999 VLAN (with an unknown machine)
-`http://10.0.3.5:8000` to simulate the 994 VLAN (with a known machine)
+ - `http://10.0.3.2:8000` to simulate the 994 VLAN (from the exterior)
+ - `http://10.0.3.3:8000` to simulate the 995 VLAN from the open Wi-Fi
+ - `http://10.0.3.4:8000` to simulate the 999 VLAN (with an unknown machine)
+ - `http://10.0.3.5:8000` to simulate the 994 VLAN (with a known machine)
 
 Your mac address will always be : "0a:00:27:00:00:10"
 
