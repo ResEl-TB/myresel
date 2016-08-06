@@ -106,6 +106,7 @@ class AddDeviceView(View):
 
             device.activate(campus)
             device.save()
+            network.update_all()  # TODO: Move that to something async
 
             messages.success(request, _("Votre machine a bien été ajoutée. Veuillez ré-initialiser votre connexion en débranchant/rebranchant le câble ou en vous déconnectant/reconnectant au Wi-Fi ResEl Secure."))
             return HttpResponseRedirect(reverse('home'))
