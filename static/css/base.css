@@ -115,7 +115,6 @@ body {
 
 .dropdown-menu {
     min-width: 100px;
-    z-index: 2;
 }
 .navbar-top-links .dropdown-menu button {
     display: block;
