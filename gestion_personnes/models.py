@@ -4,6 +4,8 @@ import json
 import ldapdb
 from django.db import models
 
+# DO NOT INHERIT MODELS, it won't work on the ldap
+
 # Create your models here.
 from myresel.settings import LDAP_DN_PEOPLE
 from ldapdb.models.fields import CharField, IntegerField, ListField
@@ -20,7 +22,7 @@ class LdapPerson(ldapdb.models.Model):
     lastname = CharField(db_column='lastname', max_length=50)
 
 
-class LdapUser(LdapPerson):
+class LdapUser(ldapdb.models.Model):
     """
     Represent a user in the ldap
     """
@@ -29,6 +31,9 @@ class LdapUser(LdapPerson):
     object_classes = ['genericPerson', 'enstbPerson', 'reselPerson', 'maiselPerson']  # TODO: choose wisely
 
     # genericPerson attributes
+    uid = CharField(db_column='uid', max_length=12, primary_key=True)
+    firstname = CharField(db_column='firstname', max_length=50)
+    lastname = CharField(db_column='lastname', max_length=50)
     displayname = CharField(db_column='displayname', max_length=100)
     userPassword = CharField(db_column='userPassword', max_length=100)
     ntPassword = CharField(db_column='ntPassword', max_length=100)
