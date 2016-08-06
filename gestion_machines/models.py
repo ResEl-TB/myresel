@@ -28,7 +28,13 @@ class LdapDevice(ldapdb.models.Model):
         self.owner = 'uid=%s,' % str(owner_uid) + settings.LDAP_DN_PEOPLE
 
     def add_zone(self, z):
-        self.zones.append(z)
+        if len(self.zones) == 0:
+            self.zones = [z]
+        else:
+            self.zones = [e for e in self.zones] + [z]
+
+    def replace_or_add_zone(self, old, new):
+        self.zones = [a for a in self.zones if a != old] + [new]
 
     def get_status(self):
         """
@@ -49,15 +55,16 @@ class LdapDevice(ldapdb.models.Model):
         return 'wrong_campus'
 
     def set_campus(self, campus="Brest"):
+
         if campus not in self.CAMPUS:
             raise ValueError("Campus %s doesn't exist" % campus)
 
-        for i in range(len(self.zones)):
-            if self.zones[i] in self.CAMPUS:
-                self.zones[i] = campus
-                break
-        else:
-            self.zones.append(campus)
+        if len(self.zones) == 0:
+            self.zones = [campus]
+            return
+
+        for old_camp in (c for c in self.CAMPUS if c != campus):
+            self.replace_or_add_zone(old_camp, campus)
 
     def get_campus(self):
         for zone in self.zones:
@@ -73,7 +80,7 @@ class LdapDevice(ldapdb.models.Model):
         :return:
         """
         self.set_campus(campus)
-        self.zones = ['User']
+        self.add_zone('User')
         self.last_date = time.strftime('%Y%m%d%H%M%S') + 'Z'
 
     def add_alias(self, alias):
