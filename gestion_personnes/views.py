@@ -2,7 +2,9 @@ import time
 
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth import login, authenticate, get_user_model
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
@@ -13,6 +15,7 @@ from django.views.generic import View
 from ldap3 import MODIFY_REPLACE
 
 from fonctions import ldap, generic, network
+from fonctions.decorators import resel_required, unknown_machine
 from gestion_personnes.models import LdapUser
 from myresel.settings import SERVER_EMAIL
 from .forms import InscriptionForm, ModPasswdForm, CGUForm, InvalidUID
@@ -68,23 +71,40 @@ class InscriptionCGU(View):
     finalize_template = 'gestion_personnes/finalize_signup.html'
     form_class = CGUForm
 
-    # @method_decorator(resel_required)
-    # @method_decorator(unknown_machine)
-    def get(self, request, *args, **kwargs):
-        if not self.request.session['logup_user']:
+    def check_session(self):
+        """
+        Redirect the user if the session is miss configured.
+        :return:
+        """
+        try:
+            if not self.request.session['logup_user']:
+                return HttpResponseRedirect(reverse('gestion-personnes:inscription'))
+        except KeyError:
             return HttpResponseRedirect(reverse('gestion-personnes:inscription'))
+        return None
 
+    @method_decorator(resel_required)
+    @method_decorator(unknown_machine)
+    def dispatch(self, request, *args, **kwargs):
+        redirect = self.check_session()
+        if redirect:
+            return redirect
+        return super(InscriptionCGU, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
         form = self.form_class()
         return render(self.request, self.cgu_template, {'form': form})
 
     def post(self, request, *args, **kwargs):
-        if not self.request.session['logup_user']:
-            return HttpResponseRedirect(reverse('gestion-personnes:inscription'))
-
         form = self.form_class(request.POST)
         if form.is_valid():
             user = LdapUser.from_JSON(self.request.session['logup_user'])
             user.save()
+
+            auth_user = ldap.get_user(username=user.uid)
+            if auth_user is not None:
+                auth_user.backend = 'django_python3_ldap.auth.LDAPBackend'
+                login(request, auth_user)
 
             # Subscribe to campus@resel.fr
             campus_email = EmailMessage(

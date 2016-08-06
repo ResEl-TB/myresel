@@ -5,6 +5,7 @@ from .generic import current_year
 from django.conf import settings
 from fonctions import generic
 from datetime import datetime, timedelta
+from django_python3_ldap.ldap import Connection as UserConnection
 
 def new_connection():
     """
@@ -33,6 +34,13 @@ def search(dn, query, attr=None):
         res = l.entries
     l.unbind()
     return res
+
+
+def get_user(**kwargs):
+    l = new_connection()
+    c = UserConnection(l)
+    return c.get_user(**kwargs)
+
 
 def search_ecole(query):
     """ Fonction pour rechercher dans le ldap école une entrée particulière
