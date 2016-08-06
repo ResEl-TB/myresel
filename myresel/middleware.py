@@ -35,7 +35,6 @@ class NetworkConfiguration(object):
         else:
             ip = request.META['REMOTE_ADDR']
         zone = network.get_network_zone(ip)
-        print(ip)
         request.network_data['ip'] = ip
         request.network_data['vlan'] = request.META['VLAN']
         request.network_data['host'] = request.META['HTTP_HOST']

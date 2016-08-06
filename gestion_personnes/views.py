@@ -171,7 +171,6 @@ class ModPasswd(View):
         form = self.form_class(request.POST)
 
         if form.is_valid:
-            print(form)
             dn = 'uid=%s,' % request.user + settings.LDAP_DN_PEOPLE
             modifs = {
                 'userpassword': [(MODIFY_REPLACE, [generic.hash_passwd(form.cleaned_data["password"])])],
