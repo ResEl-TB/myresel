@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.utils import timezone
-#from django_rq import job
+from django_rq import job
 
 from fonctions.latexWrapper import generate_pdf 
 
