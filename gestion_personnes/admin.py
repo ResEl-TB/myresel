@@ -13,3 +13,5 @@ class LdapUserAdmin(admin.ModelAdmin):
         'batiment',
     )
     list_filter = ['promo', 'cotiz', 'batiment']
+
+    search_fields = ['uid', 'mail',]

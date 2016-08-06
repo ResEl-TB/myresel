@@ -13,3 +13,5 @@ class LdapDeviceAdmin(admin.ModelAdmin):
     )
     list_filter = ['zones']
 
+    search_fields = ['hostname', 'ip']
+
