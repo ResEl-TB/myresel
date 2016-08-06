@@ -9,7 +9,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%
-% TO EDIT THE TEMPLATE, GO TO LINE ~138
+% TO EDIT THE TEMPLATE, GO TO LINE ~144
 % Variables :
 % - confLang : 'en' or 'fr'
 % - user : object that contains
@@ -21,9 +21,15 @@
 % - invoice : object that contains
 %   - id
 %   - date : generation date, should be `today`
-%   - internetFeesPrice : cost paid of internet fees
-%   - isPaid : true if invoice is paid
+%   - categories : list composed of object :
+%     - name : the name of the categories
+%     - products : a list composed of :
+%       - Element 1 : the quantity of product buyed
+%       - Element 2 : a product :
+%         - name : the designation of the product
+%         - price : the unit price of the product
 %   - payment : object that contains
+%     - isPaid : true if invoice is paid
 %     - date : if paid : date of payment else : last date to pay
 %     - info : if paid : info of payment else : means of payment
 %%%%%
@@ -161,22 +167,13 @@ France
 
 \begin{invoiceTable}{\confLang}
 
+{% for category in categories %}
+\feetype{category.name}
 
-\feetype{\ifthenelse{\equal{\confLang}{en}}{Membership fee}{Cotisation}}
-\unitrow{\ifthenelse{\equal{\confLang}{en}}{Membership fee for one year}{Cotisation à l'association}}{1}{1}{}
-
-%------------------------------------------------
-
-\feetype{Internet}
-%title, unit quantity, unit rate, and unit name
-\unitrow{\ifthenelse{\equal{\confLang}{en}}{Access fees to Internet for one year}{Frais d'accès à internet pour 1 an}}{1}{% templatetag openbrace %}{{ invoice.internetFeesPrice }}{% templatetag closebrace %}{}
-
-%------------------------------------------------
-
-{% if invoice.misc %}
-\feetype{\ifthenelse{\equal{\confLang}{en}}{Various}{Divers}}
-\unitrow{\ifthenelse{\equal{\confLang}{en}}{Ethernet cable (3m)}{Câble ethernet (3m)}}{1}{2.5}{}
-{% endif %}
+    {% for product in category.products %}
+\unitrow{% templatetag openbrace %}{{ product[1].name }}{% templatetag closebrace %}{% templatetag openbrace %}product[0]{% templatetag closebrace %}{% templatetag openbrace %}{{ product[1].price }}{% templatetag closebrace %}{}
+    {% endfor %}
+{% endfor %}
 %------------------------------------------------
 
 \end{invoiceTable}
@@ -186,7 +183,7 @@ France
 
 %----------------------------------------------------------------------------------------
 
-{% if invoice.isPaid %}
+{% if invoice.payment.isPaid %}
 {\bf \ifthenelse{\equal{\confLang}{en}}{Paid invoice}{Facture acquitée}:} \\
 \tab {{ invoice.payment.date }} \\
 \tab {{ invoice.payment.info }}

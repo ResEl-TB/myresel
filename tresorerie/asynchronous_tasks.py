@@ -2,6 +2,7 @@ from django.conf import settings
 from django.utils import timezone
 from django_rq import job
 
+import tresorerie.prices_table as pt
 from fonctions.latexWrapper import generate_pdf 
 
 #@job
@@ -21,15 +22,28 @@ def generate_and_email_invoice(user, invoice, lang='fr'):
             'uid': user.uid,
             'firstName': user.firstname,
             'lastName': user.lastname,
-            'addressFirstPart': "",
-            'addressSecondPart': "",
+            'addressFirstPart': user_address_first,
+            'addressSecondPart': user_address_second,
         },
         'invoice': {
             'id': invoice.pk,
             'date': '\\today',
-            'internetFeesPrice': invoice.total,
-            'isPaid': 'yes',
+            'categories': [
+                {
+                    'name': _('Cotisation'),
+                    'products': [[1, pt.cotisation],]
+                },
+                {
+                    'name': _('Internet'),
+                    'products': [[1, pt.accessFees],]
+                },
+                {
+                    'name': _('Divers'),
+                    'products': [[1, pt.ethernetCable3m], [1, pt.router],]
+                },
+            ],
             'payment': {
+                'isPaid': True,
                 'date': invoice.date,
                 'info': invoice.moyen,
             }
