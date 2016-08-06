@@ -1,3 +1,4 @@
+# coding=utf-8
 import json
 
 import ldapdb
@@ -8,18 +9,26 @@ from myresel.settings import LDAP_DN_PEOPLE
 from ldapdb.models.fields import CharField, IntegerField, ListField
 
 
-class LdapUser(ldapdb.models.Model):
+class LdapPerson(ldapdb.models.Model):
+    """
+    Used to search in database if a user exist
+    """
+    base_dn = LDAP_DN_PEOPLE
+
+    uid = CharField(db_column='uid', max_length=12, primary_key=True)
+    firstname = CharField(db_column='firstname', max_length=50)
+    lastname = CharField(db_column='lastname', max_length=50)
+
+
+class LdapUser(LdapPerson):
     """
     Represent a user in the ldap
     """
 
     base_dn = LDAP_DN_PEOPLE
-    object_classes = ['genericPerson', 'enstbPerson', 'reselPerson', 'maiselPerson']  # TODO: factorize that, and before people come back !
+    object_classes = ['genericPerson', 'enstbPerson', 'reselPerson', 'maiselPerson']  # TODO: choose wisely
 
     # genericPerson attributes
-    uid = CharField(db_column='uid', max_length=12, primary_key=True)
-    firstname = CharField(db_column='firstname', max_length=50)
-    lastname = CharField(db_column='lastname', max_length=50)
     displayname = CharField(db_column='displayname', max_length=100)
     userPassword = CharField(db_column='userPassword', max_length=100)
     ntPassword = CharField(db_column='ntPassword', max_length=100)

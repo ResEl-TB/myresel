@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from phonenumber_field.formfields import PhoneNumberField
 
 from fonctions.generic import current_year, hash_passwd, hash_to_ntpass
-from gestion_personnes.models import LdapUser
+from gestion_personnes.models import LdapUser, LdapPerson
 
 
 class InvalidUID(Exception):
@@ -201,9 +201,9 @@ class InscriptionForm(forms.Form):
 
         uid_incr = 0
         uid = base_uid
-        # return uid  # TODO: debug
+
         while uid_incr < 100:
-            user_in_db = LdapUser.objects.filter(uid=uid)
+            user_in_db = LdapPerson.objects.filter(uid=uid)
             if len(user_in_db) == 0:
                 break
             uid_incr += 1
