@@ -53,7 +53,6 @@ class InscriptionForm(forms.Form):
         choices=FORMATIONS,
         widget=forms.Select(attrs={
             'class': 'form-control',
-            'placeholder': _("Formation"),
         })
     )
 
