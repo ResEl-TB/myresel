@@ -1,6 +1,6 @@
 from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.conf import settings
@@ -127,23 +127,24 @@ class Contact(View):
         return render(request, self.template_name, {'form': form})
 
 
-def InscriptionZoneInfo(request):
+def inscriptionZoneInfo(request):
     # First get device datas
     if 'HTTP_X_FORWARDED_FOR' in request.META:
         ip = request.META['HTTP_X_FORWARDED_FOR']
     else:
         ip = request.META['REMOTE_ADDR']
     vlan = request.META['VLAN']
-    host = request.META['HTTP_HOST']
     zone = network.get_network_zone(ip)
-    mac = False
     is_registered = 'Unknown'
     is_logged_in = request.user.is_authenticated()
-    if "user" in zone or "inscription" in zone:  # As the device is in an inscription or user zone, we can get its mac address
-        mac = network.get_mac(ip)
+    if "user" in zone or "inscription" in zone:
         is_registered = ldap.get_status(ip) == 'active'
 
     if "inscription" not in zone:
-        return HttpResponseRedirect(reverse('pages:news'))
+        return HttpResponseForbidden(_("Cette page n'est pas accessible sur ce réseau."))
 
-    return render(request, 'pages/inscription_zone_info.html', {'vlan': vlan, 'is_logged_in': is_logged_in, 'is_registered': is_registered})
+    return render(
+        request,
+        'pages/inscription_zone_info.html',
+        {'vlan': vlan, 'is_logged_in': is_logged_in, 'is_registered': is_registered}
+    )

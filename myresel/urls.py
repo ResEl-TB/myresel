@@ -19,7 +19,7 @@ from django.contrib.auth import views as auth_views
 from django.views.generic import RedirectView
 from django.views.i18n import javascript_catalog
 
-from pages.views import Home, Contact, NewsListe, InscriptionZoneInfo 
+from pages.views import Home, Contact, NewsListe, inscriptionZoneInfo
 
 js_info_dict = {
     'packages': ('tresorerie',),
@@ -44,7 +44,7 @@ urlpatterns = [
     url(r'^contact/', Contact.as_view(), name='contact'),
 
     # Subcription related urls
-    url(r'^inscription_zone/', InscriptionZoneInfo, name="inscription-zone"),
+    url(r'^inscription_zone/', inscriptionZoneInfo, name="inscription-zone"),
     url(r'^generate_204/', RedirectView.as_view(pattern_name="inscription-zone", permanent=False), name="generate_204"),
     url(r'^$', Home.as_view(), name='home'),
 ]
