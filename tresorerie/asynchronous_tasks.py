@@ -3,16 +3,29 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django_rq import job
 
+from fonctions import ldap
 from fonctions.latexWrapper import generate_pdf 
 
 @job
 def generate_and_email_invoice(user, price, invoice, lang='fr'):
-    
-    # Formatting address
-    user_address_first = 'Bâtiment {}, Chambre {} - Maisel Télécom Bretagne'.format(user.batiment, user.roomNumber)
-    if user.campus == "rennes":
-        user_address_second = '2, rue de la Châtaigneraie - 35576 - Cesson Sévigné'
-    else: # If we don't know, we suppose it's Brest
+
+    # Get the user in LDAP for it's address
+    try:
+        user_l = LdapUser.objects.get(uid=user.username)
+        if user_l.batiment != "":
+            user_address_first = 'Bâtiment {}, Chambre {} - Maisel Télécom Bretagne'.format(user_l.batiment, user_l.roomNumber)
+            if user_l.campus == "rennes":
+                user_address_second = '2, rue de la Châtaigneraie - 35576 - Cesson Sévigné'
+            else: # If we don't know, we suppose it's Brest
+                user_address_second = '655 avenue du Technopôle - 29280 - Plouzané'
+        elif user_l.postalAddres != "":
+            user_address_first = user_l.postalAddres
+            user_address_second = ''    
+        else :
+            user_address_first = ''
+            user_address_second = ''
+    except:
+        user_address_first = 'Maisel Télécom Bretagne'
         user_address_second = '655 avenue du Technopôle - 29280 - Plouzané'
 
     invoice_categories = []
@@ -29,7 +42,7 @@ def generate_and_email_invoice(user, price, invoice, lang='fr'):
     invoice_categories.append(
         {
             'name': _('Internet'),
-            'products': [{'quantity': 1, 'name': invoice.comment, 'price': invoice.total},]
+            'products': [{'quantity': 1, 'name': invoice.commentaire, 'price': invoice.total},]
         },
     )
 
@@ -43,9 +56,9 @@ def generate_and_email_invoice(user, price, invoice, lang='fr'):
     generation_args = {
         'confLang': lang, 
         'user': {
-            'uid': user.uid,
-            'firstName': user.firstname,
-            'lastName': user.lastname,
+            'uid': user.username,
+            'firstName': user.first_name,
+            'lastName': user.last_name,
             'addressFirstPart': user_address_first,
             'addressSecondPart': user_address_second,
         },
@@ -66,7 +79,7 @@ def generate_and_email_invoice(user, price, invoice, lang='fr'):
     invoice_path_fr = generate_pdf(
         'tresorerie/facture.tex',
         generation_args,
-        'facture-{}-{}'.format(user.uid, invoice.pk),
+        'facture-{}-{}'.format(invoice.pk, user.username),
         settings.INVOICE_STORE_PATH
     )
     # Generating invoice in user lang if different
@@ -75,7 +88,7 @@ def generate_and_email_invoice(user, price, invoice, lang='fr'):
         invoice_path_en = generate_pdf(
             'tresorerie/facture.tex',
             generation_args,
-            'facture-{}-{}-{}'.format(user.uid, invoice.pk, lang),
+            'facture-{}-{}-{}'.format(invoice.pk, user.username, lang),
             settings.INVOICE_STORE_PATH
         )
 

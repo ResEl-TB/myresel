@@ -8,6 +8,7 @@ from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import get_language
 
 import tresorerie.asynchronous_tasks as async_tasks
 from fonctions import ldap, generic
@@ -148,7 +149,7 @@ class Home(View):
             queue = django_rq.get_queue()
             queue.enqueue_call(
                 async_tasks.generate_and_email_invoice,
-                args=(request.user, price, transaction, 'fr'),
+                args=(request.user, price, transaction, get_language()),
             )
 
             messages.success(request, _("Votre accès a bien été réglé"))
