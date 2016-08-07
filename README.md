@@ -20,6 +20,7 @@ Launch the server :
 ````
 vagrant ssh
 cd /myresel
+python3 manage.py rqworker default &
 python3 manage.py runserver 0.0.0.0:8000
 ````
 
@@ -63,4 +64,4 @@ Pense-bête
 - [OK] dans la page de demande d'ajout de machine, vérifier que la MAC est valide en javascript
 - [OK] système de questions déroulantes en javascript pour le montant de la cotiz à payer
 - script qui gère le paiement auto des autres mensualisations
-- [PARTIAL] générer des factures pour les paiements
+- [OK] générer des factures pour les paiements
