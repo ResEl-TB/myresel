@@ -3,8 +3,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
-from django.core.urlresolvers import resolve, Resolver404
-from django.http import Http404
+from django.core.urlresolvers import resolve, Resolver404, reverse
 
 from fonctions import ldap, network
 from gestion_machines.models import LdapDevice
@@ -120,8 +119,12 @@ class inscriptionNetworkHandler(object):
                             messages.info(request, _("Vous devez vous inscrire au ResEl avant de pouvoir naviguer normalement."))
                             return HttpResponseRedirect(settings.LOGIN_URL)
 
-                    except Resolver404: # It's a 404
-                        raise Http404()
+                    # If it is a 404, it is very likely that it is because the
+                    # browser tried to open a tab in order to test the
+                    # connection. The best solution is to redirect the user to
+                    # the landing page.
+                    except Resolver404:  # It's a 404
+                        return HttpResponseRedirect(reverse(settings.INSCRIPTION_ZONE_FALLBACK_URLNAME))
 
         elif vlan == '999':
 
@@ -144,7 +147,7 @@ class inscriptionNetworkHandler(object):
                     messages.warning(request, _("Votre inscription n'est pas finie. Veuillez vous déconnecter puis vous reconnecter sur le réseau Wifi 'ResEl Secure'"))
                 
                 else:
-                   # We check that he only browses intended part of the website
+                    # We check that he only browses intended part of the website
                     try:
                         path_url = resolve(request.path).url_name
                         path_namespaces = resolve(request.path).namespaces
@@ -156,8 +159,12 @@ class inscriptionNetworkHandler(object):
                             messages.info(request, _("Vous devez vous inscrire au ResEl avant de pouvoir naviguer normalement."))
                             return HttpResponseRedirect(settings.LOGIN_URL)
 
-                    except Resolver404: # It's a 404
-                        raise Http404()
+                    # If it is a 404, it is very likely that it is because the
+                    # browser tried to open a tab in order to test the
+                    # connection. The best solution is to redirect the user to
+                    # the landing page.
+                    except Resolver404:  # It's a 404
+                        return HttpResponseRedirect(reverse(settings.INSCRIPTION_ZONE_FALLBACK_URLNAME))
             else:
                 # Other possiblities: Brest-inscription, Brest-other.
                 # Should never happen... but ?
@@ -182,4 +189,3 @@ class SimulateProductionNetwork(object):
             client_fake_vlan = '994'
         request.META["REMOTE_ADDR"] = client_fake_ip
         request.META['VLAN'] = client_fake_vlan
-
