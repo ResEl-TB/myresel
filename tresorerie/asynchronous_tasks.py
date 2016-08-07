@@ -4,7 +4,7 @@ from django_rq import job
 
 from fonctions.latexWrapper import generate_pdf 
 
-#@job
+@job
 def generate_and_email_invoice(user, price, invoice, lang='fr'):
     
     # Formatting address
