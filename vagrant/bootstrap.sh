@@ -4,6 +4,7 @@
 
 # Configuration
 ROOTDIR=/myresel/
+CONFDIR=${ROOTDIR}myresel/
 ETCDIR=${ROOTDIR}vagrant/etc/
 LIBDIR=${ROOTDIR}vagrant/lib/
 
@@ -38,7 +39,6 @@ mysql -uroot -p${SQL_PASSWD} -e "CREATE USER '$SQL_USER'@'localhost' IDENTIFIED 
 mysql -uroot -p${SQL_PASSWD} -e "GRANT ALL PRIVILEGES ON * . * TO '$SQL_USER'@'localhost';"
 
 echo ">>> Installing openldap"
-
 
 apt-get -qq install slapd ldap-utils libldap2-dev libsasl2-dev libssl-dev ldapvi
 service slapd stop
@@ -82,3 +82,22 @@ apt-get -qq install gettext
 
 echo ">>> Installing Python requirements"
 pip3 install -r $ROOTDIR/requirements.txt
+
+echo ">>> Initializing repo"
+cd ROOTDIR
+if [ ! -f ${CONFDIR}settings_local.py ]; then
+    cp ${CONFDIR}settings_local.py.tpl ${CONFDIR}settings_local.py
+fi
+python3 manage.py makemigrations
+python3 manage.py migrate
+
+echo "==============================================="
+echo "= My ResEl DEV environment installation done. ="
+echo "==============================================="
+echo ""
+echo "To launch the server run :"
+echo "\$ vagrant ssh"
+echo "\$ cd ${ROOTDIR}"
+echo "\$ python3 manage.py runserver 0.0.0.0:8000"
+echo ""
+echo "==============================================="

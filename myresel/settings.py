@@ -14,26 +14,6 @@ from myresel.settings_local import *
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-# TODO: factorize this conf w/ vagrant conf
-DEBUG_SETTINGS = {
-    '10.0.3.2': {  # VLAN 994 (exterior)
-        'vlan': '994',
-        'client_fake_ip': '10.0.0.1',
-    },
-    '10.0.3.3': {  # VLAN 995
-        'vlan': '995',
-        'client_fake_ip': '172.22.224.5'
-    },
-    '10.0.3.4': {  # VLAN 999 (unknown machine)
-        'vlan': '999',
-        'client_fake_ip': '172.22.226.2'
-    },
-    '10.0.3.5': {  # VLAN 999 (knwon machine)
-        'vlan': '999',
-        'client_fake_ip': '172.22.200.1'
-    },
-}
-
 ALLOWED_HOSTS = ['beta.resel.fr', 'my.resel.fr', 'resel.fr']
 
 

@@ -182,8 +182,8 @@ class SimulateProductionNetwork(object):
         host = request.META["HTTP_HOST"].split(":")[0]
 
         try:
-            client_fake_ip = settings.DEBUG_SETTINGS[host]['client_fake_ip']
-            client_fake_vlan = settings.DEBUG_SETTINGS[host]['vlan']
+            client_fake_ip = settings.DEBUG_SETTINGS['networks'][host]['client_fake_ip']
+            client_fake_vlan = settings.DEBUG_SETTINGS['networks'][host]['vlan']
         except KeyError:
             client_fake_ip = '10.0.0.1'
             client_fake_vlan = '994'
