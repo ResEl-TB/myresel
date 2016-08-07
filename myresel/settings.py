@@ -55,17 +55,20 @@ LOGIN_REDIRECT_URL = '/'
 
 # Inscription zone 
 
-INSCRIPTION_ZONE_FALLBACK_URL = '/inscription_zone/'
+INSCRIPTION_ZONE_FALLBACK_URLNAME = 'inscription-zone'
 
-INSCRIPTION_ZONE_ALLOWED_URLS = [
-                                r'^$',
-                                r'^login',
-                                r'^machines/'
-                                r'^personnes/',
-                                r'^paiement/',
-                                r'^contact/',
-                                r'^' + INSCRIPTION_ZONE_FALLBACK_URL
-                                ]
+INSCRIPTION_ZONE_ALLOWED_URLNAME = [
+    'home',
+    'login',
+    'contact',
+    INSCRIPTION_ZONE_FALLBACK_URLNAME
+]
+
+INSCRIPTION_ZONE_ALLOWED_URLNAMESPACE = [
+    'gestion-machines',
+    'gestion-personnes',
+    'tresorerie',
+]
 
 # 
 

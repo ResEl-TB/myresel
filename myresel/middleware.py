@@ -3,11 +3,10 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
+from django.core.urlresolvers import resolve, Resolver404
+from django.http import Http404
 
 from fonctions import ldap, network
-
-import re
-
 from gestion_machines.models import LdapDevice
 
 
@@ -90,9 +89,6 @@ class inscriptionNetworkHandler(object):
         is_registered = request.network_data['is_registered']
         is_logged_in = request.network_data['is_logged_in']
 
-        # Compile allowed URLs in inscription area
-        INSCRIPTION_ZONE_ALLOWED_URLS = [re.compile(expr) for expr in settings.INSCRIPTION_ZONE_ALLOWED_URLS]
-
         # Vlan inscription
         if vlan == '995':
 
@@ -110,12 +106,22 @@ class inscriptionNetworkHandler(object):
                 # Check if logged in & registered:
                 if is_registered == 'active' and is_logged_in:
                     messages.warning(request, _("Vous êtes correctement inscrit, mais vous êtes sur le mauvais réseau. Veuillez vous connecter sur le réseau Wifi 'ResEl Secure'"))
+
                 else:
                     # We check that he only browses intended part of the website
-                    path = request.path_info.lstrip('/')
-                    if not any(m.match(path) for m in INSCRIPTION_ZONE_ALLOWED_URLS):
-                        messages.info(request, _("Vous devez vous inscrire au ResEl avant de pouvoir naviguer normalement."))
-                        return HttpResponseRedirect(settings.LOGIN_URL)
+                    try:
+                        path_url = resolve(request.path).url_name
+                        path_namespaces = resolve(request.path).namespaces
+
+                        test_urlname = [m == path_url for m in settings.INSCRIPTION_ZONE_ALLOWED_URLNAME]
+                        test_urlnamespace = [m in path_namespaces for m in settings.INSCRIPTION_ZONE_ALLOWED_URLNAMESPACE]
+
+                        if not (any(test_urlname) or any(test_urlnamespace)):
+                            messages.info(request, _("Vous devez vous inscrire au ResEl avant de pouvoir naviguer normalement."))
+                            return HttpResponseRedirect(settings.LOGIN_URL)
+
+                    except Resolver404: # It's a 404
+                        raise Http404()
 
         elif vlan == '999':
 
@@ -136,13 +142,22 @@ class inscriptionNetworkHandler(object):
                 # Check if logged in & registered:
                 if is_registered == 'active' and is_logged_in:
                     messages.warning(request, _("Votre inscription n'est pas finie. Veuillez vous déconnecter puis vous reconnecter sur le réseau Wifi 'ResEl Secure'"))
-                    else:
-                        # We check that he only browses intended part of the website
-                        path = request.path_info.lstrip('/')
-                        if not any(m.match(path) for m in INSCRIPTION_ZONE_ALLOWED_URLS):
+                
+                else:
+                   # We check that he only browses intended part of the website
+                    try:
+                        path_url = resolve(request.path).url_name
+                        path_namespaces = resolve(request.path).namespaces
+
+                        test_urlname = [m == path_url for m in settings.INSCRIPTION_ZONE_ALLOWED_URLNAME]
+                        test_urlnamespace = [m in path_namespaces for m in settings.INSCRIPTION_ZONE_ALLOWED_URLNAMESPACE]
+
+                        if not (any(test_urlname) or any(test_urlnamespace)):
                             messages.info(request, _("Vous devez vous inscrire au ResEl avant de pouvoir naviguer normalement."))
                             return HttpResponseRedirect(settings.LOGIN_URL)
 
+                    except Resolver404: # It's a 404
+                        raise Http404()
             else:
                 # Other possiblities: Brest-inscription, Brest-other.
                 # Should never happen... but ?
