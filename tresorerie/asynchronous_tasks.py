@@ -22,7 +22,7 @@ def generate_and_email_invoice(user, price, invoice, lang='fr'):
         invoice_categories.append(
             {
                 'name': _('Cotisation'),
-                'products': [{'quantity': 1, 'name': "Cotisation d'un an à l'association", 'price': 1},]
+                'products': [{'quantity': 1, 'name': _("Adhésion à l'Association"), 'price': 1},]
             },
         )
 
@@ -51,7 +51,7 @@ def generate_and_email_invoice(user, price, invoice, lang='fr'):
         },
         'invoice': {
             'id': invoice.pk,
-            'date': '\\today',
+            'date': invoice.date,
             'categories': invoice_categories,
             'payment': {
                 'isPaid': True,
@@ -61,18 +61,21 @@ def generate_and_email_invoice(user, price, invoice, lang='fr'):
         }
     }
 
-    # Generating invoice
+    # Generating french invoice
+    generation_args['confLang'] = 'fr'
     invoice_path_fr = generate_pdf(
         'tresorerie/facture.tex',
         generation_args,
         'facture-{}-{}'.format(user.uid, invoice.pk),
         settings.INVOICE_STORE_PATH
     )
+    # Generating invoice in user lang if different
     if lang != 'fr':
+        generation_args['confLang'] = lang
         invoice_path_en = generate_pdf(
             'tresorerie/facture.tex',
             generation_args,
-            'facture-{}-{}-en'.format(user.uid, invoice.pk),
+            'facture-{}-{}-{}'.format(user.uid, invoice.pk, lang),
             settings.INVOICE_STORE_PATH
         )
 

@@ -9,7 +9,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%
-% TO EDIT THE TEMPLATE, GO TO LINE ~144
+% TO EDIT THE TEMPLATE, GO TO LINE ~142
 % Variables :
 % - confLang : 'en' or 'fr'
 % - user : object that contains
@@ -33,6 +33,10 @@
 %     - info : if paid : info of payment else : means of payment
 %%%%%
 
+%---------------------------------------------------------------------- Header
+{# Manually set language #}
+{% load i18n %}
+{% language confLang %}
 
 %--------------------------------------------------- Package includes & config
 \documentclass[12pt]{article}
@@ -77,8 +81,7 @@
 \newcommand*{\total}[1]{\FPdiv{\t}{\arabic{#1}}{1000}\formatNumber{\t}}
 
 % Create an invoice table
-\newenvironment{invoiceTable}[1]{
-	\def\fooNoI{#1} % Store language for end block
+\newenvironment{invoiceTable}{
     % Create a new row : title, unit quantity, unit rate, and unit name
     \newcommand*{\unitrow}[4]{%
          \addtocounter{cost}{1000 * \real{##2} * \real{##3}}%
@@ -124,12 +127,12 @@
     \setlength\LTright{0pt}
     \begin{longtable}{@{\extracolsep{\fill}\hspace{\tabcolsep}} l r r r }
     \hline
-    {\bf \ifthenelse{\equal{#1}{en}}{Description}{Désignation}} & \multicolumn{1}{c}{\bf \ifthenelse{\equal{#1}{en}}{Quantity}{Quantité}} & \multicolumn{1}{c}{\bf \ifthenelse{\equal{#1}{en}}{Unit price}{Prix unitaire}} & \multicolumn{1}{c}{\bf \ifthenelse{\equal{#1}{en}}{Amount}{Montant}} \\*
+    {\bf {% trans "Désignation" %}} & \multicolumn{1}{c}{\bf {% trans "Quantité" %}} & \multicolumn{1}{c}{\bf {% trans "Prix unitaire" %}} & \multicolumn{1}{c}{\bf {% trans "Montant" %}} \\*
     \hline\hline
     \endhead
 }{
     \hline\hline\hline
-    {\bf \ifthenelse{\equal{\fooNoI}{en}}{Amount Due}{Montant à payer}} & & & {\bf \total{cost}\euro} \\
+    {\bf {% trans "Montant à payer" %}} & & & {\bf \total{cost}\euro} \\
     \end{longtable}
 }
 \def \tab {\hspace*{3ex}}
@@ -138,7 +141,7 @@
 
 %--------------------------------------------------- Beginning of template
 
-{\Huge\bf ResEl}\hfil{\Huge\bf \ifthenelse{\equal{\confLang}{en}}{Invoice}{Facture}}
+{\Huge\bf ResEl}\hfil{\Huge\bf {% trans "Facture" %}}
 \bigskip\break
 \hrule
 
@@ -147,20 +150,20 @@ Association ResEl - Télécom Bretagne \hfill (33) 2 29 00 15 76 \\
 29280 Plouzané
 France
 \\ \\
-{\bf \ifthenelse{\equal{\confLang}{en}}{Invoice To}{Délivrée à} :} {{user.firstName}} {{user.lastName}} \\
+{\bf {% trans "Délivrée à" %} :} {{user.firstName}} {{user.lastName}} }\\
 \tab {{ user.addressFirstPart }} \\
 \tab {{ user.addressSecondPart }}
 
 {\bf Date :}  {{ invoice.date }}
 
-{\bf \ifthenelse{\equal{\confLang}{en}}{Number}{Numéro} :} {{ invoice.id}}
+{\bf {% trans "Numéro de facture" %} :} {{ invoice.id}}
 
-{\bf \ifthenelse{\equal{\confLang}{en}}{Client id}{Code client} :} {{ user.uid }}
+{\bf {% trans "Code client" %} :} {{ user.uid }}
 \\
 
 %----------------------------------------------------------------------------------------
 
-\begin{invoiceTable}{\confLang}
+\begin{invoiceTable}
 
 {% for category in invoice.categories %}
 \feetype{ {{category.name|safe}} }
@@ -173,18 +176,20 @@ France
 
 \end{invoiceTable}
 
-\ifthenelse{\equal{\confLang}{en}}{(VAT not applicable, article 293 B of the CGI)}{(TVA non applicable, art. 293 B du CGI)}
+{% trans "(TVA non applicable, art. 293 B du CGI)" %"}
 \\ \\
 
 %----------------------------------------------------------------------------------------
 
 {% if invoice.payment.isPaid %}
-{\bf \ifthenelse{\equal{\confLang}{en}}{Paid invoice}{Facture acquitée}:} \\
+{\bf {% trans "Facture acquitée" %}:} \\
 \tab {{ invoice.payment.date }} \\
 \tab {{ invoice.payment.info }}
 {% else %}
-{\bf \ifthenelse{\equal{\confLang}{en}}{Payment}{Paiement}:} \\
-\tab \ifthenelse{\equal{\confLang}{en}}{Payment before}{Paiement avant le} : {{ invoice.payment.date }} \\
-\tab \ifthenelse{\equal{\confLang}{en}}{Possible means of payment}{Moyen de paiement possible} : {{ invoice.payment.info }}
+{\bf {% trans "Paiement" %}:} \\
+\tab {% trans "Paiement avant le" %} : {{ invoice.payment.date }} \\
+\tab {% trans "Moyen de paiement possible" %} : {{ invoice.payment.info }}
 {% endif %}
 \end{document}
+
+{% endlanguage %}
