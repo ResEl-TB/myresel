@@ -91,3 +91,7 @@ if DEBUG:
 # SESSION_COOKIE_SECURE = False
 # CSRF_COOKIE_SECURE = False
 # SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
+#
+
+INVOICE_STORE_PATH = '/myresel/media/invoices'

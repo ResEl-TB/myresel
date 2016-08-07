@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 from django_rq import job
 
 from fonctions.latexWrapper import generate_pdf 
@@ -21,14 +22,14 @@ def generate_and_email_invoice(user, price, invoice, lang='fr'):
         invoice_categories.append(
             {
                 'name': _('Cotisation'),
-                'products': [[1, {'name': invoice.comment, 'price': invoice.total}],]
+                'products': [{'quantity': 1, 'name': "Cotisation d'un an à l'association", 'price': 1},]
             },
         )
 
     invoice_categories.append(
         {
             'name': _('Internet'),
-            'products': [[1, {'name': invoice.comment, 'price': invoice.total}],]
+            'products': [{'quantity': 1, 'name': invoice.comment, 'price': invoice.total},]
         },
     )
 
@@ -64,14 +65,14 @@ def generate_and_email_invoice(user, price, invoice, lang='fr'):
     invoice_path_fr = generate_pdf(
         'tresorerie/facture.tex',
         generation_args,
-        'facture-{}-{}'.format(user.uid, invoice.id),
+        'facture-{}-{}'.format(user.uid, invoice.pk),
         settings.INVOICE_STORE_PATH
     )
     if lang != 'fr':
         invoice_path_en = generate_pdf(
             'tresorerie/facture.tex',
             generation_args,
-            'facture-{}-{}-en'.format(user.uid, invoice.id),
+            'facture-{}-{}-en'.format(user.uid, invoice.pk),
             settings.INVOICE_STORE_PATH
         )
 

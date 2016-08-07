@@ -23,21 +23,16 @@
 %   - date : generation date, should be `today`
 %   - categories : list composed of object :
 %     - name : the name of the categories
-%     - products : a list composed of :
-%       - Element 1 : the quantity of product buyed
-%       - Element 2 : a product :
-%         - name : the designation of the product
-%         - price : the unit price of the product
+%     - products : a list composed of object :
+%        - quantity : the quantity buyed
+%        - name : the designation of the product
+%        - price : the unit price of the product
 %   - payment : object that contains
 %     - isPaid : true if invoice is paid
 %     - date : if paid : date of payment else : last date to pay
 %     - info : if paid : info of payment else : means of payment
 %%%%%
 
-%%%%%
-% TODO :
-% Improve payment of miscellaneous stuff like ethernet cable, routeur, ...
-%%%%%
 
 %--------------------------------------------------- Package includes & config
 \documentclass[12pt]{article}
@@ -167,11 +162,11 @@ France
 
 \begin{invoiceTable}{\confLang}
 
-{% for category in categories %}
-\feetype{category.name}
+{% for category in invoice.categories %}
+\feetype{ {{category.name|safe}} }
 
     {% for product in category.products %}
-\unitrow{% templatetag openbrace %}{{ product[1].name }}{% templatetag closebrace %}{% templatetag openbrace %}product[0]{% templatetag closebrace %}{% templatetag openbrace %}{{ product[1].price }}{% templatetag closebrace %}{}
+\unitrow{% templatetag openbrace %}{{ product.name|safe }}{% templatetag closebrace %}{% templatetag openbrace %}{{ product.quantity }}{% templatetag closebrace %}{% templatetag openbrace %}{{ product.price }}{% templatetag closebrace %}{}
     {% endfor %}
 {% endfor %}
 %------------------------------------------------

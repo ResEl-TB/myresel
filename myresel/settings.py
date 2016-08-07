@@ -56,10 +56,6 @@ NUMBER_NEWS_IN_HOME = 7
 
 #
 
-INVOICE_STORE_PATH = '/srv/www/resel.fr/media/invoices'
-
-#
-
 AUTHENTICATION_BACKENDS = (
     'django_python3_ldap.auth.LDAPBackend',
     'django.contrib.auth.backends.ModelBackend',
