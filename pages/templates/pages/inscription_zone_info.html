@@ -1,41 +1,125 @@
-{% extends 'pages/home/home.html' %}
-{% load i18n %}
 {% load staticfiles %}
-{% block presentation %}
-    <div class="home-fragment home-presentation">
-        <div class="container">
-            {% if is_registered %}
-                <h2>{% trans "Erreur : mauvais réseau"%}</h2>
-                {% if vlan == "999" %}
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <link rel="stylesheet" type="text/css" href="static/css/base.css"/>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Le ResEl</title>
+
+    <link href="{% static 'boostrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <link href="{% static 'font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
+
+    <link href="{% static 'css/base.css' %}" rel="stylesheet">
+    <link href="{% static 'css/home.css' %}" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+    {% if messages %}
+    <div class="container">
+            {# Gestion des messages d'erreur, d'info et de success #}
+                {% for message in messages %}
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                        <div class="panel panel-danger">
+                            <div class="panel-heading"><h3 class="panel-title">{% trans "Erreur" %}</h3></div>
+                            <div class="panel-body">{{ message }}</div>
+                        </div>
+                    {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                        <div class="panel panel-success">
+                            <div class="panel-heading"><h3 class="panel-title">{% trans "Succès" %}</h3></div>
+                            <div class="panel-body">{{ message }}</div>
+                        </div>
+                    {% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+                        <div class="panel panel-info">
+                            <div class="panel-heading"><h3 class="panel-title">{% trans "Information" %}</h3></div>
+                            <div class="panel-body">{{ message }}</div>
+                        </div>
+                    {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+                        <div class="panel panel-warning">
+                            <div class="panel-heading"><h3 class="panel-title">{% trans "Attention" %}</h3></div>
+                            <div class="panel-body">{{ message }}</div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+
+        </div>
+    {% endif %}
+    <div id="page-wrapper">
+        <div class="home-fragment home-presentation">
+            <div class="container">
+                {% if is_registered %}
+                    <h2>{% trans "Erreur : mauvais réseau"%}</h2>
+                    {% if vlan == "999" %}
+                        <p>{% blocktrans %}
+                            Bien que votre machine soit inscrite sur notre réseau, vous êtes toujours sur la zone d'inscription.
+                            Si vous venez de vous inscrire, c'est normal, vous devez d'abord débrancher puis rebrancher votre câble réseau, ou vous
+                            déconnecter du réseau Wifi puis vous y reconnecter (sur le réseau Wifi "ResEl Secure").
+                        {% endblocktrans %}</p>
+                    {% elif vlan == "995" %}
+                        <p>{% blocktrans %}
+                            Bien que votre machine soit inscrite sur notre réseau, vous êtes toujours sur la zone d'inscription.
+                            Il semblerait que vous soyez connecté au réseau Wifi "ResEl inscription".
+                            Il est impossible d'avoir accès à internet depuis ce réseau Wifi pour des raisons de sécurité.<br/>
+                            Veuillez vous connecter sur le réseau Wifi "ResEl Secure".
+                        {% endblocktrans %}</p>
+                    {% endif %}
+                {% elif is_logged_in %}
+                    <h2>{% trans "Vous êtes sur la zone d'inscription"%}</h2>
                     <p>{% blocktrans %}
-                        Bien que votre machine soit inscrite sur notre réseau, vous êtes toujours sur la zone d'inscription.
-                        Il semblerait que vous soyez connecté au réseau Wifi "ResEl inscription".
-                        Il est impossible d'avoir accès à internet depuis ce réseau Wifi pour des raisons de sécurité.<br/>
-                        Veuillez vous connecter sur le réseau Wifi "ResEl Secure".
+                        Votre machine est actuellement connectée sur la zone inscription. Dans cette zone, vous n'avez pas accès à internet.
+                        Avant d'avoir internet, passez sur notre site pour inscrire votre machine à votre compte sur notre réseau.
                     {% endblocktrans %}</p>
-                {% elif vlan == "995" %}
+                    <a href="{% url 'gestion-machines:ajout' %}" class="btn btn-default btn-lg ">{%  trans "Je fonce !"%}</a>
+                {% else %}
+                    <h2>{% trans "Vous êtes sur la zone d'inscription"%}</h2>
                     <p>{% blocktrans %}
-                        Bien que votre machine soit inscrite sur notre réseau, vous êtes toujours sur la zone d'inscription.
-                        Si vous venez de vous inscrire, c'est normal, vous devez avant débrancher puis rebrancher votre câble réseau, ou vous
-                        déconnecter du réseau Wifi puis vous y reconnecter (sur le réseau Wifi "ResEl Secure").
+                        Votre machine est actuellement connectée sur la zone inscription. Dans cette zone, vous n'avez pas accès à internet.
+                        Avant d'avoir internet, passez sur notre site pour vous inscrire à notre association.
                     {% endblocktrans %}</p>
+                    <a href="{% url 'gestion-machines:ajout' %}" class="btn btn-default btn-lg ">{%  trans "Je fonce !"%}</a>
                 {% endif %}
-            {% endif %}
-            {% if is_logged_in %}
-                <h2>{% trans "Vous êtes sur la zone d'inscription"%}</h2>
-                <p>{% blocktrans %}
-                    Votre machine est actuellement connectée sur la zone inscription. Dans cette zone, vous n'avez pas accès à internet.
-                    Avant d'avoir internet, passez sur notre site pour inscrire votre machine à votre compte sur notre réseau.
-                {% endblocktrans %}</p>
-                <a href="{% url 'gestion-machines:ajout' %}" class="btn btn-default btn-lg ">{%  trans "Je fonce !"%}</a>
-            {% else %}
-                <h2>{% trans "Vous êtes sur la zone d'inscription"%}</h2>
-                <p>{% blocktrans %}
-                    Votre machine est actuellement connectée sur la zone inscription. Dans cette zone, vous n'avez pas accès à internet.
-                    Avant d'avoir internet, passez sur notre site pour vous inscrire à notre association.
-                {% endblocktrans %}</p>
-                <a href="{% url 'gestion-machines:ajout' %}" class="btn btn-default btn-lg ">{%  trans "Je fonce !"%}</a>
-            {% endif %}
+            </div>
         </div>
     </div>
-{% endblock %}
+    <!-- /#page-wrapper -->
+    <!-- /#wrapper -->
+
+    <footer class="footer">
+        <!-- Container for setting locale language -->
+        <div class="container text-right">
+            <div class="row">
+                <div class="col-md-8">{% trans "L'Association ResEl - http://resel.fr - 2003-2016 - Tous droits réservés" %}</div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="{% static 'jquery/jquery.min.js' %}"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{% static 'boostrap/js/bootstrap.min.js' %}"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="{% static 'js/base.js' %}"></script>
+
+    <!-- Custom Javascript -->
+    {% block javascript %}{% endblock %}
+
+</body>
+</html>
+
