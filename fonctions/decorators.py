@@ -87,7 +87,7 @@ def need_to_pay(function=None, redirect_to='home'):
         def _view(request, *args, **kwargs):
             if ldap.need_to_pay(request.user.username) == 'success':
                 # Cotisation déjà payée
-                messages.info(_("Vous avez déjà payé votre cotisation."))
+                messages.info(request, _("Vous avez déjà payé votre cotisation."))
                 return HttpResponseRedirect(reverse(redirect_to))
             else:
                 return view_func(request, *args, **kwargs)
