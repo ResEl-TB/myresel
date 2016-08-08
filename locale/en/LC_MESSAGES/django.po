@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-07 20:17+0000\n"
+"POT-Creation-Date: 2016-08-08 02:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1126,11 +1126,15 @@ msgstr "Disconnected"
 msgid "Merci pour le temps que vous avez accordé à ce site aujourd'hui."
 msgstr "Thank you for browsing ResEl website"
 
-#: tresorerie/asynchronous_tasks.py:24
+#: tresorerie/asynchronous_tasks.py:37
 msgid "Cotisation"
 msgstr "Member fees"
 
-#: tresorerie/asynchronous_tasks.py:31
+#: tresorerie/asynchronous_tasks.py:38 tresorerie/views.py:69
+msgid "Adhésion à l'Association"
+msgstr "Subscription to the Association"
+
+#: tresorerie/asynchronous_tasks.py:44
 msgid "Internet"
 msgstr "Internet"
 
@@ -1154,15 +1158,15 @@ msgstr ""
 "Hello %s,\n"
 "\n"
 
-#: tresorerie/management/commands/check-payments.py:58 tresorerie/views.py:166
+#: tresorerie/management/commands/check-payments.py:58 tresorerie/views.py:167
 msgid "Votre carte a expiré"
 msgstr "Your credit card has expired"
 
-#: tresorerie/management/commands/check-payments.py:59 tresorerie/views.py:168
+#: tresorerie/management/commands/check-payments.py:59 tresorerie/views.py:169
 msgid "Votre carte a été refusée"
 msgstr "Your credit card has been refused"
 
-#: tresorerie/management/commands/check-payments.py:60 tresorerie/views.py:169
+#: tresorerie/management/commands/check-payments.py:60 tresorerie/views.py:170
 msgid "Une erreur est survenue dans le traitement de votre demande"
 msgstr "An error occured while processing your request"
 
@@ -1246,7 +1250,7 @@ msgstr "No payment found in database"
 
 #: tresorerie/templates/tresorerie/home.html:11
 msgid "Paiement de votre accès internet"
-msgstr "Internet access paymentp"
+msgstr "Internet access payment"
 
 #: tresorerie/templates/tresorerie/home.html:12
 msgid ""
@@ -1294,67 +1298,63 @@ msgid ""
 "\">recommencer</a>"
 msgstr "If you made a mistake, you can <a class=\"reset-link\">retry</a>"
 
-#: tresorerie/views.py:44
+#: tresorerie/views.py:45
 msgid "Vous n'êtes pas inscrit dans notre base de données."
 msgstr "You are not registerd in our database."
 
-#: tresorerie/views.py:68
-msgid "Adhésion à l'Association"
-msgstr "Subscription to the Association"
-
-#: tresorerie/views.py:80
+#: tresorerie/views.py:81
 msgid "Accès Internet pour 1 mois"
 msgstr "Internet access for one month"
 
-#: tresorerie/views.py:86 tresorerie/views.py:121
+#: tresorerie/views.py:87 tresorerie/views.py:122
 msgid "Accès Internet pour 1 an - 1ère mensualisation"
 msgstr "Internet access for one year - first monthly fee"
 
-#: tresorerie/views.py:89
+#: tresorerie/views.py:90
 msgid "Accès Internet pour 6 mois - 1ère mensualisation"
 msgstr "Internet access for six months - first monthly fee"
 
-#: tresorerie/views.py:131
+#: tresorerie/views.py:132
 msgid "Accès Internet pour 6 mois"
 msgstr "Internet access for six months"
 
-#: tresorerie/views.py:141
+#: tresorerie/views.py:142
 msgid "Accès Internet pour 1 an"
 msgstr "Internet access for one year"
 
-#: tresorerie/views.py:154
+#: tresorerie/views.py:155
 msgid "Votre accès a bien été réglé"
 msgstr "Your access has been successfully paid for"
 
-#: tresorerie/views.py:161
+#: tresorerie/views.py:162
 msgid "Votre numéro de carte n'est pas valide"
 msgstr "Your card number is invalid"
 
-#: tresorerie/views.py:162
+#: tresorerie/views.py:163
 msgid "Le mois d'expiration de votre carte n'est pas valide"
 msgstr "Your card expiration date is not valid"
 
-#: tresorerie/views.py:163
+#: tresorerie/views.py:164
 msgid "L'année d'expiration de votre carte n'est pas valide"
 msgstr "Your card expiration date is not valid"
 
-#: tresorerie/views.py:164
+#: tresorerie/views.py:165
 msgid "Le cryptogramme de votre carte n'est pas valide"
 msgstr "The card cryptogram is incorrect"
 
-#: tresorerie/views.py:165
+#: tresorerie/views.py:166
 msgid "Votre numéro de carte est incorrect"
 msgstr "Your card number is incorrect"
 
-#: tresorerie/views.py:167
+#: tresorerie/views.py:168
 msgid "Le cryptogramme de votre carte est incorrect"
 msgstr "The card cryptogram is incorrect"
 
-#: tresorerie/views.py:177
+#: tresorerie/views.py:178
 msgid "Trop d'essais pour le moment, veuillez ré-essayer plus tard"
 msgstr "Too many attempts, please retry later"
 
-#: tresorerie/views.py:182
+#: tresorerie/views.py:183
 msgid ""
 "Impossible de contacter le serveur de paiement pour le moment, veuillez ré-"
 "essayer plus tard"
