@@ -240,7 +240,7 @@ msgid ""
 "débranchant/rebranchant le câble ou en vous déconnectant/reconnectant au Wi-"
 "Fi ResEl Secure."
 msgstr ""
-"Your device has been registerd successfully. Please reset your connection by "
+"Your device has been registered successfully. Please reset your connection by "
 "unplugging/plugging your Ethernet cable or disconnect/reconnect to the Wi-Fi "
 "network."
 
@@ -614,7 +614,7 @@ msgid ""
 "Vous êtes correctement inscrit, mais vous êtes sur le mauvais réseau. "
 "Veuillez vous connecter sur le réseau Wifi 'ResEl Secure'"
 msgstr ""
-"You have successfully registerd, but you are in the wrong sub network. "
+"You have successfully registered, but you are in the wrong network. "
 "Please connect to 'ResEl Secure' Wi-Fi hotspot."
 
 #: myresel/middleware.py:119 myresel/middleware.py:159
@@ -1300,7 +1300,7 @@ msgstr "If you made a mistake, you can <a class=\"reset-link\">retry</a>"
 
 #: tresorerie/views.py:45
 msgid "Vous n'êtes pas inscrit dans notre base de données."
-msgstr "You are not registerd in our database."
+msgstr "You are not registered in our database."
 
 #: tresorerie/views.py:81
 msgid "Accès Internet pour 1 mois"
