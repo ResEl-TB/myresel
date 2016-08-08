@@ -1,0 +1,22 @@
+.who-fragment {
+
+}
+
+.who-presentation {
+  padding: 30px 20px 30px 20px;
+  margin-top: 35px;
+  margin-bottom: 35px;
+  font-size: 18px;
+  color: #F3FFE2;
+  background-color: #225378;
+  box-shadow: 0 5px 6px 0 #122a3c;
+}
+
+.who-presentation h1 {
+  margin-bottom: 0;
+  font-size: 60px;
+  line-height: 1;
+  letter-spacing: -1px;
+  color: inherit;
+  font-weight: bold;
+}

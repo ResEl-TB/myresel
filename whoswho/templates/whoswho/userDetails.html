@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block titre %}{{user.uid}}{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/whoswho.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="who-presentation">
+    <h1>{{user.firstname}} {{user.lastname}}</h1>
+    <ul>
+        <li><b>{% trans "Prénom" %} :</b> {{user.firstname}}</li>
+        <li><b>{% trans "Nom" %} :</b> {{user.lastname}}</li>
+        <li><b>{% trans "Promo" %} :</b> {{user.promo}}</li>
+    </ul>
+</div>
+{% endblock %}
+
