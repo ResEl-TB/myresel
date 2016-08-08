@@ -4,6 +4,8 @@
 
 {% block titre %}{% trans "Paiement" %}{% endblock %}
 
+{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'css/tresorerie/home.css' %}"/>{% endblock %}
+
 {% block content %}
 <div class="container">
     <div class="row">
@@ -27,7 +29,7 @@
                 <div class="stripe hidden">
                     <input 
                         type="submit"
-                        class="btn btn-info"
+                        class="btn btn-info fa-input"
                         value="&#xf09d; {% trans 'Payer par carte' %}"
                         data-key="pk_test_KE9qQquz3hhdRI54CcfBaukl"
                         data-currency="eur"
