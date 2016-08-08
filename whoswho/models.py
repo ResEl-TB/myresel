@@ -1,7 +1,8 @@
 from django.db import models
 
-from ldapback.backend import Ldap
-from ldapback.directory import LdapModel, LdapField, LdapCharField, LdapPasswordField
+from ldapback.backends.ldap.base import Ldap
+from ldapback.models.base import LdapModel
+from ldapback.models.fields import LdapField, LdapCharField, LdapPasswordField, LdapListField
 
 from myresel import settings
 
