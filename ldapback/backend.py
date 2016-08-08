@@ -71,10 +71,8 @@ class Ldap(object):
         :return:
         """
         pk, object_class, attributes = model.to_ldap()
-        print(attributes)
         conn = self._new_connection()
         v = conn.add(pk, object_class, attributes)
-        print(v)
         conn.unbind()
         return pk
 
@@ -90,7 +88,6 @@ class Ldap(object):
         old_model = model.__class__.get(pk=pk)
 
         diff = model.ldap_diff(old_model)
-        print(diff)
         conn = self._new_connection()
         v = conn.modify(old_model.pk, diff)
         conn.unbind()
