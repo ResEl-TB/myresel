@@ -8,6 +8,10 @@ from ldap3 import Server
 from myresel import settings
 
 
+class LdapError(Exception):
+    pass
+
+
 class Ldap(object):
     """
     Handle every methods related to the ldap
@@ -73,6 +77,26 @@ class Ldap(object):
         print(v)
         conn.unbind()
         return pk
+
+    def update(self, model):
+        """
+        Perform an update of the object in the database
+        :param model:
+        :return:
+        """
+        pk_field_name, _ = model.get_pk_field()
+        pk = getattr(model, pk_field_name)
+
+        old_model = model.__class__.get(pk=pk)
+
+        diff = model.ldap_diff(old_model)
+        print(diff)
+        conn = self._new_connection()
+        v = conn.modify(old_model.pk, diff)
+        conn.unbind()
+        if not v:
+            raise LdapError(str(conn.result))
+
 
     def delete(self, model):
         """

@@ -97,6 +97,20 @@ class LdapModelTestCase(TestCase):
         users = self.GenericPerson.search(uid='aqwxs01edc')
         self.assertEqual(len(users), 0)
 
+    def test_get(self):
+        user = self.GenericPerson.get(uid='lcarr')
+
+        self.assertIsInstance(user, self.GenericPerson)
+        self.assertEqual("lcarr", user.uid)
+        self.assertEqual("uid=lcarr,ou=people,dc=maisel,dc=enst-bretagne,dc=fr", user.pk)
+
+        user = self.GenericPerson.get(pk='lcarr')
+
+        self.assertIsInstance(user, self.GenericPerson)
+        self.assertEqual("lcarr", user.uid)
+        self.assertEqual("uid=lcarr,ou=people,dc=maisel,dc=enst-bretagne,dc=fr", user.pk)
+
+
     def test_to_ldap(self):
         user = self.GenericPerson()
         user.uid = "uniquidbgt"
@@ -130,8 +144,11 @@ class LdapModelTestCase(TestCase):
         user.password = "piss"
 
         # Delete old version
-        user_s = self.GenericPerson.get(uid=user.uid)
-        user_s.delete()
+        try:
+            user_s = self.GenericPerson.get(uid=user.uid)
+            user_s.delete()
+        except ObjectDoesNotExist:
+            pass
 
         # Save new version
         user.save()
@@ -150,7 +167,36 @@ class LdapModelTestCase(TestCase):
         with self.assertRaises(ObjectDoesNotExist):
             self.GenericPerson.get(uid=user.uid)
 
+    def test_update(self):
 
+
+        try:
+            user_s = self.GenericPerson.get(pk="uniquiabga")
+            user_s.delete()
+        except ObjectDoesNotExist:
+            print("Didn't delete user this time")
+
+        user = self.GenericPerson()
+
+        user.uid = "uniquiabga"
+        user.firstname = "pablo"
+        user.lastname = "picaso"
+        user.password = "puss"
+
+        user.save()
+
+        # user.password = "piass"
+        user.firstname = "pablio"
+        user.lastname = "pakito"
+
+        user.save()
+
+        user_s = self.GenericPerson.get(uid=user.uid)
+
+        self.assertEqual(user.firstname, "pablio")
+        self.assertEqual(user.lastname, "pakito")
+
+        user_s.delete()
 
 
 

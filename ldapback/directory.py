@@ -3,7 +3,7 @@ import inspect
 from copy import copy
 
 from django.core.exceptions import ObjectDoesNotExist
-from ldap3 import ALL_ATTRIBUTES
+from ldap3 import ALL_ATTRIBUTES, MODIFY_ADD, MODIFY_DELETE, MODIFY_REPLACE
 
 from ldapback.backend import Ldap
 
@@ -26,7 +26,7 @@ class LdapField(object):
     def to_ldap(cls, obj):
         """
         Method to convert to a friendly type for the ldap
-
+        Return empty string if the field is not defined
         :param obj:
         :return:
         """
@@ -45,6 +45,29 @@ class LdapField(object):
         :return:
         """
         return str(obj)
+
+    @classmethod
+    def calc_diff(cls, old, new):
+        """
+        Return an ldap compliant diff
+        returns None if there is no diff
+        :param old:
+        :param new:
+        :return:
+        """
+        old_ldap = cls.to_ldap(old)
+        new_ldap = cls.to_ldap(new)
+        if old_ldap == new_ldap:
+            return None
+
+        if old_ldap == "":
+            edit_type = MODIFY_ADD
+        elif new_ldap == "":
+            edit_type = MODIFY_DELETE
+        else:
+            edit_type = MODIFY_REPLACE
+
+        return edit_type, new_ldap
 
 
 class LdapCharField(LdapField):
@@ -91,7 +114,17 @@ class LdapModel(object):
         :return: 
         """
         ldap = Ldap()
-        search_query = ldap.build_search_query(**kwargs)
+        search_args = {}
+
+        # Convert search query into db_column search query
+        for arg, arg_value in kwargs.items():
+            if arg == "pk":
+                arg = cls.get_pk_field()[1].db_column
+                search_args[arg] = arg_value
+            else:
+                arg = getattr(cls, arg).db_column
+                search_args[arg] = arg_value
+        search_query = ldap.build_search_query(**search_args)
         search_results = ldap.search(cls.base_dn, search_query, attr=ALL_ATTRIBUTES)
         if search_results is None:
             return []
@@ -178,6 +211,33 @@ class LdapModel(object):
         classes = list(viewed_object_classes)
         return dn, classes, attributes
 
+    def ldap_diff(self, other):
+        """
+        Return an Ldap diff between another object and this one
+        This one is considered as the new one
+        - Changes is a dictionary in the form {'attribute1': change),
+        'attribute2': [change, change, ...], ...}
+        change is (operation, [value1, value2, ...])
+        - Operation is 0 (MODIFY_ADD), 1 (MODIFY_DELETE), 2 (MODIFY_REPLACE), 3 (MODIFY_INCREMENT)
+
+        :param other:
+        :return: dict
+        """
+        fields = self.get_fields()
+
+        diff = {}
+        for field_name, field in fields:
+            db_column = field.db_column
+            old_val = getattr(other, field_name)
+            new_val = getattr(self, field_name)
+
+            field_diff = field.calc_diff(old_val, new_val)
+            if field_diff is not None:
+                diff_type, diff_val = field_diff
+                diff[db_column] = [(diff_type, [diff_val])]
+
+        return diff
+
     def save(self):
         """
         Insert or update the field
@@ -185,9 +245,11 @@ class LdapModel(object):
         """
 
         # Insert a new object in the database :
+        ldap = Ldap()
         if self.pk is None:
-            ldap = Ldap()
             self.pk = ldap.add(self)
+        else:
+            self.pk = ldap.update(self)
 
     def delete(self):
         """
