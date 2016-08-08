@@ -2,7 +2,7 @@
 import inspect
 
 from django.core.exceptions import ObjectDoesNotExist
-from ldap3 import ALL_ATTRIBUTES
+from ldap3 import ALL_ATTRIBUTES, MODIFY_REPLACE
 from ldap3 import LDAPAttributeError
 
 from ldapback.backends.ldap.base import Ldap
@@ -141,20 +141,26 @@ class LdapModel(object):
         """
         fields = self.get_fields()
 
+        viewed_object_classes = set()
+
         diff = {}
         for field_name, field in fields:
             db_column = field.db_column
             old_val = getattr(other, field_name)
             new_val = getattr(self, field_name)
-
             field_diff = field.calc_diff(old_val, new_val)
             if field_diff is not None:
                 diff_type, diff_val = field_diff
+                viewed_object_classes = viewed_object_classes.union(set(field.object_classes))
                 if isinstance(diff_val, list):
                     diff[db_column] = [(diff_type, diff_val)]
                 else:
                     diff[db_column] = [(diff_type, [diff_val])]
+            elif field.to_ldap(new_val) != "":
+                viewed_object_classes = viewed_object_classes.union(set(field.object_classes))
 
+        # update object class
+        diff['objectClass'] = [(MODIFY_REPLACE, list(viewed_object_classes))]
         return diff
 
     def save(self):

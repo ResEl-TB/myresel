@@ -3,6 +3,10 @@ from ldap3 import MODIFY_ADD, MODIFY_DELETE, MODIFY_REPLACE
 
 from fonctions.generic import hash_passwd, hash_to_ntpass
 
+# TODO : Fields to implement
+# Numeric fields
+# Bool field
+
 
 class LdapField(object):
     def __init__(self, db_column=None, object_classes=None, pk=False):

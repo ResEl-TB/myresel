@@ -220,7 +220,6 @@ class LdapFieldTestCase(TestCase):
         try_delete_user(user.uid)
         return user
 
-
     def test_list_field_add(self):
         user = self.new_user()
         user.save()
