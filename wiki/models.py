@@ -29,10 +29,12 @@ class Category(models.Model):
     
 # Classe pour les articles
 # La category, le name et le texte sont plutôt explicites
+# La priority est l'ordre d'apparition dans la catégorie
 # Le slug sert de nom transformé pour que django puisse
 # a partir d'une url avec, trouver cette category
 
 class Article(models.Model):
+    priority = models.IntegerField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     name = models.CharField(max_length=64, unique=True)
     description = models.CharField(max_length=255, null=True)
@@ -47,6 +49,34 @@ class Article(models.Model):
 
     def get_absolute_url(self):
         return reverse('wiki:show-article', args=[self.category.slug, self.slug])
+
+    def __str__(self):
+        return self.name
+
+
+# Classe pour les liens
+# La category, le name, le description et le url sont plutôt explicites
+# La priority est l'ordre d'apparition dans la catégorie
+# La fa_icon_name est le nom de l'icone font-awesome décorant le lien
+# Le slug sert de nom transformé pour que django puisse
+# a partir d'une url avec, trouver cette category
+
+class Link(models.Model):
+    priority = models.IntegerField()
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    name = models.CharField(max_length=64, unique=True)
+    description = models.CharField(max_length=255, null=True)
+    url = models.URLField()
+    fa_icon_name = models.CharField(max_length=64, blank=True)
+    slug = models.SlugField(max_length=255, blank=True, unique=True)
+
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super(Article, self).save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return self.url
 
     def __str__(self):
         return self.name
