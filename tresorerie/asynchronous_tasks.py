@@ -1,10 +1,12 @@
 from django.conf import settings
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+from django.core.mail import EmailMessage
 from django_rq import job
 
 from fonctions import ldap
 from fonctions.latexWrapper import generate_pdf 
+from myresel.settings import SERVER_EMAIL
 
 @job
 def generate_and_email_invoice(user, price, invoice, lang='fr'):
@@ -96,7 +98,38 @@ def generate_and_email_invoice(user, price, invoice, lang='fr'):
     # TODO
 
     # Send it by email
-    # TODO :
-    # if lang != 'fr':
-    # send email with english invoice
-    # send email to tresorier@resel.fr with french invoice
+    user_email = EmailMessage(
+        subject=_("Facture ResEl"),
+        body="Bonjour " + str(user.first_name) +
+        "\nVous recevez cet email pour vous confirmer le paiement de vos frais d'accès à internet." +
+        "\nVeuillez trouver ci-joint la facture de votre paiement" +
+        "\n\nHello " + str(user.first_name) +
+        "\nYou receive this mail to confirm you the payment of you internet access fees." +
+        "\nYou will find your invoice enclosed in this email.",
+        from_email=SERVER_EMAIL,
+        reply_to=["support@resel.fr"],
+        to=[user.mail],
+    )
+    if lang != 'fr':
+        with open(invoice_path_en, 'rb') as file:
+            user_email.attach('facture-{}-{}-{}'.format(invoice.pk, user.username, lang), file.read())
+    else :
+        with open(invoice_path_fr, 'rb') as file:
+            user_email.attach('facture-{}-{}-{}'.format(invoice.pk, user.username, lang), file.read())
+
+    treasurer_email = EmailMessage(
+        subject="Facture ResEl " + str(user.first_name),
+        body= str(user.first_name) + " vient d'effectuer un paiement." +
+        "\nVeuillez trouver ci-joint la facture.",
+        from_email=SERVER_EMAIL,
+        to=["tresorier@resel.fr"],
+    )
+    with open(invoice_path_fr, 'rb') as file:
+        user_email.attach('facture-{}-{}-{}'.format(invoice.pk, user.username, lang), file.read())
+
+
+    try:
+        treasurer_email.send()
+        user_email.send()
+    except Exception:
+        pass
