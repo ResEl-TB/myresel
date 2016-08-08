@@ -4,11 +4,36 @@ Tests methods for the ldap backend
 """
 from django.core.exceptions import ObjectDoesNotExist
 
-from ldapback.backend import Ldap
+from ldapback.backends.ldap.base import Ldap
 from django.test import TestCase
 
-from ldapback.directory import LdapModel, LdapField, LdapCharField, LdapPasswordField
+from ldapback.models.base import LdapModel
+from ldapback.models.fields import LdapField, LdapCharField, LdapPasswordField, LdapListField
 from myresel import settings
+
+
+# Declare some classes for the test
+class DummyModelObject(LdapModel):
+    base_dn = "dc=resel,dc=fr"
+    object_classes = []
+    man = LdapField(db_column="name", pk=True)
+    fruit = LdapField(db_column="banana")
+    person = LdapField(db_column="thomas")
+
+
+class TestGenericPerson(LdapModel):
+    base_dn = settings.LDAP_DN_PEOPLE
+    object_classes = ["genericPerson", "enstbPerson"]
+
+    # genericPerson
+    uid = LdapField(db_column="uid", object_classes=["genericPerson"], pk=True)
+    firstname = LdapCharField(db_column="firstname", object_classes=["genericPerson"])
+    lastname = LdapCharField(db_column="lastname", object_classes=["genericPerson"])
+    password = LdapPasswordField(db_column="userpassword", object_classes=["genericPerson"])
+
+    # enstbPerson
+    promo = LdapCharField(db_column="promo", object_classes=["enstbPerson"])
+    altMail = LdapListField(db_column="altMail", object_classes=["enstbPerson"])
 
 
 class QueryConstructorTestCase(TestCase):
@@ -20,23 +45,15 @@ class QueryConstructorTestCase(TestCase):
         self.assertIn(query, ("(&(uid=martin)(promo=2016))", "(&(promo=2016)(uid=martin))"))
 
 
+def try_delete_user(uid):
+    try:
+        user_s = TestGenericPerson.get(pk=uid)
+        user_s.delete()
+        return True
+    except ObjectDoesNotExist:
+        return False
+
 class LdapModelTestCase(TestCase):
-    class DummyModelObject(LdapModel):
-        base_dn = "dc=resel,dc=fr"
-        object_classes = []
-        man = LdapField(db_column="name", pk=True)
-        fruit = LdapField(db_column="banana")
-        person = LdapField(db_column="thomas")
-
-    class GenericPerson(LdapModel):
-        base_dn = settings.LDAP_DN_PEOPLE
-        object_classes = ["genericPerson"]
-
-        uid = LdapField(db_column="uid", object_classes=["genericPerson"], pk=True)
-        firstname = LdapCharField(db_column="firstname", object_classes=["genericPerson"])
-        lastname = LdapCharField(db_column="lastname", object_classes=["genericPerson"])
-        password = LdapPasswordField(db_column="userpassword", object_classes=["genericPerson"])
-
     def test_to_object(self):
         class QueriedObject(object):
             name = "cat"
@@ -58,26 +75,26 @@ class LdapModelTestCase(TestCase):
 
     def test_get_fields(self):
 
-        fields = self.DummyModelObject.get_fields()
+        fields = DummyModelObject.get_fields()
         self.assertEqual(len(fields), 3)
         for n, f in fields:
             self.assertIsInstance(f, LdapField)
             self.assertIn(n, ['man', 'fruit', 'person'])
 
     def test_get_pk_field(self):
-        field_name, field = self.DummyModelObject.get_pk_field()
+        field_name, field = DummyModelObject.get_pk_field()
         self.assertEqual("man", field_name)
-        self.assertEqual(field, self.DummyModelObject.man)
-        self.assertNotEqual(field, self.DummyModelObject.fruit)
+        self.assertEqual(field, DummyModelObject.man)
+        self.assertNotEqual(field, DummyModelObject.fruit)
 
     def test_generate_pk(self):
-        dummy_model = self.DummyModelObject()
+        dummy_model = DummyModelObject()
         dummy_model.man = "paris"
         pk = dummy_model.generate_pk()
         self.assertEqual("man=paris,dc=resel,dc=fr", pk)
 
     def test_to_ldap_field(self):
-        user = self.GenericPerson()
+        user = TestGenericPerson()
         user.uid = "lolo"
 
         uid_ldap = LdapCharField.to_ldap(user.uid)
@@ -87,32 +104,32 @@ class LdapModelTestCase(TestCase):
 
     # Should disable this test case ^^
     def test_search(self):
-        users = self.GenericPerson.search(uid='lcarr')
+        users = TestGenericPerson.search(uid='lcarr')
         self.assertGreater(len(users), 0)
         for u in users:
-            self.assertIsInstance(u, self.GenericPerson)
+            self.assertIsInstance(u, TestGenericPerson)
             self.assertEqual("lcarr", u.uid)
             self.assertEqual("uid=lcarr,ou=people,dc=maisel,dc=enst-bretagne,dc=fr", u.pk)
 
-        users = self.GenericPerson.search(uid='aqwxs01edc')
+        users = TestGenericPerson.search(uid='aqwxs01edc')
         self.assertEqual(len(users), 0)
 
     def test_get(self):
-        user = self.GenericPerson.get(uid='lcarr')
+        user = TestGenericPerson.get(uid='lcarr')
 
-        self.assertIsInstance(user, self.GenericPerson)
+        self.assertIsInstance(user, TestGenericPerson)
         self.assertEqual("lcarr", user.uid)
         self.assertEqual("uid=lcarr,ou=people,dc=maisel,dc=enst-bretagne,dc=fr", user.pk)
 
-        user = self.GenericPerson.get(pk='lcarr')
+        user = TestGenericPerson.get(pk='lcarr')
 
-        self.assertIsInstance(user, self.GenericPerson)
+        self.assertIsInstance(user, TestGenericPerson)
         self.assertEqual("lcarr", user.uid)
         self.assertEqual("uid=lcarr,ou=people,dc=maisel,dc=enst-bretagne,dc=fr", user.pk)
 
 
     def test_to_ldap(self):
-        user = self.GenericPerson()
+        user = TestGenericPerson()
         user.uid = "uniquidbgt"
         user.firstname = "pablo"
         user.lastname = "picaso"
@@ -136,7 +153,7 @@ class LdapModelTestCase(TestCase):
             self.assertEqual(exp_attr[att_name], att_value)
 
     def test_add_search_delete(self):
-        user = self.GenericPerson()
+        user = TestGenericPerson()
 
         user.uid = "uniquidbgt"
         user.firstname = "pablo"
@@ -144,17 +161,13 @@ class LdapModelTestCase(TestCase):
         user.password = "piss"
 
         # Delete old version
-        try:
-            user_s = self.GenericPerson.get(uid=user.uid)
-            user_s.delete()
-        except ObjectDoesNotExist:
-            pass
+        try_delete_user(user.uid)
 
         # Save new version
         user.save()
 
-        user_s = self.GenericPerson.get(uid=user.uid)
-        self.assertIsInstance(user_s, self.GenericPerson)
+        user_s = TestGenericPerson.get(uid=user.uid)
+        self.assertIsInstance(user_s, TestGenericPerson)
 
         self.assertEqual(user.pk, user_s.pk)
         self.assertEqual(user.uid, user_s.uid)
@@ -165,18 +178,12 @@ class LdapModelTestCase(TestCase):
         user_s.delete()
 
         with self.assertRaises(ObjectDoesNotExist):
-            self.GenericPerson.get(uid=user.uid)
+            TestGenericPerson.get(uid=user.uid)
 
     def test_update(self):
+        try_delete_user("uniquiabga")
 
-
-        try:
-            user_s = self.GenericPerson.get(pk="uniquiabga")
-            user_s.delete()
-        except ObjectDoesNotExist:
-            print("Didn't delete user this time")
-
-        user = self.GenericPerson()
+        user = TestGenericPerson()
 
         user.uid = "uniquiabga"
         user.firstname = "pablo"
@@ -191,7 +198,7 @@ class LdapModelTestCase(TestCase):
 
         user.save()
 
-        user_s = self.GenericPerson.get(uid=user.uid)
+        user_s = TestGenericPerson.get(uid=user.uid)
 
         self.assertEqual(user.firstname, "pablio")
         self.assertEqual(user.lastname, "pakito")
@@ -199,7 +206,55 @@ class LdapModelTestCase(TestCase):
         user_s.delete()
 
 
+class LdapFieldTestCase(TestCase):
+    def new_user(self):
+        user = TestGenericPerson()
+        user.uid = "fdshtlz"
+        user.firstname = "Martin"
+        user.lastname = "Thomas"
+        user.password = "Blah"
+
+        user.promo = "2020"
+        user.altMail = ['martin.thomas@t.com', 'thomas.martin@t.com']
+
+        try_delete_user(user.uid)
+        return user
 
 
+    def test_list_field_add(self):
+        user = self.new_user()
+        user.save()
+
+        user_s = TestGenericPerson.get(pk=user.uid)
+        self.assertIsInstance(user_s, TestGenericPerson)
+        self.assertIsInstance(user_s.altMail, list)
+        self.assertListEqual(user.altMail, user_s.altMail)
+
+    def test_empty_list_field(self):
+        user = self.new_user()
+        user.altMail = []
+        user.save()
+
+        user_s = TestGenericPerson.get(pk=user.uid)
+        self.assertIsInstance(user_s, TestGenericPerson)
+        self.assertIsInstance(user_s.altMail, list)
+        self.assertListEqual(user.altMail, [])
+
+    def test_list_field_edit(self):
+        user = self.new_user()
+        user.save()
+
+        user_s = TestGenericPerson.get(pk=user.uid)
+        self.assertIsInstance(user_s, TestGenericPerson)
+        self.assertIsInstance(user_s.altMail, list)
+        self.assertListEqual(user.altMail, user_s.altMail)
+
+        user_s.altMail.append('remy.martin.com')
+        user_s.save()
+
+        user_t = TestGenericPerson.get(pk=user.uid)
+        self.assertIsInstance(user_t, TestGenericPerson)
+        self.assertIsInstance(user_t.altMail, list)
+        self.assertListEqual(user_s.altMail, user_t.altMail)
 
 

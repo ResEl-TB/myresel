@@ -1,9 +1,5 @@
 # coding=utf-8
-"""
-Wrapper around the ldap
-"""
-from ldap3 import Connection
-from ldap3 import Server
+from ldap3 import Connection, Server
 
 from myresel import settings
 
