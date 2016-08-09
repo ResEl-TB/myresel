@@ -20,10 +20,10 @@ class Category(models.Model):
     fa_icon_name = models.CharField(max_length=64, blank=True)
     slug = models.SlugField(max_length=255, blank=True, unique=True)
 
-    def get_articles_and_links(self):
+    def get_articles_and_links(self, in_resel=False):
         try:
-            articles = self.article_set.all()
-            links = self.link_set.all()
+            articles = [el for el in self.article_set.all() if not el.show_only_if_in_resel or in_resel]
+            links = [el for el in self.link_set.all() if not el.show_only_if_in_resel or in_resel]
             stuff = list(articles)+list(links)
             stuff.sort(key=operator.attrgetter('priority'), reverse=True)
 
@@ -68,6 +68,7 @@ class Category(models.Model):
 class Article(models.Model):
     priority = models.IntegerField(default=0)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    show_only_if_in_resel = models.BooleanField(default=False)
     name = models.CharField(max_length=64, unique=True)
     description = models.CharField(max_length=255, null=True)
     text = RichTextUploadingField()
@@ -101,6 +102,7 @@ class Article(models.Model):
 class Link(models.Model):
     priority = models.IntegerField(default=0)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    show_only_if_in_resel = models.BooleanField(default=False)
     name = models.CharField(max_length=64, unique=True)
     description = models.CharField(max_length=255, null=True)
     url = models.URLField()

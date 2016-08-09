@@ -49,7 +49,7 @@ class Home(View):
         args_for_response = {}
 
         # Load services
-        services = Category.objects.get(name='Services').get_articles_and_links()
+        services = Category.objects.get(name='Services').get_articles_and_links('user' in network.get_network_zone(ip))
         args_for_response['services'] = services
 
         # Load some news
