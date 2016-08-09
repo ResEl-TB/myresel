@@ -97,15 +97,11 @@ class inscriptionNetworkHandler(object):
                 # Error ! In vlan 995 without inscription IP address
                 return HttpResponseBadRequest(_("Vous vous trouvez sur un réseau d'inscription mais ne possédez pas d'IP dans ce réseau. Veuillez contacter un administrateur."))
 
-            # Check origin:
-            # if host not in settings.ALLOWED_HOSTS:
-            #     return HttpResponseRedirect(settings.INSCRIPTION_ZONE_FALLBACK_URL)  # Will bypass the normal view
-
             else:
                 # Check if logged in & registered:
                 if is_registered == 'active' and is_logged_in:
                     messages.warning(request, _("Vous êtes correctement inscrit, mais vous êtes sur le mauvais réseau. Veuillez vous connecter sur le réseau Wifi 'ResEl Secure'"))
-
+                    # TODO: only show message, and don't give the choice
                 else:
                     # We check that he only browses intended part of the website
                     try:
@@ -117,6 +113,7 @@ class inscriptionNetworkHandler(object):
 
                         if not (any(test_urlname) or any(test_urlnamespace)):
                             messages.info(request, _("Vous devez vous inscrire au ResEl avant de pouvoir naviguer normalement."))
+                            # TODO: only show message, and don't give the choice
                             return HttpResponseRedirect(settings.LOGIN_URL)
 
                     # If it is a 404, it is very likely that it is because the
@@ -145,7 +142,7 @@ class inscriptionNetworkHandler(object):
                 # Check if logged in & registered:
                 if is_registered == 'active' and is_logged_in:
                     messages.warning(request, _("Votre inscription n'est pas finie. Veuillez vous déconnecter puis vous reconnecter sur le réseau Wifi 'ResEl Secure'"))
-                
+                    # TODO: only show message, and don't give the choice
                 else:
                     # We check that he only browses intended part of the website
                     try:
@@ -157,6 +154,7 @@ class inscriptionNetworkHandler(object):
 
                         if not (any(test_urlname) or any(test_urlnamespace)):
                             messages.info(request, _("Vous devez vous inscrire au ResEl avant de pouvoir naviguer normalement."))
+                            # TODO: only show message, and don't give the choice
                             return HttpResponseRedirect(settings.LOGIN_URL)
 
                     # If it is a 404, it is very likely that it is because the
