@@ -13,6 +13,7 @@ from ldap3 import MODIFY_REPLACE
 
 from fonctions import ldap, generic
 from fonctions.decorators import resel_required, unknown_machine
+from gestion_machines.forms import AddDeviceForm
 from gestion_personnes.models import LdapUser
 from myresel.settings import SERVER_EMAIL
 from .forms import InscriptionForm, ModPasswdForm, CGUForm, InvalidUID
@@ -148,7 +149,8 @@ class InscriptionCGU(View):
             #     # TODO: show error to user, and notify admin
 
             self.request.session['logup_user'] = None
-            return render(self.request, self.finalize_template, {'username': user.uid})
+            register_form = AddDeviceForm()
+            return render(self.request, self.finalize_template, {'username': user.uid, 'register_form': register_form})
         return render(request, self.cgu_template, {'form': form})
 
 
