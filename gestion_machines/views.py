@@ -177,7 +177,7 @@ class Liste(ListView):
     View called to show user device list
     """
 
-    template_name = 'gestion_machines/liste.html'
+    template_name = 'gestion_machines/list_devices.html'
     context_object_name = 'machines'
 
     @method_decorator(login_required)
@@ -186,12 +186,12 @@ class Liste(ListView):
 
     def get_queryset(self):
         uid = str(self.request.user)
-        devices = LdapDevice.search(owner="%(uid)s,%(dn_people)s" % {'uid': uid, 'dn_people': settings.LDAP_DN_PEOPLE})
+        devices = LdapDevice.search(owner="uid=%(uid)s,%(dn_people)s" % {'uid': uid, 'dn_people': settings.LDAP_DN_PEOPLE})
 
         machines = []
         for device in devices:
             status = device.get_status()
-            alias = devices.aliases
+            alias = device.aliases
             machines.append(
                 {'host': device.hostname, 'macaddress': device.mac_address, 'statut': status, 'alias': alias})
         return machines
