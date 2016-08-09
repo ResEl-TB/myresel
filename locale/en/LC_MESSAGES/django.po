@@ -573,12 +573,12 @@ msgid ""
 msgstr ""
 "\n"
 "<p>You are about to change your ResEl password.</p> As it is also used for "
-"Wi-Fi connection, you will have to change your Wi-Fi configuration to take "
-"change into account"
-
+"the Wi-Fi connection, you will have to change your Wi-Fi configuration to take "
+"password change into account."
+https://beta.resel.fr/static/images/logo_resel.png
 #: gestion_personnes/templates/gestion_personnes/mod-passwd.html:19
 msgid "Veuillez renseigner votre nouveau mot de passe :"
-msgstr "Type in your new password"
+msgstr "Type in your new password:"
 
 #: gestion_personnes/templates/gestion_personnes/mod-passwd.html:35
 msgid "Changer mon mot de passe"
@@ -771,7 +771,7 @@ msgstr "And more"
 
 #: pages/templates/pages/home/home.html:115
 msgid "Les dernières nouvelles"
-msgstr "Last news"
+msgstr "Latest news"
 
 #: pages/templates/pages/home/home.html:120 pages/templates/pages/news.html:15
 #, python-format
@@ -800,7 +800,7 @@ msgstr "Already have an account?"
 #: pages/templates/pages/home/home_int.html:16 templates/base.html:95
 #: templates/registration/login.html:4 templates/registration/login.html:45
 msgid "Connexion"
-msgstr "Login"
+msgstr "Log in"
 
 #: pages/templates/pages/home/home_logged.html:10
 msgid "Gestion de mon compte ResEl"
@@ -981,7 +981,7 @@ msgstr "ResEl Association - http://resel.fr - 2003-2016 - All rights reserved"
 
 #: pages/templates/pages/news.html:10
 msgid "Les dernières news"
-msgstr "Last news"
+msgstr "Latest news"
 
 #: pages/views.py:125
 msgid ""
