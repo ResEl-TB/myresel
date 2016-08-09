@@ -49,8 +49,8 @@ class LUser(ldapback.models.LdapModel):
     option = LdapCharField(db_column='option', object_classes=['enstbPerson'])
     formation = LdapCharField(db_column='formation', object_classes=['enstbPerson'])
     photo_file = LdapCharField(db_column='photoFile', object_classes=['enstbPerson'])
-    uid_godson = LdapListField(db_column='uidFillot', object_classes=['enstbPerson'])
-    uid_godfather = LdapListField(db_column='uidParrain', object_classes=['enstbPerson'])
+    uid_godchildren = LdapListField(db_column='uidFillot', object_classes=['enstbPerson'])
+    uid_godparents = LdapListField(db_column='uidParrain', object_classes=['enstbPerson'])
     origin = LdapCharField(db_column='provenance', object_classes=['enstbPerson'])
     # # TODO : publiable
     # # TODO : altmail
