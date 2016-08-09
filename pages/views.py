@@ -13,7 +13,7 @@ from pages.forms import ContactForm
 from fonctions import network, ldap, decorators
 from pages.models import News
 from wiki.models import Category
-from gestion_personnes.models import LdapUser
+
 
 from datetime import datetime
 
@@ -49,7 +49,11 @@ class Home(View):
         args_for_response = {}
 
         # Load services
-        services = Category.objects.get(name='Services').get_articles_and_links('user' in network.get_network_zone(ip))
+        try:
+            services = Category.objects.get(name='Services')
+            services = services.get_articles_and_links('user' in network.get_network_zone(ip))
+        except Category.DoesNotExist:
+            services = []
         args_for_response['services'] = services
 
         # Load some news
