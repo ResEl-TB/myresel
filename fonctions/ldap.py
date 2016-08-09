@@ -189,14 +189,16 @@ def cotisation(user, duree):
 def need_to_pay(username):
     """ Check is the user needs to pay his fee or not """
 
-    user = search(settings.LDAP_DN_PEOPLE, '(&(uid=%s))' % username, ['cotiz', 'endinternet'])[0]
-    if 'cotiz' in user.entry_to_json().lower() and 'endinternet' in user.entry_to_json().lower():
-        end_date = datetime.strptime(user.endinternet[0], '%Y%m%d%H%M%SZ')
-        if end_date < datetime.now():
-            return 'danger'
-        elif end_date < (datetime.now() + timedelta(days=7)):
-            return 'warning'
+    user = search(settings.LDAP_DN_PEOPLE, '(&(uid=%s))' % username, ['cotiz', 'endinternet'])
+    if user:
+        user = user[0]
+        if 'cotiz' in user.entry_to_json().lower() and 'endinternet' in user.entry_to_json().lower():
+            end_date = datetime.strptime(user.endinternet[0], '%Y%m%d%H%M%SZ')
+            if end_date < datetime.now():
+                return 'danger'
+            elif end_date < (datetime.now() + timedelta(days=7)):
+                return 'warning'
+            else:
+                return 'success'
         else:
-            return 'success'
-    else:
-        return 'danger'
+            return 'danger'

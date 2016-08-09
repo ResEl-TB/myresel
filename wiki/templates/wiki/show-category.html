@@ -20,8 +20,8 @@
         <div class="container">
 	    <ul>
 		{# Pour chaque article dans le "set d'article" de la catégorie #}
-		{% for article in object.article_set.all %}
-                <li><a href="{{ article.get_absolute_url }}">{{ article.name }}</a> : {{ article.description }}</li>
+        {% for stuff in category.get_articles_and_links %}
+                <li><a href="{{ stuff.get_absolute_url }}">{{ stuff.name }}</a> : {{ stuff.description }}</li>
 		{% empty %}
                 <p>{% trans "Aucun article disponible." %}</p>
 		{% endfor %}
