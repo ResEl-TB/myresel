@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import render
 from django.views.generic import View, ListView
 from django.utils.decorators import method_decorator
@@ -106,7 +107,7 @@ class AddDeviceView(View):
 
             device.activate(campus)
             device.save()
-            network.update_all()  # TODO: Move that to something async
+            # network.update_all()  # TODO: Move that to something async
 
             messages.success(request, _("Votre machine a bien été ajoutée. Veuillez ré-initialiser votre connexion en débranchant/rebranchant le câble ou en vous déconnectant/reconnectant au Wi-Fi ResEl Secure."))
             return HttpResponseRedirect(reverse('home'))
@@ -147,6 +148,7 @@ class AjoutManuel(View):
 
         return render(request, self.template_name, {'form': form})
 
+
 class ChangementCampus(View):
     """ Vue appelée lorsque qu'une machine provient d'un campus différent """
     
@@ -184,7 +186,7 @@ class Liste(ListView):
 
     def get_queryset(self):
         uid = str(self.request.user)
-        devices = LdapDevice.objects.filter(owner='(&(uidproprio=uid=%(uid)s,%(dn_people)s))' % {'uid': uid, 'dn_people': settings.LDAP_DN_PEOPLE})
+        devices = LdapDevice.search(owner="%(uid)s,%(dn_people)s" % {'uid': uid, 'dn_people': settings.LDAP_DN_PEOPLE})
 
         machines = []
         for device in devices:
