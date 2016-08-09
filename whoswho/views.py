@@ -42,14 +42,14 @@ class UserDetails(View):
         user.godchildren = []
         for line in user.uid_godchildren:
             try:
-                user.godchildren.append(LdapUser.get(line[4:find(line,',')]))
+                user.godchildren.append(LdapUser.get(line[4:line.find(',')]))
             except ObjectDoesNotExist:
                 pass
             
         user.godparents = []
         for line in user.uid_godparents:
             try:
-                user.godparents.append(LdapUser.get(line[4:find(line,',')]))
+                user.godparents.append(LdapUser.get(line[4:line.find(',')]))
             except ObjectDoesNotExist:
                 pass
         
