@@ -18,6 +18,14 @@ def try_delete_user(uid):
         return False
 
 
+def try_delete_old_user(uid):
+    try:
+        user_s = LdapOldUser.get(pk=uid)
+        user_s.delete()
+        return True
+    except ObjectDoesNotExist:
+        return False
+
 class LdapuserTestCase(TestCase):
     @staticmethod
     def create_full_user():
@@ -114,7 +122,7 @@ class LdapuserTestCase(TestCase):
         self.assertEqual(user_t.room_number, "203")
 
     def test_old_user_creation(self):
-        try_delete_user("amartine")
+        try_delete_old_user("amartine")
 
         old_user = LdapOldUser()
         old_user.uid = "amartine"
@@ -150,8 +158,9 @@ class InscriptionFormTestCase(TestCase):
 
     def test_get_free_uid_old(self):
         try_delete_user("amartine")
+        try_delete_old_user("amartine")
         try_delete_user("amartine01")
-
+        try_delete_old_user("amartine01")
         old_user = LdapOldUser()
         old_user.uid = "amartine"
         old_user.first_name = "Alexandre"
