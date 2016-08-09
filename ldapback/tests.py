@@ -11,6 +11,7 @@ from ldapback.models.base import LdapModel
 from ldapback.models.fields import LdapField, LdapCharField, LdapPasswordField, LdapListField
 from myresel import settings
 
+# TODO: test when python name and ldap fields names are different
 
 # Declare some classes for the test
 class DummyModelObject(LdapModel):
@@ -91,7 +92,7 @@ class LdapModelTestCase(TestCase):
         dummy_model = DummyModelObject()
         dummy_model.man = "paris"
         pk = dummy_model.generate_pk()
-        self.assertEqual("man=paris,dc=resel,dc=fr", pk)
+        self.assertEqual("name=paris,dc=resel,dc=fr", pk)
 
     def test_to_ldap_field(self):
         user = TestGenericPerson()

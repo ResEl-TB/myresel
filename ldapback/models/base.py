@@ -9,6 +9,8 @@ from ldapback.backends.ldap.base import Ldap
 from ldapback.models.fields import LdapField
 
 
+# TODO: create an init function to initalize fields to the right type
+
 class LdapModel(object):
     """
     A Model is related to a dn
@@ -95,11 +97,11 @@ class LdapModel(object):
         :return:
         """
 
-        pk_field_name, _ = self.get_pk_field()
+        pk_field_name, pk_field = self.get_pk_field()
         pk_field_value = str(getattr(self, pk_field_name))
         if len(pk_field_value) == 0:
             raise ValueError("Empty pk value")
-        pk = "%s=%s,%s" % (pk_field_name, pk_field_value, self.base_dn)
+        pk = "%s=%s,%s" % (pk_field.db_column, pk_field_value, self.base_dn)
         return pk
 
     def to_ldap(self):
