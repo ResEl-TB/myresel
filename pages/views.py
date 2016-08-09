@@ -1,21 +1,20 @@
+# coding: utf-8
+from datetime import datetime
+
+from django.conf import settings
+from django.contrib import messages
 from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
-from django.conf import settings
-
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import View, ListView
-from django.contrib import messages
 
-from pages.forms import ContactForm
 from fonctions import network, ldap, decorators
+from pages.forms import ContactForm
 from pages.models import News
 from wiki.models import Category
-
-
-from datetime import datetime
 
 
 class Home(View):
@@ -106,15 +105,17 @@ class Contact(View):
     form_class = ContactForm
 
     def get(self, request, *args, **kwargs):
-        try:
-            user = LdapUser.objects.get(uid=request.user.username)
-            form = self.form_class(
-                nom=user.displayName,
-                chambre=[user.batiment, user.roomNumber].join(' '),
-                mail=user.mail
-            )
-        except:
-            form = self.form_class()
+        form = self.form_class()
+
+        # try:
+        #     user = LdapUser.objects.get(uid=request.user.username)
+        #     form = self.form_class(
+        #         nom=user.displayName,
+        #         chambre=[user.batiment, user.roomNumber].join(' '),
+        #         mail=user.mail
+        #     )
+        # except:
+        #     form = self.form_class()
         return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):

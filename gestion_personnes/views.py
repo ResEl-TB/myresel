@@ -1,10 +1,7 @@
-import time
-
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import login, authenticate, get_user_model
+from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
@@ -14,7 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import View
 from ldap3 import MODIFY_REPLACE
 
-from fonctions import ldap, generic, network
+from fonctions import ldap, generic
 from fonctions.decorators import resel_required, unknown_machine
 from gestion_personnes.models import LdapUser
 from myresel.settings import SERVER_EMAIL
@@ -36,8 +33,8 @@ class Inscription(View):
     template_name = 'gestion_personnes/inscription.html'
     form_class = InscriptionForm
 
-    # @method_decorator(resel_required)
-    # @method_decorator(unknown_machine)
+    @method_decorator(resel_required)
+    @method_decorator(unknown_machine)
     def dispatch(self, *args, **kwargs):
         return super(Inscription, self).dispatch(*args, **kwargs)
 
@@ -55,7 +52,7 @@ class Inscription(View):
                 messages.error(request, _("Une erreur s'est produite lors de la création de vos identifiants. "
                                           "Veuillez contacter un administeur."))
                 return render(request, self.template_name, {'form': form})
-            request.session['logup_user'] = user.to_JSON()
+            request.session['logup_user'] = user.to_json()
             return HttpResponseRedirect(reverse('gestion-personnes:cgu'))
 
         return render(request, self.template_name, {'form': form})
@@ -98,7 +95,7 @@ class InscriptionCGU(View):
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         if form.is_valid():
-            user = LdapUser.from_JSON(self.request.session['logup_user'])
+            user = LdapUser.from_json(self.request.session['logup_user'])
             user.save()
 
             auth_user = ldap.get_user(username=user.uid)
@@ -108,8 +105,8 @@ class InscriptionCGU(View):
 
             # Subscribe to campus@resel.fr
             campus_email = EmailMessage(
-                subject="SUBSCRIBE campus {} {}".format(user.firstname,
-                                                        user.lastname),
+                subject="SUBSCRIBE campus {} {}".format(user.first_name,
+                                                        user.last_name),
                 body="Inscription automatique de {} a campus".format(user.uid),
                 from_email=user.mail,
                 reply_to=["listmaster@resel.fr"],
@@ -143,12 +140,12 @@ class InscriptionCGU(View):
                 reply_to=["support@resel.fr"],
                 to=[user.mail],
             )
-            try:
-                campus_email.send()
-                user_email.send()
-            except Exception:
-                pass
-                # TODO: show error to user, and notify admin
+            # try:
+            #     campus_email.send()
+            #     user_email.send()
+            # except Exception:
+            #     pass
+            #     # TODO: show error to user, and notify admin
 
             self.request.session['logup_user'] = None
             return render(self.request, self.finalize_template, {'username': user.uid})

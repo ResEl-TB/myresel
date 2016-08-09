@@ -1,15 +1,17 @@
+# -*- coding: utf-8 -*-
 import time
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
 
-from gestion_personnes.models import LUser
+from gestion_personnes.forms import InscriptionForm
+from gestion_personnes.models import LdapUser, LdapOldUser
 from ldapback.models.fields import LdapCharField
 
 
 def try_delete_user(uid):
     try:
-        user_s = LUser.get(pk=uid)
+        user_s = LdapUser.get(pk=uid)
         user_s.delete()
         return True
     except ObjectDoesNotExist:
@@ -19,7 +21,7 @@ def try_delete_user(uid):
 class LdapuserTestCase(TestCase):
     @staticmethod
     def create_full_user():
-        user = LUser()
+        user = LdapUser()
         user.uid = "amanoury"
         user.first_name = "Alexandre"
         user.last_name = "Manoury"
@@ -53,8 +55,8 @@ class LdapuserTestCase(TestCase):
         try_delete_user(user.uid)
         user.save()
 
-        user_s = LUser.get(pk=user.uid)
-        self.assertIsInstance(user_s, LUser)
+        user_s = LdapUser.get(pk=user.uid)
+        self.assertIsInstance(user_s, LdapUser)
         self.assertEqual(user_s.uid, "amanoury")
         self.assertEqual(user_s.first_name, "Alexandre")
         self.assertEqual(user_s.last_name, "Manoury")
@@ -79,7 +81,7 @@ class LdapuserTestCase(TestCase):
         try_delete_user(user.uid)
 
     def test_only_ResEl(self):
-        user = LUser()
+        user = LdapUser()
         user.uid = "amanoury"
         user.first_name = "Alexandre"
         user.last_name = "Manoury"
@@ -96,8 +98,8 @@ class LdapuserTestCase(TestCase):
         try_delete_user(user.uid)
         user.save()
 
-        user_s = LUser.get(pk=user.uid)
-        self.assertIsInstance(user_s, LUser)
+        user_s = LdapUser.get(pk=user.uid)
+        self.assertIsInstance(user_s, LdapUser)
         self.assertEqual(user.uid, user_s.uid)
         self.assertIsInstance(user.building, LdapCharField)
 
@@ -106,8 +108,57 @@ class LdapuserTestCase(TestCase):
         user_s.room_number = "203"
         user_s.save()
 
-        user_t = LUser.get(pk=user.uid)
-        self.assertIsInstance(user_t, LUser)
+        user_t = LdapUser.get(pk=user.uid)
+        self.assertIsInstance(user_t, LdapUser)
         self.assertEqual(user_t.building, "I11")
         self.assertEqual(user_t.room_number, "203")
 
+    def test_old_user_creation(self):
+        try_delete_user("amartine")
+
+        old_user = LdapOldUser()
+        old_user.uid = "amartine"
+        old_user.first_name = "Alexandre"
+        old_user.last_name = "Martine"
+        old_user.user_password = "blah"
+
+        old_user.save()
+
+        user_s = LdapOldUser.get(pk="amartine")
+        self.assertIsInstance(user_s, LdapOldUser)
+        self.assertEqual(old_user.last_name, user_s.last_name)
+
+
+class InscriptionFormTestCase(TestCase):
+    def test_get_free_uid_simple(self):
+        user = LdapUser()
+        user.uid = "mdanakil"
+        user.first_name = "Martin"
+        user.last_name = "Danakil"
+        user.user_password = "blah"
+
+        try_delete_user(user.uid)
+        for i in range(1, 10):
+            try_delete_user("%s0%i" % (user.uid, i))
+
+        uid = InscriptionForm.get_free_uid(user.first_name, user.last_name)
+        self.assertEqual(user.uid, uid)
+        user.save()
+
+        uid2 = InscriptionForm.get_free_uid(user.first_name, user.last_name)
+        self.assertEqual("mdanakil01", uid2)
+
+    def test_get_free_uid_old(self):
+        try_delete_user("amartine")
+        try_delete_user("amartine01")
+
+        old_user = LdapOldUser()
+        old_user.uid = "amartine"
+        old_user.first_name = "Alexandre"
+        old_user.last_name = "Martine"
+        old_user.user_password = "blah"
+
+        old_user.save()
+
+        uid = InscriptionForm.get_free_uid(old_user.first_name, old_user.last_name)
+        self.assertEqual("amartine01", uid)
