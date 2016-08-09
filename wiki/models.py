@@ -73,6 +73,7 @@ class Article(models.Model):
     text = RichTextUploadingField()
     date_creation = models.DateField(auto_now_add=True)
     date_last_edit = models.DateField(auto_now=True)
+    glyphicon_name = models.CharField(max_length=64, blank=True)
     slug = models.SlugField(max_length=255, blank=True, unique=True)
 
     def save(self, *args, **kwargs):
