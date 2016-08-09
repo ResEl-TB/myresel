@@ -19,9 +19,9 @@ class LdapDevice(ldapback.models.LdapModel):
     object_classes = ['reselMachine']
 
     hostname = LdapCharField(db_column='host', object_classes=['reselMachine'], pk=True)
-    owner = LdapCharField(db_column='uidproprio', object_classes=['reselMachine'])
-    ip = LdapCharField(db_column='iphostnumber', object_classes=['reselMachine'])
-    mac_address = LdapCharField(db_column='macaddress', object_classes=['reselMachine'])
+    owner = LdapCharField(db_column='uidproprio', object_classes=['reselMachine'], required=True)
+    ip = LdapCharField(db_column='iphostnumber', object_classes=['reselMachine'], required=True)
+    mac_address = LdapCharField(db_column='macaddress', object_classes=['reselMachine'], required=True)
     zones = LdapListField(db_column='zone', object_classes=['reselMachine'])
     aliases = LdapListField(db_column='hostalias', object_classes=['reselMachine'])
     last_date = LdapCharField(db_column='lastdate', object_classes=['reselMachine'])
