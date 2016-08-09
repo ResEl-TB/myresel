@@ -30,7 +30,7 @@
             <h2>{% trans "Parains" %}</h2>
             <ul>
             {% for godparent in user.godparents %}
-            <li><a href="{% url 'whoswho.userDetails' godparent.uid %}">godparent.display_name</a> ({%trans 'Promo' %} godparent.promo)</li>
+            <li><a href="{% url 'who:user-details' godparent.uid %}">godparent.display_name</a> ({%trans 'Promo' %} godparent.promo)</li>
             {% endfor %}
             </ul>
         </div>
@@ -40,7 +40,7 @@
             <h2>{% trans "Filleuls" %}</h2>
             <ul>
             {% for godchild in user.godchildren %}
-            <li><a href="{% url 'whoswho.userDetails' godchild.uid %}">godchild.display_name</a> ({%trans 'Promo' %} godchild.promo)</li>
+            <li><a href="{% url 'who:user-details' godchild.uid %}">godchild.display_name</a> ({%trans 'Promo' %} godchild.promo)</li>
             {% endfor %}
             </ul>
         </div>
