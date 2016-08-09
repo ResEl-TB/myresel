@@ -45,13 +45,15 @@ class UserDetails(View):
                 user.godchildren.append(LdapUser.get(uid=line[4:line.find(',')]))
             except ObjectDoesNotExist:
                 pass
-            
+        sorted(user.godchildren, key=lambda e: e.first_name + " " + e.last_name.upper())
+        
         user.godparents = []
         for line in user.uid_godparents:
             try:
                 user.godparents.append(LdapUser.get(uid=line[4:line.find(',')]))
             except ObjectDoesNotExist:
                 pass
+        sorted(user.godparents, key=lambda e: e.first_name + " " + e.last_name.upper())
         
         return render(request, self.template_name, {'user' : user})
     

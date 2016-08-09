@@ -10,10 +10,10 @@
 
 {% block content %}
 <div class="who-presentation">
-    <h1>{{user.display_name}}</h1>
+    <h1>{{user.first_name}} {{user.last_name|upper}}</h1>
     <ul>
         <li><b>{% trans "Prénom" %} :</b> {{user.first_name}}</li>
-        <li><b>{% trans "Nom" %} :</b> {{user.last_name}}</li>
+        <li><b>{% trans "Nom" %} :</b> {{user.last_name|upper}}</li>
         <li><b>{% trans "Promo" %} :</b> {{user.promo}}</li>
         {% if user.formation != "" %}<li><b>{% trans "Formation" %} :</b> {{user.formation}}</li>{% endif %}
     </ul>
@@ -22,15 +22,10 @@
 <div>
     <div class="col-sm-6 col-md-4">
         <div class="thumbnail">
-            <h2>{% trans "Clubs" %}</h2>
-        </div>
-    </div>
-    <div class="col-sm-6 col-md-4">
-        <div class="thumbnail">
-            <h2>{% trans "Parains" %}</h2>
+            <h2>{% trans "Parrains" %}</h2>
             <ul>
             {% for godparent in user.godparents %}
-            <li><a href="{% url 'who:user-details' godparent.uid %}">{{godparent.display_name}}</a> ({%trans 'Promo' %} {{godparent.promo}})</li>
+            <li><a href="{% url 'who:user-details' godparent.uid %}">{{godparent.first_name}} {{godparent.last_name|upper}}</a> ({%trans 'Promo' %} {{godparent.promo}})</li>
             {% endfor %}
             </ul>
         </div>
@@ -40,9 +35,14 @@
             <h2>{% trans "Filleuls" %}</h2>
             <ul>
             {% for godchild in user.godchildren %}
-            <li><a href="{% url 'who:user-details' godchild.uid %}">{{godchild.display_name}}</a> ({%trans 'Promo' %} {{godchild.promo}})</li>
+            <li><a href="{% url 'who:user-details' godchild.uid %}">{{godchild.first_name}} {{godchild.last_name|upper}}</a> ({%trans 'Promo' %} {{godchild.promo}})</li>
             {% endfor %}
             </ul>
+        </div>
+    </div>
+    <div class="col-sm-6 col-md-4">
+        <div class="thumbnail">
+            <h2>{% trans "Clubs" %}</h2>
         </div>
     </div>
 </div>
