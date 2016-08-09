@@ -40,6 +40,7 @@ INSCRIPTION_ZONE_FALLBACK_URLNAME = 'inscription-zone'
 INSCRIPTION_ZONE_ALLOWED_URLNAME = [
     'home',
     'login',
+    'logout',
     'contact',
     INSCRIPTION_ZONE_FALLBACK_URLNAME
 ]
