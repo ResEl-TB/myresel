@@ -38,7 +38,7 @@ LOGIN_REDIRECT_URL = '/'
 INSCRIPTION_ZONE_FALLBACK_URLNAME = 'inscription-zone'
 
 INSCRIPTION_ZONE_ALLOWED_URLNAME = [
-    'home',
+    # 'home',
     'login',
     'logout',
     'contact',

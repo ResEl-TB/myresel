@@ -98,30 +98,24 @@ class inscriptionNetworkHandler(object):
                 return HttpResponseBadRequest(_("Vous vous trouvez sur un réseau d'inscription mais ne possédez pas d'IP dans ce réseau. Veuillez contacter un administrateur."))
 
             else:
-                # Check if logged in & registered:
-                if is_registered == 'active' and is_logged_in:
-                    messages.warning(request, _("Vous êtes correctement inscrit, mais vous êtes sur le mauvais réseau. Veuillez vous connecter sur le réseau Wifi 'ResEl Secure'"))
-                    # TODO: only show message, and don't give the choice
-                else:
-                    # We check that he only browses intended part of the website
-                    try:
-                        path_url = resolve(request.path).url_name
-                        path_namespaces = resolve(request.path).namespaces
+                # We check that he only browses intended part of the website
+                # And redirect him otherwise
+                try:
+                    path_url = resolve(request.path).url_name
+                    path_namespaces = resolve(request.path).namespaces
 
-                        test_urlname = [m == path_url for m in settings.INSCRIPTION_ZONE_ALLOWED_URLNAME]
-                        test_urlnamespace = [m in path_namespaces for m in settings.INSCRIPTION_ZONE_ALLOWED_URLNAMESPACE]
+                    test_urlname = [m == path_url for m in settings.INSCRIPTION_ZONE_ALLOWED_URLNAME]
+                    test_urlnamespace = [m in path_namespaces for m in settings.INSCRIPTION_ZONE_ALLOWED_URLNAMESPACE]
 
-                        if not (any(test_urlname) or any(test_urlnamespace)):
-                            messages.info(request, _("Vous devez vous inscrire au ResEl avant de pouvoir naviguer normalement."))
-                            # TODO: only show message, and don't give the choice
-                            return HttpResponseRedirect(settings.LOGIN_URL)
-
-                    # If it is a 404, it is very likely that it is because the
-                    # browser tried to open a tab in order to test the
-                    # connection. The best solution is to redirect the user to
-                    # the landing page.
-                    except Resolver404:  # It's a 404
+                    if not (any(test_urlname) or any(test_urlnamespace)):
                         return HttpResponseRedirect(reverse(settings.INSCRIPTION_ZONE_FALLBACK_URLNAME))
+
+                # If it is a 404, it is very likely that it is because the
+                # browser tried to open a tab in order to test the
+                # connection. The best solution is to redirect the user to
+                # the landing page.
+                except Resolver404:  # It's a 404
+                    return HttpResponseRedirect(reverse(settings.INSCRIPTION_ZONE_FALLBACK_URLNAME))
 
         elif vlan == '999':
 
@@ -136,33 +130,24 @@ class inscriptionNetworkHandler(object):
 
             elif zone == 'Brest-inscription-999' or zone == 'Rennes-inscription':
                 # Check origin:
-                # if host not in settings.ALLOWED_HOSTS:
-                #     return HttpResponseRedirect(settings.INSCRIPTION_ZONE_FALLBACK_URL)  # Will bypass the normal view
-                # else:
                 # Check if logged in & registered:
-                if is_registered == 'active' and is_logged_in:
-                    messages.warning(request, _("Votre inscription n'est pas finie. Veuillez vous déconnecter puis vous reconnecter sur le réseau Wifi 'ResEl Secure'"))
-                    # TODO: only show message, and don't give the choice
-                else:
-                    # We check that he only browses intended part of the website
-                    try:
-                        path_url = resolve(request.path).url_name
-                        path_namespaces = resolve(request.path).namespaces
+                # We check that he only browses intended part of the website
+                try:
+                    path_url = resolve(request.path).url_name
+                    path_namespaces = resolve(request.path).namespaces
 
-                        test_urlname = [m == path_url for m in settings.INSCRIPTION_ZONE_ALLOWED_URLNAME]
-                        test_urlnamespace = [m in path_namespaces for m in settings.INSCRIPTION_ZONE_ALLOWED_URLNAMESPACE]
+                    test_urlname = [m == path_url for m in settings.INSCRIPTION_ZONE_ALLOWED_URLNAME]
+                    test_urlnamespace = [m in path_namespaces for m in settings.INSCRIPTION_ZONE_ALLOWED_URLNAMESPACE]
 
-                        if not (any(test_urlname) or any(test_urlnamespace)):
-                            messages.info(request, _("Vous devez vous inscrire au ResEl avant de pouvoir naviguer normalement."))
-                            # TODO: only show message, and don't give the choice
-                            return HttpResponseRedirect(settings.LOGIN_URL)
-
-                    # If it is a 404, it is very likely that it is because the
-                    # browser tried to open a tab in order to test the
-                    # connection. The best solution is to redirect the user to
-                    # the landing page.
-                    except Resolver404:  # It's a 404
+                    if not (any(test_urlname) or any(test_urlnamespace)):
                         return HttpResponseRedirect(reverse(settings.INSCRIPTION_ZONE_FALLBACK_URLNAME))
+
+                # If it is a 404, it is very likely that it is because the
+                # browser tried to open a tab in order to test the
+                # connection. The best solution is to redirect the user to
+                # the landing page.
+                except Resolver404:  # It's a 404
+                    return HttpResponseRedirect(reverse(settings.INSCRIPTION_ZONE_FALLBACK_URLNAME))
             else:
                 # Other possiblities: Brest-inscription, Brest-other.
                 # Should never happen... but ?

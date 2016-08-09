@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseForbidden, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
@@ -151,7 +151,7 @@ def inscriptionZoneInfo(request):
         is_registered = ldap.get_status(ip) == 'active'
 
     if "inscription" not in zone:
-        return HttpResponseForbidden(_("Cette page n'est pas accessible sur ce réseau."))
+        return HttpResponseRedirect(reverse("home"))
 
     return render(
         request,
