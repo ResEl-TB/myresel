@@ -10,6 +10,10 @@ SECRET_KEY = '7_gz^zjk+lj+72utudq+l(xd-!@3xlo5c*20&dz$mdgn2p22g-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+#####
+# Campus specific settings
+#####
+CURRENT_CAMPUS = "Brest"
 
 #####
 # Credentials, please keep them out of the repo
