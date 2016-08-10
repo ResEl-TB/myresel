@@ -52,7 +52,7 @@ class NetworkConfiguration(object):
                 request.network_data['is_registered'] = ldap.get_status(ip)  # TODO: possible bug
             except NetworkError as e:
                 logger.error("Imposible de détecter l'addresse mac de d'un appareil,"
-                             "voiçi les informations que nous avons : "
+                             " voici les informations que nous avons : "
                              "\n IP : %s"
                              "\n ZONE : %s"
                              "\n VLAN : %s "
@@ -105,6 +105,17 @@ class inscriptionNetworkHandler(object):
             # Preliminary check
 
             if zone != 'Brest-inscription':
+                logger.error("Un utilisateur s'est trouvé sur un réseau d'inscription avec une ip autre, "
+                             "voici les informations que nous avons : "
+                             "\n IP : %s"
+                             "\n HOST : %s"
+                             "\n ZONE : %s"
+                             "\n VLAN : %s"
+                             "\n MAC : %s"
+                             "\n Utilisateur connecté : %s"
+                             "\n Machine enregistrée : %s"
+                             % (ip, host, zone, vlan, mac,  is_logged_in, is_registered))
+
                 # Error ! In vlan 995 without inscription IP address
                 return HttpResponseBadRequest(_("Vous vous trouvez sur un réseau d'inscription mais ne possédez pas d'IP dans ce réseau. Veuillez contacter un administrateur."))
 
