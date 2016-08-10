@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseForbidden, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
@@ -62,6 +62,7 @@ class Home(View):
         # Automatically active the computer if it is known
         # Change campus automatically
         is_in_resel = network.is_resel_ip(ip)
+        args_for_response['ip_in_resel'] = is_in_resel
         if is_in_resel:
             computer_status = ldap.get_status(ip)
             if computer_status == 'inactive':
@@ -84,6 +85,7 @@ class Home(View):
             args_for_response['end_fee'] = end_fee
         elif network.is_resel_ip(ip):
             template_for_response = self.interior_template
+
 
         return render(request, template_for_response, args_for_response)
 
@@ -151,7 +153,7 @@ def inscriptionZoneInfo(request):
         is_registered = ldap.get_status(ip) == 'active'
 
     if "inscription" not in zone:
-        return HttpResponseForbidden(_("Cette page n'est pas accessible sur ce réseau."))
+        return HttpResponseRedirect(reverse("home"))
 
     return render(
         request,

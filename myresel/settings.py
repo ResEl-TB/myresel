@@ -30,6 +30,7 @@ EMAIL_HOST = 'pegase.adm.resel.fr'
 
 EMAIL_SUBJECT_PREFIX = ''
 
+EMAIL_BACKEND = 'inscription-bot@resel.fr'
 # Login
 
 LOGIN_URL = '/login'
@@ -41,7 +42,7 @@ LOGIN_REDIRECT_URL = '/'
 INSCRIPTION_ZONE_FALLBACK_URLNAME = 'inscription-zone'
 
 INSCRIPTION_ZONE_ALLOWED_URLNAME = [
-    'home',
+    # 'home',
     'login',
     'logout',
     'contact',
