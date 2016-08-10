@@ -46,6 +46,7 @@ INSCRIPTION_ZONE_ALLOWED_URLNAME = [
     'login',
     'logout',
     'contact',
+    'set_language',
     INSCRIPTION_ZONE_FALLBACK_URLNAME
 ]
 
