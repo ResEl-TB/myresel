@@ -1,14 +1,17 @@
+# -*- coding: utf-8 -*-
+import logging
+
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
-from django.contrib import messages
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
 from django.core.urlresolvers import resolve, Resolver404, reverse
 
 from fonctions import ldap, network
+from fonctions.network import NetworkError
 from gestion_machines.models import LdapDevice
 
-
+logger = logging.getLogger(__name__)
 class IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAResElAdminSoCheckTheLdapBeforeMiddleware(object):
     def process_request(self, request):
         # Check if the user is a ResEl admin. If so, its credentials will be updated to superuser and staff
@@ -44,15 +47,23 @@ class NetworkConfiguration(object):
 
         # If the device in `user` or `inscription` zone, we can retrieve its mac address
         if "user" in zone or "inscription" in zone:
-            request.network_data['mac'] = network.get_mac(ip)
-            request.network_data['is_registered'] = ldap.get_status(ip)  # TODO: possible bug
-
-            if not request.network_data['mac']:
-                # Error ! couldn't get its mac address
-                return HttpResponseBadRequest(_("Impossible de détecter votre adresse mac, veuillez contacter un administrateur ResEl."))
+            try:
+                request.network_data['mac'] = network.get_mac(ip)
+                request.network_data['is_registered'] = ldap.get_status(ip)  # TODO: possible bug
+            except NetworkError as e:
+                logger.error("Imposible de détecter l'addresse mac de d'un appareil,"
+                             "voiçi les informations que nous avons : "
+                             "\n IP : %s"
+                             "\n ZONE : %s"
+                             "\n VLAN : %s "
+                             "\n Utilisateur connecté : %s"
+                             "\n\n Voici l'erreur reçue :"
+                             "\n\n %s"
+                             % (ip, zone, request.network_data['vlan'], request.network_data['is_logged_in'], e))
+                return HttpResponseBadRequest(
+                    _("Impossible de détecter votre adresse mac, veuillez contacter un administrateur ResEl."))
 
         if request.network_data['is_registered'] != 'unknown':
-            end_ip = ".".join(ip.split(".")[-2:])
             current_device = LdapDevice.get(mac_address=request.network_data['mac'])
             request.network_data['device'] = current_device
 

@@ -33,7 +33,8 @@ class Reactivation(View):
 
     def get(self, request, *args, **kwargs):
         # Vérification que la machine est bien à l'user
-        machine = ldap.search(settings.LDAP_DN_MACHINES, '(&(macaddress=%s))' % network.get_mac(request.META['REMOTE_ADDR']), ['uidproprio', 'host', 'iphostnumber', 'macaddress'])[0]
+        mac = request.network_data['mac']
+        machine = ldap.search(settings.LDAP_DN_MACHINES, '(&(macaddress=%s))' % mac, ['uidproprio', 'host', 'iphostnumber', 'macaddress'])[0]
         if str(request.user) not in machine.uidproprio[0]:
             messages.error(request, _("Cette machine ne semble pas vous appartenir. Veuillez contacter un administrateur afin de la transférer."))
             return HttpResponseRedirect(reverse('pages:news'))

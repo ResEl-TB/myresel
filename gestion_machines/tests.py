@@ -104,6 +104,18 @@ class LdapDeviceTestCase(TestCase):
         self.assertEqual(device.ip, device_s.ip)
         self.assertEqual(device.owner, device_s.owner)
 
+    def test_device_save_empty_mac(self):
+        self.try_delete_device("emptydevicelcarr")
+
+        device = LdapDevice()
+        device.hostname = "emptydevicelcarr"
+        device.set_owner("lcarr")
+        device.ip = "123.213"
+        device.mac_address = ""
+        device.activate("Brest")
+
+        with self.assertRaises(ValueError):
+            device.save()
     # TODO: test multiple same mac devices
     # TODO: test invalid mac or ip
     # TODO: test multiple same hostname
