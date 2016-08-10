@@ -164,7 +164,7 @@ class InscriptionCGU(View):
                     "campus": settings.CURRENT_CAMPUS
                 }),
                 from_email=SERVER_EMAIL,
-                to=["inscription-bot@resel.fr", "botanik@resel.fr"],
+                to=[settings.EMAIL_BACKEND, "botanik@resel.fr"],
             )
             try:
                 campus_email.send()

@@ -54,6 +54,12 @@ REDIS_DB = 0
 
 STRIPE_API_KEY = "sk_test_Uk3Qcg8o0OTj8VHAG6NovqR9"
 
+
+# TRESO
+
+INVOICE_STORE_PATH = '/myresel/media/invoices'
+
+
 ####
 # DEBUG specific settings
 ####
@@ -95,7 +101,72 @@ if DEBUG:
 # SESSION_COOKIE_SECURE = False
 # CSRF_COOKIE_SECURE = False
 # SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-
+# SECURE_BROWSER_XSS_FILTER = True
+# SECURE_SSL_REDIRECT = True
 #
 
-INVOICE_STORE_PATH = '/myresel/media/invoices'
+####
+# Logging configuration
+####
+
+# LOGGERS
+
+# Logger used in a production environment
+PROD_LOGGING_CONF = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': '/srv/www/resel.fr/debug.log',
+            'formatter': 'simple',
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'formatter': 'verbose',
+            'include_html': True,
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file', 'mail_admins'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
+# Logger used in a development environment
+DEBUG_LOGGING_CONF = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
+
+if DEBUG:
+    LOGGING = DEBUG_LOGGING_CONF
+else:
+    LOGGING = PROD_LOGGING_CONF
+

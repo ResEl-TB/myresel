@@ -27,6 +27,7 @@ EMAIL_HOST = 'pegase.adm.resel.fr'
 
 EMAIL_SUBJECT_PREFIX = ''
 
+EMAIL_BACKEND = 'inscription-bot@resel.fr'
 # Login
 
 LOGIN_URL = '/login'
