@@ -62,6 +62,7 @@ class Home(View):
         # Automatically active the computer if it is known
         # Change campus automatically
         is_in_resel = network.is_resel_ip(ip)
+        args_for_response['ip_in_resel'] = is_in_resel
         if is_in_resel:
             computer_status = ldap.get_status(ip)
             if computer_status == 'inactive':
@@ -84,6 +85,7 @@ class Home(View):
             args_for_response['end_fee'] = end_fee
         elif network.is_resel_ip(ip):
             template_for_response = self.interior_template
+
 
         return render(request, template_for_response, args_for_response)
 
