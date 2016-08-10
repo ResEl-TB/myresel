@@ -140,6 +140,43 @@ body {
     padding-top: 15px;
 }
 
+.footer .row{
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.footer .row:last-of-type {
+    margin-bottom: 0;
+}
+
+.footer a{
+    color: #ffffff;
+}
+
+.footer ul {
+    list-style: none;
+    margin-left: 0;
+    padding-left: 0;
+    margin-bottom: 20px;
+}
+
+.footer li {
+    margin-top: 5px;
+}
+
+.footer .social-links {
+    font-size: 2.5em;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.footer .bottom-row {
+    background-color: #1a3a57;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    margin-top: 30px;
+}
+
 
 /* Alerts */
 .alert-info {

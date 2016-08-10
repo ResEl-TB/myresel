@@ -145,14 +145,47 @@
     <div id="page-wrapper">
     {% block content %}{% endblock %}
     </div>
-    <!-- /#page-wrapper -->
-    <!-- /#wrapper -->
 
     <footer class="footer">
         <!-- Container for setting locale language -->
-        <div class="container text-right">
+        <div class="container text-center">
             <div class="row">
-                <div class="col-md-8">{% trans "L'Association ResEl - http://resel.fr - 2003-2016 - Tous droits réservés" %}</div>
+                <a href="https://www.facebook.com/Reselfr"><span class="fa fa-facebook social-links"></span></a>
+                <a href="https://twitter.com/resel_fr"><span class="fa fa-twitter social-links"></span></a>
+                <a href="https://github.com/ResEl-TB"><span class="fa fa-github social-links"></span></a>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <ul>
+                        <li><a href="#">{% trans "Les statuts de l'association" %}</a></li>
+                        <li><a href="#">{% trans "Le règlement intérieur" %}</a></li>
+                        <li><a href="#">{% trans "Cotisation" %}</a></li>
+                        <li><a href="{% url "contact" %}">{% trans "Contact" %}</a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-4">
+                    <ul>
+                        <li><a href="https://status.resel.fr">{% trans "État du réseau" %}</a></li>
+                        <li><a href="#">{% trans "Les clubs" %}</a></li>
+                        <li><a href="https://campus.resel.fr">{% trans "Campus" %}</a></li>
+                        <li><a href="#">{% trans "Annuaire" %}</a></li>
+                        <li><a href="#">{% trans "Devenez Administrateur ResEl !" %}</a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-4">
+                    <ul>
+                        <li><a href="https://www.federez.net/">{% trans "Fédérez" %}</a></li>
+                        <li><a href="http://www.telecom-bretagne.eu">{% trans "Télécom Bretagne" %}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+            <div class="text-center bottom-row">
+        <div class="container ">
+                <div class="col-sm-8 col-sm-offset-2">
+                    {% trans "L'Association ResEl - 2003-2016 - Tous droits réservés" %}
+                </div>
             </div>
         </div>
     </footer>

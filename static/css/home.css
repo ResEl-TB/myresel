@@ -148,7 +148,16 @@ h3 .service-title {
 /* override css only for the footer */
 .footer {
     background: #ACF0F2;
-    color: #122a3c;
+    color: #374b4c;
+}
+
+.footer a {
+    color: #374b4c;
+}
+
+.footer .bottom-row {
+    background: #97ecef;
+    color: #081018;
 }
 
 #bigheart:hover {
