@@ -131,7 +131,7 @@
                 {% get_language_info_list for LANGUAGES as languages %}
                 <form action="{% url 'set_language' %}" method="post">
                     {% csrf_token %}
-                    <input name="next" type="hidden" value="{{ redirect_to }}"/>
+                    <input name="next" type="hidden" value="{% url 'inscription-zone' %}"/>
                     {% for language in languages %}
                         <button class="btn btn-link" name="language" type="submit" value="{{ language.code }}">{{ language.name_local|title }}</button>
                     {% endfor %}
@@ -140,16 +140,6 @@
         </div>
     </div>
 
-</div>
-</div>
-
-
-
-
-
-
-
-{#<img src="{% static 'images/logo_resel_flat.png' %}" class="img-responsive">#}
 </div>
 <!-- /#page-wrapper -->
 <!-- /#wrapper -->
