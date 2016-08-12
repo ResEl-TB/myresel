@@ -575,7 +575,6 @@ msgstr ""
 "<p>You are about to change your ResEl password.</p> As it is also used for "
 "the Wi-Fi connection, you will have to change your Wi-Fi configuration to take "
 "password change into account."
-https://beta.resel.fr/static/images/logo_resel.png
 #: gestion_personnes/templates/gestion_personnes/mod-passwd.html:19
 msgid "Veuillez renseigner votre nouveau mot de passe :"
 msgstr "Type in your new password:"
