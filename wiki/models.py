@@ -40,6 +40,9 @@ class Category(models.Model):
     
 
     def is_display_truncated(self):
+        if self.nbToDisplay == 0:
+            return False
+
         try:
             return len(self.article_set.all())+len(self.link_set.all()) > self.nbToDisplay
         except:
