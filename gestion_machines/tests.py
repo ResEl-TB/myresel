@@ -3,17 +3,17 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
 
 from gestion_machines.models import LdapDevice
-from gestion_personnes.models import LdapUser
 
 
-def new_dummy_device(activated=True):
+def new_dummy_device(owner="lcarr", hostname="mymachine", activated=True):
     device = LdapDevice()
 
-    device.hostname = "mymachine"
-    device.set_owner("lcarr")
+    device.hostname = hostname
+    device.set_owner(owner)
     device.ip = "120.45"
     if activated:
         device.activate("Brest")
+    return device
 
 
 def try_delete_device(pk):

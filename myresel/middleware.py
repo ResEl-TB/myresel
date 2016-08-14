@@ -181,7 +181,7 @@ class SimulateProductionNetwork(object):
     @staticmethod
     def process_request(request):
 
-        if not settings.DEBUG:
+        if not (settings.DEBUG or settings.TESTING):
             return
 
         host = request.META["HTTP_HOST"].split(":")[0]

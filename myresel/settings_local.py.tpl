@@ -4,11 +4,18 @@
 # Usually here is what differ from production and development configuration
 #
 
+import sys
+
 # SECURITY WARNING: Change this in production!
+
+
 SECRET_KEY = '7_gz^zjk+lj+72utudq+l(xd-!@3xlo5c*20&dz$mdgn2p22g-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+# Are we in testing mode :
+TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 
 #####
 # Campus specific settings
@@ -65,7 +72,7 @@ INVOICE_STORE_PATH = '/myresel/media/invoices'
 ####
 
 # TODO: factorize this conf w/ vagrant conf
-if DEBUG:
+if DEBUG or TESTING:
     DEBUG_SETTINGS = {
         'networks': {
             '10.0.3.94': {  # VLAN 994 (exterior)
@@ -120,7 +127,7 @@ PROD_LOGGING_CONF = {
             'format': '%(asctime)s [%(levelname)s] %(module)s %(process)d %(thread)d : %(message)s'
         },
         'simple': {
-            'format': ''%(asctime)s [%(levelname)s] %(module)s : %(message)s'
+            'format': '%(asctime)s [%(levelname)s] %(module)s : %(message)s'
         },
     },
     'handlers': {
@@ -165,7 +172,7 @@ DEBUG_LOGGING_CONF = {
 }
 
 
-if DEBUG:
+if DEBUG or TESTING:
     LOGGING = DEBUG_LOGGING_CONF
 else:
     LOGGING = PROD_LOGGING_CONF
