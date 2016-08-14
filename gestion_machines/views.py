@@ -22,7 +22,10 @@ from django.conf import settings
 
 # Create your views here.
 class Reactivation(View):
-    """ Vue appelée pour ré-activer une machine d'un utilisateur absent trop longtemps du campus """
+    """
+    Vue appelée pour ré-activer une machine d'un utilisateur absent trop longtemps du campus
+    Would a post REQUEST more adequate ? Maybe hard to implement.
+    """
 
     template_name = 'gestion_machines/reactivation.html'
 
@@ -165,8 +168,27 @@ class ChangementCampus(View):
         if ldap.get_status(request.META['REMOTE_ADDR']) == 'disabled':
             # Mise à jour de la fiche LDAP
             ldap.update_campus(request.META['REMOTE_ADDR'])
-
+            machine = ldap.search(settings.LDAP_DN_MACHINES, '(&(macaddress=%s))' % request.network_data['mac'],
+                                  ['uidproprio', 'host', 'iphostnumber', 'macaddress'])[0]
+            mail = EmailMessage(
+                subject="[Changement campus Brest] La machine {} [172.22.{} - {}] par {}".format(
+                    machine.host[0],
+                    machine.iphostnumber[0],
+                    machine.macaddress[0],
+                    str(request.user)),
+                body="Changement de campus de la machine {} appartenant à {}\n\nIP : 172.22.{}\nMAC : {}".format(
+                    machine.host[0],
+                    str(request.user),
+                    machine.iphostnumber[0],
+                    machine.macaddress[0]),
+                from_email="inscription-bot@resel.fr",
+                reply_to=["inscription-bot@resel.fr"],
+                to=["inscription-bot@resel.fr", "botanik@resel.fr"],
+                headers={'Cc': 'botanik@resel.fr'}
+            )
+            mail.send()
             return render(request, self.template_name)
+
 
         # La machine est déjà dans le bon campus, on redirige sur la page d'accueil
         messages.info(request, _("Cette machine est déjà enregistrée comme étant dans le bon campus."))
