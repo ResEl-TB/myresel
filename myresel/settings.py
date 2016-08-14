@@ -14,7 +14,10 @@ from myresel.settings_local import *
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-ALLOWED_HOSTS = ['beta.resel.fr', 'my.resel.fr', 'resel.fr']
+ALLOWED_HOSTS = ['*', 'beta.resel.fr', 'my.resel.fr', 'resel.fr']
+
+# Language switch hack
+CSRF_COOKIE_DOMAIN = '.resel.fr'
 
 
 # Mails
@@ -27,6 +30,7 @@ EMAIL_HOST = 'pegase.adm.resel.fr'
 
 EMAIL_SUBJECT_PREFIX = ''
 
+EMAIL_BACKEND = 'inscription-bot@resel.fr'
 # Login
 
 LOGIN_URL = '/login'
@@ -38,9 +42,11 @@ LOGIN_REDIRECT_URL = '/'
 INSCRIPTION_ZONE_FALLBACK_URLNAME = 'inscription-zone'
 
 INSCRIPTION_ZONE_ALLOWED_URLNAME = [
-    'home',
+    # 'home',
     'login',
+    'logout',
     'contact',
+    'set_language',
     INSCRIPTION_ZONE_FALLBACK_URLNAME
 ]
 

@@ -3,13 +3,14 @@
 Tests methods for the ldap backend
 """
 from django.core.exceptions import ObjectDoesNotExist
-
-from ldapback.backends.ldap.base import Ldap
 from django.test import TestCase
 
+from ldapback.backends.ldap.base import Ldap
 from ldapback.models.base import LdapModel
 from ldapback.models.fields import LdapField, LdapCharField, LdapPasswordField, LdapListField
 from myresel import settings
+
+# TODO: test when python name and ldap fields names are different
 
 
 # Declare some classes for the test
@@ -26,10 +27,10 @@ class TestGenericPerson(LdapModel):
     object_classes = ["genericPerson", "enstbPerson"]
 
     # genericPerson
-    uid = LdapField(db_column="uid", object_classes=["genericPerson"], pk=True)
-    firstname = LdapCharField(db_column="firstname", object_classes=["genericPerson"])
-    lastname = LdapCharField(db_column="lastname", object_classes=["genericPerson"])
-    password = LdapPasswordField(db_column="userpassword", object_classes=["genericPerson"])
+    uid = LdapField(db_column="uid", object_classes=["genericPerson"], pk=True, required=True)
+    firstname = LdapCharField(db_column="firstname", object_classes=["genericPerson"], required=True)
+    lastname = LdapCharField(db_column="lastname", object_classes=["genericPerson"], required=True)
+    password = LdapPasswordField(db_column="userpassword", object_classes=["genericPerson"], required=True)
 
     # enstbPerson
     promo = LdapCharField(db_column="promo", object_classes=["enstbPerson"])
@@ -53,7 +54,21 @@ def try_delete_user(uid):
     except ObjectDoesNotExist:
         return False
 
+
 class LdapModelTestCase(TestCase):
+    def setUp(self):
+        try_delete_user("lcarr")
+        user = TestGenericPerson()
+        user.uid = "lcarr"
+        user.firstname = "Loïc"
+        user.lastname = "Carr"
+        user.password = "123zizou"
+
+        user.promo = 2018
+        user.altMail = "loic.carr@telecom-bretagne.eu"
+        user.save()
+
+
     def test_to_object(self):
         class QueriedObject(object):
             name = "cat"
@@ -91,16 +106,16 @@ class LdapModelTestCase(TestCase):
         dummy_model = DummyModelObject()
         dummy_model.man = "paris"
         pk = dummy_model.generate_pk()
-        self.assertEqual("man=paris,dc=resel,dc=fr", pk)
+        self.assertEqual("name=paris,dc=resel,dc=fr", pk)
 
     def test_to_ldap_field(self):
         user = TestGenericPerson()
         user.uid = "lolo"
 
-        uid_ldap = LdapCharField.to_ldap(user.uid)
-        firstname_ldap = LdapCharField.to_ldap(user.firstname)
+        uid_ldap = TestGenericPerson.uid.to_ldap(user.uid)
+        promo_ldap = TestGenericPerson.promo.to_ldap(user.firstname)
         self.assertEqual("lolo", uid_ldap)
-        self.assertEqual("", firstname_ldap)
+        self.assertEqual("", promo_ldap)
 
     # Should disable this test case ^^
     def test_search(self):
@@ -126,7 +141,6 @@ class LdapModelTestCase(TestCase):
         self.assertIsInstance(user, TestGenericPerson)
         self.assertEqual("lcarr", user.uid)
         self.assertEqual("uid=lcarr,ou=people,dc=maisel,dc=enst-bretagne,dc=fr", user.pk)
-
 
     def test_to_ldap(self):
         user = TestGenericPerson()
@@ -256,4 +270,12 @@ class LdapFieldTestCase(TestCase):
         self.assertIsInstance(user_t.altMail, list)
         self.assertListEqual(user_s.altMail, user_t.altMail)
 
+    def test_default_required(self):
+        user = TestGenericPerson()
+        user.uid = "fdshtlz"
 
+        user.promo = "2020"
+        user.altMail = ['martin.thomas@t.com', 'thomas.martin@t.com']
+
+        with self.assertRaises(ValueError):
+            user.save()

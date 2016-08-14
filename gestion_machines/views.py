@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import render
 from django.views.generic import View, ListView
 from django.utils.decorators import method_decorator
@@ -21,7 +22,10 @@ from django.conf import settings
 
 # Create your views here.
 class Reactivation(View):
-    """ Vue appelée pour ré-activer une machine d'un utilisateur absent trop longtemps du campus """
+    """
+    Vue appelée pour ré-activer une machine d'un utilisateur absent trop longtemps du campus
+    Would a post REQUEST more adequate ? Maybe hard to implement.
+    """
 
     template_name = 'gestion_machines/reactivation.html'
 
@@ -32,7 +36,8 @@ class Reactivation(View):
 
     def get(self, request, *args, **kwargs):
         # Vérification que la machine est bien à l'user
-        machine = ldap.search(settings.LDAP_DN_MACHINES, '(&(macaddress=%s))' % network.get_mac(request.META['REMOTE_ADDR']), ['uidproprio', 'host', 'iphostnumber', 'macaddress'])[0]
+        mac = request.network_data['mac']
+        machine = ldap.search(settings.LDAP_DN_MACHINES, '(&(macaddress=%s))' % mac, ['uidproprio', 'host', 'iphostnumber', 'macaddress'])[0]
         if str(request.user) not in machine.uidproprio[0]:
             messages.error(request, _("Cette machine ne semble pas vous appartenir. Veuillez contacter un administrateur afin de la transférer."))
             return HttpResponseRedirect(reverse('pages:news'))
@@ -147,6 +152,7 @@ class AjoutManuel(View):
 
         return render(request, self.template_name, {'form': form})
 
+
 class ChangementCampus(View):
     """ Vue appelée lorsque qu'une machine provient d'un campus différent """
     
@@ -162,8 +168,27 @@ class ChangementCampus(View):
         if ldap.get_status(request.META['REMOTE_ADDR']) == 'disabled':
             # Mise à jour de la fiche LDAP
             ldap.update_campus(request.META['REMOTE_ADDR'])
-
+            machine = ldap.search(settings.LDAP_DN_MACHINES, '(&(macaddress=%s))' % request.network_data['mac'],
+                                  ['uidproprio', 'host', 'iphostnumber', 'macaddress'])[0]
+            mail = EmailMessage(
+                subject="[Changement campus Brest] La machine {} [172.22.{} - {}] par {}".format(
+                    machine.host[0],
+                    machine.iphostnumber[0],
+                    machine.macaddress[0],
+                    str(request.user)),
+                body="Changement de campus de la machine {} appartenant à {}\n\nIP : 172.22.{}\nMAC : {}".format(
+                    machine.host[0],
+                    str(request.user),
+                    machine.iphostnumber[0],
+                    machine.macaddress[0]),
+                from_email="inscription-bot@resel.fr",
+                reply_to=["inscription-bot@resel.fr"],
+                to=["inscription-bot@resel.fr", "botanik@resel.fr"],
+                headers={'Cc': 'botanik@resel.fr'}
+            )
+            mail.send()
             return render(request, self.template_name)
+
 
         # La machine est déjà dans le bon campus, on redirige sur la page d'accueil
         messages.info(request, _("Cette machine est déjà enregistrée comme étant dans le bon campus."))
@@ -175,7 +200,7 @@ class Liste(ListView):
     View called to show user device list
     """
 
-    template_name = 'gestion_machines/liste.html'
+    template_name = 'gestion_machines/list_devices.html'
     context_object_name = 'machines'
 
     @method_decorator(login_required)
@@ -184,12 +209,12 @@ class Liste(ListView):
 
     def get_queryset(self):
         uid = str(self.request.user)
-        devices = LdapDevice.objects.filter(owner='(&(uidproprio=uid=%(uid)s,%(dn_people)s))' % {'uid': uid, 'dn_people': settings.LDAP_DN_PEOPLE})
+        devices = LdapDevice.search(owner="uid=%(uid)s,%(dn_people)s" % {'uid': uid, 'dn_people': settings.LDAP_DN_PEOPLE})
 
         machines = []
         for device in devices:
             status = device.get_status()
-            alias = devices.aliases
+            alias = device.aliases
             machines.append(
                 {'host': device.hostname, 'macaddress': device.mac_address, 'statut': status, 'alias': alias})
         return machines

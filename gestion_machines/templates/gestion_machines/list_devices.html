@@ -21,7 +21,7 @@
                         </thead>
                         <tbody>
                     {% endif %}
-                <tr style="cursor: pointer;" class="clickable" data-href="{% url 'gestion-machines:modifier' m.host %}">
+                <tr style="cursor: pointer;" {# class="clickable" data-href="{% url 'gestion-machines:modifier' m.host %}" #}>
                     <td>{{ m.host|capfirst }}</td>
                     <td>{{ m.alias|join:" - " }}</td>
                     <td>{{ m.macaddress|upper }}</td>

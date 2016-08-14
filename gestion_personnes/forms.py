@@ -1,15 +1,16 @@
-import time
+# -*- coding: utf-8 -*-
 import re
+import time
+
 from django import forms
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.utils.text import slugify
-
 from django.utils.translation import ugettext_lazy as _
 from phonenumber_field.formfields import PhoneNumberField
 
-from fonctions.generic import current_year, hash_passwd, hash_to_ntpass
-from gestion_personnes.models import LdapUser, LdapPerson
+from fonctions.generic import current_year
+from gestion_personnes.models import LdapUser, LdapOldUser
 
 
 class InvalidUID(Exception):
@@ -156,7 +157,7 @@ class InscriptionForm(forms.Form):
     def clean_email(self):
         email = self.cleaned_data['email']
         # return email # TODO: debug
-        if len(LdapUser.objects.filter(mail=email)) > 0:
+        if len(LdapUser.search(mail=email)) > 0:
             raise ValidationError(message=_("L'addresse email est déjà associée à un compte"), code="USED EMAIL")
         return email
 
@@ -183,28 +184,30 @@ class InscriptionForm(forms.Form):
             self.add_error('password',
                            ValidationError(message=_("Les mots de passes sont différents."), code="NOT SAME PASSWORD"))
 
-    def get_free_uid(self, firstname, lastname):
+    @staticmethod
+    def get_free_uid(first_name, last_name):
         """
         Check the ldap to get a free uid in the form
-        firstname.lower()[0] + lastname.lower()[:8] + xx
+        first_name.lower()[0] + last_name.lower()[:8] + xx
 
         where xx is 2 numbers incremented
-        :param firstname:
-        :param lastname:
+        :param first_name:
+        :param last_name:
         :return:
         """
-        lastname = lastname.lower()
-        lastname = re.sub('(\W+|_)', '', lastname)
-        if len(lastname) == 0:
+        last_name = last_name.lower()
+        last_name = re.sub('(\W+|_)', '', last_name)
+        if len(last_name) == 0:
             raise InvalidUID("The filtered lastname is empty, please use latin char")
-        base_uid = slugify(firstname.lower()[0] + lastname.lower()[:8])
+        base_uid = slugify(first_name.lower()[0] + last_name.lower()[:8])
 
         uid_incr = 0
         uid = base_uid
 
         while uid_incr < 100:
-            user_in_db = LdapPerson.objects.filter(uid=uid)
-            if len(user_in_db) == 0:
+            user_in_db = LdapUser.search(uid=uid)
+            old_user_in_db = LdapOldUser.search(uid=uid)
+            if len(user_in_db + old_user_in_db) == 0:
                 break
             uid_incr += 1
             if uid_incr < 10:
@@ -213,7 +216,7 @@ class InscriptionForm(forms.Form):
                 uid = base_uid + str(uid_incr)
         else:
             raise InvalidUID("You may have MAY people called %s %s in your database, please take action..."
-                             % (firstname, lastname)
+                             % (first_name, last_name)
                              )
 
         return uid
@@ -223,29 +226,29 @@ class InscriptionForm(forms.Form):
         Convert the data in the form into an ldap user
         :return:
         """
-
         user = LdapUser()
-        user.uid = self.get_free_uid(self.cleaned_data["first_name"], self.cleaned_data["last_name"])
-        user.firstname = self.cleaned_data["first_name"]
-        user.lastname = self.cleaned_data["last_name"]
-        user.displayname = self.cleaned_data["first_name"] + ' ' + self.cleaned_data["last_name"]
-        user.userPassword = hash_passwd(self.cleaned_data["password"])
-        user.ntPassword = hash_to_ntpass(self.cleaned_data["password"])
 
-        user.promo = str(current_year() + 3)
+        user.uid = self.get_free_uid(self.cleaned_data["first_name"], self.cleaned_data["last_name"])
+        user.first_name = self.cleaned_data["first_name"]
+        user.last_name = self.cleaned_data["last_name"]
+        user.display_name = self.cleaned_data["first_name"] + ' ' + self.cleaned_data["last_name"]
+        user.user_password = self.cleaned_data["password"]
+        user.nt_password = self.cleaned_data["password"]
+        user.postal_address = self.cleaned_data["address"]  # TODO: generate from maisel attributes
+
+        user.inscr_date = time.strftime('%Y%m%d%H%M%S') + 'Z'
+        user.cotiz = ''  # FIXME: ''BLACKLIST' + str(current_year()) no cotisation needed
+        user.end_cotiz = time.strftime('%Y%m%d%H%M%S') + 'Z'
+        user.campus = self.cleaned_data["campus"]
+
+        user.building = self.cleaned_data["building"]
+        user.room_number = str(self.cleaned_data["room"])
+
+        user.promo = str(current_year() + 3)  # TODO: wtf???
         user.mail = self.cleaned_data["email"]
         user.anneeScolaire = self.cleaned_data["email"]
-        user.mobile = str(self.cleaned_data["phone"])
+        user.mobile = str(self.cleaned_data["phone"])  # TODO: delete phone field, not very convenient for aliens
         user.option = self.cleaned_data["campus"]
-
-        user.dateInscr = time.strftime('%Y%m%d%H%M%S') + 'Z'
-        user.cotiz = ''  # FIXME: ''BLACKLIST' + str(current_year()) no cotisation needed
-        user.endCotiz = time.strftime('%Y%m%d%H%M%S') + 'Z'
-
-        user.campus = self.cleaned_data["campus"]
-        user.batiment = 'I' + self.cleaned_data["building"]
-        user.roomNumber = str(self.cleaned_data["room"])
-        user.address = self.cleaned_data["address"]
 
         return user
 

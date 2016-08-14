@@ -9,7 +9,7 @@ from fonctions.generic import hash_passwd, hash_to_ntpass
 
 
 class LdapField(object):
-    def __init__(self, db_column=None, object_classes=None, pk=False):
+    def __init__(self, db_column=None, object_classes=None, required=False, pk=False):
         if db_column is None:
             raise AttributeError("No db_column given")
         self.db_column = db_column
@@ -19,9 +19,9 @@ class LdapField(object):
             self.object_classes = object_classes
 
         self.is_pk = pk
+        self.required = required or pk
 
-    @classmethod
-    def to_ldap(cls, obj):
+    def to_ldap(self, obj):
         """
         Method to convert to a friendly type for the ldap
         Return empty string if the field is not defined
@@ -29,10 +29,15 @@ class LdapField(object):
         :return:
         """
         # If the obj is an instance of this, it means that it is not init
-        if isinstance(obj, cls):
-            return ""
+        ldap_str = ""
+        if isinstance(obj, self.__class__):
+            ldap_str = ""
+        else:
+            ldap_str =  str(obj)
 
-        return str(obj)
+        if self.required and ldap_str == "":
+            raise ValueError("Field %s is cannot be empty" % self.__class__)
+        return ldap_str
 
     @classmethod
     def from_ldap(cls, obj):
@@ -44,8 +49,7 @@ class LdapField(object):
         """
         return str(obj)
 
-    @classmethod
-    def calc_diff(cls, old, new):
+    def calc_diff(self, old, new):
         """
         Return an ldap compliant diff
         returns None if there is no diff
@@ -53,8 +57,8 @@ class LdapField(object):
         :param new:
         :return:
         """
-        old_ldap = cls.to_ldap(old)
-        new_ldap = cls.to_ldap(new)
+        old_ldap = self.to_ldap(old)
+        new_ldap = self.to_ldap(new)
         if old_ldap == new_ldap:
             return None
 
@@ -73,8 +77,8 @@ class LdapCharField(LdapField):
 
 
 class LdapPasswordField(LdapCharField):
-    @classmethod
-    def to_ldap(cls, obj):
+
+    def to_ldap(self, obj):
         pwd = super().to_ldap(obj)
 
         if pwd == "":
@@ -84,8 +88,8 @@ class LdapPasswordField(LdapCharField):
 
 
 class LdapNtPasswordField(LdapCharField):
-    @classmethod
-    def to_ldap(cls, obj):
+
+    def to_ldap(self, obj):
         pwd = super().to_ldap(obj)
 
         if pwd == "":
@@ -96,13 +100,19 @@ class LdapNtPasswordField(LdapCharField):
 
 class LdapListField(LdapField):
 
-    @classmethod
-    def to_ldap(cls, obj):
-        if isinstance(obj, cls):
-            return ""
-        if len(obj) == 0:
-            return ""
-        return obj
+    def to_ldap(self, obj):
+        ldap_value = ""
+        if isinstance(obj, self.__class__):
+            ldap_value = ""
+        elif len(obj) == 0:
+            ldap_value = ""
+        else:
+            ldap_value = obj
+
+        if self.required and len(ldap_value) == 0:
+            raise ValueError("Field %s is cannot be empty" % self.__class__)
+
+        return ldap_value
 
     @classmethod
     def from_ldap(cls, obj):

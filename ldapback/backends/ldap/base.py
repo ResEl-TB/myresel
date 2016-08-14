@@ -8,6 +8,17 @@ class LdapError(Exception):
     pass
 
 
+class SaveError(Exception):
+    def __init__(self, ldap_error=None, *args, **kwargs):
+        self.ldap_error = ldap_error
+
+    def __str__(self):
+        return str(self.ldap_error)
+
+    def __repr__(self):
+        return self.__str__()
+
+
 class Ldap(object):
     """
     Handle every methods related to the ldap
@@ -69,6 +80,8 @@ class Ldap(object):
         pk, object_class, attributes = model.to_ldap()
         conn = self._new_connection()
         v = conn.add(pk, object_class, attributes)
+        if not v:
+            raise SaveError(ldap_error=conn.result)
         conn.unbind()
         return pk
 
@@ -88,7 +101,7 @@ class Ldap(object):
         v = conn.modify(old_model.pk, diff)
         conn.unbind()
         if not v:
-            raise LdapError(str(conn.result))
+            raise SaveError(ldap_error=conn.result)
 
 
     def delete(self, model):

@@ -1,21 +1,20 @@
+# coding: utf-8
+from datetime import datetime
+
+from django.conf import settings
+from django.contrib import messages
 from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseForbidden, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
-from django.conf import settings
-
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import View, ListView
-from django.contrib import messages
 
-from pages.forms import ContactForm
 from fonctions import network, ldap, decorators
+from pages.forms import ContactForm
 from pages.models import News
 from wiki.models import Category
-from gestion_personnes.models import LdapUser
-
-from datetime import datetime
 
 
 class Home(View):
@@ -49,7 +48,11 @@ class Home(View):
         args_for_response = {}
 
         # Load services
-        services = Category.objects.get(name='Services').get_articles_and_links('user' in network.get_network_zone(ip))
+        try:
+            services = Category.objects.get(name='Services')
+            services = services.get_articles_and_links('user' in network.get_network_zone(ip))
+        except Category.DoesNotExist:
+            services = []
         args_for_response['services'] = services
 
         # Load some news
@@ -59,6 +62,7 @@ class Home(View):
         # Automatically active the computer if it is known
         # Change campus automatically
         is_in_resel = network.is_resel_ip(ip)
+        args_for_response['ip_in_resel'] = is_in_resel
         if is_in_resel:
             computer_status = ldap.get_status(ip)
             if computer_status == 'inactive':
@@ -82,6 +86,7 @@ class Home(View):
         elif network.is_resel_ip(ip):
             template_for_response = self.interior_template
 
+
         return render(request, template_for_response, args_for_response)
 
 
@@ -102,15 +107,17 @@ class Contact(View):
     form_class = ContactForm
 
     def get(self, request, *args, **kwargs):
-        try:
-            user = LdapUser.objects.get(uid=request.user.username)
-            form = self.form_class(
-                nom=user.displayName,
-                chambre=[user.batiment, user.roomNumber].join(' '),
-                mail=user.mail
-            )
-        except:
-            form = self.form_class()
+        form = self.form_class()
+
+        # try:
+        #     user = LdapUser.objects.get(uid=request.user.username)
+        #     form = self.form_class(
+        #         nom=user.displayName,
+        #         chambre=[user.batiment, user.roomNumber].join(' '),
+        #         mail=user.mail
+        #     )
+        # except:
+        #     form = self.form_class()
         return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
@@ -146,7 +153,7 @@ def inscriptionZoneInfo(request):
         is_registered = ldap.get_status(ip) == 'active'
 
     if "inscription" not in zone:
-        return HttpResponseForbidden(_("Cette page n'est pas accessible sur ce réseau."))
+        return HttpResponseRedirect(reverse("home"))
 
     return render(
         request,

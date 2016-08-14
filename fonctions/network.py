@@ -7,13 +7,20 @@ from fonctions.generic import is_ip_in_subnet
 from myresel import settings
 
 
+class NetworkError(Exception):
+    """
+    An exeption which handle network errors
+    """
+    pass
+
+
 def get_mac(ip):
     """
     This function retrieve the mac address of a user based on his ip
     Should be called only if the ip is in the same network
     """
 
-    if settings.DEBUG:
+    if settings.DEBUG or settings.TESTING:
         return settings.DEBUG_SETTINGS['mac']
 
     # TODO : move interfaces to configuration file
@@ -29,12 +36,16 @@ def get_mac(ip):
             ['fping', '-t', '100', '-c', '1', '-I', eth, ip],
             stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
         )
-    except:  # TODO: narrow this exception and do something useful like logging
-        pass
-    mac = str(subprocess.Popen(["arp -a | grep {} | awk '{{print $4}}'".format(ip)],
+    except Exception as e:  # TODO: narrow this exception and do something useful like logging
+        NetworkError("An error occurred when doing an fping : "
+                     "\n %s" % e)
+    mac = str(subprocess.Popen(["arp -a | grep {}\) | awk '{{print $4}}'".format(ip)],
                                stdout=subprocess.PIPE,
                                shell=True).communicate()[0]).split('\'')[1].split('\\n')[0]
 
+    m = re.match(r'^([0-9A-Fa-f]{2}:){5}([0-9A-Fa-f]{2})$', mac)
+    if not m:
+        raise NetworkError("The string %s is not a valid mac address" % mac)
     return mac
 
 
@@ -46,19 +57,23 @@ def get_campus(ip):
     elif ip.startswith('172.23.'):
         return 'Rennes'
     else:
-        return False
+        raise NetworkError("The ip %s is not on any campus" % ip)
 
 
 def update_all():
     """ Relance le DNS, le DHCP et le firewall """
+    # TODO: do that in background
     os.system('ssh -t reloader@saymyname')
     os.system('ssh -t updatefirewall@zahia -p 2222')
 
 
 def is_resel_ip(ip):
     """ Check si l'IP est ResEl """
-
-    return True if get_campus(ip) else False
+    try:
+        get_campus(ip)
+        return True
+    except NetworkError:
+        return False
 
 
 def get_network_zone(ip):

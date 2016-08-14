@@ -54,8 +54,7 @@ def unknown_machine(function=None, redirect_to='home'):
 
     def _dec(view_func):
         def _view(request, *args, **kwargs):
-            #return view_func(request, *args, **kwargs)
-            mac = network.get_mac(request.META['REMOTE_ADDR'])
+            mac = request.network_data['mac']
 
             if ldap.search(settings.LDAP_DN_MACHINES, '(&(macaddress=%s))' % mac):
                 messages.error(request, _("Votre machine est déjà connue par notre réseau. Par conséquent, vous n'avez pas besoin d'accéder à cette page."))

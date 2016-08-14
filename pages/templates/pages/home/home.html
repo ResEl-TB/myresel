@@ -50,7 +50,7 @@
     <div class="home-fragment home-services">
         <div class="container">
             <h2>{% trans "Les services du ResEl" %}</h2>
-            
+
                 {% for service in services %}
                     {% if forloop.first %}
                 <div class="row">
@@ -104,7 +104,7 @@
                 </div>
                 <div class="col-md-4">
                     <a href="#">
-                        <span class="glyphicon glyphicon-education service-icon" aria-hidden="true"></span>
+                        <span class="fa fa-users service-icon" aria-hidden="true"></span>
                         <h3 class="service-title">{% trans "Les clubs" %}</h3>
                         <p>{% blocktrans %}On héberge tous les clubs{% endblocktrans %}</p>
                     </a>

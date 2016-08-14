@@ -39,33 +39,33 @@ msgid ""
 "Votre machine est déjà inscrite. Veuillez vous connecter sur le réseau Wi-Fi "
 "ResEl Secure."
 msgstr ""
-"Your device is already registered. Please connect to ResEl Secure Wi-Fi "
-"network."
+"Your device is already registered. Please connect to the Wi-Fi "
+"network named \"ResEl Secure\"."
 
 #: gestion_machines/forms.py:17 gestion_machines/forms.py:77
 #: gestion_machines/templates/gestion_machines/liste.html:17
 msgid "Alias de la machine"
-msgstr "Device alias"
+msgstr "Device nickname"
 
 #: gestion_machines/forms.py:29
 msgid "Alias trop court (au moins 5 caractères)"
-msgstr "Alias is too short (must be at least 5 characters long)"
+msgstr "Nickname is too short (must be at least 5 characters long)"
 
 #: gestion_machines/forms.py:31
 msgid "Alias trop long (au plus 20 caractères)"
-msgstr "Alias is too long (must be shorter than 20 characters)"
+msgstr "Nickname is too long (must be shorter than 20 characters)"
 
 #: gestion_machines/forms.py:41
 msgid "Alias non conforme, seul les lettres, chiffres et - sont acceptés."
-msgstr "Invalid alias, only letters, digits and - are accepted."
+msgstr "Invalid nickname, only letters, digits and - are accepted."
 
 #: gestion_machines/forms.py:50
 msgid "Alias non conforme, nous vous proposons un valide à la place."
-msgstr "Invalid alias, here's a valid suggestion."
+msgstr "Invalid nickname, here's a valid suggestion."
 
 #: gestion_machines/forms.py:55
 msgid "Alias déjà utilisé"
-msgstr "Alias is already used"
+msgstr "Nickname is already taken"
 
 #: gestion_machines/forms.py:61
 msgid "Adresse MAC de la machine"
@@ -85,15 +85,15 @@ msgstr "This device is already registered."
 
 #: gestion_machines/forms.py:86
 msgid "Longueur d'alias trop courte"
-msgstr "Alias is too short"
+msgstr "Nickname is too short"
 
 #: gestion_machines/forms.py:89
 msgid "Alias non conforme"
-msgstr "Invalid alias"
+msgstr "Invalid nickname"
 
 #: gestion_machines/forms.py:92
 msgid "Alias non disponible"
-msgstr "Unavailable alias"
+msgstr "Unavailable nickname"
 
 #: gestion_machines/templates/gestion_machines/add_device.html:5
 msgid "Ajout de machine"
@@ -125,7 +125,7 @@ msgstr "Requirements"
 
 #: gestion_machines/templates/gestion_machines/add_device.html:32
 msgid "Être un alias en minuscules"
-msgstr "Alias must be lowercase"
+msgstr "Nickname must be lowercase"
 
 #: gestion_machines/templates/gestion_machines/add_device.html:33
 msgid "Avoir entre 5 et 20 caractères"
@@ -202,7 +202,7 @@ msgstr "Modify my device"
 
 #: gestion_machines/templates/gestion_machines/modifier.html:10
 msgid "Modification de machine"
-msgstr "Modification of my device"
+msgstr "Modify my device"
 
 #: gestion_machines/templates/gestion_machines/reactivation.html:4
 msgid "Ré-activation"
@@ -242,7 +242,7 @@ msgid ""
 msgstr ""
 "Your device has been registered successfully. Please reset your connection by "
 "unplugging/plugging your Ethernet cable or disconnect/reconnect to the Wi-Fi "
-"network."
+"hostpot named \"ResEl Secure\"."
 
 #: gestion_machines/views.py:145
 msgid ""
@@ -264,7 +264,7 @@ msgstr "This device does not belong to our network."
 
 #: gestion_machines/views.py:251
 msgid "L'alias de la machine a bien été modifié."
-msgstr "Alias has been modified successfully."
+msgstr "Device nickname has been modified successfully."
 
 #: gestion_personnes/forms.py:20
 msgid "Je n'habite pas à la Maisel"
@@ -280,15 +280,15 @@ msgstr "Precise your training"
 
 #: gestion_personnes/forms.py:30
 msgid "Ingénieur généraliste (FIG)"
-msgstr "Ingénieur généraliste (FIG)"
+msgstr "Master of Engineering (FIG)"
 
 #: gestion_personnes/forms.py:31
 msgid "Ingénieur par alternance (FIP)"
-msgstr "Ingénieur par alternance (FIP)"
+msgstr "Master of Engineering via sandwich course (FIP)"
 
 #: gestion_personnes/forms.py:32
 msgid "Master spécialisé"
-msgstr "Master of Science"
+msgstr "Master of Science (MSc)"
 
 #: gestion_personnes/forms.py:33
 msgid "Autre"
@@ -296,7 +296,7 @@ msgstr "Other"
 
 #: gestion_personnes/forms.py:39
 msgid "Nom de famille"
-msgstr "Surname"
+msgstr "Last name"
 
 #: gestion_personnes/forms.py:47
 msgid "Prénom"
@@ -573,12 +573,11 @@ msgid ""
 msgstr ""
 "\n"
 "<p>You are about to change your ResEl password.</p> As it is also used for "
-"Wi-Fi connection, you will have to change your Wi-Fi configuration to take "
-"change into account"
-
+"the Wi-Fi connection, you will have to change your Wi-Fi configuration to take "
+"password change into account."
 #: gestion_personnes/templates/gestion_personnes/mod-passwd.html:19
 msgid "Veuillez renseigner votre nouveau mot de passe :"
-msgstr "Type in your new password"
+msgstr "Type in your new password:"
 
 #: gestion_personnes/templates/gestion_personnes/mod-passwd.html:35
 msgid "Changer mon mot de passe"
@@ -606,7 +605,7 @@ msgid ""
 "Vous vous trouvez sur un réseau d'inscription mais ne possédez pas d'IP dans "
 "ce réseau. Veuillez contacter un administrateur."
 msgstr ""
-"You are in the registration sub network but you don't have an IP address in "
+"You are in the registration subnetwork but you don't have an IP address in "
 "this network. Please contact an admin."
 
 #: myresel/middleware.py:107
@@ -615,7 +614,7 @@ msgid ""
 "Veuillez vous connecter sur le réseau Wifi 'ResEl Secure'"
 msgstr ""
 "You have successfully registered, but you are in the wrong network. "
-"Please connect to 'ResEl Secure' Wi-Fi hotspot."
+"Please connect to \"ResEl Secure\" Wi-Fi hotspot."
 
 #: myresel/middleware.py:119 myresel/middleware.py:159
 msgid ""
@@ -635,8 +634,8 @@ msgid ""
 "Votre inscription n'est pas finie. Veuillez vous déconnecter puis vous "
 "reconnecter sur le réseau Wifi 'ResEl Secure'"
 msgstr ""
-"Your registration is not complete. Please disconnect and reconnect to 'ResEl "
-"Secure' Wi-Fi hotspot."
+"Your registration is not complete. Please disconnect and reconnect to \"ResEl "
+"Secure\" Wi-Fi hotspot."
 
 #: myresel/settings.py:92
 msgid "Français"
@@ -656,7 +655,7 @@ msgstr "Your room"
 
 #: pages/forms.py:7
 msgid "Bâtiment ET chambre"
-msgstr "Building AND room"
+msgstr "Building and room number"
 
 #: pages/forms.py:8
 msgid "Votre adresse mail"
@@ -664,7 +663,7 @@ msgstr "Your email address"
 
 #: pages/forms.py:9
 msgid "Votre demande"
-msgstr "Your request"
+msgstr "Your message"
 
 #: pages/templates/pages/contact.html:10
 msgid "Nous contacter"
@@ -684,7 +683,7 @@ msgstr "Télécom Bretagne students' network"
 
 #: pages/templates/pages/home/home.html:18
 msgid "Vous cherchez internet ? Nous aussi..."
-msgstr "Looking for Internet access? So are we…"
+msgstr "Looking for Internet access? <br>So are we…"
 
 #: pages/templates/pages/home/home.html:38
 msgid ""
@@ -732,7 +731,7 @@ msgstr "TV"
 msgid ""
 "Grâce au ResEl il est possible de regarder plus de 15 chaines en direct sur "
 "son ordinateur"
-msgstr "With ResEl, watch more than 15 live TV channels on your computer"
+msgstr "Watch more than 15 live TV channels on your computer"
 
 #: pages/templates/pages/home/home.html:71
 msgid "Hébergement web"
@@ -741,7 +740,7 @@ msgstr "Web hosting"
 #: pages/templates/pages/home/home.html:72
 msgid ""
 "Hébergez tous vos sites ou applications web pour votre club ou association"
-msgstr "Host all your website or web applications for your club or association"
+msgstr "We host your club/association website"
 
 #: pages/templates/pages/home/home.html:81
 msgid "Les mails"
@@ -759,7 +758,7 @@ msgstr "Clubs"
 
 #: pages/templates/pages/home/home.html:89
 msgid "On héberge tous les clubs"
-msgstr "We host all club websites"
+msgstr "We host clubs websites and mailing lists"
 
 #: pages/templates/pages/home/home.html:97
 msgid "Chuuuut..."
@@ -771,7 +770,7 @@ msgstr "And more"
 
 #: pages/templates/pages/home/home.html:115
 msgid "Les dernières nouvelles"
-msgstr "Last news"
+msgstr "Latest news"
 
 #: pages/templates/pages/home/home.html:120 pages/templates/pages/news.html:15
 #, python-format
@@ -800,7 +799,7 @@ msgstr "Already have an account?"
 #: pages/templates/pages/home/home_int.html:16 templates/base.html:95
 #: templates/registration/login.html:4 templates/registration/login.html:45
 msgid "Connexion"
-msgstr "Connection"
+msgstr "Log in"
 
 #: pages/templates/pages/home/home_logged.html:10
 msgid "Gestion de mon compte ResEl"
@@ -855,7 +854,7 @@ msgid ""
 "Afin de pouvoir bénéficier des services du Resel, vous devez enregistrer "
 "votre machine sur le réseau."
 msgstr ""
-"To get ResEl services on your device you must register it on the network"
+"To get Internet access and ResEl services, you must register your device on the network."
 
 #: pages/templates/pages/home/home_logged.html:42
 msgid "Enregistrer"
@@ -867,7 +866,7 @@ msgstr "my computer"
 
 #: pages/templates/pages/home/home_logged.html:53
 msgid "Connecté"
-msgstr "Connected"
+msgstr "Logged in"
 
 #: pages/templates/pages/home/home_logged.html:65
 msgid "Hors campus"
@@ -915,7 +914,7 @@ msgstr ""
 "\n"
 "Even though your device has been registered, it is still in Registration sub "
 "network. If you've just registered your device, unplug/replug your Ethernet "
-"cable or disconnect Wi-Fi and reconnect to 'ResEl Secure' hotspot."
+"cable or disconnect Wi-Fi and reconnect to \"ResEl Secure\" hotspot."
 
 #: pages/templates/pages/inscription_zone_info.html:74
 msgid ""
@@ -933,13 +932,13 @@ msgstr ""
 "\n"
 "Even though your device has been registered, it is still in Registration sub "
 "network. You seem to be connected in 'ResEl inscription' Wi-Fi hotspot. You "
-"cannot access the Internet using that hotspot.<br> Please connect to 'ResEl "
-"Secure' Wi-Fi hotspot."
+"cannot access the Internet using that hotspot.<br> Please connect to \"ResEl "
+"Secure\" Wi-Fi hotspot."
 
 #: pages/templates/pages/inscription_zone_info.html:82
 #: pages/templates/pages/inscription_zone_info.html:89
 msgid "Vous êtes sur la zone d'inscription"
-msgstr "You are in Registration sub network."
+msgstr "You are in registration subnetwork."
 
 #: pages/templates/pages/inscription_zone_info.html:83
 msgid ""
@@ -951,7 +950,7 @@ msgid ""
 "                    "
 msgstr ""
 "\n"
-"Your device is currently connected to Registration sub network. This network "
+"Your device is currently connected to Registration subnetwork. This network "
 "does not have access to the Internet. Register your device to get Internet."
 
 #: pages/templates/pages/inscription_zone_info.html:87
@@ -969,7 +968,7 @@ msgid ""
 "                    "
 msgstr ""
 "\n"
-"Your device is currently connected to Registration sub network. This network "
+"Your device is currently connected to Registration subnetwork. This network "
 "does not have access to the Internet. Sign up for a ResEl account to get "
 "Internet."
 
@@ -981,7 +980,7 @@ msgstr "ResEl Association - http://resel.fr - 2003-2016 - All rights reserved"
 
 #: pages/templates/pages/news.html:10
 msgid "Les dernières news"
-msgstr "Last news"
+msgstr "Latest news"
 
 #: pages/views.py:125
 msgid ""
@@ -1056,15 +1055,15 @@ msgstr "Contact"
 
 #: templates/base.html:91 templates/registration/logout.html:4
 msgid "Déconnexion"
-msgstr "Disconnect"
+msgstr "Log out"
 
 #: templates/registration/login.html:8
 msgid "Veuillez vous connecter"
-msgstr "Please connect"
+msgstr "Please login"
 
 #: templates/registration/login.html:9
 msgid "Afin de bénéficier des services du ResEl, vous devez vous connecter."
-msgstr "To use ResEl services you must connect"
+msgstr "To use ResEl services you must sign in using your ResEl account (not your Télécom Bretagne account)"
 
 #: templates/registration/login.html:10
 msgid "Vous êtes nouveau ?"
@@ -1076,7 +1075,7 @@ msgstr "Create an account"
 
 #: templates/registration/login.html:14
 msgid "Connexion au ResEl"
-msgstr "Connection to ResEl"
+msgstr "Connection to ResEl network"
 
 #: templates/registration/login.html:23
 msgid "Nom d'utilisateur"
@@ -1100,7 +1099,7 @@ msgstr "With your ResEl account you can"
 
 #: templates/registration/login.html:55
 msgid "Avoir accès à internet très haut débit sur le campus"
-msgstr "High-speed Internet connection"
+msgstr "Enjoy a high-speed Internet connection"
 
 #: templates/registration/login.html:56
 msgid "Regarder la télévision sur votre ordinateur"
@@ -1108,19 +1107,19 @@ msgstr "Watch TV on your computer"
 
 #: templates/registration/login.html:57
 msgid "Accéder aux e-mails de clubs et leurs sites"
-msgstr "Access to e-mails from your clubs, and their website"
+msgstr "Access websites of your clubs"
 
 #: templates/registration/login.html:58
 msgid "Consulter vos statistiques d'utilisation"
-msgstr "Consult the statistcs of your utilisation"
+msgstr "Monitor your Internet usage"
 
 #: templates/registration/login.html:59
 msgid "Et plus encore !"
-msgstr "And more !"
+msgstr "And more!"
 
 #: templates/registration/logout.html:9
 msgid "Déconnecté"
-msgstr "Disconnected"
+msgstr "Logged out"
 
 #: templates/registration/logout.html:10
 msgid "Merci pour le temps que vous avez accordé à ce site aujourd'hui."
@@ -1205,7 +1204,7 @@ msgstr "Invoice number"
 
 #: tresorerie/templates/tresorerie/facture.tex:161
 msgid "Code client"
-msgstr "Client id"
+msgstr "Client ID"
 
 #: tresorerie/templates/tresorerie/facture.tex:185
 msgid "Facture acquitée"
@@ -1370,7 +1369,7 @@ msgstr "Last modification"
 
 #: wiki/templates/wiki/show-category.html:26
 msgid "Aucun article disponible."
-msgstr "No available articles."
+msgstr "No articles are available."
 
 #~ msgid ""
 #~ "Afin de finaliser votre inscription et profiter de tous les services du "
