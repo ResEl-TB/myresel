@@ -3,26 +3,29 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
 
 from gestion_machines.models import LdapDevice
+from gestion_personnes.models import LdapUser
+
+
+def new_dummy_device(activated=True):
+    device = LdapDevice()
+
+    device.hostname = "mymachine"
+    device.set_owner("lcarr")
+    device.ip = "120.45"
+    if activated:
+        device.activate("Brest")
+
+
+def try_delete_device(pk):
+    try:
+        device_s = LdapDevice.get(pk=pk)
+        device_s.delete()
+        return True
+    except ObjectDoesNotExist:
+        return False
 
 
 class LdapDeviceTestCase(TestCase):
-    def new_dummy_activated_device(self):
-        device = LdapDevice()
-
-        device.hostname = "mymachine"
-        device.set_owner("lcarr")
-        device.ip = "120.45"
-        device.activate("Brest")
-
-    @staticmethod
-    def try_delete_device(pk):
-        try:
-            device_s = LdapDevice.get(pk=pk)
-            device_s.delete()
-            return True
-        except ObjectDoesNotExist:
-            return False
-
     def test_set_owner(self):
         device = LdapDevice()
         device.set_owner("camme")
@@ -68,7 +71,7 @@ class LdapDeviceTestCase(TestCase):
         self.assertEqual("wrong_campus", device.get_status())
 
     def test_simple_device_save(self):
-        self.try_delete_device("testsimpledevicelcarr")
+        try_delete_device("testsimpledevicelcarr")
 
         device = LdapDevice()
         device.hostname = "testsimpledevicelcarr"
@@ -87,7 +90,7 @@ class LdapDeviceTestCase(TestCase):
         self.assertEqual(device.mac_address, device_s.mac_address)
 
     def test_device_save(self):
-        self.try_delete_device("testdevicelcarr")
+        try_delete_device("testdevicelcarr")
 
         device = LdapDevice()
         device.hostname = "testdevicelcarr"
@@ -105,7 +108,7 @@ class LdapDeviceTestCase(TestCase):
         self.assertEqual(device.owner, device_s.owner)
 
     def test_device_save_empty_mac(self):
-        self.try_delete_device("emptydevicelcarr")
+        try_delete_device("emptydevicelcarr")
 
         device = LdapDevice()
         device.hostname = "emptydevicelcarr"

@@ -20,7 +20,7 @@ def get_mac(ip):
     Should be called only if the ip is in the same network
     """
 
-    if settings.DEBUG:
+    if settings.DEBUG or settings.TESTING:
         return settings.DEBUG_SETTINGS['mac']
 
     # TODO : move interfaces to configuration file

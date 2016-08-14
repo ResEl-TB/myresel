@@ -26,40 +26,40 @@ def try_delete_old_user(uid):
     except ObjectDoesNotExist:
         return False
 
-class LdapuserTestCase(TestCase):
-    @staticmethod
-    def create_full_user():
-        user = LdapUser()
-        user.uid = "amanoury"
-        user.first_name = "Alexandre"
-        user.last_name = "Manoury"
-        user.user_password = "blah"
-        user.nt_password = "blah"
-        user.display_name = "Alexandre Manoury"
-        user.postal_address = "I11 Maisel blah\n blah blah"
 
-        user.inscr_date = time.strftime('%Y%m%d%H%M%S') + 'Z'
-        user.cotiz = "2016"
-        user.end_cotiz = time.strftime('%Y%m%d%H%M%S') + 'Z'
-        user.campus = "Brest"
-        user.building = "I11"
-        user.room_number = "123"
+def create_full_user():
+    user = LdapUser()
+    user.uid = "amanoury"
+    user.first_name = "Alexandre"
+    user.last_name = "Manoury"
+    user.user_password = "blah"
+    user.nt_password = "blah"
+    user.display_name = "Alexandre Manoury"
+    user.postal_address = "I11 Maisel blah\n blah blah"
 
-        user.promo = "2020"
-        user.mail = "alexandre.manoury@telecom-bretagne.eu"
-        user.anneeScolaire = "2015"
-        user.mobile = "33676675525"
-        user.option = "Brest"
-        user.formation = "FIG"
+    user.inscr_date = time.strftime('%Y%m%d%H%M%S') + 'Z'
+    user.cotiz = "2016"
+    user.end_cotiz = time.strftime('%Y%m%d%H%M%S') + 'Z'
+    user.campus = "Brest"
+    user.building = "I11"
+    user.room_number = "123"
 
-        user.ae_cotiz = "100"
-        user.ae_nature = "liquide"
-        user.n_adherent = "1235667"
+    user.promo = "2020"
+    user.mail = "alexandre.manoury@telecom-bretagne.eu"
+    user.anneeScolaire = "2015"
+    user.mobile = "33676675525"
+    user.option = "Brest"
+    user.formation = "FIG"
 
-        return user
+    user.ae_cotiz = "100"
+    user.ae_nature = "liquide"
+    user.n_adherent = "1235667"
+    return user
 
+
+class LdapUserTestCase(TestCase):
     def test_new_user(self):
-        user = self.create_full_user()
+        user = create_full_user()
         try_delete_user(user.uid)
         user.save()
 
