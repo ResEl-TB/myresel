@@ -25,11 +25,8 @@ class Inscription(View):
     C'est cette vue qui créer la fiche LDAP de l'user
     On lui affiche le réglement intérieur, et un formulaire pour remplir les champs LDAP
     """
-    # TODO: gestion des batiments de Rennes
-    # Ne plus laisser le choix de l'uid pour l'utilisateur (afficher une page avec la confirmation
-    # Envoyer un email à l'utilisateur
-    # Refactoriser la création de l'utilsateur ailleurs
-    # Choix de la promo
+    # TODO: Choix de la promo
+    # TODO: Virer téléphone portable obligatoire
 
     template_name = 'gestion_personnes/inscription.html'
     form_class = InscriptionForm

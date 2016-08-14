@@ -3,10 +3,9 @@
 Tests methods for the ldap backend
 """
 from django.core.exceptions import ObjectDoesNotExist
-
-from ldapback.backends.ldap.base import Ldap
 from django.test import TestCase
 
+from ldapback.backends.ldap.base import Ldap
 from ldapback.models.base import LdapModel
 from ldapback.models.fields import LdapField, LdapCharField, LdapPasswordField, LdapListField
 from myresel import settings
@@ -57,6 +56,19 @@ def try_delete_user(uid):
 
 
 class LdapModelTestCase(TestCase):
+    def setUp(self):
+        try_delete_user("lcarr")
+        user = TestGenericPerson()
+        user.uid = "lcarr"
+        user.firstname = "Loïc"
+        user.lastname = "Carr"
+        user.password = "123zizou"
+
+        user.promo = 2018
+        user.altMail = "loic.carr@telecom-bretagne.eu"
+        user.save()
+
+
     def test_to_object(self):
         class QueriedObject(object):
             name = "cat"

@@ -244,7 +244,7 @@ class InscriptionForm(forms.Form):
         user.building = self.cleaned_data["building"]
         user.room_number = str(self.cleaned_data["room"])
 
-        user.promo = str(current_year() + 3)  # TODO: Morgan wtf???
+        user.promo = str(current_year() + 3)  # TODO: wtf???
         user.mail = self.cleaned_data["email"]
         user.anneeScolaire = self.cleaned_data["email"]
         user.mobile = str(self.cleaned_data["phone"])  # TODO: delete phone field, not very convenient for aliens
