@@ -15,7 +15,7 @@
             <div class="row">
                 <div class="col-md-4 col-md-offset-1">
                     <h2>{% trans "Le Réseau des Élèves de Télécom Bretagne" %}</h2>
-                    <p>{% trans "Vous cherchez internet ? Nous aussi..." %}</p>
+                    <p>{% trans "Le fournisseur d'accès associatif par les teubreux pour les teubreux" %}</p>
                 </div>
                 <div class="col-md-offset-1 col-md-6">
                     <img src="{% static "images/logo_resel.png" %}" alt="logo ResEl" class="img-responsive logo">
@@ -134,9 +134,10 @@
         <div class="container">
             <h2>{% trans "Les dernières nouvelles" %}</h2>
             {% for pieceofnews in news %}
+
                 <div class="news-bloc">
                     <h3 class="title"><a href="#">{{ pieceofnews.title }}</a></h3>
-                    <hr />
+
                     <div class="body">{{ pieceofnews.content|safe|truncatewords_html:100 }}
                     </div>
                     <div> <a href="#">{% trans "Lire la suite" %}</a></div>
@@ -145,6 +146,7 @@
                         {% blocktrans with author=pieceofnews.author date=pieceofnews.date|date:"DATE_FORMAT" %}{{author}}, le {{date}}
                         {% endblocktrans %}
                     </div>
+                <hr />
                 </div>
             {% empty %}
                 <div class="news-bloc">{% trans "Pas de news à l'horizon" %}</div>
