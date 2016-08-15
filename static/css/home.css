@@ -160,3 +160,21 @@ h3 .service-title {
 #bigheart {
     transition: all 1200ms cubic-bezier(0.165, 0.84, 0.44, 1);
 }
+
+.home-blog {
+    padding-bottom: 150px;
+}
+.home-blog h2 {
+    margin-bottom: 50px;
+}
+
+.home-blog .news-bloc {
+    margin-top: 70px;
+}
+
+.home-blog .foot {
+    margin-top: 20px;
+    text-align: right;
+    font-style: italic;
+    font-weight: bold;
+}
