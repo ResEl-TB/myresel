@@ -36,6 +36,7 @@ LDAP_DC_MAISEL = "dc=maisel,dc=enst-bretagne,dc=fr"
 LDAP_DC_RESEL = "dc=resel,dc=enst-bretagne,dc=fr"
 LDAP_DN_PEOPLE = 'ou=people,%s' % LDAP_DC_MAISEL
 LDAP_DN_MACHINES = 'ou=machines,%s' % LDAP_DC_RESEL
+LDAP_OU_ADMIN = 'ou=admins,%s' % LDAP_DC_RESEL
 LDAP_DN_ADMIN = 'cn=admin,%s' % LDAP_DC_MAISEL
 
 LDAP_ECOLE = "0.0.0.0"

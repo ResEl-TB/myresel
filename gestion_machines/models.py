@@ -1,10 +1,7 @@
-import ldapback
-import ldapdb
 import time
 
+import ldapback
 from ldapback.models.fields import LdapCharField, LdapListField
-from ldapdb.models.fields import CharField, ListField
-
 from myresel import settings
 from myresel.settings import LDAP_DN_MACHINES
 
