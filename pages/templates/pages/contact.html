@@ -5,9 +5,10 @@
 
 {% block content %}
 <div class="container">
+<h1 class="page-header">{% trans "Nous contacter" %}</h1>
     <div class="row">
-        <div class="col-lg-12">
-            <h1 class="page-header">{% trans "Nous contacter" %}</h1>
+
+        <div class="col-md-6">
             <form action="" method="post">
                 {% csrf_token %}
                 {% for field in form %}
@@ -21,7 +22,28 @@
                     <input type="submit" class="btn btn-info" value="{% trans 'Envoyer' %}">
                 </div>
             </form>
-        </div> <!-- /.col-lg-12 -->
+        </div>
+
+        <div class="col-md-offset-1 col-md-5">
+            <h2>{% trans "Autrement" %}</h2>
+
+            <p>{% trans "Vous pouvez également nous contacter" %}</p>
+            <ul>
+                <li>{% trans "Par e-mail : " %}<a href="mailto:gestion@resel.fr">support@resel.fr</a></li>
+                <li>{% trans "Sur IRC sur le réseau " %}<a href="https://www.rezosup.org/">RezoSup</a> channel #ResEl</li>
+            </ul>
+            <h3>{% trans "Les pernanences" %}</h3>
+            <p>{% blocktrans %}
+                Nous tenons (hors vacances) des <b>permanences au Foyer Des Élèves
+                de 18h à 19h30 du lundi au vendredi</b>. Un administrateur ResEl pourra venir répondre à vos
+            questions et résoudre vos problèmes concernants la connexion.</p>
+            {% endblocktrans %}
+            <h3>{% trans "Adresse postale" %}</h3>
+            <p>Association ResEl <br />
+                655, Avenue du Technopôle<br />
+                29280 Plouzané - FRANCE <br />
+            </p>
+        </div>
     </div> <!-- /.row -->
 </div> <!-- /.container -->
 {% endblock %}
