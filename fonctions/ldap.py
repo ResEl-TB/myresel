@@ -1,11 +1,14 @@
 import itertools
-from ldap3 import Server, Connection, MODIFY_REPLACE, ALL_ATTRIBUTES
-from .network import get_campus, get_mac, update_all
-from .generic import current_year
-from django.conf import settings
-from fonctions import generic
 from datetime import datetime, timedelta
+
+from django.conf import settings
 from django_python3_ldap.ldap import Connection as UserConnection
+from ldap3 import Server, Connection, MODIFY_REPLACE, ALL_ATTRIBUTES
+
+from fonctions import generic
+from .generic import hash_passwd
+from .network import get_campus, get_mac, update_all
+
 
 def new_connection():
     """
@@ -202,3 +205,29 @@ def need_to_pay(username):
                 return 'success'
         else:
             return 'danger'
+
+
+def create_admin():
+    l = new_connection()
+    dn = "uid=lcarr,ou=admins,dc=resel,dc=enst-bretagne,dc=fr"
+    object_class = "reselAdmin"
+    attributes = {
+        'uid': 'lcarr',
+        'userpassword': hash_passwd("123zizou"),
+        'droit': ["Cisco",
+                  "ae",
+                  "agora",
+                  "annuaire",
+                  "backuppc",
+                  "cotiz",
+                  "documentation",
+                  "ldapadmin",
+                  "photo",
+                  "reseladmin",
+                  "svn",
+                  "trac",
+                  "tracadmin"]
+    }
+    # l.delete(dn)
+    l.add(dn, object_class, attributes)
+    l.unbind()
