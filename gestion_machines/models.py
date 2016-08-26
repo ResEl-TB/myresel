@@ -35,12 +35,10 @@ class LdapDevice(ldapback.models.LdapModel):
 
     def replace_or_add_zone(self, old, new):
         if isinstance(self.zones, LdapListField):
-            self.zones = [new]
+            self.zones = []
         elif old in self.zones:
-            old_index = self.zones.index(old)
-            self.zones[old_index] = new
-        else:
-            self.add_zone(new)
+            self.zones.remove(old)
+        self.add_zone(new)
 
     def get_status(self):
         """
@@ -89,7 +87,7 @@ class LdapDevice(ldapback.models.LdapModel):
         :return:
         """
         self.set_campus(campus)
-        self.add_zone('User')
+        self.replace_or_add_zone('Inactive', 'User')
         self.last_date = time.strftime('%Y%m%d%H%M%S') + 'Z'
 
     def add_alias(self, alias):
@@ -109,3 +107,13 @@ class LdapDevice(ldapback.models.LdapModel):
             self.aliases = []
         else:
             self.aliases.remove(alias)
+
+    def is_inactive(self):
+        """
+        Return True if the device is inactive in the ldap
+        :return:
+        """
+        for zone in self.zones:
+            if zone.lower() == "inactive":
+                return True
+        return False

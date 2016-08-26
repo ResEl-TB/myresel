@@ -2,8 +2,7 @@
 import inspect
 
 from django.core.exceptions import ObjectDoesNotExist
-from ldap3 import ALL_ATTRIBUTES, MODIFY_REPLACE
-from ldap3 import LDAPAttributeError
+from ldap3 import ALL_ATTRIBUTES, MODIFY_REPLACE, LDAPAttributeError
 
 from ldapback.backends.ldap.base import Ldap
 from ldapback.models.fields import LdapField
@@ -34,7 +33,7 @@ class LdapModel(object):
         # Convert search query into db_column search query
         for arg, arg_value in kwargs.items():
             if arg == "pk":
-                arg = cls.get_pk_field()[1].db_column
+                arg = cls.get_pk_field()[1].db_column  # TODO : THIS IS MOCHE
                 search_args[arg] = arg_value
             else:
                 arg = getattr(cls, arg).db_column

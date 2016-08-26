@@ -70,6 +70,16 @@ class LdapDeviceTestCase(TestCase):
         self.assertEqual("Rennes", device.get_campus())
         self.assertEqual("wrong_campus", device.get_status())
 
+    def test_is_inactive(self):
+        device = LdapDevice()
+        device.activate("Brest")
+
+        self.assertFalse(device.is_inactive())
+
+        device.replace_or_add_zone("User", "Inactive")
+
+        self.assertTrue(device.is_inactive())
+
     def test_simple_device_save(self):
         try_delete_device("testsimpledevicelcarr")
 
@@ -119,6 +129,26 @@ class LdapDeviceTestCase(TestCase):
 
         with self.assertRaises(ValueError):
             device.save()
+
+    def test_replace_or_add_zone(self):
+        device1 = LdapDevice()
+        device1.zones = ['User']
+        device1.replace_or_add_zone("Home", "Cat")
+
+        self.assertListEqual(['User', 'Cat'], device1.zones)
+
+        device2 = LdapDevice()
+        device2.zones = ['User']
+        device2.replace_or_add_zone('User', 'Cat')
+
+        self.assertListEqual(['Cat'], device2.zones)
+
+        device3 = LdapDevice()
+        device3.zones = ['User', 'Home']
+        device3.replace_or_add_zone('User', 'Home')
+
+        self.assertListEqual(['Home'], device3.zones)
+
     # TODO: test multiple same mac devices
     # TODO: test invalid mac or ip
     # TODO: test multiple same hostname

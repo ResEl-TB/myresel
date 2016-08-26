@@ -3,6 +3,7 @@ from datetime import datetime
 
 from django.conf import settings
 from django.contrib import messages
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
@@ -12,6 +13,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import View, ListView
 
 from fonctions import network, ldap, decorators
+from gestion_machines.models import LdapDevice
 from pages.forms import ContactForm
 from pages.models import News
 from wiki.models import Category
@@ -63,15 +65,6 @@ class Home(View):
         # Change campus automatically
         is_in_resel = network.is_resel_ip(ip)
         args_for_response['ip_in_resel'] = is_in_resel
-        if is_in_resel:
-            computer_status = ldap.get_status(ip)
-            if computer_status == 'inactive':
-                # La machine est inactive
-                return HttpResponseRedirect(reverse('gestion-machines:reactivation'))
-
-            elif computer_status == 'wrong_campus':
-                # La machine n'est pas dans le bon campus
-                return HttpResponseRedirect(reverse('gestion-machines:changement-campus'))
 
         if request.user.is_authenticated():
             # Check his end fees date
@@ -146,11 +139,18 @@ def inscriptionZoneInfo(request):
     else:
         ip = request.META['REMOTE_ADDR']
     vlan = request.META['VLAN']
-    zone = network.get_network_zone(ip)
-    is_registered = 'Unknown'
+    zone = request.network_data['zone']
+    mac = request.network_data['mac']
+    is_registered = False
     is_logged_in = request.user.is_authenticated()
     if "user" in zone or "inscription" in zone:
-        is_registered = ldap.get_status(ip) == 'active'
+        try:
+            device = LdapDevice.get(mac_address=mac)
+            is_registered = device.get_status() == 'active'
+            if not is_registered:
+                return HttpResponseRedirect(reverse("gestion-machines:reactivation"))
+        except ObjectDoesNotExist:
+            pass
 
     if "inscription" not in zone:
         return HttpResponseRedirect(reverse("home"))

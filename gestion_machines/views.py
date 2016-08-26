@@ -1,23 +1,22 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render
-from django.views.generic import View, ListView
-from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import login_required
+from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-from django.core.mail import EmailMessage
-
+from django.shortcuts import render
+from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
-
+from django.views.generic import View, ListView
 from ldap3 import MODIFY_REPLACE
 
+from fonctions import ldap, network
+from fonctions.decorators import resel_required, unknown_machine
 from fonctions.network import get_campus
 from gestion_machines.models import LdapDevice
 from .forms import AddDeviceForm, AjoutManuelForm, ModifierForm
-from fonctions import ldap, network
-from fonctions.decorators import resel_required, unknown_machine
-from django.conf import settings
 
 
 # Create your views here.
@@ -30,37 +29,39 @@ class Reactivation(View):
     template_name = 'gestion_machines/reactivation.html'
 
     @method_decorator(resel_required)
-    @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(Reactivation, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        # Vérification que la machine est bien à l'user
         mac = request.network_data['mac']
-        machine = ldap.search(settings.LDAP_DN_MACHINES, '(&(macaddress=%s))' % mac, ['uidproprio', 'host', 'iphostnumber', 'macaddress'])[0]
-        if str(request.user) not in machine.uidproprio[0]:
-            messages.error(request, _("Cette machine ne semble pas vous appartenir. Veuillez contacter un administrateur afin de la transférer."))
-            return HttpResponseRedirect(reverse('pages:news'))
 
-        # Vérification que la machine est bien désactivée
-        status = ldap.get_status(request.META['REMOTE_ADDR'])
-        if status != 'inactive':
+        try:
+            device = LdapDevice.get(mac_address=mac)
+        except ObjectDoesNotExist:
+            return HttpResponseRedirect(reverse('home'))
+
+        if device.get_status() == 'active':
             messages.info(request, _("Votre machine n'a pas besoin d'être ré-activée."))
-            return HttpResponseRedirect(reverse('pages:news'))
+            return HttpResponseRedirect(reverse('home'))
 
-        ldap.reactivation(request.META['REMOTE_ADDR'])
+        device.activate(campus=settings.CURRENT_CAMPUS)
+        device.save()
 
         mail = EmailMessage(
-                subject="[Reactivation Brest] La machine {} [172.22.{} - {}] par {}".format(machine.host[0], machine.iphostnumber[0], machine.macaddress[0], str(request.user)),
-                body="Reactivation de la machine {} appartenant à {}\n\nIP : 172.22.{}\nMAC : {}".format(machine.host[0], str(request.user), machine.iphostnumber[0], machine.macaddress[0]),
+                subject="[Reactivation {}] La machine {} [172.22.{} - {}] par {}".format(settings.CURRENT_CAMPUS, device.hostname, device.ip, device.mac_address, str(request.user)),
+                body="Reactivation de la machine {} appartenant à {}\n\nIP : 172.22.{}\nMAC : {}".format(device.hostname, str(request.user), device.ip, device.mac_address),
                 from_email="inscription-bot@resel.fr",
                 reply_to=["inscription-bot@resel.fr"],
                 to=["inscription-bot@resel.fr", "botanik@resel.fr"],
                 headers={'Cc': 'botanik@resel.fr'}
             )
-        mail.send()
-        
-        return render(request, self.template_name)
+        try:
+            mail.send()
+        except Exception:
+            pass
+        messages.info(request, _("Votre machine a bien été activée."))
+
+        return HttpResponseRedirect(reverse('home'))
 
 
 class AddDeviceView(View):
