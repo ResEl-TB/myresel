@@ -22,7 +22,7 @@ CSRF_COOKIE_DOMAIN = '.resel.fr'
 
 # Mails
 
-SERVER_EMAIL = 'inscription@resel.fr'
+SERVER_EMAIL = 'skynet@resel.fr'
 
 EMAIL_USE_TLS = True
 
@@ -30,7 +30,11 @@ EMAIL_HOST = 'pegase.adm.resel.fr'
 
 EMAIL_SUBJECT_PREFIX = ''
 
-EMAIL_BACKEND = 'inscription-bot@resel.fr'
+ADMINS = [
+    ('Inscription bot', 'inscription-bot@resel.fr'),
+    ('Botanik bot', 'botanik@resel.fr'),
+]
+
 # Login
 
 LOGIN_URL = '/login'

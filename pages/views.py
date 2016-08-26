@@ -119,11 +119,11 @@ class Contact(View):
         if form.is_valid():
             # Envoi d'un mail à support
             mail = EmailMessage(
-                subject = "Message de la part d'un utilisateur",
-                body = "%(nom)s souhaite vous contacter\n\nChambre : %(chambre)s\nDemande :\n%(demande)s" % {'nom': form.cleaned_data['nom'], 'chambre': form.cleaned_data['chambre'], 'demande': form.cleaned_data['demande']},
-                from_email = "myresel@resel.fr",
-                reply_to = [form.cleaned_data['mail']],
-                to = ["support@resel.fr"],
+                subject="Message de la part d'un utilisateur",
+                body="%(nom)s souhaite vous contacter\n\nChambre : %(chambre)s\nDemande :\n%(demande)s" % {'nom': form.cleaned_data['nom'], 'chambre': form.cleaned_data['chambre'], 'demande': form.cleaned_data['demande']},
+                from_email="myresel@resel.fr",
+                reply_to=[form.cleaned_data['mail']],
+                to=["support@resel.fr"],
             )
             mail.send()
 
