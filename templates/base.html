@@ -88,7 +88,25 @@
 
                 {% if request.user.is_authenticated %}
                 <li>
-                    <a href="/logout"><i class="fa fa-sign-out fa-fw"></i> {% trans "Déconnexion" %}</a>
+                    <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user fa-fw" aria-hidden="true"></i> {{ ldapuser.first_name }} {{ ldapuser.last_name }}</a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="#"><i class="fa fa-sliders fa-fw"></i> {% trans "Paramètres" %}</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'gestion-machines:liste' %}"><i class="fa fa-cubes fa-fw"></i> {% trans "Mes machines" %}</a>
+                        </li>
+                        <li>
+                            <a href="https://mlistes.resel.fr"><i class="fa fa-rss fa-fw"></i> {% trans "Listes de diffusion" %}</a>
+                        </li>
+                        <hr />
+                        <li>
+                            <a href="/logout"><i class="fa fa-sign-out fa-fw"></i> {% trans "Déconnexion" %}</a>
+                        </li>
+                    </ul>
+                </li>
+
                 </li>
                 {% else %}
                 <li>
