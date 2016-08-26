@@ -32,34 +32,45 @@
 {% if is_registered %} {# Computer known #}
     {% if vlan == "999" %} {# Computer known on 999 wrong ip #}
         <div class="page-title">
-            <h2 class="container">{% trans "Erreur : mauvais réseau"%}</h2>
+            <h2>{% trans "Vous venez d'activer votre appareil"%}</h2>
         </div>
-        <div class="container page-content main-content">
-            {% blocktrans %}
-                Bien que votre machine soit inscrite sur notre réseau, vous êtes toujours sur la zone d'inscription.
-                Si vous venez de vous inscrire, c'est normal, vous devez d'abord débrancher puis rebrancher votre câble réseau, ou vous
-                déconnecter du réseau Wifi puis vous y reconnecter (sur le réseau Wifi "ResEl Secure").
-            {% endblocktrans %}
+        <div class="main-content">
+            <div class="container page-content text-center">
+                <div class="row">
+                    <div class="col-sm-offset-3 col-sm-6">
+                        {% blocktrans %}
+                            <p>
+                            Votre machine vient d'être activé, pour finaliser la connexion, il faut réinitialiser la connexion
+                                en vous déconnectant puis en vous reconnectant au réseau <strong>ResEl Secure</strong>.
+                            </p>
+                            <p>Si le problème persiste, n'hésitez pas à contacter un administateur.</p>
+                        {% endblocktrans %}
+                    </div>
+                </div>
+                <div class="row page-content">
+                </div>
+            </div>
         </div>
+
     {% elif vlan == "995" %} {# Computer known on 995 wrong ip #}
         <div class="page-title">
             <h2 class="container">{% trans "Vous êtes sur la zone d'inscription"%}</h2>
         </div>
         <div class="main-content">
-        <div class="container page-content text-center">
-            <div class="row">
-                <div class="col-sm-offset-3 col-sm-6">
-                    {% blocktrans %}
-                        <p>
-                        Vous êtes connecté au réseau Wi-Fi <strong>ResEl inscription</strong> et votre machine est bien enregistrée.
-                        </p>
-                        <p>
-                        Il est impossible d'avoir accès à internet depuis ce réseau Wifi pour des raisons de sécurité.<br/>
-                        Veuillez vous connecter sur le réseau Wi-Fi <strong>ResEl Secure</strong>.
-                        </p>
-                    {% endblocktrans %}
+            <div class="container page-content text-center">
+                <div class="row">
+                    <div class="col-sm-offset-3 col-sm-6">
+                        {% blocktrans %}
+                            <p>
+                                Vous êtes connecté au réseau Wi-Fi <strong>ResEl inscription</strong> et votre machine est bien enregistrée.
+                            </p>
+                            <p>
+                                Il est impossible d'avoir accès à internet depuis ce réseau Wifi pour des raisons de sécurité.<br/>
+                                Veuillez vous connecter sur le réseau Wi-Fi <strong>ResEl Secure</strong>.
+                            </p>
+                        {% endblocktrans %}
+                    </div>
                 </div>
-            </div>
                 <div class="row">
                     <div class="col-sm-3">
                         <img src="{% static 'images/inscription-zone/subscribed-on-995-1.png' %}" class="img-responsive">
