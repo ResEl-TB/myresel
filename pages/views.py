@@ -90,7 +90,7 @@ class NewsListe(ListView):
     context_object_name = 'derniers_billets'
 
     def get_queryset(self):
-        return News.objects.ordery_by('-date').all()
+        return News.objects.order_by('-date').all()
 
 
 class Contact(View):
@@ -128,7 +128,7 @@ class Contact(View):
             mail.send()
 
             messages.success(request, _("Votre demande a bien été envoyée aux administrateurs. L'un d'eux vous répondra d'ici peu."))
-            return HttpResponseRedirect(reverse('news'))
+            return HttpResponseRedirect(reverse('home'))
         return render(request, self.template_name, {'form': form})
 
 
