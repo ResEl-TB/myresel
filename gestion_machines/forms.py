@@ -1,14 +1,11 @@
-from django import forms
-from django.utils.text import slugify
-
-from fonctions import ldap
-from django.conf import settings
-
 import re
 
-# Pour la traduction - sert à marquer les chaînes de caractères à traduire
+from django import forms
+from django.conf import settings
+from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 
+from fonctions import ldap
 from fonctions.ldap import get_free_alias
 
 
@@ -20,7 +17,6 @@ class AddDeviceForm(forms.Form):
             attrs={'class': 'form-control'}
         ))
 
-    # TODO: length verification
     def clean_alias(self):
         alias = self.cleaned_data['alias']
 

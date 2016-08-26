@@ -1,5 +1,6 @@
 # coding: utf-8
 import json
+from datetime import datetime, timedelta
 
 import ldapback
 from ldapback.models.fields import LdapCharField, LdapPasswordField, LdapNtPasswordField, LdapListField
@@ -66,6 +67,20 @@ class LdapUser(ldapback.models.LdapModel):
         for k, v in obj_dict.items():
             self.__dict__[k] = v
         return self
+
+    # TODO: make tests
+    def need_to_pay(self):
+        if not self.end_cotiz:
+            return 'danger'
+        end_cotiz = datetime.strptime(self.end_cotiz, '%Y%m%d%H%M%SZ')
+        now = datetime.now()
+        if end_cotiz < now:
+            return 'danger'
+        elif end_cotiz < (now + timedelta(days=7)):
+            return 'warning'
+        else:
+            return 'success'
+
 
 
 class LdapOldUser(LdapUser):

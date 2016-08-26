@@ -1,5 +1,4 @@
 import itertools
-from datetime import datetime, timedelta
 
 from django.conf import settings
 from django_python3_ldap.ldap import Connection as UserConnection
@@ -101,40 +100,6 @@ def get_status(ip):
     return 'unknown'
 
 
-def update_campus(ip):
-    """ Modifie le LDAP pour attribuer le bon campus à la machine qui possède l'ip fournie """
-
-    CAMPUS = ['Brest', 'Rennes']
-
-    mac = get_mac(ip)
-    campus = get_campus(ip)
-    machine = search(settings.LDAP_DN_MACHINES, '(&(macaddress=%s))' % mac, ['zone', 'host'])[0]
-
-    # Récupération de l'ancien campus de la machine
-    for z in machine.zone:
-        if z.capitalize() in CAMPUS:
-            old_campus = z.capitalize()
-
-    # Update de la fiche LDAP
-    l = new_connection()
-    l.modify('host=%s,' % machine.host[0] + settings.LDAP_DN_MACHINES,
-             {'zone': [(MODIFY_REPLACE, ['User', campus])]})
-    l.unbind()
-    update_all()
-
-
-def reactivation(ip):
-    """ Modifie le LDAP pour réactiver la machine de l'utilisateur """
-
-    mac = get_mac(ip)
-    campus = get_campus(ip)
-    machine = search(settings.LDAP_DN_MACHINES, '(&(macaddress=%s))' % mac, ['host'])[0]
-    dn = 'host=%s,' % machine.host[0] + settings.LDAP_DN_MACHINES
-    modifs = {'zone': [(MODIFY_REPLACE, ['User', campus])]}
-    modify(dn, modifs)
-    update_all()
-
-
 def modify(dn, modifs):
     """ Modifie une fiche LDAP """
 
@@ -188,23 +153,6 @@ def cotisation(user, duree):
     )
     l.unbind()
     update_all()
-
-def need_to_pay(username):
-    """ Check is the user needs to pay his fee or not """
-
-    user = search(settings.LDAP_DN_PEOPLE, '(&(uid=%s))' % username, ['cotiz', 'endinternet'])
-    if user:
-        user = user[0]
-        if 'cotiz' in user.entry_to_json().lower() and 'endinternet' in user.entry_to_json().lower():
-            end_date = datetime.strptime(user.endinternet[0], '%Y%m%d%H%M%SZ')
-            if end_date < datetime.now():
-                return 'danger'
-            elif end_date < (datetime.now() + timedelta(days=7)):
-                return 'warning'
-            else:
-                return 'success'
-        else:
-            return 'danger'
 
 
 def create_admin():

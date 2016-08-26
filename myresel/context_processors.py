@@ -1,4 +1,3 @@
-from fonctions import ldap
 from gestion_personnes.models import LdapUser
 
 
@@ -15,7 +14,8 @@ def resel_context(request):
 
     context['need_to_pay'] = False
     if request.user.is_authenticated():
-        context['need_to_pay'] = ldap.need_to_pay(request.user.username)
-        context['ldapuser'] = LdapUser.get(pk=request.user.username)
+        user = LdapUser.get(pk=request.user.username)
+        context['need_to_pay'] = user.need_to_pay()
+        context['ldapuser'] = user
 
     return context
