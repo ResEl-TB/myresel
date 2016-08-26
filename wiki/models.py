@@ -25,7 +25,7 @@ class Category(models.Model):
             articles = [el for el in self.article_set.all() if not el.show_only_if_in_resel or in_resel]
             links = [el for el in self.link_set.all() if not el.show_only_if_in_resel or in_resel]
             stuff = list(articles)+list(links)
-            stuff.sort(key=operator.attrgetter('priority'), reverse=True)
+            stuff.sort(key=operator.attrgetter('priority'))
 
             return stuff
         except:
