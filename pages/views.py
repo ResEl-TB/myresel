@@ -41,10 +41,7 @@ class Home(View):
         return super(Home, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        if 'HTTP_X_FORWARDED_FOR' in request.META:
-            ip = request.META['HTTP_X_FORWARDED_FOR']
-        else:
-            ip = request.META['REMOTE_ADDR']
+        ip = request.network_data['ip']
         
         template_for_response = self.exterior_template
         args_for_response = {}
@@ -134,11 +131,7 @@ class Contact(View):
 
 def inscriptionZoneInfo(request):
     # First get device datas
-    if 'HTTP_X_FORWARDED_FOR' in request.META:
-        ip = request.META['HTTP_X_FORWARDED_FOR']
-    else:
-        ip = request.META['REMOTE_ADDR']
-    vlan = request.META['VLAN']
+    vlan = request.network_data['vlan']
     zone = request.network_data['zone']
     mac = request.network_data['mac']
     is_registered = False
