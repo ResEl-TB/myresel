@@ -22,7 +22,7 @@ CSRF_COOKIE_DOMAIN = '.resel.fr'
 
 # Mails
 
-SERVER_EMAIL = 'skynet@resel.fr'
+SERVER_EMAIL = 'inscription@inscription.resel.fr'
 
 EMAIL_USE_TLS = True
 
@@ -33,6 +33,7 @@ EMAIL_SUBJECT_PREFIX = ''
 ADMINS = [
     ('Inscription bot', 'inscription-bot@resel.fr'),
     ('Botanik bot', 'botanik@resel.fr'),
+    ('Loïc Carr', 'loic.carr@resel.fr'),
 ]
 
 # Login
