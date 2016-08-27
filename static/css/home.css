@@ -43,8 +43,8 @@
 
 .home-user-management .btn {
     background: none;
-    color: #EB7F00;
-    border-color: #EB7F00;
+    color: #F79420;
+    border-color: #F79420;
     margin: 20px;
 }
 
@@ -55,7 +55,7 @@
 }
 
 .home-user-management a {
-    color: #EB7F00;
+    color: #F79420;
 }
 
 .home-presentation {
@@ -65,7 +65,7 @@
     text-align: center;
 }
 .home-presentation a{
-    color: #EB7F00;
+    color: #F79420;
 }
 
 .home-user-management~.home-presentation {

@@ -1,4 +1,4 @@
-/* bleu: #225378 ; bleu-clair : #1695A3 ; orange : #EB7F00 */
+/* bleu: #225378 ; bleu-clair : #1695A3 ; orange : #F79420 */
 
 /* General CSS */
 body {
@@ -10,11 +10,11 @@ body {
     padding-top: 30px;
     padding-bottom: 30px;
     background: #225378 !important;
-    color: #EB7F00;
+    color: #F79420;
 }
 
 #branding h1, #branding h1 a:link, #branding h1 a:visited {
-    color: #EB7F00;
+    color: #F79420;
 }
 
 #content-related {
