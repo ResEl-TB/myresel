@@ -2,7 +2,9 @@
 import logging
 
 from django.conf import settings
+from django.contrib.auth import logout
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import resolve, Resolver404, reverse
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
 from django.utils.translation import ugettext_lazy as _
@@ -10,11 +12,18 @@ from django.utils.translation import ugettext_lazy as _
 from fonctions import ldap, network
 from fonctions.network import NetworkError
 from gestion_machines.models import LdapDevice
+from gestion_personnes.models import LdapUser
 
 logger = logging.getLogger(__name__)
 class IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAResElAdminSoCheckTheLdapBeforeMiddleware(object):
     def process_request(self, request):
         # Check if the user is a ResEl admin. If so, its credentials will be updated to superuser and staff
+        if request.user.is_authenticated():
+            try:
+                LdapUser.get(pk=request.user.username)
+            except ObjectDoesNotExist:
+                logout(request)
+
         if request.user.is_authenticated() and not (request.user.is_staff and request.user.is_superuser):
             res = ldap.search(settings.LDAP_OU_ADMIN, '(&(uid=%s))' % request.user.username)
             if res:
