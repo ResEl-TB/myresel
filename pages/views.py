@@ -71,7 +71,7 @@ class Home(View):
             # Check his end fees date
             # try:
             user = LdapUser.get(pk=request.user)
-            end_fee = datetime.strptime(user.end_cotiz, '%Y%m%d%H%M%SZ')
+            end_fee = datetime.strptime(user.end_cotiz, '%Y%m%d%H%M%SZ') if user.end_cotiz else False
             if is_in_resel:
                 device = LdapDevice.get(mac_address=request.network_data['mac'])
                 args_for_response['not_user_device'] = device.owner != user.pk
