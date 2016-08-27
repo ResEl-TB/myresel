@@ -14,6 +14,7 @@ from django.views.generic import View, ListView
 
 from fonctions import network, ldap, decorators
 from gestion_machines.models import LdapDevice
+from gestion_personnes.models import LdapUser
 from pages.forms import ContactForm
 from pages.models import News
 from wiki.models import Category
@@ -97,17 +98,21 @@ class Contact(View):
     form_class = ContactForm
 
     def get(self, request, *args, **kwargs):
-        form = self.form_class()
-
-        # try:
-        #     user = LdapUser.objects.get(uid=request.user.username)
-        #     form = self.form_class(
-        #         nom=user.displayName,
-        #         chambre=[user.batiment, user.roomNumber].join(' '),
-        #         mail=user.mail
-        #     )
-        # except:
-        #     form = self.form_class()
+        try:
+            user = LdapUser.get(pk=request.user)
+            if user.building != "0":
+                room = user.building + ' ' + user.room_number
+            else:
+                room = None
+            form_data = {
+                'nom': user.first_name + ' ' + user.last_name,
+                'chambre': room,
+                'mail': user.mail,
+                'uid': request.user,
+            }
+            form = self.form_class(initial=form_data)
+        except ObjectDoesNotExist:
+            form = self.form_class()
         return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
@@ -117,7 +122,16 @@ class Contact(View):
             # Envoi d'un mail à support
             mail = EmailMessage(
                 subject="[Contact] %s" % form.cleaned_data['nom'],
-                body="%(nom)s souhaite vous contacter\n\nChambre : %(chambre)s\nDemande :\n\n%(demande)s" % {'nom': form.cleaned_data['nom'], 'chambre': form.cleaned_data['chambre'], 'demande': form.cleaned_data['demande']},
+                body="%(nom)s souhaite contacter un administrateur"
+                "\n\nChambre : %(chambre)s"
+                "\nuid : %(uid)s"
+                "\nMessage :"
+                "\n\n%(demande)s" % {
+                    'uid': form.cleaned_data['uid'],
+                    'nom': form.cleaned_data['nom'],
+                    'chambre': form.cleaned_data['chambre'],
+                    'demande': form.cleaned_data['demande']
+                },
                 from_email="contact@resel.fr",
                 reply_to=[form.cleaned_data['mail']],
                 to=["support@resel.fr"],
