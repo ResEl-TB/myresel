@@ -150,14 +150,14 @@ class InscriptionCGU(View):
                         "\nPrénom : %(firstname)s"
                         "\nemail : %(mail)s"
                         "\nCampus : %(campus)s"
-                        "\n\n Ce mail est un mail automatique envoyé par l'interface d'inscription du ResEl. ".format({
+                        "\n\n Ce mail est un mail automatique envoyé par l'interface d'inscription du ResEl. " % {
                             "username": user.uid,
                             "lastname": user.last_name,
                             "firstname": user.first_name,
                             "mail": user.mail,
                             "campus": settings.CURRENT_CAMPUS
                         })
-                        )
+
             try:
                 campus_email.send()
                 user_email.send()
