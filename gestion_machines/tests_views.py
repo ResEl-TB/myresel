@@ -45,7 +45,9 @@ class AddDeviceViewCase(TestCase):
                                     HTTP_HOST="10.0.3.95", follow=True)
         self.assertEqual(200, response.status_code)
         self.assertEqual(user_machines + 1, len(LdapDevice.search(owner=self.owner)))
+        self.assertEqual(1, len(mail.outbox))
 
+    # TODO: make test with concurency to try mutiple simultinate presses
     def test_add_twice(self):
         user_machines = len(LdapDevice.search(owner=self.owner))
         response = self.client.post(reverse("gestion-machines:ajout"),
@@ -54,7 +56,7 @@ class AddDeviceViewCase(TestCase):
         self.assertEqual(user_machines + 1, len(LdapDevice.search(owner=self.owner)))
 
         response2 = self.client.post(reverse("gestion-machines:ajout"),
-                                    HTTP_HOST="10.0.3.95", follow=True)
+                                     HTTP_HOST="10.0.3.99", follow=True)
         self.assertEqual(200, response2.status_code)
         self.assertEqual(user_machines + 1, len(LdapDevice.search(owner=self.owner)))
 

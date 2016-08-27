@@ -74,6 +74,7 @@ INVOICE_STORE_PATH = '/myresel/media/invoices'
 
 # TODO: factorize this conf w/ vagrant conf
 if DEBUG or TESTING:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
     DEBUG_SETTINGS = {
         'networks': {
             '10.0.3.94': {  # VLAN 994 (exterior)
