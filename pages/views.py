@@ -1,4 +1,5 @@
 # coding: utf-8
+import logging
 from datetime import datetime
 
 from django.conf import settings
@@ -12,12 +13,14 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import View, ListView
 
-from fonctions import network, ldap, decorators
+from fonctions import network, decorators
 from gestion_machines.models import LdapDevice
 from gestion_personnes.models import LdapUser
 from pages.forms import ContactForm
 from pages.models import News
 from wiki.models import Category
+
+logger = logging.getLogger(__name__)
 
 
 class Home(View):
@@ -66,17 +69,19 @@ class Home(View):
 
         if request.user.is_authenticated():
             # Check his end fees date
-            end_fee = False
-            user = ldap.search(settings.LDAP_DN_PEOPLE, '(&(uid=%s))' % str(request.user.username), ['endInternet'])
-            if user:
-                user = user[0]
-                end_fee = datetime.strptime(str(user.endinternet), '%Y%m%d%H%M%SZ') if 'endinternet' in user.entry_to_json().lower() else False
-            # end_fee = datetime.now()  # TODO: DEBUG
+            # try:
+            user = LdapUser.get(pk=request.user)
+            end_fee = datetime.strptime(user.end_cotiz, '%Y%m%d%H%M%SZ')
+            if is_in_resel:
+                device = LdapDevice.get(mac_address=request.network_data['mac'])
+                args_for_response['not_user_device'] = device.owner != user.pk
+            # except Exception as e:
+            #     logger.error(e)
+            #     end_fee = False
             template_for_response = self.logged_template
             args_for_response['end_fee'] = end_fee
         elif network.is_resel_ip(ip):
             template_for_response = self.interior_template
-
 
         return render(request, template_for_response, args_for_response)
 

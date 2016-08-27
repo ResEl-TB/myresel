@@ -16,7 +16,7 @@
                     <h3>{% trans "Mes services" %}</h3>
                     <div class="services-group">
                         <div><a href="{% url 'gestion-machines:liste' %}"><span class="fa fa-cubes fa-fw"></span> {% trans "Consulter toutes mes machines inscrites" %}</a></div>
-                        <div><a href="#"><span class="fa fa-comment-o fa-fw"></span> {% trans "Voir ma consomation de bande passante" %}</a></div>
+                        <div><a href="#"><span class="fa fa-tasks fa-fw"></span> {% trans "Voir ma consomation de bande passante" %}</a></div>
                     </div>
                     <div class="services-group">
                         <div><a href="#"><span class="fa fa-group fa-fw"></span> {% trans "Gérer mes clubs et associations" %}</a></div>
@@ -43,6 +43,21 @@
                             </div>
                         </div>
                     </div>
+                {% elif not_user_device %}
+                    {# The current device is not associated with the account #}
+                    <div class="col-md-6 col-md-offset-2">
+                        <div class="row">
+                            <div class="col-sm-4 computer-icon hidden-xs"><span class="fa fa-laptop"></span></div>
+                            <div class="col-sm-7">
+                                <div><h3>{% trans "Mauvais appareil" %}</div>
+                                <div>{% blocktrans %}
+                                    Vous êtes connecté sur un appareil qui ne vous appartient pas.
+                                    Vous ne pouvez donc pas l'administrer.
+                                {% endblocktrans %}</div>
+                                <small>{% trans "Si vous souhaiter transférer cet appareil" %} <a href="{% url 'contact' %}">vous pouvez nous contacter</a></small>
+                            </div>
+                        </div>
+                    </div>
                 {% elif is_resel %}
                     {# In the netwok and saved #}
                     <div class="col-md-6 col-md-offset-2">
@@ -56,6 +71,7 @@
                             </div>
                         </div>
                     </div>
+
                 {% else %}
                     {# Not in the network #}
                     <div class="col-md-6 col-md-offset-2">
@@ -71,53 +87,53 @@
                 {% endif %}
 
                 {# DISABLED FOR THE MOMENT #}
-{#                {% if is_resel %}#}
-{#                    <div class="col-sm-3 col-sm-offset-3 hidden-xs hidden-sm"> <hr /></div>#}
-{#                    {% if need_to_pay == 'success' %}#}
-{#                        <div class="col-md-6 col-md-offset-2 payement-block">#}
-{#                            <div class="row">#}
-{#                                <div class="col-xs-5 col-sm-4 computer-icon"><span class="fa fa-check"></span></div>#}
-{#                                <div class="col-xs-7">#}
-{#                                    <h3>{% trans "Facturation à jour" %}</h3>#}
-{#                                    <div>{% trans "Cotisation annuelle payée" %}</div>#}
-{#                                    <div>{% trans "Frais d'accès payés jusqu'au" %} {{ end_fee }}</div>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    {% elif need_to_pay == 'warning' %}#}
-{#                        <div class="col-md-6 col-md-offset-2">#}
-{#                            <div class="row">#}
-{#                                <div class="col-sm-4 computer-icon hidden-xs"><span class="fa fa-exclamation"></span></div>#}
-{#                                <div class="col-sm-7">#}
-{#                                    <h3>{% trans "Attention" %}</h3>#}
-{#                                    <div>{% trans "Votre abonnement arrive à échéance le " %}<a href="{% url 'tresorerie:home' %}">{{ end_fee|date:"j F Y" }}</a>.</div>#}
-{#                                    <a href="{% url 'tresorerie:home' %}" class="btn btn-default">{%  trans "Accéder à la trésorerie"%}</a>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    {% elif need_to_pay == 'danger' %}#}
-{#                        <div class="col-md-6 col-md-offset-2">#}
-{#                            <div class="row">#}
-{#                                <div class="col-xs-5 col-sm-4 computer-icon hidden-xs"><span class="fa fa-times"></span></div>#}
-{#                                <div class="col-sm-7">#}
-{#                                    <h3>{% trans "Aucun payement effectué" %}</h3>#}
-{#                                    <div>{% trans "Votre abonnement au Resel a expiré, pour pouvoir à nouveau utiliser les services du ResEl vous devez régulariser votre situation." %}</div>#}
-{#                                    <a href="{% url 'tresorerie:home' %}" class="btn btn-default btn-lg ">{%  trans "Accéder à la trésorerie"%}</a>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    {% else %}#}
-{#                        <div class="col-md-6 col-md-offset-2">#}
-{#                            <div class="row">#}
-{#                                <div class="col-sm-4 computer-icon hidden-xs"><span class="fa fa-minus"></span></div>#}
-{#                                <div class="col-sm-7">#}
-{#                                    <h3>{% trans "Pas d'information de facturation" %}</h3>#}
-{#                                    <div>Vous ne semblez pas élibible à la cotisation ResEl.</div>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                        </div>#}
-{#                    {% endif %}#}
-{#                {% endif %}#}
+                {#                {% if is_resel %}#}
+                {#                    <div class="col-sm-3 col-sm-offset-3 hidden-xs hidden-sm"> <hr /></div>#}
+                {#                    {% if need_to_pay == 'success' %}#}
+                {#                        <div class="col-md-6 col-md-offset-2 payement-block">#}
+                {#                            <div class="row">#}
+                {#                                <div class="col-xs-5 col-sm-4 computer-icon"><span class="fa fa-check"></span></div>#}
+                {#                                <div class="col-xs-7">#}
+                {#                                    <h3>{% trans "Facturation à jour" %}</h3>#}
+                {#                                    <div>{% trans "Cotisation annuelle payée" %}</div>#}
+                {#                                    <div>{% trans "Frais d'accès payés jusqu'au" %} {{ end_fee }}</div>#}
+                {#                                </div>#}
+                {#                            </div>#}
+                {#                        </div>#}
+                {#                    {% elif need_to_pay == 'warning' %}#}
+                {#                        <div class="col-md-6 col-md-offset-2">#}
+                {#                            <div class="row">#}
+                {#                                <div class="col-sm-4 computer-icon hidden-xs"><span class="fa fa-exclamation"></span></div>#}
+                {#                                <div class="col-sm-7">#}
+                {#                                    <h3>{% trans "Attention" %}</h3>#}
+                {#                                    <div>{% trans "Votre abonnement arrive à échéance le " %}<a href="{% url 'tresorerie:home' %}">{{ end_fee|date:"j F Y" }}</a>.</div>#}
+                {#                                    <a href="{% url 'tresorerie:home' %}" class="btn btn-default">{%  trans "Accéder à la trésorerie"%}</a>#}
+                {#                                </div>#}
+                {#                            </div>#}
+                {#                        </div>#}
+                {#                    {% elif need_to_pay == 'danger' %}#}
+                {#                        <div class="col-md-6 col-md-offset-2">#}
+                {#                            <div class="row">#}
+                {#                                <div class="col-xs-5 col-sm-4 computer-icon hidden-xs"><span class="fa fa-times"></span></div>#}
+                {#                                <div class="col-sm-7">#}
+                {#                                    <h3>{% trans "Aucun payement effectué" %}</h3>#}
+                {#                                    <div>{% trans "Votre abonnement au Resel a expiré, pour pouvoir à nouveau utiliser les services du ResEl vous devez régulariser votre situation." %}</div>#}
+                {#                                    <a href="{% url 'tresorerie:home' %}" class="btn btn-default btn-lg ">{%  trans "Accéder à la trésorerie"%}</a>#}
+                {#                                </div>#}
+                {#                            </div>#}
+                {#                        </div>#}
+                {#                    {% else %}#}
+                {#                        <div class="col-md-6 col-md-offset-2">#}
+                {#                            <div class="row">#}
+                {#                                <div class="col-sm-4 computer-icon hidden-xs"><span class="fa fa-minus"></span></div>#}
+                {#                                <div class="col-sm-7">#}
+                {#                                    <h3>{% trans "Pas d'information de facturation" %}</h3>#}
+                {#                                    <div>Vous ne semblez pas élibible à la cotisation ResEl.</div>#}
+                {#                                </div>#}
+                {#                            </div>#}
+                {#                        </div>#}
+                {#                    {% endif %}#}
+                {#                {% endif %}#}
             </div>
         </div>
     </div>
