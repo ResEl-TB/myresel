@@ -44,13 +44,13 @@ class Reactivation(View):
 
         device.activate(campus=settings.CURRENT_CAMPUS)
         device.save()
-
+        owner_uid = device.owner.split(',')[0][4:]
         mail_admins(
             "[Reactivation {}] La machine {} [172.22.{} - {}] par {}".format(settings.CURRENT_CAMPUS, device.hostname,
                                                                              device.ip, device.mac_address,
-                                                                             str(request.user)),
+                                                                             owner_uid),
             "Reactivation de la machine {} appartenant à {}\n\nIP : 172.22.{}\nMAC : {}".format(device.hostname,
-                                                                                                str(request.user),
+                                                                                                owner_uid,
                                                                                                 device.ip,
                                                                                                 device.mac_address)
 
