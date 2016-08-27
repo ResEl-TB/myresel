@@ -3,7 +3,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, mail_admins
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -45,18 +45,16 @@ class Reactivation(View):
         device.activate(campus=settings.CURRENT_CAMPUS)
         device.save()
 
-        mail = EmailMessage(
-                subject="[Reactivation {}] La machine {} [172.22.{} - {}] par {}".format(settings.CURRENT_CAMPUS, device.hostname, device.ip, device.mac_address, str(request.user)),
-                body="Reactivation de la machine {} appartenant à {}\n\nIP : 172.22.{}\nMAC : {}".format(device.hostname, str(request.user), device.ip, device.mac_address),
-                from_email="inscription-bot@resel.fr",
-                reply_to=["inscription-bot@resel.fr"],
-                to=["inscription-bot@resel.fr", "botanik@resel.fr"],
-                headers={'Cc': 'botanik@resel.fr'}
-            )
-        try:
-            mail.send()
-        except Exception:
-            pass
+        mail_admins(
+            "[Reactivation {}] La machine {} [172.22.{} - {}] par {}".format(settings.CURRENT_CAMPUS, device.hostname,
+                                                                             device.ip, device.mac_address,
+                                                                             str(request.user)),
+            "Reactivation de la machine {} appartenant à {}\n\nIP : 172.22.{}\nMAC : {}".format(device.hostname,
+                                                                                                str(request.user),
+                                                                                                device.ip,
+                                                                                                device.mac_address)
+
+        )
         messages.info(request, _("Votre machine a bien été activée."))
         network.update_all()
 
@@ -112,6 +110,18 @@ class AddDeviceView(View):
             device.activate(campus)
             device.save()
             network.update_all()  # TODO: Move that to something async
+
+            mail_admins(
+                "[Inscription {}] La machine {} [172.22.{} - {}] inscrite par {}".format(settings.CURRENT_CAMPUS,
+                                                                                 device.hostname,
+                                                                                 device.ip, device.mac_address,
+                                                                                 str(request.user)),
+                "Inscription de la machine {} appartenant à {}\n\nIP : 172.22.{}\nMAC : {}".format(device.hostname,
+                                                                                                    str(request.user),
+                                                                                                    device.ip,
+                                                                                                    device.mac_address)
+
+            )
 
             messages.success(request, _("Votre machine a bien été ajoutée. Veuillez ré-initialiser votre connexion en débranchant/rebranchant le câble ou en vous déconnectant/reconnectant au Wi-Fi ResEl Secure."))
             return HttpResponseRedirect(reverse('home'))

@@ -103,7 +103,7 @@ class Reactivation(TestCase):
         device3 = LdapDevice.get(owner=self.owner)
         self.assertEqual("active", device3.get_status())
         self.assertFalse(device3.is_inactive())
-        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(1, len(mail.outbox))
 
     @skip("It fails, I don't know why...")
     def test_real_case_activation(self):
