@@ -22,7 +22,7 @@ CSRF_COOKIE_DOMAIN = '.resel.fr'
 
 # Mails
 
-SERVER_EMAIL = 'inscription@inscription.resel.fr'
+SERVER_EMAIL = 'skynet@resel.fr'
 
 EMAIL_USE_TLS = True
 
