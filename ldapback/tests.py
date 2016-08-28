@@ -58,9 +58,9 @@ def try_delete_user(uid):
 
 class LdapModelTestCase(TestCase):
     def setUp(self):
-        try_delete_user("lcarr")
+        try_delete_user("blahlcarr")
         user = TestGenericPerson()
-        user.uid = "lcarr"
+        user.uid = "blahlcarr"
         user.firstname = "Loïc"
         user.lastname = "Carr"
         user.password = "123zizou"
@@ -119,39 +119,56 @@ class LdapModelTestCase(TestCase):
         self.assertEqual("", promo_ldap)
 
     def test_search(self):
-        users = TestGenericPerson._search(uid='lcarr')
+        users = TestGenericPerson._search(uid='blahlcarr')
         self.assertGreater(len(users), 0)
         for u in users:
             self.assertIsInstance(u, TestGenericPerson)
-            self.assertEqual("lcarr", u.uid)
-            self.assertEqual("uid=lcarr,ou=people,dc=maisel,dc=enst-bretagne,dc=fr", u.pk)
+            self.assertEqual("blahlcarr", u.uid)
+            self.assertEqual("uid=blahlcarr,ou=people,dc=maisel,dc=enst-bretagne,dc=fr", u.pk)
 
         users = TestGenericPerson._search(uid='aqwxs01edc')
         self.assertEqual(len(users), 0)
 
     def test_filter(self):
-        users = TestGenericPerson.filter(uid='lcarr', lastname='Carr')
+        users = TestGenericPerson.filter(uid='blahlcarr', lastname='Carr')
         self.assertGreater(len(users), 0)
         for u in users:
             self.assertIsInstance(u, TestGenericPerson)
-            self.assertEqual("lcarr", u.uid)
-            self.assertEqual("uid=lcarr,ou=people,dc=maisel,dc=enst-bretagne,dc=fr", u.pk)
+            self.assertEqual("blahlcarr", u.uid)
+            self.assertEqual("uid=blahlcarr,ou=people,dc=maisel,dc=enst-bretagne,dc=fr", u.pk)
 
         users = TestGenericPerson.filter(uid='aqwxs01edc')
         self.assertEqual(len(users), 0)
 
+        users = TestGenericPerson.filter(uid__contains='blahlca')
+        self.assertGreater(len(users), 0)
+        for u in users:
+            self.assertIsInstance(u, TestGenericPerson)
+            self.assertEqual("blahlcarr", u.uid)
+            self.assertEqual("uid=blahlcarr,ou=people,dc=maisel,dc=enst-bretagne,dc=fr", u.pk)
+
+        users = TestGenericPerson.filter(uid__startswith='blahlca')
+        self.assertGreater(len(users), 0)
+        for u in users:
+            self.assertIsInstance(u, TestGenericPerson)
+            self.assertEqual("blahlcarr", u.uid)
+            self.assertEqual("uid=blahlcarr,ou=people,dc=maisel,dc=enst-bretagne,dc=fr", u.pk)
+
+        users = TestGenericPerson.filter(uid__endswith='lca')
+        self.assertEqual(len(users), 0)
+
     def test_get(self):
-        user = TestGenericPerson.get(uid='lcarr')
+        user = TestGenericPerson.get(uid='blahlcarr')
 
         self.assertIsInstance(user, TestGenericPerson)
-        self.assertEqual("lcarr", user.uid)
-        self.assertEqual("uid=lcarr,ou=people,dc=maisel,dc=enst-bretagne,dc=fr", user.pk)
+        self.assertEqual("blahlcarr", user.uid)
+        self.assertEqual("uid=blahlcarr,ou=people,dc=maisel,dc=enst-bretagne,dc=fr", user.pk)
 
-        user = TestGenericPerson.get(pk='lcarr')
+        user = TestGenericPerson.get(pk='blahlcarr')
 
         self.assertIsInstance(user, TestGenericPerson)
-        self.assertEqual("lcarr", user.uid)
-        self.assertEqual("uid=lcarr,ou=people,dc=maisel,dc=enst-bretagne,dc=fr", user.pk)
+        self.assertEqual("blahlcarr", user.uid)
+        self.assertEqual("uid=blahlcarr,ou=people,dc=maisel,dc=enst-bretagne,dc=fr", user.pk)
 
     def test_to_ldap(self):
         user = TestGenericPerson()
