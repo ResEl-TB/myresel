@@ -5,37 +5,37 @@
 
 {% block content %}
     <div class="container">
-    <h1 class="page-header">{% trans "Demande d'enregistrement de machine" %}</h1>
-    <div class="row">
-    <div class="col-sm-offset-1 col-sm-10">
-    {% blocktrans %}
+        <h1 class="page-header">{% trans "Demande d'enregistrement de machine" %}</h1>
+        <div class="row">
+            <div class="col-sm-offset-1 col-sm-10">
+                {% blocktrans %}
 
-        <div class="alert alert-info">
-        Vous pouvez par le biais de ce formulaire demander l'ajout d'une machine à votre compte ResEl, cela est utile
-        lorsque le système d'inscription automatique ne fonctionne pas (anciennes consoles de jeux, anciens téléphones...).
+                    <div class="alert alert-info">
+                        Vous pouvez par le biais de ce formulaire demander l'ajout d'une machine à votre compte ResEl, cela est utile
+                        lorsque le système d'inscription automatique ne fonctionne pas (anciennes consoles de jeux, anciens téléphones...).
+                    </div>
+                    <div class="alert alert-warning">
+                        <strong>Important : </strong>
+                        Il est important <strong>d'expliquer clairement</strong> pourquoi cette machine n'a pas pu être ajoutée via le système automatique, dans le cas contraire,
+                        les administrateurs ResEl se donneront le droit de refuser l'ajout de la machine au compte.
+                    </div>
+                {% endblocktrans %}
+            </div>
+            <div class="col-sm-offset-3 col-sm-6">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <fieldset class="form-group">
+                            <label>{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.errors %}{{ field.errors }}{% endif %}
+                        </fieldset>
+                    {% endfor %}
+                    <div class="form-group text-center">
+                        <input type="submit" class="btn btn-info" value="{% trans 'Envoyer votre demande' %}">
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="alert alert-warning">
-        <strong>Important : </strong>
-        Il est important <strong>d'expliquer clairement</strong> pourquoi cette machine n'a pas pu être ajoutée via le système automatique, dans le cas contraire,
-            les administrateurs ResEl se donneront le droit de refuser l'ajout de la machine au compte.
-        </div>
-    {% endblocktrans %}
-    </div>
-        <div class="col-sm-offset-3 col-sm-6">
-            <form action="" method="post">
-                {% csrf_token %}
-                {% for field in form %}
-                <fieldset class="form-group">
-                    <label>{{ field.label }}</label>
-                    {{ field }}
-                    {% if field.errors %}{{ field.errors }}{% endif %}
-                </fieldset>
-                {% endfor %}
-                <div class="form-group text-center">
-                    <input type="submit" class="btn btn-info" value="{% trans 'Envoyer votre demande' %}">
-                </div>
-            </form>
-        </div>
-    </div>
     </div>
 {% endblock %}

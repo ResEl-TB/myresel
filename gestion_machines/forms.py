@@ -61,8 +61,7 @@ class AjoutManuelForm(forms.Form):
 
     def clean_mac(self):
         mac = self.cleaned_data['mac']
-
-        if not re.match(r'^([a-f0-9]{2}:){5}[a-f0-9]{2}$', mac):
+        if not re.match(r'^([a-f0-9]{2}[:\-]){5}[a-f0-9]{2}$', mac):
             raise forms.ValidationError(_("Adresse MAC non valide"), code='invalid')
         if ldap.search(settings.LDAP_DN_MACHINES, '(&(macaddress=%s))' % mac):
             raise forms.ValidationError(_("Cette machine est déjà enregistrée sur notre réseau."), code='invalid')
