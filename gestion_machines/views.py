@@ -10,13 +10,13 @@ from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import View, ListView
-from ldap3 import MODIFY_REPLACE
 
 from fonctions import ldap, network
 from fonctions.decorators import resel_required, unknown_machine
 from fonctions.network import get_campus
 from gestion_machines.models import LdapDevice
-from .forms import AddDeviceForm, AjoutManuelForm, ModifierForm
+from gestion_personnes.models import LdapUser
+from .forms import AddDeviceForm, AjoutManuelForm
 
 
 # Create your views here.
@@ -184,7 +184,7 @@ class AjoutManuel(View):
         return render(request, self.template_name, {'form': form})
 
 
-class Liste(ListView):
+class ListDevices(ListView):
     """
     View called to show user device list
     """
@@ -194,74 +194,68 @@ class Liste(ListView):
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
-        return super(Liste, self).dispatch(*args, **kwargs)
+        return super(ListDevices, self).dispatch(*args, **kwargs)
 
     def get_queryset(self):
         uid = str(self.request.user)
         devices = LdapDevice.filter(owner="uid=%(uid)s,%(dn_people)s" % {'uid': uid, 'dn_people': settings.LDAP_DN_PEOPLE})
 
-        machines = []
-        for device in devices:
-            status = device.get_status()
-            alias = device.aliases
-            machines.append(
-                {'host': device.hostname, 'macaddress': device.mac_address, 'statut': status, 'alias': alias})
-        return machines
+        return devices
 
 
 class Modifier(View):
     """ Vue appelée pour modifier le nom et l'alias de sa machine """
 
     template_name = 'gestion_machines/modifier.html'
-    form_class = ModifierForm
+    form_class = AddDeviceForm
+
+    def get_user_and_machine(self, request, hostname):
+        # Vérification que la mac fournie est connue, et que la machine appartient à l'user
+        machine = LdapDevice.get(hostname=hostname)
+        ldap_user = LdapUser.get(pk=request.user.username)
+        if ldap_user.pk != machine.owner:
+            raise ObjectDoesNotExist()
+
+        return ldap_user, machine
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(Modifier, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        host = self.kwargs.get('host', '')
+        hostname = self.kwargs.get('host', '')
 
-        # Vérification que la mac fournie est connue, et que la machine appartient à l'user
-        machine = ldap.search(settings.LDAP_DN_MACHINES, '(&(host=%s))' % host, ['uidproprio', 'hostalias'])
-        if machine:
-            if str(request.user) not in machine[0].entry_to_json():
-                messages.error(request, _("Cette machine ne vous appartient pas."))
-                return HttpResponseRedirect(reverse('pages:news'))
+        try:
+            ldap_user, machine = self.get_user_and_machine(request, hostname)
+        except ObjectDoesNotExist:
+            messages.error(request, _("Cette machine n'existe pas ou ne vous appartient pas."))
+            return HttpResponseRedirect(reverse('gestion-machines:liste'))
 
-            alias = ''
-            try:
-                for a in machine[0].hostalias:
-                    if 'pc' + str(request.user) in a:
-                        request.session['generic_alias'] = a
-                    else:
-                        alias = a
-
-            except:
-                alias = ''
-                request.session['generic_alias'] = machine[0].host[0]
-
-            if alias != '':
-                form = self.form_class({'alias': alias})
-            else:
-                form = self.form_class()
-
-            return render(request, self.template_name, {'form': form})
+        if machine.aliases:
+            proposed_alias = machine.aliases[0]
         else:
-            messages.error(request, _("Cette machine n'est pas connue sur notre réseau."))
-            return HttpResponseRedirect(reverse('pages:news'))
+            proposed_alias = ldap.get_free_alias(str(request.user.username))
+
+        form = self.form_class({'alias': proposed_alias})
+        return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
 
         if form.is_valid():
-            dn = 'host=%s,' % self.kwargs.get('host', '') + settings.LDAP_DN_MACHINES
-            modifs = {'hostAlias': [(MODIFY_REPLACE, [request.session['generic_alias'], form.cleaned_data['alias']])]}
-            print(modifs)
-            ldap.modify(dn, modifs)
-            network.update_all()
-
-            del(request.session['generic_alias'])
+            alias = form.cleaned_data['alias']
+            hostname = self.kwargs.get('host', '')
+            try:
+                ldap_user, machine = self.get_user_and_machine(request, hostname)
+            except ObjectDoesNotExist:
+                messages.error(request, _("Cette machine n'existe pas ou ne vous appartient pas."))
+                return HttpResponseRedirect(reverse('gestion-machines:liste'))
+            if machine.aliases:
+                machine.aliases[0] = alias
+            else:
+                machine.aliases = [alias]
+            machine.save()
+            print(alias)
             messages.success(request, _("L'alias de la machine a bien été modifié."))
             return HttpResponseRedirect(reverse('gestion-machines:liste'))
 

@@ -16,19 +16,29 @@
                         <table class="table table-hover">
                         <thead>
                         <tr>
-                            <th><i class="fa fa-desktop" aria-hidden="true"></i> {% trans "Nom de la machine" %}</th>
-                            <th><i class="fa fa-clone" aria-hidden="true"></i> {% trans "Alias de la machine" %}</th>
-                            <th><i class="fa fa-server" aria-hidden="true"></i> {% trans "Adresse MAC" %}</th>
-                            <th><i class="fa fa-info" aria-hidden="true"></i> {% trans "Statut de la machine" %}</th>
+                            <th><i class="fa fa-desktop fa-fw" aria-hidden="true"></i> {% trans "Nom" %}</th>
+                            <th><i class="fa fa-clone fa-fw" aria-hidden="true"></i> {% trans "Alias" %}</th>
+                            <th><i class="fa fa-server fa-fw" aria-hidden="true"></i> {% trans "Adresse MAC" %}</th>
+                            <th><i class="fa fa-info fa-fw" aria-hidden="true"></i> {% trans "Statut" %}</th>
                         </tr>
                         </thead>
                         <tbody>
                     {% endif %}
-                <tr style="cursor: pointer;" {# class="clickable" data-href="{% url 'gestion-machines:modifier' m.host %}" #}>
-                    <td>{{ m.host|capfirst }}</td>
-                    <td>{{ m.alias|join:" - " }}</td>
-                    <td>{{ m.macaddress|upper }}</td>
-                    <td>{{ m.statut|capfirst }}</td>
+
+                <tr style="cursor: pointer;" class="clickable" data-href="{% url 'gestion-machines:modifier' m.hostname %}">
+                    <td>{{ m.hostname|capfirst }}</td>
+                    <td>{{ m.aliases|first|capfirst }}</td>
+                    <td>{{ m.mac_address|upper }}</td>
+                    <td>{% if m.get_status == "active" %}
+                        <span class="label label-success">{% trans "Activée" %}</span>
+                        {% elif m.get_status == "inactive" %}
+                        <span class="label label-default">{% trans "Inactive" %}</span>
+                        {% elif m.get_status == "wrong_campus" %}
+                        <span class="label label-danger">{% trans "Mauvais campus" %}</span>
+                        {% else %}
+                        <span class="label label-danger">{% trans "Erreur" %}</span>
+                        {% endif %}
+                    </td>
                 </tr>
                 {% if forloop.last %}
                     </tbody>

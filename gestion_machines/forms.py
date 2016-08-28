@@ -66,24 +66,3 @@ class AjoutManuelForm(forms.Form):
         if ldap.search(settings.LDAP_DN_MACHINES, '(&(macaddress=%s))' % mac):
             raise forms.ValidationError(_("Cette machine est déjà enregistrée sur notre réseau."), code='invalid')
         return mac
-
-
-class ModifierForm(forms.Form):
-    alias = forms.CharField(label = _("Alias de la machine"), widget = forms.TextInput(attrs = {'class': 'form-control'}), required=False)
-
-    def clean_alias(self):
-        alias = self.cleaned_data['alias']
-
-        if len(alias) == 0:
-            return alias
-
-        if len(alias) < 5:
-            raise forms.ValidationError(_("Longueur d'alias trop courte"), code='invalid')
-
-        if not re.match(r'^[a-z0-9-]{5,}$', alias):
-            raise forms.ValidationError(_("Alias non conforme"), code='invalid')
-
-        if ldap.search(settings.LDAP_DN_MACHINES, '(|(host=%(alias)s)(hostalias=%(alias)s))' % {'alias': alias}):
-            raise forms.ValidationError(_("Alias non disponible"), code='invalid')
-
-        return alias
