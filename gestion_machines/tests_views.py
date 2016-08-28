@@ -84,9 +84,11 @@ class Reactivation(TestCase):
             try_delete_device(device.hostname)
 
         # Create a simple device:
-        self.client.post(reverse("gestion-machines:ajout"),
-                         HTTP_HOST="10.0.3.95", follow=True
+        self.client.post(
+            reverse("gestion-machines:ajout"),
+            HTTP_HOST="10.0.3.95", follow=True,
         )
+        mail.outbox = []
 
     def test_simple_activation(self):
         device = LdapDevice.get(owner=self.owner)

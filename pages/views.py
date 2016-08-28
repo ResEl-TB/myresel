@@ -104,7 +104,7 @@ class Contact(View):
 
     def get(self, request, *args, **kwargs):
         try:
-            user = LdapUser.get(pk=request.user)
+            user = LdapUser.get(pk=request.user.username)
             if user.building != "0":
                 room = user.building + ' ' + user.room_number
             else:
