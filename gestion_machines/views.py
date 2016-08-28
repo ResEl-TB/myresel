@@ -124,13 +124,13 @@ class AddDeviceView(View):
 
             mail_admins(
                 "[Inscription {}] La machine {} [172.22.{} - {}] inscrite par {}".format(settings.CURRENT_CAMPUS,
-                                                                                 device.hostname,
-                                                                                 device.ip, device.mac_address,
-                                                                                 str(request.user)),
+                                                                                         device.hostname,
+                                                                                         device.ip, device.mac_address,
+                                                                                         str(request.user)),
                 "Inscription de la machine {} appartenant à {}\n\nIP : 172.22.{}\nMAC : {}".format(device.hostname,
-                                                                                                    str(request.user),
-                                                                                                    device.ip,
-                                                                                                    device.mac_address)
+                                                                                                   str(request.user),
+                                                                                                   device.ip,
+                                                                                                   device.mac_address)
 
             )
 
@@ -160,16 +160,26 @@ class AjoutManuel(View):
         if form.is_valid():
             # Envoi d'un mail à support
             mail = EmailMessage(
-                subject = "Demande d'ajout d'une machine",
-                body = "L'utilisateur %(user)s souhaite ajouter une machine à son compte.\n\n MAC : %(mac)s\nDescription de la demande :\n%(desc)s" % {'user': str(request.user), 'mac': form.cleaned_data['mac'], 'desc': form.cleaned_data['description']},
-                from_email = "myresel@resel.fr",
-                reply_to = ["noreply@resel.fr"],
-                to = ["support@resel.fr"],
+                subject="Demande d'ajout d'une machine",
+                body="L'utilisateur %(user)s souhaite ajouter une machine à son compte."
+                     "\n\n MAC : %(mac)s"
+                     "\nDescription de la demande :"
+                     "\n%(desc)s"
+                     "\n\n----------------------------"
+                     "\nCe message est un message automatique généré par le site resel.fr, il convient de répondre à "
+                     "l'utilisateur et non ce message." % {
+                         'user': str(request.user),
+                         'mac': form.cleaned_data['mac'],
+                         'desc': form.cleaned_data['description']
+                     },
+                from_email="skynet@resel.fr",
+                reply_to=[request.user.email],
+                to=["support@resel.fr"],
             )
             mail.send()
 
             messages.success(request, _("Votre demande a été envoyée aux administrateurs. L'un d'eux vous contactera d'ici peu de temps."))
-            return HttpResponseRedirect(reverse('pages:news'))
+            return HttpResponseRedirect(reverse('gestion-machines:liste'))
 
         return render(request, self.template_name, {'form': form})
 
@@ -235,7 +245,7 @@ class Modifier(View):
                 form = self.form_class({'alias': alias})
             else:
                 form = self.form_class()
-            
+
             return render(request, self.template_name, {'form': form})
         else:
             messages.error(request, _("Cette machine n'est pas connue sur notre réseau."))
