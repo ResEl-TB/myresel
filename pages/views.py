@@ -69,15 +69,15 @@ class Home(View):
 
         if request.user.is_authenticated():
             # Check his end fees date
-            # try:
-            user = LdapUser.get(pk=request.user)
-            end_fee = datetime.strptime(user.end_cotiz, '%Y%m%d%H%M%SZ') if user.end_cotiz else False
-            if is_in_resel:
-                device = LdapDevice.get(mac_address=request.network_data['mac'])
-                args_for_response['not_user_device'] = device.owner != user.pk
-            # except Exception as e:
-            #     logger.error(e)
-            #     end_fee = False
+            try:
+                user = LdapUser.get(pk=request.user)
+                end_fee = datetime.strptime(user.end_cotiz, '%Y%m%d%H%M%SZ') if user.end_cotiz else False
+                if is_in_resel:
+                    device = LdapDevice.get(mac_address=request.network_data['mac'])
+                    args_for_response['not_user_device'] = device.owner != user.pk
+            except Exception as e:
+                logger.error(e)
+                end_fee = False
             template_for_response = self.logged_template
             args_for_response['end_fee'] = end_fee
         elif network.is_resel_ip(ip):

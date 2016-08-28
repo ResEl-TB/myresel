@@ -24,10 +24,10 @@
                         <div><a href="https://mlistes.resel.fr"><span class="fa fa-feed fa-fw"></span> {% trans "Mes listes de diffusion" %}</a></div>
                     </div>
                     <div class="services-group">
-                        <div><a href="#"><span class="fa fa-user fa-fw"></span> {% trans "Modifier mes informations personnelles" %}</a></div>
+                        <div><a href="{% url 'who:user-details' user %}"><span class="fa fa-user fa-fw"></span> {% trans "Modifier mes informations personnelles" %}</a></div>
                         <div><a href="#"><span class="fa fa-sliders fa-fw"></span> {% trans "Paramètres de mon compte" %}</a></div>
                         <div><a href="{% url 'gestion-personnes:mod-passwd' %}"><span class="fa fa-pencil-square fa-fw"></span> {% trans "Modifier mon mot de passe" %}</a></div>
-                        <div><a href="#"><span class="fa fa-history fa-fw"></span> {% trans "Historique de mes factures" %}</a></div>
+                        <div><a href="{% url 'tresorerie:historique' %}"><span class="fa fa-history fa-fw"></span> {% trans "Historique de mes factures" %}</a></div>
                     </div>
                 </div>
 
