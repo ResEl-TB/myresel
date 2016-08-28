@@ -26,7 +26,7 @@ class AddDeviceViewCase(TestCase):
 
     def setUp(self):
         self.client.login(username="amanoury", password="blah")
-        user_devices = LdapDevice.search(owner=self.owner)
+        user_devices = LdapDevice.filter(owner=self.owner)
         for device in user_devices:
             try_delete_device(device.hostname)
 
@@ -40,32 +40,32 @@ class AddDeviceViewCase(TestCase):
         self.assertTemplateUsed(response, "gestion_machines/add_device.html")
 
     def test_add_simple_device(self):
-        user_machines = len(LdapDevice.search(owner=self.owner))
+        user_machines = len(LdapDevice.filter(owner=self.owner))
         response = self.client.post(reverse("gestion-machines:ajout"),
                                     HTTP_HOST="10.0.3.95", follow=True)
         self.assertEqual(200, response.status_code)
-        self.assertEqual(user_machines + 1, len(LdapDevice.search(owner=self.owner)))
+        self.assertEqual(user_machines + 1, len(LdapDevice.filter(owner=self.owner)))
         self.assertEqual(1, len(mail.outbox))
 
     # TODO: make test with concurency to try mutiple simultinate presses
     def test_add_twice(self):
-        user_machines = len(LdapDevice.search(owner=self.owner))
+        user_machines = len(LdapDevice.filter(owner=self.owner))
         response = self.client.post(reverse("gestion-machines:ajout"),
                                     HTTP_HOST="10.0.3.95", follow=True)
         self.assertEqual(200, response.status_code)
-        self.assertEqual(user_machines + 1, len(LdapDevice.search(owner=self.owner)))
+        self.assertEqual(user_machines + 1, len(LdapDevice.filter(owner=self.owner)))
 
         response2 = self.client.post(reverse("gestion-machines:ajout"),
                                      HTTP_HOST="10.0.3.99", follow=True)
         self.assertEqual(200, response2.status_code)
-        self.assertEqual(user_machines + 1, len(LdapDevice.search(owner=self.owner)))
+        self.assertEqual(user_machines + 1, len(LdapDevice.filter(owner=self.owner)))
 
     def test_add_custom_alias(self):
-        user_machines = len(LdapDevice.search(owner=self.owner))
+        user_machines = len(LdapDevice.filter(owner=self.owner))
         response = self.client.post(reverse("gestion-machines:ajout"), {'alias': 'customalias'},
                                     HTTP_HOST="10.0.3.95", follow=True)
         self.assertEqual(200, response.status_code)
-        self.assertEqual(user_machines + 1, len(LdapDevice.search(owner=self.owner)))
+        self.assertEqual(user_machines + 1, len(LdapDevice.filter(owner=self.owner)))
 
         device = LdapDevice.get(pk="pcamanoury")
         self.assertEqual("customalias", device.aliases[0])
@@ -79,7 +79,7 @@ class Reactivation(TestCase):
         self.user.save()
         self.client.login(username="amanoury", password="blah")
         self.owner = ("uid=amanoury,%s" % settings.LDAP_DN_PEOPLE)
-        user_devices = LdapDevice.search(owner=self.owner)
+        user_devices = LdapDevice.filter(owner=self.owner)
         for device in user_devices:
             try_delete_device(device.hostname)
 
@@ -136,7 +136,7 @@ class ChangeCampusCase(TestCase):
         self.user.save()
         self.client.login(username="amanoury", password="blah")
         self.owner = ("uid=amanoury,%s" % settings.LDAP_DN_PEOPLE)
-        user_devices = LdapDevice.search(owner=self.owner)
+        user_devices = LdapDevice.filter(owner=self.owner)
         for device in user_devices:
             try_delete_device(device.hostname)
 

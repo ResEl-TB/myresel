@@ -114,7 +114,7 @@ class AddDeviceView(View):
             # I think even with the decorator, some user where able to click twice on the submit button fast enough
             # To create a bug... So we check one final time before saving the data
             # I'll also add a bit of javascript to stop theses caca
-            if len(LdapDevice.search(mac_address=mac)) > 0:
+            if len(LdapDevice.filter(mac_address=mac)) > 0:
                 messages.error(request, _(
                     "Votre machine est déjà enregistrée sur notre réseau. Si vous pensez que c'est une erreur, contactez un administrateur"
                 ))
@@ -188,7 +188,7 @@ class Liste(ListView):
 
     def get_queryset(self):
         uid = str(self.request.user)
-        devices = LdapDevice.search(owner="uid=%(uid)s,%(dn_people)s" % {'uid': uid, 'dn_people': settings.LDAP_DN_PEOPLE})
+        devices = LdapDevice.filter(owner="uid=%(uid)s,%(dn_people)s" % {'uid': uid, 'dn_people': settings.LDAP_DN_PEOPLE})
 
         machines = []
         for device in devices:

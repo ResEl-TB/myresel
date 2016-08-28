@@ -1,15 +1,16 @@
-from django.shortcuts import render
-from django.contrib import messages
-from django.core.urlresolvers import reverse
-from django.views.generic import View
-from django.http import Http404, HttpResponseRedirect, HttpResponse
-from gestion_personnes.models import LdapUser
-from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_protect
-from django.utils.translation import ugettext as _
 import json
+
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.urlresolvers import reverse
+from django.http import Http404, HttpResponseRedirect, HttpResponse
+from django.shortcuts import render
+from django.utils.decorators import method_decorator
+from django.utils.translation import ugettext as _
+from django.views.generic import View
+
+from gestion_personnes.models import LdapUser
 
 
 class UserDetails(View):
@@ -79,9 +80,9 @@ class RequestUser(View):
             #    '(|(uid=*%(what)s*)(firstname=*%(what)s*)(lastname=*%(what)s*)(displayname=*%(what)s*))' % {'what': what},
             #)
             res = set()
-            res += LdapUser.filter(uid__contains=what)
-            res += LdapUser.filter(first_name__contains=what)
-            res += LdapUser.filter(last_name__contains=what)
+            res |= set(LdapUser.filter(uid__contains=what))
+            res |= set(LdapUser.filter(first_name__contains=what))
+            res |= set(LdapUser.filter(last_name__contains=what))
             res = list(res)[:20]
             results = []
             if res:

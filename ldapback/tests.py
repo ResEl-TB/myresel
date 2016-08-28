@@ -10,6 +10,7 @@ from ldapback.models.base import LdapModel
 from ldapback.models.fields import LdapField, LdapCharField, LdapPasswordField, LdapListField
 from myresel import settings
 
+
 # TODO: test when python name and ldap fields names are different
 
 
@@ -117,16 +118,26 @@ class LdapModelTestCase(TestCase):
         self.assertEqual("lolo", uid_ldap)
         self.assertEqual("", promo_ldap)
 
-    # Should disable this test case ^^
     def test_search(self):
-        users = TestGenericPerson.search(uid='lcarr')
+        users = TestGenericPerson._search(uid='lcarr')
         self.assertGreater(len(users), 0)
         for u in users:
             self.assertIsInstance(u, TestGenericPerson)
             self.assertEqual("lcarr", u.uid)
             self.assertEqual("uid=lcarr,ou=people,dc=maisel,dc=enst-bretagne,dc=fr", u.pk)
 
-        users = TestGenericPerson.search(uid='aqwxs01edc')
+        users = TestGenericPerson._search(uid='aqwxs01edc')
+        self.assertEqual(len(users), 0)
+
+    def test_filter(self):
+        users = TestGenericPerson.filter(uid='lcarr', lastname='Carr')
+        self.assertGreater(len(users), 0)
+        for u in users:
+            self.assertIsInstance(u, TestGenericPerson)
+            self.assertEqual("lcarr", u.uid)
+            self.assertEqual("uid=lcarr,ou=people,dc=maisel,dc=enst-bretagne,dc=fr", u.pk)
+
+        users = TestGenericPerson.filter(uid='aqwxs01edc')
         self.assertEqual(len(users), 0)
 
     def test_get(self):

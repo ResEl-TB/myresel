@@ -114,3 +114,32 @@ class Ldap(object):
         conn = self._new_connection()
         conn.delete(pk)
         conn.unbind()
+
+    @staticmethod
+    def sanitize(input_str):
+        if len(input_str) > 0 and (input_str[0] in [' ', '#']):
+            input_str += '\\'
+        new_str = ""
+        for i in range(len(input_str)):
+            current_char = input_str[i]
+            if current_char == "\\":
+                new_str += "\\5c"
+            # elif current_char == ",":
+            #     new_str += "\\,"
+            elif current_char == "\"":
+                new_str += "\\\""
+            elif current_char == "<":
+                new_str += "\\<"
+            elif current_char == ">":
+                new_str += "\\>"
+            elif current_char == ";":
+                new_str += "\\;"
+            elif current_char == "*":
+                new_str += "\\2a"
+            elif current_char == "(":
+                new_str += "\\28"
+            elif current_char == ")":
+                new_str += "\\29"
+            else:
+                new_str += current_char
+        return new_str

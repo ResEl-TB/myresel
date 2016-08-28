@@ -22,7 +22,30 @@ class LdapModel(object):
         pass
 
     @classmethod
-    def search(cls, **kwargs):
+    def filter(cls, **kwargs):
+        """
+        Filter a query according to the asked arguments
+        :param kwargs:
+        :return:
+        """
+        new_kwargs = {}
+        for arg, arg_value in kwargs.items():
+            new_arg = arg
+            new_arg_value = Ldap.sanitize(arg_value)
+            arg_splited = arg.split("__")
+            if len(arg_splited) > 1:
+                new_arg, matching_type = arg_splited
+                if matching_type == "contains":
+                    new_arg_value = "*" + arg_value + "*"
+                elif matching_type == "startswith":
+                    new_arg_value = arg_value + "*"
+                elif matching_type == "endswith":
+                    new_arg_value = "*" + arg_value
+            new_kwargs[new_arg] = new_arg_value
+        return cls._search(**new_kwargs)
+
+    @classmethod
+    def _search(cls, **kwargs):
         """
         Perform a search in the ldap
         :return:
@@ -33,7 +56,7 @@ class LdapModel(object):
         # Convert search query into db_column search query
         for arg, arg_value in kwargs.items():
             if arg == "pk":
-                arg = cls.get_pk_field()[1].db_column  # TODO : THIS IS MOCHE
+                arg = cls.get_pk_field()[1].db_column  # TODO : THIS IS MOCHE, redéfinition de args pour quelque chose de sémentiquement différent
                 search_args[arg] = arg_value
             else:
                 arg = getattr(cls, arg).db_column
@@ -85,7 +108,7 @@ class LdapModel(object):
 
     @classmethod
     def get(cls, **kwargs):
-        results = cls.search(**kwargs)
+        results = cls.filter(**kwargs)
         if len(results) == 0:
             raise ObjectDoesNotExist("Could not find the requested object")
         return results[0]

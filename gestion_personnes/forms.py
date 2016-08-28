@@ -157,7 +157,7 @@ class InscriptionForm(forms.Form):
     def clean_email(self):
         email = self.cleaned_data['email']
         # return email # TODO: debug
-        if len(LdapUser.search(mail=email)) > 0:
+        if len(LdapUser.filter(mail=email)) > 0:
             raise ValidationError(message=_("L'addresse email est déjà associée à un compte"), code="USED EMAIL")
         return email
 
@@ -205,8 +205,8 @@ class InscriptionForm(forms.Form):
         uid = base_uid
 
         while uid_incr < 100:
-            user_in_db = LdapUser.search(uid=uid)
-            old_user_in_db = LdapOldUser.search(uid=uid)
+            user_in_db = LdapUser.filter(uid=uid)
+            old_user_in_db = LdapOldUser.filter(uid=uid)
             if len(user_in_db + old_user_in_db) == 0:
                 break
             uid_incr += 1
