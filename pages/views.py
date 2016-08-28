@@ -1,4 +1,5 @@
 # coding: utf-8
+import logging
 from datetime import datetime
 
 from django.conf import settings
@@ -12,11 +13,14 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import View, ListView
 
-from fonctions import network, ldap, decorators
+from fonctions import network, decorators
 from gestion_machines.models import LdapDevice
+from gestion_personnes.models import LdapUser
 from pages.forms import ContactForm
 from pages.models import News
 from wiki.models import Category
+
+logger = logging.getLogger(__name__)
 
 
 class Home(View):
@@ -41,10 +45,7 @@ class Home(View):
         return super(Home, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        if 'HTTP_X_FORWARDED_FOR' in request.META:
-            ip = request.META['HTTP_X_FORWARDED_FOR']
-        else:
-            ip = request.META['REMOTE_ADDR']
+        ip = request.network_data['ip']
         
         template_for_response = self.exterior_template
         args_for_response = {}
@@ -68,17 +69,19 @@ class Home(View):
 
         if request.user.is_authenticated():
             # Check his end fees date
-            end_fee = False
-            user = ldap.search(settings.LDAP_DN_PEOPLE, '(&(uid=%s))' % str(request.user.username), ['endInternet'])
-            if user:
-                user = user[0]
-                end_fee = datetime.strptime(str(user.endinternet), '%Y%m%d%H%M%SZ') if 'endinternet' in user.entry_to_json().lower() else False
-            # end_fee = datetime.now()  # TODO: DEBUG
+            # try:
+            user = LdapUser.get(pk=request.user)
+            end_fee = datetime.strptime(user.end_cotiz, '%Y%m%d%H%M%SZ') if user.end_cotiz else False
+            if is_in_resel:
+                device = LdapDevice.get(mac_address=request.network_data['mac'])
+                args_for_response['not_user_device'] = device.owner != user.pk
+            # except Exception as e:
+            #     logger.error(e)
+            #     end_fee = False
             template_for_response = self.logged_template
             args_for_response['end_fee'] = end_fee
         elif network.is_resel_ip(ip):
             template_for_response = self.interior_template
-
 
         return render(request, template_for_response, args_for_response)
 
@@ -100,17 +103,21 @@ class Contact(View):
     form_class = ContactForm
 
     def get(self, request, *args, **kwargs):
-        form = self.form_class()
-
-        # try:
-        #     user = LdapUser.objects.get(uid=request.user.username)
-        #     form = self.form_class(
-        #         nom=user.displayName,
-        #         chambre=[user.batiment, user.roomNumber].join(' '),
-        #         mail=user.mail
-        #     )
-        # except:
-        #     form = self.form_class()
+        try:
+            user = LdapUser.get(pk=request.user)
+            if user.building != "0":
+                room = user.building + ' ' + user.room_number
+            else:
+                room = None
+            form_data = {
+                'nom': user.first_name + ' ' + user.last_name,
+                'chambre': room,
+                'mail': user.mail,
+                'uid': request.user,
+            }
+            form = self.form_class(initial=form_data)
+        except ObjectDoesNotExist:
+            form = self.form_class()
         return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
@@ -119,9 +126,18 @@ class Contact(View):
         if form.is_valid():
             # Envoi d'un mail à support
             mail = EmailMessage(
-                subject="Message de la part d'un utilisateur",
-                body="%(nom)s souhaite vous contacter\n\nChambre : %(chambre)s\nDemande :\n%(demande)s" % {'nom': form.cleaned_data['nom'], 'chambre': form.cleaned_data['chambre'], 'demande': form.cleaned_data['demande']},
-                from_email="myresel@resel.fr",
+                subject="[Contact] %s" % form.cleaned_data['nom'],
+                body="%(nom)s souhaite contacter un administrateur"
+                "\n\nChambre : %(chambre)s"
+                "\nuid : %(uid)s"
+                "\nMessage :"
+                "\n\n%(demande)s" % {
+                    'uid': form.cleaned_data['uid'],
+                    'nom': form.cleaned_data['nom'],
+                    'chambre': form.cleaned_data['chambre'],
+                    'demande': form.cleaned_data['demande']
+                },
+                from_email="contact@resel.fr",
                 reply_to=[form.cleaned_data['mail']],
                 to=["support@resel.fr"],
             )
@@ -134,11 +150,7 @@ class Contact(View):
 
 def inscriptionZoneInfo(request):
     # First get device datas
-    if 'HTTP_X_FORWARDED_FOR' in request.META:
-        ip = request.META['HTTP_X_FORWARDED_FOR']
-    else:
-        ip = request.META['REMOTE_ADDR']
-    vlan = request.META['VLAN']
+    vlan = request.network_data['vlan']
     zone = request.network_data['zone']
     mac = request.network_data['mac']
     is_registered = False

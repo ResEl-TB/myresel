@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, mail_admins
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -15,7 +15,6 @@ from fonctions import ldap, generic
 from fonctions.decorators import resel_required, unknown_machine
 from gestion_machines.forms import AddDeviceForm
 from gestion_personnes.models import LdapUser
-from myresel.settings import SERVER_EMAIL
 from .forms import InscriptionForm, ModPasswdForm, CGUForm, InvalidUID
 
 
@@ -140,33 +139,28 @@ class InscriptionCGU(View):
                 " d'administrateurs !"+
 
                 "\n\nÀ bientôt, l'équipe ResEl.",
-                from_email=SERVER_EMAIL,
-                reply_to=["support@resel.fr"],
+                from_email="inscription@resel.fr",
                 to=[user.mail],
             )
 
-            botanik_email = EmailMessage(
-                subject="Inscription de %s au ResEl" % str(user.uid),
-                body="Nouvel inscrit au ResEl par le site web :"
-                     "\n\nuid : %(username)s"
-                     "\nNom : %(lastname)s"
-                     "\nPrénom : %(firstname)s"
-                     "\nemail : %(mail)s"
-                     "\nCampus : %(campus)s"
-                     "\n\n Ce mail est un mail automatique envoyé par l'interface d'inscription du ResEl. ".format({
-                    "username": user.uid,
-                    "lastname": user.last_name,
-                    "firstname": user.first_name,
-                    "mail": user.mail,
-                    "campus": settings.CURRENT_CAMPUS
-                }),
-                from_email=SERVER_EMAIL,
-                to=[settings.EMAIL_BACKEND, "botanik@resel.fr"],
-            )
+            mail_admins("Inscription de %s au ResEl" % str(user.uid),
+                        "Nouvel inscrit au ResEl par le site web :"
+                        "\n\nuid : %(username)s"
+                        "\nNom : %(lastname)s"
+                        "\nPrénom : %(firstname)s"
+                        "\nemail : %(mail)s"
+                        "\nCampus : %(campus)s"
+                        "\n\n Ce mail est un mail automatique envoyé par l'interface d'inscription du ResEl. " % {
+                            "username": user.uid,
+                            "lastname": user.last_name,
+                            "firstname": user.first_name,
+                            "mail": user.mail,
+                            "campus": settings.CURRENT_CAMPUS
+                        })
+
             try:
                 campus_email.send()
                 user_email.send()
-                botanik_email.send()
             except Exception:
                 pass
                 # TODO: show error to user, and notify admin

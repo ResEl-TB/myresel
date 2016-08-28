@@ -15,7 +15,7 @@
                         {% blocktrans %}Votre machine est nouvelle sur notre réseau. Afin de bénéficier d'un accès aux services
                             du ResEl vous devez l'associer à votre compte.
                         {% endblocktrans %}</div>
-                    <form action="" method="post">
+                    <form action="" method="post" id="slowform">
                         {% csrf_token %}
                         {% for field in form %}
                             <fieldset class="form-group hide">
@@ -25,12 +25,22 @@
                             </fieldset>
                         {% endfor %}
                         <div class="form-group text-center">
-                            <input id="bouton" type="submit" class="btn btn-info btn-lg" value="{% trans 'Inscrire ma machine' %}">
+                            <input id="sender" type="submit" class="btn btn-info btn-lg" value="{% trans 'Inscrire ma machine' %}">
+                            <div id="waiter" class="hide" > <span class=" btn btn-info btn-lg " disabled="disabled"><span class="fa fa-spin fa-cog"></span> {% trans "Inscription veuillez patienter..." %}</span></div>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-    </div>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        $("#slowform").submit(function( event ){
+            console.log("HOLA");
+            $("#sender").addClass("hide");
+            $("#waiter").removeClass("hide");
+        });
+    </script>
 {% endblock %}
