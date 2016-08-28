@@ -70,7 +70,7 @@ class Home(View):
         if request.user.is_authenticated():
             # Check his end fees date
             try:
-                user = LdapUser.get(pk=request.user)
+                user = LdapUser.get(pk=request.user.username)
                 end_fee = datetime.strptime(user.end_cotiz, '%Y%m%d%H%M%SZ') if user.end_cotiz else False
                 if is_in_resel:
                     device = LdapDevice.get(mac_address=request.network_data['mac'])

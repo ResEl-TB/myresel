@@ -198,3 +198,14 @@ class ModPasswd(View):
             return HttpResponseRedirect(reverse('home'))
 
         return render(request, self.template_name, {'form': form})
+
+
+class Settings(View):
+    template_name = 'gestion_personnes/settings.html'
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(Settings, self).dispatch(*args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name)

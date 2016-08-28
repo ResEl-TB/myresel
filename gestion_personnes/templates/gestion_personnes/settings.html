@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block titre %}{%  trans "Paramètres de compte" %}{% endblock %}
+
+{% block css %}
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <h1 class="col-md-6">{% trans "Paramètres" %}</h1>
+        </div>
+        <hr />
+        <div class="row"><h2>{% trans "Page en cours de contruction..." %}</h2></div>
+
+        <div class="row text-right">
+            <a href="{% url 'home' %}" class="btn btn-lg btn-link">{% trans "Revenir à l'accueil" %}</a>
+        </div>
+
+
+    </div>
+
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}
