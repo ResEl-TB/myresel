@@ -78,7 +78,11 @@ class RequestUser(View):
             #    settings.LDAP_DN_PEOPLE,
             #    '(|(uid=*%(what)s*)(firstname=*%(what)s*)(lastname=*%(what)s*)(displayname=*%(what)s*))' % {'what': what},
             #)
-            res = LdapUser.search(uid='*'+what+'*')
+            res = set()
+            res += LdapUser.filter(uid__contains=what)
+            res += LdapUser.filter(first_name__contains=what)
+            res += LdapUser.filter(last_name__contains=what)
+            res = list(res)[:20]
             results = []
             if res:
                 for user in res:
