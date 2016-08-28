@@ -81,7 +81,7 @@ def get_status(ip):
     campus = get_campus(ip)
 
     # Récupération de l'adresse mac associée à l'IP
-    mac = get_mac(ip)
+    mac = get_mac(ip)  # TODO: use something else than re-requesting the network, which is slow
 
     res = search(settings.LDAP_DN_MACHINES, '(&(macaddress=%s))' % mac, ['zone'])
     if res:

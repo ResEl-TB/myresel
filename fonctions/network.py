@@ -1,11 +1,13 @@
 # coding=utf-8
-import subprocess
+import logging
 import os
 import re
+import subprocess
 
 from fonctions.generic import is_ip_in_subnet
 from myresel import settings
 
+logger = logging.getLogger(__name__)
 
 class NetworkError(Exception):
     """
@@ -24,9 +26,9 @@ def get_mac(ip):
         return settings.DEBUG_SETTINGS['mac']
 
     # TODO : move interfaces to configuration file
-    if re.match(r'^172\.22\.22[4-5]', ip):
+    if re.match(r'^172\.[22-23]\.22[4-5]', ip):
         eth = 'eth4'
-    elif re.match(r'^172\.22\.22[6-7]', ip):
+    elif re.match(r'^172\.[22-23]\.22[6-7]', ip):
         eth = 'eth3'
     else:
         eth = 'eth2'
@@ -36,9 +38,10 @@ def get_mac(ip):
             ['fping', '-t', '100', '-c', '1', '-I', eth, ip],
             stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
         )
-    except Exception as e:  # TODO: narrow this exception and do something useful like logging
-        NetworkError("An error occurred when doing an fping : "
+    except Exception as e:
+        e = NetworkError("An error occurred when doing an fping : "
                      "\n %s" % e)
+        logger.error(e)
     mac = str(subprocess.Popen(["arp -a | grep {}\) | awk '{{print $4}}'".format(ip)],
                                stdout=subprocess.PIPE,
                                shell=True).communicate()[0]).split('\'')[1].split('\\n')[0]
