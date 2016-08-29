@@ -22,5 +22,5 @@ urlpatterns = [
     url(r'^ajout$', AddDeviceView.as_view(), name ='ajout'),
     url(r'^ajout-manuel$', AjoutManuel.as_view(), name='ajout-manuel'),
     url(r'^liste$', ListDevices.as_view(), name='liste'),
-    url(r'^modifier/(?P<host>[a-z0-9-]{5,})$', Modifier.as_view(), name='modifier'),
+    url(r'^modifier/(?P<host>[a-z0-9-]{2,})$', Modifier.as_view(), name='modifier'),
 ]
