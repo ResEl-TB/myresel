@@ -63,6 +63,15 @@
                         </a>
                     </div>
                     {% if forloop.last %}
+                        {% if not ip_in_resel %}
+                            <div class="col-md-4">
+                                <a href="#">
+                                    <span class="fa fa-rocket service-icon" aria-hidden="true"></span>
+                                    <h3 class="service-title">{% trans "Et plein d'autres services" %}</h3>
+                                    <p><span class="fa fa-ellipsis-h" aria-hidden="true"></span></p>
+                                </a>
+                            </div>
+                        {% endif %}
                 </div>
                     {% elif forloop.counter|divisibleby:3 %}
                 </div>
@@ -70,15 +79,6 @@
                     {% endif %}
                 {% empty %}
                 {% endfor %}
-                {% if not ip_in_resel %}
-                    <div class="col-md-4">
-                        <a href="#">
-                            <span class="fa fa-rocket service-icon" aria-hidden="true"></span>
-                            <h3 class="service-title">{% trans "Et plein d'autres services" %}</h3>
-                            <p><span class="fa fa-ellipsis-h" aria-hidden="true"></span></p>
-                        </a>
-                    </div>
-                {% endif %}
             </div>
         </div>
     </div>
