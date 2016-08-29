@@ -26,9 +26,9 @@ def get_mac(ip):
         return settings.DEBUG_SETTINGS['mac']
 
     # TODO : move interfaces to configuration file
-    if re.match(r'^172\.[22-23]\.22[4-5]', ip):
+    if re.match(r'^172\.2[2-3]\.22[4-5]', ip):
         eth = 'eth4'
-    elif re.match(r'^172\.[22-23]\.22[6-7]', ip):
+    elif re.match(r'^172\.2[2-3]\.22[6-7]', ip):
         eth = 'eth3'
     else:
         eth = 'eth2'
