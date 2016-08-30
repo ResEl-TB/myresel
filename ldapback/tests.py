@@ -247,6 +247,41 @@ class LdapModelTestCase(TestCase):
 
         user_s.delete()
 
+    def test_eq(self):
+        try_delete_user("uniquiabga")
+        try_delete_user("uniquiabgb")
+
+        user = TestGenericPerson()
+
+        user.uid = "uniquiabga"
+        user.firstname = "pablo"
+        user.lastname = "picaso"
+        user.password = "puss"
+
+        user.save()
+
+        try_delete_user("uniquiabgb")
+
+        user = TestGenericPerson()
+
+        user.uid = "uniquiabgb"
+        user.firstname = "pablo"
+        user.lastname = "picaso"
+        user.password = "puss"
+
+        user.save()
+
+        user1a = TestGenericPerson.get(pk="uniquiabga")
+        user1b = TestGenericPerson.get(pk="uniquiabga")
+        user2a = TestGenericPerson.get(pk="uniquiabgb")
+
+        self.assertEqual(user1a, user1a)
+        self.assertEqual(user1a, user1b)
+
+        self.assertNotEqual(user1a, user2a)
+        self.assertNotEqual(user1a, "uniquiabga")
+        self.assertNotEqual(user1a, TestGenericPerson())
+
 
 class LdapFieldTestCase(TestCase):
     def new_user(self):

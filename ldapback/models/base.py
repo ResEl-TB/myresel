@@ -126,6 +126,10 @@ class LdapModel(object):
         pk = "%s=%s,%s" % (pk_field.db_column, pk_field_value, self.base_dn)
         return pk
 
+    def __eq__(self, other):
+        return (other.__class__ == self.__class__ and
+             other.pk == self.pk)
+
     def to_ldap(self):
         """
         Convert this object to an ldap compliant tuple
