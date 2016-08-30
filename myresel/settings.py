@@ -14,7 +14,7 @@ from myresel.settings_local import *
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-ALLOWED_HOSTS = ['*', 'beta.resel.fr', 'my.resel.fr', 'resel.fr']
+ALLOWED_HOSTS = ['*', 'beta.resel.fr', 'beta.rennes.resel.fr', 'resel.fr', 'rennes.resel.fr']
 
 # Language switch hack
 CSRF_COOKIE_DOMAIN = '.resel.fr'

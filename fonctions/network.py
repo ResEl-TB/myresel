@@ -79,6 +79,7 @@ def is_resel_ip(ip):
         return False
 
 
+# TODO: test this !!!
 def get_network_zone(ip):
     """ 
     Renvoit la zone à laquelle correspond l'ip :
@@ -95,7 +96,9 @@ def get_network_zone(ip):
         return "Brest-other"
     elif is_ip_in_subnet(ip, '172.23.224.0', 23):
         return "Rennes-inscription"
-    elif ip.startswith('172.23'):  # TODO : check the full pattern
+    elif is_ip_in_subnet(ip, '172.23.226.0', 23):
+        return "Rennes-inscription-999"
+    elif ip.startswith('172.23') and ip[7:10].isdigit() and 200 <= int(ip[7:10]) <= 223:  # range 172.23.200.1 to 172.23.223.254
         return "Rennes-user"
 
     return "Internet"
