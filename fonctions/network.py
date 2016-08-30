@@ -9,6 +9,7 @@ from myresel import settings
 
 logger = logging.getLogger(__name__)
 
+
 class NetworkError(Exception):
     """
     An exeption which handle network errors
@@ -66,8 +67,8 @@ def get_campus(ip):
 def update_all():
     """ Relance le DNS, le DHCP et le firewall """
     # TODO: do that in background
-    os.system('ssh -t reloader@saymyname')
-    os.system('ssh -t updatefirewall@zahia -p 2222')
+    os.system(settings.DNS_DHCP_RELOAD_COMMAND)
+    os.system(settings.FIREWALL_RELOAD_COMMAND)
 
 
 def is_resel_ip(ip):

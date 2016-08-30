@@ -21,6 +21,8 @@ TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 # Campus specific settings
 #####
 CURRENT_CAMPUS = "Brest"
+DNS_DHCP_RELOAD_COMMAND = "ping -c 1 127.0.0.1"
+FIREWALL_RELOAD_COMMAND = "ping -c 1 127.0.0.1"
 
 #####
 # Mail configuration
