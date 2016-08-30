@@ -48,7 +48,7 @@ class LdapDevice(ldapback.models.LdapModel):
         wrong campus : the device is on the wrong campus
         :return:
         """
-        current_campus = "Brest"  # TODO: modify this for Rennes
+        current_campus = settings.CURRENT_CAMPUS
         lower_zone = [z.lower() for z in self.zones]
 
         if 'inactive' in lower_zone:
