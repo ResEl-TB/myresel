@@ -160,7 +160,7 @@ class inscriptionNetworkHandler(object):
                 # pass here, so the else block don't stuck normal user.
                 pass
 
-            elif zone == 'Brest-inscription-999' or zone == 'Rennes-inscription':
+            elif zone == 'Brest-inscription-999' or zone == 'Rennes-inscription-999':
                 # Check origin:
                 # Check if logged in & registered:
                 # We check that he only browses intended part of the website
