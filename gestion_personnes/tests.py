@@ -4,7 +4,7 @@ import time
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
 
-from gestion_personnes.forms import InscriptionForm
+from gestion_personnes.forms import InscriptionForm, ModPasswdForm
 from gestion_personnes.models import LdapUser, LdapOldUser
 from ldapback.models.fields import LdapCharField
 
@@ -171,3 +171,20 @@ class InscriptionFormTestCase(TestCase):
 
         uid = InscriptionForm.get_free_uid(old_user.first_name, old_user.last_name)
         self.assertEqual("amartine01", uid)
+
+
+class ModPasswdFormTestCase(TestCase):
+    def test_passwd_verification(self):
+        data = {
+            'password': "blah",
+            'password_verification': "bloh",
+        }
+        form = ModPasswdForm(initial=data)
+        self.assertFalse(form.is_valid())
+
+        data = {
+            'password': "blah",
+            'password_verification': "blah",
+        }
+        form = ModPasswdForm(initial=data)
+        self.assertFalse(form.is_valid())

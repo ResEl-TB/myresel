@@ -9,9 +9,8 @@ from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import View
-from ldap3 import MODIFY_REPLACE
 
-from fonctions import ldap, generic
+from fonctions import ldap
 from fonctions.decorators import resel_required, unknown_machine
 from gestion_machines.forms import AddDeviceForm
 from gestion_personnes.models import LdapUser
@@ -186,13 +185,11 @@ class ModPasswd(View):
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
 
-        if form.is_valid:
-            dn = 'uid=%s,' % request.user + settings.LDAP_DN_PEOPLE
-            modifs = {
-                'userpassword': [(MODIFY_REPLACE, [generic.hash_passwd(form.cleaned_data["password"])])],
-                'ntpassword': [(MODIFY_REPLACE, [generic.hash_to_ntpass(form.cleaned_data["password"])])],
-            }
-            ldap.modify(dn, modifs)
+        if form.is_valid():
+            user = LdapUser.get(pk=request.user.username)
+            user.user_password = form.cleaned_data["password"]
+            user.nt_password = form.cleaned_data["password"]
+            user.save()
 
             messages.success(request, _("Votre mot de passe a été modifié"))
             return HttpResponseRedirect(reverse('home'))
