@@ -21,15 +21,6 @@ CSRF_COOKIE_DOMAIN = '.resel.fr'
 
 
 # Mails
-
-SERVER_EMAIL = 'skynet@resel.fr'
-
-EMAIL_USE_TLS = True
-
-EMAIL_HOST = 'pegase.adm.resel.fr'
-
-EMAIL_SUBJECT_PREFIX = ''
-
 ADMINS = [
     ('Inscription bot', 'inscription-bot@resel.fr'),
     ('Botanik bot', 'botanik@resel.fr'),

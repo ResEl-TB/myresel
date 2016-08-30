@@ -23,6 +23,17 @@ TESTING = len(sys.argv) > 1 and sys.argv[1] == 'test'
 CURRENT_CAMPUS = "Brest"
 
 #####
+# Mail configuration
+#####
+
+SERVER_EMAIL = 'skynet@resel.fr'
+
+EMAIL_HOST = 'pegase.adm.resel.fr'
+
+EMAIL_SUBJECT_PREFIX = '[resel.fr]'
+
+
+#####
 # Credentials, please keep them out of the repo
 #####
 
