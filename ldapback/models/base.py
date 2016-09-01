@@ -128,7 +128,8 @@ class LdapModel(object):
 
     def __eq__(self, other):
         return (other.__class__ == self.__class__ and
-             other.pk == self.pk)
+             other.pk == self.pk
+        )
 
     def to_ldap(self):
         """

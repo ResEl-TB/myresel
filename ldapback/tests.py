@@ -2,12 +2,14 @@
 """
 Tests methods for the ldap backend
 """
+from datetime import datetime
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
 
 from ldapback.backends.ldap.base import Ldap
 from ldapback.models.base import LdapModel
-from ldapback.models.fields import LdapField, LdapCharField, LdapPasswordField, LdapListField
+from ldapback.models.fields import LdapField, LdapCharField, LdapPasswordField, LdapListField, LdapDatetimeField
 from myresel import settings
 
 
@@ -25,7 +27,7 @@ class DummyModelObject(LdapModel):
 
 class TestGenericPerson(LdapModel):
     base_dn = settings.LDAP_DN_PEOPLE
-    object_classes = ["genericPerson", "enstbPerson"]
+    object_classes = ["genericPerson", "enstbPerson", 'reselPerson']
 
     # genericPerson
     uid = LdapField(db_column="uid", object_classes=["genericPerson"], pk=True, required=True)
@@ -36,6 +38,11 @@ class TestGenericPerson(LdapModel):
     # enstbPerson
     promo = LdapCharField(db_column="promo", object_classes=["enstbPerson"])
     altMail = LdapListField(db_column="altMail", object_classes=["enstbPerson"])
+
+    # reselPerson
+    inscr_date = LdapDatetimeField(db_column='dateinscr', object_classes=['reselPerson'])
+    end_cotiz = LdapDatetimeField(db_column='endinternet', object_classes=['reselPerson'])
+
 
 
 class QueryConstructorTestCase(TestCase):
@@ -67,8 +74,8 @@ class LdapModelTestCase(TestCase):
 
         user.promo = 2018
         user.altMail = "loic.carr@telecom-bretagne.eu"
+        user.inscr_date = datetime.now()
         user.save()
-
 
     def test_to_object(self):
         class QueriedObject(object):
@@ -294,6 +301,7 @@ class LdapFieldTestCase(TestCase):
         user.promo = "2020"
         user.altMail = ['martin.thomas@t.com', 'thomas.martin@t.com']
 
+        user.inscr_date = datetime.now()
         try_delete_user(user.uid)
         return user
 
@@ -342,3 +350,16 @@ class LdapFieldTestCase(TestCase):
 
         with self.assertRaises(ValueError):
             user.save()
+
+    def test_datetime_field(self):
+        # TODO : add test for to_ldap and from_ldap to narrow problems
+        user = self.new_user()
+        now = datetime.now()
+        now = now.replace(microsecond=0)
+        user.end_cotiz = now
+        user.save()
+
+        user_s = TestGenericPerson.get(pk=user.uid)
+        self.assertIsInstance(user_s, TestGenericPerson)
+        self.assertIsInstance(user_s.end_cotiz, datetime)
+        self.assertEqual(now, user_s.end_cotiz)
