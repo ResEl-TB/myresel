@@ -1,15 +1,15 @@
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
-from django.contrib import messages
-
-from django.utils.translation import ugettext_lazy as _
-
-from .network import is_resel_ip, get_mac
-from fonctions import ldap, network
-from django.conf import settings
-
+import logging
 import re
 
+from django.conf import settings
+from django.contrib import messages
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+from django.utils.translation import ugettext_lazy as _
+
+from fonctions import ldap, network
+
+logger = logging.getLogger(__name__)
 
 def resel_required(function=None, redirect_to='home'):
     """ Vérifie que l'user a une IP resel
@@ -84,13 +84,17 @@ def need_to_pay(function=None, redirect_to='home'):
 
     def _dec(view_func):
         def _view(request, *args, **kwargs):
-            if ldap.need_to_pay(request.user.username) == 'success':
-                # Cotisation déjà payée
-                messages.info(request, _("Vous avez déjà payé votre cotisation."))
+            try:
+                if not request.ldap_user:
+                    raise AttributeError("The user is not logged in")
+                if request.ldap_user.need_to_pay() == 'success':
+                    messages.info(request, _("Votre cotisation et vos frais d'accès internet sont à jour."))
+                    return HttpResponseRedirect(reverse(redirect_to))
+            except AttributeError as e:
+                logger.error("An unlogged user tried to access the trésorie module")
                 return HttpResponseRedirect(reverse(redirect_to))
-            else:
-                return view_func(request, *args, **kwargs)
 
+            return view_func(request, *args, **kwargs)
         _view.__name__ = view_func.__name__
         _view.__dict__ = view_func.__dict__
         _view.__doc__ = view_func.__doc__
