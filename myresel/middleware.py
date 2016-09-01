@@ -20,10 +20,11 @@ class IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAResElAdmi
         # Check if the user is a ResEl admin. If so, its credentials will be updated to superuser and staff
         if request.user.is_authenticated():
             try:
-                LdapUser.get(pk=request.user.username)
+                request.ldap_user = LdapUser.get(pk=request.user.username)
             except ObjectDoesNotExist:
                 logout(request)
 
+        # TODO: move this code to the new backend
         if request.user.is_authenticated() and not (request.user.is_staff and request.user.is_superuser):
             res = ldap.search(settings.LDAP_OU_ADMIN, '(&(uid=%s))' % request.user.username)
             if res:
