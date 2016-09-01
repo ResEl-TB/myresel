@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import re
-import time
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -236,9 +235,7 @@ class InscriptionForm(forms.Form):
         user.nt_password = self.cleaned_data["password"]
         user.postal_address = self.cleaned_data["address"]  # TODO: generate from maisel attributes
 
-        user.inscr_date = time.strftime('%Y%m%d%H%M%S') + 'Z'
         user.cotiz = ''  # FIXME: ''BLACKLIST' + str(current_year()) no cotisation needed
-        user.end_cotiz = time.strftime('%Y%m%d%H%M%S') + 'Z'
         user.campus = self.cleaned_data["campus"]
 
         user.building = self.cleaned_data["building"]
@@ -249,7 +246,6 @@ class InscriptionForm(forms.Form):
         user.anneeScolaire = self.cleaned_data["email"]
         user.mobile = str(self.cleaned_data["phone"])  # TODO: delete phone field, not very convenient for aliens
         user.option = self.cleaned_data["campus"]
-
         return user
 
 

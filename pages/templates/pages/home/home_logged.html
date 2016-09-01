@@ -31,7 +31,7 @@
                     </div>
                 </div>
 
-                {% if is_registered == 'unknown' and is_resel %}
+                {% if not is_registered  and is_resel %}
                     {# In the netwok but not saved #}
                     <div class="col-md-6 col-md-offset-2">
                         <div e_class="row">

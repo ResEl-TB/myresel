@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import time
+from datetime import datetime
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
@@ -28,18 +28,20 @@ def try_delete_old_user(uid):
 
 
 def create_full_user():
+    now = datetime.now()
+    now = now.replace(microsecond=0)
     user = LdapUser()
     user.uid = "amanoury"
     user.first_name = "Alexandre"
     user.last_name = "Manoury"
-    user.user_password = "blah"
-    user.nt_password = "blah"
+    user.user_password = "blahblah"
+    user.nt_password = "blahblah"
     user.display_name = "Alexandre Manoury"
     user.postal_address = "I11 Maisel blah\n blah blah"
 
-    user.inscr_date = time.strftime('%Y%m%d%H%M%S') + 'Z'
+    user.inscr_date = now
     user.cotiz = "2016"
-    user.end_cotiz = time.strftime('%Y%m%d%H%M%S') + 'Z'
+    user.end_cotiz = now
     user.campus = "Brest"
     user.building = "I11"
     user.room_number = "123"
@@ -89,6 +91,8 @@ class LdapUserTestCase(TestCase):
         try_delete_user(user.uid)
 
     def test_only_ResEl(self):
+        now = datetime.now()
+        now.replace(microsecond=0)
         user = LdapUser()
         user.uid = "amanoury"
         user.first_name = "Alexandre"
@@ -99,9 +103,9 @@ class LdapUserTestCase(TestCase):
         user.display_name = "Alexandre Manoury"
         user.postal_address = "I11 Maisel blah\n blah blah"
 
-        user.inscr_date = time.strftime('%Y%m%d%H%M%S') + 'Z'
+        user.inscr_date = now
         user.cotiz = "2016"
-        user.end_cotiz = time.strftime('%Y%m%d%H%M%S') + 'Z'
+        user.end_cotiz = now
 
         try_delete_user(user.uid)
         user.save()

@@ -25,7 +25,7 @@ class AddDeviceViewCase(TestCase):
         cls.user.save()
 
     def setUp(self):
-        self.client.login(username="amanoury", password="blah")
+        self.client.login(username=self.user.uid, password=self.user.user_password)
         user_devices = LdapDevice.filter(owner=self.owner)
         for device in user_devices:
             try_delete_device(device.hostname)
@@ -77,7 +77,7 @@ class Reactivation(TestCase):
         try_delete_old_user("amanoury")
         self.user = create_full_user()
         self.user.save()
-        self.client.login(username="amanoury", password="blah")
+        self.client.login(username=self.user.uid, password=self.user.user_password)
         self.owner = ("uid=amanoury,%s" % settings.LDAP_DN_PEOPLE)
         user_devices = LdapDevice.filter(owner=self.owner)
         for device in user_devices:
@@ -136,16 +136,17 @@ class ChangeCampusCase(TestCase):
         try_delete_old_user("amanoury")
         self.user = create_full_user()
         self.user.save()
-        self.client.login(username="amanoury", password="blah")
+        self.client.login(username=self.user.uid, password=self.user.user_password)
         self.owner = ("uid=amanoury,%s" % settings.LDAP_DN_PEOPLE)
         user_devices = LdapDevice.filter(owner=self.owner)
         for device in user_devices:
             try_delete_device(device.hostname)
 
         # Create a simple device:
-        self.client.post(reverse("gestion-machines:ajout"),
+        r = self.client.post(reverse("gestion-machines:ajout"),
                          HTTP_HOST="10.0.3.95", follow=True
         )
+        self.assertEqual(200, r.status_code)
         mail.outbox = []
 
     def test_simple_campus_change(self):

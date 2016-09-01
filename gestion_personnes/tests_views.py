@@ -9,7 +9,7 @@ from django.test import TestCase
 from fonctions.generic import hash_to_ntpass
 from gestion_machines.models import LdapDevice
 from gestion_personnes.models import LdapUser
-from gestion_personnes.tests import try_delete_user
+from gestion_personnes.tests import try_delete_user, create_full_user
 from myresel import settings
 
 
@@ -37,6 +37,52 @@ class InscriptionCase(TestCase):
                                    HTTP_HOST="10.0.3.199")
         self.assertEqual(200, response.status_code)
         self.assertTemplateUsed(response, "gestion_personnes/inscription.html")
+
+    def test_full_signup(self):
+        user = create_full_user()
+        try_delete_user(user.uid)
+
+        response = self.client.get(reverse("gestion-personnes:inscription"),
+                                   HTTP_HOST="10.0.3.95")
+        self.assertEqual(200, response.status_code)
+        self.assertTemplateUsed(response, "gestion_personnes/inscription.html")
+
+        r = self.client.post(reverse(
+            "gestion-personnes:inscription"),
+            data={
+                'last_name': user.last_name,
+                'first_name': user.first_name,
+                'formation': user.formation,
+                'email': user.mail,
+                'password': user.user_password,
+                'password_verification': user.user_password,
+                'campus': user.campus,
+                'building': user.building,
+                'room': user.room_number,
+                'phone': user.mobile,
+                'certify_truth': 'certify_truth',
+            },
+            HTTP_HOST="10.0.3.95", follow=True)
+        self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed(r, 'gestion_personnes/cgu.html')
+
+        r = self.client.post(
+            reverse("gestion-personnes:cgu"),
+            data={
+                'have_read': 'have_read'
+            },
+            HTTP_HOST="10.0.3.95", follow=True)
+        self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed(r, 'gestion_personnes/finalize_signup.html')
+        self.assertContains(r, user.uid)
+
+        user_s = LdapUser.get(pk=user.uid)
+        self.assertEqual(user.uid, user_s.uid)
+        self.assertEqual(user.first_name, user_s.first_name)
+        self.assertEqual(user.last_name, user_s.last_name)
+        self.assertEqual(user.building, user_s.building)
+        self.assertEqual(user.campus, user_s.campus)
+
 
     def test_simple_wrong_network(self):
         response = self.client.get(reverse("gestion-personnes:inscription"),

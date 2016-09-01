@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login
@@ -92,6 +94,8 @@ class InscriptionCGU(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             user = LdapUser.from_json(self.request.session['logup_user'])
+            user.inscr_date = datetime.now()
+            user.end_cotiz = datetime.now()  # That does not survive the json parser
             user.save()
 
             auth_user = ldap.get_user(username=user.uid)

@@ -1,6 +1,5 @@
 # coding: utf-8
 import logging
-from datetime import datetime
 
 from django.conf import settings
 from django.contrib import messages
@@ -68,16 +67,15 @@ class Home(View):
         args_for_response['ip_in_resel'] = is_in_resel
 
         if request.user.is_authenticated():
+            end_fee = request.ldap_user.end_cotiz if request.ldap_user.end_cotiz else False
             # Check his end fees date
-            try:
-                user = LdapUser.get(pk=request.user.username)
-                end_fee = datetime.strptime(user.end_cotiz, '%Y%m%d%H%M%SZ') if user.end_cotiz else False
-                if is_in_resel:
+            if is_in_resel:
+                try:
                     device = LdapDevice.get(mac_address=request.network_data['mac'])
-                    args_for_response['not_user_device'] = device.owner != user.pk
-            except Exception as e:
-                logger.error(e)
-                end_fee = False
+                    args_for_response['not_user_device'] = device.owner != request.ldap_user.pk
+                    args_for_response['is_registered'] = True
+                except ObjectDoesNotExist:
+                    args_for_response['is_registered'] = False
             template_for_response = self.logged_template
             args_for_response['end_fee'] = end_fee
         elif network.is_resel_ip(ip):

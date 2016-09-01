@@ -3,7 +3,8 @@ import json
 from datetime import datetime, timedelta
 
 import ldapback
-from ldapback.models.fields import LdapCharField, LdapPasswordField, LdapNtPasswordField, LdapListField
+from ldapback.models.fields import LdapCharField, LdapPasswordField, LdapNtPasswordField, LdapListField, \
+    LdapDatetimeField
 from myresel.settings import LDAP_DN_PEOPLE
 
 
@@ -25,9 +26,9 @@ class LdapUser(ldapback.models.LdapModel):
     postal_address = LdapCharField(db_column='postaladdress', object_classes=['genericPerson'])
 
     # reselPerson
-    inscr_date = LdapCharField(db_column='dateinscr', object_classes=['reselPerson'])
+    inscr_date = LdapDatetimeField(db_column='dateinscr', object_classes=['reselPerson'])
     cotiz = LdapCharField(db_column='cotiz', object_classes=['reselPerson'])
-    end_cotiz = LdapCharField(db_column='endinternet', object_classes=['reselPerson'])
+    end_cotiz = LdapDatetimeField(db_column='endinternet', object_classes=['reselPerson'])
     campus = LdapCharField(db_column='campus', object_classes=['reselPerson'])
 
     # maiselPerson
@@ -72,11 +73,10 @@ class LdapUser(ldapback.models.LdapModel):
     def need_to_pay(self):
         if not self.end_cotiz:
             return 'danger'
-        end_cotiz = datetime.strptime(self.end_cotiz, '%Y%m%d%H%M%SZ')
         now = datetime.now()
-        if end_cotiz < now:
+        if self.end_cotiz < now:
             return 'danger'
-        elif end_cotiz < (now + timedelta(days=7)):
+        elif self.end_cotiz < (now + timedelta(days=7)):
             return 'warning'
         else:
             return 'success'
