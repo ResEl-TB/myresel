@@ -18,6 +18,6 @@ from django.conf.urls import url
 from .views import *
 
 urlpatterns = [
-    url(r'^$', Home.as_view(), name = 'home'),
-    url(r'^historique$', Historique.as_view(), name='historique'),
+    url(r'^$', Home.as_view(), name='home'),
+    url(r'^historique$', History.as_view(), name='historique'),
 ]

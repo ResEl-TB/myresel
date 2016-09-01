@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 
+
 class Transaction(models.Model):
     """ Model used to save a transaction made with the user """
 
@@ -13,6 +14,7 @@ class Transaction(models.Model):
 
     def __str__(self):
         return "%s - %s" % (self.utilisateur, self.commentaire)
+
 
 class MonthlyPayment(models.Model):
     """ Model used to say if the user is doing monthly payments """

@@ -1,18 +1,17 @@
 import django_rq
-from django.shortcuts import render
-from django.views.generic import View, ListView
-from django.utils.decorators import method_decorator
+from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-from django.contrib import messages
-from django.conf import settings
-from django.utils.translation import ugettext_lazy as _
-from django.utils.translation import get_language
+from django.shortcuts import render
+from django.utils.decorators import method_decorator
+from django.utils.translation import ugettext_lazy as _, get_language
+from django.views.generic import View, ListView
 
 import tresorerie.asynchronous_tasks as async_tasks
 from fonctions import ldap, generic
-from fonctions.decorators import resel_required, unknown_machine, need_to_pay
+from fonctions.decorators import resel_required, need_to_pay
 from tresorerie.models import MonthlyPayment, Transaction
 
 
@@ -21,29 +20,22 @@ class Home(View):
 
     template_name = 'tresorerie/home.html'
 
-    @method_decorator(resel_required)
+    @method_decorator(resel_required)  # Maybe yes, maybe no ?
     @method_decorator(login_required)
     @method_decorator(need_to_pay)
     def dispatch(self, *args, **kwargs):
         return super(Home, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        user = ldap.search(settings.LDAP_DN_PEOPLE, '(&(uid=%s))' % str(request.user), ['formation', 'cotiz', 'mail'])
-        if user:
-            formation = 'unknown'
-            if 'formation' in user[0].entry_to_json().lower():
-                formation = user[0].formation[0]
-            cotiz = user[0].cotiz[-1]
-            member = 'false'
-            if cotiz == str(generic.current_year()):
-                member = 'true'
-            request.session['mail'] = user[0].mail[0]
-            request.session['formation'] = formation
-            request.session['member'] = member
-            return render(request, self.template_name)
-        else:
-            messages.error(request, _("Vous n'êtes pas inscrit dans notre base de données."))
-            return HttpResponseRedirect(reverse('home'))
+        user = request.ldap_user
+        formation = user.formation
+        member = 'false'
+        if str(generic.current_year()) in user.cotiz:
+            member = 'true'
+        request.session['mail'] = user.mail
+        request.session['formation'] = user.formation
+        request.session['member'] = member
+        return render(request, self.template_name)
 
     def post(self, request, *args, **kwargs):
         import stripe
@@ -183,15 +175,18 @@ class Home(View):
             messages.error(request, _("Impossible de contacter le serveur de paiement pour le moment, veuillez ré-essayer plus tard"))
             return HttpResponseRedirect(reverse('home'))
 
-class Historique(ListView):
-    """ Vue qui affiche un historique des paiements de l'uitlisateur """
 
-    template_name = 'tresorerie/historique.html'
+class History(ListView):
+    """
+    This view show to the user the history of his payements
+    """
+
+    template_name = 'tresorerie/history.html'
     context_object_name = 'transactions'
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
-        return super(Historique, self).dispatch(*args, **kwargs)
+        return super(History, self).dispatch(*args, **kwargs)
 
     def get_queryset(self):
-        return Transaction.objects.all().filter(utilisateur__exact = self.request.user).order_by('date')
+        return Transaction.objects.all().filter(utilisateur__exact=self.request.user).order_by('date')
