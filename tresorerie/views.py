@@ -28,7 +28,6 @@ class Home(View):
 
     def get(self, request, *args, **kwargs):
         user = request.ldap_user
-        formation = user.formation
         member = 'false'
         if str(generic.current_year()) in user.cotiz:
             member = 'true'
