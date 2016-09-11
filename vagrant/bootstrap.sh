@@ -91,7 +91,7 @@ cd ROOTDIR
 if [ ! -f ${CONFDIR}settings_local.py ]; then
     cp ${CONFDIR}settings_local.py.tpl ${CONFDIR}settings_local.py
 fi
-python3 manage.py makemigrations
+python3 manage.py makemigrations pages tresorerie wiki
 python3 manage.py migrate
 
 echo "==============================================="
