@@ -814,7 +814,7 @@ msgid "Consulter toutes mes machines inscrites"
 msgstr "Review registered devices"
 
 #: pages/templates/pages/home/home_logged.html:19
-msgid "Voir ma consomation de bande passante"
+msgid "Voir ma consommation de bande passante"
 msgstr "Check bandwidth usage"
 
 #: pages/templates/pages/home/home_logged.html:22
