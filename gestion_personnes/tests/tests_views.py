@@ -83,6 +83,9 @@ class InscriptionCase(TestCase):
         self.assertEqual(user.building, user_s.building)
         self.assertEqual(user.campus, user_s.campus)
 
+        # TODO: find a way to check if emails are sent...
+        # get_worker().work(burst=True)
+        # self.assertEqual(3, len(mail.outbox))
 
     def test_simple_wrong_network(self):
         response = self.client.get(reverse("gestion-personnes:inscription"),
@@ -171,7 +174,7 @@ class ModPasswdCase(TestCase):
         self.assertEqual(200, r.status_code)
         u = LdapUser.get(pk="lcarr")
         self.assertEqual(hash_to_ntpass("blah"), u.nt_password)
-        # self.assertEqual(hash_passwd("blah"), u.user_password)
+        # self.assertEqual(hash_passwd("blah"), u.user_password)  # commented because I don't know how to check the passwd
 
     def test_passwd_too_short(self):
         r = self.client.post(

@@ -239,7 +239,6 @@ PHONENUMBER_DEFAULT_REGION = "FR"
 
 
 # Redis conf
-
 RQ_QUEUES = {
    'default': {
        'HOST': REDIS_HOST,
@@ -247,3 +246,4 @@ RQ_QUEUES = {
        'DB': REDIS_DB,
    },
 }
+RQ_SHOW_ADMIN_LINK = True
