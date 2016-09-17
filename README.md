@@ -111,8 +111,8 @@ Installez une machine proprement comme on le fait au ResEl, avec Debian, Munin, 
 
 Installez les paquets nécéssaires :
 ```
-apt install build-essential python-software-properties python3 python3-dev python3-pip nginx libmysqlclient-dev ldap-utils libldap2-dev libsasl2-dev libssl-dev redis-server libjpeg-dev libssl-dev gettext
-apt install texlive-latex-extra  # À décocher si vous voulez économiser un café
+apt install build-essential python-software-properties python3 python3-dev python3-pip nginx libmysqlclient-dev ldap-utils libldap2-dev libsasl2-dev libssl-dev redis-server libjpeg-dev libssl-dev gettext supervisor
+apt install texlive-latex-extra  # Ne pas executer si vous voulez économiser un café
 ```
 
 ### Configuration de nginx
@@ -234,6 +234,17 @@ TODO : Aussi configurer le module uwsgi...
 ### Configuration de uwsgi
 Todo
 
+### Configuration de supervisor
+Créer le fichier `conf.d/resel.fr.conf` :
+TODO: centraliser les logs... 
+
+```
+[program:rqworker]
+command=/srv/www/resel.fr/env/bin/python manage.py rqworker
+directory=/srv/www/resel.fr
+user=www-data
+```
+
 ### Configuration du site
 Si il n'existe pas déjà creez un utilisateur `www-data` il sera le owner du programme.
 Créez également le dossier `/srv/www/` et déplacez-vous y dedans.
@@ -251,8 +262,17 @@ TODO
 ### Lancement du service
 TODO
 
+Lancer les services en tache de fond
+```
+supervisorctl
+start rqworker
+```
+
 ### monitoring
-TODO
+Configurer icinga et tout
+Supervisor : https://github.com/nationbuilder/supervisord-nagios
+
+TODO: nginx, veronica, mails...
 
 ### Notes
 TODO
