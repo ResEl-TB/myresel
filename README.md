@@ -43,10 +43,10 @@ En plus des tests "manuels", l'application présente des tests automatisé qui p
 
 Pour lancer les tests :
 ```
-python3 manage.py tests
+python3 manage.py test
 ```
 
-**Ne lancez surtout pas les tests sur le ldap de production !** Vous risquez d'avoir des surprises.
+**Ne lancez surtout pas les tests sur le ldap de production !** Pika risque d'avoir des surprises.
 
 ## Liste des modules et fonctionnalités
 
@@ -70,19 +70,19 @@ python3 manage.py tests
  - `vagrant/` : les fichiers de configuration spécifiques à Vagrant
  
  
- ## Conventions et bonnes pratiques 
+## Conventions et bonnes pratiques 
  
- Ici, on a des nazis du [PEP8](https://www.python.org/dev/peps/pep-0008/), donc respectez le. Si vous n'aimez pas lire les trucs compliqués [voici un petit résumé](http://sametmax.com/le-pep8-en-resume/).
+Ici, on a des nazis du [PEP8](https://www.python.org/dev/peps/pep-0008/), donc respectez le. Si vous n'aimez pas lire les trucs compliqués [voici un petit résumé](http://sametmax.com/le-pep8-en-resume/).
  
- Le nom des entités (modules, fonctions, classes, variables...) doit toujours être en anglais, pour les commentaires et les docstrings on est plus souple et le français est toléré. Vous constaterez que ceci n'est pas toujours respecté, c'est pas une raison pour continuer rajouter du français dans le code !
+Le nom des entités (modules, fonctions, classes, variables...) doit toujours être en anglais, pour les commentaires et les docstrings on est plus souple et le français est toléré. Vous constaterez que ceci n'est pas toujours respecté, c'est pas une raison pour continuer rajouter du français dans le code !
  
- Toutes les fonctions et classes doivent avoir un docstring sauf quand le code est vraiment évident. Aussi, un bon commentaire n'explique ce que fait le code, mais pourquoi ce bout de code existe.
+Toutes les fonctions et classes doivent avoir un docstring sauf quand le code est vraiment évident. Aussi, un bon commentaire n'explique ce que fait le code, mais pourquoi ce bout de code existe.
  
  ---------------------------------------------
  
- ## Environment de production
+## Environment de production
  
- Actuellement le site est fonctionnel sur les serveurs skynet à Brest et doubidou à Rennes. Voici la démarche d'installation. 
+Actuellement le site est fonctionnel sur les serveurs skynet à Brest et doubidou à Rennes. Voici la démarche d'installation. 
  
 ### Configuration matérielle
 
@@ -97,20 +97,27 @@ Pour que le site puisse facilement détecter les addresses MAC des machines lors
 
 1 à 2 Go de RAM est suffisant dépendant du nombre d'utilisateurs qui s'inscrivent.
 
-10 Go de disque est confortable (même avec latex, oui difficile de le croire !)
+10 Go de disque est confortable (même avec latex, oui difficile de me croire !)
 
-### Installation
+### Configuration du DNS et du DHCP
+TODO
+
+### Exceptions Firewall
+TODO
+
+### Installation de base
 
 Installez une machine proprement comme on le fait au ResEl, avec Debian, Munin, Icinga, Backuppc, le proxy http bien configuré. Avec un peu de change vous ferez ça avec Ansible, mais je ne me fais pas trop d'illusions non plus...
 
-Installez les paquets nécéssaires
+Installez les paquets nécéssaires :
 ```
 apt install build-essential python-software-properties python3 python3-dev python3-pip nginx libmysqlclient-dev ldap-utils libldap2-dev libsasl2-dev libssl-dev redis-server libjpeg-dev libssl-dev gettext
-apt install texlive-latex-extra
+apt install texlive-latex-extra  # À décocher si vous voulez économiser un café
 ```
 
 ### Configuration de nginx
-Créez un site resel.fr :
+Créez un site resel.fr
+
 Exemple : `/etc/nginx/sites-available/resel.fr`
 
 ```
@@ -243,15 +250,19 @@ TODO
 
 ### Lancement du service
 TODO
+
 ### monitoring
 TODO
+
 ### Notes
 TODO
 
 -----------------------
 
 ## Crédits
-Pour ce magnifique site, on peut remercier :
+Pour ce magnifique site, on peut remercier : 
  - Théo Jacquin @nimag42 : theo.jacquin@telecom-bretagne.eu
  - Morgan Robin @tharkunn : morgan.robin@telecom-bretagne.eu
  - Loïc Carr @dimtion : loic.carr@telecom-bretagne.eu
+
+Code sous license ne faites pas de bêtises.
