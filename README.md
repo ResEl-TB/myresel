@@ -1,5 +1,5 @@
-resel.fr
-========
+Le site resel.fr
+================
 
 Ceci est le code pour le nouveau site ResEl  resel.fr il est développé en [Python](https://python.org) avec le framework [Django](https://www.djangoproject.com/). 
 
@@ -78,4 +78,180 @@ python3 manage.py tests
  
  Toutes les fonctions et classes doivent avoir un docstring sauf quand le code est vraiment évident. Aussi, un bon commentaire n'explique ce que fait le code, mais pourquoi ce bout de code existe.
  
+ ---------------------------------------------
  
+ ## Environment de production
+ 
+ Actuellement le site est fonctionnel sur les serveurs skynet à Brest et doubidou à Rennes. Voici la démarche d'installation. 
+ 
+### Configuration matérielle
+
+Pour que le site puisse facilement détecter les addresses MAC des machines lors de l'inscription, celui-ci a besoin de plusieurs interfaces réseau
+ - **eth0** : VLAN 997 Administration
+ - **eth1** : VLAN 994 Vue publique (également passerelle par défaut)
+ - **eth2** : VLAN 999 Vue depuis l'interieur du ResEl machines inscrites (bien choisir l'ip)
+ - **eth3** : VLAN 999 Vue depuis les machines non inscrites (bien choisir l'ip)
+ - **eth4** : VLAN 995 Vue depuis les machines non inscrites
+
+**Le nom des interfaces est important** pour le lookup dans la table arp, pour le moment ceci n'est pas configurable.
+
+1 à 2 Go de RAM est suffisant dépendant du nombre d'utilisateurs qui s'inscrivent.
+
+10 Go de disque est confortable (même avec latex, oui difficile de le croire !)
+
+### Installation
+
+Installez une machine proprement comme on le fait au ResEl, avec Debian, Munin, Icinga, Backuppc, le proxy http bien configuré. Avec un peu de change vous ferez ça avec Ansible, mais je ne me fais pas trop d'illusions non plus...
+
+Installez les paquets nécéssaires
+```
+apt install build-essential python-software-properties python3 python3-dev python3-pip nginx libmysqlclient-dev ldap-utils libldap2-dev libsasl2-dev libssl-dev redis-server libjpeg-dev libssl-dev gettext
+apt install texlive-latex-extra
+```
+
+### Configuration de nginx
+Créez un site resel.fr :
+Exemple : `/etc/nginx/sites-available/resel.fr`
+
+```
+server {
+    listen      172.22.42.49:80;    # VLAN 994
+    listen      172.22.199.49:80;   # VLAN 999 user
+    listen      172.22.227.250:80;  # VLAN 999 inscription
+    listen      172.22.225.250:80;  # VLAN 995
+    server_name beta.resel.fr my.resel.fr;
+
+    return  301 https://$server_name;
+}
+
+server {
+    listen      172.22.42.49:443 ssl;
+    server_name beta.resel.fr my.resel.fr;
+    charset     utf-8;
+
+    # max upload size
+    client_max_body_size 75M;
+
+    # Django media
+    location /media  {
+        alias /srv/www/resel.fr/media;
+    }
+
+    location /static {
+        alias /srv/www/resel.fr/static_files;
+    }
+
+    location / {
+        uwsgi_param VLAN 994;
+        uwsgi_pass  unix:/srv/www/resel.fr/uwsgi.sock;
+        include /etc/nginx/conf.d/uwsgi_params.conf;
+    }
+}
+
+server {
+    listen      172.22.199.49:443 ssl;
+    server_name beta.resel.fr my.resel.fr;
+    charset     utf-8;
+
+    # max upload size
+    client_max_body_size 75M;
+
+    # Django media
+    location /media  {
+        alias /srv/www/resel.fr/media;
+    }
+
+    location /static {
+        alias /srv/www/resel.fr/static_files;
+    }
+
+    location / {
+        uwsgi_param VLAN 999;
+        uwsgi_pass  unix:/srv/www/resel.fr/uwsgi.sock;
+        include /etc/nginx/conf.d/uwsgi_params.conf;
+    }
+}
+
+server {
+    listen      172.22.227.250:443 ssl;
+    server_name  beta.resel.fr my.resel.fr;
+
+    charset     utf-8;
+
+    # max upload size
+    client_max_body_size 75M;
+
+    # Django media
+    location /media  {
+        alias /srv/www/resel.fr/media;
+    }
+    
+    location / {
+        uwsgi_param VLAN 999;
+        uwsgi_pass  unix:/srv/www/resel.fr/uwsgi.sock;
+        include /etc/nginx/conf.d/uwsgi_params.conf;
+    }
+
+    location /static {
+        alias /srv/www/resel.fr/static_files;
+    }
+
+}
+
+server {
+    listen      172.22.225.250:443 ssl;
+    server_name beta.resel.fr my.resel.fr;
+    charset     utf-8;
+
+    # max upload size
+    client_max_body_size 75M;
+
+    # Django media
+    location /media  {
+        alias /srv/www/resel.fr/media;
+    }
+
+    location /static {
+        alias /srv/www/resel.fr/static_files;
+    }
+
+    location / {
+        uwsgi_param VLAN 995;
+        uwsgi_pass  unix:/srv/www/resel.fr/uwsgi.sock;
+        include /etc/nginx/conf.d/uwsgi_params.conf;
+    }
+}
+```
+TODO : Aussi configurer le module uwsgi...
+
+### Configuration de uwsgi
+Todo
+
+### Configuration du site
+Si il n'existe pas déjà creez un utilisateur `www-data` il sera le owner du programme.
+Créez également le dossier `/srv/www/` et déplacez-vous y dedans.
+
+
+```
+git clone https://git.resel.fr/resel/myresel resel.fr
+cd resel.fr
+```
+
+Créez le fichier `myresel/settings_local.py` et remplissez-le convenablement en vous inspirant du fichier `myresel/settings_local.py.tpl`.
+
+TODO
+
+### Lancement du service
+TODO
+### monitoring
+TODO
+### Notes
+TODO
+
+-----------------------
+
+## Crédits
+Pour ce magnifique site, on peut remercier :
+ - Théo Jacquin @nimag42 : theo.jacquin@telecom-bretagne.eu
+ - Morgan Robin @tharkunn : morgan.robin@telecom-bretagne.eu
+ - Loïc Carr @dimtion : loic.carr@telecom-bretagne.eu
