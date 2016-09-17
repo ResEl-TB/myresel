@@ -34,7 +34,7 @@
 
 <body>
     <div class="container-fluid">
-        <div class="alert alert-warning" role="alert" style="margin-top: 5px; text-align: center"><strong>{% trans "VERSION BETA" %}</strong> {% trans "quelques petites coquilles peuvent se glisser ! " %}</div>
+        <div class="alert alert-warning" role="alert" style="margin-top: 5px; text-align: center"><strong>{% trans "VERSION BETA" %}</strong> {% trans "quelques petites coquilles peuvent se glisser. N'hésitez pas à nous " %} <a style="color: #0f0f0f" href="{% url "contact" %}"><strong>signaler un bug</strong></a> !</div>
     </div>
     <!-- Navigation -->
     <nav class="navbar navbar-main navbar-static-top" role="navigation">
@@ -113,20 +113,20 @@
                 </li>
                 {% endif %}
             <hr class="visible-xs"/>
-{#                <li class="dropdown">#}
-{#                    <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw" aria-hidden="true"></i> {% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE | upper }}</a>#}
-{#                    <div class="dropdown-menu">#}
-{#                        {% get_available_languages as LANGUAGES %}#}
-{#                        {% get_language_info_list for LANGUAGES as languages %}#}
-{#                        <form action="{% url 'set_language' %}" method="post">#}
-{#                            {% csrf_token %}#}
-{#                            <input name="next" type="hidden" value="{{ request.path }}"/>#}
-{#                            {% for language in languages %}#}
-{#                                    <button class="btn btn-link" name="language" type="submit" value="{{ language.code }}">{{ language.name_local|title }}</button>#}
-{#                            {% endfor %}#}
-{#                        </form>#}
-{#                    </div>#}
-{#                </li>#}
+                <li class="dropdown">
+                    <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw" aria-hidden="true"></i> {% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE | upper }}</a>
+                    <div class="dropdown-menu">
+                        {% get_available_languages as LANGUAGES %}
+                        {% get_language_info_list for LANGUAGES as languages %}
+                        <form action="{% url 'set_language' %}" method="post">
+                            {% csrf_token %}
+                            <input name="next" type="hidden" value="{{ request.path }}"/>
+                            {% for language in languages %}
+                                    <button class="btn btn-link" name="language" type="submit" value="{{ language.code }}">{{ language.name_local|title }}</button>
+                            {% endfor %}
+                        </form>
+                    </div>
+                </li>
             </ul>
         </div><!-- /.container -->
     </nav>
