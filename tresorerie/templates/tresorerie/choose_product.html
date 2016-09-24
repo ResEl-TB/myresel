@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block titre %}{% trans "Paiement" %}{% endblock %}
+
+{% block css %}<link rel="stylesheet" type="text/css" href="{% static 'css/tresorerie/choose_product.css' %}"/>{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="page-header">{% trans "Paiement de votre accès internet" %}</h1>
+        <div class="alert alert-info">
+            {% blocktrans %}
+                <p>
+                    Afin de bénéficier de votre accès à internet, vous devez vous acquitter d'un certain montant, dépendant du temps que vous passerez sur le campus cette année et de votre formation.</p>
+                <div>Ce montant est séparé en deux :
+                    <ul>
+                        <li>1 € pour payer votre cotisation et donc votre adhésion à notre association (indispensable pour bénéficier de nos services d'accès à Internet)</li>
+                        <li> une somme variable suivant votre formation et votre temps de présence sur le campus, correspondant aux frais d'accès à Internet</li>
+                    </ul>
+                </div>
+            {% endblocktrans %}
+        </div>
+        <div class="row">
+            <div class="col-md-4 col-md-offset-2">
+                <div class="panel panel-primary panel-product">
+                    <div class="panel-heading">{% trans "Accès au ResEl" %}</div>
+                    <div class="panel-body">
+                        <div>{% trans "Services inclus :" %}</div>
+                        <div class="service">Internet Très Haut Débit</div>
+                        <div class="service">Télévision sur Internet</div>
+                        <div class="service">Garbage</div>
+                        <div class="service">Mails ResEl</div>
+                        <div class="service">Gestion des clubs</div>
+                        <div class="service">Et bien plus..</div>
+                        <hr />
+                        <span class="price">{{ adhesion.display_price|floatformat }}€ d'adhésion</span>
+                        <div class="price"><span class="fa fa-plus fa-fw"></span></div>
+                        <div class="row text-center">
+                        </div>
+                        <div class="btn-group">
+                            <div class="row">
+                                <div class="col-md-6"><a class="btn btn-info btn-lg" href="{% url 'tresorerie:pay' one_year.id %}">1 an pour {{ one_year.display_price|floatformat }}€</a></div>
+                                <div class="col-md-6"><a class="btn btn-info btn-lg" href="{% url 'tresorerie:pay' six_month.id %}">6 mois pour {{ six_month.display_price|floatformat }}€</a></div>
+                            </div>
+                                <div><a class="btn btn-info btn-lg" href="{% url 'tresorerie:pay' one_month.id %}">1 mois pour {{ one_month.display_price|floatformat }}€</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-md-offset-1">
+                <div class="panel panel-default panel-product">
+                    <div class="panel-heading">{% trans "Adhésion simple" %}</div>
+                    <div class="panel-body">
+                        <div>{% trans "Services inclus :" %}</div>
+                        <div class="service">Télévision sur Internet</div>
+                        <div class="service">Garbage</div>
+                        <div class="service">Mails ResEl</div>
+                        <div class="service">Gestion des clubs</div>
+                        {#                        <div class="service">Internet Illimité au Foyer</div>#}
+                        <div class="price">{{ adhesion.display_price|floatformat }}€</div>
+                        <div class="text-center">
+                            <a class="btn btn-info btn-lg" href="{% url 'tresorerie:pay' adhesion.id %}">Je préfère une adhésion simple</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <form action="" method="post" class="col-lg-6 col-lg-offset-3 text-center form-horizontal">
+            {% csrf_token %}
+            <div class="choices"></div>
+            <div class="stripe hidden">
+                <input
+                        type="submit"
+                        class="btn btn-info fa-input"
+                        value="&#xf09d; {% trans 'Payer par carte' %}"
+                        data-key="pk_test_KE9qQquz3hhdRI54CcfBaukl"
+                        data-currency="eur"
+                        data-name="Association ResEl"
+                        data-image="{% static 'images/tresorerie/marketplace.png' %}"
+                        data-locale="auto"
+                        data-email="{{ request.session.mail }}"
+                />
+            </div>
+            <br>
+            <input name='price' type='hidden'>
+        </form>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}

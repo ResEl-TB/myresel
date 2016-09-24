@@ -7,6 +7,7 @@ The database should be enough to make stripe payment work now
 import uuid
 
 import django
+from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils import timezone
@@ -122,6 +123,10 @@ class Product(models.Model):
         default='ALL',
     )
 
+    @property
+    def display_price(self):
+        return self.prix / 100
+
     def __str__(self):
         return '%s - %.2f €' % (self.nom, self.prix)
 
@@ -213,3 +218,29 @@ class StripeCustomer(models.Model):
 
     ldap_id = models.CharField(max_length=50, primary_key=True)
     stripe_id = models.CharField(max_length=50, unique=True)
+
+    @staticmethod
+    def retreive_or_create(user):
+        import stripe
+        try:
+            customer_id = StripeCustomer.objects.get(ldap_id=user.uid).stripe_id
+            return stripe.Customer.retrieve(customer_id)
+        except ObjectDoesNotExist:
+            desc = "%s : %s %s " % (
+                user.uid,
+                user.first_name,
+                user.last_name.upper(),
+            )
+
+            customer = stripe.Customer.create(
+                description=desc,
+                email=user.mail,
+                metadata={'uid': user.uid},
+            )
+
+            db_cus = StripeCustomer()
+            db_cus.ldap_id = user.uid
+            db_cus.stripe_id = customer.id
+            db_cus.save()
+
+            return customer
