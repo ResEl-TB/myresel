@@ -118,117 +118,9 @@ apt install texlive-latex-extra  # Ne pas executer si vous voulez économiser un
 ### Configuration de nginx
 Créez un site resel.fr
 
-Exemple : `/etc/nginx/sites-available/resel.fr`
+Exemple : `/etc/nginx/sites-available/resel.fr` dans le fichier `nginx.conf`  
 
-```
-server {
-    listen      172.22.42.49:80;    # VLAN 994
-    listen      172.22.199.49:80;   # VLAN 999 user
-    listen      172.22.227.250:80;  # VLAN 999 inscription
-    listen      172.22.225.250:80;  # VLAN 995
-    server_name beta.resel.fr my.resel.fr;
 
-    return  301 https://$server_name;
-}
-
-server {
-    listen      172.22.42.49:443 ssl;
-    server_name beta.resel.fr my.resel.fr;
-    charset     utf-8;
-
-    # max upload size
-    client_max_body_size 75M;
-
-    # Django media
-    location /media  {
-        alias /srv/www/resel.fr/media;
-    }
-
-    location /static {
-        alias /srv/www/resel.fr/static_files;
-    }
-
-    location / {
-        uwsgi_param VLAN 994;
-        uwsgi_pass  unix:/srv/www/resel.fr/uwsgi.sock;
-        include /etc/nginx/conf.d/uwsgi_params.conf;
-    }
-}
-
-server {
-    listen      172.22.199.49:443 ssl;
-    server_name beta.resel.fr my.resel.fr;
-    charset     utf-8;
-
-    # max upload size
-    client_max_body_size 75M;
-
-    # Django media
-    location /media  {
-        alias /srv/www/resel.fr/media;
-    }
-
-    location /static {
-        alias /srv/www/resel.fr/static_files;
-    }
-
-    location / {
-        uwsgi_param VLAN 999;
-        uwsgi_pass  unix:/srv/www/resel.fr/uwsgi.sock;
-        include /etc/nginx/conf.d/uwsgi_params.conf;
-    }
-}
-
-server {
-    listen      172.22.227.250:443 ssl;
-    server_name  beta.resel.fr my.resel.fr;
-
-    charset     utf-8;
-
-    # max upload size
-    client_max_body_size 75M;
-
-    # Django media
-    location /media  {
-        alias /srv/www/resel.fr/media;
-    }
-    
-    location / {
-        uwsgi_param VLAN 999;
-        uwsgi_pass  unix:/srv/www/resel.fr/uwsgi.sock;
-        include /etc/nginx/conf.d/uwsgi_params.conf;
-    }
-
-    location /static {
-        alias /srv/www/resel.fr/static_files;
-    }
-
-}
-
-server {
-    listen      172.22.225.250:443 ssl;
-    server_name beta.resel.fr my.resel.fr;
-    charset     utf-8;
-
-    # max upload size
-    client_max_body_size 75M;
-
-    # Django media
-    location /media  {
-        alias /srv/www/resel.fr/media;
-    }
-
-    location /static {
-        alias /srv/www/resel.fr/static_files;
-    }
-
-    location / {
-        uwsgi_param VLAN 995;
-        uwsgi_pass  unix:/srv/www/resel.fr/uwsgi.sock;
-        include /etc/nginx/conf.d/uwsgi_params.conf;
-    }
-}
-```
 TODO : Aussi configurer le module uwsgi...
 
 ### Configuration de uwsgi
@@ -275,7 +167,11 @@ Supervisor : https://github.com/nationbuilder/supervisord-nagios
 TODO: nginx, veronica, mails...
 
 ### Notes
-TODO
+
+#### Astuces
+
+##### mettre le site en mode maintenance
+Lorsque vous avez de grosses migrations à faire, il est parfois nécéssaire de mettre le site en mode maintenance pour éviter que les utilisateurs ecrivent dans la base de données en même temps que vos migrations. Pour cela il suffit de renommer le fichier `maintenance_off.html` en `maintenance_on.html`. Si la configuration de nginx est correcte, le site devrait retourner une erreur `503` le temps de faire la migration. 
 
 -----------------------
 
