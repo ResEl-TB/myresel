@@ -243,7 +243,8 @@ class InscriptionForm(forms.Form):
 
         user.promo = str(current_year() + 3)  # TODO: wtf???
         user.mail = self.cleaned_data["email"]
-        user.anneeScolaire = self.cleaned_data["email"]
+        user.anneeScolaire = ""  # TODO: get that in school ldap
+        user.formation = self.cleaned_data["formation"]
         user.mobile = str(self.cleaned_data["phone"])  # TODO: delete phone field, not very convenient for aliens
         user.option = self.cleaned_data["campus"]
         return user
