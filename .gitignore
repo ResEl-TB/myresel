@@ -5,7 +5,7 @@ __pycache__
 *.pyc
 
 # Django related stuff
-migrations/
+# migrations/ we should put migrations in git
 media/
 static_files/
 uwsgi.*
