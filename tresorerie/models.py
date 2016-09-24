@@ -1,5 +1,12 @@
-from datetime import date
+# -*- coding: utf-8 -*-
+"""
+Version 2 of the tresorerie module.
+The database should be enough to make stripe payment work now
+"""
 
+import uuid
+
+import django
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.utils import timezone
@@ -41,7 +48,7 @@ class Check(models.Model):
     )
 
     date_emission = models.DateField(
-        default=date.today(),
+        auto_now_add=True,
         verbose_name='date d\'émission',
     )
 
@@ -73,22 +80,28 @@ class Product(models.Model):
     class Meta:
         verbose_name = 'produit'
 
-    TYPES = (
+    TYPES_PRODUITS = (
         ('A', 'Adhésion'),
         ('M', 'Matériel'),
         ('F', 'Frais d\'accès'),
+    )
+
+    AUTH = (
+        ('FIG', 'FIG'),
+        ('FIP', 'FIP'),
+        ('ALL', 'ALL'),
     )
 
     nom = models.CharField(
         max_length=100,
     )
 
-    prix = models.FloatField()
+    prix = models.IntegerField()
 
     type_produit = models.CharField(
         max_length=1,
         verbose_name='type de produit',
-        choices=TYPES,
+        choices=TYPES_PRODUITS,
     )
 
     duree = models.IntegerField(
@@ -101,6 +114,14 @@ class Product(models.Model):
         blank=True,
     )
 
+    autorisation = models.CharField(
+        max_length=3,
+        verbose_name='Authorisation d\'achat',
+        help_text='Définit qui est éligible à ce produit',
+        choices=AUTH,
+        default='ALL',
+    )
+
     def __str__(self):
         return '%s - %.2f €' % (self.nom, self.prix)
 
@@ -110,7 +131,12 @@ class Transaction(models.Model):
     Model used to save a transaction made with the user
     """
 
-    CHOICES = (
+    uuid = models.UUIDField(
+        unique=True,
+        default=uuid.uuid4,
+    )
+
+    MOYENS_PAY = (
         ('L', 'Liquide'),
         ('C', 'Chèque'),
         ('CB', 'Carte bancaire'),
@@ -124,16 +150,15 @@ class Transaction(models.Model):
     moyen = models.CharField(
         max_length=2,
         verbose_name='moyen de paiement',
-        choices=CHOICES,
+        choices=MOYENS_PAY,
     )
 
-    date = models.DateField(
+    date = models.DateTimeField(
         auto_now_add=True,
     )
 
     produit = models.ManyToManyField(
         'Product',
-        null=True,
     )
 
     admin = models.CharField(
@@ -147,6 +172,13 @@ class Transaction(models.Model):
 
     total = models.FloatField(
         default=0,
+    )
+
+    stripe_id = models.CharField(
+        blank=True,
+        null=True,
+        max_length=30,
+        unique=True,
     )
 
     def __str__(self):
@@ -167,8 +199,17 @@ class MonthlyPayment(models.Model):
     months_to_pay = models.IntegerField()
     months_paid = models.IntegerField(default=0)
     customer = models.CharField(max_length=50)
-    last_paid = models.DateField(default=timezone.now)
+    last_paid = models.DateField(default=django.utils.timezone.now)
     amount_to_pay = models.FloatField()
 
     def __str__(self):
         return "%s - Payment %d/%d" % (self.user, self.months_paid, self.months_to_pay)
+
+
+class StripeCustomer(models.Model):
+    """
+    A model to make the link between stripe customers and LdapUsers
+    """
+
+    ldap_id = models.CharField(max_length=50, primary_key=True)
+    stripe_id = models.CharField(max_length=50, unique=True)
