@@ -1,12 +1,12 @@
 from django.conf import settings
-from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
 from django.core.mail import EmailMessage
+from django.utils.translation import ugettext_lazy as _
 from django_rq import job
 
-from fonctions import ldap
-from fonctions.latexWrapper import generate_pdf 
+from fonctions.latexWrapper import generate_pdf
+from gestion_personnes.models import LdapUser
 from myresel.settings import SERVER_EMAIL
+
 
 @job
 def generate_and_email_invoice(user, price, invoice, lang='fr'):
