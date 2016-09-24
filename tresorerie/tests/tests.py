@@ -4,12 +4,12 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 
 from gestion_personnes.tests import try_delete_user, create_full_user
-from .models import Transaction
+from tresorerie.models import Transaction
 
 
 class HistoryViewCase(TestCase):
     def setUp(self):
-        self.user =create_full_user()
+        self.user = create_full_user()
         try_delete_user(self.user.uid)
         self.user.save()
         self.client.login(username=self.user.uid, password=self.user.user_password)
