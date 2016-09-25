@@ -11,65 +11,573 @@
         <h1 class="page-header">{% trans "Récapitulatif de la commande" %}</h1>
         <div class="row">
             <div class="col-md-7 col-md-offset-1">
-                <div class="panel panel-primary">
+                <div class="panel panel-primary transaction-panel">
                     <div class="panel-heading">{{ main_product.nom }}</div>
-                    <table class="table table-hover">
+                    <table class="table">
                         <tr class="info"><th>{% trans "Généralités" %}</th><th></th></tr>
                         <tr><td>{% trans "Nom" %}</td><td>{{ user.first_name }} {{ user.last_name|upper }}</td></tr>
                         <tr><td>{% trans "E-mail" %}</td><td>{{ user.mail }} </td></tr>
                         <tr><td>{% trans "Identifiant de transaction" %}</td><td>{{ transaction.uuid }}</td></tr>
                         <tr><td>{% trans "Type de paiement" %}</td><td><span class="label label-default">{{ transaction.moyen }}</span></td></tr>
-                        <tr class="info"><th >{% trans "Liste des commandes" %}</th><th></th></tr>
-                        {% for p in products %}
-                            <tr class="active"><td>{% trans "Commande" %}</td><td>{{ p.nom }}</td></tr>
-                            <tr><td>{% trans "Durée" %}</td><td>{{ p.duree }} {% trans "mois" %}</td></tr>
-                            <tr><td>{% trans "Prix" %}</td><td>{{ p.display_price|floatformat }}€</td></tr>
-                        {% endfor %}
-                        <tr class="info"><th>{% trans "Total" %}</th><th>{{ transaction.total|floatformat }}€</th></tr>
+                        <tr class="info"><th >{% trans "Résumé de la transaction" %}</th><th></th></tr>
                     </table>
-                </div>
-                <form action="" method="post" class="col-lg-6 col-lg-offset-3 text-center form-horizontal">
-                    {% csrf_token %}
-                    <input type="hidden" name="uuid" value="{{ transaction.uuid }}">
-                    <div class="stripe">
-                        <button
-                                type="submit"
-                                class="btn btn-info btn-lg"
-                                data-key="pk_test_KE9qQquz3hhdRI54CcfBaukl"
-                                data-currency="eur"
-                                data-name="Association ResEl"
-                                data-description="{{ transaction.full_name }}"
-                                data-amount="{{ transaction.total_stripe }}"
-                                data-image="{% static 'images/tresorerie/marketplace.png' %}"
-                                data-locale="fr"
-                                data-email="{{ user.mail }}"
-                                data-allow-remember-me="false"
-                        ><span class="fa fa-fw fa-credit-card"></span> {% trans 'Payer par carte' %}</button>
+                    <div class="transaction-resume row">
+                        {% for p in products %}
+                            <div class="col-md-4 col-md-offset-1">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">{{ p.nom }}</div>
+                                    <table class="table">
+                                        <tr><td>{% trans "Durée" %}</td><td>{{ p.duree }} {% trans "mois" %}</td></tr>
+                                        <tr><td>{% trans "Prix" %}</td><td>{{ p.display_price|floatformat }}€</td></tr>
+                                    </table>
+                                </div>
+                            </div>
+                        {% endfor %}
                     </div>
-                    <br>
-                    <input name='price' type='hidden'>
-                </form>
+                </div>
+
             </div>
 
             <div class="col-md-3 col-md-offset-1">
-                <div><a href="{% url 'tresorerie:home' %}"><span class="fa fa-fw fa-long-arrow-left"></span> {% trans "Retour aux offres" %}</a></div>
+                <div class="back"><a href="{% url 'tresorerie:home' %}"><span class="fa fa-fw fa-long-arrow-left"></span> {% trans "Retour aux offres" %}</a></div>
+
+                <div class="total text-center">
+                    <div class="total-text" >{% trans "Total :" %} {{ transaction.total|floatformat }}€</div>
+
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="uuid" value="{{ transaction.uuid }}">
+                        <div class="stripe">
+                            <button
+                                    type="submit"
+                                    class="btn btn-success btn-lg"
+                                    data-key="pk_test_KE9qQquz3hhdRI54CcfBaukl"
+                                    data-currency="eur"
+                                    data-name="Association ResEl"
+                                    data-description="{{ transaction.full_name }}"
+                                    data-amount="{{ transaction.total_stripe }}"
+                                    data-image="{% static 'images/tresorerie/marketplace.png' %}"
+                                    data-locale="fr"
+                                    data-email="{{ user.mail }}"
+                                    data-allow-remember-me="false"
+                            ><span class="fa fa-fw fa-credit-card"></span> {% trans 'Payer par carte' %}</button>
+                        </div>
+                        <br>
+                        <input name='price' type='hidden'>
+                    </form>
+                    <div class="card-text">Cartes acceptées :</div>
+                    <div>
+                        <span class="fa fa-fw fa-cc-mastercard"></span>
+                        <span class="fa fa-fw fa-cc-visa"></span>
+                        <span class="fa fa-fw fa-cc-stripe"></span>
+                    </div>
+                </div>
+                <hr />
                 <h3>{% trans "Besoin d'aide ?" %}</h3>
-                <p>Vous pouvez nous contacter etc...</p>
+                <p>Si vous avez la moindre question ou rencontrez le moindre problème concernant le paiement n'hésitez pas à
+                    <a href="{% url "contact" %}">nous contacter</a>.</p>
+                <hr />
             </div>
+
         </div>
 
     </div>
+    <div class="modal fade" id="cguModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="myModalLabel">{% trans "Règlement intérieur du ResEl" %}</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-warning">{%  trans "Afin de valider votre paiement vous devez lire attentivement le règlement intérieur et l'accepter." %}</div>
+                    <hr />
+                    <!--l. 47--><p class="noindent" >
+
+<span
+        class="eccc-2074">R<span
+        class="small-caps">E</span><span
+        class="small-caps">S</span>E<span
+        class="small-caps">L</span></span><span class="frenchb-nbsp">&nbsp;</span><span
+                        class="eccc-2074">: R</span><span
+                        class="eccc-2074">É<span
+                        class="small-caps">S</span><span
+                        class="small-caps">E</span><span
+                        class="small-caps">A</span><span
+                        class="small-caps">U</span> <span
+                        class="small-caps">D</span><span
+                        class="small-caps">E</span><span
+                        class="small-caps">S</span> E<span
+                        class="small-caps">L</span></span><span
+                        class="eccc-2074">È<span
+                        class="small-caps">V</span><span
+                        class="small-caps">E</span><span
+                        class="small-caps">S</span></span><br /><br />
+                    <span
+                            class="eccc-2074">TELECOM B<span
+                            class="small-caps">R</span><span
+                            class="small-caps">E</span><span
+                            class="small-caps">T</span><span
+                            class="small-caps">A</span><span
+                            class="small-caps">G</span><span
+                            class="small-caps">N</span><span
+                            class="small-caps">E</span></span><br /><br />
+                    ____________________________________________________<br /><br />
+                    <span
+                            class="ecbx-2488">R</span><span
+                        class="ecbx-2488">èglement Int</span><span
+                        class="ecbx-2488">érieur</span><br />
+                    ________________________________________________<br /><br />
+                    <span
+                            class="eccc-1728">E<span
+                            class="small-caps">N</span> <span
+                            class="small-caps">A</span><span
+                            class="small-caps">P</span><span
+                            class="small-caps">P</span><span
+                            class="small-caps">L</span><span
+                            class="small-caps">I</span><span
+                            class="small-caps">C</span><span
+                            class="small-caps">A</span><span
+                            class="small-caps">T</span><span
+                            class="small-caps">I</span><span
+                            class="small-caps">O</span><span
+                            class="small-caps">N</span> <span
+                            class="small-caps">A</span><span
+                            class="small-caps">U</span> 01/09/2016</span><br /><br />
+
+                    <h3 class="sectionHead"><span class="titlemark">1 </span> <a
+                            id="x1-10001"></a>Préambule</h3>
+                    <!--l. 63--><p class="noindent" >Le présent Règlement Intérieur a pour objet de préciser les Statuts de l&#8217;Association « ResEl »
+                    (ci-après désignée par « le ResEl »), sise dans les locaux de TELECOM Bretagne, ainsi que de définir
+                    les règles d&#8217;utilisation du réseau géré par l&#8217;Association.
+                    <!--l. 65--><p class="noindent" >Ce document ne prétend pas être exhaustif sur les droits et devoirs en la matière, mais il vise à
+                    informer de leur existence et des risques encourus.
+                    <!--l. 67--><p class="noindent" >Il s&#8217;adresse à tous les adhérents de l&#8217;Association ResEl.
+                    <!--l. 69--><p class="noindent" >Ce document s&#8217;appuie en particulier sur le Règlement informatique de TELECOM Bretagne (auquel
+                    sont soumis les adhérents du ResEl), la charte Renater, la loi 88-19 du 5 janvier 1988 relative à la
+                    fraude informatique, la loi 85-660 du 3 juillet 1985 relative à la protection des logiciels, la loi 78-17 du
+                    6 janvier 1978 relative à l&#8217;informatique, aux fichiers et aux libertés, la loi 92-597 du 1er juillet 1992
+                    relative au Code de la Propriété Intellectuelle et ses amendements dont la Loi n<sup class="textsuperscript"><span
+                            class="ecrm-1095">o</span></sup> 2006-961 du 1 août
+                    2006.
+                    <!--l. 71--><p class="noindent" >Le terme « Utilisateur » désigne ici tout utilisateur du réseau géré par le ResEl, celui-ci est désigné
+                    par le terme « réseau ». Le terme « administrateur » désigne quant à lui toute les personnes en charge
+                    de l&#8217;administration technique du réseau, qu&#8217;elles fassent partie du Conseil d&#8217;Administration ou
+                    non.
+                    <!--l. 73--><p class="noindent" >
+                    <h3 class="sectionHead"><span class="titlemark">2 </span> <a
+                            id="x1-20002"></a>Utilisation du réseau</h3>
+                    <!--l. 75--><p class="noindent" >
+                    <h4 class="likesubsectionHead"><a
+                            id="x1-30002"></a>Article I.<span class="frenchb-nbsp">&nbsp;</span>: Contacter les administrateurs</h4>
+                    <!--l. 77--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-40002"></a><span
+                        class="ecbx-1200">1</span></span>
+                    Le réseau est géré par des administrateurs qui peuvent être contactés, en cas de problème du ressort
+                    du ResEl par les moyens suivants (par ordre de priorité)<span class="frenchb-nbsp">&nbsp;</span>:
+                    <ul class="itemize1">
+                        <li class="itemize">aux permanences du ResEl dont le lieu et les heures sont indiqués sur la porte du local
+                            et au Foyer des Elèves<span class="frenchb-thinspace">&nbsp;</span>;
+                        </li>
+                        <li class="itemize">sur IRC<span class="frenchb-nbsp">&nbsp;</span>: serveur <a
+                                href="irc.resel.fr" class="url" ><span
+                                class="ectt-1200">irc.resel.fr</span></a> (ou <a
+                                href="irc.rezosup.org" class="url" ><span
+                                class="ectt-1200">irc.rezosup.org</span></a> depuis l&#8217;extérieur), canal <a
+                                href="#resel" class="url" ><span
+                                class="ectt-1200">#resel</span></a>,
+                            sur lequel sont présents les administrateurs lorsqu&#8217;ils sont disponibles<span class="frenchb-thinspace">&nbsp;</span>;
+
+                        </li>
+                        <li class="itemize">par courrier     électronique     à     l&#8217;adresse     <a
+                                href="support@resel.fr" class="url" ><span
+                                class="ectt-1200">support@resel.fr</span></a>   pour     Brest
+                            et <a
+                                    href="support-rennes@resel.fr" class="url" ><span
+                                    class="ectt-1200">support-_rennes@resel.fr</span></a> pour Rennes. Ce courrier doit contenir une description
+                            précise du problème et doit être envoyé après avoir vérifié que la solution ne se trouve
+                            pas sur <a
+                                    href="https://www.resel.fr" class="url" ><span
+                                    class="ectt-1200">https://www.resel.fr</span></a>.</li></ul>
+                    <!--l. 84--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-50002"></a><span
+                        class="ecbx-1200">2</span></span>
+                    Il est explicitement demandé aux utilisateurs de ne pas téléphoner directement aux administrateurs ni
+                    de venir leur rendre visite s&#8217;ils sont en mesure d&#8217;utiliser les moyens décrits dans le premier paragraphe
+                    de cet article.
+                    <!--l. 86--><p class="noindent" >
+                    <h4 class="likesubsectionHead"><a
+                            id="x1-60002"></a>Article II.<span class="frenchb-nbsp">&nbsp;</span>: Responsabilité légale et vie en communauté</h4>
+                    <!--l. 88--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-70002"></a><span
+                        class="ecbx-1200">1</span></span>
+                    Le ResEl est un fournisseur d&#8217;accès à internet déclaré auprès de l&#8217;Autorité de régulation des
+                    communications électroniques et des postes, en ce sens, les utilisateurs du réseau sont responsables
+                    aux yeux de la loi de leurs agissements à travers le réseau du ResEl.<br
+                            class="newline" />Aucune responsabilité des actes malveillants ou illégaux des adhérents ne saurait être imputée au
+                    ResEl.
+                    <!--l. 91--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-80002"></a><span
+                        class="ecbx-1200">2</span></span>
+                    L&#8217;utilisateur s&#8217;engage à respecter la législation en vigueur notamment concernant la fraude
+                    informatique (loi n<span
+                            class="cmsy-8">&#x2218;</span>88-19 du 5 janvier 1988, articles 323-1 à 323-7 du Nouveau Code Pénal).<br
+                            class="newline" />Entre autres, l&#8217;utilisateur ne tentera pas de profiter de failles de sécurité pour s&#8217;introduire dans un
+                    système ne lui appartenant pas, ou ne tentera pas d&#8217;intercepter toute forme de communication
+                    électronique entre deux machines.
+                    <!--l. 94--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-90002"></a><span
+                        class="ecbx-1200">3</span></span>
+                    L&#8217;utilisateur s&#8217;engage à respecter la législation en vigueur notamment concernant la propriété
+                    intellectuelle (code de la propriété intellectuelle).<br
+                            class="newline" />Entre autres, il s&#8217;engage à ne pas partager de logiciel ou de contenu multimédia sans le consentement
+                    de son auteur.
+
+                    <!--l. 97--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-100002"></a><span
+                        class="ecbx-1200">4</span></span>
+                    L&#8217;adhérent s&#8217;engage à ne pas utiliser le réseau pour diffuser des informations contraires aux lois en
+                    vigueur. En particulier, il s&#8217;engage notamment à ne pas diffuser de message à caractère
+                    violent ou pornographique, incitant aux crimes ou délits, à la haine, à la violence ou à la
+                    discrimination.<br
+                            class="newline" />Plus généralement, l&#8217;utilisateur s&#8217;engage à respecter les règles de bonne conduite sur Internet
+                    (Netiquette).
+                    <!--l. 100--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-110002"></a><span
+                        class="ecbx-1200">5</span></span>
+                    Les ressources sont partagées entre tous les utilisateurs. L&#8217;utilisation de la bande passante vers
+                    l&#8217;Internet doit donc rester raisonnable pour le confort des autres utilisateurs du réseau. Toute
+                    utilisation pénalisant sensiblement les performances du réseau est proscrite, notamment l&#8217;utilisation
+                    abusive du trafic de diffusion (<span class="uline">broadcast</span>), comme par exemple le protocole <span class="uline">NetBIOS</span> des partages de
+                    fichiers Windows.
+                    <!--l. 102--><p class="noindent" >
+                    <h4 class="likesubsectionHead"><a
+                            id="x1-120002"></a>Article III.<span class="frenchb-nbsp">&nbsp;</span>: Droit personnel d&#8217;utilisation du réseau</h4>
+                    <!--l. 104--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-130002"></a><span
+                        class="ecbx-1200">1</span></span>
+                    L&#8217;adresse IP fournie à la connexion est personnelle, incessible et liée à l&#8217;adresse physique de la
+                    machine de l&#8217;utilisateur. L&#8217;utilisateur s&#8217;engage à ne pas la modifier, même à titre temporaire, sans
+                    l&#8217;accord explicite d&#8217;un membre du Conseil d&#8217;Administration.<br
+                            class="newline" />Dans tous les cas, l&#8217;utilisateur est entièrement responsable de l&#8217;utilisation qui est faite de sa connexion
+                    attitrée, y compris par une tierce personne.
+                    <!--l. 107--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-140002"></a><span
+                        class="ecbx-1200">2</span></span>
+                    Contrevenir à la règle précédente revient à tenter de masquer son identité ou de prendre celle d&#8217;une
+                    autre machine. Ce type d&#8217;agissement est donc considéré par le ResEl et par la loi comme une
+                    tentative de fraude informatique.
+                    <!--l. 109--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-150002"></a><span
+                        class="ecbx-1200">3</span></span>
+                    En cas de changement de propriétaire du matériel possédant l&#8217;adresse physique enregistrée au ResEl,
+                    l&#8217;utilisateur doit prévenir le ResEl.
+
+                    <!--l. 111--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-160002"></a><span
+                        class="ecbx-1200">4</span></span>
+                    L&#8217;utilisateur est administrateur de sa propre machine. À ce titre, il est responsable de toute opération
+                    effectuée sur celle-ci par lui ou une tierce personne. C&#8217;est donc à lui de faire respecter les
+                    règles de sécurité et les lois informatiques aux personnes à qui il permettra l&#8217;accès à sa
+                    machine.<br
+                            class="newline" />
+                    <!--l. 112--><p class="noindent" >L&#8217;utilisateur est seul responsable des données émises depuis sa ou ses machine(s) reliée(s) au réseau,
+                    aussi bien en ce qui concerne leur contenu (y compris virus, chevaux de Troie, etc.) que leur
+                    volume.<br
+                            class="newline" />
+                    <!--l. 113--><p class="noindent" >Il incombe à l&#8217;utilisateur de tenir à jour sa machine contre les failles de sécurité, et il lui est fortement
+                    conseillé d&#8217;utiliser un logiciel pare-feu ainsi qu&#8217;un logiciel antivirus.
+                    <!--l. 115--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-170002"></a><span
+                        class="ecbx-1200">5</span></span>
+                    Toute tentative d&#8217;intrusion sur la machine de l&#8217;utilisateur doit être immédiatement signalée au
+                    Conseil d&#8217;Administration du ResEl pour qu&#8217;il puisse prendre les mesures nécessaires dans les plus
+                    brefs délais.
+                    <!--l. 117--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-180002"></a><span
+                        class="ecbx-1200">6</span></span>
+                    Il est fortement déconseillé à l&#8217;utilisateur d&#8217;essayer d&#8217;accéder à une machine s&#8217;il n&#8217;est pas certain d&#8217;y
+                    être autorisé. En effet, des tentatives d&#8217;accès infructueuses et répétées à une machine peuvent
+                    être interprétées comme une tentative d&#8217;agression par l&#8217;administrateur de la machine
+                    concernée.
+                    <!--l. 119--><p class="noindent" >
+                    <h4 class="likesubsectionHead"><a
+                            id="x1-190002"></a>Article IV.<span class="frenchb-nbsp">&nbsp;</span>: Responsabilité de l&#8217;Association</h4>
+                    <!--l. 121--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-200002"></a><span
+                        class="ecbx-1200">1</span></span>
+                    L&#8217;Association ne saurait en aucun cas être tenue responsable de quelconques problèmes liés au réseau.
+                    Ces problèmes, pour lesquels elle n&#8217;a pas d&#8217;obligation légale, sont notamment mais pas
+                    exclusivement<span class="frenchb-nbsp">&nbsp;</span>:
+                    <ul class="itemize1">
+                        <li class="itemize">dysfonctionnement du réseau<span class="frenchb-thinspace">&nbsp;</span>;
+                        </li>
+                        <li class="itemize">pertes de données.</li></ul>
+
+                    <!--l. 127--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-210002"></a><span
+                        class="ecbx-1200">2</span></span>
+                    L&#8217;Association, en tant que FAI déclaré à l&#8217;ARCEP, décline toute responsabilité quant à l&#8217;utilisation
+                    du réseau faite par l&#8217;utilisateur. En particulier, elle ne saurait être tenue responsable des
+                    agissements malveillants des utilisateurs ainsi que de l&#8217;utilisation du réseau à de mauvaises
+                    fins.
+                    <!--l. 129--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-220002"></a><span
+                        class="ecbx-1200">3</span></span>
+                    Le ResEl n&#8217;est pas en mesure en raison de ses moyens limités de<span class="frenchb-nbsp">&nbsp;</span>:
+                    <ul class="itemize1">
+                        <li class="itemize">surveiller le contenu véhiculé par le réseau<span class="frenchb-thinspace">&nbsp;</span>;
+                        </li>
+                        <li class="itemize">surveiller l&#8217;utilisation du réseau faite par les utilisateurs<span class="frenchb-thinspace">&nbsp;</span>;
+                        </li>
+                        <li class="itemize">répondre à tout heure aux demandes des utilisateurs même si celles-ci rentrent dans le
+                            cadre d&#8217;action du ResEl.</li></ul>
+                    <!--l. 137--><p class="noindent" >
+                    <h4 class="likesubsectionHead"><a
+                            id="x1-230002"></a>Article V.<span class="frenchb-nbsp">&nbsp;</span>: Informatique et Libertés</h4>
+                    <!--l. 139--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-240002"></a><span
+                        class="ecbx-1200">1</span></span>
+                    L&#8217;Association dispose de plusieurs bases de données nominatives, déclarées auprès de la CNIL, qui
+                    servent notamment mais non exclusivement<span class="frenchb-nbsp">&nbsp;</span>:
+                    <ul class="itemize1">
+                        <li class="itemize">à fournir un service d&#8217;information (annuaire)<span class="frenchb-thinspace">&nbsp;</span>;
+                        </li>
+                        <li class="itemize">à aider à la gestion de l&#8217;Association et du réseau.</li></ul>
+                    <!--l. 144--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-250002"></a><span
+                        class="ecbx-1200">2</span></span>
+                    Les informations concernant l&#8217;utilisateur contenues dans ces bases peuvent être modifiées pour une
+                    partie d&#8217;entre elles dans <a
+                            href="https://resel.fr/MyResEl/" class="url" ><span
+                            class="ectt-1200">https://resel.fr/MyResEl/</span></a>, pour l&#8217;autre en envoyant un courrier
+                    électronique à <a
+                            href="gestion@resel.fr" class="url" ><span
+                            class="ectt-1200">gestion@resel.fr</span></a>.
+                    <!--l. 146--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-260002"></a><span
+                        class="ecbx-1200">3</span></span>
+                    L&#8217;utilisation en dehors du campus de ces données, la transmission à des tiers sans l&#8217;autorisation des
+                    personnes concernées, est absolument interdite à tous les utilisateurs. Toute infraction avérée à cette
+                    règle sera sanctionnée et cela à l&#8217;appréciation des membres du conseil d&#8217;administration du
+                    ResEl.
+
+                    <!--l. 148--><p class="noindent" >
+                    <h4 class="likesubsectionHead"><a
+                            id="x1-270002"></a>Article VI.<span class="frenchb-nbsp">&nbsp;</span>: Sanctions prévues</h4>
+                    <!--l. 150--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-280002"></a><span
+                        class="ecbx-1200">1</span></span>
+                    En cas de non-respect de ce Règlement Intérieur, l&#8217;adhérent est passible (en plus des peines prévues
+                    par la loi) des sanctions suivantes<span class="frenchb-nbsp">&nbsp;</span>:
+                    <ul class="itemize1">
+                        <li class="itemize">privation temporaire ou définitive de l&#8217;accès à un ou plusieurs service(s) du ResEl<span class="frenchb-thinspace">&nbsp;</span>;
+                        </li>
+                        <li class="itemize">déconnexion temporaire ou définitive du réseau<span class="frenchb-thinspace">&nbsp;</span>;
+                        </li>
+                        <li class="itemize">exclusion de l&#8217;Association.</li></ul>
+                    <!--l. 157--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-290002"></a><span
+                        class="ecbx-1200">2</span></span>
+                    La sanction est d&#8217;abord prise par les administrateurs en fonction de la gravité de l&#8217;acte mis en cause.
+                    En cas de litige, le choix de la sanction est laissé au libre arbitre du Conseil d&#8217;Administration de
+                    l&#8217;Association.
+                    <!--l. 159--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-300002"></a><span
+                        class="ecbx-1200">3</span></span>
+                    De plus, si la gravité de l&#8217;acte commis le justifie aux yeux du Conseil d&#8217;Administration,
+                    l&#8217;administration ou la logistique informatique de TELECOM Bretagne seront mis au courant et
+                    prendront les mesures qu&#8217;ils jugeront nécessaires.
+                    <!--l. 161--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-310002"></a><span
+                        class="ecbx-1200">4</span></span>
+                    Les données ou preuves détenues par les administrateurs du ResEl sont tenues à disposition
+                    des autorités administratives ou judiciaires agissant dans le cadre de leurs fonctions, en
+                    accord avec le Code des postes et des communications électroniques (article L34-1 alinéa
+                    III).
+
+                    <!--l. 163--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-320002"></a><span
+                        class="ecbx-1200">5</span></span>
+                    La liste des actions passibles de sanction décrites dans ce document n&#8217;est pas exhaustive
+                    et se contente de recenser les problèmes les plus fréquemment rencontrés sur un réseau
+                    informatique. Plus généralement, toute action visant à nuire à un système informatique, à
+                    s&#8217;approprier des données sans l&#8217;accord de leur(s) propriétaire(s) ou pouvant nuire à la réputation
+                    du ResEl ou de TELECOM Bretagne sera sanctionnée selon le libre arbitre du Conseil
+                    d&#8217;Administration.
+                    <!--l. 165--><p class="noindent" >
+                    <h3 class="sectionHead"><span class="titlemark">3 </span> <a
+                            id="x1-330003"></a>Organisation de l&#8217;Association</h3>
+                    <!--l. 167--><p class="noindent" >
+                    <h4 class="likesubsectionHead"><a
+                            id="x1-340003"></a>Article VII.<span class="frenchb-nbsp">&nbsp;</span>: Adhésion et cotisation</h4>
+                    <!--l. 169--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-350003"></a><span
+                        class="ecbx-1200">1</span></span>
+                    Une année commence le 1er août et se termine le 31 juillet.<br
+                            class="newline" />Le semestre d&#8217;automne commence le 1er août et se termine le 31 janvier.<br
+                            class="newline" />Le semestre de printemps commence le 1er février et se termine le 31 juillet.
+                    <!--l. 173--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-360003"></a><span
+                        class="ecbx-1200">2</span></span>
+                    Pour adhérer à l&#8217;association, un membre doit s&#8217;acquitter d&#8217;une cotisation de 1<span
+                            class="feymr-10x-x-120">&#x20AC;</span>.<br
+                            class="newline" />Les cotisations doivent être payées entre début septembre et le 15&#x00A0;octobre inclus. En cas
+                    d&#8217;inscription après le 15&#x00A0;octobre, la cotisation doit être payée au maximum deux semaines après
+                    l&#8217;inscription.
+                    <!--l. 177--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-370003"></a><span
+                        class="ecbx-1200">4</span></span>
+                    Tout les membres de l&#8217;association ont accès aux services internes du ResEl, entre autres la possibilité
+                    d&#8217;hébergement de sites web, l&#8217;accès aux mailing-listes, etc.
+
+                    <!--l. 179--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-380003"></a><span
+                        class="ecbx-1200">5</span></span>
+                    L&#8217;accès à internet via le réseau du ResEl est reservé uniquement aux membres qui s&#8217;acquittent des
+                    frais d&#8217;accès à internet définis dans le paragraphe suivant.
+                    <!--l. 181--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-390003"></a><span
+                        class="ecbx-1200">6</span></span>
+                    Montant des frais d&#8217;accès à internet<span class="frenchb-nbsp">&nbsp;</span>: <br
+                            class="newline" />
+                    <div class="center"
+                    >
+                        <!--l. 182--><p class="noindent" >
+                    <div class="tabular"><table id="TBL-1" class="tabular"
+                                                cellspacing="0" cellpadding="0" rules="groups"
+                    ><colgroup id="TBL-1-1g"><col
+                            id="TBL-1-1"></colgroup><colgroup id="TBL-1-2g"><col
+                            id="TBL-1-2"></colgroup><colgroup id="TBL-1-3g"><col
+                            id="TBL-1-3"></colgroup><colgroup id="TBL-1-4g"><col
+                            id="TBL-1-4"></colgroup><tr
+                            class="hline"><tr
+                            style="vertical-align:baseline;" id="TBL-1-1-"><td  style="white-space:nowrap; text-align:center;" id="TBL-1-1-1"
+                                                                                class="td11">           </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-1-2"
+                                                                                                                  class="td11"> 1 mois  </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-1-3"
+                                                                                                                                                  class="td11"> 6 mois  </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-1-4"
+                                                                                                                                                                                  class="td11"> 1 an  </td></tr><tr
+                            class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr
+                            style="vertical-align:baseline;" id="TBL-1-2-"><td  style="white-space:nowrap; text-align:center;" id="TBL-1-2-1"
+                                                                                class="td11"> Cas général </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-2-2"
+                                                                                                                    class="td11"> 10<span
+                            class="feymr-10x-x-120">&#x20AC; </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-2-3"
+                                                                              class="td11"> 51<span
+                            class="feymr-10x-x-120">&#x20AC; </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-2-4"
+                                                                              class="td11"> 85<span
+                            class="feymr-10x-x-120">&#x20AC;</span></td>
+                    </tr><tr
+                            class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr
+                            style="vertical-align:baseline;" id="TBL-1-3-"><td  style="white-space:nowrap; text-align:center;" id="TBL-1-3-1"
+                                                                                class="td11"> Élèves FIP  </td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-3-2"
+                                                                                                                    class="td11">  10<span
+                            class="feymr-10x-x-120">&#x20AC;  </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-3-3"
+                                                                               class="td11">  31<span
+                            class="feymr-10x-x-120">&#x20AC;  </span></td><td  style="white-space:nowrap; text-align:center;" id="TBL-1-3-4"
+                                                                               class="td11"> 51<span
+                            class="feymr-10x-x-120">&#x20AC; </span></td>
+                    </tr><tr
+                            class="hline"><td><hr></td><td><hr></td><td><hr></td><td><hr></td></tr><tr
+                            style="vertical-align:baseline;" id="TBL-1-4-"><td  style="white-space:nowrap; text-align:center;" id="TBL-1-4-1"
+                                                                                class="td11">            </td>
+                    </tr></table></div>
+                    <!--l. 194--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-400003"></a><span
+                        class="ecbx-1200">7</span></span>
+                    L&#8217;accès à internet via le réseau du ResEl n&#8217;est établi qu&#8217;après que le paiement par le membre des frais
+                    d&#8217;accès.<br
+                            class="newline" />À la fin d&#8217;une période payée par le membre, son accès internet est suspendu en l&#8217;absence de
+                    renouvellement de sa part.
+                    <!--l. 197--><p class="noindent" >
+                    <h4 class="likesubsectionHead"><a
+                            id="x1-410003"></a>Article X.<span class="frenchb-nbsp">&nbsp;</span>: Départ de l&#8217;Association</h4>
+                    <!--l. 199--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-420003"></a><span
+                        class="ecbx-1200">1</span></span>
+                    Tout membre du ResEl, qu&#8217;il soit membre actif ou membre d&#8217;honneur, peut à tout moment quitter
+                    l&#8217;Association par simple notification au Conseil d&#8217;Administration. Le départ peut entraîner l&#8217;arrêt des
+                    services proposés par le ResEl.
+                    <!--l. 201--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-430003"></a><span
+                        class="ecbx-1200">2</span></span>
+                    Le remboursement de la cotisation ne pourra pas être exigé en cas de démission, d&#8217;exclusion ou de
+                    décès d&#8217;un membre.
+
+                    <!--l. 203--><p class="noindent" >
+                    <h4 class="likesubsectionHead"><a
+                            id="x1-440003"></a>Article XI.<span class="frenchb-nbsp">&nbsp;</span>: Conseil d&#8217;Administration</h4>
+                    <!--l. 205--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-450003"></a><span
+                        class="ecbx-1200">1</span></span>
+                    L&#8217;ensemble des membres du Conseil d&#8217;Administration doit être prévenu des réunions du Conseil
+                    d&#8217;Administration au moins 24&#x00A0;heures à l&#8217;avance par courrier électronique ou communiqué écrit
+                    individuel. L&#8217;ordre du jour est inscrit sur les convocations.
+                    <!--l. 207--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-460003"></a><span
+                        class="ecbx-1200">2</span></span>
+                    Lorsque le Conseil d&#8217;Administration procède à un vote, le vote se fait soit à main levée, soit à bulletin
+                    secret (sur demande d&#8217;au moins un de ses membres).
+                    <!--l. 209--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-470003"></a><span
+                        class="ecbx-1200">3</span></span>
+                    Lors d&#8217;un vote à bulletin secret, les bulletins sont conservés pendant 1 an.
+                    <!--l. 211--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-480003"></a><span
+                        class="ecbx-1200">4</span></span>
+                    Lorsqu&#8217;un vote porte sur un membre du Conseil d&#8217;Administration, il peut être demandé à cette
+                    personne de quitter la salle de réunion du Conseil, et cette personne n&#8217;a pas droit de vote. Cette règle
+                    ne vaut pas pour les élections des membres du Bureau.
+                    <!--l. 213--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-490003"></a><span
+                        class="ecbx-1200">5</span></span>
+                    Les membres du Conseil d&#8217;Administration empêchés d&#8217;assister personnellement à une réunion peuvent
+                    se faire représenter par un autre membre du Conseil d&#8217;Administration au moyen d&#8217;une procuration
+                    communiquée au Conseil d&#8217;Administration par courrier électronique ou demande manuscrite avant la
+                    réunion. Nul ne peut détenir plus de deux procurations.
+                    <!--l. 215--><p class="noindent" >
+                    <h4 class="likesubsectionHead"><a
+                            id="x1-500003"></a>Article XII.<span class="frenchb-nbsp">&nbsp;</span>: Modification du Règlement Intérieur</h4>
+
+                    <!--l. 217--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-510003"></a><span
+                        class="ecbx-1200">1</span></span>
+                    Conformément aux statuts de l&#8217;Association, le Règlement Intérieur est proposé par le Conseil
+                    d&#8217;Administration.
+                    <!--l. 219--><p class="noindent" ><span class="paragraphHead"><a
+                        id="x1-520003"></a><span
+                        class="ecbx-1200">2</span></span>
+                    Le Règlement Intérieur doit être approuvé soit par une Assemblée Générale Ordinaire ou
+                    Extraordinaire, soit par la signature d&#8217;au moins les deux tiers des membres du Conseil
+                    d&#8217;Administration. Le nouveau Règlement Intérieur est alors mis à disposition sur le site Internet de
+                    l&#8217;Association. Les membres actifs sont ensuite avertis par courrier électronique de son emplacement
+                    sur le site.
+
+                    <hr />
+                    <h4>{% trans "Veuillez également lire attentivement"%} <a href="#">{%  trans "les statuts" %}</a> {% trans "de l'association avant de continuer" %}</h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary" id="acceptCGU" >J'ai lu et j'accepte le règlement intérieur</button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
+
 
 {% block javascript %}
     <script type="text/javascript" src="https://checkout.stripe.com/checkout.js"></script>
     <script>
-
+        var $button;
         $(document).ready(function () {
             $(':submit').on('click', function(event) {
                 event.preventDefault();
-                var $button = $(this),
-                        $form = $button.parents('form');
+                $button = $(this);
+                $('#cguModal').modal('show');
+            });
+
+            $('#acceptCGU').on('click', function ( e ){
+                $('#cguModal').modal('hide');
+                $form = $button.parents('form');
                 var opts = $.extend({}, $button.data(), {
                     token: function(result) {
                         $form.append($('<input>').attr({ type: 'hidden', name: 'stripeToken', value: result.id })).submit();
