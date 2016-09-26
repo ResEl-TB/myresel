@@ -128,7 +128,7 @@ class Product(models.Model):
         return self.prix / 100
 
     def __str__(self):
-        return '%s - %.2f €' % (self.nom, self.prix)
+        return '%s %.2f €' % (self.nom, self.prix / 100)
 
 
 class Transaction(models.Model):
@@ -212,9 +212,8 @@ class Transaction(models.Model):
         blank=True,
     )
 
-
     def __str__(self):
-        return 'Transaction du %s de l\'utilisateur %s' % (self.date, self.utilisateur)
+        return 'Transaction du %s de l\'utilisateur %s' % (self.date_creation, self.utilisateur)
 
     def get_checks(self):
         return Check.objects.all().filter(transaction=self.pk)
@@ -228,6 +227,9 @@ class Transaction(models.Model):
                 products_by_cat.append((c, products))
 
         return products_by_cat
+
+    def get_main_product(self):
+        return self.produit.all().sort(key=lambda x: x.prix, reverse=True)[0]
 
 
 class MonthlyPayment(models.Model):
@@ -257,7 +259,7 @@ class StripeCustomer(models.Model):
     stripe_id = models.CharField(max_length=50, unique=True)
 
     @staticmethod
-    def retreive_or_create(user):
+    def retrieve_or_create(user):
         import stripe
         try:
             customer_id = StripeCustomer.objects.get(ldap_id=user.uid).stripe_id
