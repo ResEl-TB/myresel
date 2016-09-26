@@ -43,7 +43,8 @@ def generate_and_email_invoice(user, transaction, lang='fr'):
         )
 
     # Save it in DB
-    transaction.facture = filename
+    transaction.facture = "invoices/" + filename + ".pdf"
+    transaction.save()
 
     # Send it by email
     user_email = EmailMessage(
