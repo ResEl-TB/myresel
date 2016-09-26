@@ -15,7 +15,6 @@ from django.utils.translation import ugettext_lazy as _, get_language
 from django.views.generic import DetailView, View, ListView
 
 import tresorerie.async_tasks as async_tasks
-from fonctions import generic
 from fonctions.decorators import need_to_pay
 from tresorerie.models import Transaction, Product, StripeCustomer
 
@@ -36,7 +35,7 @@ class ChooseProduct(View):
 
         # All prices are in € cents
         user = request.ldap_user
-        is_member = str(generic.current_year()) in user.cotiz
+        is_member = user.is_member
         formation = "FIG"
 
         if "fip" in user.formation.lower():
@@ -115,7 +114,7 @@ class Pay(View):
         products = [main_product]
 
         # If the user is not member of the association :
-        is_member = str(generic.current_year()) in request.ldap_user.cotiz
+        is_member = request.ldap_user.is_member
 
         if not is_member and main_product.type_produit != 'A':
             products.append(Product.objects.get(type_produit='A'))
@@ -153,7 +152,7 @@ class Pay(View):
         for pk in products_id:
             products.append(Product.objects.get(pk=pk))
 
-        is_member = str(generic.current_year()) in user.cotiz
+        is_member = user.is_member
 
         customer = StripeCustomer.retrieve_or_create(user)
         customer.source = token

@@ -3,6 +3,7 @@ import json
 from datetime import datetime, timedelta
 
 import ldapback
+from fonctions import generic
 from ldapback.models.fields import LdapCharField, LdapPasswordField, LdapNtPasswordField, LdapListField, \
     LdapDatetimeField
 from myresel.settings import LDAP_DN_PEOPLE
@@ -93,6 +94,9 @@ class LdapUser(ldapback.models.LdapModel):
         )
 
         return address
+
+    def is_member(self):
+        return str(generic.current_year()) in self.cotiz
 
 
 class LdapOldUser(LdapUser):
