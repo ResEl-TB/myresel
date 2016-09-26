@@ -75,8 +75,7 @@ apt-get -qq install redis-server
 echo ">>> Installing LateX"
 apt-get -qq install texlive-latex-extra
 
-mkdir ${ROOTDIR}/media
-mkdir ${ROOTDIR}/media/invoices
+mkdir -p ${ROOTDIR}/media/invoices
 
 echo ">>> Installing other dependecies"
 apt-get -qq install libjpeg-dev
