@@ -15,7 +15,7 @@ from fonctions.decorators import resel_required, unknown_machine
 from gestion_machines.forms import AddDeviceForm
 from gestion_personnes.async_tasks import send_mails
 from gestion_personnes.models import LdapUser
-from .forms import InscriptionForm, ModPasswdForm, CGUForm, InvalidUID
+from .forms import InscriptionForm, ModPasswdForm, CGUForm, InvalidUID, PersonnalInfoForm
 
 
 class Inscription(View):
@@ -147,3 +147,67 @@ class Settings(View):
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name)
+
+
+class PersonalInfo(View):
+    template_name = 'gestion_personnes/personal_info.html'
+    form_class = PersonnalInfoForm
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(PersonalInfo, self).dispatch(*args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class(initial={
+            'email': request.ldap_user.mail,
+            'phone': request.ldap_user.mobile,
+            'campus': request.ldap_user.campus,
+            'building': request.ldap_user.building,
+            'room': request.ldap_user.room_number,
+            'address': request.ldap_user.postal_address
+        })
+        c = {
+            'form': form,
+            'user': request.ldap_user,
+        }
+        return render(request, self.template_name, c)
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            user = request.ldap_user
+            # Check if the email is not already in use
+            email = form.cleaned_data["email"]
+            if email != user.mail and len(LdapUser.filter(mail=email)) > 0:
+                form.add_error("email", _("Addresse e-mail déjà utilisée"))
+                return render(request, self.template_name, {'form': form})
+
+            # Generate an address if necessary
+            address = form.cleaned_data["address"]
+            if form.cleaned_data["building"] != "":
+                if form.cleaned_data["campus"].lower() == "brest":
+                    address = "Bâtiment {} Chambre {} Maisel Télécom Bretagne\n 655 avenue du Technopôle 29280 Plouzané"
+                else:
+                    address = "Bâtiment {} Chambre {} Maisel Télécom Bretagne\n 2, rue de la Châtaigneraie 35576 Cesson Sévigné"
+                address = address.format(
+                        form.cleaned_data["building"],
+                        form.cleaned_data["room"],
+                    )
+
+            user.mail = email
+            user.mobile = form.cleaned_data["phone"]
+            user.campus = form.cleaned_data["campus"]
+            user.building = form.cleaned_data["building"]
+            user.room_number = form.cleaned_data["room"]
+            user.postal_address = address
+
+            messages.success(request, _("Vos informations ont bien été mises à jour."))
+            user.save()
+
+            request.session['update'] = True
+            redirect_to = request.GET.get('next', '')
+            if redirect_to:
+                return HttpResponseRedirect(redirect_to)
+
+        return render(request, self.template_name, {'form': form})

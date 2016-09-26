@@ -3,7 +3,7 @@ import re
 
 from django import forms
 from django.core.exceptions import ValidationError
-from django.core.validators import MaxLengthValidator, MinLengthValidator
+from django.core.validators import MaxLengthValidator, MinLengthValidator, EmailValidator
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 from phonenumber_field.formfields import PhoneNumberField
@@ -11,9 +11,114 @@ from phonenumber_field.formfields import PhoneNumberField
 from fonctions.generic import current_year
 from gestion_personnes.models import LdapUser, LdapOldUser
 
+# TODO : merge personnal info form and Inscription form
+
 
 class InvalidUID(Exception):
     pass
+
+
+class PersonnalInfoForm(forms.Form):
+    CAMPUS = [('Brest', "Brest"), ('Rennes', 'Rennes'), ('None', _('Je n\'habite pas à la Maisel'))]
+    BUILDINGS_BREST = [('I%d' % i, 'I%d' % i) for i in range(1, 13)]
+    BUILDINGS_RENNES = [('S1', 'Studios'), ('C1', 'Chambres')]
+
+    BUILDINGS = [(0, _("Sélectionnez un Bâtiment"))]
+    BUILDINGS += BUILDINGS_BREST
+    BUILDINGS += BUILDINGS_RENNES
+
+    FORMATIONS = [
+        (0, _('Indiquez votre formation')),
+        ('FIG', _('Ingénieur généraliste (FIG)')),
+        ('FIP', _('Ingénieur par alternance (FIP)')),
+        ('Master', _('Master spécialisé')),
+        ('Autre', _('Autre'))
+    ]
+
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+            'placeholder': _("Addresse e-mail"),
+        }),
+    )
+
+    campus = forms.ChoiceField(
+        choices=CAMPUS,
+        widget=forms.Select(attrs={
+            'class': 'form-control',
+            'placeholder': _("Campus"),
+        })
+    )
+
+    building = forms.ChoiceField(
+        choices=BUILDINGS,
+        widget=forms.Select(attrs={
+            'class': 'form-control',
+            'placeholder': _("Bâtiment"),
+        }),
+    )
+
+    room = forms.IntegerField(
+        min_value=0,
+        max_value=330,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': _("N° de Chambre"),
+        }),
+        required=False,
+    )
+
+    address = forms.CharField(
+        max_length=512,
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'placeholder': _("Addresse postale complète"),
+            'rows': '5'
+        }),
+        required=False,
+    )
+
+    phone = PhoneNumberField(
+        widget=PhoneNumberField.widget(attrs={
+            'class': 'form-control',
+            'placeholder': _("Numéro de téléphone"),
+        })
+    )
+
+    certify_truth = forms.BooleanField(
+        label=_("Je certifie sur l'honneur que les informations saisies sont correctes."),
+        widget=forms.CheckboxInput()
+    )
+
+    def clean_campus(self):
+        campus = self.cleaned_data['campus']
+
+        if campus == '0':
+            raise ValidationError(message=_("Veuillez sélectionner un campus"), code="NO CAMPUS")
+        return campus
+
+    def clean_formation(self):
+        formation = self.cleaned_data['formation']
+
+        if formation == '0':
+            raise ValidationError(message=_("Veuillez sélectionner une formation"), code="NO FORMATION")
+        return formation
+
+    def clean(self):
+        cleaned_data = super(PersonnalInfoForm, self).clean()
+        campus = cleaned_data.get("campus")
+        building = cleaned_data.get("building")
+        address = cleaned_data.get("address")
+        room = cleaned_data.get("room")
+
+        if (campus == "Brest" or campus == "Rennes") and room is None:
+            self.add_error("room", _("Ce champ est obligatoire"))
+        if campus == "Brest" and building not in [a[0] for a in self.BUILDINGS_BREST]:
+            self.add_error('building', _("Veuillez choisir un bâtiment du campus de Brest"))
+        if campus == "Rennes" and building not in [a[0] for a in self.BUILDINGS_RENNES]:
+            self.add_error('building', _("Veuillez choisir un bâtiment du campus de Rennes"))
+        if campus == "None" and address == "":
+            self.add_error('address', _("Veuillez saisir votre addresse postale"))
 
 
 class InscriptionForm(forms.Form):
@@ -61,6 +166,7 @@ class InscriptionForm(forms.Form):
             'class': 'form-control',
             'placeholder': _("Addresse e-mail"),
         }),
+        validators=[EmailValidator()]
     )
 
     password = forms.CharField(

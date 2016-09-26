@@ -15,11 +15,12 @@ Including another URLconf
 """
 from django.conf.urls import url
 
-from .views import Inscription, ModPasswd, InscriptionCGU, Settings
+from .views import Inscription, ModPasswd, InscriptionCGU, Settings, PersonalInfo
 
 urlpatterns = [
     url(r'^inscription$', Inscription.as_view(), name='inscription'),
-    url(r'^cgu', InscriptionCGU.as_view(), name='cgu'),
+    url(r'^cgu$', InscriptionCGU.as_view(), name='cgu'),
     url(r'^modification-passwd$', ModPasswd.as_view(), name='mod-passwd'),
     url(r'^parametres$', Settings.as_view(), name='settings'),
+    url(r'^$', PersonalInfo.as_view(), name='personal-infos'),
 ]
