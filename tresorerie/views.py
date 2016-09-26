@@ -206,7 +206,7 @@ class Pay(View):
             queue = django_rq.get_queue()
             queue.enqueue_call(
                 async_tasks.generate_and_email_invoice,
-                args=(request.user, transaction.total, transaction, get_language()),
+                args=(request.user, transaction, get_language()),
             )
 
             messages.success(request, _("Votre accès a bien été réglé"))
@@ -254,4 +254,4 @@ class History(ListView):
         return super(History, self).dispatch(*args, **kwargs)
 
     def get_queryset(self):
-        return Transaction.objects.all().filter(utilisateur__exact=self.request.user).order_by('date')
+        return Transaction.objects.all().filter(utilisateur__exact=self.request.user).order_by('date_creation')

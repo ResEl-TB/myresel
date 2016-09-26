@@ -136,6 +136,13 @@ class Transaction(models.Model):
     Model used to save a transaction made with the user
     """
 
+    STATUTS = (
+        ('A', 'En attente'),
+        ('N', 'Non payée'),
+        ('P', 'Payée'),
+        ('E', 'Erreur'),
+    )
+
     uuid = models.UUIDField(
         unique=True,
         default=uuid.uuid4,
@@ -158,7 +165,7 @@ class Transaction(models.Model):
         choices=MOYENS_PAY,
     )
 
-    date = models.DateTimeField(
+    date_creation = models.DateTimeField(
         auto_now_add=True,
     )
 
@@ -186,11 +193,41 @@ class Transaction(models.Model):
         unique=True,
     )
 
+    statut = models.CharField(
+        verbose_name='Statut de la transaction',
+        choices=STATUTS,
+        max_length=3,
+        default='N',
+    )
+
+    date_paiement = models.DateTimeField(
+        null=True,
+        blank=True,
+    )
+
+    facture = models.CharField(
+        verbose_name="Chemin de la facture en pdf",
+        max_length=500,
+        null=True,
+        blank=True,
+    )
+
+
     def __str__(self):
         return 'Transaction du %s de l\'utilisateur %s' % (self.date, self.utilisateur)
 
     def get_checks(self):
         return Check.objects.all().filter(transaction=self.pk)
+
+    def get_products_by_cat(self):
+        products_by_cat = []
+
+        for c_id, c in Product.TYPES_PRODUITS:
+            products = [p for p in list(self.produit.all()) if p.type_produit == c_id]
+            if len(products) > 0:
+                products_by_cat.append((c, products))
+
+        return products_by_cat
 
 
 class MonthlyPayment(models.Model):
