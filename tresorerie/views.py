@@ -35,7 +35,7 @@ class ChooseProduct(View):
 
         # All prices are in € cents
         user = request.ldap_user
-        is_member = user.is_member
+        is_member = user.is_member()
         formation = "FIG"
 
         if "fip" in user.formation.lower():
@@ -100,7 +100,7 @@ class Pay(View):
             return HttpResponseRedirect(
                 reverse("gestion-personnes:personal-infos")
                 + "?next="
-                + quote_plus(reverse('tresorerie:pay',  kwargs={'product_id': product_id}))
+                + quote_plus(reverse('tresorerie:pay', kwargs={'product_id': product_id}))
             )
 
         main_product = get_object_or_404(Product, pk=product_id)
@@ -114,7 +114,7 @@ class Pay(View):
         products = [main_product]
 
         # If the user is not member of the association :
-        is_member = request.ldap_user.is_member
+        is_member = request.ldap_user.is_member()
 
         if not is_member and main_product.type_produit != 'A':
             products.append(Product.objects.get(type_produit='A'))
@@ -147,12 +147,10 @@ class Pay(View):
         transaction_total = request.session['transaction_total_stripe']
         transaction_full_name = request.session['transaction_full_name']
         products_id = request.session['products_id']
-
+        main_product_id = self.kwargs["product_id"]
         products = []
         for pk in products_id:
             products.append(Product.objects.get(pk=pk))
-
-        is_member = user.is_member
 
         customer = StripeCustomer.retrieve_or_create(user)
         customer.source = token
@@ -162,11 +160,11 @@ class Pay(View):
 
         if given_uuid != transaction_uuid:
             # TODO: show error message
-            return HttpResponseRedirect(reverse('tresorerie:pay', self.kwargs["product_id"]))
+            return HttpResponseRedirect(reverse('tresorerie:pay', kwargs={'product_id': main_product_id}))
 
-        if adhere and is_member:
-            # TODO: show error message
-            return HttpResponseRedirect(reverse('tresorerie:pay', self.kwargs["product_id"]))
+        if adhere and user.is_member():
+            messages.error(request, _("Vous êtes déjà membre de l'association, vous n'avez pas besoin de payer à nouveau la cotisation."))
+            return HttpResponseRedirect(reverse('tresorerie:pay', kwargs={'product_id': main_product_id}))
 
         try:
             charge = stripe.Charge.create(
