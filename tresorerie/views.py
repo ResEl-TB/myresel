@@ -12,7 +12,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _, get_language
-from django.views.generic import View, ListView
+from django.views.generic import DetailView, View, ListView
 
 import tresorerie.async_tasks as async_tasks
 from fonctions import generic
@@ -155,7 +155,7 @@ class Pay(View):
 
         is_member = str(generic.current_year()) in user.cotiz
 
-        customer = StripeCustomer.retreive_or_create(user)
+        customer = StripeCustomer.retrieve_or_create(user)
         customer.source = token
         customer.save()
 
@@ -200,16 +200,13 @@ class Pay(View):
 
             transaction.save()
 
-            # TODO:
-            # Generate notifications for the user
-            # Asynchronously generate invoice and mail it to user & treasurer
             queue = django_rq.get_queue()
             queue.enqueue_call(
                 async_tasks.generate_and_email_invoice,
-                args=(request.user, transaction, get_language()),
+                args=(request.ldap_user, transaction, get_language()),
             )
 
-            messages.success(request, _("Votre accès a bien été réglé"))
+            messages.success(request, _("Vous venez de payer votre accès au ResEl, vous devriez recevoir sous peu un email avec votre facture."))
             return HttpResponseRedirect(reverse('tresorerie:historique'))
 
         except stripe.error.CardError as e:
@@ -255,3 +252,17 @@ class History(ListView):
 
     def get_queryset(self):
         return Transaction.objects.all().filter(utilisateur__exact=self.request.user).order_by('date_creation')
+
+
+class TransactionDetailView(DetailView):
+
+    model = Transaction
+    template_name = "tresorerie/transaction_detail.html"
+    slug_field = "uuid"
+
+    def get_context_data(self, **kwargs):
+        context = super(TransactionDetailView, self).get_context_data(**kwargs)
+        context['user'] = self.request.ldap_user
+        context['main_product'] = context['transaction'].produit.all()[0]
+        context['products'] = context['transaction'].produit.all()
+        return context
