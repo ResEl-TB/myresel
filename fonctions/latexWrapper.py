@@ -1,8 +1,7 @@
 import os
-
+from shutil import copyfile
 from subprocess import call
 from tempfile import mkdtemp, mkstemp
-from shutil import copyfile
 
 from django.template.loader import render_to_string
 
@@ -25,7 +24,7 @@ def generate_pdf(template_path, template_variable, dest_name, dest_folder):
     call(['pdflatex', '-interaction=batchmode', texfilename])
 
     # Make pdf permanent
-    # TODO : improve handle errors !
+    # TODO : improve error handling!
     copyfile(texfilename + '.pdf', os.path.join(dest_folder, dest_name + '.pdf'))
 
     # Cleanup
