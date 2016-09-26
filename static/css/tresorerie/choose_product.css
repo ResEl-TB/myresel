@@ -3,6 +3,9 @@
     margin-bottom: 50px;
 }
 
+.panel-product .service-list{
+    min-height: 230px;
+}
 .panel-product .panel-heading {
     font-size: 1.4em;
 }

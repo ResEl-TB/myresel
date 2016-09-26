@@ -1,5 +1,6 @@
 import uuid
 from datetime import datetime, timedelta
+from urllib.parse import quote_plus
 
 import django_rq
 import stripe
@@ -67,6 +68,7 @@ class ChooseProduct(View):
             'one_month': one_month,
             'formation': formation
         }
+        request.session['update'] = False
         return render(request, self.template_name, context=c)
 
 
@@ -90,8 +92,19 @@ class Pay(View):
         :param kwargs:
         :return:
         """
+        # Check if info where updated
+        product_id = self.kwargs["product_id"]
+        updated = request.session.get('update', False)
+        if not updated:
+            messages.warning(request,
+                          _("Veuillez vérifier que vos informations personnelles soient correctes."))
+            return HttpResponseRedirect(
+                reverse("gestion-personnes:personal-infos")
+                + "?next="
+                + quote_plus(reverse('tresorerie:pay',  kwargs={'product_id': product_id}))
+            )
 
-        main_product = get_object_or_404(Product, pk=self.kwargs["product_id"])
+        main_product = get_object_or_404(Product, pk=product_id)
 
         # Create a new transaction :
         transaction = Transaction()

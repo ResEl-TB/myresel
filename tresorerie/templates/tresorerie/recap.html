@@ -16,9 +16,11 @@
                     <table class="table">
                         <tr class="info"><th>{% trans "Généralités" %}</th><th></th></tr>
                         <tr><td>{% trans "Nom" %}</td><td>{{ user.first_name }} {{ user.last_name|upper }}</td></tr>
+                        <tr><td>{% trans "Téléphone" %}</td><td>{{ user.mobile }}</td></tr>
                         <tr><td>{% trans "E-mail" %}</td><td>{{ user.mail }} </td></tr>
+                        <tr><td>{% trans "Adresse" %}</td><td>{{ user.postal_address|linebreaks }} </td></tr>
                         <tr><td>{% trans "Identifiant de transaction" %}</td><td>{{ transaction.uuid }}</td></tr>
-                        <tr><td>{% trans "Type de paiement" %}</td><td><span class="label label-default">{{ transaction.moyen }}</span></td></tr>
+                        <tr><td>{% trans "Type de paiement" %}</td><td><span class="label label-default" data-toggle="tooltip" data-placement="right" title="{% trans "Les paiements en espèce et par chèque sont uniquement possible au foyer" %}">{% trans "Carte Banquaire" %}</span></td></tr>
                         <tr class="info"><th >{% trans "Résumé de la transaction" %}</th><th></th></tr>
                     </table>
                     <div class="transaction-resume row">
@@ -567,6 +569,9 @@
 {% block javascript %}
     <script type="text/javascript" src="https://checkout.stripe.com/checkout.js"></script>
     <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
         var $button;
         $(document).ready(function () {
             $(':submit').on('click', function(event) {
