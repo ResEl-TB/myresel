@@ -23,7 +23,7 @@ class LdapUserTestCase(TestCase):
         self.assertEqual(user_s.first_name, "Alexandre")
         self.assertEqual(user_s.last_name, "Manoury")
         self.assertEqual(user_s.display_name, "Alexandre Manoury")
-        self.assertEqual(user_s.postal_address, "I11 Maisel blah\n blah blah")
+        self.assertEqual(user_s.postal_address, "Bâtiment I11 Chambre 123 Maisel Télécom Bretagne\n 655 avenue du Technopôle 29280 Plouzané")
         self.assertEqual(user_s.inscr_date, user.inscr_date)
         self.assertEqual(user_s.cotiz, "2016")
         self.assertEqual(user_s.end_cotiz, user.end_cotiz)

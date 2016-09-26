@@ -183,17 +183,10 @@ class PersonalInfo(View):
                 form.add_error("email", _("Addresse e-mail déjà utilisée"))
                 return render(request, self.template_name, {'form': form})
 
-            # Generate an address if necessary
             address = form.cleaned_data["address"]
+            # Generate an address if
             if form.cleaned_data["building"] != "":
-                if form.cleaned_data["campus"].lower() == "brest":
-                    address = "Bâtiment {} Chambre {} Maisel Télécom Bretagne\n 655 avenue du Technopôle 29280 Plouzané"
-                else:
-                    address = "Bâtiment {} Chambre {} Maisel Télécom Bretagne\n 2, rue de la Châtaigneraie 35576 Cesson Sévigné"
-                address = address.format(
-                        form.cleaned_data["building"],
-                        form.cleaned_data["room"],
-                    )
+                address = LdapUser.generate_address(form.cleaned_data["campus"], form.cleaned_data["building"], form.cleaned_data["room"])
 
             user.mail = email
             user.mobile = form.cleaned_data["phone"]

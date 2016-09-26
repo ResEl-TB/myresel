@@ -34,7 +34,6 @@ def create_full_user():
     user.user_password = "blahblah"
     user.nt_password = "blahblah"
     user.display_name = "Alexandre Manoury"
-    user.postal_address = "I11 Maisel blah\n blah blah"
 
     user.inscr_date = now
     user.cotiz = "2016"
@@ -42,6 +41,7 @@ def create_full_user():
     user.campus = "Brest"
     user.building = "I11"
     user.room_number = "123"
+    user.postal_address = LdapUser.generate_address(user.campus, user.building, user.room_number)
 
     user.promo = "2020"
     user.mail = "alexandre.manoury@telecom-bretagne.eu"

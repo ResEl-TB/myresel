@@ -81,6 +81,18 @@ class LdapUser(ldapback.models.LdapModel):
         else:
             return 'success'
 
+    @staticmethod
+    def generate_address(campus, building, room):
+        if campus.lower() == "brest":
+            address = "Bâtiment {} Chambre {} Maisel Télécom Bretagne\n 655 avenue du Technopôle 29280 Plouzané"
+        else:
+            address = "Bâtiment {} Chambre {} Maisel Télécom Bretagne\n 2, rue de la Châtaigneraie 35576 Cesson Sévigné"
+        address = address.format(
+            building,
+            room,
+        )
+
+        return address
 
 
 class LdapOldUser(LdapUser):
