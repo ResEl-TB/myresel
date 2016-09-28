@@ -51,36 +51,36 @@
         <div class="container">
             <h2>{% trans "Les services du ResEl" %}</h2>
 
-                {% for service in services %}
-                    {% if forloop.first %}
-                <div class="row">
-                    {% endif %}
+            {% for service in services %}
+                {% if forloop.first %}
+                    <div class="row">
+                {% endif %}
+            <div class="col-md-4">
+                <a href="{{ service.get_absolute_url }}">
+                    <span class="glyphicon {{ service.glyphicon_name }} service-icon" aria-hidden="true"></span>
+                    <h3 class="service-title">{{ service.name }}</h3>
+                    <p>{{ service.description }}</p>
+                </a>
+            </div>
+            {% if forloop.last %}
+                {% if not ip_in_resel %}
                     <div class="col-md-4">
-                        <a href="{{ service.get_absolute_url }}">
-                            <span class="glyphicon {{ service.glyphicon_name }} service-icon" aria-hidden="true"></span>
-                            <h3 class="service-title">{{ service.name }}</h3>
-                            <p>{{ service.description }}</p>
+                        <a href="#">
+                            <span class="fa fa-rocket service-icon" aria-hidden="true"></span>
+                            <h3 class="service-title">{% trans "Et plein d'autres services" %}</h3>
+                            <p><span class="fa fa-ellipsis-h" aria-hidden="true"></span></p>
                         </a>
                     </div>
-                    {% if forloop.last %}
-                        {% if not ip_in_resel %}
-                            <div class="col-md-4">
-                                <a href="#">
-                                    <span class="fa fa-rocket service-icon" aria-hidden="true"></span>
-                                    <h3 class="service-title">{% trans "Et plein d'autres services" %}</h3>
-                                    <p><span class="fa fa-ellipsis-h" aria-hidden="true"></span></p>
-                                </a>
-                            </div>
-                        {% endif %}
+                {% endif %}
                 </div>
-                    {% elif forloop.counter|divisibleby:3 %}
+            {% elif forloop.counter|divisibleby:3 %}
                 </div>
                 <div class="row">
-                    {% endif %}
-                {% empty %}
-                {% endfor %}
+            {% endif %}
+            {% empty %}
+            {% endfor %}
             </div>
-        </div>
+    </div>
     </div>
 
     <div class="home-fragment home-blog">
@@ -99,7 +99,7 @@
                         {% blocktrans with author=pieceofnews.author date=pieceofnews.date|date:"DATE_FORMAT" %}{{author}}, le {{date}}
                         {% endblocktrans %}
                     </div>
-                <hr />
+                    <hr />
                 </div>
             {% empty %}
                 <div class="news-bloc">{% trans "Pas de news à l'horizon" %}</div>
