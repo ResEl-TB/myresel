@@ -127,7 +127,7 @@ TODO : Aussi configurer le module uwsgi...
 Todo
 
 ### Configuration de supervisor
-Créer le fichier `conf.d/resel.fr.conf` :
+Créer le fichier `/etc/supervisor/conf.d/resel.fr.conf` :
 TODO: centraliser les logs... 
 
 ```
