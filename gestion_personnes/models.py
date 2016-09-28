@@ -15,7 +15,7 @@ class LdapUser(ldapback.models.LdapModel):
     The class having all the element for a user
     """
     base_dn = LDAP_DN_PEOPLE
-    object_classes = ['genericPerson', 'enstbPerson', 'reselPerson', 'maiselPerson', 'aePerson']
+    object_classes = ['genericPerson', 'enstbPerson', 'reselPerson', 'maiselPerson', 'aePerson', 'mailPerson']
 
     # genericPerson
     uid = LdapCharField(db_column='uid', object_classes=['genericPerson'], pk=True)
@@ -57,6 +57,13 @@ class LdapUser(ldapback.models.LdapModel):
     ae_nature = LdapCharField(db_column='aeNature', object_classes=['aePerson'])
     n_adherent = LdapCharField(db_column='nAdherent', object_classes=['aePerson'])
     # TODO: other fields
+
+
+    # mailPerson
+    mail_local_address = LdapListField(db_column='mailLocalAddress', object_classes=['mailPerson'])
+    mail_dir = LdapCharField(db_column='mailDir', object_classes=['mailPerson'])
+    home_directory = LdapCharField(db_column='homeDirectory', object_classes=['mailPerson'])
+
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__,
