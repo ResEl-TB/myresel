@@ -81,11 +81,11 @@ class LdapCharField(LdapField):
 
 
 class LdapPasswordField(LdapCharField):
-    hash_method = "SSHA"
+    hash_method = "ssha"
 
     def to_ldap(self, obj):
         pwd_hash = super().to_ldap(obj)
-        if pwd_hash.startswith("{" + self.hash_method + "}"):  # TODO: NOT BEAU, but we need a hotfix
+        if pwd_hash.lower().startswith("{" + self.hash_method + "}"):  # TODO: NOT BEAU, but we need a hotfix
             ldap_str = pwd_hash
         else:
             ldap_str = hash_passwd(pwd_hash)
