@@ -24,7 +24,7 @@ def generate_and_email_invoice(user, transaction, lang='fr'):
         'user': user,
     }
 
-    filename = 'facture-{}-{}'.format(transaction.pk, user.uid)
+    filename = 'facture-{}-{}'.format(user.uid, str(transaction.uuid)[:8])
     # Generating french invoice
     invoice_path_fr = generate_pdf(
         'tresorerie/facture.tex',
@@ -51,31 +51,23 @@ def generate_and_email_invoice(user, transaction, lang='fr'):
         subject=_("Facture ResEl"),
         body="Bonjour " + str(user.first_name) +
         "\nVous recevez cet email pour vous confirmer le paiement de vos frais d'accès à internet." +
-        "\nVeuillez trouver ci-joint la facture de votre paiement" +
-        "\n\nHello " + str(user.first_name) +
-        "\nYou receive this mail to confirm you the payment of you internet access fees." +
-        "\nYou will find your invoice enclosed in this email.",
+        "\nVeuillez trouver ci-joint la facture de votre paiement",
         from_email="tresorier@resel.fr",
         reply_to=["support@resel.fr"],
         to=[user.mail],
     )
-    if lang != 'fr':
-        with open(invoice_path_en, 'rb') as file:
-            user_email.attach(filename, file.read())
-    else:
-        with open(invoice_path_fr, 'rb') as file:
-            user_email.attach(filename, file.read())
 
     treasurer_email = EmailMessage(
-        subject="Facture ResEl " + str(user.first_name),
-        body= str(user.first_name) + " vient d'effectuer un paiement." +
-        "\nVeuillez trouver ci-joint la facture.",
+        subject="Facture ResEl " + str(user.uid),
+        body=str(user.uid) + " vient d'effectuer un paiement." +
+             "\nVeuillez trouver ci-joint la facture.",
         from_email=SERVER_EMAIL,
         to=["tresorier@resel.fr"],
     )
+
     with open(invoice_path_fr, 'rb') as file:
-        user_email.attach(filename, file.read())
-        treasurer_email.attach(filename, file.read())
+        user_email.attach(filename + ".pdf", file.read(), "application/pdf")
+        treasurer_email.attach(filename + ".pdf", file.read(), "application/pdf")
 
     treasurer_email.send()
     user_email.send()
