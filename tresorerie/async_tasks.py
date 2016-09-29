@@ -51,7 +51,7 @@ def generate_and_email_invoice(user, transaction, lang='fr'):
         subject=_("Facture ResEl"),
         body="Bonjour " + str(user.first_name) +
         "\nVous recevez cet email pour vous confirmer le paiement de vos frais d'accès à internet." +
-        "\nVeuillez trouver ci-joint la facture de votre paiement",
+        "\nVeuillez trouver ci-jointe la facture de votre paiement",
         from_email="tresorier@resel.fr",
         reply_to=["support@resel.fr"],
         to=[user.mail],
@@ -67,6 +67,7 @@ def generate_and_email_invoice(user, transaction, lang='fr'):
 
     with open(invoice_path_fr, 'rb') as file:
         user_email.attach(filename + ".pdf", file.read(), "application/pdf")
+    with open(invoice_path_fr, 'rb') as file:
         treasurer_email.attach(filename + ".pdf", file.read(), "application/pdf")
 
     treasurer_email.send()
