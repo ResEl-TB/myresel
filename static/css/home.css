@@ -178,3 +178,7 @@ h3 .service-title {
     font-style: italic;
     font-weight: bold;
 }
+
+.article {
+    max-width: 800px;
+}
