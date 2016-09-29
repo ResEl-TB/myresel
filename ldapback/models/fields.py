@@ -81,26 +81,39 @@ class LdapCharField(LdapField):
 
 
 class LdapPasswordField(LdapCharField):
+    hash_method = "SSHA"
 
     def to_ldap(self, obj):
-        pwd = super().to_ldap(obj)
+        pwd_hash = super().to_ldap(obj)
+        if pwd_hash.startswith("{" + self.hash_method + "}"):  # TODO: NOT BEAU, but we need a hotfix
+            ldap_str = pwd_hash
+        else:
+            ldap_str = hash_passwd(pwd_hash)
+        return ldap_str
 
-        if pwd == "":
-            return pwd
-
-        return hash_passwd(pwd)
+    @classmethod
+    def from_ldap(cls, obj):
+        pwd_hash = super().from_ldap(obj)
+        return pwd_hash
 
 
 class LdapNtPasswordField(LdapCharField):
+    hash_method = "NT"
 
     def to_ldap(self, obj):
         pwd = super().to_ldap(obj)
 
-        if pwd == "":
-            return pwd
+        if pwd.startswith("{" + self.hash_method + "}"):  # TODO: NOT BEAU, but we need a hotfix
+            ldap_str = pwd[len(self.hash_method) + 1:]
+        else:
+            ldap_str = hash_to_ntpass(pwd)
 
-        return hash_to_ntpass(pwd)
+        return ldap_str
 
+    @classmethod
+    def from_ldap(cls, obj):
+        pwd_hash = super().from_ldap(obj)
+        return "{" + cls.hash_method + "}" + pwd_hash
 
 class LdapListField(LdapField):
 
@@ -124,6 +137,7 @@ class LdapListField(LdapField):
         if lst == "":
             return []
         return [o for o in obj]
+
 
 class LdapDatetimeField(LdapField):
     """

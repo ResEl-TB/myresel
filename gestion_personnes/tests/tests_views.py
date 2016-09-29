@@ -153,7 +153,7 @@ class ModPasswdCase(TestCase):
 
         self.assertEqual(200, r.status_code)
         u = LdapUser.get(pk="lcarr")
-        self.assertEqual(hash_to_ntpass("blohhhhhhh"), u.nt_password)
+        self.assertEqual("{NT}" + hash_to_ntpass("blohhhhhhh"), u.nt_password)
         # self.assertEqual(hash_passwd("blohhhhhhh"), u.user_password)
 
     def test_wrong_mod_passwd(self):
@@ -173,7 +173,7 @@ class ModPasswdCase(TestCase):
 
         self.assertEqual(200, r.status_code)
         u = LdapUser.get(pk="lcarr")
-        self.assertEqual(hash_to_ntpass("blah"), u.nt_password)
+        self.assertEqual("{NT}" + hash_to_ntpass("blah"), u.nt_password)
         # self.assertEqual(hash_passwd("blah"), u.user_password)  # commented because I don't know how to check the passwd
 
     def test_passwd_too_short(self):
@@ -189,5 +189,5 @@ class ModPasswdCase(TestCase):
 
         self.assertEqual(200, r.status_code)
         u = LdapUser.get(pk="lcarr")
-        self.assertEqual(hash_to_ntpass("blah"), u.nt_password)
+        self.assertEqual("{NT}" + hash_to_ntpass("blah"), u.nt_password)
         # self.assertEqual(hash_passwd("blah"), u.user_password)

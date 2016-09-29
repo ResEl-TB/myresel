@@ -1,7 +1,7 @@
 import binascii
 import hashlib
 import os
-from base64 import encodestring
+from base64 import encodestring, decodebytes, encodebytes
 from datetime import datetime, timedelta
 
 
@@ -30,7 +30,15 @@ def hash_passwd(password):
     salt = os.urandom(4)
     h = hashlib.sha1(password.encode('utf-8'))
     h.update(salt)
-    return "{SSHA}" + str(encodestring(h.digest() + salt)).split("'")[1].split('\\')[0]
+    return "{SSHA}" + str(encodebytes(h.digest() + salt)).split("'")[1].split('\\')[0]
+
+
+def compare_passwd(passwd, hsh):
+    salt = decodebytes(bytes(hsh[6:], 'utf-8'))
+    salt = salt[-4:]
+    h = hashlib.sha1(passwd.encode('utf-8'))
+    h.update(salt)
+    return "{SSHA}" + str(encodestring(h.digest() + salt)).split("'")[1].split('\\')[0] == hsh
 
 
 def hash_to_ntpass(password):
