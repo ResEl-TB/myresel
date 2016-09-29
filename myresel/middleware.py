@@ -60,9 +60,9 @@ class NetworkConfiguration(object):
         if "user" in zone or "inscription" in zone:
             # Hack to redirect to the good campus
             if network.get_campus(ip) == "Rennes" and settings.CURRENT_CAMPUS == "Brest":
-                return HttpResponseRedirect(settings.MAIN_HOST_RENNES)
+                return HttpResponseRedirect("https://" + settings.MAIN_HOST_RENNES)
             elif network.get_campus(ip) == "Brest" and settings.CURRENT_CAMPUS == "Rennes":
-                return HttpResponseRedirect(settings.MAIN_HOST_BREST)
+                return HttpResponseRedirect("https://" + settings.MAIN_HOST_BREST)
 
             try:
                 request.network_data['mac'] = network.get_mac(ip)
