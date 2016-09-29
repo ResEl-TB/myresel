@@ -14,11 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url, include
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.views.generic import RedirectView
 from django.views.i18n import javascript_catalog
 
+from myresel import settings
 from pages.views import Home, Contact, NewsListe, inscriptionZoneInfo
 
 js_info_dict = {
@@ -50,6 +52,9 @@ urlpatterns = [
 
     url(r'^$', Home.as_view(), name='home'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler400 = 'myresel.error_views.bad_request'
 handler403 = 'myresel.error_views.permission_denied'

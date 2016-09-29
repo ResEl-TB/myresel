@@ -16,6 +16,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 ALLOWED_HOSTS = ['*', 'beta.resel.fr', 'beta.rennes.resel.fr', 'resel.fr', 'rennes.resel.fr']
 
+MAIN_HOST_BREST = 'beta.resel.fr'
+MAIN_HOST_RENNES = 'beta.rennes.resel.fr'
+
 # Language switch hack
 CSRF_COOKIE_DOMAIN = '.resel.fr'
 
