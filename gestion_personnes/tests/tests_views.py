@@ -2,11 +2,13 @@
 """
 Test the views in the current module
 """
+import datetime
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
-from fonctions.generic import hash_to_ntpass
+from fonctions.generic import hash_to_ntpass, compare_passwd
 from gestion_machines.models import LdapDevice
 from gestion_personnes.models import LdapUser
 from gestion_personnes.tests import try_delete_user, create_full_user
@@ -154,7 +156,7 @@ class ModPasswdCase(TestCase):
         self.assertEqual(200, r.status_code)
         u = LdapUser.get(pk="lcarr")
         self.assertEqual("{NT}" + hash_to_ntpass("blohhhhhhh"), u.nt_password)
-        # self.assertEqual(hash_passwd("blohhhhhhh"), u.user_password)
+        self.assertTrue(compare_passwd("blohhhhhhh", u.user_password))
 
     def test_wrong_mod_passwd(self):
         r = self.client.get(reverse("gestion-personnes:mod-passwd"),
@@ -191,3 +193,52 @@ class ModPasswdCase(TestCase):
         u = LdapUser.get(pk="lcarr")
         self.assertEqual("{NT}" + hash_to_ntpass("blah"), u.nt_password)
         # self.assertEqual(hash_passwd("blah"), u.user_password)
+
+
+class TestPersonalInfo(TestCase):
+    def setUp(self):
+        try_delete_user("lcarr")
+        try_delete_device(settings.DEBUG_SETTINGS['mac'])
+
+        user = LdapUser()
+        user.uid = 'lcarr'
+        user.first_name = "Loïc"
+        user.last_name = "Carr"
+        user.user_password = "blah"
+        user.promo = "2018"
+        user.inscr_date = datetime.datetime.now()
+        user.nt_password = user.user_password
+        user.save()
+
+        self.client.login(username="lcarr", password="blah")
+
+    def test_simple_mod(self):
+        r = self.client.get(reverse("gestion-personnes:personal-infos"),
+                            HTTP_HOST="10.0.3.99", follow=True)
+        self.assertEqual(200, r.status_code)
+
+        r = self.client.post(
+            reverse("gestion-personnes:personal-infos"),
+            data={
+                'email': "email@email.fr",
+                'phone': "0123456789",
+                'campus': "Brest",
+                'building': "I10",
+                'room': "14",
+                'certify_truth': "certify_truth"
+        },
+            HTTP_HOST="10.0.3.99",
+            follow=True
+        )
+
+        self.assertEqual(200, r.status_code)
+        self.assertContains(r, "Vos informations ont bien été mises à jour.")
+        u = LdapUser.get(pk="lcarr")
+        self.assertEqual(u.mail, "email@email.fr")
+        self.assertEqual(u.mobile, "+33123456789")
+        self.assertEqual(u.campus, "Brest")
+        self.assertEqual(u.building, "I10")
+        self.assertEqual(u.room_number, "14")
+
+        # Test a bug which would modify wrongly the password
+        self.assertTrue(compare_passwd("blah", u.user_password))
