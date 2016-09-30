@@ -35,7 +35,7 @@ class InvoiceCreation(TestCase):
         self.productAdhesion.save()
 
         self.transaction = Transaction()
-        self.transaction.utilisateur =self.user.uid
+        self.transaction.utilisateur = self.user.uid
         self.transaction.moyen = "CB"
         self.transaction.save()
 
@@ -54,3 +54,43 @@ class InvoiceCreation(TestCase):
             pass
 
         self.assertEqual(2, len(mail.outbox))
+
+
+class test_product(TestCase):
+    def setUp(self):
+        self.user = create_full_user()
+        try_delete_user(self.user.uid)
+        self.user.save()
+
+        self.productFIG_1m = Product(
+            nom="1 mois ResEl",
+            prix=1000,
+            type_produit="F",
+            duree=1,
+            autorisation="ALL",
+        )
+
+        self.productAdhesion = Product(
+            nom="Adhesion au ResEl",
+            prix=100,
+            type_produit="A",
+            duree=12,
+            autorisation="ALL",
+        )
+        self.productFIG_1m.save()
+        self.productAdhesion.save()
+
+    def test_get_main_product_simple(self):
+
+        self.transaction = Transaction()
+        self.transaction.utilisateur = self.user.uid
+        self.transaction.moyen = "CB"
+        self.transaction.save()
+
+        self.transaction.produit.add(self.productAdhesion)
+        self.transaction.produit.add(self.productFIG_1m)
+        self.transaction.save()
+
+        transaction_s = Transaction.objects.get(pk=self.transaction.pk)
+        main_product = transaction_s.get_main_product()
+        self.assertEqual(main_product.nom, self.productFIG_1m.nom)

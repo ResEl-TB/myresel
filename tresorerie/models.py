@@ -229,7 +229,7 @@ class Transaction(models.Model):
         return products_by_cat
 
     def get_main_product(self):
-        return self.produit.all().sort(key=lambda x: x.prix, reverse=True)[0]
+        return self.produit.order_by('-prix')[0]
 
 
 class MonthlyPayment(models.Model):
