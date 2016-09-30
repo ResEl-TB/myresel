@@ -147,7 +147,7 @@ class HomeViewCase(TestCase):
                 self.productFIG_1m):
             self.assertContains(r, "%i€" % (p.prix/100))
 
-    def test_recap_get(self):
+    def test_do_pay_simple(self):
         self.user.formation = "ANY"
         self.user.cotiz = ""
         self.user.save()
@@ -156,6 +156,23 @@ class HomeViewCase(TestCase):
 
         r = self.client.get(reverse("tresorerie:pay", args=(product.id,)),
                             HTTP_HOST="10.0.3.99", follow=True)
+
+        self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed(r, "gestion_personnes/personal_info.html")
+
+        r = self.client.post(
+            r.redirect_chain[0][0],
+            data={
+                'email': "email@email14.fr",
+                'phone': "0123456789",
+                'campus': "Brest",
+                'building': "I10",
+                'room': "14",
+                'certify_truth': "certify_truth"
+            },
+            HTTP_HOST="10.0.3.99",
+            follow=True
+        )
 
         self.assertEqual(200, r.status_code)
         self.assertTemplateUsed(r, "tresorerie/recap.html")

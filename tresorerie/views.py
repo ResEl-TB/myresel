@@ -262,4 +262,5 @@ class TransactionDetailView(DetailView):
         context['user'] = self.request.ldap_user
         context['main_product'] = context['transaction'].produit.all()[0]
         context['products'] = context['transaction'].produit.all()
+
         return context
