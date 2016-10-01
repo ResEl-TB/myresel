@@ -16,6 +16,7 @@ from fonctions.decorators import resel_required, unknown_machine
 from fonctions.network import get_campus
 from gestion_machines.models import LdapDevice
 from gestion_personnes.models import LdapUser
+from myresel.settings_local import SERVER_EMAIL
 from .forms import AddDeviceForm, AjoutManuelForm
 
 
@@ -172,7 +173,7 @@ class AjoutManuel(View):
                          'mac': form.cleaned_data['mac'],
                          'desc': form.cleaned_data['description']
                      },
-                from_email="skynet@resel.fr",
+                from_email=SERVER_EMAIL,
                 reply_to=[request.user.email],
                 to=["support@resel.fr"],
             )
