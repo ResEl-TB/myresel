@@ -17,7 +17,7 @@ from gestion_machines.forms import AddDeviceForm
 from gestion_personnes.async_tasks import send_mails
 from gestion_personnes.models import LdapUser, UserMetaData
 from .forms import InscriptionForm, ModPasswdForm, CGUForm, InvalidUID, PersonnalInfoForm, ResetPwdSendForm, \
-    ResetPwdForm
+    ResetPwdForm, SendUidForm
 
 
 class Inscription(View):
@@ -221,6 +221,21 @@ class ResetPwdSend(FormView):
         ))
         return super(ResetPwdSend, self).form_valid(form)
 
+
+class SendUid(FormView):
+    """
+    View to get send the uid of a user from its email
+    """
+    template_name = 'gestion_personnes/get_uid_from_email.html'
+    form_class = SendUidForm
+    success_url = reverse_lazy("home")
+
+    def form_valid(self, form):
+        form.send_email(self.request)
+        messages.info(self.request, _(
+            "Nous venons de vous envoyer un e-mail sur votre addresse avec votre identifiant ResEl."
+        ))
+        return super(SendUid, self).form_valid(form)
 
 class ResetPwd(View):
     template_name = 'gestion_personnes/mod-passwd.html'

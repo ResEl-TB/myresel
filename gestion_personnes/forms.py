@@ -393,11 +393,11 @@ class ResetPwdSendForm(forms.Form):
         user_email = EmailMessage(
             subject=_("Réinitialisation du mot de passe ResEl"),
             body=_("Bonjour,\n\n" +
-                 "Vous avez demandé la réinitisalisation de votre mot de passe ResEl. Pour confirmer ceci, veuillez suivre le lien suivant : \n" +
+                 "Vous avez demandé la réinitisalisation de votre mot de passe ResEl. Pour la confirmer veuillez cliquer sur le lien suivant : \n" +
                  "%s\n\n" +
                  "------------------------\n\n" +
                  "Si vous pensez que vous recevez cet e-mail par erreur, veuillez l'ignorer. Dans tous les cas, n'hésitez pas à nous contacter " +
-                 "à support@resel.fr") % request.build_absolute_uri(
+                 "à support@resel.fr pour toute question.") % request.build_absolute_uri(
                      reverse('gestion-personnes:reset-pwd',
                              kwargs={'key': user_meta.reset_pwd_code,})
                  ),
@@ -468,3 +468,43 @@ class ResetPwdForm(forms.Form):
 
 class ModPasswdForm(ResetPwdForm):
     pass  # TODO: ask for old passwd
+
+
+class SendUidForm(forms.Form):
+    email = forms.EmailField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': _("Addresse e-mail"),
+        }),
+    )
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+
+        try:
+            LdapUser.get(mail=email)
+        except ObjectDoesNotExist:
+            raise ValidationError(message=_("Cette addresse e-mail n'est pas enregistrée"), code="WRONG EMAIL")
+        return email
+
+    def send_email(self, request):
+        email = self.cleaned_data['email']
+        user = LdapUser.get(mail=email)
+
+        user_email = EmailMessage(
+            subject=_("Identifiants ResEl"),
+            body=_("Bonjour,\n\n" +
+                   "Vous venez de demander l'envoi de vos identifiants ResEl, les voici : \n" +
+                   "Nom d'utilisateur : %s\n" +
+                   "Mot de passe : ****** (celui que vous avez choisi à l'inscription)\n\n"
+                   "Vous pourrez vous connecter à votre tableau de bord en cliquant sur le lien suiviant : %s\n\n" +
+                   "------------------------\n\n" +
+                   "Si vous pensez que vous recevez cet e-mail par erreur, veuillez l'ignorer. Dans tous les cas, n'hésitez pas à nous contacter " +
+                   "à support@resel.fr pour toute question.") % (user.uid, request.build_absolute_uri(reverse('login')))
+            ,
+            from_email="secretaire@resel.fr",
+            reply_to=["support@resel.fr"],
+            to=[user.mail],
+        )
+
+        user_email.send()

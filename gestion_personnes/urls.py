@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import url
 
 from gestion_personnes.views import ResetPwd
-from .views import Inscription, ModPasswd, InscriptionCGU, Settings, PersonalInfo, ResetPwdSend
+from .views import Inscription, ModPasswd, InscriptionCGU, Settings, PersonalInfo, ResetPwdSend, SendUid
 
 urlpatterns = [
     url(r'^inscription$', Inscription.as_view(), name='inscription'),
@@ -25,6 +25,6 @@ urlpatterns = [
     url(r'^parametres$', Settings.as_view(), name='settings'),
     url(r'^reset-pwd/(?P<key>[-\w]+)$', ResetPwd.as_view(), name='reset-pwd'),
     url(r'^reset-pwd$', ResetPwdSend.as_view(), name='reset-pwd-send'),
-
+    url('^send-uid$', SendUid.as_view(), name='send-uid'),
     url(r'^$', PersonalInfo.as_view(), name='personal-infos'),
 ]

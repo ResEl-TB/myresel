@@ -20,7 +20,7 @@
                 <div class="col-sm-5">{% trans "Veuillez renseigner votre identifiant ResEl :" %}</div>
                     <fieldset class=" col-sm-6 {% if form.uid.errors %}has-error{% endif %}">
                         {{ form.uid }}
-                        <a>Vous avez oublié votre identifiant ResEl ?</a>
+                        <a href="{% url 'gestion-personnes:send-uid' %}">Vous avez oublié votre identifiant ResEl ?</a>
                         {% if form.uid.errors %}<span class="help-block">{{ form.uid.errors }}</span>{% endif %}
                     </fieldset>
                 </div>

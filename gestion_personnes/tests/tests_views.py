@@ -293,3 +293,49 @@ class TestResetPasswd(TestCase):
 
         logged = self.client.login(username=self.user.uid, password=new_pwd)
         self.assertTrue(logged)
+
+
+class TestSendUid(TestCase):
+    def setUp(self):
+        self.user = create_full_user()
+        self.old_pwd = self.user.user_password
+        try_delete_user(self.user.uid)
+        self.user.save()
+
+    def test_simple_send(self):
+        r = self.client.get(reverse("gestion-personnes:send-uid"),
+                            HTTP_HOST="10.0.3.99", follow=True)
+        self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed("gestion_personnes/get_uid_from_email.html")
+
+        r = self.client.post(
+            reverse("gestion-personnes:send-uid"),
+            data={
+                'email': self.user.mail
+            },
+            HTTP_HOST="10.0.3.99",
+            follow=True
+        )
+
+        self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed(r, "pages/home/home.html")
+        self.assertContains(r, "Nous venons de vous envoyer un e-mail")
+
+        self.assertEqual(1, len(mail.outbox))
+
+        m = mail.outbox[0]
+        self.assertIn(self.user.mail, m.to)
+
+    def test_assert_wrong_email(self):
+        r = self.client.post(
+            reverse("gestion-personnes:send-uid"),
+            data={
+                'email': "blahbloh" + self.user.mail
+            },
+            HTTP_HOST="10.0.3.99",
+            follow=True
+        )
+
+        self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed("gestion_personnes/get_uid_from_email.html")
+        self.assertContains(r, "error")
