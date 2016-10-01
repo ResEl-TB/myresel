@@ -82,8 +82,12 @@
                 </li>
                 {% endfor %}
                 <li>
+                    <a href="{% url 'faq' %}"><i class="fa fa-question fa-fw"></i> {% trans "F.A.Q." %}</a>
+                </li>
+                <li>
                     <a href="{% url 'contact' %}"><i class="fa fa-comment-o fa-fw"></i> {% trans "Contact" %}</a>
                 </li>
+
                 <hr class="visible-xs"/>
 
                 {% if request.user.is_authenticated %}

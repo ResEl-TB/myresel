@@ -19,7 +19,7 @@ from django.contrib.auth import views as auth_views
 from django.views.generic import RedirectView
 from django.views.i18n import javascript_catalog
 
-from pages.views import Home, Contact, NewsListe, inscriptionZoneInfo
+from pages.views import Home, Contact, NewsListe, inscriptionZoneInfo, FaqList, faqUpvote
 
 js_info_dict = {
     'packages': ('tresorerie',),
@@ -41,6 +41,8 @@ urlpatterns = [
 
     url(r'^wiki/', include('wiki.urls', namespace='wiki')),
     url(r'^news/', NewsListe.as_view(), name='news'),
+    url(r'^faq/$', FaqList.as_view(), name='faq'),
+    url(r'^faq/upvote/$', faqUpvote, name='upvote'),
     url(r'^contact/', Contact.as_view(), name='contact'),
 
     # Subcription related urls

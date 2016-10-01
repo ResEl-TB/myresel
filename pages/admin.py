@@ -1,7 +1,7 @@
 from django.contrib import admin
 from modeltranslation.admin import TranslationAdmin
 
-from pages.models import News
+from pages.models import News, Faq
 
 
 class NewsAdmin(TranslationAdmin):
@@ -12,3 +12,8 @@ class NewsAdmin(TranslationAdmin):
         obj.save()
 
 admin.site.register(News, NewsAdmin)
+
+class FaqAdmin(TranslationAdmin):
+    pass
+
+admin.site.register(Faq, FaqAdmin)
