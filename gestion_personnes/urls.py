@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url
 
-from gestion_personnes.views import ResetPwd
+from gestion_personnes.views import ResetPwd, CheckEmail
 from .views import Inscription, ModPasswd, InscriptionCGU, Settings, PersonalInfo, ResetPwdSend, SendUid
 
 urlpatterns = [
@@ -26,5 +26,7 @@ urlpatterns = [
     url(r'^reset-pwd/(?P<key>[-\w]+)$', ResetPwd.as_view(), name='reset-pwd'),
     url(r'^reset-pwd$', ResetPwdSend.as_view(), name='reset-pwd-send'),
     url('^send-uid$', SendUid.as_view(), name='send-uid'),
+    url('^check-email$', CheckEmail.as_view(), name='check-email'),
+    url('^check-email/(?P<key>[-\w]+)$', CheckEmail.as_view(), name='check-email'),
     url(r'^$', PersonalInfo.as_view(), name='personal-infos'),
 ]

@@ -99,6 +99,9 @@ class InscriptionCGU(View):
             user.end_cotiz = datetime.now()  # That does not survive the json parser
             user.save()
 
+            user_meta, __ = UserMetaData.objects.get_or_create(uid=user.uid)
+            user_meta.send_email_validation(user.mail, request.get_full_path)
+
             # Auto-login the user to simplify his life !
             auth_user = ldap.get_user(username=user.uid)
             if auth_user is not None:
@@ -190,6 +193,10 @@ class PersonalInfo(View):
             if form.cleaned_data["building"] != "":
                 address = LdapUser.generate_address(form.cleaned_data["campus"], form.cleaned_data["building"], form.cleaned_data["room"])
 
+            if user.mail != email:
+                user_meta, __ = UserMetaData.objects.get_or_create(uid=user.uid)
+                user_meta.send_email_validation(email, request.get_full_path)
+
             user.mail = email
             user.mobile = form.cleaned_data["phone"]
             user.campus = form.cleaned_data["campus"]
@@ -237,7 +244,11 @@ class SendUid(FormView):
         ))
         return super(SendUid, self).form_valid(form)
 
+
 class ResetPwd(View):
+    """
+    View where the user can type a new password
+    """
     template_name = 'gestion_personnes/mod-passwd.html'
     form_class = ResetPwdForm
     success_url = reverse_lazy("home")
@@ -268,3 +279,32 @@ class ResetPwd(View):
             ))
             return HttpResponseRedirect(self.success_url)
         return render(request, self.template_name, {'form': form})
+
+
+class CheckEmail(View):
+    """
+    View where the user can ask for a new email validation/validate his email
+    """
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(CheckEmail, self).dispatch(*args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        key = self.kwargs.get("key")
+        user_info, __ = UserMetaData.objects.get_or_create(uid=request.ldap_user.uid)
+        if key is None:
+            if user_info.email_validated:
+                messages.error(request, _("Votre addresse e-mail a déjà été validée, vous n'avez donc pas besoin de la valider une seconde fois."))
+            else:
+                user_info.send_email_validation(request.ldap_user.mail, request.build_absolute_uri)
+                messages.info(request, _(
+                    "Nous venons de vous envoyer un e-mail avec un lien que vous devrez suivre pour valider votre addresse e-mail."))
+        else:
+            try:
+                u = UserMetaData.objects.get(email_validation_code=key)
+                u.email_validated = True
+                u.save()
+                messages.info(request, _("Votre addresse e-mail est bien validée."))
+            except ObjectDoesNotExist:
+                return HttpResponseForbidden()
+        return HttpResponseRedirect(reverse("home"))

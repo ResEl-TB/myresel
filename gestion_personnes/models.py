@@ -3,6 +3,8 @@ import json
 import uuid
 from datetime import datetime, timedelta
 
+from django.core.mail import EmailMessage
+from django.core.urlresolvers import reverse
 from django.db import models
 
 import ldapback
@@ -128,3 +130,35 @@ class UserMetaData(models.Model):
     def do_reset_pwd_code(self):
         self.reset_pwd_code = uuid.uuid4()
         self.save()
+
+    def send_email_validation(self, email, link_builder):
+        """
+        Send a new validation email.
+        WARNING: it will assume that the email was never validated!
+        :param link_builder: a link builder from a request for example : request.build_absolute_uri()
+        :param email: the email of the user
+        :return:
+        """
+        # Generate a new uid
+        self.email_validation_code = uuid.uuid4()
+        self.email_validated = False
+        self.save()
+
+        user_email = EmailMessage(
+            subject="Validation addresse e-mail ResEl",
+            body=("Bonjour,\n\n" +
+                  "Voici le lien de valisation de votre addresse e-mail : \n" +
+                  "%s\n\n" +
+                  "------------------------\n\n" +
+                  "Il est important de garder vos informations personnelles à jour.\n\n"
+                  "Si vous pensez que vous recevez cet e-mail par erreur, veuillez l'ignorer. Dans tous les cas, n'hésitez pas à nous contacter " +
+                  "à support@resel.fr pour toute question.") % (
+                     link_builder(reverse('gestion-personnes:check-email',
+                                          kwargs={'key': self.email_validation_code}))
+            ),
+            from_email="secretaire@resel.fr",
+            reply_to=["support@resel.fr"],
+            to=[email],
+        )
+
+        user_email.send()

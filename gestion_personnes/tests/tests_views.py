@@ -11,7 +11,7 @@ from django.test import TestCase
 
 from fonctions.generic import hash_to_ntpass, compare_passwd
 from gestion_machines.models import LdapDevice
-from gestion_personnes.models import LdapUser
+from gestion_personnes.models import LdapUser, UserMetaData
 from gestion_personnes.tests import try_delete_user, create_full_user
 from myresel import settings
 
@@ -306,7 +306,7 @@ class TestSendUid(TestCase):
         r = self.client.get(reverse("gestion-personnes:send-uid"),
                             HTTP_HOST="10.0.3.99", follow=True)
         self.assertEqual(200, r.status_code)
-        self.assertTemplateUsed("gestion_personnes/get_uid_from_email.html")
+        self.assertTemplateUsed(r, "gestion_personnes/get_uid_from_email.html")
 
         r = self.client.post(
             reverse("gestion-personnes:send-uid"),
@@ -337,5 +337,32 @@ class TestSendUid(TestCase):
         )
 
         self.assertEqual(200, r.status_code)
-        self.assertTemplateUsed("gestion_personnes/get_uid_from_email.html")
+        self.assertTemplateUsed(r, "gestion_personnes/get_uid_from_email.html")
         self.assertContains(r, "error")
+
+
+class TestCheckEmail(TestCase):
+    def setUp(self):
+        self.user = create_full_user()
+        try_delete_user(self.user.uid)
+        self.user.save()
+
+        self.client.login(username=self.user.uid, password=self.user.user_password)
+
+    def test_simple_check(self):
+        r = self.client.get(reverse("gestion-personnes:check-email"),
+                            HTTP_HOST="10.0.3.99", follow=True)
+        self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed(r, "pages/home/home.html")
+        self.assertContains(r, "Nous venons de vous envoyer un e-mail")
+
+        self.assertEqual(1, len(mail.outbox))
+        m = mail.outbox[0]
+        link = m.body.split('\n')[3]
+        r = self.client.get(link, HTTP_HOST="10.0.3.99", follow=True)
+
+        self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed(r, "pages/home/home.html")
+
+        user_s = UserMetaData.objects.get(uid=self.user.uid)
+        self.assertTrue(user_s.email_validated)
