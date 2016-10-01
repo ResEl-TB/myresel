@@ -4,6 +4,7 @@ Test the views in the current module
 """
 import datetime
 
+from django.core import mail
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.test import TestCase
@@ -242,3 +243,53 @@ class TestPersonalInfo(TestCase):
 
         # Test a bug which would modify wrongly the password
         self.assertTrue(compare_passwd("blah", u.user_password))
+
+
+class TestResetPasswd(TestCase):
+    def setUp(self):
+        self.user = create_full_user()
+        self.old_pwd = self.user.user_password
+        try_delete_user(self.user.uid)
+        self.user.save()
+
+    def test_simple_init(self):
+        new_pwd = "blahblahcar"
+        r = self.client.get(reverse("gestion-personnes:reset-pwd-send"),
+                            HTTP_HOST="10.0.3.99", follow=True)
+        self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed("gestion_personnes/reset_pwd_send.html")
+
+        r = self.client.post(
+            reverse("gestion-personnes:reset-pwd-send"),
+            data={
+                'uid': self.user.uid
+            },
+            HTTP_HOST="10.0.3.99",
+            follow=True
+        )
+
+        self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed(r, "pages/home/home.html")
+        self.assertContains(r, "Nous venons de vous envoyer un e-mail")
+
+        self.assertEqual(1, len(mail.outbox))
+
+        m = mail.outbox[0]
+        link = m.body.split('\n')[3]
+        r = self.client.get(link, HTTP_HOST="10.0.3.99", follow=True)
+
+        self.assertEqual(200, r.status_code)
+
+        r = self.client.post(
+            link,
+            data={
+                'password': new_pwd,
+                'password_verification': new_pwd,
+            },
+            HTTP_HOST="10.0.3.99", follow=True)
+
+        self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed(r, "pages/home/home.html")
+
+        logged = self.client.login(username=self.user.uid, password=new_pwd)
+        self.assertTrue(logged)

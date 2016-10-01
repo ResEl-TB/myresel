@@ -1,6 +1,9 @@
 # coding: utf-8
 import json
+import uuid
 from datetime import datetime, timedelta
+
+from django.db import models
 
 import ldapback
 from fonctions import generic
@@ -64,7 +67,6 @@ class LdapUser(ldapback.models.LdapModel):
     mail_dir = LdapCharField(db_column='mailDir', object_classes=['mailPerson'])
     home_directory = LdapCharField(db_column='homeDirectory', object_classes=['mailPerson'])
 
-
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__,
                           sort_keys=True, indent=4)
@@ -111,3 +113,18 @@ class LdapOldUser(LdapUser):
     This model represent an old user that is no longer in the active users
     """
     base_dn = LDAP_DN_PEOPLE = "ou=anciens,dc=maisel,dc=enst-bretagne,dc=fr"
+
+
+class UserMetaData(models.Model):
+    """
+    Class to store a bit more information about users which are only important for
+    this site, and not all the ResEl
+    """
+    uid = models.CharField(max_length=64, primary_key=True)
+    email_validation_code = models.UUIDField(default=uuid.uuid4)
+    email_validated = models.BooleanField(default=False)
+    reset_pwd_code = models.UUIDField(default=uuid.uuid4)
+
+    def do_reset_pwd_code(self):
+        self.reset_pwd_code = uuid.uuid4()
+        self.save()

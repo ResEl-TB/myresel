@@ -15,12 +15,16 @@ Including another URLconf
 """
 from django.conf.urls import url
 
-from .views import Inscription, ModPasswd, InscriptionCGU, Settings, PersonalInfo
+from gestion_personnes.views import ResetPwd
+from .views import Inscription, ModPasswd, InscriptionCGU, Settings, PersonalInfo, ResetPwdSend
 
 urlpatterns = [
     url(r'^inscription$', Inscription.as_view(), name='inscription'),
     url(r'^cgu$', InscriptionCGU.as_view(), name='cgu'),
     url(r'^modification-passwd$', ModPasswd.as_view(), name='mod-passwd'),
     url(r'^parametres$', Settings.as_view(), name='settings'),
+    url(r'^reset-pwd/(?P<key>[-\w]+)$', ResetPwd.as_view(), name='reset-pwd'),
+    url(r'^reset-pwd$', ResetPwdSend.as_view(), name='reset-pwd-send'),
+
     url(r'^$', PersonalInfo.as_view(), name='personal-infos'),
 ]

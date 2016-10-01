@@ -2,14 +2,17 @@
 import re
 
 from django import forms
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.core.mail import EmailMessage
+from django.core.urlresolvers import reverse
 from django.core.validators import MaxLengthValidator, MinLengthValidator, EmailValidator
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 from phonenumber_field.formfields import PhoneNumberField
 
 from fonctions.generic import current_year
-from gestion_personnes.models import LdapUser, LdapOldUser
+from gestion_personnes.models import LdapUser, LdapOldUser, UserMetaData
+
 
 # TODO : merge personnal info form and Inscription form
 
@@ -363,7 +366,50 @@ class CGUForm(forms.Form):
     )
 
 
-class ModPasswdForm(forms.Form):
+class ResetPwdSendForm(forms.Form):
+    uid = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': _("Identifiant ResEl"),
+        }),
+    )
+
+    def clean_uid(self):
+        uid = self.cleaned_data['uid']
+
+        try:
+            LdapUser.get(uid=uid)
+        except ObjectDoesNotExist:
+            raise ValidationError(message=_("L'identifiant n'existe pas"), code="WRONG UID")
+        return uid
+
+    def send_reset_email(self, request):
+        uid = self.cleaned_data['uid']
+        user = LdapUser.get(uid=uid)
+
+        user_meta, __ = UserMetaData.objects.get_or_create(uid=uid)
+        user_meta.do_reset_pwd_code()
+
+        user_email = EmailMessage(
+            subject=_("Réinitialisation du mot de passe ResEl"),
+            body=_("Bonjour,\n\n" +
+                 "Vous avez demandé la réinitisalisation de votre mot de passe ResEl. Pour confirmer ceci, veuillez suivre le lien suivant : \n" +
+                 "%s\n\n" +
+                 "------------------------\n\n" +
+                 "Si vous pensez que vous recevez cet e-mail par erreur, veuillez l'ignorer. Dans tous les cas, n'hésitez pas à nous contacter " +
+                 "à support@resel.fr") % request.build_absolute_uri(
+                     reverse('gestion-personnes:reset-pwd',
+                             kwargs={'key': user_meta.reset_pwd_code,})
+                 ),
+            from_email="secretaire@resel.fr",
+            reply_to=["support@resel.fr"],
+            to=[user.mail],
+        )
+
+        user_email.send()
+
+
+class ResetPwdForm(forms.Form):
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
@@ -381,10 +427,44 @@ class ModPasswdForm(forms.Form):
     )
 
     def clean(self):
-        cleaned_data = super(ModPasswdForm, self).clean()
+        cleaned_data = super(ResetPwdForm, self).clean()
         password1 = cleaned_data.get('password')
         password2 = cleaned_data.get('password_verification')
 
         if password1 != password2:
-            self.add_error("password", ValidationError(message=_("Les mots de passes sont différents."), code="DIFFERENT PASSWORD"))
+            self.add_error("password",
+                           ValidationError(message=_("Les mots de passes sont différents."), code="DIFFERENT PASSWORD"))
         return cleaned_data
+
+    def reset_pwd(self, uid):
+        pwd = self.cleaned_data["password"]
+
+        user = LdapUser.get(pk=uid)
+        user.user_password = pwd
+        user.nt_password = pwd
+        user.save()
+
+    def send_reset_email(self, uid):
+        user = LdapUser.get(uid=uid)
+
+        user_meta, __ = UserMetaData.objects.get_or_create(uid=uid)
+        user_meta.do_reset_pwd_code()
+
+        user_email = EmailMessage(
+            subject=_("Mot de passe ResEl réinitialisé"),
+            body=_("Bonjour,\n\n" +
+                 "Vous avez demandé la réinitisalisation de votre mot de passe ResEl.\n" +
+                 "Nous vous confirmons bien la réinitisalisation.\n\n" +
+                 "------------------------\n\n" +
+                 "Si vous pensez que vous recevez cet e-mail par erreur, veuillez l'ignorer. Dans tous les cas, n'hésitez pas à nous contacter " +
+                 "à support@resel.fr"),
+            from_email="secretaire@resel.fr",
+            reply_to=["support@resel.fr"],
+            to=[user.mail],
+        )
+
+        user_email.send()
+
+
+class ModPasswdForm(ResetPwdForm):
+    pass  # TODO: ask for old passwd

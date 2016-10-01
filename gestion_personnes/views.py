@@ -3,19 +3,21 @@ from datetime import datetime
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.urlresolvers import reverse, reverse_lazy
+from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import View
+from django.views.generic import FormView, View
 
 from fonctions import ldap
 from fonctions.decorators import resel_required, unknown_machine
 from gestion_machines.forms import AddDeviceForm
 from gestion_personnes.async_tasks import send_mails
-from gestion_personnes.models import LdapUser
-from .forms import InscriptionForm, ModPasswdForm, CGUForm, InvalidUID, PersonnalInfoForm
+from gestion_personnes.models import LdapUser, UserMetaData
+from .forms import InscriptionForm, ModPasswdForm, CGUForm, InvalidUID, PersonnalInfoForm, ResetPwdSendForm, \
+    ResetPwdForm
 
 
 class Inscription(View):
@@ -203,4 +205,51 @@ class PersonalInfo(View):
             if redirect_to:
                 return HttpResponseRedirect(redirect_to)
 
+        return render(request, self.template_name, {'form': form})
+
+
+class ResetPwdSend(FormView):
+    template_name = 'gestion_personnes/reset_pwd_send.html'
+    form_class = ResetPwdSendForm
+    success_url = reverse_lazy("home")
+
+    def form_valid(self, form):
+        form.send_reset_email(self.request)
+        messages.info(self.request, _(
+            "Nous venons de vous envoyer un e-mail de réinitialisation que vous devriez recevoir d'ici peu."
+            " Cliquez sur le lien fournit dans l'e-mail pour continuer la procédure."
+        ))
+        return super(ResetPwdSend, self).form_valid(form)
+
+
+class ResetPwd(View):
+    template_name = 'gestion_personnes/mod-passwd.html'
+    form_class = ResetPwdForm
+    success_url = reverse_lazy("home")
+
+    def get(self, request, *args, **kwargs):
+        key = self.kwargs["key"]
+        try:
+            UserMetaData.objects.get(reset_pwd_code=key).uid
+        except ObjectDoesNotExist:
+            return HttpResponseForbidden()
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        key = self.kwargs["key"]
+        try:
+            uid = UserMetaData.objects.get(reset_pwd_code=key).uid
+        except ObjectDoesNotExist:
+            return HttpResponseForbidden()
+
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            form.reset_pwd(uid)
+            form.send_reset_email(uid)
+            messages.info(request, _(
+                "Nous venez de réinitialiser votre mot de passe. " +
+                "Vous pouvez désormais vous connecter avec le nouveau mot de passe."
+            ))
+            return HttpResponseRedirect(self.success_url)
         return render(request, self.template_name, {'form': form})

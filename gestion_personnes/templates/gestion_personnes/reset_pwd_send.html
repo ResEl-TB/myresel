@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block titre %}{% trans "Réinitialisation de mot de passe" %}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">{% trans "Réinitialisation de mot de passe" %}</div>
+    <div class="alert alert-warning">
+        {% blocktrans %}
+        <p>Vous êtes sur le point de réinitialiser votre mot de passe ResEl.</p>
+        <p>Gardez en tête qu'il faudra ensuite changer votre configuration Wi-Fi pour utiliser ce nouveau mot de passe</p>
+        {% endblocktrans %}
+    </div>
+    <div class="col-md-8">
+        <form action="" method="POST" class="form">
+            {% csrf_token %}
+            <div class="form-category">
+                <div class="form-group row">
+                <div class="col-sm-5">{% trans "Veuillez renseigner votre identifiant ResEl :" %}</div>
+                    <fieldset class=" col-sm-6 {% if form.uid.errors %}has-error{% endif %}">
+                        {{ form.uid }}
+                        <a>Vous avez oublié votre identifiant ResEl ?</a>
+                        {% if form.uid.errors %}<span class="help-block">{{ form.uid.errors }}</span>{% endif %}
+                    </fieldset>
+                </div>
+
+            </div>
+
+            <div class="form-category">
+                <div class="row">
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-info">{% trans "Envoyer un e-mail de réinitialisation" %}</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div> <!-- /.container -->
+{% endblock %}
