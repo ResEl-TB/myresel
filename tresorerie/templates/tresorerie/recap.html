@@ -51,6 +51,7 @@
                         <input type="hidden" name="uuid" value="{{ transaction.uuid }}">
                         <div class="stripe">
                             <button
+                                    id="pay"
                                     type="submit"
                                     class="btn btn-success btn-lg"
                                     data-key="{{ stripe_public_key }}"
@@ -571,7 +572,7 @@
     <script>
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
-        })
+        });
         var $button;
         $(document).ready(function () {
             $(':submit').on('click', function(event) {
@@ -582,10 +583,13 @@
 
             $('#acceptCGU').on('click', function ( e ){
                 $('#cguModal').modal('hide');
+
                 $form = $button.parents('form');
                 var opts = $.extend({}, $button.data(), {
                     token: function(result) {
                         $form.append($('<input>').attr({ type: 'hidden', name: 'stripeToken', value: result.id })).submit();
+                        $('#pay').addClass('disabled');
+                        $("#pay").html('<span class="fa fa-spin fa-spinner"></span> {% trans 'Chargement' %}');
                     }
                 });
                 StripeCheckout.open(opts);
