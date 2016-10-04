@@ -1,6 +1,7 @@
 import itertools
 
 from django.conf import settings
+from django.template.defaultfilters import slugify
 from django_python3_ldap.ldap import Connection as UserConnection
 from ldap3 import Server, Connection, MODIFY_REPLACE, ALL_ATTRIBUTES
 
@@ -59,6 +60,7 @@ def search_ecole(query):
         res = l.entries
     l.unbind()
     return res
+
 
 def add(dn, object_class, attributes):
     """ Fonction qui ajoute une fiche au LDAP """
@@ -126,6 +128,11 @@ def get_free_alias(name, prefix='pc'):
     :param prefix: machine prefix
     :return:
     """
+
+    # Name was assumed to be safe, but on the 2016-10-03 we discovered
+    # That some users have bad formed uid. So I now I suppose nothing is
+    # safe here...
+    name = slugify(name)
 
     again = True
     base_alias = prefix + name
