@@ -14,7 +14,6 @@ from ldapback.models.fields import LdapCharField, LdapPasswordField, LdapNtPassw
 from myresel.settings import LDAP_DN_PEOPLE
 
 
-# TODO: change class name
 class LdapUser(ldapback.models.LdapModel):
     """
     The class having all the element for a user
@@ -33,7 +32,7 @@ class LdapUser(ldapback.models.LdapModel):
 
     # reselPerson
     inscr_date = LdapDatetimeField(db_column='dateinscr', object_classes=['reselPerson'])
-    cotiz = LdapCharField(db_column='cotiz', object_classes=['reselPerson'])
+    cotiz = LdapListField(db_column='cotiz', object_classes=['reselPerson'])
     end_cotiz = LdapDatetimeField(db_column='endinternet', object_classes=['reselPerson'])
     campus = LdapCharField(db_column='campus', object_classes=['reselPerson'])
 
@@ -81,7 +80,6 @@ class LdapUser(ldapback.models.LdapModel):
             self.__dict__[k] = v
         return self
 
-    # TODO: make tests
     def need_to_pay(self):
         if not self.end_cotiz:
             return 'danger'
@@ -107,7 +105,7 @@ class LdapUser(ldapback.models.LdapModel):
         return address
 
     def is_member(self):
-        return str(generic.current_year()) in self.cotiz
+        return str(generic.current_year()) in [c.strip() for c in self.cotiz]
 
 
 class LdapOldUser(LdapUser):

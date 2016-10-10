@@ -336,25 +336,28 @@ class InscriptionForm(forms.Form):
         """
         user = LdapUser()
 
-        user.uid = self.get_free_uid(self.cleaned_data["first_name"], self.cleaned_data["last_name"])
+        user.uid = self.get_free_uid(self.cleaned_data["first_name"], self.cleaned_data["last_name"])  # TODO: get that in school ldap
         user.first_name = self.cleaned_data["first_name"]
         user.last_name = self.cleaned_data["last_name"]
         user.display_name = self.cleaned_data["first_name"] + ' ' + self.cleaned_data["last_name"]
         user.user_password = self.cleaned_data["password"]
         user.nt_password = self.cleaned_data["password"]
-        user.postal_address = self.cleaned_data["address"]  # TODO: generate from maisel attributes
 
-        user.cotiz = ''  # FIXME: ''BLACKLIST' + str(current_year()) no cotisation needed
+        user.cotiz = ['BLACKLIST' + str(current_year())]  # requirement for the admin interface
         user.campus = self.cleaned_data["campus"]
 
         user.building = self.cleaned_data["building"]
         user.room_number = str(self.cleaned_data["room"])
+        if self.cleaned_data["address"]:
+            user.postal_address = self.cleaned_data["address"]
+        else:
+            user.postal_address = user.generate_address(user.campus, user.building, user.room_number)
 
         user.promo = str(current_year() + 3)  # TODO: wtf???
         user.mail = self.cleaned_data["email"]
         user.anneeScolaire = ""  # TODO: get that in school ldap
         user.formation = self.cleaned_data["formation"]
-        user.mobile = str(self.cleaned_data["phone"])  # TODO: delete phone field, not very convenient for aliens
+        user.mobile = str(self.cleaned_data["phone"])  # TODO: Phone field not mandatory
         user.option = self.cleaned_data["campus"]
         return user
 

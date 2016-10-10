@@ -15,6 +15,7 @@ from django.utils.translation import ugettext_lazy as _, get_language
 from django.views.generic import DetailView, View, ListView
 
 import tresorerie.async_tasks as async_tasks
+from fonctions import generic
 from fonctions.decorators import need_to_pay
 from tresorerie.models import Transaction, Product, StripeCustomer
 
@@ -174,14 +175,16 @@ class Pay(View):
                 customer=customer.id,
             )
 
+            # TODO: move everything here somewhere more appropriate
             # Update the user internet access
             if adhere:
-                user.cotiz += ' 2016'  # TODO: convert that to ldap list
+                year = generic.current_year()
+                # Delete blacklist and add this year:
+                user.cotiz = [c for c in user.cotiz if c.lower() != "blacklist" + str(year)] + [str(year)]
 
             month_numbers = sum(p.duree for p in products if p.type_produit == 'F')
 
-            date = datetime.now() + timedelta(days=month_numbers*30)
-            user.end_cotiz = date
+            user.end_cotiz = datetime.now() + timedelta(days=month_numbers*30)
             user.save()
 
             # Insert the transaction in the database

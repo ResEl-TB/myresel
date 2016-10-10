@@ -41,7 +41,7 @@ class HistoryViewCase(TestCase):
 class HomeViewCase(TestCase):
     def setUp(self):
         self.user = create_full_user()
-        self.user.cotiz = ""
+        self.user.cotiz = []
         try_delete_user(self.user.uid)
         self.user.save()
         self.client.login(username=self.user.uid, password=self.user.user_password)
@@ -149,7 +149,7 @@ class HomeViewCase(TestCase):
 
     def test_do_pay_simple(self):
         self.user.formation = "ANY"
-        self.user.cotiz = ""
+        self.user.cotiz = []
         self.user.save()
 
         product = self.productFIG_1a

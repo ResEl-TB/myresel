@@ -36,7 +36,7 @@ def create_full_user():
     user.display_name = "Alexandre Manoury"
 
     user.inscr_date = now
-    user.cotiz = "2016"
+    user.cotiz = ["2016"]
     user.end_cotiz = now
     user.campus = "Brest"
     user.building = "I11"
