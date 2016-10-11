@@ -343,7 +343,7 @@ class InscriptionForm(forms.Form):
         user.user_password = self.cleaned_data["password"]
         user.nt_password = self.cleaned_data["password"]
 
-        user.cotiz = ['BLACKLIST' + str(current_year())]  # requirement for the admin interface
+        user.cotiz = ['NONE' + str(current_year())]  # requirement for the admin interface
         user.campus = self.cleaned_data["campus"]
 
         user.building = self.cleaned_data["building"]
