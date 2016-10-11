@@ -7,6 +7,7 @@ import stripe
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
@@ -120,6 +121,14 @@ class Pay(View):
 
         if not is_member and main_product.type_produit != 'A':
             products.append(Product.objects.get(type_produit='A'))
+
+        formation = "FIG"
+
+        if "fip" in request.ldap_user.formation.lower():
+            formation = "FIP"
+
+        if formation == "FIG" and main_product.autorisation == "FIP":
+            raise PermissionDenied
 
         transaction.total = sum(product.prix for product in products) / 100
         transaction.total_stripe = sum(product.prix for product in products)
