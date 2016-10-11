@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
+from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _, get_language
 from django.views.generic import DetailView, View, ListView
@@ -141,8 +142,6 @@ class Pay(View):
     def post(self, request, *args, **kwargs):
         stripe.api_key = settings.STRIPE_API_KEY
         user = request.ldap_user
-        token = request.POST['stripeToken']
-        given_uuid = uuid.UUID(request.POST['uuid'])
 
         transaction_uuid = uuid.UUID(request.session['transaction_uuid'])
         transaction_total = request.session['transaction_total_stripe']
@@ -152,6 +151,13 @@ class Pay(View):
         products = []
         for pk in products_id:
             products.append(Product.objects.get(pk=pk))
+
+        try:
+            token = request.POST['stripeToken']
+            given_uuid = uuid.UUID(request.POST['uuid'])
+        except MultiValueDictKeyError:
+            messages.error(request, _("Veuillez activer le javascript pour effectuer le paiement. En cas de problème n'hésitez pas à nous contacter."))
+            return HttpResponseRedirect(reverse('tresorerie:pay', kwargs={'product_id': main_product_id}))
 
         customer = StripeCustomer.retrieve_or_create(user)
         customer.source = token
