@@ -195,7 +195,7 @@ class Pay(View):
             if adhere:
                 year = generic.current_year()
                 # Delete blacklist and add this year:
-                user.cotiz = [c for c in user.cotiz if c.lower() != "blacklist" + str(year)] + [str(year)]
+                user.cotiz = [c for c in user.cotiz if c.lower() != "none" + str(year)] + [str(year)]
 
             month_numbers = sum(p.duree for p in products if p.type_produit == 'F')
 
