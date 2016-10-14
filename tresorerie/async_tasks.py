@@ -53,9 +53,9 @@ def generate_and_email_invoice(user, transaction, lang='fr'):
                         "Votre facture se trouve en pièce jointe de cet email.\n" +
                         "Vous pouvez l'enregistrer, mais si vous la perdez, vous pourrez toujours la télécharger depuis la page \"Historique de mes factures\" sur le site du ResEl.\n" +
                         "Vous y trouverez aussi la date de fin de votre accès à Internet.\n\n" +
-                        "En cas de problème de tout type avec votre connexion, n'ayez aucune hésitation à contacter l'équipe d'administrateurs par email à support@resel.fr / support-rennes@resel.fr." +
+                        "En cas de problème de tout type avec votre connexion, n'ayez aucune hésitation à contacter l'équipe d'administrateurs par email à support@resel.fr / support-rennes@resel.fr. " +
                         "Vous pouvez aussi venir directement nous voir aux permanences qui se tiennent tous les jours de semaine de 18h à 19h30 au foyer des élèves.\n" +
-                        "Nous ferons tout notre possible pour résoudre votre problème." +
+                        "Nous ferons tout notre possible pour résoudre votre problème. " +
                         "Cordialement,\n\n" +
                         "L'équipe du ResEl.") % (user.first_name)
     elif main_product.type_produit == "M":
