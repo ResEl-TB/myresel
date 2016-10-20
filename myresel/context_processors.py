@@ -17,5 +17,14 @@ def resel_context(request):
         user = LdapUser.get(pk=request.user.username)
         context['need_to_pay'] = user.need_to_pay()
         context['ldapuser'] = user
+        context['has_paid_cotiz'] = user.need_to_pay()
+    else:
+        try:
+            device = request.network_data['device']
+            owner_short_uid = device.owner.split(",")[0][4:]
+            user = LdapUser.get(uid=owner_short_uid)
+            context['has_paid_cotiz'] = user.need_to_pay()
+        except:
+            context['has_paid_cotiz'] = 'success'
 
     return context
