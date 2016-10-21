@@ -199,7 +199,8 @@ class Pay(View):
 
             month_numbers = sum(p.duree for p in products if p.type_produit == 'F')
 
-            user.end_cotiz = datetime.now() + timedelta(days=month_numbers*30)
+            offset = max(user.end_cotiz, datetime.now())
+            user.end_cotiz = offset + timedelta(days=month_numbers*30)
             user.save()
 
             # Insert the transaction in the database
