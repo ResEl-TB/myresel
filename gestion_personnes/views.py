@@ -100,7 +100,7 @@ class InscriptionCGU(View):
             user.save()
 
             user_meta, __ = UserMetaData.objects.get_or_create(uid=user.uid)
-            user_meta.send_email_validation(user.mail, request.get_full_path)
+            user_meta.send_email_validation(user.mail, request.build_absolute_uri)
 
             # Auto-login the user to simplify his life !
             auth_user = ldap.get_user(username=user.uid)
@@ -195,7 +195,7 @@ class PersonalInfo(View):
 
             if user.mail != email:
                 user_meta, __ = UserMetaData.objects.get_or_create(uid=user.uid)
-                user_meta.send_email_validation(email, request.get_full_path)
+                user_meta.send_email_validation(email, request.build_absolute_uri)
 
             user.mail = email
             user.mobile = form.cleaned_data["phone"]

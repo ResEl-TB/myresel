@@ -145,7 +145,7 @@ class UserMetaData(models.Model):
         user_email = EmailMessage(
             subject="Validation addresse e-mail ResEl",
             body=("Bonjour,\n\n" +
-                  "Voici le lien de valisation de votre addresse e-mail : \n" +
+                  "Voici le lien de validation de votre addresse e-mail : \n" +
                   "%s\n\n" +
                   "------------------------\n\n" +
                   "Il est important de garder vos informations personnelles à jour.\n\n"
