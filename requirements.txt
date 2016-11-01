@@ -15,3 +15,4 @@ redis
 rq
 django-rq
 pyldap>=2.4.25
+python-logstash>=0.4.6

@@ -134,7 +134,6 @@ if DEBUG or TESTING:
 
 # LOGGERS
 
-# Logger used in a production environment
 PROD_LOGGING_CONF = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -159,10 +158,20 @@ PROD_LOGGING_CONF = {
             'formatter': 'verbose',
             'include_html': True,
         },
+        'logstash': {
+            'level': 'DEBUG',
+            'class': 'logstash.LogstashHandler',
+            'host': 'orion.adm.resel.fr',
+            'port': 5959,  # Default value: 5959
+            'version': 1,
+            'message_type': 'logstash',
+            'fqdn': False,  # Fully qualified domain name. Default value: false.
+            'tags': None,  # list of tags. Default: None.
+        },
     },
     'loggers': {
         'django': {
-            'handlers': ['file', 'mail_admins'],
+            'handlers': ['file', 'mail_admins', 'logstash'],
             'level': 'DEBUG',
             'propagate': True,
         },
