@@ -22,6 +22,7 @@ MAIN_HOST_RENNES = 'beta.rennes.resel.fr'
 # Language switch hack
 CSRF_COOKIE_DOMAIN = '.resel.fr'
 
+PROJECT_ROOT = os.path.abspath(os.path.dirname(__name__))
 
 # Mails
 ADMINS = [

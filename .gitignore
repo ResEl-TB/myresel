@@ -6,7 +6,6 @@ __pycache__
 
 # Django related stuff
 # migrations/ we should put migrations in git
-media/
 static_files/
 uwsgi.*
 db.sqlite3
@@ -26,3 +25,5 @@ db.sqlite3_admin
 
 # Vagrant
 .vagrant
+
+.coverage

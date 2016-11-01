@@ -49,8 +49,8 @@ class InvoiceCreation(TestCase):
         generate_and_email_invoice(self.user, self.transaction)
 
         # Open a file
-        with open(os.path.join(settings.INVOICE_STORE_PATH,
-                               "facture-{}-{}.pdf".format(self.transaction.pk, self.user.uid))):
+        with open(os.path.join(settings.PROJECT_ROOT, settings.INVOICE_STORE_PATH,
+                               "facture-{}-{}.pdf".format(self.user.uid, str(self.transaction.uuid)[:8], ))):
             pass
 
         self.assertEqual(2, len(mail.outbox))

@@ -1,6 +1,10 @@
 Le site resel.fr
 ================
 
+[![build status](https://git.resel.fr/resel/myresel/badges/master/build.svg)](https://git.resel.fr/resel/myresel/commits/master)
+[![coverage report](https://git.resel.fr/resel/myresel/badges/master/coverage.svg)](https://git.resel.fr/resel/myresel/commits/master)
+
+
 Ceci est le code pour le nouveau site ResEl [resel.fr](resel.fr) il est développé en [Python](https://python.org) avec le framework [Django](https://www.djangoproject.com/). Ce document a pour objectif de vous présenter rapidement le projet et son fonctionnement. Il sert également de guide pour les nouveaux développeurs qui veulent contribuer au projet et de guide pour les administrateurs systèmes qui voudraient installer (ou réparer) le service.
 
 Dans la suite du document nous supposons que le lecteur est famillier avec [Python](https://python.org) et avec le framework [Django](https://www.djangoproject.com/) (et toutes les technologies associées HTTP, MYSQL, HTML, CSS, Javascript).
@@ -21,7 +25,7 @@ Dans la suite du document nous supposons que le lecteur est famillier avec [Pyth
    - [Installation de base](#installation-de-base)
    - [Configuration de nginx](#configuration-de-nginx)
    - [Configuration de uwsgi](#configuration-de-uwsgi)
-   - [Configuration de Supervisor](configuration-de-supervisor)
+   - [Configuration de Supervisor](#configuration-de-supervisor)
    - [Configuration du site](#configuration-du-site)
    - [Lancement du service](#lancement-du-service)
    - [Monitoring](#monitoring)
@@ -72,7 +76,7 @@ Pour lancer les tests :
 python3 manage.py tests
 ```
 
-**Ne lancez surtout pas les tests sur le ldap de production !** [Pika](mailto:pika@resel.fr) risque d'avoir des surprises.
+**Ne lancez surtout pas les tests sur le ldap de production !** [Pika](https://garbage.resel.fr/search/?q=putazizi) risque d'avoir des surprises.
 
 ## Liste des modules
 
@@ -94,16 +98,16 @@ python3 manage.py tests
  - `locale/` : les fichiers de langue
  - `static/` : les fichiers statiques (js, img, css...)
  - `templates/` : les templates généraux à l'application 
- - `vagrant/` : les fichiers de configuration spécifiques à Vagrant
+ - `.install/` : les fichiers de configuration à l'installation et le déployement de l'application sur les différents environements (Vagrant, gitlab-ci..)
  
  
 ## Conventions et bonnes pratiques 
  
 Ici, on a des nazis du [PEP8](https://www.python.org/dev/peps/pep-0008/), donc respectez le. Si vous ne le connaissez pas et n'aimez pas lire les trucs compliqués [voici un petit résumé](http://sametmax.com/le-pep8-en-resume/).
  
-Le nom des entités (modules, fonctions, classes, variables...) doit toujours être en anglais, pour les commentaires et les docstrings on est plus souple et le français est toléré. Vous constaterez que ceci n'est pas toujours respecté, c'est pas une raison pour continuer rajouter du français dans le code !
+Le nom des entités (modules, fonctions, classes, variables...) doit toujours être en anglais, pour les commentaires et les [docstrings](https://www.python.org/dev/peps/pep-0257/) on est plus souple et le français est toléré. Vous constaterez que ceci n'est pas toujours respecté, **c'est pas une raison pour continuer rajouter du français dans le code !**
  
-Toutes les fonctions et classes doivent avoir un docstring sauf quand le code est vraiment évident. Aussi, un bon commentaire n'explique ce que fait le code, mais pourquoi ce bout de code existe.
+Toutes les fonctions et classes doivent avoir un docstring sauf quand le code est vraiment évident. Aussi, je rappelle qu'un bon commentaire n'explique ce que fait le code, mais pourquoi ce bout de code existe.
 
 ## Inscription
 
@@ -200,9 +204,15 @@ systemctl start nginx
 ```
 
 ### Monitoring
-Configurer icinga et tout...
+
+Le monitoring sur l'application est multiple, cela permet d'avoir le plus de métriques possible en fonction des problèmes rencontrés. Ceux-là vont des métriques "normales" du ResEl à d'autres plus poussées
+
+Installez le service sur une machine du ResEl bien configurée avec [Munin](https://munin.resel.fr) et [Icinga](https://icinga.resel.fr).
+
+Il existe un plugin pour icinga de supervisor : 
 
 Supervisor : https://github.com/nationbuilder/supervisord-nagios
+
 
 TODO: nginx, veronica, mails...
 
