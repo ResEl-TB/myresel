@@ -61,5 +61,5 @@ pylint:
   script:
     - pip3 install pylint --quiet
     - pip3 install pylint-django --quiet
-    - pylint --load-plugins pylint_django myresel
+    - pylint --rcfile=.pylintrc myresel
   allow_failure: true
