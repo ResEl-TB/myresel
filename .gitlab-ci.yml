@@ -9,6 +9,7 @@ services:
 stages:
   - configure
   - test
+  - deploy
 
 variables:
   MYSQL_HOST: mysql
@@ -63,3 +64,18 @@ pylint:
     - pip3 install pylint-django --quiet
     - pylint --rcfile=.pylintrc myresel
   allow_failure: true
+
+deploy to brest:
+  stage: deploy
+  only:
+    - deploy
+  environment:
+    name: skynet
+    url: https://rennes.beta.resel.fr
+
+deploy to rennes:
+  only:
+    - deploy
+  environment:
+    name: doubidou
+    url: https://beta.resel.fr
