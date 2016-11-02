@@ -70,7 +70,13 @@
                         <div class="row">
                             <div class="col-sm-4 computer-icon hidden-xs"><span class="fa fa-fw fa-laptop"></span></div>
                             <div class="col-sm-7">
-                                <div><h3>{{ device.hostname }} <small><a href="#" class="fa fa-pencil fa-fw"></a></small></h3></div>
+                                <div><h3>{% if device.aliases %}
+                                    {{ device.aliases|first|capfirst }}
+                                    {% else %}
+                                    {{ device.hostname|capfirst }}
+                                    {% endif %}
+
+                                    <small><a href="{% url 'gestion-machines:modifier' device.hostname %}" class="fa fa-pencil fa-fw"></a></small></h3></div>
                                 <div><span class="label label-success">{% trans "Connecté au ResEl" %}</span></div>
                                 {#                                <div><span class="fa fa-arrow-up"></span> </div>#}
                                 {#                                <div><span class="fa fa-arrow-down"></span> </div>#}
