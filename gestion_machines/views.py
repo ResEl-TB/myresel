@@ -195,7 +195,7 @@ class ListDevices(ListView):
     """
 
     template_name = 'gestion_machines/list_devices.html'
-    context_object_name = 'machines'
+    context_object_name = 'devices'
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):

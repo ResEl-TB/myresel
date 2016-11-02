@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -37,7 +37,7 @@ def create_full_user():
 
     user.inscr_date = now
     user.cotiz = ["2016"]
-    user.end_cotiz = now
+    user.end_cotiz = now + timedelta(days=7)
     user.campus = "Brest"
     user.building = "I11"
     user.room_number = "123"
