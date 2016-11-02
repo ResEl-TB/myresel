@@ -186,14 +186,14 @@
                     <ul>
                         <li><a href="#">{% trans "Les statuts de l'association" %}</a></li>
                         <li><a href="#">{% trans "Le règlement intérieur" %}</a></li>
-                        <li><a href="#">{% trans "Cotisation" %}</a></li>
+                        <li><a href="{% url "tresorerie:prices" %}">{% trans "Tarifs et Cotisation" %}</a></li>
                         <li><a href="{% url "contact" %}">{% trans "Contact" %}</a></li>
                     </ul>
                 </div>
                 <div class="col-sm-4">
                     <ul>
                         <li><a href="https://status.resel.fr">{% trans "État du réseau" %}</a></li>
-                        <li><a href="#">{% trans "Les clubs" %}</a></li>
+                        <li><a href="https://clubs.resel.fr">{% trans "Les clubs" %}</a></li>
                         <li><a href="https://campus.resel.fr">{% trans "Campus" %}</a></li>
                         <li><a href="{% url 'who:user-details'  'u' %}">{% trans "Annuaire" %}</a></li>
                         <li><a href="#">{% trans "Devenez Administrateur ResEl !" %}</a></li>

@@ -14,5 +14,5 @@ uWSGI==2.0.13.1
 redis
 rq
 django-rq
-pyldap>=2.4.25
 python-logstash>=0.4.6
+coverage>=4.2

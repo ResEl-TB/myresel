@@ -199,6 +199,10 @@ class Pay(View):
 
             month_numbers = sum(p.duree for p in products if p.type_produit == 'F')
 
+            # For users who don't have an end_cotiz field
+            if user.end_cotiz is None:
+                user.end_cotiz = datetime.now()
+
             offset = max(user.end_cotiz, datetime.now())
             user.end_cotiz = offset + timedelta(days=month_numbers*30)
             user.save()
@@ -283,3 +287,56 @@ class TransactionDetailView(DetailView):
         context['products'] = context['transaction'].produit.all()
 
         return context
+
+
+class ListProducts(View):
+    """
+    View to list the different product available
+    """
+
+    template_name = 'tresorerie/list_product.html'
+
+    def get(self, request, *args, **kwargs):
+
+        adhesion = Product.objects.get(type_produit="A")
+        products_FIP = list(Product.objects.filter(type_produit="F", autorisation="FIP"))
+        products_FIP += list(Product.objects.filter(type_produit="F", autorisation="ALL"))
+        products_FIP = sorted(products_FIP, key=lambda x: x.prix, reverse=True)  # So that the least expensive will have priority
+
+        products_FIG = list(Product.objects.filter(type_produit="F", autorisation="ALL"))
+        products_FIG = sorted(products_FIG, key=lambda x: x.prix, reverse=True)
+
+        one_year_FIP = None
+        six_month_FIP = None
+        one_month_FIP = None
+        one_year_FIG = None
+        six_month_FIG = None
+        one_month_FIG = None
+
+        # Small hack because I woudn't do that in the template
+        for p in products_FIP:
+            if p.duree == 12:
+                one_year_FIP = p
+            elif p.duree == 6:
+                six_month_FIP = p
+            elif p.duree == 1:
+                one_month_FIP = p
+
+        for p in products_FIG:
+            if p.duree == 12:
+                one_year_FIG = p
+            elif p.duree == 6:
+                six_month_FIG = p
+            elif p.duree == 1:
+                one_month_FIG = p
+
+        c = {
+            'adhesion': adhesion,
+            'one_year_FIP': one_year_FIP,
+            'six_month_FIP': six_month_FIP,
+            'one_month_FIP': one_month_FIP,
+            'one_year_FIG': one_year_FIG,
+            'six_month_FIG': six_month_FIG,
+            'one_month_FIG': one_month_FIG,
+        }
+        return render(request, self.template_name, context=c)

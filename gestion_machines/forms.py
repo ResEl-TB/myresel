@@ -56,7 +56,7 @@ class AddDeviceForm(forms.Form):
 class AjoutManuelForm(forms.Form):
     mac = forms.CharField(label=_("Adresse MAC de la machine"),
                           widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'xx:xx:xx:xx:xx:xx'}))
-    description = forms.CharField(label=_("Description de l'équipement à ajouter"),
+    description = forms.CharField(label=_("Raison de la demande"),
                                   widget=forms.Textarea(attrs={'class': 'form-control', 'style': 'resize:none;'}))
 
     def clean_mac(self):

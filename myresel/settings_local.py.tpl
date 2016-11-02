@@ -79,7 +79,7 @@ STRIPE_PUBLIC_KEY = "pk_test_KE9qQquz3hhdRI54CcfBaukl"
 
 # TRESO
 
-INVOICE_STORE_PATH = '/myresel/media/invoices'
+INVOICE_STORE_PATH = 'media/invoices'
 
 
 ####
