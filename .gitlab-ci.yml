@@ -66,16 +66,27 @@ pylint:
   allow_failure: true
 
 deploy to brest:
+  before_script:
+    - apt-get -qq install curl
   stage: deploy
+  script:
+    - curl http://skynet.adm.resel.fr/deploy-resel
   only:
     - deploy
   environment:
     name: skynet
-    url: https://rennes.beta.resel.fr
+    url: https://beta.resel.fr
 
 deploy to rennes:
+  before_script:
+    - apt-get -qq install curl
+  stage: deploy
+  script:
+    - curl http://doubidou.adm.resel.fr/deploy-resel
   only:
     - deploy
+  script:
+    - curl
   environment:
     name: doubidou
-    url: https://beta.resel.fr
+    url: https://rennes.beta.resel.fr
