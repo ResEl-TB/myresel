@@ -66,6 +66,7 @@ pylint:
   allow_failure: true
 
 deploy to brest:
+  services: []
   before_script:
     - apt-get -qq install curl
   stage: deploy
@@ -78,6 +79,7 @@ deploy to brest:
     url: https://beta.resel.fr
 
 deploy to rennes:
+  services: []
   before_script:
     - apt-get -qq install curl
   stage: deploy
@@ -85,8 +87,6 @@ deploy to rennes:
     - curl http://doubidou.adm.resel.fr/deploy-resel
   only:
     - deploy
-  script:
-    - curl
   environment:
     name: doubidou
     url: https://rennes.beta.resel.fr
