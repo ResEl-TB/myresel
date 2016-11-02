@@ -85,6 +85,7 @@ class InscriptionCase(TestCase):
         self.assertEqual(user.last_name, user_s.last_name)
         self.assertEqual(user.building, user_s.building)
         self.assertEqual(user.campus, user_s.campus)
+        self.assertEqual(user.end_cotiz, user_s.end_cotiz)
 
         # TODO: find a way to check if emails are sent...
         # get_worker().work(burst=True)

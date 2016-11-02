@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from django.contrib import messages
 from django.contrib.auth import login
@@ -96,7 +96,10 @@ class InscriptionCGU(View):
         if form.is_valid():
             user = LdapUser.from_json(self.request.session['logup_user'])
             user.inscr_date = datetime.now()
-            user.end_cotiz = datetime.now()  # That does not survive the json parser
+
+            # Add 7 free days :
+            free_duration = timedelta(days=7)  # TODO: move that to config file
+            user.end_cotiz = datetime.now() + free_duration  # That does not survive the json parser
             user.save()
 
             user_meta, __ = UserMetaData.objects.get_or_create(uid=user.uid)
