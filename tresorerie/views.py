@@ -199,6 +199,10 @@ class Pay(View):
 
             month_numbers = sum(p.duree for p in products if p.type_produit == 'F')
 
+            # For users who don't have an end_cotiz field
+            if user.end_cotiz is None:
+                user.end_cotiz = datetime.now()
+
             offset = max(user.end_cotiz, datetime.now())
             user.end_cotiz = offset + timedelta(days=month_numbers*30)
             user.save()
