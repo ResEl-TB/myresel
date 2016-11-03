@@ -14,7 +14,7 @@ from django.views.generic import View, ListView
 
 from fonctions import network, decorators
 from gestion_machines.models import LdapDevice
-from gestion_personnes.models import LdapUser
+from gestion_personnes.models import LdapUser, UserMetaData
 from pages.forms import ContactForm
 from pages.models import News, Faq
 from wiki.models import Category
@@ -68,6 +68,10 @@ class Home(View):
 
         if request.user.is_authenticated():
             end_fee = request.ldap_user.end_cotiz if request.ldap_user.end_cotiz else False
+
+            # Check email validation:
+            user_meta = UserMetaData.objects.get_or_create(uid=request.ldap_user.uid)
+            args_for_response['user_meta'] = user_meta
             # Check his end fees date
             if is_in_resel:
                 try:

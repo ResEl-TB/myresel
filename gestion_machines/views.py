@@ -16,6 +16,7 @@ from fonctions.decorators import resel_required, unknown_machine
 from fonctions.network import get_campus
 from gestion_machines.models import LdapDevice
 from gestion_personnes.models import LdapUser
+from myresel.settings_local import SERVER_EMAIL
 from .forms import AddDeviceForm, AjoutManuelForm
 
 
@@ -160,19 +161,23 @@ class AjoutManuel(View):
         if form.is_valid():
             # Envoi d'un mail à support
             mail = EmailMessage(
-                subject="Demande d'ajout d'une machine",
+                subject="Ajout machine sur le compte %(user)s",
                 body="L'utilisateur %(user)s souhaite ajouter une machine à son compte."
+                     "\n\n uid : %(user)s"
+                     "\n Prénom NOM : %(firstname)s %(lastname)s"
                      "\n\n MAC : %(mac)s"
-                     "\nDescription de la demande :"
-                     "\n%(desc)s"
+                     "\n\nDescription de la demande :"
+                     "\n\n%(desc)s"
                      "\n\n----------------------------"
                      "\nCe message est un message automatique généré par le site resel.fr, il convient de répondre à "
                      "l'utilisateur et non ce message." % {
-                         'user': str(request.user),
+                         'user': request.ldap_user.uid,
+                         'lastname': request.ldap_user.last_name.upper(),
+                         'firstname': request.ldap_user.first_name,
                          'mac': form.cleaned_data['mac'],
                          'desc': form.cleaned_data['description']
                      },
-                from_email="skynet@resel.fr",
+                from_email=SERVER_EMAIL,
                 reply_to=[request.user.email],
                 to=["support@resel.fr"],
             )
@@ -190,7 +195,7 @@ class ListDevices(ListView):
     """
 
     template_name = 'gestion_machines/list_devices.html'
-    context_object_name = 'machines'
+    context_object_name = 'devices'
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):

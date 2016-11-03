@@ -13,22 +13,22 @@
         <div class="container">
             <div class="row">
                 <h2>{{ object.name }}</h2>
-	            <p>{{ object.description|safe }}</p>
+                <p>{{ object.description|safe }}</p>
             </div>
         </div>
     </div>
 
     <div class="home-fragment home-presentation">
         <div class="container text-left">
-	        <div class="row">
+            <div class="article col-md-offset-2">
                 <p>{{ object.text|safe }}</p>
-                <hr>
-                <p class="text-right">
-                    {% trans "Publié" %} : {{ object.date_creation|date:"DATE_FORMAT" }}<br/>
-                    {% trans "Dernière modification" %}: {{ object.date_last_edit|date:"DATE_FORMAT" }}
-                </p>
             </div>
-	    </div>
-    </div>    
+            <hr>
+            <p class="text-right">
+                {% trans "Publié" %} : {{ object.date_creation|date:"DATE_FORMAT" }}<br/>
+                {% trans "Dernière modification" %}: {{ object.date_last_edit|date:"DATE_FORMAT" }}
+            </p>
+        </div>
+    </div>
 {% endblock %}
 

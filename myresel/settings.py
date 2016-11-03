@@ -16,9 +16,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 ALLOWED_HOSTS = ['*', 'beta.resel.fr', 'beta.rennes.resel.fr', 'resel.fr', 'rennes.resel.fr']
 
+MAIN_HOST_BREST = 'beta.resel.fr'
+MAIN_HOST_RENNES = 'beta.rennes.resel.fr'
+
 # Language switch hack
 CSRF_COOKIE_DOMAIN = '.resel.fr'
 
+PROJECT_ROOT = os.path.abspath(os.path.dirname(__name__))
 
 # Mails
 ADMINS = [
@@ -239,7 +243,6 @@ PHONENUMBER_DEFAULT_REGION = "FR"
 
 
 # Redis conf
-
 RQ_QUEUES = {
    'default': {
        'HOST': REDIS_HOST,
@@ -247,3 +250,4 @@ RQ_QUEUES = {
        'DB': REDIS_DB,
    },
 }
+RQ_SHOW_ADMIN_LINK = True

@@ -9,7 +9,7 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 
 from gestion_machines.models import LdapDevice
-from gestion_machines.tests import try_delete_device
+from gestion_machines.tests.tests import try_delete_device
 from gestion_personnes.tests import try_delete_user, try_delete_old_user, create_full_user
 from myresel import settings
 

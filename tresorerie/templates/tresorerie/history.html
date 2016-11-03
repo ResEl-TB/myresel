@@ -4,34 +4,36 @@
 {% block titre %}{% trans "Historique des paiements" %}{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col-lg-12">
-            <h1 class="page-header">{% trans "Toutes vos transactions" %}</h1>
-            {% if transactions %}
-            <table class="table table-hover">
-                <thead>
-                    <th><i class="fa fa-calendar" aria-hidden="true"></i> {% trans "Date" %}</th>
-                    <th><i class="fa fa-credit-card-alt" aria-hidden="true"></i> {% trans "Moyen de paiement" %}</th>
-                    <th><i class="fa fa-eur" aria-hidden="true"></i> {% trans "Montant" %}</th>
-                    <th><i class="fa fa-comments" aria-hidden="true"></i> {% trans "Commentaires" %}</th>
-                </thead>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">{% trans "Toutes vos transactions" %}</h1>
+                {% if transactions %}
+                    <table class="table table-hover">
+                        <thead>
+                        <th><i class="fa fa-hashtag" aria-hidden="true"></i> {% trans "Id" %}</th>
+                        <th><i class="fa fa-calendar" aria-hidden="true"></i> {% trans "Date" %}</th>
+                        <th><i class="fa fa-credit-card-alt" aria-hidden="true"></i> {% trans "Moyen de paiement" %}</th>
+                        <th><i class="fa fa-eur" aria-hidden="true"></i> {% trans "Montant" %}</th>
+                        <th><i class="fa fa-cube" aria-hidden="true"></i> {% trans "Produits" %}</th>
+                        </thead>
 
-                <tbody>
-                {% for t in transactions %}
-                    <tr>
-                        <td>{{ t.date|date:'d/m/Y' }}</td>
-                        <td>{{ t.moyen }}</td>
-                        <td>{{ t.total }}</td>
-                        <td>{{ t.commentaire }}</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-            {% else %}
-            <p>{% trans "Pas de paiements trouvés dans la base de données." %}</p>
-            {% endif %}
-        </div> <!-- /.col-lg-12 -->
-    </div> <!-- /.row -->
-</div> <!-- /.container -->
+                        <tbody>
+                        {% for t in transactions %}
+                            <tr>
+                                <td><a href="{% url "tresorerie:transaction-detail" t.uuid %}">{{ t.uuid|safe|slice:":8" }}</a></td>
+                                <td>{{ t.date_creation|date:'d/m/Y' }}</td>
+                                <td>{{ t.get_moyen_display }}</td>
+                                <td>{{ t.total|floatformat }}€</td>
+                                <td>{{ t.produit.all|join:" - " }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>{% trans "Pas de paiements trouvés dans la base de données." %}</p>
+                {% endif %}
+            </div> <!-- /.col-lg-12 -->
+        </div> <!-- /.row -->
+    </div> <!-- /.container -->
 {% endblock %}

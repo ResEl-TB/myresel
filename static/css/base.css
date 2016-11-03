@@ -229,3 +229,15 @@ body {
 #unregistered-device:hover {
     background-color: #d9534f;
 }
+
+.danger {
+    color: #d9534f;
+}
+
+.success {
+    color: #1ed212;
+}
+
+.warning {
+    color: #FFCA59;
+}

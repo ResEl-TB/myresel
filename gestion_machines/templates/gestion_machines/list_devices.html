@@ -11,7 +11,7 @@
                 <p class="text-right">
                     <a href="{% url 'gestion-machines:ajout-manuel' %}" class="btn btn-info">{% trans "Ajouter une machine" %}</a>
                 </p>
-                {% for m in machines %}
+                {% for m in devices %}
                     {% if forloop.first %}
                         <table class="table table-hover">
                         <thead>
@@ -25,18 +25,23 @@
                         <tbody>
                     {% endif %}
 
-                <tr style="cursor: pointer;" class="clickable" data-href="{% url 'gestion-machines:modifier' m.hostname %}">
+                <tr style="cursor: pointer;" class="clickable {% if current_device.hostname == m.hostname %}active{% endif %}" data-href="{% url 'gestion-machines:modifier' m.hostname %}">
                     <td>{{ m.hostname|capfirst }}</td>
                     <td>{{ m.aliases|first|capfirst }}</td>
                     <td>{{ m.mac_address|upper }}</td>
-                    <td>{% if m.get_status == "active" %}
-                        <span class="label label-success">{% trans "Activée" %}</span>
+                    <td>
+                        {% if m.get_status == "active" %}
+                            <span class="label label-success">{% trans "Activée" %}</span>
                         {% elif m.get_status == "inactive" %}
-                        <span class="label label-default">{% trans "Inactive" %}</span>
+                            <span class="label label-default">{% trans "Inactive" %}</span>
                         {% elif m.get_status == "wrong_campus" %}
-                        <span class="label label-danger">{% trans "Mauvais campus" %}</span>
+                            <span class="label label-danger">{% trans "Mauvais campus" %}</span>
                         {% else %}
-                        <span class="label label-danger">{% trans "Erreur" %}</span>
+                            <span class="label label-danger">{% trans "Erreur" %}</span>
+                        {% endif %}
+
+                        {% if current_device.hostname == m.hostname %}
+                            <span class="label label-info">{% trans "Machine courante" %}</span>
                         {% endif %}
                     </td>
                 </tr>
@@ -47,8 +52,17 @@
                 {% empty %}
                     <p>{% blocktrans %}Vous n'avez enregistré aucune machine à votre nom.{% endblocktrans %}</p>
                 {% endfor %}
+
+
             </div> <!-- /.col-lg-12 -->
+
         </div> <!-- /.row -->
+
+        {% if current_device == None %}
+            <div class="text-center">
+                <a href="{% url 'gestion-machines:ajout' %}" class="btn btn-info btn-lg">{%  trans "Enregistrer mon ordinateur"%} </a>
+            </div>
+        {% endif %}
     </div> <!-- /.container -->
 {% endblock %}
 

@@ -1,22 +1,23 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
-from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-from django.core.mail import EmailMessage, mail_admins
-from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.urlresolvers import reverse, reverse_lazy
+from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import View
+from django.views.generic import FormView, View
 
 from fonctions import ldap
 from fonctions.decorators import resel_required, unknown_machine
 from gestion_machines.forms import AddDeviceForm
-from gestion_personnes.models import LdapUser
-from .forms import InscriptionForm, ModPasswdForm, CGUForm, InvalidUID
+from gestion_personnes.async_tasks import send_mails
+from gestion_personnes.models import LdapUser, UserMetaData
+from .forms import InscriptionForm, ModPasswdForm, CGUForm, InvalidUID, PersonnalInfoForm, ResetPwdSendForm, \
+    ResetPwdForm, SendUidForm
 
 
 class Inscription(View):
@@ -95,78 +96,22 @@ class InscriptionCGU(View):
         if form.is_valid():
             user = LdapUser.from_json(self.request.session['logup_user'])
             user.inscr_date = datetime.now()
-            user.end_cotiz = datetime.now()  # That does not survive the json parser
+
+            # Add 7 free days :
+            free_duration = timedelta(days=7)  # TODO: move that to config file
+            user.end_cotiz = datetime.now() + free_duration  # That does not survive the json parser
             user.save()
 
+            user_meta, __ = UserMetaData.objects.get_or_create(uid=user.uid)
+            user_meta.send_email_validation(user.mail, request.build_absolute_uri)
+
+            # Auto-login the user to simplify his life !
             auth_user = ldap.get_user(username=user.uid)
             if auth_user is not None:
                 auth_user.backend = 'django_python3_ldap.auth.LDAPBackend'
                 login(request, auth_user)
 
-            # Subscribe to campus@resel.fr
-            campus_email = EmailMessage(
-                subject="SUBSCRIBE campus {} {}".format(user.first_name,
-                                                        user.last_name),
-                body="Inscription automatique de {} a campus".format(user.uid),
-                from_email=user.mail,
-                reply_to=["listmaster@resel.fr"],
-                to=["sympa@resel.fr"],
-            )
-
-            # Send a validation email to the user
-            # TODO: rédiger un peu plus ce mail et le faire valider par le respons' com
-            # TODO: ajouter un email pour faire valider l'adresse email
-            user_email = EmailMessage(
-                subject=_("Inscription au ResEl"),
-                body="Bonjour," +
-                "\nVous êtes désormais inscrit au ResEl, voici vos identifiants :" +
-                "\nNom d'utilisateur : " + str(user.uid) +
-                "\nMot de passe : **** (celui que vous avez choisi lors de l'inscription)" +
-
-                "\n\n Vous pouvez, si vous souhaitez, changer votre mot de passe (en suivant ce lien https://my.resel.fr/personnes/modification-passwd)" +
-                "\n Ainsi que tout les paramètres de votre compte." +
-
-                "\n\n En étant membre de l'association ResEl vous pouvez profiter de ses nombreux services et des "
-                  "activités que l'association propose." +
-                "\n N'hésitez pas à naviguer sur notre site (https://resel.fr) pour y découvrir tout ce que nous proposons." +
-
-                "\n\nPour avoir accès à internet, vous allez devoir inscrire chacune de vos machines (ordinateurs, smartphones, etc...) à notre réseau." +
-                "\nRendez vous sur notre site web, vous serez guidé à travers cette dernière étape." +
-
-                "\n\nSi vous avez le moindre problème, la moindre question, la moindre envie de nous féliciter, ou de nous faire des bisous baveux,"+
-                "vous pouvez répondre à cet e-mail, ou venir nous voir pendant nos permanences, celles-ci ont lieu tous les jours en semaine de 18h à 19h30"+
-                "au foyer des élèves de Télécom Bretagne."+
-
-                "\n\nSi vous êtes intéressé pour nous aider, pour travailler avec nous au sein de l'association, pour mettre à disposition vos compétences,"+
-                "ou même si vous n'avez pas de compétences mais que vous souhaitez apprendre, vous pouvez aussi nous contacter pour faire partie de l'équipe" +
-                " d'administrateurs !"+
-
-                "\n\nÀ bientôt, l'équipe ResEl.",
-                from_email="inscription@resel.fr",
-                to=[user.mail],
-            )
-
-            mail_admins("Inscription de %s au ResEl" % str(user.uid),
-                        "Nouvel inscrit au ResEl par le site web :"
-                        "\n\nuid : %(username)s"
-                        "\nNom : %(lastname)s"
-                        "\nPrénom : %(firstname)s"
-                        "\nemail : %(mail)s"
-                        "\nCampus : %(campus)s"
-                        "\n\n Ce mail est un mail automatique envoyé par l'interface d'inscription du ResEl. " % {
-                            "username": user.uid,
-                            "lastname": user.last_name,
-                            "firstname": user.first_name,
-                            "mail": user.mail,
-                            "campus": settings.CURRENT_CAMPUS
-                        })
-
-            try:
-                campus_email.send()
-                user_email.send()
-            except Exception:
-                pass
-                # TODO: show error to user, and notify admin
+            send_mails.delay(user)
 
             self.request.session['logup_user'] = None
             register_form = AddDeviceForm()
@@ -210,3 +155,159 @@ class Settings(View):
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name)
+
+
+class PersonalInfo(View):
+    template_name = 'gestion_personnes/personal_info.html'
+    form_class = PersonnalInfoForm
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(PersonalInfo, self).dispatch(*args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class(initial={
+            'email': request.ldap_user.mail,
+            'phone': request.ldap_user.mobile,
+            'campus': request.ldap_user.campus,
+            'building': request.ldap_user.building,
+            'room': request.ldap_user.room_number,
+            'address': request.ldap_user.postal_address
+        })
+        c = {
+            'form': form,
+            'user': request.ldap_user,
+        }
+        return render(request, self.template_name, c)
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            user = request.ldap_user
+            # Check if the email is not already in use
+            email = form.cleaned_data["email"]
+            if email != user.mail and len(LdapUser.filter(mail=email)) > 0:
+                form.add_error("email", _("Addresse e-mail déjà utilisée"))
+                return render(request, self.template_name, {'form': form})
+
+            address = form.cleaned_data["address"]
+            # Generate an address if
+            if form.cleaned_data["building"] != "":
+                address = LdapUser.generate_address(form.cleaned_data["campus"], form.cleaned_data["building"], form.cleaned_data["room"])
+
+            if user.mail != email:
+                user_meta, __ = UserMetaData.objects.get_or_create(uid=user.uid)
+                user_meta.send_email_validation(email, request.build_absolute_uri)
+
+            user.mail = email
+            user.mobile = form.cleaned_data["phone"]
+            user.campus = form.cleaned_data["campus"]
+            user.building = form.cleaned_data["building"]
+            user.room_number = form.cleaned_data["room"]
+            user.postal_address = address
+
+            messages.success(request, _("Vos informations ont bien été mises à jour."))
+            user.save()
+
+            request.session['update'] = True
+            redirect_to = request.GET.get('next', '')
+            if redirect_to:
+                return HttpResponseRedirect(redirect_to)
+
+        return render(request, self.template_name, {'form': form})
+
+
+class ResetPwdSend(FormView):
+    template_name = 'gestion_personnes/reset_pwd_send.html'
+    form_class = ResetPwdSendForm
+    success_url = reverse_lazy("home")
+
+    def form_valid(self, form):
+        form.send_reset_email(self.request)
+        messages.info(self.request, _(
+            "Nous venons de vous envoyer un e-mail de réinitialisation que vous devriez recevoir d'ici peu."
+            " Cliquez sur le lien fournit dans l'e-mail pour continuer la procédure."
+        ))
+        return super(ResetPwdSend, self).form_valid(form)
+
+
+class SendUid(FormView):
+    """
+    View to get send the uid of a user from its email
+    """
+    template_name = 'gestion_personnes/get_uid_from_email.html'
+    form_class = SendUidForm
+    success_url = reverse_lazy("home")
+
+    def form_valid(self, form):
+        form.send_email(self.request)
+        messages.info(self.request, _(
+            "Nous venons de vous envoyer un e-mail sur votre addresse avec votre identifiant ResEl."
+        ))
+        return super(SendUid, self).form_valid(form)
+
+
+class ResetPwd(View):
+    """
+    View where the user can type a new password
+    """
+    template_name = 'gestion_personnes/mod-passwd.html'
+    form_class = ResetPwdForm
+    success_url = reverse_lazy("home")
+
+    def get(self, request, *args, **kwargs):
+        key = self.kwargs["key"]
+        try:
+            UserMetaData.objects.get(reset_pwd_code=key).uid
+        except ObjectDoesNotExist:
+            return HttpResponseForbidden()
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        key = self.kwargs["key"]
+        try:
+            uid = UserMetaData.objects.get(reset_pwd_code=key).uid
+        except ObjectDoesNotExist:
+            return HttpResponseForbidden()
+
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            form.reset_pwd(uid)
+            form.send_reset_email(uid)
+            messages.info(request, _(
+                "Nous venez de réinitialiser votre mot de passe. " +
+                "Vous pouvez désormais vous connecter avec le nouveau mot de passe."
+            ))
+            return HttpResponseRedirect(self.success_url)
+        return render(request, self.template_name, {'form': form})
+
+
+class CheckEmail(View):
+    """
+    View where the user can ask for a new email validation/validate his email
+    """
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(CheckEmail, self).dispatch(*args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        key = self.kwargs.get("key")
+        user_info, __ = UserMetaData.objects.get_or_create(uid=request.ldap_user.uid)
+        if key is None:
+            if user_info.email_validated:
+                messages.error(request, _("Votre addresse e-mail a déjà été validée, vous n'avez donc pas besoin de la valider une seconde fois."))
+            else:
+                user_info.send_email_validation(request.ldap_user.mail, request.build_absolute_uri)
+                messages.info(request, _(
+                    "Nous venons de vous envoyer un e-mail avec un lien que vous devrez suivre pour valider votre addresse e-mail."))
+        else:
+            try:
+                u = UserMetaData.objects.get(email_validation_code=key)
+                u.email_validated = True
+                u.save()
+                messages.info(request, _("Votre addresse e-mail est bien validée."))
+            except ObjectDoesNotExist:
+                return HttpResponseForbidden()
+        return HttpResponseRedirect(reverse("home"))

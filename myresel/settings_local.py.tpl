@@ -74,11 +74,12 @@ REDIS_DB = 0
 # STRIPE CREDENTIALS
 
 STRIPE_API_KEY = "sk_test_Uk3Qcg8o0OTj8VHAG6NovqR9"
+STRIPE_PUBLIC_KEY = "pk_test_KE9qQquz3hhdRI54CcfBaukl"
 
 
 # TRESO
 
-INVOICE_STORE_PATH = '/myresel/media/invoices'
+INVOICE_STORE_PATH = 'media/invoices'
 
 
 ####
@@ -133,7 +134,6 @@ if DEBUG or TESTING:
 
 # LOGGERS
 
-# Logger used in a production environment
 PROD_LOGGING_CONF = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -158,10 +158,20 @@ PROD_LOGGING_CONF = {
             'formatter': 'verbose',
             'include_html': True,
         },
+        'logstash': {
+            'level': 'DEBUG',
+            'class': 'logstash.LogstashHandler',
+            'host': 'orion.adm.resel.fr',
+            'port': 5959,  # Default value: 5959
+            'version': 1,
+            'message_type': 'logstash',
+            'fqdn': False,  # Fully qualified domain name. Default value: false.
+            'tags': None,  # list of tags. Default: None.
+        },
     },
     'loggers': {
         'django': {
-            'handlers': ['file', 'mail_admins'],
+            'handlers': ['file', 'mail_admins', 'logstash'],
             'level': 'DEBUG',
             'propagate': True,
         },

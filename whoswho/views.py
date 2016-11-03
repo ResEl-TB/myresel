@@ -49,6 +49,7 @@ class UserDetails(View):
         
         return render(request, self.template_name, {'display_user' : user})
 
+
 class UserHome(View):
     """
     View used to see and update user's godparents and

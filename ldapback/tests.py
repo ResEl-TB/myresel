@@ -7,9 +7,10 @@ from datetime import datetime
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
 
+from fonctions.generic import compare_passwd, hash_to_ntpass
 from ldapback.backends.ldap.base import Ldap
 from ldapback.models.base import LdapModel
-from ldapback.models.fields import LdapField, LdapCharField, LdapPasswordField, LdapListField, LdapDatetimeField
+from ldapback.models.fields import LdapField, LdapCharField, LdapPasswordField, LdapListField, LdapDatetimeField, LdapNtPasswordField
 from myresel import settings
 
 
@@ -34,6 +35,7 @@ class TestGenericPerson(LdapModel):
     firstname = LdapCharField(db_column="firstname", object_classes=["genericPerson"], required=True)
     lastname = LdapCharField(db_column="lastname", object_classes=["genericPerson"], required=True)
     password = LdapPasswordField(db_column="userpassword", object_classes=["genericPerson"], required=True)
+    nt_password = LdapNtPasswordField(db_column='ntpassword', object_classes=['genericPerson'])
 
     # enstbPerson
     promo = LdapCharField(db_column="promo", object_classes=["enstbPerson"])
@@ -183,12 +185,14 @@ class LdapModelTestCase(TestCase):
         user.firstname = "pablo"
         user.lastname = "picaso"
         user.password = "pass"
+        user.nt_password = "pass"
 
         exp_attr = {
             "uid": "uniquidbgt",
             "firstname": "pablo",
             "lastname": "picaso",
             "userpassword": "pass",
+            "ntpassword": "pass"
         }
         dn, classes, attributes = user.to_ldap()
 
@@ -197,7 +201,7 @@ class LdapModelTestCase(TestCase):
 
         self.assertEqual(len(exp_attr), len(attributes))
         for att_name, att_value in attributes.items():
-            if att_name == "userpassword":
+            if att_name in ["userpassword", "ntpassword"]:
                 continue
             self.assertEqual(exp_attr[att_name], att_value)
 
@@ -297,6 +301,7 @@ class LdapFieldTestCase(TestCase):
         user.firstname = "Martin"
         user.lastname = "Thomas"
         user.password = "Blah"
+        user.nt_password = "Blah"
 
         user.promo = "2020"
         user.altMail = ['martin.thomas@t.com', 'thomas.martin@t.com']
@@ -363,3 +368,43 @@ class LdapFieldTestCase(TestCase):
         self.assertIsInstance(user_s, TestGenericPerson)
         self.assertIsInstance(user_s.end_cotiz, datetime)
         self.assertEqual(now, user_s.end_cotiz)
+
+    def test_password_field(self):
+        user = self.new_user()
+        passwd = user.password
+        user.save()
+
+        user_s = TestGenericPerson.get(pk=user.uid)
+        self.assertTrue(compare_passwd(passwd, user_s.password))
+
+        # Force save to demonstrate a bug found which would overide the correct passwd
+        user_s.save()
+        user_t = TestGenericPerson.get(pk=user.uid)
+        self.assertTrue(compare_passwd(passwd, user_t.password))
+
+        # Test passwd change
+        user_t.password = "akamai"
+        user_t.save()
+
+        user_u = TestGenericPerson.get(pk=user.uid)
+        self.assertTrue(compare_passwd("akamai", user_u.password))
+
+    def test_nt_password_field(self):
+        user = self.new_user()
+        passwd = user.nt_password
+        user.save()
+
+        user_s = TestGenericPerson.get(pk=user.uid)
+        self.assertEqual("{NT}" + hash_to_ntpass(passwd), user_s.nt_password)
+
+        # Force save to demonstrate a bug found which would overide the correct passwd
+        user_s.save()
+        user_t = TestGenericPerson.get(pk=user.uid)
+        self.assertEqual("{NT}" + hash_to_ntpass(passwd), user_t.nt_password)
+
+        # Test passwd change
+        user_t.nt_password = "akamai"
+        user_t.save()
+
+        user_u = TestGenericPerson.get(pk=user.uid)
+        self.assertEqual("{NT}" + hash_to_ntpass("akamai"), user_u.nt_password)

@@ -1,0 +1,92 @@
+#TODO: refactor configuration (username, pass...)
+#TODO: do not delete migrations
+
+image: resel:web-python  # Custom image made for the ResEl
+services:
+  - redis:latest
+  - mysql:latest
+
+stages:
+  - configure
+  - test
+  - deploy
+
+variables:
+  MYSQL_HOST: mysql
+  MYSQL_USER: resel
+  MYSQL_PASSWORD: blah
+  MYSQL_DATABASE: resel
+  MYSQL_ROOT_PASSWORD: blah
+  REDIS_HOST: redis
+
+  ROOTDIR: ./
+  CONFDIR: myresel/
+  ETCDIR: .install/etc/
+  LIBDIR: .install/lib/
+  LDAP_PASSWORD: blah
+
+  DEBIAN_FRONTEND: noninteractive
+
+before_script:
+  - source .install/scripts/install_essentials.sh
+  - source .install/scripts/install_openldap.sh
+  - source .install/scripts/install_latex.sh
+  - pip3 install -qr requirements.txt
+
+create_config:
+  stage: configure
+  script:
+    - rm -f -- ${ROOTDIR}myresel/settings_local.py
+    - export MYSQL_USER=root
+    - source .install/scripts/configure.sh
+    - source .install/scripts/populate_db.sh
+  artifacts:
+    paths:
+      - myresel/settings_local.py
+      - wiki/migrations/
+      - tresorerie/migrations/
+      - pages/migrations/
+      - gestion_personnes/migrations/
+      - gestion_machines/migrations/
+
+test_django:
+  stage: test
+  script:
+    - coverage run manage.py test --noinput
+    - coverage html
+    - grep pc_cov htmlcov/index.html | egrep -o "[0-9]+\%" | awk '{ print "covered " $1;}'
+
+pylint:
+  stage: test
+  services: []
+  script:
+    - pip3 install pylint --quiet
+    - pip3 install pylint-django --quiet
+    - pylint --rcfile=.pylintrc myresel
+  allow_failure: true
+
+deploy to brest:
+  services: []
+  before_script:
+    - apt-get -qq install curl
+  stage: deploy
+  script:
+    - curl http://skynet.adm.resel.fr/deploy-resel
+  only:
+    - deploy
+  environment:
+    name: skynet
+    url: https://beta.resel.fr/
+
+deploy to rennes:
+  services: []
+  before_script:
+    - apt-get -qq install curl
+  stage: deploy
+  script:
+    - curl http://doubidou.adm.resel.fr/deploy-resel
+  only:
+    - deploy
+  environment:
+    name: doubidou
+    url: https://beta.rennes.resel.fr/

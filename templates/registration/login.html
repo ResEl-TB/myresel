@@ -36,7 +36,7 @@
                     {% endif %}
                     <div class="row">
                         <div class="col-md-6">
-                            <div><a href="#">{% trans "Mot de passe oublié ?" %}</a></div>
+                            <div><a href="{% url "gestion-personnes:reset-pwd-send" %}">{% trans "Mot de passe oublié ?" %}</a></div>
                             {% if is_resel %}<div><a href="{% url 'gestion-personnes:inscription' %}">{% trans "Pas de compte ?" %}</a></div>{% endif %}
                         </div>
                         <div class="col-md-6">

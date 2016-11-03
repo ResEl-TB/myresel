@@ -14,23 +14,20 @@
 % - confLang : 'en' or 'fr'
 % - user : object that contains
 %   - uid
-%   - firstName 
-%   - lastName
-%   - addressFirstPart
-%   - addressSecondPart
-% - invoice : object that contains
-%   - id
+%   - first_name
+%   - last_name
+%   - address_first
+%   - address_second
+% - transaction :object that contains
+%   - uuid
 %   - date : generation date, should be `today`
+%   - date_paiement : payement date (if payed)
 %   - categories : list composed of object :
 %     - name : the name of the categories
 %     - products : a list composed of object :
 %        - quantity : the quantity buyed
 %        - name : the designation of the product
 %        - price : the unit price of the product
-%   - payment : object that contains
-%     - isPaid : true if invoice is paid
-%     - date : if paid : date of payment else : last date to pay
-%     - info : if paid : info of payment else : means of payment
 %%%%%
 
 %---------------------------------------------------------------------- Header
@@ -150,45 +147,42 @@ Association ResEl - Télécom Bretagne \hfill (33) 2 29 00 15 76 \\
 29280 Plouzané
 France
 \\ \\
-{\bf {% trans "Délivrée à" %} :} {{user.firstName}} {{user.lastName}} }\\
-\tab {{ user.addressFirstPart }} \\
-\tab {{ user.addressSecondPart }}
+{\bf {% trans "Délivrée à" %} :} {{user.first_name}} {{user.last_name}} }\\
+\tab {{ user.address_first }} \\
+\tab {{ user.address_second }}
 
-{\bf Date :}  {{ invoice.date }}
+{\bf Date :}  {{ transaction.date_creation }}
 
-{\bf {% trans "Numéro de facture" %} :} {{ invoice.id}}
+{\bf {% trans "Identifiant de facture" %} :} {{ transaction.uuid}}
 
-{\bf {% trans "Code client" %} :} {{ user.uid }}
-\\
+{\bf {% trans "Identifiant client" %} :} {{ user.uid }}
 
 %----------------------------------------------------------------------------------------
 
 \begin{invoiceTable}
 
-{% for category in invoice.categories %}
-\feetype{ {{category.name|safe}} }
-
-    {% for product in category.products %}
-\unitrow{% templatetag openbrace %}{{ product.name|safe }}{% templatetag closebrace %}{% templatetag openbrace %}{{ product.quantity }}{% templatetag closebrace %}{% templatetag openbrace %}{{ product.price }}{% templatetag closebrace %}{}
+{% for category, products in transaction.get_products_by_cat %}
+\feetype{ {{category|safe}} }
+    {% for product in products %}
+    \unitrow{% templatetag openbrace %}{{ product.nom|safe }}{% templatetag closebrace %}{% templatetag openbrace %}1{% templatetag closebrace %}{% templatetag openbrace %}{{ product.display_price|floatformat }}{% templatetag closebrace %}{}
     {% endfor %}
 {% endfor %}
 %------------------------------------------------
 
 \end{invoiceTable}
 
-{% trans "(TVA non applicable, art. 293 B du CGI)" %"}
-\\ \\
+{% trans "(TVA non applicable, art. 293 B du Code Général des Impôts)" %}
 
 %----------------------------------------------------------------------------------------
 
-{% if invoice.payment.isPaid %}
-{\bf {% trans "Facture acquitée" %}:} \\
-\tab {{ invoice.payment.date }} \\
-\tab {{ invoice.payment.info }}
+{% if transaction.statut == "P" %}
+{\bf {% trans "Facture acquitée" %}:}  \\
+\tab {{ transaction.date_paiement }}  \\
+\tab {{ transaction.info }}  \\
 {% else %}
-{\bf {% trans "Paiement" %}:} \\
-\tab {% trans "Paiement avant le" %} : {{ invoice.payment.date }} \\
-\tab {% trans "Moyen de paiement possible" %} : {{ invoice.payment.info }}
+{\bf {% trans "Paiement" %}:}  \\
+\tab {% trans "Paiement avant le" %} : \today \\% {{ transaction.date_paiement }}  \\
+\tab {% trans "Moyen de paiement possible" %} : {{ transaction.info }}  \\
 {% endif %}
 \end{document}
 

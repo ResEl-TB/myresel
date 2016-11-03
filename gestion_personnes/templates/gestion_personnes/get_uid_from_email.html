@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block titre %}{% trans "Récupération identifiant" %}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="page-header">{% trans "Récupération de votre identifiant ResEl" %}</div>
+        <div class="alert alert-info">
+            {% blocktrans %}
+                <p>En connaissant votre addresse e-mail, nous pouvons vous envoyer votre identifiant ResEl.</p>
+                <p>Note : Le ResEl n'a pas moyen de vous fournir votre mot de passe. Cependant vous pouvez toujours demander à le réinitialiser.</p>
+            {% endblocktrans %}
+        </div>
+        <div class="col-md-8">
+            <form action="" method="POST" class="form">
+                {% csrf_token %}
+                <div class="form-category">
+                    <div class="form-group row">
+                        <div class="col-sm-5">{% trans "Veuillez renseigner addresse e-mail :" %}</div>
+                        <fieldset class=" col-sm-6 {% if form.email.errors %}has-error{% endif %}">
+                            {{ form.email }}
+                            <a>Vous avez oublié votre identifiant ResEl ?</a>
+                            {% if form.email.errors %}<span class="help-block">{{ form.email.errors }}</span>{% endif %}
+                        </fieldset>
+                    </div>
+
+                </div>
+
+                <div class="form-category">
+                    <div class="row">
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-info">{% trans "Envoyer un e-mail avec votre identifiant" %}</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div> <!-- /.container -->
+{% endblock %}

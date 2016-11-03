@@ -1,10 +1,11 @@
 import os
-
+from shutil import copyfile
 from subprocess import call
 from tempfile import mkdtemp, mkstemp
-from shutil import copyfile
 
 from django.template.loader import render_to_string
+
+from myresel import settings
 
 
 def generate_pdf(template_path, template_variable, dest_name, dest_folder):
@@ -17,6 +18,9 @@ def generate_pdf(template_path, template_variable, dest_name, dest_folder):
     os.chdir(tmp_folder)
     texfile, texfilename = mkstemp(dir=tmp_folder)
 
+    # Final destination folder:
+    full_dest_folder = os.path.join(settings.PROJECT_ROOT, dest_folder)
+
     # Render to template with var
     os.write(texfile, render_to_string(template_path, template_variable).encode('utf-8'))
     os.close(texfile)
@@ -25,8 +29,12 @@ def generate_pdf(template_path, template_variable, dest_name, dest_folder):
     call(['pdflatex', '-interaction=batchmode', texfilename])
 
     # Make pdf permanent
-    # TODO : improve handle errors !
-    copyfile(texfilename + '.pdf', os.path.join(dest_folder, dest_name + '.pdf'))
+    # TODO : improve error handling!
+    if not os.path.exists(full_dest_folder):
+        # noinspection PyCompatibility
+        raise FileNotFoundError("Invoice destination folder doesn't exist %s" % full_dest_folder)
+
+    copyfile(texfilename + '.pdf', os.path.join(os.getcwd(), full_dest_folder, dest_name + '.pdf'))
 
     # Cleanup
     os.remove(texfilename)
@@ -34,4 +42,4 @@ def generate_pdf(template_path, template_variable, dest_name, dest_folder):
     os.remove(texfilename + '.aux')
     os.remove(texfilename + '.log')
     os.rmdir(tmp_folder)
-    return os.path.join(dest_folder, dest_name + '.pdf')
+    return os.path.join(full_dest_folder, dest_name + '.pdf')

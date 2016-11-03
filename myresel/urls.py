@@ -14,12 +14,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url, include
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.views.generic import RedirectView
 from django.views.i18n import javascript_catalog
-
 from pages.views import Home, Contact, NewsListe, inscriptionZoneInfo, FaqList, faqUpvote
+from myresel import settings
+
 
 js_info_dict = {
     'packages': ('tresorerie',),
@@ -32,6 +34,7 @@ urlpatterns = [
 
     url(r'^login', auth_views.login, name='login'),
     url(r'^logout', auth_views.logout, {'next_page': '/'}, name='logout'),
+    url(r'^gestion/django-rq/', include('django_rq.urls')),
     url(r'^gestion/', admin.site.urls),
 
     url(r'^machines/', include('gestion_machines.urls', namespace='gestion-machines')),
@@ -48,8 +51,12 @@ urlpatterns = [
     # Subcription related urls
     url(r'^inscription_zone/', inscriptionZoneInfo, name="inscription-zone"),
     url(r'^generate_204/', RedirectView.as_view(pattern_name="inscription-zone", permanent=False), name="generate_204"),
+
     url(r'^$', Home.as_view(), name='home'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 handler400 = 'myresel.error_views.bad_request'
 handler403 = 'myresel.error_views.permission_denied'
