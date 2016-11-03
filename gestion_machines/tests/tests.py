@@ -1,16 +1,19 @@
 # -*- coding: utf-8 -*-
+from django.core import mail
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
 
+from gestion_machines.forms import AjoutManuelForm
 from gestion_machines.models import LdapDevice
 
 
-def new_dummy_device(owner="lcarr", hostname="mymachine", activated=True):
+def new_dummy_device(owner="lcarr", hostname="mymachine", activated=True, ip="120.45", mac="00:00:00:00:00"):
     device = LdapDevice()
 
     device.hostname = hostname
     device.set_owner(owner)
-    device.ip = "120.45"
+    device.ip = ip
+    device.mac_address = mac
     if activated:
         device.activate("Brest")
     return device
@@ -152,3 +155,43 @@ class LdapDeviceTestCase(TestCase):
     # TODO: test multiple same mac devices
     # TODO: test invalid mac or ip
     # TODO: test multiple same hostname
+
+
+class AjoutManuelFormTestCase(TestCase):
+    def setUp(self):
+        self.device = new_dummy_device(mac="00:00:00:00:01:00")
+        try_delete_device(self.device.hostname)
+        self.device.save()
+
+    def test_simple(self):
+        form_data = {
+            'mac': '00:00:02:00:01:00',
+            'description': "Je fais quoi de ma vie ?"
+        }
+
+        form = AjoutManuelForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_invalid_data(self):
+        inputs = [{
+            'mac': '00:00:0200:01:00',
+            'description': "Je fais quoi de ma vie ?"
+            },
+            {
+                'mac': '00:00:03:00:01:00',
+                'description': "",
+            },
+        ]
+        for form_data in inputs:
+            form = AjoutManuelForm(data=form_data)
+            self.assertFalse(form.is_valid())
+
+    def test_notify_existing_mac(self):
+        form_data = {
+            'mac': self.device.mac_address,
+            'description': "Je fais quoi de ma vie ?"
+        }
+
+        form = AjoutManuelForm(data=form_data)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(len(mail.outbox), 1)
