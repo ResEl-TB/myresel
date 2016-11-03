@@ -2,11 +2,14 @@ import re
 
 from django import forms
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.mail import mail_admins
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 
 from fonctions import ldap
 from fonctions.ldap import get_free_alias
+from gestion_machines.models import LdapDevice
 
 
 class AddDeviceForm(forms.Form):
@@ -61,8 +64,30 @@ class AjoutManuelForm(forms.Form):
 
     def clean_mac(self):
         mac = self.cleaned_data['mac']
+        mac = mac.lower()
         if not re.match(r'^([a-f0-9]{2}[:\-]){5}[a-f0-9]{2}$', mac):
             raise forms.ValidationError(_("Adresse MAC non valide"), code='invalid')
-        if ldap.search(settings.LDAP_DN_MACHINES, '(&(macaddress=%s))' % mac):
+        try:
+            device = LdapDevice.get(mac_address=mac)
+            mail_admins(
+                "[Transfert {}]Tentative changement compte machine [{}] {}, ".format(settings.CURRENT_CAMPUS,
+                                                                                      device.mac_address,
+                                                                                      device.hostname),
+                "Un utilisateur (quelconque) a tenté de transférer une machine d'un autre utilisateur vers "
+                "son compte. Cette personne va très probablement se manifester sur le support afin de transférer "
+                "la machine vers son compte."
+                "\n\n HOSTNAME: {}"
+                "\n MAC: {}"
+                "\n IP: {}"
+                "\n UID PROPRIO: {}"
+                "\n\n /!\\ Le partage de compte est interdit selon le règlement intérieur /!\\"
+                "\n\n ----------"
+                "\n Message généré par le site ResEl"
+                    .format(device.hostname, device.mac_address, device.ip, device.owner)
+
+            )
+            # Send an email to notify the admins that the device is already saved
             raise forms.ValidationError(_("Cette machine est déjà enregistrée sur notre réseau."), code='invalid')
+        except ObjectDoesNotExist:
+           pass
         return mac
