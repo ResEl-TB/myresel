@@ -84,7 +84,7 @@ deploy to rennes:
     - apt-get -qq install curl
   stage: deploy
   script:
-    - curl http://doubidou.adm.resel.fr/deploy-resel
+    - curl http://doubidou.adm.rennes.resel.fr/deploy-resel
   only:
     - deploy
   environment:
