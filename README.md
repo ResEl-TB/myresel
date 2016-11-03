@@ -76,7 +76,7 @@ Pour lancer les tests :
 python3 manage.py tests
 ```
 
-**Ne lancez surtout pas les tests sur le ldap de production !** [Pika](https://garbage.resel.fr/search/?q=putazizi) risque d'avoir des surprises.
+**Ne lancez surtout pas les tests sur le LDAP de production !** [Pika](https://garbage.resel.fr/search/?q=putazizi) risque d'avoir des surprises.
 
 ## Liste des modules
 
