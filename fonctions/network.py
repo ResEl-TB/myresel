@@ -42,7 +42,7 @@ def get_mac(ip):
     except Exception as e:
         e = NetworkError("An error occurred when doing an fping : "
                      "\n %s" % e)
-        logger.error(e)
+        logger.info(e)
     mac = str(subprocess.Popen(["arp -a | grep {}\) | grep {} | awk '{{print $4}}'".format(ip, eth)],
                                stdout=subprocess.PIPE,
                                shell=True).communicate()[0]).split('\'')[1].split('\\n')[0]
