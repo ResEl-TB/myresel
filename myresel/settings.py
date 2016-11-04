@@ -260,7 +260,7 @@ RQ_SHOW_ADMIN_LINK = True
 # LOGGERS
 
 PROD_LOGGING_CONF = {
-    'version': 2,
+    'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
