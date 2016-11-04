@@ -7,7 +7,7 @@ import subprocess
 from fonctions.generic import is_ip_in_subnet
 from myresel import settings
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("default")
 
 
 class NetworkError(Exception):

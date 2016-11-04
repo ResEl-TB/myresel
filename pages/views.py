@@ -19,7 +19,7 @@ from pages.forms import ContactForm
 from pages.models import News
 from wiki.models import Category
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("default")
 
 
 class Home(View):
