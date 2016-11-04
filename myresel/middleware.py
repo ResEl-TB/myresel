@@ -14,7 +14,7 @@ from fonctions.network import NetworkError
 from gestion_machines.models import LdapDevice
 from gestion_personnes.models import LdapUser
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("default")
 class IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAResElAdminSoCheckTheLdapBeforeMiddleware(object):
     def process_request(self, request):
         # Check if the user is a ResEl admin. If so, its credentials will be updated to superuser and staff

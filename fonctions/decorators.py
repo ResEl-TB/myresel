@@ -9,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from fonctions import ldap, network
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("default")
 
 def resel_required(function=None, redirect_to='home'):
     """ Vérifie que l'user a une IP resel

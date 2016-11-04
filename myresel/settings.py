@@ -251,3 +251,89 @@ RQ_QUEUES = {
    },
 }
 RQ_SHOW_ADMIN_LINK = True
+
+
+####
+# Logging configuration
+####
+
+# LOGGERS
+
+PROD_LOGGING_CONF = {
+    'version': 2,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(asctime)s [%(levelname)s] %(module)s %(process)d %(thread)d : %(message)s'
+        },
+        'simple': {
+            'format': '%(asctime)s [%(levelname)s] %(module)s : %(message)s'
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': '/srv/www/resel.fr/debug.log',
+            'formatter': 'simple',
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'formatter': 'verbose',
+            'include_html': True,
+        },
+        'logstash': {
+            'level': 'DEBUG',
+            'class': 'logstash.LogstashHandler',
+            'host': 'orion.adm.resel.fr',
+            'port': 5959,  # Default value: 5959
+            'version': 1,
+            'message_type': 'logstash',
+            'fqdn': False,  # Fully qualified domain name. Default value: false.
+            'tags': None,  # list of tags. Default: None.
+        },
+    },
+    'loggers': {
+        'default': {
+            'handlers': ['file', 'mail_admins', 'logstash'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django': {
+            'handlers': ['file', 'mail_admins', 'logstash'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
+# Logger used in a development environment
+DEBUG_LOGGING_CONF = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django.db.backends': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+}
+
+
+if DEBUG or TESTING:
+    LOGGING = DEBUG_LOGGING_CONF
+else:
+    LOGGING = PROD_LOGGING_CONF
+
