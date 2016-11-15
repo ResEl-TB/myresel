@@ -177,7 +177,7 @@ class InscriptionForm(forms.Form):
             'class': 'form-control',
             'placeholder': _("Choisissez un mot de passe sécurisé"),
         }),
-        validators=[MinLengthValidator(7)],
+        validators=[MinLengthValidator(7),MaxLengthValidator(25)]
     )
 
     password_verification = forms.CharField(
@@ -418,7 +418,7 @@ class ResetPwdForm(forms.Form):
             'class': 'form-control',
             'placeholder': _("Choisissez un mot de passe sécurisé"),
         }),
-        validators=[MinLengthValidator(7)],
+        validators=[MinLengthValidator(7),MaxLengthValidator(50)]
     )
 
     password_verification = forms.CharField(
