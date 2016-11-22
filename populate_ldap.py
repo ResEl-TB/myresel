@@ -128,7 +128,7 @@ ensemble_home_directory = ["" for i in range(sample_number)]                #Str
 #On remplit maintenant la base de donnée
 compteur = 0
 for element in ensemble_produit :
-    user. = LdapUser()
+    user = LdapUser()
     user.object_classes = ["genericPerson"]
     user.uid = ensemble_uid[compteur]
     user.first_name = ensemble_first_name[compteur]
