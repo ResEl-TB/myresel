@@ -2,4 +2,4 @@
 
 python3 ${ROOTDIR}manage.py makemigrations pages tresorerie wiki
 python3 ${ROOTDIR}manage.py migrate
-python3 ${ROOTDIR}.install/scripts/populate_ldap.py
+python3 ${ROOTDIR}manage.py populateldap
