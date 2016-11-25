@@ -244,18 +244,18 @@ class Pay(View):
             }
 
             messages.error(request, ERRORS[code])
-            return render(request, self.template_name)
+            return HttpResponseRedirect(reverse('tresorerie:pay', kwargs={'product_id': main_product_id}))
 
         except stripe.error.RateLimitError as e:
             # Too many requests made to the API too quickly
             messages.error(request, _("Nous recevons actuellement trop de paiements simultanés, veuillez ré-essayer plus tard"))
-            return HttpResponseRedirect(reverse('tresorerie:pay', self.kwargs["product_id"]))
+            return HttpResponseRedirect(reverse('tresorerie:pay', kwargs={'product_id': main_product_id}))
 
         except stripe.error.APIConnectionError as e:
             # Network communication with Stripe failed
             messages.error(request, _(
                 "Impossible de contacter le serveur de paiement pour le moment, veuillez ré-essayer plus tard"))
-            return HttpResponseRedirect(reverse('tresorerie:pay', self.kwargs["product_id"]))
+            return HttpResponseRedirect(reverse('tresorerie:pay', kwargs={'product_id': main_product_id}))
 
 
 class History(ListView):
