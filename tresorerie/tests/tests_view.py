@@ -4,7 +4,10 @@ from datetime import datetime, timedelta
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
+from fonctions.generic import current_year
+from gestion_personnes.models import LdapUser
 from gestion_personnes.tests import create_full_user, try_delete_user
+from myresel import settings
 from tresorerie.models import Transaction, Product
 
 
@@ -148,18 +151,27 @@ class HomeViewCase(TestCase):
             self.assertContains(r, "%i€" % (p.prix/100))
 
     def test_do_pay_simple(self):
+        import stripe
+
+        # Ensure that this test is not run in release mode:
+        self.assertIn("test", settings.STRIPE_API_KEY)
+
+        stripe.api_key = settings.STRIPE_API_KEY
         self.user.formation = "ANY"
         self.user.cotiz = []
+        self.user.end_cotiz = datetime.today()
         self.user.save()
 
         product = self.productFIG_1a
 
+        # Choose product
         r = self.client.get(reverse("tresorerie:pay", args=(product.id,)),
                             HTTP_HOST="10.0.3.99", follow=True)
 
         self.assertEqual(200, r.status_code)
         self.assertTemplateUsed(r, "gestion_personnes/personal_info.html")
 
+        # Update user infos
         r = self.client.post(
             r.redirect_chain[0][0],
             data={
@@ -171,7 +183,7 @@ class HomeViewCase(TestCase):
                 'certify_truth': "certify_truth"
             },
             HTTP_HOST="10.0.3.99",
-            follow=True
+            follow=True,
         )
 
         self.assertEqual(200, r.status_code)
@@ -183,3 +195,36 @@ class HomeViewCase(TestCase):
 
         # Check if the total is correct :
         self.assertContains(r, "%i€" % ((self.productAdhesion.prix+product.prix) / 100))
+
+        # Check if the stripe public key is here
+        self.assertContains(r,  "%s" % settings.STRIPE_PUBLIC_KEY)
+
+        # Create a token
+        tok = stripe.Token.create(
+            card={
+                "number": '4242424242424242',
+                "exp_month": 12,
+                "exp_year": 2050,
+                "cvc": '123'
+            },
+        )
+
+        r = self.client.post(
+            reverse("tresorerie:pay", args=(product.id,)),
+            data={
+                'uuid': r.context["transaction"].uuid,
+                'price': r.context["transaction"].total_stripe,
+                'stripeToken': tok.id,
+            },
+            HTTP_HOST="10.0.3.99",
+            follow=True,
+        )
+
+        self.assertTemplateUsed("tresorerie/history.html")
+        self.assertContains(r, "%i€" % ((self.productAdhesion.prix + product.prix) / 100))
+
+        # Check in database if everything is correct:
+        user_s = LdapUser.get(pk=self.user.uid)
+        self.assertIn(str(current_year()), user_s.cotiz)
+        self.assertLessEqual(datetime.now() + timedelta(days=29), user_s.end_cotiz)
+
