@@ -106,8 +106,8 @@ potential_uid = [
 potential_user_password = ["#ldap%{}".format(potential_uid[i]) for i in range(sample_number)]  # String
 potential_nt_password = ["{}#ldap%".format(potential_uid[i]) for i in range(sample_number)]  # String
 potential_display_name = [
-     "{} {}".format(potential_first_name[i], potential_last_name[i])
-     for i in range(sample_number)
+    "{} {}".format(potential_first_name[i], potential_last_name[i])
+    for i in range(sample_number)
 ]  # String
 # potential_postal_address générée lors de la création de l'utilisateur
 
@@ -136,11 +136,42 @@ potential_mail_local_address = [
 potential_mail_dir = ["{}/Maildir/".format(potential_uid[i]) for i in range(sample_number)]  # String
 potential_home_directory = ["/var/mail/virtual/{}".format(potential_uid[i]) for i in range(sample_number)]  # String
 
-# On remplit maintenant la base de donnée
+# On remplit maintenant la base de donnée et le fichier csv
+monitoring_file = open('ldap_test_users.csv', 'w')
+monitoring_file.write(
+    "{};{};{};{};{};{};{};{};{};{};{};{};{};{};{};{};{};{};{};{};{};{};{};{};{};{};{};{}\n".format(
+    "uid",
+    "first_name",
+    "last_name",
+    "user_password",
+    "nt_password",
+    "display_name",
+    "postal_address",
+    "inscr_date",
+    "cotiz",
+    "end_cotiz",
+    "building",
+    "room_number",
+    "promo",
+    "mail",
+    "anneeScolaire",
+    "mobile",
+    "option",
+    "formation",
+    "photo_file",
+    "uid_godchildren",
+    "uid_godparents",
+    "origin",
+    "ae_cotiz",
+    "ae_nature",
+    "n_adherent",
+    "mail_local_address",
+    "mail_dir",
+    "home_directory"
+))
 compteur = 0
 for element in cartesian_product:
     user = LdapUser()
-    user.object_classes = ["genericPerson"]
     user.uid = potential_uid[compteur]
     user.first_name = potential_first_name[compteur]
     user.last_name = potential_last_name[compteur]
@@ -148,15 +179,31 @@ for element in cartesian_product:
     user.nt_password = potential_nt_password[compteur]
     user.display_name = potential_display_name[compteur]
     user.postal_address = "655, avenue du technopôle\n29280 PLOUZANE"
+    monitoring_file.write("{};{};{};{};{};{};{};".format(
+        user.uid,
+        user.first_name,
+        user.last_name,
+        user.user_password,
+        user.nt_password,
+        user.display_name,
+        user.postal_address
+    ))
     if element[link_dict["is_reselPerson"]]:
-        user.object_classes.append("reselPerson")
         user.inscr_date = element[link_dict["inscr_date"]]
         user.cotiz = element[link_dict["cotiz"]]
         user.end_cotiz = element[link_dict["end_cotiz"]]
         user.building = potential_building[compteur]
         user.room_number = potential_room_number[compteur]
+        monitoring_file.write("{};{};{};{};{};".format(
+            user.inscr_date,
+            user.cotiz,
+            user.end_cotiz,
+            user.building,
+            user.room_number,
+        ))
+    else:
+        monitoring_file.write(";;;;;")
     if element[link_dict["is_enstbPerson"]]:
-        user.object_classes.append("enstbPerson")
         user.promo = element[link_dict["promo"]]
         user.mail = potential_mail[compteur]
         user.anneeScolaire = element[link_dict["anneeScolaire"]]
@@ -167,14 +214,46 @@ for element in cartesian_product:
         user.uid_godchildren = element[link_dict["uid_godchildren"]]
         user.uid_godparents = element[link_dict["uid_godparents"]]
         user.origin = element[link_dict["origin"]]
+        monitoring_file.write("{};{};{};{};{};{};{};{};{};{};".format(
+            user.promo,
+            user.mail,
+            user.anneeScolaire,
+            user.mobile,
+            user.option,
+            user.formation,
+            user.photo_file,
+            user.uid_godchildren,
+            user.uid_godparents,
+            user.origin
+        ))
+    else:
+        monitoring_file.write(";;;;;;;;;;;")
     if element[link_dict["is_aePerson"]]:
-        user.object_classes.append("aePerson")
         user.ae_cotiz = element[link_dict["ae_cotiz"]]
         user.ae_nature = ae_cotiz = element[link_dict["ae_nature"]]
         user.n_adherent = potential_n_adherent[compteur]
+        monitoring_file.write("{};{};{};".format(
+            user.ae_cotiz,
+            user.ae_nature,
+            user.n_adherent
+        ))
+    else:
+        monitoring_file.write(";;;")
     if element[link_dict["is_mailPerson"]]:
-        user.object_classes.append("mailPerson")
         user.mail_local_address = potential_mail_local_address[compteur]
         user.mail_dir = potential_mail_dir[compteur]
         user.home_directory = potential_home_directory[compteur]
-    user.save()
+        monitoring_file.write("{};{};{};".format(
+            user.mail_local_address,
+            user.mail_dir,
+            user.home_directory
+        ))
+    else:
+        monitoring_file.write(";;;")
+
+    monitoring_file.write("\n")
+    monitoring_file.close()
+    try:
+        user.save()
+    except:
+        print("Failed to create new LDap users")
