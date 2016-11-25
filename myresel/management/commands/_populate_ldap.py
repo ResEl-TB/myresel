@@ -19,59 +19,59 @@ next_year = now.year + 1
 # Ensembles Attributs
 
 # reselPerson
-ensemble_is_reselPerson = [False, True]  # Bool
-ensemble_inscr_date = [previous_month, now]  # Date
-ensemble_cotiz = [str(next_year), str(previous_year)]  # String ...... ????????????
-ensemble_end_cotiz = [previous_month, month_later]  # Date
-ensemble_campus = ["Brest"]  # String
+potential_is_reselPerson = [False, True]  # Bool
+potential_inscr_date = [previous_month, now]  # Date
+potential_cotiz = [str(next_year), str(previous_year)]  # String ...... ????????????
+potential_end_cotiz = [previous_month, month_later]  # Date
+potential_campus = ["Brest"]  # String
 
 # maiselPerson
-ensemble_is_maiselPerson = [False, True]  # Bool
+potential_is_maiselPerson = [False, True]  # Bool
 
 # enstbPerson
-ensemble_is_enstbPerson = [False, True]  # Bool
-ensemble_promo = [str(next_year)]  # String
-ensemble_anneeScolaire = [str(current_year) + "-" + str(next_year)]  # String
-ensemble_option = ["ESH"]  # String ...... ??????????
-ensemble_formation = ["FIP", "FIG"]  # String
-ensemble_photo_file = [""]  # String
-ensemble_uid_godchildren = [[]]  # List
-ensemble_uid_godparents = [[]]  # List
-ensemble_origin = ["Sealand"]  # String
+potential_is_enstbPerson = [False, True]  # Bool
+potential_promo = [str(next_year)]  # String
+potential_anneeScolaire = ["{}-{}".format(current_year, next_year)]  # String
+potential_option = ["ESH"]  # String ...... ??????????
+potential_formation = ["FIP", "FIG"]  # String
+potential_photo_file = [""]  # String
+potential_uid_godchildren = [[]]  # List
+potential_uid_godparents = [[]]  # List
+potential_origin = ["Sealand"]  # String
 
 # aePerson
-ensemble_is_aePerson = [False, True]  # Bool
-ensemble_ae_cotiz = [str(previous_year), str(next_year)]  # String
-ensemble_ae_nature = ["CB", "Liquide"]  # String
+potential_is_aePerson = [False, True]  # Bool
+potential_ae_cotiz = [str(previous_year), str(next_year)]  # String
+potential_ae_nature = ["CB", "Liquide"]  # String
 
 # mailPerson
-ensemble_is_mailPerson = [False, True]  # Bool
+potential_is_mailPerson = [False, True]  # Bool
 
-ensemble_produit = product(
-    ensemble_is_reselPerson,
-    ensemble_inscr_date,
-    ensemble_cotiz,
-    ensemble_end_cotiz,
-    ensemble_campus,
-    ensemble_is_maiselPerson,
-    ensemble_is_enstbPerson,
-    ensemble_promo,
-    ensemble_anneeScolaire,
-    ensemble_option,
-    ensemble_formation,
-    ensemble_photo_file,
-    ensemble_uid_godchildren,
-    ensemble_uid_godparents,
-    ensemble_origin,
-    ensemble_is_aePerson,
-    ensemble_ae_cotiz,
-    ensemble_ae_nature,
-    ensemble_is_mailPerson
-    )
+cartesian_product = product(
+    potential_is_reselPerson,
+    potential_inscr_date,
+    potential_cotiz,
+    potential_end_cotiz,
+    potential_campus,
+    potential_is_maiselPerson,
+    potential_is_enstbPerson,
+    potential_promo,
+    potential_anneeScolaire,
+    potential_option,
+    potential_formation,
+    potential_photo_file,
+    potential_uid_godchildren,
+    potential_uid_godparents,
+    potential_origin,
+    potential_is_aePerson,
+    potential_ae_cotiz,
+    potential_ae_nature,
+    potential_is_mailPerson
+)
 
-# Donne la correspondance entre la case du tableau ensemble_produit et le champs pour les champs attributs
+# Donne la correspondance entre la case du tableau cartesian_product et le champs pour les champs attributs
 # Seuls les attributs rentrent dans le dictionnaire
-dictionnaire = {
+link_dict = {
     "is_reselPerson": 0,
     "inscr_date": 1,
     "cotiz": 2,
@@ -93,80 +93,88 @@ dictionnaire = {
     "is_mailPerson": 18
 }
 
-ensemble_produit = list(ensemble_produit)
-sample_number = len(ensemble_produit)  # Nombre de possibilités générées
+cartesian_product = list(cartesian_product)
+sample_number = len(cartesian_product)  # Nombre de possibilités générées
 
 # Ensembles Identifiants
-ensemble_first_name = [hex(i) for i in range(sample_number)]  # String
-ensemble_last_name = [hex(i) + "last" for i in range(sample_number)]  # String
-ensemble_uid = [ensemble_first_name[i][0] + ensemble_last_name[i]
-    [0:max(len(ensemble_last_name[i]) - 1, 7)] for i in range(sample_number)]  # String
-ensemble_user_password = ["#ldap%" + ensemble_uid[i] for i in range(sample_number)]  # String
-ensemble_nt_password = [ensemble_uid[i] + "#ldap%" for i in range(sample_number)]  # String
-ensemble_display_name = [ensemble_first_name[i] + " " +
-                         ensemble_last_name[i] for i in range(sample_number)]  # String
-# ensemble_postal_address générée lors de la création de l'utilisateur
+potential_first_name = [hex(i) for i in range(sample_number)]  # String
+potential_last_name = ["{}last".format(hex(i)) for i in range(sample_number)]  # String
+potential_uid = [
+    potential_first_name[i][0] + potential_last_name[i]
+    [0:max(len(potential_last_name[i]) - 1, 7)] for i in range(sample_number)
+]  # String
+potential_user_password = ["#ldap%{}".format(potential_uid[i]) for i in range(sample_number)]  # String
+potential_nt_password = ["{}#ldap%".format(potential_uid[i]) for i in range(sample_number)]  # String
+potential_display_name = [
+     "{} {}".format(potential_first_name[i], potential_last_name[i])
+     for i in range(sample_number)
+]  # String
+# potential_postal_address générée lors de la création de l'utilisateur
 
 
 # maiselPerson
-ensemble_building = ["I1" for i in range(sample_number)]  # String
-ensemble_room_number = ["220" for i in range(sample_number)]  # String
+potential_building = ["I1" for i in range(sample_number)]  # String
+potential_room_number = ["220" for i in range(sample_number)]  # String
 
 # enstbPerson
-ensemble_mail = [ensemble_first_name[i] + "." + ensemble_last_name[i] +
-                 "@telecom-bretagne.eu" for i in range(sample_number)]  # String
-ensemble_mobile = ["336" + "0" * (8 - len(str(i))) + str(i)
-                   for i in range(sample_number)]  # String
+potential_mail = [
+    "{}.{}@telecom-bretagne.eu".format(potential_first_name[i], potential_last_name[i])
+    for i in range(sample_number)
+]  # String
+potential_mobile = [
+    "336{}{}".format("0" * (8 - len(str(i))), str(i))
+    for i in range(sample_number)]  # String
 
 # aePerson
-ensemble_n_adherent = [str(i) for i in range(sample_number)]  # String
+potential_n_adherent = [str(i) for i in range(sample_number)]  # String
 
 # mailPerson
-ensemble_mail_local_address = [ensemble_first_name[i] + "." +
-                               ensemble_last_name[i] + "@resel.fr" for i in range(sample_number)]  # String
-ensemble_mail_dir = ["" for i in range(sample_number)]  # String
-ensemble_home_directory = ["" for i in range(sample_number)]  # String
+potential_mail_local_address = [
+    "{}.{}@resel.fr".format(potential_first_name[i], potential_last_name[i])
+    for i in range(sample_number)
+]  # String
+potential_mail_dir = ["{}/Maildir/".format(potential_uid[i]) for i in range(sample_number)]  # String
+potential_home_directory = ["/var/mail/virtual/{}".format(potential_uid[i]) for i in range(sample_number)]  # String
 
 # On remplit maintenant la base de donnée
 compteur = 0
-for element in ensemble_produit:
+for element in cartesian_product:
     user = LdapUser()
     user.object_classes = ["genericPerson"]
-    user.uid = ensemble_uid[compteur]
-    user.first_name = ensemble_first_name[compteur]
-    user.last_name = ensemble_last_name[compteur]
-    user.user_password = ensemble_user_password[compteur]
-    user.nt_password = ensemble_nt_password[compteur]
-    user.display_name = ensemble_display_name[compteur]
+    user.uid = potential_uid[compteur]
+    user.first_name = potential_first_name[compteur]
+    user.last_name = potential_last_name[compteur]
+    user.user_password = potential_user_password[compteur]
+    user.nt_password = potential_nt_password[compteur]
+    user.display_name = potential_display_name[compteur]
     user.postal_address = "655, avenue du technopôle\n29280 PLOUZANE"
-    if element[dictionnaire["is_reselPerson"]]:
+    if element[link_dict["is_reselPerson"]]:
         user.object_classes.append("reselPerson")
-        user.inscr_date = element[dictionnaire["inscr_date"]]
-        user.cotiz = element[dictionnaire["cotiz"]]
-        user.end_cotiz = element[dictionnaire["end_cotiz"]]
-        user.building = ensemble_building[compteur]
-        user.room_number = ensemble_room_number[compteur]
-    if element[dictionnaire["is_enstbPerson"]]:
+        user.inscr_date = element[link_dict["inscr_date"]]
+        user.cotiz = element[link_dict["cotiz"]]
+        user.end_cotiz = element[link_dict["end_cotiz"]]
+        user.building = potential_building[compteur]
+        user.room_number = potential_room_number[compteur]
+    if element[link_dict["is_enstbPerson"]]:
         user.object_classes.append("enstbPerson")
-        user.promo = element[dictionnaire["promo"]]
-        user.mail = ensemble_mail[compteur]
-        user.anneeScolaire = element[dictionnaire["anneeScolaire"]]
-        user.mobile = ensemble_mobile[compteur]
-        user.option = element[dictionnaire["option"]]
-        user.formation = element[dictionnaire["formation"]]
-        user.photo_file = element[dictionnaire["photo_file"]]
-        user.uid_godchildren = element[dictionnaire["uid_godchildren"]]
-        user.uid_godparents = element[dictionnaire["uid_godparents"]]
-        user.origin = element[dictionnaire["origin"]]
-    if element[dictionnaire["is_aePerson"]]:
+        user.promo = element[link_dict["promo"]]
+        user.mail = potential_mail[compteur]
+        user.anneeScolaire = element[link_dict["anneeScolaire"]]
+        user.mobile = potential_mobile[compteur]
+        user.option = element[link_dict["option"]]
+        user.formation = element[link_dict["formation"]]
+        user.photo_file = element[link_dict["photo_file"]]
+        user.uid_godchildren = element[link_dict["uid_godchildren"]]
+        user.uid_godparents = element[link_dict["uid_godparents"]]
+        user.origin = element[link_dict["origin"]]
+    if element[link_dict["is_aePerson"]]:
         user.object_classes.append("aePerson")
-        user.ae_cotiz = element[dictionnaire["ae_cotiz"]]
-        user.ae_nature = ae_cotiz = element[dictionnaire["ae_nature"]]
-        user.n_adherent = ensemble_n_adherent[compteur]
-    if element[dictionnaire["is_mailPerson"]]:
+        user.ae_cotiz = element[link_dict["ae_cotiz"]]
+        user.ae_nature = ae_cotiz = element[link_dict["ae_nature"]]
+        user.n_adherent = potential_n_adherent[compteur]
+    if element[link_dict["is_mailPerson"]]:
         user.object_classes.append("mailPerson")
-        user.mail_local_address = ensemble_mail_local_address[compteur]
-        user.mail_dir = ensemble_mail_dir[compteur]
-        user.home_directory = ensemble_home_directory[compteur]
-    compteur += 1
-print(compteur)
+        user.mail_local_address = potential_mail_local_address[compteur]
+        user.mail_dir = potential_mail_dir[compteur]
+        user.home_directory = potential_home_directory[compteur]
+    user.save()
