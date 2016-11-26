@@ -22,7 +22,7 @@
                     <h3>{% trans "Mes services" %}</h3>
                     <div class="services-group">
                         <div><a href="{% url 'gestion-machines:liste' %}"><span class="fa fa-cubes fa-fw"></span> {% trans "Consulter toutes mes machines inscrites" %}</a></div>
-                        <div><a><span class="fa fa-tasks fa-fw"></span> {% trans "Cconsommation de bande passante" %}</a> <span class="label label-default">{% trans "Bientôt" %}</span></div>
+                        <div><a href="{% url 'gestion-machines:bandwidth-usage' %}"><span class="fa fa-tasks fa-fw"></span> {% trans "Consommation de bande passante" %}</a> <span class="label label-default"></span></div>
                     </div>
                     <div class="services-group">
                         <div><a><span class="fa fa-group fa-fw"></span> {% trans "Gérer mes clubs et associations" %}</a> <span class="label label-default">{% trans "Bientôt" %}</span></div>

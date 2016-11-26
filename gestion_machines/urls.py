@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url
 
-from .views import Reactivation, AddDeviceView, AjoutManuel, ListDevices, Modifier
+from .views import Reactivation, AddDeviceView, AjoutManuel, ListDevices, Modifier, BandwidthUsage
 
 urlpatterns = [
     url(r'^réactivation$', Reactivation.as_view(), name='reactivation'),
@@ -23,4 +23,5 @@ urlpatterns = [
     url(r'^ajout-manuel$', AjoutManuel.as_view(), name='ajout-manuel'),
     url(r'^liste$', ListDevices.as_view(), name='liste'),
     url(r'^modifier/(?P<host>[a-z0-9-]{2,})$', Modifier.as_view(), name='modifier'),
+    url(r'^consomation$', BandwidthUsage.as_view(), name='bandwidth-usage')
 ]

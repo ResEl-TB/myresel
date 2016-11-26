@@ -46,10 +46,40 @@ class PeopleData(models.Model):
 
 
 class PeopleHistory(models.Model):
+
+    UP = 'up'
+    DOWN = 'down'
+    WAY_CHOICES = (
+        (UP, 'up'),
+        (DOWN, 'down'),
+    )
+
+    CLEAN = 'clean'
+    DIRTY = 'dirty'
+    FLOW_CHOICES = (
+        (CLEAN, 'clean'),
+        (DIRTY, 'dirty')
+    )
+
+    site = CharField(max_length=32, default=None, db_column="site", editable=False)
+    timestamp = IntegerField(default=None, db_column="timestamp", editable=False)
+    cn = CharField(max_length=128, default=None, db_column="cn", editable=False, primary_key=True)
+    uid = CharField(max_length=16, default=None, db_column="uid", editable=False)
+    way = CharField(max_length=4, default=None, db_column="way", editable=False, choices=WAY_CHOICES)
+    flow = CharField(max_length=5, default=None, db_column="flow", editable=False, choices=FLOW_CHOICES)
+
+    group = IntegerField(default=None, db_column="group", editable=False)
+    amount = BigIntegerField(default=None, db_column="amount", editable=False)
+    amount_ponderated = BigIntegerField(default=None, db_column="amount_ponderated", editable=False)
+    duration = IntegerField(default=None, db_column="duration", editable=False)
+
     class Meta:
         db_table = "people_history"
         managed = False
         default_permissions = ()
+        index_together = [
+            ["cn", "way", "flow", "site", "timestamp"],
+        ]
 
 
 class LdapDevice(ldapback.models.LdapModel):
@@ -185,6 +215,8 @@ class QoSRouter(object):
         return None
 
     def db_for_write(self, model, **hints):
+        if self.is_qos(model):
+            return 'qos'
         return None
 
     def allow_relation(self, obj1, obj2, **hints):

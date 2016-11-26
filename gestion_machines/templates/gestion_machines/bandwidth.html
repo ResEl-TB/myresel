@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block titre %}{% trans "Consomation de bande passante" %}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">{% trans "Consomation de bande passante" %}</h1>
+            </div> <!-- /.col-lg-12 -->
+        </div>
+        <canvas id="bandwidthChart" width="800" height="600" style="max-width: 800px; max-height: 600px;"></canvas>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    <script src="{% static 'js/Chart.bundle.min.js' %}"></script>
+    <script>
+        /**
+         * Convert to human readable
+         * From: https://stackoverflow.com/a/14919494
+         * @param bytes
+         * @param si
+         * @returns {string}
+         */
+        function humanFileSize(bytes, si) {
+            var thresh = si ? 1000 : 1024;
+            if(Math.abs(bytes) < thresh) {
+                return bytes + ' B';
+            }
+            var units = si
+                ? ['ko','Mo','Go','To','Po','Eo','Zo','Yo']
+                : ['Kio','Mio','Gio','Tio','Pio','Eio','Zio','Yio'];
+            var u = -1;
+            do {
+                bytes /= thresh;
+                ++u;
+            } while(Math.abs(bytes) >= thresh && u < units.length - 1);
+            return bytes.toFixed(1)+' '+units[u];
+        }
+        var ctx = document.getElementById("bandwidthChart");
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {{ hist_label }},
+
+                datasets: [{
+                    label: 'Téléchargements',
+                    data: {{ hist_down }},
+                    borderColor: 'rgba(45, 115, 160, .6)',
+                    backgroundColor: 'rgba(45, 115, 160, .4)',
+                    pointRadius: 1,
+
+                },
+                    {
+                        label: 'Téléversements',
+                        data: {{ hist_up }},
+                        borderColor: 'rgba(192, 0, 26, .6)',
+                        backgroundColor: 'rgba(192, 0, 26, .4)',
+                        pointRadius: 1,
+
+                    }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true,
+                            callback: function(value, index, values) {
+                                return humanFileSize(value, true);
+                            }
+                        }
+
+                    }],
+                    xAxes: [{
+                        ticks: {
+                            callback: function(value, index, values) {
+                                return new Date(value).toTimeString();
+                            }
+                        }
+
+                    }]
+                }
+            }
+        });
+    </script>
+{% endblock %}

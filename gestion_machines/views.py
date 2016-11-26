@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+import time
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -15,7 +16,7 @@ from django.views.generic import View, ListView
 from fonctions import ldap, network
 from fonctions.decorators import resel_required, unknown_machine
 from fonctions.network import get_campus
-from gestion_machines.models import LdapDevice
+from gestion_machines.models import LdapDevice, PeopleHistory
 from gestion_personnes.models import LdapUser
 from myresel.settings_local import SERVER_EMAIL
 from .forms import AddDeviceForm, AjoutManuelForm
@@ -290,3 +291,55 @@ class Modifier(View):
             return HttpResponseRedirect(reverse('gestion-machines:liste'))
 
         return render(request, self.template_name, {'form': form})
+
+
+class BandwidthUsage(View):
+    """
+    Display the bandwidth used by the user
+    For the moment it only display per user, but in the future we can
+    imagine that it show bandwidth par device
+    """
+    template_name = "gestion_machines/bandwidth.html"
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(BandwidthUsage, self).dispatch(*args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        # Get all the data in the last 24 hours:
+        current_time = int(time.time())
+        batchs = 50
+        duration = 24 * 3600  # In seconds
+
+
+        bare_up = PeopleHistory.objects.filter(
+            uid=request.ldap_user.uid,
+            timestamp__gte=current_time - duration,
+            way=PeopleHistory.UP).order_by("timestamp")
+
+        bare_down = PeopleHistory.objects.filter(
+            uid=request.ldap_user.uid,
+            timestamp__gte=current_time - duration,
+            way=PeopleHistory.DOWN).order_by("timestamp")
+
+        # Create 2 historygrams
+        hist_time_labels = [i for i in range(current_time - duration, current_time, int(duration / batchs))]
+        hist_up = [0 for _ in range(current_time - duration, current_time, int(duration / batchs))]
+        i = 0
+        for d in bare_up:
+            if d.timestamp > hist_time_labels[i + 1]:
+                i += 1
+            hist_up[i] += d.amount
+
+        hist_down = [0 for _ in range(current_time - duration, current_time, int(duration / batchs))]
+        i = 0
+        for d in bare_down:
+            if d.timestamp > hist_time_labels[i + 1]:
+                i += 1
+            hist_down[i] += d.amount
+
+        return render(request, self.template_name, context={
+            "hist_up": str(hist_up),
+            "hist_down": str(hist_down),
+            "hist_label": str(hist_time_labels),
+        })
