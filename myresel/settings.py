@@ -184,6 +184,7 @@ DATABASES = {
         'HOST': DB_QOS_HOST,
     }
 }
+DATABASE_ROUTERS = ['gestion_machines.models.QoSRouter']
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
