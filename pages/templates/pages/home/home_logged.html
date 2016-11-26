@@ -78,8 +78,8 @@
 
                                     <small><a href="{% url 'gestion-machines:modifier' device.hostname %}" class="fa fa-pencil fa-fw"></a></small></h3></div>
                                 <div><span class="label label-success">{% trans "Connecté au ResEl" %}</span></div>
-                                {#                                <div><span class="fa fa-arrow-up"></span> </div>#}
-                                {#                                <div><span class="fa fa-arrow-down"></span> </div>#}
+                                <br />
+                                <div><span class="fa fa-fw fa-upload"></span> {{ data_up }} <span class="fa fa-fw fa-download"></span> {{ data_down }}</div>
                             </div>
                         </div>
                     </div>
