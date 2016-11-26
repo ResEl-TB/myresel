@@ -67,3 +67,20 @@ def is_ip_in_subnet(ip, ipNetwork, maskLength):
     minVal = ipNetworkInt-chopAmount
     maxVal = minVal+2**maskLengthFromRight -1
     return minVal <= ipInt and ipInt <= maxVal
+
+
+def sizeof_fmt(num, suffix='o'):
+    """
+    Human readable file size
+
+    Credit: Sridhar Ratnakumar
+    From: https://stackoverflow.com/a/1094933
+    :param num:
+    :param suffix:
+    :return:
+    """
+    for unit in ['', 'Ki', 'Mi', 'Gi', 'Ti', 'Pi', 'Ei', 'Zi']:
+        if abs(num) < 1024.0:
+            return "%3.1f%s%s" % (num, unit, suffix)
+        num /= 1024.0
+    return "%.1f%s%s" % (num, 'Yi', suffix)
