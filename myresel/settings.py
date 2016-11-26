@@ -176,6 +176,13 @@ DATABASES = {
         'PASSWORD': DB_PASSWORD,
         'HOST': DB_HOST,
     },
+    'qos': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': DB_QOS_NAME,
+        'USER': DB_QOS_USER,
+        'PASSWORD': DB_QOS_PASSWORD,
+        'HOST': DB_QOS_HOST,
+    }
 }
 
 # Password validation
