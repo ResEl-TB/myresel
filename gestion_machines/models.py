@@ -38,7 +38,7 @@ class PeopleData(models.Model):
 
     class Meta:
         db_table = "people_data"
-        managed = False
+        managed = False  # Read-only database
         default_permissions = ()
         index_together = [
             ["cn", "way", "flow", "site"],
@@ -75,7 +75,7 @@ class PeopleHistory(models.Model):
 
     class Meta:
         db_table = "people_history"
-        managed = False
+        managed = False  # Read-only database
         default_permissions = ()
         index_together = [
             ["cn", "way", "flow", "site", "timestamp"],
@@ -197,6 +197,10 @@ class LdapDevice(ldapback.models.LdapModel):
 class QoSRouter(object):
     """
     A router for reading in QoS database
+    The router, helps making the QoS database read only. But
+    you should not rely only on that.
+
+    The user in database must be put as read-only
     """
     QoSClasses = (
         PeopleData,

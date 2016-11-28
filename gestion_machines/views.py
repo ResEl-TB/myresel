@@ -327,16 +327,22 @@ class BandwidthUsage(View):
         hist_up = [0 for _ in range(current_time - duration, current_time, int(duration / batchs))]
         i = 0
         for d in bare_up:
-            if d.timestamp > hist_time_labels[i + 1]:
-                i += 1
-            hist_up[i] += d.amount
+            try:
+                if d.timestamp > hist_time_labels[i + 1]:
+                    i += 1
+                hist_up[i] += d.amount
+            except IndexError:
+                break
 
         hist_down = [0 for _ in range(current_time - duration, current_time, int(duration / batchs))]
         i = 0
         for d in bare_down:
-            if d.timestamp > hist_time_labels[i + 1]:
-                i += 1
-            hist_down[i] += d.amount
+            try:
+                if d.timestamp > hist_time_labels[i + 1]:
+                    i += 1
+                hist_down[i] += d.amount
+            except IndexError:
+                break
 
         return render(request, self.template_name, context={
             "hist_up": str(hist_up),
