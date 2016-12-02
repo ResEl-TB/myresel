@@ -33,17 +33,7 @@ def get_mac(ip):
         eth = 'eth3'
     else:
         eth = 'eth2'
-
-    try:
-        subprocess.check_call(
-            ['fping', '-t', '100', '-c', '1', '-I', eth, ip],
-            stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
-        )
-    except Exception as e:
-        e = NetworkError("An error occurred when doing an fping : "
-                     "\n %s" % e)
-        logger.info(e)
-    mac = str(subprocess.Popen(["arp -a | grep {}\) | grep {} | awk '{{print $4}}'".format(ip, eth)],
+    mac = str(subprocess.Popen(["arp -ani {} {}".format(eth, ip)],
                                stdout=subprocess.PIPE,
                                shell=True).communicate()[0]).split('\'')[1].split('\\n')[0]
 
