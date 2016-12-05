@@ -311,3 +311,75 @@ class CheckEmail(View):
             except ObjectDoesNotExist:
                 return HttpResponseForbidden()
         return HttpResponseRedirect(reverse("home"))
+
+
+class MailResel(View):
+    """
+    Base view to present mail configuration parameters, to propose mail
+    creation and destruction.
+    """
+    template_name = 'gestion_personnes/mail_resel.html'
+    def get(self, request, *args, **kwargs):
+        # Is he already a mailPerson ?
+        user = LdapUser.get(pk=request.user.username)
+        if 'mailPerson' in user.object_classes:
+            print(",".join(user.object_classes))
+            print("THIS IS WAHT I WANT : " + user.uid)
+            template_name = 'gestion_personnes/mail_resel.html'
+        else:
+            template_name = 'gestion_personnes/mail_resel_new.html'
+
+        return render(request, self.template_name, {'user': user})
+
+    def post(self, request, *args, **kwargs):
+        # Turning him into a mail person.
+        user = LdapUser.get(pk=request.user.username)
+        if 'mailPerson' not in user.object_classes:
+            # Get the right left part
+            homeDir = '/var/mail/virtual/'+user.uid
+            mailDir = user.uid + '/Maildir/'
+            handle = user.firstName + '.' + user.lastName
+
+            # We let the XX in the uid ?
+            
+            # If he already exist...
+            bearer = LdapUser.get(mailLocalAddress=handle + '@resel.fr')
+            if bearer == None:
+                # SO : http://stackoverflow.com/q/517923
+                handle = unicodedata.normalize('NFKD', handle).encode('ASCII',
+                'ignore')
+                user.mail_local_address = handle + '@resel.fr'
+                user.mail_dir = mailDir
+                user.home_dir = homeDir
+                user.object_classes.add('mailPerson')
+                user.save()
+
+                # TODO: Send base instructions in first email
+                # TODO: Do not hardcode text (i18n)
+                # Validate mailbox
+                creation_mail = EmailMessage(
+                    subject='Création de votre boîte mail ResEl',
+                    body='Bonjour, \n' +
+                        'Votre nouvelle boîte mail vient d\'être créée.' +
+                        'Cordialement, \n L\'équipe ResEl',
+                    from_mail='noreply@resel.fr',
+                    reply_to='support@resel.fr',
+                    to=mail_address)
+
+                creation_mail.send()
+                
+                messages.success(request, 
+                                'Votre boîte mail vient d\'être créée !')
+
+
+                return HttpResponseRedirect(reverse("mail"))
+            else:
+                messages.error(request,
+                    _("Une erreur est survenue. Contactez support@resel.fr"))
+                return HttpResponseRedirect(reverse("mail"))
+
+        else:
+            messages.error(request, 
+                    _("Vous avez déjà une adresse ResEl."))
+            return HttpResponseRedirect(reverse("mail"))
+

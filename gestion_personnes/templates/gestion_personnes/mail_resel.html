@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block titre %}{% trans "Email ResEl" %}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">{% trans "Votre boîte mail {{user.mail_local_address}}" %}</div>
+
+    
+    <div class="row">
+    	<div class="col-md-7 col-md-offset-1">
+<p>Accès par un logiciel de courrier électronique : 
+	<ul>
+   <li> Serveur POP/IMAP (SSL/TLS obligatoire) : mail.resel.fr sur le port 995 (POP) ou 993 (IMAP); </li>
+   <li> Nom d'utilisateur : {{user.uid}};</li>
+   <li> Mot de passe : votre mot de passe ResEl;</li>
+   <li> Serveur SMTP (courrier sortant) : mail.resel.fr sur le port 587, en activant le TLS.</li>
+	</ul>
+Par le Webmail ResEl :
+<ul>
+   <li> Adresse : https://webmail.resel.fr ou https://roundcube.resel.fr</li>
+   <li> Nom d'utilisateur : {{user.uid}}</li>
+   <li> Mot de passe : votre mot de passe ResEl</li>
+   <li> Domaine : @resel.fr</li>
+</ul>
+Informations supplémentaires :
+<ul>
+    <li>Taille maximale des mails : 10 Mo</li>
+</ul>
+	</div>
+    	<div class="col-md-4">
+		<div class="row">
+			<div>
+			{{user.mail_routing_address}}
+		<button type="button" class="btn btn-primary">Changer ma redirection</button>	
+			</div>
+			<div class="row">
+			Vous pouvez supprimer votre boîte mail ici. Elle sera supprimée au bout de trente jours; les mails seront accessibles jusque là.
+		<button type="button" class="btn btn-danger">Supprimer ma boîte ResEl</button>
+			</div>
+    	</div>
+    </div>
+</div> <!-- /.container -->
+{% endblock %}
