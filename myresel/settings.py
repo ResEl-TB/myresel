@@ -128,6 +128,7 @@ INSTALLED_APPS = [
     'django_rq',
     'whoswho',
     'clubs',
+    'campus',
 ]
 
 MIDDLEWARE_CLASSES = [
