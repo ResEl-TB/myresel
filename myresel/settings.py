@@ -19,9 +19,6 @@ ALLOWED_HOSTS = ['*', 'beta.resel.fr', 'beta.rennes.resel.fr', 'resel.fr', 'renn
 MAIN_HOST_BREST = 'beta.resel.fr'
 MAIN_HOST_RENNES = 'beta.rennes.resel.fr'
 
-# Language switch hack
-CSRF_COOKIE_DOMAIN = '.resel.fr'
-
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__name__))
 
 # Mails

@@ -128,3 +128,6 @@ if DEBUG or TESTING:
 # SECURE_SSL_REDIRECT = True
 #
 
+
+# Language switch hack
+# CSRF_COOKIE_DOMAIN = '.resel.fr'
