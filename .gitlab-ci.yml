@@ -1,7 +1,7 @@
 #TODO: refactor configuration (username, pass...)
 #TODO: do not delete migrations
 
-image: resel:web-python  # Custom image made for the ResEl
+image: docker.resel.fr/web  # Custom image made for the ResEl
 services:
   - redis:latest
   - mysql:latest
