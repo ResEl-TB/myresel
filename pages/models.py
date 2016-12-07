@@ -11,7 +11,7 @@ class News(models.Model):
     title = models.CharField(max_length=100)
     content = RichTextField()
     author = models.ForeignKey(User, null=True, blank=True, editable=False)
-    date = models.DateTimeField(auto_now=True, null=True)
+    date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.title
