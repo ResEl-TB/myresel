@@ -1,5 +1,6 @@
 import logging
 import re
+from datetime import datetime
 
 from django.conf import settings
 from django.contrib import messages
@@ -126,6 +127,37 @@ def correct_vlan(function=None, redirect_to='home'):
                 messages.error(request, _("Votre machine est déjà inscrite. Veuillez vous connecter sur le réseau Wi-Fi ResEl Secure."))
                 return HttpResponseRedirect(reverse(redirect_to))
             
+            return view_func(request, *args, **kwargs)
+
+        _view.__name__ = view_func.__name__
+        _view.__dict__ = view_func.__dict__
+        _view.__doc__ = view_func.__doc__
+
+        return _view
+
+    if function is None:
+        return _dec
+    else:
+        return _dec(function)
+
+def ae_required(function=None, redirect_to='campus:rooms:calendar'):
+    """ 
+    Checks if the user is a valid ae member
+    """
+
+    def _dec(view_func):
+        def _view(request, *args, **kwargs):
+            ae = False
+            for period in request.ldap_user.dates_membre:
+                [start, end] = list(map(lambda x: datetime.strptime(x, '%Y%m%d').date(), period.split('-')))
+                if start <= datetime.now().date() <= end:
+                    ae = True
+                    break
+            
+            if not ae:
+                messages.error(request, _('Vous n\'êtes pas membre de l\'AE, vous ne pouvez donc pas réserver de salle'))
+                return HttpResponseRedirect(reverse(redirect_to))             
+
             return view_func(request, *args, **kwargs)
 
         _view.__name__ = view_func.__name__
