@@ -1,5 +1,5 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 
-urlpattern = [
-
+urlpatterns = [
+    url(r'^salles/', include('campus.suburls.urls_rooms', namespace='rooms')),
 ]
