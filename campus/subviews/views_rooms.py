@@ -5,10 +5,11 @@ from django.utils import timezone
 from django.contrib.auth.decorators import permission_required, login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 
 import calendar, datetime, json
 from campus.forms import RoomBookingForm
-from campus.models import RoomBooking, Room
+from campus.models import RoomBooking, Room, Club
 from fonctions.decorators import ae_required
 
 def calendarView(request, room='all', year=timezone.now().year, month=timezone.now().month, day='all'):
@@ -23,14 +24,14 @@ def calendarView(request, room='all', year=timezone.now().year, month=timezone.n
     cal = list()
     if room != 'all':
         room = Room.objects.get(pk=int(room))
-        if room.private:
-            if request.user.is_authenticated():
-                if not request.user.username in room.allowed_members:
-                    messages.error(request, _('Vous n\'avez pas accès à cette page'))
-                    return HttpResponseRedirect(reverse('home'))
-            else:
-                messages.error(request, _('Vous devez être connecté pour accéder à cette page'))
-                return HttpResponseRedirect(reverse('home'))
+
+        if not request.user.is_authenticated():
+            messages.error(request, _('Vous devez être connecté pour accéder à cette page'))
+            return HttpResponseRedirect(reverse('home'))
+
+        if not room.user_can_access(request.ldap_user):
+            messages.error(request, _('Vous n\'avez pas accès à cette page'))
+            return HttpResponseRedirect(reverse('home'))
 
         events = room.roombooking_set.filter(
             start_time__year=year, 
@@ -68,8 +69,11 @@ def calendarView(request, room='all', year=timezone.now().year, month=timezone.n
     
 
     # Getting all the rooms
-    private_rooms = Room.objects.filter(private=True, allowed_members__contains=request.user.username) \
-                        if request.user.is_authenticated() else None
+    queryset = Q()
+    for club in Club.filter(members__contains='uid=%s' % request.ldap_user.uid):
+        queryset = queryset | Q(clubs__contains=club.cn)
+    private_rooms = Room.objects.filter(queryset)
+
     rooms = [
         ('Salles clubs', private_rooms),
         ('Salles du foyer', Room.objects.filter(private=False, location='F')),
@@ -92,14 +96,29 @@ def calendarView(request, room='all', year=timezone.now().year, month=timezone.n
 
 @login_required
 @ae_required
-def bookView(request, booking=None):
+def bookingView(request, booking=None):
     """ View to book a room """
     if booking:
         instance = get_object_or_404(RoomBooking, id=booking)
+        granted = False
+        for room in instance.room.all():
+            if room.user_can_manage(request.ldap_user):
+                # User can manage reservations for this room
+                granted = True
+
+        if request.ldap_user.uid == instance.user:
+            # User can modify his own reservation
+            granted = True
+
+        if not granted:
+            messages.error(request, _('Vous ne pouvez pas modifier cette réservation'))
+            return HttpResponseRedirect(reverse('campus:rooms:calendar'))
+
         form = RoomBookingForm(request.POST or None, user=request.ldap_user, instance=instance)
     else:
         form = RoomBookingForm(request.POST or None, user=request.ldap_user)
     if form.is_valid():
         form.save()
-        return render(request, 'campus/rooms/booking_success.html')
+        messages.success(request, _('Opération réussie'))
+        return HttpResponseRedirect(reverse('campus:rooms:calendar'))
     return render(request, 'campus/rooms/booking.html', {'form': form})
