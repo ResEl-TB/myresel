@@ -10,6 +10,7 @@ class Club(ldapback.models.LdapModel):
     object_classes = ['tbClub']
 
     # tbClub
-    name = LdapCharField(db_column='orgaName', object_classes=['tbClub'], pk=True)
+    cn = LdapCharField(db_column='cn', object_classes=['tbClub'], pk=True)
+    name = LdapCharField(db_column='orgaName', object_classes=['tbClub'])
     prezs = LdapListField(db_column='uidPrezs', object_classes=['tbClub'])
     members = LdapListField(db_column='uidMembres', object_classes=['tbClub'])
