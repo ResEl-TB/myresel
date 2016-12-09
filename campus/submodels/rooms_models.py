@@ -1,14 +1,16 @@
 from django.db import models
 from django.core.mail import EmailMessage
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import User
 from django.db.models import Q
+from django.core.exceptions import ObjectDoesNotExist
 
 import django_rq
 from datetime import timedelta
 
 from gestion_personnes.models import LdapUser
 import campus.async_tasks as async_tasks
+from campus.submodels.clubs_models import Club
 
 class Room(models.Model):
     class Meta:
@@ -45,11 +47,48 @@ class Room(models.Model):
         verbose_name=_('Salle privée / club'),
     )
 
-    allowed_members = models.TextField(
-        help_text=_('indique les utilisateurs pouvant réserver la salle, un par ligne'),
+    clubs = models.TextField(
+        verbose_name='club(s)',
+        help_text=_('indique à quel(s) club(s) appartient la salle, un par ligne'),
         blank=True,
-        verbose_name=_('Membres authorisés'),
     )
+
+    def user_can_access(self, user):
+        """ Checks if a user can access the room """
+        
+        if self.private:
+            granted = False
+            for club in self.get_clubs():
+                if (user.uid in '\t'.join(club.members)) or (user.uid in '\t'.join(club.prezs)):
+                    granted = True
+                    break
+        else:
+            granted = True
+        return granted
+
+    def user_can_manage(self, user):
+        """ Checks if a user can manage bookings for this room """
+
+        granted = False
+        if self.private:
+            for club in self.get_clubs():
+                if user.uid in '\t'.join(club.prezs):
+                    granted = True
+                    break
+        return granted
+
+    def get_clubs(self):
+        """ Get allowed clubs for the room """
+
+        clubs = ['Tous']
+        if self.private:
+            clubs = list()
+            for club_cn in self.clubs.split('\r\n'):
+                try:
+                    clubs.append(Club.get(pk=club_cn))
+                except ObjectDoesNotExist:
+                    pass
+        return clubs
 
     def __str__(self):
         return '%s - %s' % (self.name, self.get_location_display()) 
@@ -57,19 +96,25 @@ class Room(models.Model):
     def is_free(self, start_date, end_date):
         """ Checks if a room is free between the time range given """
         
-        events = RoomBooking.objects.filter(
-            room__pk=self.pk,
+        events = self.roombooking_set.filter(
             start_time__year=start_date.year,
             start_time__month=start_date.month,
             start_time__day=start_date.day,
         )
-        print(events)
 
         free = True
         for event in events:
-            if event.start_time <= start_date <= event.end_time or event.start_time <= end_date <= event.end_time:
+            # Room not free if start_date in [event.start_time, event.end_time] or end_date in [event.start_time, event.end_time]
+            if event.start_time <= start_date <= event.end_time or \
+               event.start_time <= end_date <= event.end_time:
                 free = False
                 break
+
+            # Room also not free if [event.start_time, event.end_time] is included in [start_date, end_date]
+            elif start_date <= event.start_time <= end_date and start_date <= event.end_time <= end_date:
+                free = False
+                break
+
         return free
 
 class RoomBooking(models.Model):
@@ -145,7 +190,15 @@ class RoomAdmin(models.Model):
         verbose_name = 'administrateur des salles'
         verbose_name_plural = 'administrateurs des salles'
 
-    uid = models.CharField(
-        max_length=15,
-        verbose_name='nom d\'utilisateur',
+    user = models.ForeignKey(
+        User,
+        verbose_name='utilisateur',
     )
+
+    rooms = models.ManyToManyField(
+        'Room',
+        verbose_name='Salles accessibles',
+    )
+
+    def __str__(self):
+        return self.user.username
