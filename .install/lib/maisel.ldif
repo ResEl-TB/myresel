@@ -40,3 +40,14 @@ modifiersName: uid=afratice,ou=admins,dc=resel,dc=enst-bretagne,dc=fr
 modifyTimestamp: 20050909092009Z
 subschemaSubentry: cn=Subschema
 hasSubordinates: TRUE
+
+dn: ou=organisations,dc=maisel,dc=enst-bretagne,dc=fr
+objectClass: organizationalUnit
+ou: organisations
+structuralObjectClass: organizationalUnit
+hasSubordinates: TRUE
+subschemaSubentry: cn=Subschema
+modifiersName: cn=admin,dc=maisel,dc=enst-bretagne,dc=fr
+modifyTimestamp: 20030907213019Z
+creatorsName: cn=admin,dc=maisel,dc=enst-bretagne,dc=fr
+createTimestamp: 20030826174116Z
