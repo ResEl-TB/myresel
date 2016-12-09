@@ -142,6 +142,7 @@ MIDDLEWARE_CLASSES = [
     'myresel.middleware.IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAResElAdminSoCheckTheLdapBeforeMiddleware',
     'myresel.middleware.NetworkConfiguration',
     'myresel.middleware.inscriptionNetworkHandler',
+    'campus.middleware.RoomAdminMiddleware',
 ]
 
 ROOT_URLCONF = 'myresel.urls'
@@ -211,7 +212,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

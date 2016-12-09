@@ -13,6 +13,7 @@ from fonctions import ldap, network
 from fonctions.network import NetworkError
 from gestion_machines.models import LdapDevice
 from gestion_personnes.models import LdapUser
+from campus.models import Club, Room
 
 logger = logging.getLogger("default")
 class IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAResElAdminSoCheckTheLdapBeforeMiddleware(object):
@@ -32,7 +33,6 @@ class IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAResElAdmi
                 user.is_staff = 1
                 user.is_superuser = 1
                 user.save()
-
 
 class NetworkConfiguration(object):
     """
