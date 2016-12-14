@@ -20,7 +20,6 @@
                         <div class="col-sm-5">{% trans "Veuillez renseigner addresse e-mail :" %}</div>
                         <fieldset class=" col-sm-6 {% if form.email.errors %}has-error{% endif %}">
                             {{ form.email }}
-                            <a>Vous avez oublié votre identifiant ResEl ?</a>
                             {% if form.email.errors %}<span class="help-block">{{ form.email.errors }}</span>{% endif %}
                         </fieldset>
                     </div>

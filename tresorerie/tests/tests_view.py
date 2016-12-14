@@ -4,11 +4,17 @@ from datetime import datetime, timedelta
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
+from fonctions.generic import current_year
+from gestion_personnes.models import LdapUser
 from gestion_personnes.tests import create_full_user, try_delete_user
+from myresel import settings
 from tresorerie.models import Transaction, Product
+
+import stripe
 
 
 class HistoryViewCase(TestCase):
+
     def setUp(self):
         self.user = create_full_user()
         try_delete_user(self.user.uid)
@@ -96,6 +102,61 @@ class HomeViewCase(TestCase):
         self.productFIP_6m.save()
         self.productAdhesion.save()
 
+    def prepare_payment(self, product, do_test=False):
+        """
+        Do all the first successful task to prepare a payment.
+
+        :param product:
+        :param do_test: should we test the code here ? Faster without
+        :return:
+        """
+        # Ensure that this test is not run in release mode:
+        self.assertIn("test", settings.STRIPE_API_KEY)
+
+        stripe.api_key = settings.STRIPE_API_KEY
+        self.user.formation = "ANY"
+        self.user.cotiz = []
+        self.user.end_cotiz = datetime.today()
+        self.user.save()
+
+        # Choose product
+        r = self.client.get(reverse("tresorerie:pay", args=(product.id,)),
+                            HTTP_HOST="10.0.3.99", follow=True)
+
+        if do_test:
+            self.assertEqual(200, r.status_code)
+            self.assertTemplateUsed(r, "gestion_personnes/personal_info.html")
+
+        # Update user infos
+        r = self.client.post(
+            r.redirect_chain[0][0],
+            data={
+                'email': "email@email14.fr",
+                'phone': "0123456789",
+                'campus': "Brest",
+                'building': "I10",
+                'room': "14",
+                'certify_truth': "certify_truth"
+            },
+            HTTP_HOST="10.0.3.99",
+            follow=True,
+        )
+        if do_test:
+            self.assertEqual(200, r.status_code)
+            self.assertTemplateUsed(r, "tresorerie/recap.html")
+            self.assertContains(r, "%i€" % (product.prix / 100))
+
+            # Check if the user get a 2016 cotiz
+            self.assertContains(r, "%i€" % (self.productAdhesion.prix / 100))
+
+            # Check if the total is correct :
+            self.assertContains(r, "%i€" % ((self.productAdhesion.prix + product.prix) / 100))
+
+            # Check if the stripe public key is here
+            self.assertContains(r, "%s" % settings.STRIPE_PUBLIC_KEY)
+
+        return r.context["transaction"].uuid, r.context["transaction"].total_stripe
+
     def test_no_need_to_pay(self):
         self.user.end_cotiz = datetime.now() + timedelta(days=50)
         self.user.save()
@@ -148,38 +209,64 @@ class HomeViewCase(TestCase):
             self.assertContains(r, "%i€" % (p.prix/100))
 
     def test_do_pay_simple(self):
-        self.user.formation = "ANY"
-        self.user.cotiz = []
-        self.user.save()
-
         product = self.productFIG_1a
 
-        r = self.client.get(reverse("tresorerie:pay", args=(product.id,)),
-                            HTTP_HOST="10.0.3.99", follow=True)
+        transaction_uuid, price = self.prepare_payment(product, do_test=True)
 
-        self.assertEqual(200, r.status_code)
-        self.assertTemplateUsed(r, "gestion_personnes/personal_info.html")
-
-        r = self.client.post(
-            r.redirect_chain[0][0],
-            data={
-                'email': "email@email14.fr",
-                'phone': "0123456789",
-                'campus': "Brest",
-                'building': "I10",
-                'room': "14",
-                'certify_truth': "certify_truth"
+        # Create a token
+        tok = stripe.Token.create(
+            card={
+                "number": '4242424242424242',
+                "exp_month": 12,
+                "exp_year": 2050,
+                "cvc": '123'
             },
-            HTTP_HOST="10.0.3.99",
-            follow=True
         )
 
-        self.assertEqual(200, r.status_code)
+        r = self.client.post(
+            reverse("tresorerie:pay", args=(product.id,)),
+            data={
+                'uuid': transaction_uuid,
+                'price': price,
+                'stripeToken': tok.id,
+            },
+            HTTP_HOST="10.0.3.99",
+            follow=True,
+        )
+
+        self.assertTemplateUsed(r, "tresorerie/history.html")
+        self.assertContains(r, "%i€" % ((self.productAdhesion.prix + product.prix) / 100))
+
+        # Check in database if everything is correct:
+        user_s = LdapUser.get(pk=self.user.uid)
+        self.assertIn(str(current_year()), user_s.cotiz)
+        self.assertLessEqual(datetime.now() + timedelta(days=29), user_s.end_cotiz)
+
+    def test_declined_card(self):
+        product = self.productFIG_1a
+
+        transaction_uuid, price = self.prepare_payment(product)
+
+        # Create a token
+        tok = stripe.Token.create(
+            card={
+                "number": '4000000000000341',
+                "exp_month": 12,
+                "exp_year": 2050,
+                "cvc": '123'
+            },
+        )
+
+        r = self.client.post(
+            reverse("tresorerie:pay", args=(product.id,)),
+            data={
+                'uuid': transaction_uuid,
+                'price': price,
+                'stripeToken': tok.id,
+            },
+            HTTP_HOST="10.0.3.99",
+            follow=True,
+        )
+
         self.assertTemplateUsed(r, "tresorerie/recap.html")
-        self.assertContains(r, "%i€" % (product.prix/100))
-
-        # Check if the user get a 2016 cotiz
-        self.assertContains(r, "%i€" % (self.productAdhesion.prix / 100))
-
-        # Check if the total is correct :
-        self.assertContains(r, "%i€" % ((self.productAdhesion.prix+product.prix) / 100))
+        self.assertContains(r, "Votre carte a été refusée")

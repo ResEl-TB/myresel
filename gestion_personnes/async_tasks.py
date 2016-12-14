@@ -14,7 +14,13 @@ from myresel import settings
 
 
 @job
-def send_mails(user):
+def send_mails(user) -> None:
+    """
+    Send emails to the spectified user when he creates an account
+     - Subscribe him to campus email
+     - Welcoming e-mail
+     - email for admins
+    """
     # Subscribe to campus@resel.fr
     campus_email = EmailMessage(
         subject="SUBSCRIBE campus {} {}".format(user.first_name,
