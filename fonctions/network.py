@@ -33,7 +33,7 @@ def get_mac(ip):
         eth = 'eth3'
     else:
         eth = 'eth2'
-    mac = str(subprocess.Popen(["arp -ani {} {}".format(eth, ip)],
+    mac = str(subprocess.Popen(["arp -ani {} {} | awk ' {{print $4}}'".format(eth, ip)],
                                stdout=subprocess.PIPE,
                                shell=True).communicate()[0]).split('\'')[1].split('\\n')[0]
 
