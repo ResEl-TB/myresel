@@ -64,7 +64,7 @@ def send_mails(user) -> None:
         to=[user.mail],
     )
 
-    mail_admins("Inscription de %s au ResEl" % str(user.uid),
+    mail_admins("Inscription de %s" % str(user.uid),
                 "Nouvel inscrit au ResEl par le site web :"
                 "\n\nuid : %(username)s"
                 "\nNom : %(lastname)s"
