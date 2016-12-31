@@ -45,7 +45,7 @@ class NetworkConfiguration(object):
             ip = request.META['HTTP_X_FORWARDED_FOR']
         else:
             ip = request.META['REMOTE_ADDR']
-        ip = ip.split(' ')[-1]  # HOT fixe to handle some bugs during port fowarding
+        ip = ip.split(' ')[-1]  # HOT fix to handle some bugs during port fowarding
         zone = network.get_network_zone(ip)
         request.network_data['ip'] = ip
         request.network_data['vlan'] = request.META['VLAN']

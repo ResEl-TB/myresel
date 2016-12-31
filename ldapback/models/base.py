@@ -31,6 +31,7 @@ class LdapModel(object):
         new_kwargs = {}
         for arg, arg_value in kwargs.items():
             new_arg = arg
+            arg_value = arg_value if arg_value is not None else ""
             new_arg_value = Ldap.sanitize(arg_value)
             arg_splited = arg.split("__")
             if len(arg_splited) > 1:
