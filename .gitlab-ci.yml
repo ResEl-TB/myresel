@@ -4,6 +4,7 @@
 image: docker.resel.fr/web  # Custom image made for the ResEl
 services:
   - redis:latest
+  - mysql:latest
 
 stages:
   - configure
@@ -11,7 +12,7 @@ stages:
   - deploy
 
 variables:
-  MYSQL_HOST: localhost
+  MYSQL_HOST: mysql
   MYSQL_USER: resel
   MYSQL_PASSWORD: blah
   MYSQL_DATABASE: resel
@@ -28,7 +29,6 @@ variables:
 
 before_script:
   - source .install/scripts/install_essentials.sh
-  - source .install/scripts/install_mysql.sh
   - source .install/scripts/install_openldap.sh
   - source .install/scripts/install_latex.sh
   - pip3 install -qr requirements.txt

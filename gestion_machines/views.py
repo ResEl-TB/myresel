@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import logging
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -19,8 +20,9 @@ from gestion_personnes.models import LdapUser
 from myresel.settings_local import SERVER_EMAIL
 from .forms import AddDeviceForm, AjoutManuelForm
 
+logger = logging.getLogger("default")
 
-# Create your views here.
+
 class Reactivation(View):
     """
     Vue appelée pour ré-activer une machine d'un utilisateur absent trop longtemps du campus
@@ -47,16 +49,16 @@ class Reactivation(View):
         device.save()
         owner_uid = device.owner.split(',')[0][4:]
         mail_admins(
-            "[Reactivation {}] La machine {} [172.22.{} - {}] par {}".format(settings.CURRENT_CAMPUS, device.hostname,
-                                                                             device.ip, device.mac_address,
-                                                                             owner_uid),
+            "[Reactivation {}] 172.22.{} - {} [{}] par {}".format(settings.CURRENT_CAMPUS,
+                                                                  device.ip, device.mac_address, device.hostname,
+                                                                  owner_uid),
             "Reactivation de la machine {} appartenant à {}\n\nIP : 172.22.{}\nMAC : {}".format(device.hostname,
                                                                                                 owner_uid,
                                                                                                 device.ip,
                                                                                                 device.mac_address)
 
         )
-        messages.info(request, _("Votre machine a bien été activée."))
+        messages.info(request, _("Votre machine vient d'être réactivée."))
         network.update_all()
 
         return HttpResponseRedirect(reverse('home'))
@@ -95,7 +97,6 @@ class AddDeviceView(View):
             campus = get_campus(request.network_data['ip'])
             mac = request.network_data['mac']
 
-
             # In case the user didn't specified any alias, don't make any
             if hostname == alias:
                 alias = False
@@ -114,20 +115,19 @@ class AddDeviceView(View):
 
             # I think even with the decorator, some user where able to click twice on the submit button fast enough
             # To create a bug... So we check one final time before saving the data
-            # I'll also add a bit of javascript to stop theses caca
             if len(LdapDevice.filter(mac_address=mac)) > 0:
                 messages.error(request, _(
-                    "Votre machine est déjà enregistrée sur notre réseau. Si vous pensez que c'est une erreur, contactez un administrateur"
+                    "Votre machine est déjà enregistrée sur notre réseau. Si vous pensez que c'est une erreur n'hésitez pas à contactez un administrateur."
                 ))
                 return render(request, self.template_name, {'form': form})
             device.save()
             network.update_all()  # TODO: Move that to something async
 
             mail_admins(
-                "[Inscription {}] La machine {} [172.22.{} - {}] inscrite par {}".format(settings.CURRENT_CAMPUS,
-                                                                                         device.hostname,
-                                                                                         device.ip, device.mac_address,
-                                                                                         str(request.user)),
+                "[Inscription {}] 172.22.{} - {} [{}] par {}".format(settings.CURRENT_CAMPUS,
+                                                                     device.ip, device.mac_address,
+                                                                     device.hostname,
+                                                                     str(request.user)),
                 "Inscription de la machine {} appartenant à {}\n\nIP : 172.22.{}\nMAC : {}".format(device.hostname,
                                                                                                    str(request.user),
                                                                                                    device.ip,
@@ -135,7 +135,8 @@ class AddDeviceView(View):
 
             )
 
-            messages.success(request, _("Votre machine a bien été ajoutée. Veuillez ré-initialiser votre connexion en débranchant/rebranchant le câble ou en vous déconnectant/reconnectant au Wi-Fi ResEl Secure."))
+            messages.success(request, _(
+                "Votre machine a bien été ajoutée. Veuillez ré-initialiser votre connexion en débranchant/rebranchant le câble ou en vous déconnectant/reconnectant au Wi-Fi ResEl Secure."))
             return HttpResponseRedirect(reverse('home'))
 
         return render(request, self.template_name, {'form': form})
@@ -161,16 +162,18 @@ class AjoutManuel(View):
         if form.is_valid():
             # Envoi d'un mail à support
             mail = EmailMessage(
-                subject="Ajout machine sur le compte %(user)s",
+                subject="Ajout machine sur le compte de %(user)s" % {'user': request.ldap_user.uid},
                 body="L'utilisateur %(user)s souhaite ajouter une machine à son compte."
-                     "\n\n uid : %(user)s"
-                     "\n Prénom NOM : %(firstname)s %(lastname)s"
-                     "\n\n MAC : %(mac)s"
-                     "\n\nDescription de la demande :"
+                     "\n\nuid : %(user)s"
+                     "\nPrénom NOM : %(firstname)s %(lastname)s"
+                     "\n\nMAC : %(mac)s"
+                     "\n\nDescription de la demande:"
                      "\n\n%(desc)s"
                      "\n\n----------------------------"
                      "\nCe message est un message automatique généré par le site resel.fr, il convient de répondre à "
-                     "l'utilisateur et non ce message." % {
+                     "l'utilisateur et non ce message."
+                     "\nIl est important de noter que l'utilisateur doit expliquer pourquoi il ne peut pas inscrire sa"
+                     "machine normalement, le cas le plus courant étant les consoles de jeu." % {
                          'user': request.ldap_user.uid,
                          'lastname': request.ldap_user.last_name.upper(),
                          'firstname': request.ldap_user.first_name,
@@ -183,7 +186,8 @@ class AjoutManuel(View):
             )
             mail.send()
 
-            messages.success(request, _("Votre demande a été envoyée aux administrateurs. L'un d'eux vous contactera d'ici peu de temps."))
+            messages.success(request, _(
+                "Votre demande a été envoyée aux administrateurs. L'un d'eux vous contactera d'ici peu de temps."))
             return HttpResponseRedirect(reverse('gestion-machines:liste'))
 
         return render(request, self.template_name, {'form': form})
@@ -203,7 +207,8 @@ class ListDevices(ListView):
 
     def get_queryset(self):
         uid = str(self.request.user)
-        devices = LdapDevice.filter(owner="uid=%(uid)s,%(dn_people)s" % {'uid': uid, 'dn_people': settings.LDAP_DN_PEOPLE})
+        devices = LdapDevice.filter(
+            owner="uid=%(uid)s,%(dn_people)s" % {'uid': uid, 'dn_people': settings.LDAP_DN_PEOPLE})
 
         return devices
 
@@ -214,10 +219,16 @@ class Modifier(View):
     template_name = 'gestion_machines/modifier.html'
     form_class = AddDeviceForm
 
-    def get_user_and_machine(self, request, hostname):
-        # Vérification que la mac fournie est connue, et que la machine appartient à l'user
+    @staticmethod
+    def get_user_and_machine(username, hostname):
+        """
+        Check if the mac address exists and is known
+        :param request:
+        :param hostname:
+        :return:
+        """
         machine = LdapDevice.get(hostname=hostname)
-        ldap_user = LdapUser.get(pk=request.user.username)
+        ldap_user = LdapUser.get(pk=username)
         if ldap_user.pk != machine.owner:
             raise ObjectDoesNotExist()
 
@@ -231,8 +242,14 @@ class Modifier(View):
         hostname = self.kwargs.get('host', '')
 
         try:
-            ldap_user, machine = self.get_user_and_machine(request, hostname)
+            ldap_user, machine = self.get_user_and_machine(request.user.username, hostname)
         except ObjectDoesNotExist:
+            logger.warning("Tentative de modification d'une machine qui n'existe pas"
+                           "\n\nuid: {uid}"
+                           "\nhostname: {hostname}".format(
+                uid=request.user.username,
+                hostname=hostname)
+            )
             messages.error(request, _("Cette machine n'existe pas ou ne vous appartient pas."))
             return HttpResponseRedirect(reverse('gestion-machines:liste'))
 
@@ -251,8 +268,16 @@ class Modifier(View):
             alias = form.cleaned_data['alias']
             hostname = self.kwargs.get('host', '')
             try:
-                ldap_user, machine = self.get_user_and_machine(request, hostname)
+                ldap_user, machine = self.get_user_and_machine(request.user.username, hostname)
             except ObjectDoesNotExist:
+                logger.warning("Tentative de modification d'une machine qui n'existe pas"
+                               "\n\nuid: {uid}"
+                               "\nhostname: {hostname}"
+                               "\nnew alias: {alias}".format(
+                    uid=request.user.username,
+                    alias=alias,
+                    hostname=hostname)
+                )
                 messages.error(request, _("Cette machine n'existe pas ou ne vous appartient pas."))
                 return HttpResponseRedirect(reverse('gestion-machines:liste'))
             if machine.aliases:
