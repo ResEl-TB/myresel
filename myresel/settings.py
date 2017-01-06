@@ -272,6 +272,7 @@ PROD_LOGGING_CONF = {
             'class': 'logging.FileHandler',
             'filename': '/srv/www/resel.fr/debug.log',
             'formatter': 'simple',
+            'encoding': 'utf8',
         },
         'mail_admins': {
             'level': 'ERROR',
