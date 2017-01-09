@@ -24,7 +24,6 @@ PROJECT_ROOT = os.path.abspath(os.path.dirname(__name__))
 # Mails
 ADMINS = [
     ('Inscription bot', 'inscription-bot@resel.fr'),
-    ('Botanik bot', 'botanik@resel.fr'),
 ]
 
 # Login
