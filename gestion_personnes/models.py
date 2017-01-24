@@ -30,6 +30,9 @@ class LdapUser(ldapback.models.LdapModel):
     display_name = LdapCharField(db_column='displayname', object_classes=['genericPerson'])
     postal_address = LdapCharField(db_column='postaladdress', object_classes=['genericPerson'])
 
+    # Ldap Groups
+    groups = LdapListField(db_column='memberOf')
+
     # reselPerson
     inscr_date = LdapDatetimeField(db_column='dateinscr', object_classes=['reselPerson'])
     cotiz = LdapListField(db_column='cotiz', object_classes=['reselPerson'])
@@ -62,7 +65,6 @@ class LdapUser(ldapback.models.LdapModel):
     n_adherent = LdapCharField(db_column='nAdherent', object_classes=['aePerson'])
     dates_membre = LdapListField(db_column='datesMembre', object_classes=['aePerson'])
     # TODO: other fields
-
 
     # mailPerson
     mail_local_address = LdapListField(db_column='mailLocalAddress', object_classes=['mailPerson'])
@@ -107,7 +109,6 @@ class LdapUser(ldapback.models.LdapModel):
 
     def is_member(self):
         return str(generic.current_year()) in [c.strip() for c in self.cotiz]
-
 
 class LdapOldUser(LdapUser):
     """

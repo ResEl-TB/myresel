@@ -2,7 +2,7 @@
 import inspect
 
 from django.core.exceptions import ObjectDoesNotExist
-from ldap3 import ALL_ATTRIBUTES, MODIFY_REPLACE, LDAPAttributeError
+from ldap3 import ALL_ATTRIBUTES, MODIFY_REPLACE, LDAPAttributeError, ALL_OPERATIONAL_ATTRIBUTES
 
 from ldapback.backends.ldap.base import Ldap
 from ldapback.models.fields import LdapField
@@ -52,7 +52,7 @@ class LdapModel(object):
         """
         ldap = Ldap()
 
-        search_results = ldap.search(cls.base_dn, '(!(objectClass=organizationalUnit))', attr=ALL_ATTRIBUTES)
+        search_results = ldap.search(cls.base_dn, '(!(objectClass=organizationalUnit))', attr=[ALL_ATTRIBUTES, ALL_OPERATIONAL_ATTRIBUTES])
         if search_results is None:
             return []
 
@@ -79,7 +79,7 @@ class LdapModel(object):
                 arg = getattr(cls, arg).db_column
                 search_args[arg] = arg_value
         search_query = ldap.build_search_query(**search_args)
-        search_results = ldap.search(cls.base_dn, search_query, attr=ALL_ATTRIBUTES)
+        search_results = ldap.search(cls.base_dn, search_query, attr=[ALL_ATTRIBUTES, ALL_OPERATIONAL_ATTRIBUTES])
         if search_results is None:
             return []
 
