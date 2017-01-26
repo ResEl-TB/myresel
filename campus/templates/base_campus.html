@@ -1,0 +1,104 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Gestion des évènements du campus brestois de Télécom Bretagne">
+    <meta name="author" content="ResEl">
+    <meta charset="utf-8"/>
+    <link rel="icon" href="{% static 'images/campus/favicon.png' %}">
+
+    <title>Campus.resel.fr | {% block title %}{% endblock %}</title>
+
+    {# CSS #}
+    <link href="{% static 'boostrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/campus/base.css' %}">
+    {% block css %}{% endblock %}
+
+    {# Fonts #}
+    <link href='http://fonts.googleapis.com/css?family=Droid+Serif' rel='stylesheet' type='text/css'>
+</head>
+<body>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{% url 'campus:rooms:calendar' %}">
+                    <img src="{% static 'images/campus/elephant-polygon.png' %}" alt="logo-elephant"/>
+                </a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="{% url 'campus:rooms:calendar' %}">Calendrier campus</a></li>
+                    <li><a href="{% url 'campus:rooms:booking' %}">Réserver une salle</a></li>
+                    <li><a href="{% url 'campus:mails:send' %}">Mail campus@resel.fr</a></li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+
+    {% block content %}{% endblock %}
+
+    <footer class="footer">
+        <div class="container text-center">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <a href="https://www.facebook.com/Reselfr"><span class="fa fa-facebook social-links"></span></a>
+                        <a href="https://twitter.com/resel_fr"><span class="fa fa-twitter social-links"></span></a>
+                        <a href="https://github.com/ResEl-TB"><span class="fa fa-github social-links"></span></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-4">
+                    <ul>
+                        <li><a href="#">Les statuts de l'association</a></li>
+                        <li><a href="#">Le règlement intérieur</a></li>
+                        <li><a href="/paiement/tarifs/">Tarifs et Cotisation</a></li>
+                        <li><a href="/contact/">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-4">
+                    <ul>
+                        <li><a href="https://status.resel.fr">État du réseau</a></li>
+                        <li><a href="https://clubs.resel.fr">Les clubs</a></li>
+                        <li><a href="/">Site ResEl</a></li>
+
+                        <li><a href="/wiki/lassociation/devenez-administrateur-resel">Devenez Administrateur ResEl !</a></li>
+                    </ul>
+                </div>
+                <div class="col-sm-4">
+                    <ul>
+                        <li><a href="https://www.federez.net/">Fédérez</a></li>
+                        <li><a href="http://www.telecom-bretagne.eu">Télécom Bretagne</a></li>
+                        <br />
+                        <li><a href="http://assos-tb.fr/">Associations de Télécom Bretagne</a></li>
+                        <li><a href="http://www.aitb.org//">Alumni</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </footer>
+
+    {# javascript #}
+    <script type="text/javascript" src="{% static 'jquery/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'boostrap/js/bootstrap.min.js' %}"></script>
+    {% block javascript %}{% endblock %}
+</body>
+</html>

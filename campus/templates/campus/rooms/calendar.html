@@ -1,93 +1,59 @@
-{% extends "base.html" %}
+{% extends "base_campus.html" %}
 {% load staticfiles %}
 {% load rooms_extras %}
 
-{% block titre %}Calendrier campus{% endblock %}
+{% block title %}Calendrier campus{% endblock %}
 
 {% block css %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/campus/rooms.css' %}">
 {% endblock css %}
 
 {% block content %}
-<div class="container" id="content">
+<div class="container well" id="content">
     <div class="row">
-        <div class="col-xs-12">
-            <div class="text-center">
-                <h1>
-                    {% if current_room == 'all' %}
-                    Toutes les salles - <a href="{% url 'campus:rooms:booking' %}">réserver une salle</a>
-                    {% else %}
-                    {{ current_room.name }} (<a href="{% url 'campus:rooms:calendar' %}">voir toutes les salles</a>) - <a href="{% url 'campus:rooms:booking' %}">réserver la salle</a>
-                    {% endif %}
-                </h1>
-            </div>
-        </div>
 
-        <div class="col-sm-2" >
-            {% for title, queryset in rooms %}
-                {% if queryset %}
-                <div class="col-xs-6 col-lg-12 room-list">
-                    <div class="panel panel-info">
-                        <div class="panel-heading">{{ title }}</div>
-
-                        <div class="panel-body">
-                            {% for room in queryset %}    
-                            <a href="{% url 'campus:rooms:calendar-room' room.pk %}">{{ room.name }}</a><br>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
+        <div class="col-xs-12" id="month-navigation"> 
+            <div class="btn-group" role="group" aria-label="previous-next-month">
+                {% if current_room == 'all' %}
+                <a class="btn btn-default" href="{% url 'campus:rooms:calendar-month' current_date|previous_month|date:'Y' current_date|previous_month|date:'n' %}">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                </a>
+                {% else %}
+                <a class="btn btn-default" href="{% url 'campus:rooms:calendar-room-month' current_room.pk current_date|previous_month|date:'Y' current_date|previous_month|date:'n' %}">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                </a>
                 {% endif %}
-            {% endfor %}
-        </div>
-
-        <div class="table-responsive col-sm-10">
-            <div class="row">
-                <div class="col-xs-4 text-left">
-                    <h2>
-                        {% if current_room == 'all' %}
-                        <a href="{% url 'campus:rooms:calendar-month' current_date|previous_month|date:'Y' current_date|previous_month|date:'n' %}">
-                            {{ current_date|previous_month|date:'F Y' }}
-                        </a>
-                        {% else %}
-                        <a href="{% url 'campus:rooms:calendar-room-month' current_room.pk current_date|previous_month|date:'Y' current_date|previous_month|date:'n' %}">
-                            {{ current_date|previous_month|date:'F Y' }}
-                        </a>
-                        {% endif %}
-                    </h2>
-                </div>
-                <div class="col-xs-4 text-center">
-                    <h2>{{ current_date|date:'F Y' }}</h2>
-                </div>
-                <div class="col-xs-4 text-right">
-                    <h2>
-                        {% if current_room == 'all' %}
-                        <a href="{% url 'campus:rooms:calendar-month' current_date|next_month|date:'Y' current_date|next_month|date:'n' %}">
-                            {{ current_date|next_month|date:'F Y' }}
-                        </a>
-                        {% else %}
-                        <a href="{% url 'campus:rooms:calendar-room-month' current_room.pk current_date|next_month|date:'Y' current_date|next_month|date:'n' %}">
-                            {{ current_date|next_month|date:'F Y' }}
-                        </a>
-                        {% endif %}
-                    </h2>
-                </div>
+                
+                {% if current_room == 'all' %}
+                <a class="btn btn-default" href="{% url 'campus:rooms:calendar-month' current_date|next_month|date:'Y' current_date|next_month|date:'n' %}">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+                {% else %}
+                <a class="btn btn-default" href="{% url 'campus:rooms:calendar-room-month' current_room.pk current_date|next_month|date:'Y' current_date|next_month|date:'n' %}">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                </a>
+                {% endif %}
             </div>
 
-            <div class="row">
-                <table id="legend">
-                    <tr>
-                        <td><span class="alert alert-party">Soirée</span></td>
-                        <td><span class="alert alert-club">Activité de club</span></td>
-                        <td><span class="alert alert-meeting">Réunion</span></td>
-                        <td><span class="alert alert-training">Formation</span></td>
-                        <td><span class="alert alert-event">Évènement</span></td>
-                        <td><span class="alert alert-sport">Sport</span></td>
-                        <td><span class="alert alert-arts">Arts et culture</span></td>
-                        <td><span class="alert alert-other">Autre</span></td>
-                    </tr>
-                </table>
+            <div class="btn btn-link">
+                {{ current_date|date:'F Y' }}
+            </div>
 
+            <div class="btn btn-link">
+                {% if current_room == 'all' %}
+                Toutes les salles - <a href="{% url 'campus:rooms:booking' %}">réserver une salle</a>
+                {% else %}
+                {{ current_room.name }} (<a href="{% url 'campus:rooms:calendar' %}">voir toutes les salles</a>) - <a href="{% url 'campus:rooms:booking' %}">réserver la salle</a>
+                {% endif %}
+            </div>
+        </div>
+
+    </div> <!-- /.row -->
+
+    <div class="row">
+        
+        <div class="table-responsive col-xs-12">
+            <div class="row">
                 <table id="calendar" class="table">
                     <thead>
                         <tr>
@@ -140,8 +106,44 @@
                         {% endfor %}
                     </tbody>
                 </table>
+
+                <table id="legend">
+                    <tr>
+                        <td><span class="alert alert-party">Soirée</span></td>
+                        <td><span class="alert alert-club">Activité de club</span></td>
+                        <td><span class="alert alert-meeting">Réunion</span></td>
+                        <td><span class="alert alert-training">Formation</span></td>
+                        <td><span class="alert alert-event">Évènement</span></td>
+                        <td><span class="alert alert-sport">Sport</span></td>
+                        <td><span class="alert alert-arts">Arts et culture</span></td>
+                        <td><span class="alert alert-other">Autre</span></td>
+                    </tr>
+                </table>
             </div>
+        </div> <!-- /.table-responsive -->
+
+    </div> <!-- /.row -->
+
+    <div class="row">
+
+        <div class="col-xs-12" >
+            {% for title, queryset in rooms %}
+                {% if queryset %}
+                <div class="col-xs-6 col-sm-3 room-list">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">{{ title }}</div>
+
+                        <div class="panel-body">
+                            {% for room in queryset %}    
+                            <a href="{% url 'campus:rooms:calendar-room' room.pk %}">{{ room.name }}</a><br>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
         </div>
-    </div>
+
+    </div>  <!-- /.row -->
 </div>
 {% endblock %}
