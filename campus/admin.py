@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
-from campus.models import Room, RoomBooking, RoomAdmin, Mail, MailModerator, Club
+from campus.models import Room, RoomBooking, RoomAdmin, Mail, Club
 
 class RoomBookingAdmin(admin.ModelAdmin):
     list_display = ('description', 'user', 'start_time', 'end_time', 'list_rooms')
@@ -56,4 +56,3 @@ admin.site.register(RoomBooking, RoomBookingAdmin)
 admin.site.register(RoomAdmin, RoomAdmin_admin)
 
 admin.site.register(Mail)
-admin.site.register(MailModerator)

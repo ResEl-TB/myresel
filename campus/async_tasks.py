@@ -1,3 +1,5 @@
+from django.core.mail import EmailMessage
+
 from django_rq import job
 
 @job
@@ -19,5 +21,20 @@ def notify_mailing_list(user, room):
         from_email='noreply@resel.fr',
         reply_to=[user.mail],
         to=[room.mailing_list],
+    )
+    mail.send()
+
+@job
+def notify_moderator(moderator_address, mail_id):
+    mail = EmailMessage(
+        subject='Nouveau mail campus à modérer',
+        body=('Bonjour,\n\n' +
+              'Un nouveau mail campus requiert votre modération.\n' +
+              'Vous pouvez suivre directement ce lien pour le faire : *insérer lien ici*\n\n' +
+              'Have fun,\n' +
+              '~ Le gentil bot ResEl ~'
+        ),
+        from_email='noreply@resel.fr',
+        to=[moderator_address],
     )
     mail.send()
