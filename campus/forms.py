@@ -1,11 +1,10 @@
-from django.forms import ModelForm
+from django.forms import ModelForm, CharField, TextInput
 from django.forms.models import ModelMultipleChoiceField
-from django.forms import CharField
 from django.utils.translation import ugettext_lazy as _
 from django.db.models import Q
 from django.contrib import messages
 
-from campus.models import RoomBooking, Room, RoomAdmin, Club
+from campus.models import RoomBooking, Room, RoomAdmin, Club, Mail
 import datetime
 
 class RoomBookingForm(ModelForm):
@@ -100,3 +99,10 @@ class RoomBookingForm(ModelForm):
                 self.add_error('room', _('Une des salles n\'est pas libre'))
                 break
 
+class SendMailForm(ModelForm):
+    class Meta:
+        model = Mail
+        fields = '__all__'
+        widgets = {
+            'sender': TextInput(attrs={'readonly':'readonly', 'class': 'form-control'}),
+        }

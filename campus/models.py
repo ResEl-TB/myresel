@@ -1,7 +1,3 @@
-from campus.submodels.rooms_models import *
-from campus.submodels.mails_models import *
-from campus.submodels.clubs_models import *
-
 import ldapback
 from ldapback.models.fields import LdapCharField, LdapListField
 from myresel.settings import LDAP_DN_GROUPS
@@ -19,3 +15,7 @@ class LdapGroup(ldapback.models.LdapModel):
 
     def is_member(self, uid):
         return uid in [member.split(',')[0].split('uid=')[1] for member in self.members]
+
+from campus.submodels.rooms_models import *
+from campus.submodels.mails_models import *
+from campus.submodels.clubs_models import *
