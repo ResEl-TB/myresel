@@ -45,7 +45,7 @@ urlpatterns = [
     url(r'^wiki/', include('wiki.urls', namespace='wiki')),
     url(r'^news/', NewsListe.as_view(), name='news'),
     url(r'^contact/', Contact.as_view(), name='contact'),
-    #url(r'^campus/', include('campus.urls', namespace='campus')),
+    url(r'^campus/', include('campus.urls', namespace='campus')),
 
     # Subcription related urls
     url(r'^inscription_zone/', inscriptionZoneInfo, name="inscription-zone"),
