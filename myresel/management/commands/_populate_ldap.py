@@ -178,7 +178,7 @@ for element in cartesian_product:
     user.user_password = potential_user_password[compteur]
     user.nt_password = potential_nt_password[compteur]
     user.display_name = potential_display_name[compteur]
-    user.postal_address = "655, avenue du technopôle\n29280 PLOUZANE"
+    user.postal_address = "655, avenue du technopole\n29280 PLOUZANE"
     monitoring_file.write("{};{};{};{};{};{};{};".format(
         user.uid,
         user.first_name,
