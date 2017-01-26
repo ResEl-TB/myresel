@@ -1,11 +1,12 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.core.mail import EmailMessage
 
+import json
 from campus.forms import SendMailForm
 from campus.models import LdapGroup, Mail
 
@@ -18,7 +19,24 @@ def sendMailView(request):
     if request.method == 'POST':
         form = SendMailForm(request.POST)
         if form.is_valid():
-            form.save()
+            m = form.save()
+
+            # Send confirmation mail
+            mail = EmailMessage(
+                subject="Votre mail a été soumis à la modération",
+                body="Bonjour,\n\n" +
+                     "Ce mail a été envoyé automatiquement, merci de ne pas y répondre.\n" +
+                     "Vous trouverez ci-joint une copie du mail qui est actuellement en cours de modération :\n\n" +
+                     "--------------------------------------\n" +
+                     m.content + "\n\n" +
+                     "--------------------------------------\n" +
+                     "Cordialement,\n" +
+                     "~ le gentil bot ResEl ~",
+                from_email="noreply@resel.fr",
+                to=[m.sender]
+            )
+            mail.send()
+
             messages.success(request, _('Votre mail sera traité par les modérateurs.'))
             return HttpResponseRedirect(reverse('home'))
 
@@ -29,26 +47,41 @@ def sendMailView(request):
     )
 
 @login_required
-def moderateView(request, mail=None):
+def moderateView(request):
     if not LdapGroup.get(pk='campusmodo').is_member(request.ldap_user.uid):
         messages.error(request, _("Vous n'êtes pas modérateur campus"))
         return HttpResponseRedirect(reverse('campus:salles:calendar'))
 
-    if mail:
-        """
-        Specific mail moderation
-        """
+    if request.is_ajax():
+        if request.method == 'GET':
+            """
+            GET call, to get infos of the mail
+            """
+            mailid = request.GET.get('id')
+            m = get_object_or_404(Mail, id=mailid)
+            response_data = {
+                'sender': m.sender,
+                'subject': m.subject,
+                'content': m.content,
+            }
+            return HttpResponse(
+                json.dumps(response_data),
+                content_type="application/json"
+            )
 
-        instance = get_object_or_404(Mail, id=mail)
-        form = SendMailForm(request.POST, instance=instance) if request.method == 'POST' else SendMailForm(instance=instance)
+        """
+        Moderating the mail
+        """
+        mailid = request.POST.get('id')
+        instance = get_object_or_404(Mail, id=mailid)
+        form = SendMailForm(request.POST, instance=instance)
 
-        if request.method == 'POST' and form.is_valid():
+        if form.is_valid():
             m = form.save()
             m.moderated = True
             m.moderated_by = request.ldap_user.uid
             m.save()
 
-            #TODO : send mail to Sympa
             mail_sympa = EmailMessage(
                 subject=m.subject,
                 body=m.content,
@@ -58,21 +91,35 @@ def moderateView(request, mail=None):
             mail_sympa.send()
 
             messages.success(request, _("Mail modéré !"))
-            return HttpResponseRedirect(reverse('campus:mails:moderate-list'))
+            return HttpResponse()
 
-        return render(
-            request,
-            'campus/mails/moderate.html',
-            {'form': form}
-        )
+    return render(
+        request,
+        'campus/mails/need_moderation.html',
+        {'mails': Mail.objects.all().filter(moderated=False).order_by('-pk')}
+    )
 
-    else:
-        """
-        List all the mails that need to be moderated
-        """
+@login_required
+def rejectView(request, mail):
+    if request.is_ajax():
+        m = Mail.objects.get(pk=mail)
+        explanation = request.POST.get('explanation') or 'aucun motif'
 
-        return render(
-            request,
-            'campus/mails/need_moderation.html',
-            {'mails': Mail.objects.all().filter(moderated=False).order_by('-pk')}
-        )
+        if not m.moderated:
+            # Notify the sender of the rejection
+            notify = EmailMessage(
+                subject="Votre mail campus a été rejeté",
+                body="Bonjour,\n\n" +
+                     "Votre mail a été rejeté pour le motif suivant :\n" +
+                     explanation + "\n\n" +
+                     "Cordialement,\n" +
+                     "~ le gentil bot ResEl ~",
+                from_email="noreply@resel.fr",
+                to=[m.sender]
+            )
+            notify.send()
+
+            # Delete the mail
+            m.delete()
+
+        return HttpResponse()

@@ -3,6 +3,10 @@
 
 {% block title %}Les mails campus à modérer{% endblock %}
 
+{% block css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.0.3/jquery-confirm.min.css">
+{% endblock %}
+
 {% block content %}
 <div class="container">
     <div class="row">
@@ -18,16 +22,18 @@
                     <th>Expéditeur</th>
                     <th>Sujet</th>
                     <th>Reçu le</th>
+                    <th>Rejeter</th>
                 </thead>
 
                 <tbody>
                     {% for mail in mails %}
-                    <tr>
-                        <td>
-                            <a href="{% url 'campus:mails:moderate-specific' mail.pk %}">{{ mail.sender }}</a>
-                        </td>
+                    <tr data-mailid="{{ mail.pk }}">
+                        <td class="moderate">{{ mail.sender }}</td>
                         <td>{{ mail.subject }}</td>
                         <td>{{ mail.date|date:'d F Y à H:i' }}</td>
+                        <td class="reject" style="cursor: pointer;">
+                            <span><i class="fa fa-ban" aria-hidden="true"></i></span>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -35,4 +41,9 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block javascript %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.0.3/jquery-confirm.min.js"></script>
+<script src="{% static 'js/campus/mails.js' %}"></script>
 {% endblock %}
