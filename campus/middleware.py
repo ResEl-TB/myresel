@@ -8,6 +8,11 @@ class RoomAdminMiddleware(object):
     """
 
     def process_request(self, request):
+        try:
+            request.ldap_user
+        except AttributeError:
+            return
+
         if request.ldap_user.uid == 'pbouilla':
             # Pbouilla is admin <3
             pass
