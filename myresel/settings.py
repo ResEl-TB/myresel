@@ -142,7 +142,6 @@ MIDDLEWARE_CLASSES = [
     'myresel.middleware.IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAResElAdminSoCheckTheLdapBeforeMiddleware',
     'myresel.middleware.NetworkConfiguration',
     'myresel.middleware.inscriptionNetworkHandler',
-    'campus.middleware.RoomAdminMiddleware',
 ]
 
 ROOT_URLCONF = 'myresel.urls'

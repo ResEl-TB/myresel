@@ -8,6 +8,8 @@ class RoomAdminMiddleware(object):
     """
 
     def process_request(self, request):
+
+        # It is not possible to view any page if the user is not logged in
         try:
             request.ldap_user
         except AttributeError:
