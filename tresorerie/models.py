@@ -110,7 +110,7 @@ class Product(models.Model):
             MinValueValidator(0),
             MaxValueValidator(12),
         ],
-        help_text='durée en mois des frais d\'accès (si type = frais d\'accès, laisser vide sinon)',
+        help_text='Durée en mois des frais d\'accès (si type = frais d\'accès, laisser vide sinon)',
         verbose_name='durée',
         blank=True,
     )

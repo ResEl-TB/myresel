@@ -178,11 +178,11 @@ France
 {% if transaction.statut == "P" %}
 {\bf {% trans "Facture acquitée" %}:}  \\
 \tab {{ transaction.date_paiement }}  \\
-\tab {{ transaction.info }}  \\
+\tab {{ transaction.moyen }}  \\
 {% else %}
 {\bf {% trans "Paiement" %}:}  \\
 \tab {% trans "Paiement avant le" %} : \today \\% {{ transaction.date_paiement }}  \\
-\tab {% trans "Moyen de paiement possible" %} : {{ transaction.info }}  \\
+\tab {% trans "Moyen de paiement possible" %} : {% trans "Carte banquaire, Chèque, liquide" %}  \\
 {% endif %}
 \end{document}
 
