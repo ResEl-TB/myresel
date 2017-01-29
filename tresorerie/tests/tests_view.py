@@ -270,3 +270,147 @@ class HomeViewCase(TestCase):
 
         self.assertTemplateUsed(r, "tresorerie/recap.html")
         self.assertContains(r, "Votre carte a été refusée")
+
+class ListProductCase(TestCase):
+    # TODO : for the moment the test simply test that the page loads maybe do a bit more
+
+    def setUp(self):
+        self.user = create_full_user()
+        self.user.cotiz = []
+        try_delete_user(self.user.uid)
+        self.user.save()
+        # self.client.login(username=self.user.uid, password=self.user.user_password)
+
+        self.productFIG_1m = Product(
+            nom="1 mois ResEl",
+            prix=1000,
+            type_produit="F",
+            duree=1,
+            autorisation="ALL",
+        )
+        self.productFIG_6m = Product(
+            nom="6 mois ResEl",
+            prix=5000,
+            type_produit="F",
+            duree=6,
+            autorisation="FIG",
+        )
+        self.productFIG_1a = Product(
+            nom="1 an ResEl",
+            prix=8500,
+            type_produit="F",
+            duree=12,
+            autorisation="FIG",
+        )
+        self.productFIP_6m = Product(
+            nom="6 mois ResEl FIP",
+            prix=3100,
+            type_produit="F",
+            duree=6,
+            autorisation="FIP",
+        )
+        self.productFIP_1a = Product(
+            nom="1 an ResEl FIP",
+            prix=5100,
+            type_produit="F",
+            duree=12,
+            autorisation="FIP",
+        )
+        self.productAdhesion = Product(
+            nom="Adhesion au ResEl",
+            prix=100,
+            type_produit="A",
+            duree=12,
+            autorisation="ALL",
+        )
+
+        self.productFIG_1a.save()
+        self.productFIG_6m.save()
+        self.productFIG_1m.save()
+        self.productFIP_1a.save()
+        self.productFIP_6m.save()
+        self.productAdhesion.save()
+
+    def test_simple_display(self):
+        # Test if the user is not logged in
+        r = self.client.get(reverse("tresorerie:prices"),
+                            HTTP_HOST="10.0.3.99", follow=True)
+
+        self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed(r, 'tresorerie/list_product.html')
+
+
+class TransactionDetailViewTest(TestCase):
+    def setUp(self):
+        self.user = create_full_user()
+        self.user.cotiz = []
+        try_delete_user(self.user.uid)
+        self.user.save()
+        self.client.login(username=self.user.uid, password=self.user.user_password)
+
+        self.productFIG_1m = Product(
+            nom="1 mois ResEl",
+            prix=1000,
+            type_produit="F",
+            duree=1,
+            autorisation="ALL",
+        )
+        self.productFIG_6m = Product(
+            nom="6 mois ResEl",
+            prix=5000,
+            type_produit="F",
+            duree=6,
+            autorisation="FIG",
+        )
+        self.productFIG_1a = Product(
+            nom="1 an ResEl",
+            prix=8500,
+            type_produit="F",
+            duree=12,
+            autorisation="FIG",
+        )
+        self.productFIP_6m = Product(
+            nom="1 m6is ResEl FIP",
+            prix=3100,
+            type_produit="F",
+            duree=6,
+            autorisation="FIP",
+        )
+        self.productFIP_1a = Product(
+            nom="1 an ResEl",
+            prix=5100,
+            type_produit="F",
+            duree=12,
+            autorisation="FIP",
+        )
+        self.productAdhesion = Product(
+            nom="Adhesion au ResEl",
+            prix=100,
+            type_produit="A",
+            duree=12,
+            autorisation="ALL",
+        )
+
+        self.productFIG_1a.save()
+        self.productFIG_6m.save()
+        self.productFIG_1m.save()
+        self.productFIP_1a.save()
+        self.productFIP_6m.save()
+        self.productAdhesion.save()
+
+    def test_simple_display(self):
+        # Create a fake transaction :
+        t = Transaction()
+        t.utilisateur = self.user.uid
+
+        t.save()
+        for p in [self.productFIG_1a, self.productAdhesion]:
+            t.produit.add(p)
+        t.save()
+
+        r = self.client.get(reverse("tresorerie:transaction-detail",args=(t.uuid,)),
+                            HTTP_HOST="10.0.3.99", follow=True)
+
+        self.assertEqual(r.status_code, 200)
+        self.assertTemplateUsed(r, "tresorerie/transaction_detail.html")
+

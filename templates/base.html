@@ -33,7 +33,7 @@
 
 <body>
     <div class="container-fluid">
-        <div class="alert alert-warning" role="alert" style="margin-top: 5px; text-align: center"><strong>{% trans "VERSION BETA" %}</strong> {% trans "quelques petites coquilles peuvent se glisser. N'hésitez pas à nous " %} <a style="color: #0f0f0f" href="{% url "contact" %}"><strong>signaler un bug</strong></a> !</div>
+        <div class="alert alert-info" role="alert" style="margin-top: 5px; text-align: center"><strong>{% trans "NOUVEAU SITE ResEl !" %}</strong> {% trans "Vous pouvez toujours " %} <a style="color: #ffffff" href="https://old.resel.fr"><strong>accéder à l'ancien site</strong></a>.</div>
     </div>
 
     <!-- Navigation -->
@@ -82,8 +82,12 @@
                     </li>
                 {% endfor %}
                 <li>
+                    <a href="{% url 'faq' %}"><i class="fa fa-question fa-fw"></i> {% trans "F.A.Q." %}</a>
+                </li>
+                <li>
                     <a href="{% url 'contact' %}"><i class="fa fa-comment-o fa-fw"></i> {% trans "Contact" %}</a>
                 </li>
+
                 <hr class="visible-xs"/>
 
                 {% if request.user.is_authenticated %}
@@ -232,7 +236,7 @@
 <script type="text/javascript">
   var _paq = _paq || [];
   _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
-  _paq.push(["setCookieDomain", "*.beta.resel.fr"]);
+  _paq.push(["setCookieDomain", "*.resel.fr"]);
   _paq.push(["setDomains", ["*.beta.resel.fr","*.rennes.beta.resel.fr","*.rennes.resel.fr","*.resel.fr"]]);
   _paq.push(['trackPageView']);
   _paq.push(['enableLinkTracking']);

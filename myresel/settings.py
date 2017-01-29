@@ -14,17 +14,16 @@ from myresel.settings_local import *
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-ALLOWED_HOSTS = ['*', 'beta.resel.fr', 'beta.rennes.resel.fr', 'resel.fr', 'rennes.resel.fr']
+ALLOWED_HOSTS = ['*', 'resel.fr', 'rennes.resel.fr', 'beta.resel.fr', 'beta.rennes.resel.fr']
 
-MAIN_HOST_BREST = 'beta.resel.fr'
-MAIN_HOST_RENNES = 'beta.rennes.resel.fr'
+MAIN_HOST_BREST = 'resel.fr'
+MAIN_HOST_RENNES = 'rennes.resel.fr'
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__name__))
 
 # Mails
 ADMINS = [
     ('Inscription bot', 'inscription-bot@resel.fr'),
-    ('Botanik bot', 'botanik@resel.fr'),
 ]
 
 # Login

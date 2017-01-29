@@ -1,5 +1,5 @@
-#TODO: refactor configuration (username, pass...)
-#TODO: do not delete migrations
+# TODO: refactor configuration (username, pass...)
+# TODO: do not delete migrations
 
 image: docker.resel.fr/web  # Custom image made for the ResEl
 services:
@@ -76,7 +76,7 @@ deploy to brest:
     - deploy
   environment:
     name: skynet
-    url: https://beta.resel.fr/
+    url: https://resel.fr/
 
 deploy to rennes:
   services: []
@@ -89,4 +89,4 @@ deploy to rennes:
     - deploy
   environment:
     name: doubidou
-    url: https://beta.rennes.resel.fr/
+    url: https://rennes.resel.fr/
