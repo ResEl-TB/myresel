@@ -6,8 +6,8 @@ from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import render, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import View, ListView
@@ -16,7 +16,7 @@ from fonctions import network, decorators
 from gestion_machines.models import LdapDevice
 from gestion_personnes.models import LdapUser, UserMetaData
 from pages.forms import ContactForm
-from pages.models import News
+from pages.models import News, Faq
 from wiki.models import Category
 
 logger = logging.getLogger("default")
@@ -45,7 +45,7 @@ class Home(View):
 
     def get(self, request, *args, **kwargs):
         ip = request.network_data['ip']
-        
+
         template_for_response = self.exterior_template
         args_for_response = {}
 
@@ -174,3 +174,18 @@ def inscriptionZoneInfo(request):
         'pages/inscription_zone_info.html',
         {'vlan': vlan, 'is_logged_in': is_logged_in, 'is_registered': is_registered}
     )
+
+class FaqList(ListView):
+    """ Vue appelée pour afficher les F.A.Q. au niveau du ResEl """
+
+    template_name = 'pages/faq.html'
+    context_object_name = 'questions'
+
+    def get_queryset(self):
+        return Faq.objects.order_by('-vote').all()
+
+def faqUpvote(request):
+
+    faq = get_object_or_404(Faq, pk=request.POST['faq_id'])
+    faq.upvote()
+    return HttpResponse('OK')
