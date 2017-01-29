@@ -187,15 +187,15 @@
             <div class="row">
                 <div class="col-sm-4">
                     <ul>
-                        <li><a href="#">{% trans "Les statuts de l'association" %}</a></li>
-                        <li><a href="#">{% trans "Le règlement intérieur" %}</a></li>
+                        <li><a href="{% static "files/reglement-interieur.pdf" %}">{% trans "Les statuts de l'association" %}</a></li>
+                        <li><a href="{% static "files/statuts.pdf" %}">{% trans "Le règlement intérieur" %}</a></li>
                         <li><a href="{% url "tresorerie:prices" %}">{% trans "Tarifs et Cotisation" %}</a></li>
                         <li><a href="{% url "contact" %}">{% trans "Contact" %}</a></li>
                     </ul>
                 </div>
                 <div class="col-sm-4">
                     <ul>
-                        <li><a href="https://status.resel.fr">{% trans "État du réseau" %}</a></li>
+{#                        <li><a href="https://status.resel.fr">{% trans "État du réseau" %}</a></li>#}
                         <li><a href="https://clubs.resel.fr">{% trans "Les clubs" %}</a></li>
                         <li><a href="https://campus.resel.fr">{% trans "Campus" %}</a></li>
 {#                        <li><a href="{% url 'who:user-details'  'u' %}">{% trans "Annuaire" %}</a></li>#}
@@ -205,10 +205,10 @@
                 <div class="col-sm-4">
                     <ul>
                         <li><a href="https://www.federez.net/">{% trans "Fédérez" %}</a></li>
-                        <li><a href="http://www.telecom-bretagne.eu">{% trans "Télécom Bretagne" %}</a></li>
+                        <li><a href="https://www.imt-atlantique.fr/">{% trans "IMT Atlantique" %}</a></li>
                         <br />
-                        <li><a href="http://assos-tb.fr/">{% trans "Associations de Télécom Bretagne" %}</a></li>
-                        <li><a href="http://www.aitb.org//">{% trans "Alumni" %}</a></li>
+                        <li><a href="http://assos-tb.fr/">{% trans "Associations de l'IMT Atlantique" %}</a></li>
+                        <li><a href="http://www.aitb.org/">{% trans "Alumni" %}</a></li>
                     </ul>
                 </div>
             </div>
