@@ -7,6 +7,7 @@ RUN apt-get -qq update
 # Python
 RUN apt-get -qq upgrade && apt-get -qq install build-essential python-software-properties python3 python3-dev python3-pip vim libssl-dev libmysqlclient-dev
 RUN easy_install3 -U pip
+RUN pip3 install -qr requirements.txt
 
 # LDAP
 RUN apt-get -qq upgrade && apt-get -qq install slapd ldap-utils libldap2-dev libsasl2-dev libssl-dev ldapvi
