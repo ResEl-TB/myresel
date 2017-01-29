@@ -91,7 +91,7 @@
                             <div class="col-xs-5 col-sm-3 computer-icon"><span class="fa fa-fw fa-globe"></span></div>
                             <div class="col-xs-7">
                                 <h3>{% trans "Hors campus" %}</h3>
-                                <div>{% trans "Vous êtes actuellement hors du campus de Télécom Bretagne." %}</div>
+                                <div>{% trans "Vous êtes actuellement hors du campus de l'IMT Atlantique." %}</div>
                                 <small>{% trans "Vos actions sont limitées" %}</small>
                             </div>
                         </div>
@@ -119,7 +119,7 @@
                 {% elif need_to_pay == 'warning' %}
                     <div class="col-md-6 col-md-offset-2 payement-block">
                         <div class="row">
-                            <div class="col-xs-5 col-sm-3 computer-icon warning"><span class="fa fa-fw     fa-exclamation hidden-xs"></span></div>
+                            <div class="col-xs-5 col-sm-3 computer-icon warning"><span class="fa fa-fw fa-exclamation hidden-xs"></span></div>
                             <div class="col-sm-7">
                                 <h3>{% trans "Attention abonnement" %}</h3>
                                 {% if ldapuser.is_member %}
