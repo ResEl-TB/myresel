@@ -80,7 +80,7 @@ class Room(models.Model):
     def get_clubs(self):
         """ Get allowed clubs for the room """
 
-        clubs = ['Tous']
+        clubs = []
         if self.private:
             clubs = list()
             for club_cn in self.clubs.split('\r\n'):
@@ -95,27 +95,11 @@ class Room(models.Model):
 
     def is_free(self, start_date, end_date):
         """ Checks if a room is free between the time range given """
-        
-        events = self.roombooking_set.filter(
-            start_time__year=start_date.year,
-            start_time__month=start_date.month,
-            start_time__day=start_date.day,
-        )
 
-        free = True
-        for event in events:
-            # Room not free if start_date in [event.start_time, event.end_time] or end_date in [event.start_time, event.end_time]
-            if event.start_time <= start_date <= event.end_time or \
-               event.start_time <= end_date <= event.end_time:
-                free = False
-                break
-
-            # Room also not free if [event.start_time, event.end_time] is included in [start_date, end_date]
-            elif start_date <= event.start_time <= end_date and start_date <= event.end_time <= end_date:
-                free = False
-                break
-
-        return free
+        return self.roombooking_set.filter(
+            start_time__lt=end_date,
+            end_time__gt=start_date
+        ).count() == 0
 
 class RoomBooking(models.Model):
     class Meta:

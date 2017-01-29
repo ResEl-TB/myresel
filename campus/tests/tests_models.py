@@ -105,3 +105,31 @@ class RoomTestCase(TestCase):
                 parse_datetime('2016-12-01 10:30:00')
             )
         )
+
+    def test_multiple_days_event_is_free(self):
+        room = Room.objects.get(name='Salle TV')
+        booking = RoomBooking()
+        booking.name = 'Art Live'
+        booking.description = 'Config de switchs'
+        booking.user = 'jhomassel'
+        booking.booking_type = 'training'
+        booking.start_time = parse_datetime('2016-11-01 10:00:00')
+        booking.end_time = parse_datetime('2016-11-03 11:00:00')
+        booking.save()
+        booking.room.add(room)
+
+        # Room should be free
+        self.assertTrue(
+            room.is_free(
+                parse_datetime('2016-11-03 12:00:00'),
+                parse_datetime('2016-11-03 13:00:00')
+            )
+        )
+
+        # Room should be occupied
+        self.assertFalse(
+            room.is_free(
+                parse_datetime('2016-11-02 9:15:00'),
+                parse_datetime('2016-11-02 10:30:00')
+            )
+        )
