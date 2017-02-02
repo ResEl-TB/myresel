@@ -121,7 +121,7 @@ class inscriptionNetworkHandler(object):
             # Preliminary check
 
             if zone != 'Brest-inscription':
-                logger.error("IP et VLAN non concordants"
+                logger.warning("IP et VLAN non concordants"
                              "\n IP : %s"
                              "\n HOST : %s"
                              "\n ZONE : %s"
