@@ -58,7 +58,7 @@ class LdapDevice(ldapback.models.LdapModel):
                 "user" in lower_zone:
             return 'active'
 
-        # Computer in the wrong campus orin error (in some rare cases)
+        # Computer in the wrong campus or in error (in some rare cases)
         return 'wrong_campus'
 
     def set_campus(self, campus="Brest"):

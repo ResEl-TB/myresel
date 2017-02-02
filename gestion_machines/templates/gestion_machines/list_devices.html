@@ -19,6 +19,7 @@
                             <th><i class="fa fa-desktop fa-fw" aria-hidden="true"></i> {% trans "Nom" %}</th>
                             <th><i class="fa fa-clone fa-fw" aria-hidden="true"></i> {% trans "Alias" %}</th>
                             <th><i class="fa fa-server fa-fw" aria-hidden="true"></i> {% trans "Adresse MAC" %}</th>
+                            <th><i class="fa fa-server fa-fw" aria-hidden="true"></i> {% trans "Adresse IP" %}</th>
                             <th><i class="fa fa-info fa-fw" aria-hidden="true"></i> {% trans "Statut" %}</th>
                         </tr>
                         </thead>
@@ -29,17 +30,17 @@
                     <td>{{ m.hostname|capfirst }}</td>
                     <td>{{ m.aliases|first|capfirst }}</td>
                     <td>{{ m.mac_address|upper }}</td>
+                    <td>{% if "Brest" in m.zones %}172.22.{% elif "Rennes" in m.zones %}172.23.{% endif %}{{ m.ip|upper }}</td>
                     <td>
                         {% if m.get_status == "active" %}
                             <span class="label label-success">{% trans "Activée" %}</span>
                         {% elif m.get_status == "inactive" %}
                             <span class="label label-default">{% trans "Inactive" %}</span>
                         {% elif m.get_status == "wrong_campus" %}
-                            <span class="label label-danger">{% trans "Mauvais campus" %}</span>
+                            <span class="label label-default">{% trans "Mauvais campus" %}</span>
                         {% else %}
                             <span class="label label-danger">{% trans "Erreur" %}</span>
                         {% endif %}
-
                         {% if current_device.hostname == m.hostname %}
                             <span class="label label-info">{% trans "Machine courante" %}</span>
                         {% endif %}
