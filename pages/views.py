@@ -10,7 +10,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import View, ListView
+from django.views.generic import View, ListView, DetailView
 
 from fonctions import network, decorators
 from gestion_machines.models import LdapDevice
@@ -93,10 +93,17 @@ class NewsListe(ListView):
 
     template_name = 'pages/news.html'
     context_object_name = 'derniers_billets'
+    paginate_by = 4
 
     def get_queryset(self):
         return News.objects.order_by('-date').all()
 
+class NewsDetail(DetailView):
+    """ Vue appelée pour afficher un billet particulié """
+
+    template_name = 'pages/piece_of_news.html'
+    context_object_name = 'pieceOfNews'
+    model = News
 
 class Contact(View):
     """ Vue appelée pour contacter les admin en cas de soucis """

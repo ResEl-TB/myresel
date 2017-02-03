@@ -89,11 +89,11 @@
             {% for pieceofnews in news %}
 
                 <div class="news-bloc">
-                    <h3 class="title"><a href="#">{{ pieceofnews.title }}</a></h3>
+                    <h3 class="title"><a href="{%url 'pieceOfNews' pieceofnews.pk %}">{{ pieceofnews.title }}</a></h3>
 
                     <div class="body">{{ pieceofnews.content|safe|truncatewords_html:100 }}
                     </div>
-                    <div> <a href="#">{% trans "Lire la suite" %}</a></div>
+                    <div> <a href="{%url 'pieceOfNews' pieceofnews.pk %}">{% trans "Lire la suite" %}</a></div>
 
                     <div class="foot">
                         {% blocktrans with author=pieceofnews.author date=pieceofnews.date|date:"DATE_FORMAT" %}{{author}}, le {{date}}
@@ -104,6 +104,7 @@
             {% empty %}
                 <div class="news-bloc">{% trans "Pas de news à l'horizon" %}</div>
             {% endfor %}
+               <div class="newblock centered" style="font-size: 1.1em;"><a href="{% url 'news'%}">{% trans "Voir l'intégralité" %}</a></div>
         </div>
     </div>
 {% endblock %}

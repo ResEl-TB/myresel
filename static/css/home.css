@@ -182,3 +182,7 @@ h3 .service-title {
 .article {
     max-width: 800px;
 }
+
+.centered {
+   text-align: center;
+}
