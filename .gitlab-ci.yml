@@ -19,6 +19,11 @@ variables:
   MYSQL_ROOT_PASSWORD: blah
   REDIS_HOST: redis
 
+  MYSQL_QOS_DATABASE: resel
+  MYSQL_QOS_HOST: mysql
+  MYSQL_QOS_USER: resel
+  MYSQL_QOS_PASSWORD: blah
+
   ROOTDIR: ./
   CONFDIR: myresel/
   ETCDIR: .install/etc/
@@ -29,7 +34,6 @@ variables:
 
 before_script:
   - source .install/scripts/install_essentials.sh
-  - echo "CREATE DATABASE qos; CREATE USER 'qos'@'%' IDENTIFIED BY 'blah'; GRANT ALL PRIVILEGES ON * . * TO 'newuser'@'%'; FLUSH PRIVILEGES;" |mysql -uroot -p${MYSQL_ROOT_PASSWORD} -h ${MYSQL_HOST}
   - source .install/scripts/install_openldap.sh
   - source .install/scripts/install_latex.sh
   - pip3 install -qr requirements.txt
