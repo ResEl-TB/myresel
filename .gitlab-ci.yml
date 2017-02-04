@@ -19,6 +19,11 @@ variables:
   MYSQL_ROOT_PASSWORD: blah
   REDIS_HOST: redis
 
+  MYSQL_QOS_DATABASE: qos
+  MYSQL_QOS_HOST: mysql
+  MYSQL_QOS_USER: root
+  MYSQL_QOS_PASSWORD: blah
+
   ROOTDIR: ./
   CONFDIR: myresel/
   ETCDIR: .install/etc/
@@ -29,6 +34,8 @@ variables:
 
 before_script:
   - source .install/scripts/install_essentials.sh
+  - apt-get install -qq mysql-client
+  - echo "CREATE DATABASE qos" | mysql -uroot -pblah -h mysql
   - source .install/scripts/install_openldap.sh
   - source .install/scripts/install_latex.sh
   - pip3 install -qr requirements.txt
