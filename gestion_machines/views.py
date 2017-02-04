@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import logging
 import time
+from datetime import datetime, timedelta
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -308,17 +310,22 @@ class BandwidthUsage(View):
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax():
-            start_date = request.GET.get('s', '')
-            end_date = request.GET.get('e', '')
+            start_date_str = request.GET.get('s', '')
+            end_date_str = request.GET.get('e', '')
             device = None
-
+            try:
+                start_date = datetime.strptime(start_date_str , "%Y-%m-%dT%H:%M:%S.%fZ")
+                end_date = datetime.strptime(end_date_str , "%Y-%m-%dT%H:%M:%S.%fZ")
+            except ValueError:
+                start_date = datetime.strptime(start_date_str, "%Y-%m-%d")
+                end_date = datetime.strptime(end_date_str, "%Y-%m-%d")
             data = self.get_graph_data(start_date, end_date, device)
             return JsonResponse(data, safe=False)
         else:
             return render(request, self.template_name)
 
 
-    def get_graph_data(self, start_date, end_date=None, device=None):
+    def get_graph_data(self, start_date, end_date, device=None):
         """
         Get the graph data in the form of a table
 
@@ -327,24 +334,32 @@ class BandwidthUsage(View):
         :param device: Unused, for later usage
         :return:
         """
-        # Get all the data in the last 24 hours:
-        current_time = int(time.time())
-        batchs = 50
-        duration = 24 * 3600  # In seconds
+        batchs = settings.BANDWIDTH_BATCHS
+
+        # update end_date to the end of the day
+        end_date = min(end_date + timedelta(days=1), datetime.now())
+
+        # Convert everything to seconds, which is simple to use
+        duration = end_date - start_date
+        start_st = int(start_date.timestamp())
+        end_st = int(end_date.timestamp())
+        duration_st = duration.days * 24 * 60 + duration.seconds
 
         bare_up = PeopleHistory.objects.filter(
             uid=self.request.ldap_user.uid,
-            timestamp__gte=current_time - duration,
+            timestamp__gte=start_date.timestamp(),
+            timestamp__lte=end_date.timestamp(),
             way=PeopleHistory.UP).order_by("timestamp")
 
         bare_down = PeopleHistory.objects.filter(
             uid=self.request.ldap_user.uid,
-            timestamp__gte=current_time - duration,
+            timestamp__gte=start_date.timestamp(),
+            timestamp__lte=end_date.timestamp(),
             way=PeopleHistory.DOWN).order_by("timestamp")
 
         # Create 2 historygrams
-        hist_time_labels = [i for i in range(current_time - duration, current_time, int(duration / batchs))]
-        hist_up = [0 for _ in range(current_time - duration, current_time, int(duration / batchs))]
+        hist_time_labels = [i for i in range(start_st, end_st, int(duration_st / batchs))]
+        hist_up = [0 for _ in range(start_st, end_st, int(duration_st / batchs))]
         i = 0
         for d in bare_up:
             try:
@@ -354,7 +369,7 @@ class BandwidthUsage(View):
             except IndexError:
                 break
 
-        hist_down = [0 for _ in range(current_time - duration, current_time, int(duration / batchs))]
+        hist_down = [0 for _ in range(start_st, end_st, int(duration_st / batchs))]
         i = 0
         for d in bare_down:
             try:

@@ -311,6 +311,12 @@ PHONENUMBER_DB_FORMAT = "E164"
 PHONENUMBER_DEFAULT_REGION = "FR"
 
 
+# QOS Conf
+
+# Number of batchs to do, smaller is faster but less precise
+BANDWIDTH_BATCHS = 50
+
+
 # Redis conf
 RQ_QUEUES = {
    'default': {
