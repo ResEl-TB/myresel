@@ -29,6 +29,7 @@ variables:
 
 before_script:
   - source .install/scripts/install_essentials.sh
+  - echo "CREATE DATABASE qos; CREATE USER 'qos'@'%' IDENTIFIED BY 'blah'; GRANT ALL PRIVILEGES ON * . * TO 'newuser'@'%'; FLUSH PRIVILEGES;" |mysql -uroot -p${MYSQL_ROOT_PASSWORD} -h ${MYSQL_HOST}
   - source .install/scripts/install_openldap.sh
   - source .install/scripts/install_latex.sh
   - pip3 install -qr requirements.txt
