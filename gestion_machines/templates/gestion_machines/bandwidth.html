@@ -4,86 +4,57 @@
 
 {% block titre %}{% trans "Consomation de bande passante" %}{% endblock %}
 
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/vendors/bootstrap-datepicker3.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bandwidth.css' %}"/>
+{% endblock %}
 {% block content %}
     <div class="container">
+        <h1 class="page-header">{% trans "Consomation de bande passante" %}</h1>
         <div class="row">
-            <div class="col-lg-12">
-                <h1 class="page-header">{% trans "Consomation de bande passante" %}</h1>
-            </div> <!-- /.col-lg-12 -->
+            <div class="col-md-8">
+                <div id="bw-control" class="row">
+
+                    <div class="col-sm-4">
+                        <div class="input-daterange input-group" id="datepicker">
+                            <input type="text" class="input-sm form-control" name="start" id="start-date"/>
+                            <span class="input-group-addon">to</span>
+                            <input type="text" class="input-sm form-control" name="end" id="end-date" />
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-sm-offset-2 instantorcumul">
+                        <div class="btn-group" data-toggle="buttons" id="cumulate-toogle">
+                            <label class="btn btn-default active">
+                                <input type="radio" name="instantorcumul" autocomplete="off" checked value="instant">Instantané
+                            </label>
+                            <label class="btn btn-default">
+                                <input type="radio" name="instantorcumul" autocomplete="off" value="cumul">Cumulé
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <canvas id="bandwidthChart" width="800" height="600" style="max-width: 800px; max-height: 600px;"></canvas>
+            </div>
+
+            <div class="col-md-3">
+                <h2>Notes</h2>
+                <ul>
+                    <li>Les Informations sur cette pages ne sont pas totalement exactes des imprecisions peuvent
+                        arriver lors du calcul des données téléchargées</li>
+                    <li>Seules les données vers internet sont affichées ici. Tout ce qui reste sur le réseau n'est pas
+                        compatibilisé</li>
+                </ul>
+            </div>
         </div>
-        <canvas id="bandwidthChart" width="800" height="600" style="max-width: 800px; max-height: 600px;"></canvas>
+
+
     </div>
 {% endblock %}
 
 {% block javascript %}
-    <script src="{% static 'js/Chart.bundle.min.js' %}"></script>
-    <script>
-        /**
-         * Convert to human readable
-         * From: https://stackoverflow.com/a/14919494
-         * @param bytes
-         * @param si
-         * @returns {string}
-         */
-        function humanFileSize(bytes, si) {
-            var thresh = si ? 1000 : 1024;
-            if(Math.abs(bytes) < thresh) {
-                return bytes + ' B';
-            }
-            var units = si
-                ? ['ko','Mo','Go','To','Po','Eo','Zo','Yo']
-                : ['Kio','Mio','Gio','Tio','Pio','Eio','Zio','Yio'];
-            var u = -1;
-            do {
-                bytes /= thresh;
-                ++u;
-            } while(Math.abs(bytes) >= thresh && u < units.length - 1);
-            return bytes.toFixed(1)+' '+units[u];
-        }
-        var ctx = document.getElementById("bandwidthChart");
-        var myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: {{ hist_label }},
+    <script src="{% static 'js/vendors/Chart.bundle.min.js' %}"></script>
+    <script src="{% static 'js/vendors/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'js/vendors/bootstrap-datepicker.fr.min.js' %}"></script>
 
-                datasets: [{
-                    label: 'Téléchargements',
-                    data: {{ hist_down }},
-                    borderColor: 'rgba(45, 115, 160, .6)',
-                    backgroundColor: 'rgba(45, 115, 160, .4)',
-                    pointRadius: 1,
-
-                },
-                    {
-                        label: 'Téléversements',
-                        data: {{ hist_up }},
-                        borderColor: 'rgba(192, 0, 26, .6)',
-                        backgroundColor: 'rgba(192, 0, 26, .4)',
-                        pointRadius: 1,
-
-                    }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero:true,
-                            callback: function(value, index, values) {
-                                return humanFileSize(value, true);
-                            }
-                        }
-
-                    }],
-                    xAxes: [{
-                        ticks: {
-                            callback: function(value, index, values) {
-                                return new Date(value).toTimeString();
-                            }
-                        }
-
-                    }]
-                }
-            }
-        });
-    </script>
+    <script src="{% static 'js/bandwidth.js' %}"></script>
 {% endblock %}

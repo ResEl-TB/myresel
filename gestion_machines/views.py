@@ -8,6 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import EmailMessage, mail_admins
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
@@ -306,19 +307,38 @@ class BandwidthUsage(View):
         return super(BandwidthUsage, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            start_date = request.GET.get('s', '')
+            end_date = request.GET.get('e', '')
+            device = None
+
+            data = self.get_graph_data(start_date, end_date, device)
+            return JsonResponse(data, safe=False)
+        else:
+            return render(request, self.template_name)
+
+
+    def get_graph_data(self, start_date, end_date=None, device=None):
+        """
+        Get the graph data in the form of a table
+
+        :param start_date:
+        :param end_date:
+        :param device: Unused, for later usage
+        :return:
+        """
         # Get all the data in the last 24 hours:
         current_time = int(time.time())
         batchs = 50
         duration = 24 * 3600  # In seconds
 
-
         bare_up = PeopleHistory.objects.filter(
-            uid=request.ldap_user.uid,
+            uid=self.request.ldap_user.uid,
             timestamp__gte=current_time - duration,
             way=PeopleHistory.UP).order_by("timestamp")
 
         bare_down = PeopleHistory.objects.filter(
-            uid=request.ldap_user.uid,
+            uid=self.request.ldap_user.uid,
             timestamp__gte=current_time - duration,
             way=PeopleHistory.DOWN).order_by("timestamp")
 
@@ -344,8 +364,8 @@ class BandwidthUsage(View):
             except IndexError:
                 break
 
-        return render(request, self.template_name, context={
-            "hist_up": str(hist_up),
-            "hist_down": str(hist_down),
-            "hist_label": str(hist_time_labels),
-        })
+        return {
+            "up": hist_up,
+            "down": hist_down,
+            "labels": hist_time_labels,
+        }
