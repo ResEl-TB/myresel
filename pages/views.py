@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
+from django.db import OperationalError
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.utils.decorators import method_decorator
@@ -86,15 +87,19 @@ class Home(View):
             template_for_response = self.logged_template
             args_for_response['end_fee'] = end_fee
 
-            # For the moment show his total amount downloaded, not the per device view
-            # TODO: once the new fw is done, we should improve that
-            data_down = PeopleData.objects.filter(uid=request.ldap_user.uid, way=PeopleData.DOWN)
-            data_up = PeopleData.objects.filter(uid=request.ldap_user.uid, way=PeopleData.UP)
+            # TODO:For the moment show his total amount downloaded, not the per device view
+            # TODO: ~once the new fw is done, we should improve that
+            try:
+                data_down = PeopleData.objects.filter(uid=request.ldap_user.uid, way=PeopleData.DOWN)
+                data_up = PeopleData.objects.filter(uid=request.ldap_user.uid, way=PeopleData.UP)
 
-            display_down = sizeof_fmt(sum(d.amount for d in data_down))
-            display_up = sizeof_fmt(sum(d.amount for d in data_up))
-            args_for_response['data_down'] = display_down
-            args_for_response['data_up'] = display_up
+                display_down = sizeof_fmt(sum(d.amount for d in data_down))
+                display_up = sizeof_fmt(sum(d.amount for d in data_up))
+                args_for_response['data_down'] = display_down
+                args_for_response['data_up'] = display_up
+            except OperationalError:  # For the sake of stability we will be very loose with errors in that space
+                args_for_response['data_down'] = "ERR"
+                args_for_response['data_up'] = "ERR"
 
         elif network.is_resel_ip(ip):
             template_for_response = self.interior_template
