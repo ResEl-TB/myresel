@@ -167,3 +167,22 @@ class ChangeCampusCase(TestCase):
         self.assertEqual("active", device3.get_status())
         self.assertEqual("Brest", device3.get_campus())
         self.assertEqual(len(mail.outbox), 1)
+
+
+class BandwidthUsageCase(TestCase):
+    def setUp(self):
+        try_delete_user("lcarr")
+        try_delete_old_user("lcarr")
+        self.user = create_full_user()
+        self.user.save()
+        self.client.login(username=self.user.uid, password=self.user.user_password)
+        self.owner = ("uid=lcarr,%s" % settings.LDAP_DN_PEOPLE)
+        user_devices = LdapDevice.filter(owner=self.owner)
+        for device in user_devices:
+            try_delete_device(device.hostname)
+
+    def test_simple_dispay(self):
+        response = self.client.get(reverse("gestion-machines:bandwidth-usage"),
+                                   HTTP_HOST="10.0.3.199", follow=True)
+        self.assertEqual(200, response.status_code)
+        self.assertTemplateUsed(response, "gestion_machines/bandwidth.html")

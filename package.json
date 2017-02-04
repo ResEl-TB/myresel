@@ -1,0 +1,18 @@
+{
+  "name": "myresel",
+  "version": "0.2.0",
+  "description": "Site officiel de l'association ResEl",
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@git.resel.fr:43000/resel/myresel.git"
+  },
+  "license": "None",
+  "bugs": {
+    "url": "https://git.resel.fr/resel/myresel/issues"
+  },
+  "homepage": "https://git.resel.fr/resel/myresel",
+  "dependencies": {
+    "chart.js": "^2.4.0"
+  },
+  "devDependencies": {}
+}
