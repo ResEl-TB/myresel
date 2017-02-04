@@ -66,7 +66,7 @@ class NewsCase(TestCase):
         self.assertContains(r, self.news[0].title)
 
         # News detail page
-        r = self.client.get(reverse("pieceOfNews", args=[self.news[0].pk]),
+        r = self.client.get(reverse("piece-of-news", args=[self.news[0].pk]),
                             HTTP_HOST="10.0.3.99", follow=True)
 
         self.assertEqual(200, r.status_code)

@@ -44,7 +44,7 @@ urlpatterns = [
 
     url(r'^wiki/', include('wiki.urls', namespace='wiki')),
     url(r'^news/$', NewsListe.as_view(), name='news'),
-    url(r'^news/(?P<pk>\d+)$', NewsDetail.as_view(), name='pieceOfNews'),
+    url(r'^news/(?P<pk>\d+)$', NewsDetail.as_view(), name='piece-of-news'),
     url(r'^faq/$', FaqList.as_view(), name='faq'),
     url(r'^faq/upvote/$', faqUpvote, name='upvote'),
     url(r'^contact/', Contact.as_view(), name='contact'),

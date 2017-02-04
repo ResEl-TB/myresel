@@ -93,7 +93,7 @@ class NewsListe(ListView):
 
     template_name = 'pages/news.html'
     context_object_name = 'derniers_billets'
-    paginate_by = 4
+    paginate_by = 5
 
     def get_queryset(self):
         return News.objects.order_by('-date').all()

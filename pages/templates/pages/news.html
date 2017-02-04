@@ -23,12 +23,12 @@
             <div class="home-fragment home-presentation">
                 <div class="container text-left article">
                   {% for billet in derniers_billets %}
-                      <div class="panel panel-info">
-                         <div class="panel-heading"><h3 class="panel-title"><a href="{%url 'pieceOfNews' billet.pk %}">{{ billet.title }}</a></h3></div>
+                     <div class="news-container">
+                         <div class="panel-heading centered"><h3><a href="{%url 'piece-of-news' billet.pk %}">{{ billet.title }}</a></h3><hr /></div>
                          <div class="panel-body">{{ billet.content|safe|truncatewords_html:150 }}</div>
-                         <div class="centered"> <a href="{%url 'pieceOfNews' billet.pk %}">{% trans "Lire la suite" %}</a></div>
-                         <div class="panel-footer">{% blocktrans with author=billet.author date=billet.date %}{{author}}, le {{date}}{% endblocktrans %}</div>
-                      </div>
+                         <div class="centered"><a href="{%url 'piece-of-news' billet.pk %}">{% trans "Lire la suite" %}</a></div><hr />
+                         <div class="pieceofnews-footer">{% blocktrans with author=billet.author date=billet.date %}{{author}}, le {{date}}{% endblocktrans %}</div>
+                     </div>
                   {% empty %}
                   <p>{% trans "Pas de news à l'horizon" %}</p>
                   {% endfor %}
