@@ -109,7 +109,7 @@ var download_data = function() {
     var start_date = $("#start-date").val();
     var end_date = $("#end-date").val();
 
-    $.getJSON( "/machines/consomation", { s: start_date, e: end_date }, function( data ) {
+    $.getJSON( "/machines/consommation", { s: start_date, e: end_date }, function( data ) {
         up_raw_data = data.up;
         down_raw_data = data.down;
         label_raw_data = data.labels;
