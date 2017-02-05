@@ -17,16 +17,16 @@ from django.conf.urls import url
 
 from gestion_personnes.views import ResetPwd, CheckEmail
 from .views import Inscription, ModPasswd, InscriptionCGU, Settings
-from .views import PersonalInfo, ResetPwdSend, SendUid, MailResel, DeleteMailResel, RedirectMailResel
+from .views import PersonalInfo, ResetPwdSend, SendUid, MailResEl, DeleteMailResEl, RedirectMailResEl
 
 urlpatterns = [
     url(r'^inscription$', Inscription.as_view(), name='inscription'),
     url(r'^cgu$', InscriptionCGU.as_view(), name='cgu'),
     url(r'^modification-passwd$', ModPasswd.as_view(), name='mod-passwd'),
     url(r'^parametres$', Settings.as_view(), name='settings'),
-    url(r'^mail$', MailResel.as_view(), name='mail'),
-    url(r'^mail/delete$', DeleteMailResel.as_view(), name='delete-mail'),
-    url(r'^mail/redirect$', RedirectMailResel.as_view(), name='redirect-mail'),
+    url(r'^mail$', MailResEl.as_view(), name='mail'),
+    url(r'^mail/delete$', DeleteMailResEl.as_view(), name='delete-mail'),
+    url(r'^mail/redirect$', RedirectMailResEl.as_view(), name='redirect-mail'),
     url(r'^reset-pwd/(?P<key>[-\w]+)$', ResetPwd.as_view(), name='reset-pwd'),
     url(r'^reset-pwd$', ResetPwdSend.as_view(), name='reset-pwd-send'),
     url('^send-uid$', SendUid.as_view(), name='send-uid'),

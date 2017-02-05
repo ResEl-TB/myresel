@@ -24,7 +24,7 @@
     <div class="col-md-5 col-md-offset-1">
       <h3>Par le Webmail ResEl :</h3>
       <ul>
-         <li> Adresse : https://webmail.resel.fr ou https://roundcube.resel.fr</li>
+         <li> Adresse : <a href="https://webmail.resel.fr">https://webmail.resel.fr</a> ou <a href="roundcube.resel.fr">https://roundcube.resel.fr</a></li>
          <li> Nom d'utilisateur : {{user.uid}}</li>
          <li> Mot de passe : votre mot de passe ResEl</li>
          <li> Domaine : @resel.fr</li>
@@ -48,14 +48,14 @@
     <div class="col-md-4 center-block">
       <center>
       <a href="{% url 'gestion-personnes:redirect-mail' %}">
-  		<button type="button" class="btn btn-primary">Redirection email</button>	
+  		<button type="button" class="btn btn-primary btn-lg">Redirection email</button>	
       </a>
       </center>
     </div>
 
     <div class="col-md-4 col-md-offset-2">
       <a href="{% url 'gestion-personnes:delete-mail' %}">
-  		<button type="button" class="btn btn-danger">Suppression boîte ResEl</button>
+  		<button type="button" class="btn btn-danger btn-lg">Suppression boîte ResEl</button>
       </a>
   	</div>
     <div class="col-md-1"></div>

@@ -317,7 +317,7 @@ class CheckEmail(View):
         return HttpResponseRedirect(reverse("home"))
 
 
-class MailResel(View):
+class MailResEl(View):
     """
     Base view to present mail configuration parameters, to propose mail
     creation and destruction.
@@ -334,14 +334,12 @@ class MailResel(View):
         bearer = LdapUser.filter(object_classes='mailPerson', mail_local_address=address)
 
 
-        if len(bearer) == 0 or bearer == None:
+        if bearer is None or len(bearer) == 0:
             # SO : http://stackoverflow.com/q/517923
             handle = unicodedata.normalize('NFKD', handle + str(uid_num.group(1))).encode('ASCII',
             'ignore').lower()
         else:
             handle = None
-
-        dir(handle)
 
         return handle
 
@@ -431,7 +429,7 @@ class MailResel(View):
                     _("Vous avez déjà une adresse ResEl."))
             return HttpResponseRedirect(reverse("gestion-personnes:mail"))
 
-class DeleteMailResel(View):
+class DeleteMailResEl(View):
     """
         Handles deletion of email address and explications to the user.
     """
@@ -475,7 +473,7 @@ class DeleteMailResel(View):
                 messages.error(request, _("L'adresse entrée ne correspond pas à votre adresse email."))
                 return HttpResponseRedirect(reverse("gestion-personnes:delete-mail"))
 
-class RedirectMailResel(View):
+class RedirectMailResEl(View):
     template_name = "gestion_personnes/mail_redirect.html"
 
     def get(self, request, *args, **kwargs):
