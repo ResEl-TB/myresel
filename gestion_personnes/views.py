@@ -1,10 +1,14 @@
 from datetime import datetime, timedelta, date
+import time
+import re
 
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse, reverse_lazy
+from django.core.mail import EmailMessage
+
 from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
@@ -19,8 +23,6 @@ from gestion_personnes.models import LdapUser, UserMetaData
 from .forms import InscriptionForm, ModPasswdForm, CGUForm, InvalidUID, PersonnalInfoForm, ResetPwdSendForm, \
     ResetPwdForm, SendUidForm
 import unicodedata
-from django.core.mail import EmailMessage
-import time
 
 class Inscription(View):
     """
@@ -326,11 +328,15 @@ class MailResel(View):
         handle = first_name + '.' + last_name
         
         # If he already exist...
-        address = handle + '@resel.fr'
+        uid_num = re.match("^[a-z._-]+?([0-9].*)$", uid)
+
+        address = handle + str(uid_num.group(1)) + '@resel.fr'
         bearer = LdapUser.filter(object_classes='mailPerson', mail_local_address=address)
+
+
         if len(bearer) == 0 or bearer == None:
             # SO : http://stackoverflow.com/q/517923
-            handle = unicodedata.normalize('NFKD', handle).encode('ASCII',
+            handle = unicodedata.normalize('NFKD', handle + str(uid_num.group(1))).encode('ASCII',
             'ignore').lower()
         else:
             handle = None
@@ -378,6 +384,15 @@ class MailResel(View):
 
             if handle:
                 mail_address = handle + b'@resel.fr'
+
+                bearer = LdapUser.filter(object_classes='mailPerson', mail_local_address=str(mail_address))
+
+                if len(bearer) != 0:
+                    messages.error(request, 
+                                    'Impossible de créer une adresse mail unique. Contactez support@resel.fr.')
+
+                    return HttpResponseRedirect(reverse("gestion-personnes:mail"))
+
 
                 user.mail_local_address = mail_address
                 user.mail_dir = mailDir
