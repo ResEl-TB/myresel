@@ -5,41 +5,62 @@
 
 {% block content %}
 <div class="container">
-    <div class="page-header">{% trans "Votre boîte mail {{user.mail_local_address}}" %}</div>
+  <div class="page-header"><h2>{% trans "Votre boîte mail " %} {{user_mail_address}}</h2></div>
 
     
-    <div class="row">
-    	<div class="col-md-7 col-md-offset-1">
-<p>Accès par un logiciel de courrier électronique : 
-	<ul>
-   <li> Serveur POP/IMAP (SSL/TLS obligatoire) : mail.resel.fr sur le port 995 (POP) ou 993 (IMAP); </li>
-   <li> Nom d'utilisateur : {{user.uid}};</li>
-   <li> Mot de passe : votre mot de passe ResEl;</li>
-   <li> Serveur SMTP (courrier sortant) : mail.resel.fr sur le port 587, en activant le TLS.</li>
-	</ul>
-Par le Webmail ResEl :
-<ul>
-   <li> Adresse : https://webmail.resel.fr ou https://roundcube.resel.fr</li>
-   <li> Nom d'utilisateur : {{user.uid}}</li>
-   <li> Mot de passe : votre mot de passe ResEl</li>
-   <li> Domaine : @resel.fr</li>
-</ul>
-Informations supplémentaires :
-<ul>
-    <li>Taille maximale des mails : 10 Mo</li>
-</ul>
-	</div>
-    	<div class="col-md-4">
-		<div class="row">
-			<div>
-			{{user.mail_routing_address}}
-		<button type="button" class="btn btn-primary">Changer ma redirection</button>	
-			</div>
-			<div class="row">
-			Vous pouvez supprimer votre boîte mail ici. Elle sera supprimée au bout de trente jours; les mails seront accessibles jusque là.
-		<button type="button" class="btn btn-danger">Supprimer ma boîte ResEl</button>
-			</div>
-    	</div>
+  <div class="row">
+  	<div class="col-md-6">
+      <h3>Accès par un logiciel de courrier électronique :</h3>
+      <p> 
+      <em>Par exemple Thunderbird ou Gmail.</em>
+      	<ul>
+         <li> Serveur POP/IMAP (SSL/TLS obligatoire) : mail.resel.fr sur le port 995 (POP) ou 993 (IMAP); </li>
+         <li> Nom d'utilisateur : {{user.uid}};</li>
+         <li> Mot de passe : votre mot de passe ResEl;</li>
+         <li> Serveur SMTP (courrier sortant) : mail.resel.fr sur le port 587, en activant le TLS.</li>
+      	</ul>
+      </p>
     </div>
+    <div class="col-md-5 col-md-offset-1">
+      <h3>Par le Webmail ResEl :</h3>
+      <ul>
+         <li> Adresse : https://webmail.resel.fr ou https://roundcube.resel.fr</li>
+         <li> Nom d'utilisateur : {{user.uid}}</li>
+         <li> Mot de passe : votre mot de passe ResEl</li>
+         <li> Domaine : @resel.fr</li>
+      </ul>
+    </div>
+  </div>
+
+  <br>
+  
+  <div class="row">
+    <div class="col-md-6">
+      <h3>Gestion de mon adresse</h2>
+    </div>
+  </div>
+
+  <br>
+
+  <div class="row">
+
+    <div class="col-md-1"></div>
+    <div class="col-md-4 center-block">
+      <center>
+      <a href="{% url 'gestion-personnes:redirect-mail' %}">
+  		<button type="button" class="btn btn-primary">Redirection email</button>	
+      </a>
+      </center>
+    </div>
+
+    <div class="col-md-4 col-md-offset-2">
+      <a href="{% url 'gestion-personnes:delete-mail' %}">
+  		<button type="button" class="btn btn-danger">Suppression boîte ResEl</button>
+      </a>
+  	</div>
+    <div class="col-md-1"></div>
+
+  </div>
+
 </div> <!-- /.container -->
 {% endblock %}
