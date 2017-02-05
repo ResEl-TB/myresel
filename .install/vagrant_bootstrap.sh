@@ -19,6 +19,12 @@ export MYSQL_DATABASE=resel
 export MYSQL_USER=resel
 export MYSQL_PASSWORD=blah
 
+# SQL QoS configuration
+export MYSQL_QOS_HOST=localhost
+export MYSQL_QOS_DATABASE=qos
+export MYSQL_QOS_USER=resel
+export MYSQL_QOS_PASSWORD=blah
+
 # Redis configuration
 export REDIS_HOST=localhost
 

@@ -1,9 +1,85 @@
 import time
 
+from django.db import models
+from django.db.models import CharField, IntegerField, BigIntegerField
+
 import ldapback
 from ldapback.models.fields import LdapCharField, LdapListField
 from myresel import settings
 from myresel.settings import LDAP_DN_MACHINES
+
+
+class PeopleData(models.Model):
+
+    UP = 'up'
+    DOWN = 'down'
+    WAY_CHOICES = (
+        (UP, 'up'),
+        (DOWN, 'down'),
+    )
+
+    CLEAN = 'clean'
+    DIRTY = 'dirty'
+    FLOW_CHOICES = (
+        (CLEAN, 'clean'),
+        (DIRTY, 'dirty')
+    )
+
+    site = CharField(max_length=32, default=None, db_column="site", editable=False)
+    cn = CharField(max_length=128, default=None, db_column="cn", editable=False, primary_key=True)
+    uid = CharField(max_length=16, default=None, db_column="uid", editable=False)
+    way = CharField(max_length=4, default=None, db_column="way", editable=False, choices=WAY_CHOICES)
+    flow = CharField(max_length=5, default=None, db_column="flow", editable=False, choices=FLOW_CHOICES)
+
+    group = IntegerField(default=None, db_column="group", editable=False)
+    amount = BigIntegerField(default=None, db_column="amount", editable=False)
+    amount_ponderated = BigIntegerField(default=None, db_column="amount_ponderated", editable=False)
+    last_rate = IntegerField(default=None, db_column="last_rate", editable=False)
+
+    class Meta:
+        db_table = "people_data"
+        managed = False  # Read-only database
+        default_permissions = ()
+        index_together = [
+            ["cn", "way", "flow", "site"],
+        ]
+
+
+class PeopleHistory(models.Model):
+
+    UP = 'up'
+    DOWN = 'down'
+    WAY_CHOICES = (
+        (UP, 'up'),
+        (DOWN, 'down'),
+    )
+
+    CLEAN = 'clean'
+    DIRTY = 'dirty'
+    FLOW_CHOICES = (
+        (CLEAN, 'clean'),
+        (DIRTY, 'dirty')
+    )
+
+    site = CharField(max_length=32, default=None, db_column="site", editable=False)
+    timestamp = IntegerField(default=None, db_column="timestamp", editable=False)
+    cn = CharField(max_length=128, default=None, db_column="cn", editable=False, primary_key=True)
+    uid = CharField(max_length=16, default=None, db_column="uid", editable=False)
+    way = CharField(max_length=4, default=None, db_column="way", editable=False, choices=WAY_CHOICES)
+    flow = CharField(max_length=5, default=None, db_column="flow", editable=False, choices=FLOW_CHOICES)
+
+    group = IntegerField(default=None, db_column="group", editable=False)
+    amount = BigIntegerField(default=None, db_column="amount", editable=False)
+    amount_ponderated = BigIntegerField(default=None, db_column="amount_ponderated", editable=False)
+    duration = IntegerField(default=None, db_column="duration", editable=False)
+
+    class Meta:
+        db_table = "people_history"
+        managed = False  # Read-only database
+        default_permissions = ()
+        index_together = [
+            ["cn", "way", "flow", "site", "timestamp"],
+        ]
 
 
 class LdapDevice(ldapback.models.LdapModel):
@@ -117,3 +193,42 @@ class LdapDevice(ldapback.models.LdapModel):
             if zone.lower() == "inactive":
                 return True
         return False
+
+class QoSRouter(object):
+    """
+    A router for reading in QoS database
+    The router, helps making the QoS database read only. But
+    you should not rely only on that.
+
+    The user in database must be put as read-only
+    """
+    QoSClasses = (
+        PeopleData,
+        PeopleHistory,
+    )
+
+    def is_qos(self, obj):
+        try:
+            for c in self.QoSClasses:
+                if isinstance(obj(), c):
+                    return True
+        except:
+            return False
+
+    def db_for_read(self, model, **hints):
+        if self.is_qos(model):
+            return 'qos'
+        return None
+
+    def db_for_write(self, model, **hints):
+        if self.is_qos(model):
+            return 'qos'
+        return None
+
+    def allow_relation(self, obj1, obj2, **hints):
+        if self.is_qos(obj1) and self.is_qos(obj2):
+            return True
+        return None
+
+    def allow_migrate(self, db, app_label, model_name=None, **hints):
+        return None

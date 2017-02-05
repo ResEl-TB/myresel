@@ -46,6 +46,23 @@ class LdapModel(object):
         return cls._search(**new_kwargs)
 
     @classmethod
+    def all(cls):
+        """
+        Return all entries in base_dn
+        :return:
+        """
+        ldap = Ldap()
+
+        search_results = ldap.search(cls.base_dn, '(!(objectClass=organizationalUnit))', attr=ALL_ATTRIBUTES)
+        if search_results is None:
+            return []
+
+        results = []
+        for result_line in search_results:
+            results.append(cls._to_object(result_line))
+        return results
+
+    @classmethod
     def _search(cls, **kwargs):
         """
         Perform a search in the ldap

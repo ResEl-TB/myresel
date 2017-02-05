@@ -6,6 +6,8 @@ from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
+from django.db import OperationalError
+from django.db import ProgrammingError
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.utils.decorators import method_decorator
@@ -13,7 +15,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import View, ListView, DetailView
 
 from fonctions import network, decorators
-from gestion_machines.models import LdapDevice
+from fonctions.generic import sizeof_fmt
+from gestion_machines.models import LdapDevice, PeopleData
 from gestion_personnes.models import LdapUser, UserMetaData
 from pages.forms import ContactForm
 from pages.models import News, Faq
@@ -32,6 +35,8 @@ class Home(View):
         - Utilisateur connecté sur le campus, on lui propose des options pour son compte
         - la personne exterieure qui veut en savoir plus sur le ResEl
         - L'utilisateur à l'exterieur qui veut avoir des infos sur son compte
+
+    TODO: separate this functions in multiple ones...
     """
 
     template_name = 'pages/home.html'
@@ -82,6 +87,21 @@ class Home(View):
                     args_for_response['is_registered'] = False
             template_for_response = self.logged_template
             args_for_response['end_fee'] = end_fee
+
+            # TODO:For the moment show his total amount downloaded, not the per device view
+            # TODO: ~once the new fw is done, we should improve that
+            try:
+                data_down = PeopleData.objects.filter(uid=request.ldap_user.uid, way=PeopleData.DOWN)
+                data_up = PeopleData.objects.filter(uid=request.ldap_user.uid, way=PeopleData.UP)
+
+                display_down = sizeof_fmt(sum(d.amount for d in data_down))
+                display_up = sizeof_fmt(sum(d.amount for d in data_up))
+                args_for_response['data_down'] = display_down
+                args_for_response['data_up'] = display_up
+            except (OperationalError, ProgrammingError):  # For the sake of stability we will be very loose with errors in that space
+                args_for_response['data_down'] = "ERR"
+                args_for_response['data_up'] = "ERR"
+
         elif network.is_resel_ip(ip):
             template_for_response = self.interior_template
 

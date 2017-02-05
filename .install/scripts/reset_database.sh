@@ -5,6 +5,7 @@ if [ -z ${MYSQL_PASSWORD+x} ]; then MYSQL_PASSWORD=blah; fi
 if [ -z ${MYSQL_DATABASE+x} ]; then MYSQL_DATABASE=resel; fi
 if [ -z ${MYSQL_USER+x} ]; then MYSQL_USER=resel; fi
 if [ -z ${ROOTDIR+x} ]; then ROOTDIR=/myresel/; fi
+if [ -z ${LIBDIR+x} ]; then LIBDIR=/myresel/.install/lib/; fi
 
 
 mysql -uroot -p${MYSQL_PASSWORD} -e "DROP DATABASE IF EXISTS ${MYSQL_DATABASE};"

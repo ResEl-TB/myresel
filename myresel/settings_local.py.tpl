@@ -64,6 +64,15 @@ DB_USER = "root"
 DB_PASSWORD = "blah"
 
 
+# Database for the QoS
+# (information coming from the firewall)
+
+DB_QOS_NAME = "qos"
+DB_QOS_HOST = "localhost"
+DB_QOS_USER = "qos"
+DB_QOS_PASSWORD = "blah"
+
+
 # REDIS CREDENTIALS
 
 REDIS_HOST = 'localhost'

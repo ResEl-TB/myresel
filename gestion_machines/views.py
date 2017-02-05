@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 import logging
+import time
+from datetime import datetime, timedelta
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -7,6 +10,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import EmailMessage, mail_admins
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
@@ -15,7 +19,7 @@ from django.views.generic import View, ListView
 from fonctions import ldap, network
 from fonctions.decorators import resel_required, unknown_machine
 from fonctions.network import get_campus
-from gestion_machines.models import LdapDevice
+from gestion_machines.models import LdapDevice, PeopleHistory
 from gestion_personnes.models import LdapUser
 from myresel.settings_local import SERVER_EMAIL
 from .forms import AddDeviceForm, AjoutManuelForm
@@ -290,3 +294,93 @@ class Modifier(View):
             return HttpResponseRedirect(reverse('gestion-machines:liste'))
 
         return render(request, self.template_name, {'form': form})
+
+
+class BandwidthUsage(View):
+    """
+    Display the bandwidth used by the user
+    For the moment it only display per user, but in the future we can
+    imagine that it show bandwidth par device
+    """
+    template_name = "gestion_machines/bandwidth.html"
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(BandwidthUsage, self).dispatch(*args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            start_date_str = request.GET.get('s', '')
+            end_date_str = request.GET.get('e', '')
+            device = None
+            try:
+                start_date = datetime.strptime(start_date_str , "%Y-%m-%dT%H:%M:%S.%fZ")
+                end_date = datetime.strptime(end_date_str , "%Y-%m-%dT%H:%M:%S.%fZ")
+            except ValueError:
+                start_date = datetime.strptime(start_date_str, "%Y-%m-%d")
+                end_date = datetime.strptime(end_date_str, "%Y-%m-%d")
+            data = self.get_graph_data(start_date, end_date, device)
+            return JsonResponse(data, safe=False)
+        else:
+            return render(request, self.template_name)
+
+
+    def get_graph_data(self, start_date, end_date, device=None):
+        """
+        Get the graph data in the form of a table
+
+        :param start_date:
+        :param end_date:
+        :param device: Unused, for later usage
+        :return:
+        """
+        batchs = settings.BANDWIDTH_BATCHS
+
+        # update end_date to the end of the day
+        end_date = min(end_date + timedelta(days=1), datetime.now())
+
+        # Convert everything to seconds, which is simple to use
+        duration = end_date - start_date
+        start_st = int(start_date.timestamp())
+        end_st = int(end_date.timestamp())
+        duration_st = duration.days * 24 * 60 + duration.seconds
+
+        bare_up = PeopleHistory.objects.filter(
+            uid=self.request.ldap_user.uid,
+            timestamp__gte=start_date.timestamp(),
+            timestamp__lte=end_date.timestamp(),
+            way=PeopleHistory.UP).order_by("timestamp")
+
+        bare_down = PeopleHistory.objects.filter(
+            uid=self.request.ldap_user.uid,
+            timestamp__gte=start_date.timestamp(),
+            timestamp__lte=end_date.timestamp(),
+            way=PeopleHistory.DOWN).order_by("timestamp")
+
+        # Create 2 historygrams
+        hist_time_labels = [i for i in range(start_st, end_st, int(duration_st / batchs))]
+        hist_up = [0 for _ in range(start_st, end_st, int(duration_st / batchs))]
+        i = 0
+        for d in bare_up:
+            try:
+                if d.timestamp > hist_time_labels[i + 1]:
+                    i += 1
+                hist_up[i] += d.amount
+            except IndexError:
+                break
+
+        hist_down = [0 for _ in range(start_st, end_st, int(duration_st / batchs))]
+        i = 0
+        for d in bare_down:
+            try:
+                if d.timestamp > hist_time_labels[i + 1]:
+                    i += 1
+                hist_down[i] += d.amount
+            except IndexError:
+                break
+
+        return {
+            "up": hist_up,
+            "down": hist_down,
+            "labels": hist_time_labels,
+        }
