@@ -47,7 +47,7 @@ class ContactCase(TestCase):
 class NewsCase(TestCase):
     def setUp(self):
         self.news = []
-        for i in range(10):
+        for i in range(5):
             n = News(
                 title="Random title %i" % i,
                 content="Random content %i" % i,
@@ -63,7 +63,8 @@ class NewsCase(TestCase):
         # news list page
         self.assertEqual(200, r.status_code)
         self.assertTemplateUsed(r, "pages/news.html")
-        self.assertContains(r, self.news[0].title)
+        for n in self.news:
+            self.assertContains(r, n.title)
 
         # News detail page
         r = self.client.get(reverse("piece-of-news", args=[self.news[0].pk]),
