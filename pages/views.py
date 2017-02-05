@@ -7,6 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
 from django.db import OperationalError
+from django.db import ProgrammingError
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.utils.decorators import method_decorator
@@ -97,7 +98,7 @@ class Home(View):
                 display_up = sizeof_fmt(sum(d.amount for d in data_up))
                 args_for_response['data_down'] = display_down
                 args_for_response['data_up'] = display_up
-            except OperationalError:  # For the sake of stability we will be very loose with errors in that space
+            except (OperationalError, ProgrammingError):  # For the sake of stability we will be very loose with errors in that space
                 args_for_response['data_down'] = "ERR"
                 args_for_response['data_up'] = "ERR"
 

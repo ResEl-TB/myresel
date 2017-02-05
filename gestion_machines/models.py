@@ -208,10 +208,12 @@ class QoSRouter(object):
     )
 
     def is_qos(self, obj):
-        for c in self.QoSClasses:
-            if isinstance(obj(), c):
-                return True
-        return False
+        try:
+            for c in self.QoSClasses:
+                if isinstance(obj(), c):
+                    return True
+        except:
+            return False
 
     def db_for_read(self, model, **hints):
         if self.is_qos(model):
@@ -224,7 +226,7 @@ class QoSRouter(object):
         return None
 
     def allow_relation(self, obj1, obj2, **hints):
-        if self.is_qos(obj1) or self.is_qos(obj2):
+        if self.is_qos(obj1) and self.is_qos(obj2):
             return True
         return None
 

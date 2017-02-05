@@ -230,26 +230,7 @@ class UnManagedModelTestRunner(DiscoverRunner):
             m._meta.managed = False
 
 if 'test' in sys.argv or 'test_coverage' in sys.argv:  # Covers regular testing and django-coverage
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': DB_NAME,
-            'USER': DB_USER,
-            'PASSWORD': DB_PASSWORD,
-            'HOST': DB_HOST,
-        },
-        'qos': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'test_' + DB_QOS_NAME,
-            'USER': DB_QOS_USER,
-            'PASSWORD': DB_QOS_PASSWORD,
-            'HOST': DB_QOS_HOST,  # TODO: move that if we ever do tests in production (or staging)
-        }
-    }
-
     MIGRATION_MODULES = DisableMigrations()
-
-    DATABASE_ROUTERS = []
     TEST_RUNNER = 'myresel.settings.UnManagedModelTestRunner'
 
 # Password validation
