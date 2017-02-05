@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 
 from gestion_personnes.tests import try_delete_user, try_delete_old_user, create_full_user
+from wiki.models import Category, Link
 
 
 class ContactCase(TestCase):
@@ -42,3 +43,28 @@ class ContactCase(TestCase):
             HTTP_HOST="10.0.3.99", follow=True
         )
         self.assertEqual(200, get_page.status_code)
+
+class HomeViewCase(TestCase):
+    def setUp(self):
+        cat = Category()
+        cat.name = "Services"
+        cat.save()
+
+        ln = Link()
+        ln.name = "Dumb link to a site"
+        ln.url = "https://wiki.resel.fr/"
+        ln.description = "This is simple link to a wonderful website"
+        ln.category = cat
+        ln.save()
+
+        self.ln = ln
+
+    def test_simple_load(self):
+        r = self.client.get(reverse("home"),
+                                   HTTP_HOST="10.0.3.99", follow=True)
+
+        self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed(r, "pages/home/home.html")
+        self.assertContains(r, self.ln.name)
+        self.assertContains(r, self.ln.description)
+        self.assertContains(r, self.ln.url)
