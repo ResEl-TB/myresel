@@ -18,7 +18,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ALLOWED_HOSTS = ['*', 'resel.fr', 'rennes.resel.fr', 'beta.resel.fr', 'beta.rennes.resel.fr']
 
 MAIN_HOST_BREST = 'resel.fr'
-MAIN_HOST_RENNES = 'resel.fr'
+MAIN_HOST_RENNES = 'rennes.resel.fr'
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__name__))
 
@@ -33,7 +33,7 @@ LOGIN_URL = '/login'
 
 LOGIN_REDIRECT_URL = '/'
 
-# Inscription zone 
+# Inscription zone
 
 INSCRIPTION_ZONE_FALLBACK_URLNAME = 'inscription-zone'
 
@@ -52,9 +52,9 @@ INSCRIPTION_ZONE_ALLOWED_URLNAMESPACE = [
     'tresorerie',
 ]
 
-# 
+#
 
-NUMBER_NEWS_IN_HOME = 7
+NUMBER_NEWS_IN_HOME = 4
 
 #
 
@@ -230,26 +230,7 @@ class UnManagedModelTestRunner(DiscoverRunner):
             m._meta.managed = False
 
 if 'test' in sys.argv or 'test_coverage' in sys.argv:  # Covers regular testing and django-coverage
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': DB_NAME,
-            'USER': DB_USER,
-            'PASSWORD': DB_PASSWORD,
-            'HOST': DB_HOST,
-        },
-        'qos': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'test_' + DB_QOS_NAME,
-            'USER': DB_QOS_USER,
-            'PASSWORD': DB_QOS_PASSWORD,
-            'HOST': DB_QOS_HOST,  # TODO: move that if we ever do tests in production (or staging)
-        }
-    }
-
     MIGRATION_MODULES = DisableMigrations()
-
-    DATABASE_ROUTERS = []
     TEST_RUNNER = 'myresel.settings.UnManagedModelTestRunner'
 
 # Password validation
@@ -412,4 +393,3 @@ if DEBUG or TESTING:
     LOGGING = DEBUG_LOGGING_CONF
 else:
     LOGGING = PROD_LOGGING_CONF
-
