@@ -21,7 +21,7 @@ from gestion_machines.forms import AddDeviceForm
 from gestion_personnes.async_tasks import send_mails
 from gestion_personnes.models import LdapUser, UserMetaData
 from .forms import InscriptionForm, ModPasswdForm, CGUForm, InvalidUID, PersonnalInfoForm, ResetPwdSendForm, \
-    ResetPwdForm, SendUidForm
+    ResetPwdForm, SendUidForm, RoutingMailForm
 import unicodedata
 
 class Inscription(View):
@@ -398,7 +398,7 @@ class MailResel(View):
                 user.mail_dir = mailDir
                 # TODO: [EMERG] Delete mailDelDate field !
                 #user.mail_del_date = ""
-                user.mail_del_date = None
+                user.mail_del_date = date.fromtimestamp(time.time() + 15 * 12 * 31 * 24 *3600)
                 user.home_directory = homeDir
                 user.object_classes.append('mailPerson')
                 user.save()
@@ -489,8 +489,9 @@ class RedirectMailResel(View):
             # TODO: Be sure to select @resel.fr (!)
             # Some still have @resel.enst-bretagne.fr mail adresses (and they should keep it)
             mail_address = user.mail_local_address[0]
+            mail_form = RoutingMailForm(initial={'new_routing_address': routing_address})
 
-            return render(request, self.template_name, {"user_mail_address": mail_address, "user_routing_address": routing_address})
+            return render(request, self.template_name, {"user_mail_address": mail_address, "user_routing_address": routing_address, "mail_form": mail_form})
 
     def post(self, request, *args, **kwargs):
         user = LdapUser.get(pk=request.user.username)
@@ -498,7 +499,13 @@ class RedirectMailResel(View):
                 messages.error(request, _("Vous n'avez pas encore d'adresse email."))
                 return HttpResponseRedirect(reverse("gestion-personnes:mail"))
         else:
-            new_routing_address = request.POST.get("new_routing_address", None)
+            mail_form = RoutingMailForm(request.POST)
+            #new_routing_address = request.POST.get("new_routing_address", None)
+
+            if mail_form.is_valid():
+                new_routing_address = mail_form.cleaned_data.get('new_routing_address', None)
+            else:
+                new_routing_address = None
 
             if new_routing_address is None:
                 return HttpResponseRedirect(reverse("gestion-personnes:redirect-mail"))

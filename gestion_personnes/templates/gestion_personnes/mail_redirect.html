@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load i18n %}
 
-{% block titre %}{% trans "Suppression boîte ResEl" %}{% endblock %}
+{% block titre %}{% trans "Redirection adresse ResEl" %}{% endblock %}
 
 {% block content %}
 <div class="container">
@@ -23,7 +23,7 @@
       <p>
         <form action="" method="POST" class="form-inline">
             {% csrf_token %}
-            <input type="email" class="form-control" id="new_routing_address" name="new_routing_address" placeholder="Email" value="{{user_routing_address}}"> 
+            {{mail_form.new_routing_address}}
             <button type="submit" class="btn btn-info">Valider la redirection</button>
         </form>
       </p>
