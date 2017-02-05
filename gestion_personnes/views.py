@@ -479,7 +479,7 @@ class RedirectMailResel(View):
 
     def post(self, request, *args, **kwargs):
         user = LdapUser.get(pk=request.user.username)
-        if "mailPerson" not in user.object_classes or "None" in user.mail_local_address:
+        if "mailPerson" not in user.object_classes or " " in user.mail_local_address:
                 messages.error(request, _("Vous n'avez pas encore d'adresse email."))
                 return HttpResponseRedirect(reverse("gestion-personnes:mail"))
         else:
@@ -491,6 +491,8 @@ class RedirectMailResel(View):
                 # User cancelled its redirection
                 user.mail_routing_address = ""
                 user.save()
+                messages.success(request, _("La redirection a bien été supprimée."))
+                return HttpResponseRedirect(reverse("gestion-personnes:redirect-mail"))
             else:
                 user.mail_routing_address = new_routing_address
                 user.save()
