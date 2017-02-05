@@ -394,9 +394,7 @@ class MailResEl(View):
 
                 user.mail_local_address = mail_address
                 user.mail_dir = mailDir
-                # TODO: [EMERG] Delete mailDelDate field !
-                #user.mail_del_date = ""
-                user.mail_del_date = date.fromtimestamp(time.time() + 15 * 12 * 31 * 24 *3600)
+                user.mail_del_date = None
                 user.home_directory = homeDir
                 user.object_classes.append('mailPerson')
                 user.save()
