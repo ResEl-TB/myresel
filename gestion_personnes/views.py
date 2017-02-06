@@ -435,7 +435,7 @@ class DeleteMailResEl(View):
     def get(self, request, *args, **kwargs):
         user = LdapUser.get(pk=request.user.username)
 
-        if "mailPerson" not in user.object_classes or " " in user.mail_local_address:
+        if not user.has_resel_email():
             messages.error(request, _("Cette adresse email n'existe pas ou plus."))
             return HttpResponseRedirect(reverse("gestion-personnes:mail"))
 
@@ -477,7 +477,7 @@ class RedirectMailResEl(View):
     def get(self, request, *args, **kwargs):
         user = LdapUser.get(pk=request.user.username)
 
-        if "mailPerson" not in user.object_classes or " " in user.mail_local_address:
+        if not user.has_resel_email():
                 messages.error(request, _("Vous n'avez pas ou plus d'adresse email."))
                 return HttpResponseRedirect(reverse("gestion-personnes:mail"))
         else:
@@ -491,7 +491,7 @@ class RedirectMailResEl(View):
 
     def post(self, request, *args, **kwargs):
         user = LdapUser.get(pk=request.user.username)
-        if "mailPerson" not in user.object_classes or " " in user.mail_local_address:
+        if not user.has_resel_email():
                 messages.error(request, _("Vous n'avez pas encore d'adresse email."))
                 return HttpResponseRedirect(reverse("gestion-personnes:mail"))
         else:
@@ -526,7 +526,7 @@ class Webmail(View):
     def get(self, request, *args, **kwargs):
         user = LdapUser.get(pk=request.user.username)
 
-        if "mailPerson" in user.object_classes and " " not in user.mail_local_address:
+        if user.has_resel_email():
             return HttpResponseRedirect("https://webmail.resel.fr")
         else:
             return HttpResponseRedirect(reverse("gestion-personnes:mail"))
