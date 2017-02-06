@@ -177,6 +177,11 @@ body {
     margin-top: 30px;
 }
 
+.footer .bottom-row a{
+    color: #ffffff;
+    font-weight: bold;
+}
+
 
 /* Alerts */
 .alert-info {

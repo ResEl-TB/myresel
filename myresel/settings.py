@@ -18,7 +18,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ALLOWED_HOSTS = ['*', 'resel.fr', 'rennes.resel.fr', 'beta.resel.fr', 'beta.rennes.resel.fr']
 
 MAIN_HOST_BREST = 'resel.fr'
-MAIN_HOST_RENNES = 'rennes.resel.fr'
+MAIN_HOST_RENNES = 'resel.fr'
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__name__))
 
@@ -295,7 +295,7 @@ PHONENUMBER_DEFAULT_REGION = "FR"
 # QOS Conf
 
 # Number of batchs to do, smaller is faster but less precise
-BANDWIDTH_BATCHS = 50
+BANDWIDTH_BATCHS = 5
 
 
 # Redis conf
