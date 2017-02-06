@@ -518,3 +518,16 @@ class RedirectMailResEl(View):
                 messages.success(request, _("La redirection a bien été créée."))
                 return HttpResponseRedirect(reverse("gestion-personnes:redirect-mail"))
 
+class Webmail(View):
+    """
+        Access webmail or configuration page.
+    """
+    # TODO: Is he logged in ?
+    def get(self, request, *args, **kwargs):
+        user = LdapUser.get(pk=request.user.username)
+
+        if "mailPerson" in user.object_classes and " " not in user.mail_local_address:
+            return HttpResponseRedirect("https://webmail.resel.fr")
+        else:
+            return HttpResponseRedirect(reverse("gestion-personnes:mail"))
+

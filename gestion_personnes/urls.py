@@ -17,7 +17,7 @@ from django.conf.urls import url
 
 from gestion_personnes.views import ResetPwd, CheckEmail
 from .views import Inscription, ModPasswd, InscriptionCGU, Settings
-from .views import PersonalInfo, ResetPwdSend, SendUid, MailResEl, DeleteMailResEl, RedirectMailResEl
+from .views import PersonalInfo, ResetPwdSend, SendUid, MailResEl, DeleteMailResEl, RedirectMailResEl, Webmail
 
 urlpatterns = [
     url(r'^inscription$', Inscription.as_view(), name='inscription'),
@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^parametres$', Settings.as_view(), name='settings'),
     url(r'^mail$', MailResEl.as_view(), name='mail'),
     url(r'^mail/delete$', DeleteMailResEl.as_view(), name='delete-mail'),
+    url(r'^webmail$', Webmail.as_view(), name='webmail'),
     url(r'^mail/redirect$', RedirectMailResEl.as_view(), name='redirect-mail'),
     url(r'^reset-pwd/(?P<key>[-\w]+)$', ResetPwd.as_view(), name='reset-pwd'),
     url(r'^reset-pwd$', ResetPwdSend.as_view(), name='reset-pwd-send'),
