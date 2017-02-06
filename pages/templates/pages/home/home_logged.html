@@ -26,12 +26,13 @@
                     </div>
                     <div class="services-group">
                         <div><a><span class="fa fa-group fa-fw"></span> {% trans "Gérer mes clubs et associations" %}</a> <span class="label label-default">{% trans "Bientôt" %}</span></div>
-                        <div><a><span class="fa fa-inbox fa-fw"></span> <a href="{% url 'gestion-personnes:mail' %}">{% trans "Ma boîte mail ResEl" %}</a></div>
+                        <div><a href="{% url 'gestion-personnes:webmail' %}"><span class="fa fa-inbox fa-fw"></span> {% trans "Ma boîte mail ResEl" %}</a></div>
                         <div><a href="https://mlistes.resel.fr"><span class="fa fa-feed fa-fw"></span> {% trans "Mes listes de diffusion" %}</a></div>
                     </div>
                     <div class="services-group">
                         <div><a href="{% url 'gestion-personnes:personal-infos' %}"><span class="fa fa-user fa-fw"></span> {% trans "Modifier mes informations personnelles" %}</a></div>
-                        <div><a href="{% url 'gestion-personnes:settings' %}"><span class="fa fa-sliders fa-fw"></span> {% trans "Paramètres de mon compte" %} <span class="label label-default">{% trans "Bientot" %}</span></a></div>
+                        {# Temporarly to the webmail, but in the future we will add more settings #}
+                        <div><a href="{% url 'gestion-personnes:mail' %}"><span class="fa fa-sliders fa-fw"></span> {% trans "Paramètres de mon compte" %}</a></div>
                         <div><a href="{% url 'gestion-personnes:mod-passwd' %}"><span class="fa fa-pencil-square fa-fw"></span> {% trans "Modifier mon mot de passe" %}</a></div>
                         <div><a href="{% url 'tresorerie:historique' %}"><span class="fa fa-history fa-fw"></span> {% trans "Historique de mes factures" %}</a></div>
                     </div>
