@@ -63,7 +63,7 @@
                 <!-- Lists of categories -->
                 {% for category in categories %}
                     <li class="dropdown">
-                        <a href="{% url 'wiki:show-category' slug=category.slug %}" class="dropdown-toggle" data-toggle="dropdown"><i class="fa {{ category.fa_icon_name }} fa-fw" aria-hidden="true"></i> {{ category.name }}</a>
+                        <a href="{% url 'wiki:show-category' slug=category.slug %}" class="dropdown-toggle" data-toggle="dropdown"><i class="fa {{ category.fa_icon_name }} fa-fw" aria-hidden="true"></i> <span class="hidden-sm">{{ category.name }}</span></a>
                         <ul class="dropdown-menu">
                             {% for stuff in category.get_articles_and_links_to_display %}
                                 <li>
@@ -82,10 +82,10 @@
                     </li>
                 {% endfor %}
                 <li>
-                    <a href="{% url 'faq' %}"><i class="fa fa-question fa-fw"></i> {% trans "F.A.Q." %}</a>
+                    <a href="{% url 'faq' %}"><i class="fa fa-question fa-fw"></i> <span class="hidden-sm">{% trans "F.A.Q." %}</span></a>
                 </li>
                 <li>
-                    <a href="{% url 'contact' %}"><i class="fa fa-comment-o fa-fw"></i> {% trans "Contact" %}</a>
+                    <a href="{% url 'contact' %}"><i class="fa fa-comment-o fa-fw"></i>{% trans "Contact" %}</a>
                 </li>
 
                 <hr class="visible-xs"/>
@@ -93,7 +93,7 @@
                 {% if request.user.is_authenticated %}
                     <li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user fa-fw" aria-hidden="true"></i> {{ ldapuser.first_name }} {{ ldapuser.last_name }} ({{ ldapuser.uid }})</a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user fa-fw" aria-hidden="true"></i> {{ ldapuser.first_name }} <span class="hidden-sm">{{ ldapuser.last_name }} ({{ ldapuser.uid }})</span></a>
                         <ul class="dropdown-menu">
                             <li>
                                 <a href="#"><i class="fa fa-sliders fa-fw"></i> {% trans "Paramètres" %}</a>
