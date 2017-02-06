@@ -82,10 +82,10 @@
                     </li>
                 {% endfor %}
                 <li>
-                    <a href="{% url 'faq' %}"><i class="fa fa-question fa-fw"></i> <span class="hidden-sm">{% trans "F.A.Q." %}</span></a>
+                    <a href="{% url 'news' %}"><i class="fa fa-newspaper-o fa-fw"></i> <span class="hidden-sm hidden-md">{% trans "Actualités" %}</span></a>
                 </li>
                 <li>
-                    <a href="{% url 'contact' %}"><i class="fa fa-comment-o fa-fw"></i>{% trans "Contact" %}</a>
+                    <a href="{% url 'contact' %}"><i class="fa fa-comment-o fa-fw"></i> {% trans "Contact" %}</a>
                 </li>
 
                 <hr class="visible-xs"/>

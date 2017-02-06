@@ -86,22 +86,24 @@
     <div class="home-fragment home-blog">
         <div class="container">
             <h2 class="clickable-title"><a href="{% url 'news'%}">{% trans "Les dernières nouvelles" %}</a></h2>
+        </div>
+        <div class="container article">
+
             {% for pieceofnews in news %}
-                <div class="news-bloc">
-                    <h3 class="title"><a href="{%url 'piece-of-news' pieceofnews.pk %}">{{ pieceofnews.title }}</a></h3>
-                    <div class="body">{{ pieceofnews.content|safe|truncatewords_html:100 }}
+                <div class="news-container">
+                    <h3 class="panel-heading centered"><a href="{%url 'piece-of-news' pieceofnews.pk %}">{{ pieceofnews.title }}</a></h3><hr />
+                    <div class="panel-body">{{ pieceofnews.content|safe|truncatewords_html:30 }}
                     </div>
-                    <div> <a href="{%url 'piece-of-news' pieceofnews.pk %}">{% trans "Lire la suite" %}</a></div>
-                    <div class="foot">
+                    <div> <div class="centered"><a href="{%url 'piece-of-news' pieceofnews.pk %}">{% trans "Lire la suite" %}</a></div></div>
+                    <div class="pieceofnews-footer">
                         {% blocktrans with author=pieceofnews.author date=pieceofnews.date|date:"DATE_FORMAT" %}{{author}}, le {{date}}
                         {% endblocktrans %}
                     </div>
-                    <hr />
                 </div>
             {% empty %}
                 <div class="news-bloc">{% trans "Pas de news à l'horizon" %}</div>
             {% endfor %}
-               <div class="newblock centered" style="font-size: 1.1em;"><a href="{% url 'news'%}">{% trans "Voir l'intégralité" %}</a></div>
+            <div class="newblock centered" style="font-size: 1.1em;"><a href="{% url 'news'%}">{% trans "Voir l'intégralité" %}</a></div>
         </div>
     </div>
 {% endblock %}
