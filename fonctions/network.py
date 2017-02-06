@@ -70,7 +70,7 @@ def update_all():
     os.system(settings.FIREWALL_RELOAD_COMMAND)
 
 
-def is_resel_ip(ip: str) -> str:
+def is_resel_ip(ip: str) -> bool:
     """ Check if this is a ResEl IP"""
     try:
         get_campus(ip)
