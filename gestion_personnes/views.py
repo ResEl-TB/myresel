@@ -354,7 +354,7 @@ class MailResEl(View):
         user = LdapUser.get(pk=request.user.username)
         mail_proposed_address = None
 
-        if 'mailPerson' in user.object_classes and " " not in user.mail_local_address:
+        if user.has_resel_email():
             template_name = 'gestion_personnes/mail_resel.html'
             mail_address = user.mail_local_address[0]
 
@@ -373,7 +373,7 @@ class MailResEl(View):
     def post(self, request, *args, **kwargs):
         # Turning him into a mail person.
         user = LdapUser.get(pk=request.user.username)
-        if 'mailPerson' not in user.object_classes or user.mail_local_address[0] == " ":
+        if user.has_resel_email():
             # Get the right left part
             homeDir = '/var/mail/virtual/'+user.uid
             mailDir = user.uid + '/Maildir/'
