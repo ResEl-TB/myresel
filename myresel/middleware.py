@@ -59,10 +59,10 @@ class NetworkConfiguration(object):
         # If the device in `user` or `inscription` zone, we can retrieve its mac address
         if "user" in zone or "inscription" in zone:
             # Hack to redirect to the good campus
-            if network.get_campus(ip) == "Rennes" and settings.CURRENT_CAMPUS == "Brest":
-                return HttpResponseRedirect("https://" + settings.MAIN_HOST_RENNES + request.get_full_path())
-            elif network.get_campus(ip) == "Brest" and settings.CURRENT_CAMPUS == "Rennes":
-                return HttpResponseRedirect("https://" + settings.MAIN_HOST_BREST + request.get_full_path())
+            # if network.get_campus(ip) == "Rennes" and settings.CURRENT_CAMPUS == "Brest":
+            #     return HttpResponseRedirect("https://" + settings.MAIN_HOST_RENNES + request.get_full_path())
+            # elif network.get_campus(ip) == "Brest" and settings.CURRENT_CAMPUS == "Rennes":
+            #     return HttpResponseRedirect("https://" + settings.MAIN_HOST_BREST + request.get_full_path())
 
             try:
                 request.network_data['mac'] = network.get_mac(ip)
