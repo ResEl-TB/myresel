@@ -328,16 +328,21 @@ class MailResEl(View):
         handle = first_name + '.' + last_name
         
         # If he already exist...
-        uid_num = re.match("^[a-z._-]+?([0-9].*)$", uid)
-
-        address = handle + str(uid_num.group(1)) + '@resel.fr'
+        uid_num_match = re.match("^[a-z._-]+?([0-9].*)$", uid)
+        if uid_num_match:
+            uid_num = str(uid_num_match.group(1))
+        else:
+            uid_num = ""
+        address = '%s%s@resel.fr' % (handle, uid_num)
         bearer = LdapUser.filter(object_classes='mailPerson', mail_local_address=address)
 
 
-        if bearer is None or len(bearer) == 0:
+        if len(bearer) == 0:
             # SO : http://stackoverflow.com/q/517923
-            handle = unicodedata.normalize('NFKD', handle + str(uid_num.group(1))).encode('ASCII',
-            'ignore').lower()
+            handle = unicodedata.normalize(
+                'NFKD',
+                handle + str(uid_num)
+            ).encode('ASCII','ignore').lower()
         else:
             handle = None
 
@@ -373,13 +378,12 @@ class MailResEl(View):
             'mail_proposed_address': mail_proposed_address})
 
 
-
     def post(self, request, *args, **kwargs):
         # Turning him into a mail person.
         user = LdapUser.get(pk=request.user.username)
-        if user.has_resel_email():
+        if not user.has_resel_email():
             # Get the right left part
-            homeDir = '/var/mail/virtual/'+user.uid
+            homeDir = '/var/mail/virtual/' + user.uid
             mailDir = user.uid + '/Maildir/'
             
             handle = self.build_address(user.uid, user.first_name, user.last_name)
@@ -431,6 +435,7 @@ class MailResEl(View):
                     _("Vous avez déjà une adresse ResEl."))
             return HttpResponseRedirect(reverse("gestion-personnes:mail"))
 
+
 class DeleteMailResEl(View):
     """
         Handles deletion of email address and explications to the user.
@@ -478,6 +483,7 @@ class DeleteMailResEl(View):
             else:
                 messages.error(request, _("L'adresse entrée ne correspond pas à votre adresse email."))
                 return HttpResponseRedirect(reverse("gestion-personnes:delete-mail"))
+
 
 class RedirectMailResEl(View):
     template_name = "gestion_personnes/mail_redirect.html"
