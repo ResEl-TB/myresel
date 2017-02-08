@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block css %}
+    <link href="{% static 'css/home.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block titre %}News{% endblock %}
+
+{% block content %}
+    <div>
+        <div>
+            <div class="home-fragment home-user-management">
+                <div class="container">
+                    <div class="row">
+                        <h2>{% trans "Les services ResEl" %}</h2>
+                        <p>{% trans "Retrouvez ici tous les services proposés par le ResEl."%}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="home-fragment home-presentation">
+                <div class="container">
+                   {% for service in services %}
+                   {% if forloop.counter|add:-1|divisibleby:3%}
+                   <div class="row">
+                   {% endif %}
+                   <div class="col-md-4">
+                       <a href="{{ service.get_absolute_url }}">
+                           <span class="glyphicon {{ service.glyphicon_name }} service-icon" aria-hidden="true"></span>
+                           <h3 class="service-title">{{ service.name }}</h3>
+                           <p>{{ service.description }}</p>
+                       </a>
+                   </div>
+                   {% if forloop.counter|divisibleby:3%}
+                   </div>
+                   {% endif %}
+                   {% empty %}
+                   {% endfor %}
+                  </div>
+               </div>
+            </div>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+{% endblock %}

@@ -11,8 +11,8 @@
 {% block content %}
     <div class="jumbotron">
         <div class="jumbotron-sep hidden-xs"></div>
-        <div class="container">
-            <div class="row">
+        <div class="container slide-wrapper">
+            <div class="row slide">
                 <div class="col-md-4 col-md-offset-1">
                     <h2>{% trans "Le Réseau des Élèves de l'IMT Atlantique" %}</h2>
                     <p>{% trans "Le fournisseur d'accès associatif par les teubreux pour les teubreux" %}</p>
@@ -21,40 +21,43 @@
                     <img src="{% static "images/logo_resel.png" %}" alt="logo ResEl" class="img-responsive logo">
                 </div>
             </div>
+            <div class="row slide">
+               <div class="col-sm-4 col-sm-offset-1">
+                   <span id="bigheart" class="fa fa-heart-o service-icon" aria-hidden="true"></span>
+               </div>
+               <div class="col-sm-6">
+                   <h2>{% blocktrans %}Le ResEl : l'association qui gère le réseau sur le campus de l'IMT Atlantique{% endblocktrans %}</h2>
+                   <br />
+                   {% blocktrans %}
+                       <p>Le <strong>ResEl</strong> (pour Réseau des élèves de <a href="https://www.imt-atlantique.fr/">l'IMT Atlantique</a>) est l'association d'élèves qui gère le réseau informatique des résidences des élèves de l'IMT Atlantique, l'une à Plouzané, près de Brest, et l'autre à Rennes.</p>
+                   {% endblocktrans %}
+               </div>
+            </div>
+            <div class="row slide">
+               <div class="col-sm-4 col-sm-offset-1">
+                   <span id="bigheart" class="fa fa-sitemap service-icon" aria-hidden="true"></span>
+               </div>
+               <div class="col-sm-6">
+                   <h2>{% blocktrans %}Le ResEl : l'association qui gère le réseau sur le campus de l'IMT Atlantique{% endblocktrans %}</h2>
+                   <br />
+                   {% blocktrans %}
+                       <p>Ce réseau relie entre elles les 600 chambres du campus de Brest et les 100 chambres du campus de Rennes. Les élèves disposant d'un ordinateur bénéficient donc d'un accès permanent à Internet.<p>
+                   {% endblocktrans %}
+               </div>
+            </div>
+            <a class="slide-btn slide-btn-left" onclick="plusDivs(-1)">&#10094;</a>
+            <a class="slide-btn slide-btn-right" onclick="plusDivs(+1)">&#10095;</a>
         </div>
     </div>
 
     {% block myresel %}
     {% endblock %}
 
-    {% block presentation %}
-        <div class="home-fragment home-presentation">
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-4 col-sm-offset-1">
-                        <span id="bigheart" class="fa fa-heart-o service-icon" aria-hidden="true"></span>
-                    </div>
-                    <div class="col-sm-6">
-                        <h2>{% blocktrans %}Le ResEl : l'association qui gère le réseau sur le campus de l'IMT Atlantique{% endblocktrans %}</h2>
-                        <br />
-                        {% blocktrans %}
-                            <p>Le <strong>ResEl</strong> (pour Réseau des élèves de <a href="https://www.imt-atlantique.fr/">l'IMT Atlantique</a>) est l'association d'élèves qui gère le réseau informatique des résidences des élèves de l'IMT Atlantique, l'une à Plouzané, près de Brest, et l'autre à Rennes.</p
-                            <p>Ce réseau relie entre elles les 600 chambres du campus de Brest et les 100 chambres du campus de Rennes. Les élèves disposant d'un ordinateur bénéficient donc d'un accès permanent à Internet.<p>
-                        {% endblocktrans %}
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% endblock %}
-
     <div class="home-fragment home-services">
         <div class="container">
             <h2>{% trans "Les services du ResEl" %}</h2>
-
+            <div class="row">
             {% for service in services %}
-                {% if forloop.first %}
-                    <div class="row">
-                {% endif %}
             <div class="col-md-4">
                 <a href="{{ service.get_absolute_url }}">
                     <span class="glyphicon {{ service.glyphicon_name }} service-icon" aria-hidden="true"></span>
@@ -62,46 +65,64 @@
                     <p>{{ service.description }}</p>
                 </a>
             </div>
-            {% if forloop.last %}
-                {% if not ip_in_resel %}
-                    <div class="col-md-4">
-                        <a href="#">
-                            <span class="fa fa-rocket service-icon" aria-hidden="true"></span>
-                            <h3 class="service-title">{% trans "Et plein d'autres services" %}</h3>
-                            <p><span class="fa fa-ellipsis-h" aria-hidden="true"></span></p>
-                        </a>
-                    </div>
-                {% endif %}
-                </div>
-            {% elif forloop.counter|divisibleby:3 %}
-                </div>
-                <div class="row">
-            {% endif %}
             {% empty %}
             {% endfor %}
+            <div class="col-md-4">
+                <a href="{% url 'services'%}">
+                    <span class="fa fa-rocket service-icon" aria-hidden="true"></span>
+                    <h3 class="service-title">{% trans "Et plein d'autres services" %}</h3>
+                    <p><span class="fa fa-ellipsis-h" aria-hidden="true"></span></p>
+                </a>
             </div>
+            </div>
+         </div>
+      </div>
     </div>
     </div>
 
     <div class="home-fragment home-blog">
         <div class="container">
             <h2 class="clickable-title"><a href="{% url 'news'%}">{% trans "Les dernières nouvelles" %}</a></h2>
+        </div>
+        <div class="container article">
+
             {% for pieceofnews in news %}
-                <div class="news-bloc">
-                    <h3 class="title"><a href="{%url 'piece-of-news' pieceofnews.pk %}">{{ pieceofnews.title }}</a></h3>
-                    <div class="body">{{ pieceofnews.content|safe|truncatewords_html:100 }}
+                <div class="news-container">
+                    <h3 class="panel-heading centered"><a href="{%url 'piece-of-news' pieceofnews.pk %}">{{ pieceofnews.title }}</a></h3><hr />
+                    <div class="panel-body">{{ pieceofnews.content|safe|truncatewords_html:30 }}
                     </div>
-                    <div> <a href="{%url 'piece-of-news' pieceofnews.pk %}">{% trans "Lire la suite" %}</a></div>
-                    <div class="foot">
+                    <div> <div class="centered"><a href="{%url 'piece-of-news' pieceofnews.pk %}">{% trans "Lire la suite" %}</a></div></div>
+                    <div class="pieceofnews-footer">
                         {% blocktrans with author=pieceofnews.author date=pieceofnews.date|date:"DATE_FORMAT" %}{{author}}, le {{date}}
                         {% endblocktrans %}
                     </div>
-                    <hr />
                 </div>
             {% empty %}
                 <div class="news-bloc">{% trans "Pas de news à l'horizon" %}</div>
             {% endfor %}
-               <div class="newblock centered" style="font-size: 1.1em;"><a href="{% url 'news'%}">{% trans "Voir l'intégralité" %}</a></div>
+            <div class="newblock centered" style="font-size: 1.1em;"><a href="{% url 'news'%}">{% trans "Voir l'intégralité" %}</a></div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+   var slideIndex = 1;
+   showDivs(slideIndex);
+
+   function plusDivs(n) {
+       showDivs(slideIndex += n);
+   }
+
+   function showDivs(n) {
+       var i;
+       var x = document.getElementsByClassName("slide");
+       if (n > x.length) {slideIndex = 1}
+       if (n < 1) {slideIndex = x.length} ;
+       for (i = 0; i < x.length; i++) {
+           x[i].style.display = "none";
+       }
+       x[slideIndex-1].style.display = "block";
+   }
+</script>
 {% endblock %}

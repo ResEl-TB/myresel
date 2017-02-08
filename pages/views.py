@@ -57,7 +57,7 @@ class Home(View):
         # Load services
         try:
             services = Category.objects.get(name='Services')
-            services = services.get_articles_and_links('user' in network.get_network_zone(ip))
+            services = services.get_articles_and_links('user' in network.get_network_zone(ip))[:2]
         except Category.DoesNotExist:
             services = []
         args_for_response['services'] = services
@@ -124,6 +124,20 @@ class NewsDetail(DetailView):
     template_name = 'pages/piece_of_news.html'
     context_object_name = 'pieceOfNews'
     model = News
+
+class Services(ListView):
+    """ Vue appelée pour afficher la liste des services du ResEl """
+    template_name = 'pages/service.html'
+    context_object_name = 'services'
+
+    def get_queryset(self):
+        ip = self.request.network_data['ip']
+        try:
+            services = Category.objects.get(name='Services')
+            services = services.get_articles_and_links('user' in network.get_network_zone(ip))
+        except Category.DoesNotExist:
+            services = []
+        return(services)
 
 class Contact(View):
     """ Vue appelée pour contacter les admin en cas de soucis """
