@@ -343,6 +343,10 @@ class MailResEl(View):
 
         return handle
 
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(MailResEl, self).dispatch(*args, **kwargs)
+
     def get(self, request, *args, **kwargs):
         """ 
             Display either :
@@ -432,6 +436,10 @@ class DeleteMailResEl(View):
         Handles deletion of email address and explications to the user.
     """
 
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(DeleteMailResEl, self).dispatch(*args, **kwargs)
+
     def get(self, request, *args, **kwargs):
         user = LdapUser.get(pk=request.user.username)
 
@@ -473,6 +481,10 @@ class DeleteMailResEl(View):
 
 class RedirectMailResEl(View):
     template_name = "gestion_personnes/mail_redirect.html"
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(RedirectMailResEl, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         user = LdapUser.get(pk=request.user.username)
@@ -522,7 +534,11 @@ class Webmail(View):
     """
         Access webmail or configuration page.
     """
-    # TODO: Is he logged in ?
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(Webmail, self).dispatch(*args, **kwargs)
+
     def get(self, request, *args, **kwargs):
         user = LdapUser.get(pk=request.user.username)
 
