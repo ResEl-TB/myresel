@@ -349,7 +349,7 @@ class BandwidthUsage(View):
         precision = -int(math.log10(duration_st / batchs))
 
         bare_up = list(PeopleHistory.objects.raw(
-            'SELECT site, cn, uid, way, flow, timestamp,'
+            'SELECT cn, uid, way, timestamp,'
             'ROUND(timestamp, %i) AS batch, '
             'SUM(amount) AS amount FROM people_history '
             'WHERE timestamp >= %i AND '
@@ -362,7 +362,7 @@ class BandwidthUsage(View):
         ))
 
         bare_down = list(PeopleHistory.objects.raw(
-            'SELECT site, cn, uid, way, flow, timestamp,'
+            'SELECT cn, uid, way, timestamp,'
             'ROUND(timestamp,%i) AS batch, '
             'SUM(amount) AS amount FROM people_history '
             'WHERE timestamp >= %i AND '
