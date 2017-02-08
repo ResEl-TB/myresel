@@ -19,7 +19,8 @@ class LdapUser(ldapback.models.LdapModel):
     The class having all the element for a user
     """
     base_dn = LDAP_DN_PEOPLE
-    object_classes = ['genericPerson', 'enstbPerson', 'reselPerson', 'maiselPerson', 'aePerson', 'mailPerson']
+    #object_classes = ['genericPerson', 'enstbPerson', 'reselPerson', 'maiselPerson', 'aePerson', 'mailPerson']
+    object_classes = LdapListField(db_column='objectClass')
 
     # genericPerson
     uid = LdapCharField(db_column='uid', object_classes=['genericPerson'], pk=True)
@@ -67,6 +68,8 @@ class LdapUser(ldapback.models.LdapModel):
     mail_local_address = LdapListField(db_column='mailLocalAddress', object_classes=['mailPerson'])
     mail_dir = LdapCharField(db_column='mailDir', object_classes=['mailPerson'])
     home_directory = LdapCharField(db_column='homeDirectory', object_classes=['mailPerson'])
+    mail_routing_address = LdapCharField(db_column='mailRoutingAddress', object_classes=['mailPerson'])
+    mail_del_date = LdapDatetimeField(db_column='mailDelDate', object_classes=['mailPerson'])
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__,
@@ -105,7 +108,15 @@ class LdapUser(ldapback.models.LdapModel):
         return address
 
     def is_member(self):
+        # TODO : possible bug if self.cotiz is not defined as a list
         return str(generic.current_year()) in [c.strip() for c in self.cotiz]
+
+    def has_resel_email(self):
+        """
+        Tells if according to the Ldap the user has a @resel.fr address
+        :return: bool
+        """
+        return 'mailPerson' in self.object_classes and " " not in self.mail_local_address
 
 
 class LdapOldUser(LdapUser):

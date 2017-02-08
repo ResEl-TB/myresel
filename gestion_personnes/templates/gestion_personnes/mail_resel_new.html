@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block titre %}{% trans "Email ResEl" %}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+    <h2>{% trans "Création d'une boîte mail @resel.fr" %}</h2>
+    </div>
+    
+    <div class="row">
+    	<div class="col-md-12 col-md-offset-1">
+    		<p>Cette page vous permet de créer une adresse mail @resel.fr. Voici les caractéristiques de ce que vous propose le ResEl :
+        	<ul>
+            <li>Boite mail avec adresse en prenom.nom@resel.fr, utilisable partout</li>
+            <li>Accès à la boite par webmail, POPS ou IMAPS;</li>
+            <li>Possibilité de rediriger le courrier vers une autre adresse;</li>
+            <li>Filtrage anti-spam (SpamAssassin) des mails;</li>
+            <li>Filtrage anti-virus.</li>
+        	</ul>
+        En créant cette boîte, vous vous engagez à :
+        	<ul>
+            <li>La consulter et la vider regulièrement;</li>
+            <li>En faire un usage conforme à la Netiquette (règles de savoir-vivre sur Internet) et aux lois en vigueur;</li>
+            <li>Informer le ResEl lorsque vous n'utilisez plus votre boîte.</li>
+        	</ul>
+            Votre boîte mail sera immédiatement disponible. <br /><br />
+            </p>
+	   </div>
+    </div>
+    <div class="row row-offset-2">
+    	<div class="col-md-12">
+            <center>
+        		<form method="POST" action="" class="form">
+                {% csrf_token %}
+        		<button type="submit" class="btn btn-success btn-block btn-lg">Créer ma boîte mail <strong>{{mail_proposed_address}}</strong>!</button>	
+                </form>
+            </center>
+    	</div>
+    </div> <!-- row -->
+</div> <!-- /.container -->
+{% endblock %}
