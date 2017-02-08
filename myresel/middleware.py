@@ -67,12 +67,6 @@ class NetworkConfiguration(object):
 
             request.network_data['is_registered'] = ldap.get_status(ip)  # TODO: possible bug
 
-        # FIXME: si la condition au dessus n'est pas respecté, on risque un bug parce que
-        # FIXME: request.network_data['mac'] == None
-        if request.network_data['is_registered'] != 'unknown':
-            current_device = LdapDevice.get(ip=ip)
-            request.network_data['device'] = current_device
-
 
 class inscriptionNetworkHandler(object):
     # Before the request is sent to the website, we need to handle if the user is in an inscription network

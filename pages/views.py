@@ -80,7 +80,9 @@ class Home(View):
             # Check his end fees date
             if is_in_resel:
                 try:
-                    device = LdapDevice.get(ip=request.network_data['ip_suffix'])
+                    mac = network.get_mac(request.network_data['ip'])
+                    device = LdapDevice.get(mac_address=mac)
+                    args_for_response['device'] = device
                     args_for_response['not_user_device'] = device.owner != request.ldap_user.pk
                     args_for_response['is_registered'] = True
                 except ObjectDoesNotExist:
