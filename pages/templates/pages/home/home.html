@@ -47,6 +47,11 @@
             </div>
             <a class="slide-btn slide-btn-left" onclick="plusDivs(-1)">&#10094;</a>
             <a class="slide-btn slide-btn-right" onclick="plusDivs(+1)">&#10095;</a>
+            <span class="slide-ctrl-btn">
+               <a class="slide-btn slide-link" onclick="showDivs(slideIndex=1)"><span class="fa fa-circle-thin" aria-hidden="true"></span></a>
+               <a class="slide-btn slide-link" onclick="showDivs(slideIndex=2)"><span class="fa fa-circle-thin" aria-hidden="true"></span></a>
+               <a class="slide-btn slide-link" onclick="showDivs(slideIndex=3)"><span class="fa fa-circle-thin" aria-hidden="true"></span></a>
+            </span>
         </div>
     </div>
 
@@ -117,12 +122,15 @@
    function showDivs(n) {
        var i;
        var x = document.getElementsByClassName("slide");
+       var y = document.getElementsByClassName("slide-link");
        if (n > x.length) {slideIndex = 1}
        if (n < 1) {slideIndex = x.length} ;
        for (i = 0; i < x.length; i++) {
            x[i].style.display = "none";
+           y[i].innerHTML = '<span class="fa fa-circle-thin" aria-hidden="true"></span>';
        }
        x[slideIndex-1].style.display = "block";
+       y[slideIndex-1].innerHTML = '<span class="fa fa-circle active-slide-btn" aria-hidden="true"></span>';
    }
 </script>
 {% endblock %}
