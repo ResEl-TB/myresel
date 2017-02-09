@@ -195,7 +195,6 @@ h3 .service-title {
 
 .clickable-title a:hover{
    text-decoration: none;
-   transform: rotate(720deg);
 }
 
 .pieceofnews-footer {
@@ -243,6 +242,34 @@ h3 .service-title {
 .slide-ctrl-btn{
    position: absolute;
    bottom: 0;
+   margin-left: auto;
+   margin-right: auto;
+   left: 0;
+   right: 0;
+}
+
+.service {
+   margin-bottom: 5%;
+}
+
+.service-glyphicon {
+   color: #1695A3;
+}
+
+.service-description {
+   color: #262626;
+}
+
+.service-description a:hover{
+   text-decoration: none;
+}
+
+.service-link{
+   margin-bottom: 5%;
+}
+
+.service-link:hover{
+   text-decoration: none;
 }
 
 @keyframes fading {

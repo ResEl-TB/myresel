@@ -25,11 +25,13 @@
                    {% if forloop.counter|add:-1|divisibleby:3%}
                    <div class="row">
                    {% endif %}
-                   <div class="col-md-4">
-                       <a href="{{ service.get_absolute_url }}">
-                           <span class="glyphicon {{ service.glyphicon_name }} service-icon" aria-hidden="true"></span>
-                           <h3 class="service-title">{{ service.name }}</h3>
-                           <p>{{ service.description }}</p>
+                   <div class="col-md-4 service">
+                       <a class="service-link" href="{{ service.get_absolute_url }}">
+                           <span class="glyphicon service-glyphicon {{ service.glyphicon_name }} service-icon" aria-hidden="true"></span>
+                           <span class="service-description">
+                              <h3 class="service-title">{{ service.name }}</h3>
+                              <p>{{ service.description }}</p>
+                           </span>
                        </a>
                    </div>
                    {% if forloop.counter|divisibleby:3%}
