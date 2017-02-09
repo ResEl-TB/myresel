@@ -36,7 +36,8 @@ class AddDeviceViewCase(TestCase):
         try_delete_user("amanoury")
 
     def test_simple_get_page(self):
-        response = self.client.get(reverse("gestion-machines:ajout"), HTTP_HOST="10.0.3.95")
+        response = self.client.get(reverse("gestion-machines:ajout"),
+                                   HTTP_HOST="10.0.3.95", follow=True)
         self.assertEqual(200, response.status_code)
         self.assertTemplateUsed(response, "gestion_machines/add_device.html")
 
@@ -46,6 +47,13 @@ class AddDeviceViewCase(TestCase):
                                     HTTP_HOST="10.0.3.95", follow=True)
         self.assertEqual(200, response.status_code)
         self.assertEqual(user_machines + 1, len(LdapDevice.filter(owner=self.owner)))
+        self.assertEqual(1, len(mail.outbox))
+
+        # Check if the home page is up to date
+        r = self.client.get(reverse("home"), HTTP_HOST="10.0.3.99", follow=True)
+
+        self.assertEqual(200, r.status_code)
+        self.assertContains(r, "Connecté au ResEl")
         self.assertEqual(1, len(mail.outbox))
 
     # TODO: make test with concurency to try mutiple simultinate presses
@@ -188,6 +196,7 @@ class BandwidthUsageCase(TestCase):
         self.assertEqual(200, response.status_code)
         self.assertTemplateUsed(response, "gestion_machines/bandwidth.html")
 
+    @skip("Temporarily disabled")
     def test_simple_ajax(self):
         r = self.client.get(reverse("gestion-machines:bandwidth-usage"),
                             {'s': '2017-02-05', 'e': '2017-02-05'},

@@ -3,6 +3,7 @@ import logging
 import os
 import re
 import subprocess
+from ipaddress import ip_address
 
 from fonctions.generic import is_ip_in_subnet
 from myresel import settings
@@ -20,9 +21,12 @@ class NetworkError(Exception):
 def get_mac(ip):
     """
     This function retrieve the mac address of a user based on his ip
-    Should be called only if the ip is in the same network
+    Should be called only if the ip is in the same network.
     """
 
+    # FIXME: I don't know how to test that very well, and indeed during
+    # local tests, a fake mac is sent. One day we will have a good enough
+    # test suite
     if settings.DEBUG or settings.TESTING:
         return settings.DEBUG_SETTINGS['mac']
 
@@ -43,12 +47,17 @@ def get_mac(ip):
     return mac
 
 
-def get_campus(ip):
-    """ Détermine le campus en fonction de l'ip de l'utilisateur """
+def get_campus(ip_str: str) -> str:
+    """ Tells on which campus the user is """
 
-    if ip.startswith('172.22.'):
+    try:
+        ip = ip_address(ip_str)
+    except ValueError as e:
+        raise NetworkError(str(e))
+
+    if ip in settings.NET_BREST:
         return 'Brest'
-    elif ip.startswith('172.23.'):
+    elif ip in settings.NET_RENNES:
         return 'Rennes'
     else:
         raise NetworkError("The ip %s is not on any campus" % ip)
@@ -61,8 +70,8 @@ def update_all():
     os.system(settings.FIREWALL_RELOAD_COMMAND)
 
 
-def is_resel_ip(ip):
-    """ Check si l'IP est ResEl """
+def is_resel_ip(ip: str) -> bool:
+    """ Check if this is a ResEl IP"""
     try:
         get_campus(ip)
         return True
@@ -70,26 +79,34 @@ def is_resel_ip(ip):
         return False
 
 
-# TODO: test this !!!
-def get_network_zone(ip):
-    """ 
-    Renvoit la zone à laquelle correspond l'ip :
-    - Brest-user, Brest-inscription-999, Brest-inscription, Rennes-user, Rennes-inscription
+def get_network_zone(ip_str: str) -> str:
     """
+    Tells in which network is the ip
+    :param ip_str: string for the ip (e.g. "172.22.220.224")
+    :return: Brest-inscription, Brest-inscription-999, Brest-user, Brest-other,
+             Rennes-inscription, Rennes-inscription-999, Rennes-user
+             Rennes-other or Internet
+    """
+    try:
+        ip = ip_address(ip_str)
+    except ValueError as e:
+        raise NetworkError(str(e))
 
-    if is_ip_in_subnet(ip, '172.22.224.0', 23):
+    if ip in settings.NET_BREST_INSCR:
         return "Brest-inscription"
-    elif is_ip_in_subnet(ip, '172.22.226.0', 23):
+    elif ip in settings.NET_BREST_INSCR_999:
         return "Brest-inscription-999"
-    elif ip.startswith('172.22.') and ip[7:10].isdigit() and 200 <= int(ip[7:10]) <= 223:  # range 172.22.200.1 to 172.22.223.254
+    elif ip in settings.NET_BREST_USERS:
         return "Brest-user"
-    elif ip.startswith('172.22.'):
+    elif ip in settings.NET_BREST:
         return "Brest-other"
-    elif is_ip_in_subnet(ip, '172.23.224.0', 23):
+    if ip in settings.NET_RENNES_INSCR:
         return "Rennes-inscription"
-    elif is_ip_in_subnet(ip, '172.23.226.0', 23):
+    elif ip in settings.NET_RENNES_INSCR_999:
         return "Rennes-inscription-999"
-    elif ip.startswith('172.23') and ip[7:10].isdigit() and 200 <= int(ip[7:10]) <= 223:  # range 172.23.200.1 to 172.23.223.254
+    elif ip in settings.NET_RENNES_USERS:
         return "Rennes-user"
-
+    elif ip in settings.NET_RENNES:
+        return "Rennes-other"
     return "Internet"
+

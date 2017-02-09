@@ -38,7 +38,7 @@ class Reactivation(View):
         return super(Reactivation, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        mac = request.network_data['mac']
+        mac = network.get_mac(request.network_data['ip'])
 
         try:
             device = LdapDevice.get(mac_address=mac)
@@ -99,7 +99,7 @@ class AddDeviceView(View):
             hostname = ldap.get_free_alias(str(request.user))
             alias = form.cleaned_data['alias']
             campus = get_campus(request.network_data['ip'])
-            mac = request.network_data['mac']
+            mac = network.get_mac(request.network_data['ip'])
 
             # In case the user didn't specified any alias, don't make any
             if hostname == alias:

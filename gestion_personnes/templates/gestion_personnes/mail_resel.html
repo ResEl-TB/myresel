@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block titre %}{% trans "Email ResEl" %}{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="page-header"><h2>{% trans "Votre boîte mail " %} {{user_mail_address}}</h2></div>
+
+    
+  <div class="row">
+  	<div class="col-md-6">
+      <h3>Accès par un logiciel de courrier électronique :</h3>
+      <p> 
+      <em>Par exemple Thunderbird ou Gmail.</em>
+      	<ul>
+         <li> Serveur POP/IMAP (SSL/TLS obligatoire) : mail.resel.fr sur le port 995 (POP) ou 993 (IMAP); </li>
+         <li> Nom d'utilisateur : {{user.uid}};</li>
+         <li> Mot de passe : votre mot de passe ResEl;</li>
+         <li> Serveur SMTP (courrier sortant) : mail.resel.fr sur le port 587, en activant le TLS.</li>
+      	</ul>
+      </p>
+    </div>
+    <div class="col-md-5 col-md-offset-1">
+      <h3>Par le Webmail ResEl :</h3>
+      <ul>
+         <li> Adresse : <a href="https://webmail.resel.fr">https://webmail.resel.fr</a> ou <a href="roundcube.resel.fr">https://roundcube.resel.fr</a></li>
+         <li> Nom d'utilisateur : {{user.uid}}</li>
+         <li> Mot de passe : votre mot de passe ResEl</li>
+         <li> Domaine : @resel.fr</li>
+      </ul>
+    </div>
+  </div>
+
+  <br>
+  
+  <div class="row">
+    <div class="col-md-6">
+      <h3>Gestion de mon adresse</h2>
+    </div>
+  </div>
+
+  <br>
+
+  <div class="row">
+
+    <div class="col-md-1"></div>
+    <div class="col-md-4 center-block">
+      <center>
+      <a href="{% url 'gestion-personnes:redirect-mail' %}">
+  		<button type="button" class="btn btn-primary btn-lg">Redirection email</button>	
+      </a>
+      </center>
+    </div>
+
+    <div class="col-md-4 col-md-offset-2">
+      <a href="{% url 'gestion-personnes:delete-mail' %}">
+  		<button type="button" class="btn btn-danger btn-lg">Suppression boîte ResEl</button>
+      </a>
+  	</div>
+    <div class="col-md-1"></div>
+
+  </div>
+
+</div> <!-- /.container -->
+{% endblock %}

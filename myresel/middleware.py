@@ -46,12 +46,13 @@ class NetworkConfiguration(object):
         else:
             ip = request.META['REMOTE_ADDR']
         ip = ip.split(' ')[-1]  # HOT fix to handle some bugs during port fowarding
+        ip_suffix = ip.split(".")[2:]
         zone = network.get_network_zone(ip)
         request.network_data['ip'] = ip
+        request.network_data['ip_suffix'] = ip_suffix
         request.network_data['vlan'] = request.META['VLAN']
         request.network_data['host'] = request.META['HTTP_HOST']
         request.network_data['zone'] = zone
-        request.network_data['mac'] = None
         request.network_data['is_registered'] = 'unknown'
         request.network_data['is_logged_in'] = request.user.is_authenticated()
         request.network_data['is_resel'] = network.is_resel_ip(ip)
@@ -64,24 +65,7 @@ class NetworkConfiguration(object):
             elif network.get_campus(ip) == "Brest" and settings.CURRENT_CAMPUS == "Rennes":
                 return HttpResponseRedirect("https://" + settings.MAIN_HOST_BREST + request.get_full_path())
 
-            try:
-                request.network_data['mac'] = network.get_mac(ip)
-                request.network_data['is_registered'] = ldap.get_status(ip)  # TODO: possible bug
-            except NetworkError as e:
-                logger.error("Impossible de détecter la MAC"
-                             "\n IP : %s"
-                             "\n ZONE : %s"
-                             "\n VLAN : %s "
-                             "\n Utilisateur : %s"
-                             "\n\n Erreur reçue :"
-                             "\n\n %s"
-                             % (ip, zone, request.network_data['vlan'], request.network_data['is_logged_in'], e))
-                return HttpResponseBadRequest(
-                    _("Detection d'adresse mac impossible, veuillez contacter un administrateur ResEl."))
-
-        if request.network_data['is_registered'] != 'unknown':
-            current_device = LdapDevice.get(mac_address=request.network_data['mac'])
-            request.network_data['device'] = current_device
+            request.network_data['is_registered'] = ldap.get_status(ip)  # TODO: possible bug
 
 
 class inscriptionNetworkHandler(object):
@@ -111,7 +95,6 @@ class inscriptionNetworkHandler(object):
         vlan = request.network_data['vlan']
         host = request.network_data['host']
         zone = request.network_data['zone']
-        mac = request.network_data['mac']
         is_registered = request.network_data['is_registered']
         is_logged_in = request.network_data['is_logged_in']
 
@@ -126,10 +109,9 @@ class inscriptionNetworkHandler(object):
                              "\n HOST : %s"
                              "\n ZONE : %s"
                              "\n VLAN : %s"
-                             "\n MAC : %s"
                              "\n Utilisateur : %s"
                              "\n Machine : %s"
-                             % (ip, host, zone, vlan, mac,  is_logged_in, is_registered))
+                             % (ip, host, zone, vlan, is_logged_in, is_registered))
 
                 # Error ! In vlan 995 without inscription IP address
                 return HttpResponseBadRequest(_("Vous vous trouvez sur un réseau d'inscription mais ne possédez pas d'IP dans ce réseau. Veuillez contacter un administrateur."))
