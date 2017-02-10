@@ -129,11 +129,6 @@
     font-size: 7em;
 }
 
-h3 .service-title {
-    font-size: 1.3em;
-    display: block;
-}
-
 .home-services p {
     font-size: 1.1em;
 }
@@ -264,11 +259,22 @@ h3 .service-title {
 }
 
 .service-glyphicon {
-   color: #1695A3;
+   color: #F79420;
+
+   transform: scale(1.0);
+   transition: all 2s;
 }
 
-.service-description {
+.service-description-text {
    color: #262626;
+   text-align: justify;
+   border-bottom: 1px solid #e8e8e8;
+}
+
+@media screen and (max-width: 992px) {
+   .service-description-text {
+      text-align: center;
+   }
 }
 
 .service-description a:hover{
@@ -282,6 +288,12 @@ h3 .service-title {
 .service-link:hover{
    text-decoration: none;
 }
+
+.revealOnScroll {
+   transform: scale(0.0);
+   transition: all 1s;
+}
+
 
 @keyframes fading {
    0% {
