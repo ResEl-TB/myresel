@@ -175,14 +175,25 @@ h3 .service-title {
 }
 
 .home-blog .news-bloc {
-    margin-top: 70px;
+    margin-top: 5px;
 }
 
-.home-blog .foot {
-    margin-top: 20px;
-    text-align: right;
-    font-style: italic;
-    font-weight: bold;
+.home-blog a {
+    color: #63645e;
+}
+
+.home-blog a:hover {
+    color: #2b669a;
+    text-decoration: none;
+}
+
+.home-blog h3 {
+    color: #48719a;
+    margin-top: 5px;
+}
+
+.home-blog hr {
+    margin: 10px;
 }
 
 .article {
