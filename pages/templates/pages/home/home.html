@@ -26,43 +26,68 @@
 
     {% block myresel %}
     {% endblock %}
-    {% block presentation %}
-        <div class="home-fragment home-presentation">
-            <div class="container article">
-                <h2>{% blocktrans %}Le ResEl gère le réseau sur le campus de l'IMT Atlantique{% endblocktrans %}</h2>
-                {% blocktrans %}
-                    <p>Le <strong>ResEl</strong> (pour Réseau des élèves de <a href="https://www.imt-atlantique.fr/">l'IMT Atlantique</a>) est l'association d'élèves qui gère le réseau informatique des résidences des élèves de l'IMT Atlantique, l'une à Plouzané, près de Brest, et l'autre à Rennes.</p>
-                {% endblocktrans %}
-                <div class="diagram">
-                    <div class="fa fa-cloud"></div>
-                    <div class="line"></div>
-                    <div class="wifi"></div>
-                    <div class="wifi wifi-poper"></div>
-                    <div class="packet packet1"></div>
-{#                    <div class="packet packet2"></div>#}
+    {% if not request.user.is_authenticated %}
+        {% block presentation %}
+            <div class="home-fragment home-presentation home-user-management">
+                <div class="container article">
+                    <h2>Le ResEl fournit un accès Internet aux campus brestois et rennais de <a href="https://www.imt-atlantique.fr/">l'IMT Atlantique</a></h2>
+                    <div class="diagram">
+                        <div class="fa fa-cloud"></div>
+                        <div class="line"></div>
+                        <div class="wifi"></div>
+                        <div class="wifi wifi-poper"></div>
+                        <div class="packet packet1"></div>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="row home-login">
+                        <div class="col-md-4 col-md-offset-3">
+                            <h3>{% trans "Connectez-vous pour bénéficier de tous les services du ResEl" %}</h3>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="{% url 'login' %}" class="btn btn-default btn-lg">{%  trans "Connexion"%}</a>
+                        </div>
+                    </div>
                 </div>
             </div>
-
-
-        </div>
-    {% endblock %}
-    <div class="home-fragment home-bg-img">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-4 col-sm-offset-1">
-                    <span id="bigheart" class="fa fa-heart-o service-icon" aria-hidden="true"></span>
-                </div>
-                <div class="col-sm-6">
-                    <h2>{% blocktrans %}Le ResEl : l'association qui gère le réseau sur le campus de l'IMT Atlantique{% endblocktrans %}</h2>
-                    <br />
-                    {% blocktrans %}
-                        <p>Le <strong>ResEl</strong> (pour Réseau des élèves de <a href="https://www.imt-atlantique.fr/">l'IMT Atlantique</a>) est l'association d'élèves qui gère le réseau informatique des résidences des élèves de l'IMT Atlantique, l'une à Plouzané, près de Brest, et l'autre à Rennes.</p
-                        <p>Ce réseau relie entre elles les 600 chambres du campus de Brest et les 100 chambres du campus de Rennes. Les élèves disposant d'un ordinateur bénéficient donc d'un accès permanent à Internet.<p>
-                    {% endblocktrans %}
+        {% endblock %}
+        <div class="home-fragment home-bg-img">
+            <div id="carousel-quotes" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner" role="listbox">
+                    <div class="container item active">
+                        <div class="row">
+                            <div class="col-sm-4 col-sm-offset-1">
+                                <span class="fa fa-heart-o service-icon bigger" aria-hidden="true"></span>
+                            </div>
+                            <div class="col-sm-6">
+                                <h2>Le ResEl relie à Internet 600 chambres à Brest et 100 chambres à Rennes</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container item">
+                        <div class="row">
+                            <div class="col-sm-4 col-sm-offset-1">
+                                <span class="fa fa-graduation-cap service-icon bigger" aria-hidden="true"></span>
+                            </div>
+                            <div class="col-sm-6">
+                                <h2>Tous les administrateurs de l'association sont membres de l'IMT Atlantique</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container item">
+                        <div class="row">
+                            <div class="col-sm-4 col-sm-offset-1">
+                                <span class="fa fa-code-fork service-icon bigger" aria-hidden="true"></span>
+                            </div>
+                            <div class="col-sm-6">
+                                <h2>Nous utilisons presque exclusivement que des logiciels libres, ce qui permet une grande flexibilité</h2>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    {% endif %}
     <div class="home-fragment home-services">
         <div class="container">
             <h2 class="clickable-title"><a href="{% url 'services'%}">{% trans "Les services du ResEl" %}</a></h2>
@@ -70,7 +95,7 @@
                 {% for service in services %}
                     <div class="col-md-4">
                         <a href="{{ service.get_absolute_url }}">
-                            <span class="glyphicon {{ service.glyphicon_name }} service-icon" aria-hidden="true"></span>
+                            <span class="glyphicon {{ service.glyphicon_name }} service-icon bigger" aria-hidden="true"></span>
                             <h3 class="service-title">{{ service.name }}</h3>
                             <p>{{ service.description }}</p>
                         </a>
@@ -79,7 +104,7 @@
                 {% endfor %}
                 <div class="col-md-4">
                     <a href="{% url 'services'%}">
-                        <span class="fa fa-rocket service-icon" aria-hidden="true"></span>
+                        <span class="fa fa-rocket service-icon bigger" aria-hidden="true"></span>
                         <h3 class="service-title">{% trans "Et plein d'autres" %}</h3>
                         <p><span class="fa fa-ellipsis-h" aria-hidden="true"></span></p>
                     </a>
