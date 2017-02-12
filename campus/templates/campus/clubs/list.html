@@ -1,0 +1,27 @@
+{% extends "base_campus.html" %}
+{% load staticfiles %}
+
+{% block title %}Envoyer un mail{% endblock %}
+
+{% block content %}
+    <div class="container" id="content">
+        <div class="row">
+
+            <div class="col-md-12">
+                <h1 class="page-header text-center" style="color: white;">
+                    Les clubs et associations
+                </h1>
+            </div>
+
+        </div>
+
+        {% for club in clubs %}
+            {{ club.orgaName }}
+        {% endfor %}
+
+        {% for asso in assos %}
+            {{ asso.orgaName }}
+        {% endfor %}
+
+    </div>
+{% endblock %}

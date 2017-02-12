@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 
-from campus.models import Room, RoomBooking, RoomAdmin, Mail, Club
+from campus.models import Room, RoomBooking, RoomAdmin, Mail, StudentOrganisation
 
 class RoomBookingAdmin(admin.ModelAdmin):
     list_display = ('description', 'user', 'start_time', 'end_time', 'list_rooms')

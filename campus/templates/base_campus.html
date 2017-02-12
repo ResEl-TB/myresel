@@ -49,11 +49,12 @@
                 </a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#"><span class="fa fa-users"></span> Clubs et associations</a></li>
+                <li><a href="{% url 'campus:clubs:list' %}"><span class="fa fa-users"></span> Clubs et associations</a></li>
                 <li><a href="#"><span class="fa fa-address-book"></span> Annuaire</a></li>
                 <li><a href="{% url 'campus:rooms:calendar' %}"><span class="fa fa-fw fa-calendar"></span> Calendrier campus</a></li>
                 <li><a href="{% url 'campus:rooms:booking' %}"><span class="fa fa-fw fa-calendar-plus-o"></span> Réserver une salle</a></li>
                 <li><a href="{% url 'campus:mails:send' %}"><span class="fa fa-fw fa-envelope"></span> campus@resel.fr</a></li>
+                <li><a href="{% url 'login' %}"><span class="fa fa-fw fa-sign-in"></span> Connexion</a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->

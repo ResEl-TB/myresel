@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.db.models import Q
 from django.contrib import messages
 
-from campus.models import RoomBooking, Room, RoomAdmin, Club, Mail
+from campus.models import RoomBooking, Room, RoomAdmin, StudentOrganisation, Mail
 import datetime
 
 class RoomBookingForm(ModelForm):
@@ -19,7 +19,7 @@ class RoomBookingForm(ModelForm):
         self.user = user.uid
         if not RoomAdmin.objects.filter(user__username=user.uid):
             del self.fields['user']
-            clubs = Club.filter(members__contains='uid=%s' % user.uid)
+            clubs = StudentOrganisation.filter(members__contains='uid=%s' % user.uid)
             queryset = Q(private=False)
             for club in clubs:
                 queryset = queryset | Q(private=True, clubs__contains=club.cn)

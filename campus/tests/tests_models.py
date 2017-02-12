@@ -40,7 +40,7 @@ class RoomBookingTestCase(TestCase):
 
         # Booking that room
         booking_s = RoomBooking()
-        booking_s.name = 'Club ciné'
+        booking_s.name = 'StudentOrganisation ciné'
         booking_s.description = 'Visionnage de films X'
         booking_s.start_time = timezone.now()
         booking_s.end_time = booking_s.start_time + timedelta(hours=2)
@@ -57,7 +57,7 @@ class RoomBookingTestCase(TestCase):
         self.assertEqual(len(mail.outbox), 0)
 
         # Testing for a room located in the school - should send a mail
-        booking_s = RoomBooking.objects.get(name='Club ciné')
+        booking_s = RoomBooking.objects.get(name='StudentOrganisation ciné')
         booking_s.notify_mailing_list()
         self.assertEqual(len(mail.outbox), 1)
 

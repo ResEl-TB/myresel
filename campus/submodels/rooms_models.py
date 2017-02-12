@@ -10,7 +10,7 @@ from datetime import timedelta
 
 from gestion_personnes.models import LdapUser
 import campus.async_tasks as async_tasks
-from campus.submodels.clubs_models import Club
+from campus.submodels.clubs_models import StudentOrganisation
 
 class Room(models.Model):
     class Meta:
@@ -85,7 +85,7 @@ class Room(models.Model):
             clubs = list()
             for club_cn in self.clubs.split('\r\n'):
                 try:
-                    clubs.append(Club.get(pk=club_cn))
+                    clubs.append(StudentOrganisation.get(pk=club_cn))
                 except ObjectDoesNotExist:
                     pass
         return clubs

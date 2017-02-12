@@ -9,7 +9,7 @@ from django.db.models import Q
 
 import calendar, datetime, json
 from campus.forms import RoomBookingForm
-from campus.models import RoomBooking, Room, Club
+from campus.models import RoomBooking, Room, StudentOrganisation
 from fonctions.decorators import ae_required
 
 def calendarView(request, room='all', year=timezone.now().year, month=timezone.now().month, day='all'):
@@ -69,7 +69,7 @@ def calendarView(request, room='all', year=timezone.now().year, month=timezone.n
     # Getting all the rooms
     if request.user.is_authenticated():
         queryset = Q()
-        for club in Club.filter(members__contains='uid=%s' % request.ldap_user.uid):
+        for club in StudentOrganisation.filter(members__contains='uid=%s' % request.ldap_user.uid):
             queryset = queryset | Q(clubs__contains=club.cn)
         private_rooms = Room.objects.filter(queryset)
     else:

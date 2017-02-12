@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^salles/', include('campus.suburls.urls_rooms', namespace='rooms')),
     url(r'^mails/', include('campus.suburls.urls_mails', namespace='mails')),
     url(r'^who/', include('campus.whoswho.urls', namespace='who')),
+    url(r'^clubs/', include('campus.suburls.urls_clubs', namespace='clubs')),
 ]

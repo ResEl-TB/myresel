@@ -1,5 +1,7 @@
 #content.container {
     font-family: Arial, Helvetica, sans-serif;
+    margin-top: 50px;
+    margin-bottom: 50px;
 }
 
 .table {

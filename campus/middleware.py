@@ -1,6 +1,6 @@
 from django.core.urlresolvers import resolve
 
-from campus.models import Club, RoomAdmin, Room
+from campus.models import StudentOrganisation, RoomAdmin, Room
 
 class RoomAdminMiddleware(object):
     """
@@ -22,7 +22,7 @@ class RoomAdminMiddleware(object):
         elif resolve(request.META['PATH_INFO']).view_name == 'campus:rooms:booking':
             is_prez = False
             clubs = list()
-            for c in Club.all():
+            for c in StudentOrganisation.all():
                 if request.ldap_user.uid in '\t'.join(c.prezs):
                     clubs.append(c) 
                     is_prez = True
