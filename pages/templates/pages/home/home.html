@@ -93,17 +93,19 @@
                             <a href="{% url 'piece-of-news' pieceofnews.pk %}">
                                 <div class="row">
                                     <h3 class="title">{{ pieceofnews.title|title }}<small> le {{ pieceofnews.date|date }} par {{ pieceofnews.author.first_name }}</small></h3>
-                                    <div>{{ pieceofnews.content|safe|truncatewords_html:20 }}</div>
+                                    <div>{{ pieceofnews.content|safe|truncatewords_html:15 }}</div>
                                 </div>
                             </a>
-                            {#                            <hr />#}
                         </div>
                     {% empty %}
                         <div class="news-bloc">{% trans "Pas de nouvelles à l'horizon" %}</div>
                     {% endfor %}
-                    <div class="newblock centered"><a href="{% url 'news'%}" class="btn btn-link btn-lg">{% trans "Voir l'intégralité des nouvelles" %}</a></div>
+                    <div class="btn-more"><a href="{% url 'news'%}" class="btn btn-link btn-lg">{% trans "Voir l'intégralité des nouvelles" %}</a></div>
                 </div>
-                <div class="col-md-4 col-md-offset-1"><a class="twitter-timeline" data-height="500" data-dnt="true" data-link-color="#337ab7" href="https://twitter.com/Resel_fr">Tweets by ResEl</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script></div>
+                <div class="col-md-5 twitter-widget">
+                    <a class="twitter-timeline" data-height="600" data-dnt="true" data-link-color="#337ab7" href="https://twitter.com/Resel_fr">Tweets by ResEl</a>
+                    <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+                </div>
             </div>
         </div>
     </div>

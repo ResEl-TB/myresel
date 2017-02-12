@@ -48,6 +48,7 @@ class Home(View):
     def dispatch(self, *args, **kwargs):
         return super(Home, self).dispatch(*args, **kwargs)
 
+
     def get(self, request, *args, **kwargs):
         ip = request.network_data['ip']
 

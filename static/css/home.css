@@ -171,13 +171,29 @@
 
 .home-blog {
     padding-bottom: 150px;
+    background-color: #F7F7F7;
 }
 .home-blog h2 {
-    margin-bottom: 50px;
+    margin-bottom: 10px;
 }
 
+.twitter-widget {
+    margin-top: 5px;
+}
 .home-blog .news-bloc {
     margin-top: 5px;
+    border: 1px solid #ddd;
+    padding: 20px 20px 20px 30px;
+    background-color: #FFFFFF;
+}
+
+iframe {
+    border: 1px solid #ddd!important;
+}
+
+.btn-more {
+    margin-bottom: 50px;
+    text-align: center;
 }
 
 .home-blog a {
