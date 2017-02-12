@@ -2,6 +2,7 @@
 """
 Test the views of the device management module
 """
+import json
 from unittest import skip
 
 from django.core import mail
@@ -35,7 +36,8 @@ class AddDeviceViewCase(TestCase):
         try_delete_user("amanoury")
 
     def test_simple_get_page(self):
-        response = self.client.get(reverse("gestion-machines:ajout"), HTTP_HOST="10.0.3.95")
+        response = self.client.get(reverse("gestion-machines:ajout"),
+                                   HTTP_HOST="10.0.3.95", follow=True)
         self.assertEqual(200, response.status_code)
         self.assertTemplateUsed(response, "gestion_machines/add_device.html")
 
@@ -45,6 +47,13 @@ class AddDeviceViewCase(TestCase):
                                     HTTP_HOST="10.0.3.95", follow=True)
         self.assertEqual(200, response.status_code)
         self.assertEqual(user_machines + 1, len(LdapDevice.filter(owner=self.owner)))
+        self.assertEqual(1, len(mail.outbox))
+
+        # Check if the home page is up to date
+        r = self.client.get(reverse("home"), HTTP_HOST="10.0.3.99", follow=True)
+
+        self.assertEqual(200, r.status_code)
+        self.assertContains(r, "Connecté au ResEl")
         self.assertEqual(1, len(mail.outbox))
 
     # TODO: make test with concurency to try mutiple simultinate presses
@@ -101,7 +110,7 @@ class Reactivation(TestCase):
         self.assertTrue(device2.is_inactive())
         # The real view check
         response = self.client.get(reverse("gestion-machines:reactivation"),
-                                    HTTP_HOST="10.0.3.199", follow=True)
+                                   HTTP_HOST="10.0.3.199", follow=True)
         self.assertEqual(200, response.status_code)
 
         device3 = LdapDevice.get(owner=self.owner)
@@ -144,8 +153,8 @@ class ChangeCampusCase(TestCase):
 
         # Create a simple device:
         r = self.client.post(reverse("gestion-machines:ajout"),
-                         HTTP_HOST="10.0.3.95", follow=True
-        )
+                             HTTP_HOST="10.0.3.95", follow=True
+                             )
         self.assertEqual(200, r.status_code)
         mail.outbox = []
 
@@ -167,3 +176,34 @@ class ChangeCampusCase(TestCase):
         self.assertEqual("active", device3.get_status())
         self.assertEqual("Brest", device3.get_campus())
         self.assertEqual(len(mail.outbox), 1)
+
+
+class BandwidthUsageCase(TestCase):
+    def setUp(self):
+        try_delete_user("amanoury")
+        try_delete_old_user("amanoury")
+        self.user = create_full_user()
+        self.user.save()
+        self.client.login(username=self.user.uid, password=self.user.user_password)
+        self.owner = ("uid=amanoury,%s" % settings.LDAP_DN_PEOPLE)
+        user_devices = LdapDevice.filter(owner=self.owner)
+        for device in user_devices:
+            try_delete_device(device.hostname)
+
+    def test_simple_display(self):
+        response = self.client.get(reverse("gestion-machines:bandwidth-usage"),
+                                   HTTP_HOST="10.0.3.199", follow=True)
+        self.assertEqual(200, response.status_code)
+        self.assertTemplateUsed(response, "gestion_machines/bandwidth.html")
+
+    @skip("Temporarily disabled")
+    def test_simple_ajax(self):
+        r = self.client.get(reverse("gestion-machines:bandwidth-usage"),
+                            {'s': '2017-02-05', 'e': '2017-02-05'},
+                            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+                            HTTP_HOST="10.0.3.199", follow=True)
+        self.assertEqual(200, r.status_code)
+        data = json.loads(r.content.decode())
+        self.assertEqual(len(data["up"]), settings.BANDWIDTH_BATCHS + 1)
+        self.assertEqual(len(data["down"]), settings.BANDWIDTH_BATCHS + 1)
+        self.assertEqual(len(data["labels"]), settings.BANDWIDTH_BATCHS + 1)

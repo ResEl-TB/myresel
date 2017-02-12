@@ -6,7 +6,6 @@
 
 <head>
 
-    <link rel="stylesheet" type="text/css" href="static/css/base.css"/>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -34,7 +33,7 @@
 
 <body>
     <div class="container-fluid">
-        <div class="alert alert-warning" role="alert" style="margin-top: 5px; text-align: center"><strong>{% trans "VERSION BETA" %}</strong> {% trans "quelques petites coquilles peuvent se glisser. N'hésitez pas à nous " %} <a style="color: #0f0f0f" href="{% url "contact" %}"><strong>signaler un bug</strong></a> !</div>
+        <div class="alert alert-info" role="alert" style="margin-top: 5px; text-align: center"><strong>{% trans "NOUVEAU SITE ResEl !" %}</strong> {% trans "Vous pouvez toujours " %} <a style="color: #ffffff" href="https://old.resel.fr"><strong>accéder à l'ancien site</strong></a>.</div>
     </div>
 
     <!-- Navigation -->
@@ -64,7 +63,7 @@
                 <!-- Lists of categories -->
                 {% for category in categories %}
                     <li class="dropdown">
-                        <a href="{% url 'wiki:show-category' slug=category.slug %}" class="dropdown-toggle" data-toggle="dropdown"><i class="fa {{ category.fa_icon_name }} fa-fw" aria-hidden="true"></i> {{ category.name }}</a>
+                        <a href="{% url 'wiki:show-category' slug=category.slug %}" class="dropdown-toggle" data-toggle="dropdown"><i class="fa {{ category.fa_icon_name }} fa-fw" aria-hidden="true"></i> <span class="hidden-sm">{{ category.name }}</span></a>
                         <ul class="dropdown-menu">
                             {% for stuff in category.get_articles_and_links_to_display %}
                                 <li>
@@ -83,20 +82,27 @@
                     </li>
                 {% endfor %}
                 <li>
+                    <a href="{% url 'news' %}"><i class="fa fa-newspaper-o fa-fw"></i> <span class="hidden-sm hidden-md">{% trans "Actualités" %}</span></a>
+                </li>
+                <li>
                     <a href="{% url 'contact' %}"><i class="fa fa-comment-o fa-fw"></i> {% trans "Contact" %}</a>
                 </li>
+
                 <hr class="visible-xs"/>
 
                 {% if request.user.is_authenticated %}
                     <li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user fa-fw" aria-hidden="true"></i> {{ ldapuser.first_name }} {{ ldapuser.last_name }} ({{ ldapuser.uid }})</a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user fa-fw" aria-hidden="true"></i> {{ ldapuser.first_name }} <span class="hidden-sm">{{ ldapuser.last_name }} ({{ ldapuser.uid }})</span></a>
                         <ul class="dropdown-menu">
                             <li>
                                 <a href="#"><i class="fa fa-sliders fa-fw"></i> {% trans "Paramètres" %}</a>
                             </li>
                             <li>
                                 <a href="{% url 'gestion-machines:liste' %}"><i class="fa fa-cubes fa-fw"></i> {% trans "Mes machines" %}</a>
+                            </li>
+                            <li>
+                                <a href="{% url 'gestion-personnes:mail' %}"><i class="fa fa-envelope-o fa-fw"></i> {% trans "Email ResEl" %}</a>
                             </li>
                             <li>
                                 <a href="https://mlistes.resel.fr"><i class="fa fa-rss fa-fw"></i> {% trans "Listes de diffusion" %}</a>
@@ -184,17 +190,18 @@
             <div class="row">
                 <div class="col-sm-4">
                     <ul>
-                        <li><a href="#">{% trans "Les statuts de l'association" %}</a></li>
-                        <li><a href="#">{% trans "Le règlement intérieur" %}</a></li>
+                        <li><a href="{% static "files/statuts.pdf" %}">{% trans "Les statuts de l'association" %}</a></li>
+                        <li><a href="{% static "files/reglement-interieur.pdf" %}">{% trans "Le règlement intérieur" %}</a></li>
                         <li><a href="{% url "tresorerie:prices" %}">{% trans "Tarifs et Cotisation" %}</a></li>
                         <li><a href="{% url "contact" %}">{% trans "Contact" %}</a></li>
                     </ul>
                 </div>
                 <div class="col-sm-4">
                     <ul>
-                        <li><a href="https://status.resel.fr">{% trans "État du réseau" %}</a></li>
+{#                        <li><a href="https://status.resel.fr">{% trans "État du réseau" %}</a></li>#}
                         <li><a href="https://clubs.resel.fr">{% trans "Les clubs" %}</a></li>
                         <li><a href="https://campus.resel.fr">{% trans "Campus" %}</a></li>
+                        <li><a href="{% url 'gestion-personnes:webmail' %}">Webmail</a></li>
 {#                        <li><a href="{% url 'who:user-details'  'u' %}">{% trans "Annuaire" %}</a></li>#}
                         <li><a href="/wiki/lassociation/devenez-administrateur-resel">{% trans "Devenez Administrateur ResEl !" %}</a></li>
                     </ul>
@@ -202,10 +209,10 @@
                 <div class="col-sm-4">
                     <ul>
                         <li><a href="https://www.federez.net/">{% trans "Fédérez" %}</a></li>
-                        <li><a href="http://www.telecom-bretagne.eu">{% trans "Télécom Bretagne" %}</a></li>
+                        <li><a href="https://www.imt-atlantique.fr/">{% trans "IMT Atlantique" %}</a></li>
                         <br />
-                        <li><a href="http://assos-tb.fr/">{% trans "Associations de Télécom Bretagne" %}</a></li>
-                        <li><a href="http://www.aitb.org//">{% trans "Alumni" %}</a></li>
+                        <li><a href="http://assos-tb.fr/">{% trans "Associations de l'IMT Atlantique" %}</a></li>
+                        <li><a href="http://www.aitb.org/">{% trans "Alumni" %}</a></li>
                     </ul>
                 </div>
             </div>
@@ -214,7 +221,7 @@
             <div class="text-center bottom-row">
         <div class="container ">
                 <div class="col-sm-8 col-sm-offset-2">
-                    {% trans "L'Association ResEl - 2003-2016 - Tous droits réservés" %}
+                    Association ResEl - 2003-{% now "Y" %} - Tous droits réservés - <a href="https://git.resel.fr/resel/myresel">{% trans "Code Source"%}</a>
                 </div>
             </div>
         </div>
@@ -233,7 +240,7 @@
 <script type="text/javascript">
   var _paq = _paq || [];
   _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
-  _paq.push(["setCookieDomain", "*.beta.resel.fr"]);
+  _paq.push(["setCookieDomain", "*.resel.fr"]);
   _paq.push(["setDomains", ["*.beta.resel.fr","*.rennes.beta.resel.fr","*.rennes.resel.fr","*.resel.fr"]]);
   _paq.push(['trackPageView']);
   _paq.push(['enableLinkTracking']);

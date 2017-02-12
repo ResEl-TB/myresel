@@ -31,6 +31,7 @@ class LdapModel(object):
         new_kwargs = {}
         for arg, arg_value in kwargs.items():
             new_arg = arg
+            arg_value = arg_value if arg_value is not None else ""
             new_arg_value = Ldap.sanitize(arg_value)
             arg_splited = arg.split("__")
             if len(arg_splited) > 1:
@@ -43,6 +44,23 @@ class LdapModel(object):
                     new_arg_value = "*" + arg_value
             new_kwargs[new_arg] = new_arg_value
         return cls._search(**new_kwargs)
+
+    @classmethod
+    def all(cls):
+        """
+        Return all entries in base_dn
+        :return:
+        """
+        ldap = Ldap()
+
+        search_results = ldap.search(cls.base_dn, '(!(objectClass=organizationalUnit))', attr=ALL_ATTRIBUTES)
+        if search_results is None:
+            return []
+
+        results = []
+        for result_line in search_results:
+            results.append(cls._to_object(result_line))
+        return results
 
     @classmethod
     def all(cls):

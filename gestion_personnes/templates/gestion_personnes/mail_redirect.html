@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block titre %}{% trans "Redirection adresse ResEl" %}{% endblock %}
+
+{% block content %}
+<div class="container">
+    
+  <div class="row">
+    <div class="bs-callout bs-callout-info">
+      <h4> Redirection de votre adresse mail <strong>{{user_mail_address}}</strong></h4>
+      <p>
+      Tous les emails envoyés à {{user_mail_address}} seront redirigés vers l'adresse email de votre choix. <br>
+      Pour supprimer la redirection actuelle, videz le champ Email et validez le formulaire.
+      </p>
+    </div>
+  </div>
+
+  <div class="row">
+
+    <div class="bs-callout bs-callout-default">
+      <h4>Adresse de redirection</h4>
+      <p>
+        <form action="" method="POST" class="form-inline">
+            {% csrf_token %}
+            {{mail_form.new_routing_address}}
+            <button type="submit" class="btn btn-info">Valider la redirection</button>
+        </form>
+      </p>
+    </div>
+  </div>
+
+
+</div> <!-- /.container -->
+{% endblock %}

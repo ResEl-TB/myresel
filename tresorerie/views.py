@@ -80,7 +80,7 @@ class ChooseProduct(View):
 
 class Pay(View):
     """
-    Page which make the actual payement
+    Page which make the actual payment
     There is not coming back from that page. An error here is critical.
     So be very careful!
     """
@@ -223,7 +223,7 @@ class Pay(View):
             transaction.utilisateur = user.uid
             transaction.total = transaction_total / 100
             transaction.stripe_id = charge.id
-            transaction.save()
+            transaction.save()  # Because a UUID is needed before adding products
             for p in products:
                 transaction.produit.add(p)
 
@@ -251,7 +251,7 @@ class Pay(View):
                 'card_declined': _("Votre carte a été refusée"),
                 'processing_error': _("Une erreur est survenue dans le traitement de votre demande")
             }
-            logger.warning("Carte de crédit non , erreur : %s, uid : %s" % (ERRORS[code], request.ldap_user.uid))
+            logger.warning("Carte de crédit non valide, erreur : %s, uid : %s" % (ERRORS[code], request.ldap_user.uid))
             messages.error(request, ERRORS[code])
             return HttpResponseRedirect(reverse('tresorerie:pay', kwargs={'product_id': main_product_id}))
 
@@ -263,7 +263,7 @@ class Pay(View):
 
         except stripe.error.APIConnectionError as e:
             # Network communication with Stripe failed
-            logger.error("Serveur Stripe non contactable")
+            logger.error("Serveur Stripe non joignable")
             messages.error(request, _(
                 "Impossible de contacter le serveur de paiement pour le moment, veuillez ré-essayer plus tard"))
             return HttpResponseRedirect(reverse('tresorerie:pay', kwargs={'product_id': main_product_id}))
@@ -314,7 +314,8 @@ class ListProducts(View):
         products_FIP += list(Product.objects.filter(type_produit="F", autorisation="ALL"))
         products_FIP = sorted(products_FIP, key=lambda x: x.prix, reverse=True)  # So that the least expensive will have priority
 
-        products_FIG = list(Product.objects.filter(type_produit="F", autorisation="ALL"))
+        products_FIG = list(Product.objects.filter(type_produit="F", autorisation="FIG"))
+        products_FIG += list(Product.objects.filter(type_produit="F", autorisation="ALL"))
         products_FIG = sorted(products_FIG, key=lambda x: x.prix, reverse=True)
 
         one_year_FIP = None

@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+import logging
+import time
+from datetime import datetime, timedelta
+
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -6,6 +10,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import EmailMessage, mail_admins
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
@@ -14,13 +19,14 @@ from django.views.generic import View, ListView
 from fonctions import ldap, network
 from fonctions.decorators import resel_required, unknown_machine
 from fonctions.network import get_campus
-from gestion_machines.models import LdapDevice
+from gestion_machines.models import LdapDevice, PeopleHistory
 from gestion_personnes.models import LdapUser
 from myresel.settings_local import SERVER_EMAIL
 from .forms import AddDeviceForm, AjoutManuelForm
 
+logger = logging.getLogger("default")
 
-# Create your views here.
+
 class Reactivation(View):
     """
     Vue appelée pour ré-activer une machine d'un utilisateur absent trop longtemps du campus
@@ -32,7 +38,7 @@ class Reactivation(View):
         return super(Reactivation, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        mac = request.network_data['mac']
+        mac = network.get_mac(request.network_data['ip'])
 
         try:
             device = LdapDevice.get(mac_address=mac)
@@ -47,16 +53,16 @@ class Reactivation(View):
         device.save()
         owner_uid = device.owner.split(',')[0][4:]
         mail_admins(
-            "[Reactivation {}] La machine {} [172.22.{} - {}] par {}".format(settings.CURRENT_CAMPUS, device.hostname,
-                                                                             device.ip, device.mac_address,
-                                                                             owner_uid),
+            "[Reactivation {}] 172.22.{} - {} [{}] par {}".format(settings.CURRENT_CAMPUS,
+                                                                  device.ip, device.mac_address, device.hostname,
+                                                                  owner_uid),
             "Reactivation de la machine {} appartenant à {}\n\nIP : 172.22.{}\nMAC : {}".format(device.hostname,
                                                                                                 owner_uid,
                                                                                                 device.ip,
                                                                                                 device.mac_address)
 
         )
-        messages.info(request, _("Votre machine a bien été activée."))
+        messages.info(request, _("Votre machine vient d'être réactivée."))
         network.update_all()
 
         return HttpResponseRedirect(reverse('home'))
@@ -93,8 +99,7 @@ class AddDeviceView(View):
             hostname = ldap.get_free_alias(str(request.user))
             alias = form.cleaned_data['alias']
             campus = get_campus(request.network_data['ip'])
-            mac = request.network_data['mac']
-
+            mac = network.get_mac(request.network_data['ip'])
 
             # In case the user didn't specified any alias, don't make any
             if hostname == alias:
@@ -114,20 +119,19 @@ class AddDeviceView(View):
 
             # I think even with the decorator, some user where able to click twice on the submit button fast enough
             # To create a bug... So we check one final time before saving the data
-            # I'll also add a bit of javascript to stop theses caca
             if len(LdapDevice.filter(mac_address=mac)) > 0:
                 messages.error(request, _(
-                    "Votre machine est déjà enregistrée sur notre réseau. Si vous pensez que c'est une erreur, contactez un administrateur"
+                    "Votre machine est déjà enregistrée sur notre réseau. Si vous pensez que c'est une erreur n'hésitez pas à contactez un administrateur."
                 ))
                 return render(request, self.template_name, {'form': form})
             device.save()
             network.update_all()  # TODO: Move that to something async
 
             mail_admins(
-                "[Inscription {}] La machine {} [172.22.{} - {}] inscrite par {}".format(settings.CURRENT_CAMPUS,
-                                                                                         device.hostname,
-                                                                                         device.ip, device.mac_address,
-                                                                                         str(request.user)),
+                "[Inscription {}] 172.22.{} - {} [{}] par {}".format(settings.CURRENT_CAMPUS,
+                                                                     device.ip, device.mac_address,
+                                                                     device.hostname,
+                                                                     str(request.user)),
                 "Inscription de la machine {} appartenant à {}\n\nIP : 172.22.{}\nMAC : {}".format(device.hostname,
                                                                                                    str(request.user),
                                                                                                    device.ip,
@@ -135,7 +139,8 @@ class AddDeviceView(View):
 
             )
 
-            messages.success(request, _("Votre machine a bien été ajoutée. Veuillez ré-initialiser votre connexion en débranchant/rebranchant le câble ou en vous déconnectant/reconnectant au Wi-Fi ResEl Secure."))
+            messages.success(request, _(
+                "Votre machine a bien été ajoutée. Veuillez ré-initialiser votre connexion en débranchant/rebranchant le câble ou en vous déconnectant/reconnectant au Wi-Fi ResEl Secure."))
             return HttpResponseRedirect(reverse('home'))
 
         return render(request, self.template_name, {'form': form})
@@ -161,16 +166,18 @@ class AjoutManuel(View):
         if form.is_valid():
             # Envoi d'un mail à support
             mail = EmailMessage(
-                subject="Ajout machine sur le compte %(user)s",
+                subject="Ajout machine sur le compte de %(user)s" % {'user': request.ldap_user.uid},
                 body="L'utilisateur %(user)s souhaite ajouter une machine à son compte."
-                     "\n\n uid : %(user)s"
-                     "\n Prénom NOM : %(firstname)s %(lastname)s"
-                     "\n\n MAC : %(mac)s"
-                     "\n\nDescription de la demande :"
+                     "\n\nuid : %(user)s"
+                     "\nPrénom NOM : %(firstname)s %(lastname)s"
+                     "\n\nMAC : %(mac)s"
+                     "\n\nDescription de la demande:"
                      "\n\n%(desc)s"
                      "\n\n----------------------------"
                      "\nCe message est un message automatique généré par le site resel.fr, il convient de répondre à "
-                     "l'utilisateur et non ce message." % {
+                     "l'utilisateur et non ce message."
+                     "\nIl est important de noter que l'utilisateur doit expliquer pourquoi il ne peut pas inscrire sa"
+                     "machine normalement, le cas le plus courant étant les consoles de jeu." % {
                          'user': request.ldap_user.uid,
                          'lastname': request.ldap_user.last_name.upper(),
                          'firstname': request.ldap_user.first_name,
@@ -183,7 +190,8 @@ class AjoutManuel(View):
             )
             mail.send()
 
-            messages.success(request, _("Votre demande a été envoyée aux administrateurs. L'un d'eux vous contactera d'ici peu de temps."))
+            messages.success(request, _(
+                "Votre demande a été envoyée aux administrateurs. L'un d'eux vous contactera d'ici peu de temps."))
             return HttpResponseRedirect(reverse('gestion-machines:liste'))
 
         return render(request, self.template_name, {'form': form})
@@ -203,7 +211,8 @@ class ListDevices(ListView):
 
     def get_queryset(self):
         uid = str(self.request.user)
-        devices = LdapDevice.filter(owner="uid=%(uid)s,%(dn_people)s" % {'uid': uid, 'dn_people': settings.LDAP_DN_PEOPLE})
+        devices = LdapDevice.filter(
+            owner="uid=%(uid)s,%(dn_people)s" % {'uid': uid, 'dn_people': settings.LDAP_DN_PEOPLE})
 
         return devices
 
@@ -214,10 +223,16 @@ class Modifier(View):
     template_name = 'gestion_machines/modifier.html'
     form_class = AddDeviceForm
 
-    def get_user_and_machine(self, request, hostname):
-        # Vérification que la mac fournie est connue, et que la machine appartient à l'user
+    @staticmethod
+    def get_user_and_machine(username, hostname):
+        """
+        Check if the mac address exists and is known
+        :param request:
+        :param hostname:
+        :return:
+        """
         machine = LdapDevice.get(hostname=hostname)
-        ldap_user = LdapUser.get(pk=request.user.username)
+        ldap_user = LdapUser.get(pk=username)
         if ldap_user.pk != machine.owner:
             raise ObjectDoesNotExist()
 
@@ -231,8 +246,14 @@ class Modifier(View):
         hostname = self.kwargs.get('host', '')
 
         try:
-            ldap_user, machine = self.get_user_and_machine(request, hostname)
+            ldap_user, machine = self.get_user_and_machine(request.user.username, hostname)
         except ObjectDoesNotExist:
+            logger.warning("Tentative de modification d'une machine qui n'existe pas"
+                           "\n\nuid: {uid}"
+                           "\nhostname: {hostname}".format(
+                uid=request.user.username,
+                hostname=hostname)
+            )
             messages.error(request, _("Cette machine n'existe pas ou ne vous appartient pas."))
             return HttpResponseRedirect(reverse('gestion-machines:liste'))
 
@@ -251,8 +272,16 @@ class Modifier(View):
             alias = form.cleaned_data['alias']
             hostname = self.kwargs.get('host', '')
             try:
-                ldap_user, machine = self.get_user_and_machine(request, hostname)
+                ldap_user, machine = self.get_user_and_machine(request.user.username, hostname)
             except ObjectDoesNotExist:
+                logger.warning("Tentative de modification d'une machine qui n'existe pas"
+                               "\n\nuid: {uid}"
+                               "\nhostname: {hostname}"
+                               "\nnew alias: {alias}".format(
+                    uid=request.user.username,
+                    alias=alias,
+                    hostname=hostname)
+                )
                 messages.error(request, _("Cette machine n'existe pas ou ne vous appartient pas."))
                 return HttpResponseRedirect(reverse('gestion-machines:liste'))
             if machine.aliases:
@@ -265,3 +294,93 @@ class Modifier(View):
             return HttpResponseRedirect(reverse('gestion-machines:liste'))
 
         return render(request, self.template_name, {'form': form})
+
+
+class BandwidthUsage(View):
+    """
+    Display the bandwidth used by the user
+    For the moment it only display per user, but in the future we can
+    imagine that it show bandwidth par device
+    """
+    template_name = "gestion_machines/bandwidth.html"
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(BandwidthUsage, self).dispatch(*args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            start_date_str = request.GET.get('s', '')
+            end_date_str = request.GET.get('e', '')
+            device = None
+            try:
+                start_date = datetime.strptime(start_date_str , "%Y-%m-%dT%H:%M:%S.%fZ")
+                end_date = datetime.strptime(end_date_str , "%Y-%m-%dT%H:%M:%S.%fZ")
+            except ValueError:
+                start_date = datetime.strptime(start_date_str, "%Y-%m-%d")
+                end_date = datetime.strptime(end_date_str, "%Y-%m-%d")
+            data = self.get_graph_data(start_date, end_date, device)
+            return JsonResponse(data, safe=False)
+        else:
+            return render(request, self.template_name)
+
+
+    def get_graph_data(self, start_date, end_date, device=None):
+        """
+        Get the graph data in the form of a table
+
+        :param start_date:
+        :param end_date:
+        :param device: Unused, for later usage
+        :return:
+        """
+        batchs = settings.BANDWIDTH_BATCHS
+
+        # update end_date to the end of the day
+        end_date = min(end_date + timedelta(days=1), datetime.now())
+
+        # Convert everything to seconds, which is simple to use
+        duration = end_date - start_date
+        start_st = int(start_date.timestamp())
+        end_st = int(end_date.timestamp())
+        duration_st = duration.days * 24 * 60 + duration.seconds
+
+        bare_up = PeopleHistory.objects.filter(
+            uid=self.request.ldap_user.uid,
+            timestamp__gte=start_date.timestamp(),
+            timestamp__lte=end_date.timestamp(),
+            way=PeopleHistory.UP).order_by("timestamp")
+
+        bare_down = PeopleHistory.objects.filter(
+            uid=self.request.ldap_user.uid,
+            timestamp__gte=start_date.timestamp(),
+            timestamp__lte=end_date.timestamp(),
+            way=PeopleHistory.DOWN).order_by("timestamp")
+
+        # Create 2 historygrams
+        hist_time_labels = [i for i in range(start_st, end_st, int(duration_st / batchs))]
+        hist_up = [0 for _ in range(start_st, end_st, int(duration_st / batchs))]
+        i = 0
+        for d in bare_up:
+            try:
+                if d.timestamp > hist_time_labels[i + 1]:
+                    i += 1
+                hist_up[i] += d.amount
+            except IndexError:
+                break
+
+        hist_down = [0 for _ in range(start_st, end_st, int(duration_st / batchs))]
+        i = 0
+        for d in bare_down:
+            try:
+                if d.timestamp > hist_time_labels[i + 1]:
+                    i += 1
+                hist_down[i] += d.amount
+            except IndexError:
+                break
+
+        return {
+            "up": hist_up,
+            "down": hist_down,
+            "labels": hist_time_labels,
+        }

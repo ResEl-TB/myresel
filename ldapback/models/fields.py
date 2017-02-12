@@ -73,7 +73,10 @@ class LdapField(object):
         else:
             edit_type = MODIFY_REPLACE
 
-        return edit_type, new_ldap
+        if edit_type == MODIFY_DELETE:
+            return edit_type, old_ldap
+        else:
+            return edit_type, new_ldap
 
 
 class LdapCharField(LdapField):

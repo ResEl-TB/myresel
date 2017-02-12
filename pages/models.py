@@ -15,3 +15,18 @@ class News(models.Model):
 
     def __str__(self):
         return self.title
+
+class Faq(models.Model):
+    question_text = models.CharField(max_length=200)
+    response = RichTextField()
+    author = models.ForeignKey(User, null=True, blank=True, editable=False)
+    date = models.DateTimeField(auto_now=True)
+    vote = models.IntegerField(default=0)
+
+    def upvote(self):
+        self.vote += 1
+        self.save()
+
+
+    def __str__(self):
+        return self.question_text

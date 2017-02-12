@@ -19,9 +19,9 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.views.generic import RedirectView
 from django.views.i18n import javascript_catalog
-
+from pages.views import Home, Contact, NewsListe, inscriptionZoneInfo, FaqList, faqUpvote, NewsDetail
 from myresel import settings
-from pages.views import Home, Contact, NewsListe, inscriptionZoneInfo
+
 
 js_info_dict = {
     'packages': ('tresorerie',),
@@ -42,7 +42,10 @@ urlpatterns = [
     url(r'^paiement/', include('tresorerie.urls', namespace='tresorerie')),
 
     url(r'^wiki/', include('wiki.urls', namespace='wiki')),
-    url(r'^news/', NewsListe.as_view(), name='news'),
+    url(r'^news/$', NewsListe.as_view(), name='news'),
+    url(r'^news/(?P<pk>\d+)$', NewsDetail.as_view(), name='piece-of-news'),
+    url(r'^faq/$', FaqList.as_view(), name='faq'),
+    url(r'^faq/upvote/$', faqUpvote, name='upvote'),
     url(r'^contact/', Contact.as_view(), name='contact'),
     url(r'^campus/', include('campus.urls', namespace='campus')),
 

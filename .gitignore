@@ -27,3 +27,4 @@ db.sqlite3_admin
 .vagrant
 
 .coverage
+/node_modules

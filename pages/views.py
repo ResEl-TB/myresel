@@ -6,17 +6,20 @@ from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.db import OperationalError
+from django.db import ProgrammingError
+from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import render, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import View, ListView
+from django.views.generic import View, ListView, DetailView
 
 from fonctions import network, decorators
-from gestion_machines.models import LdapDevice
+from fonctions.generic import sizeof_fmt
+from gestion_machines.models import LdapDevice, PeopleData
 from gestion_personnes.models import LdapUser, UserMetaData
 from pages.forms import ContactForm
-from pages.models import News
+from pages.models import News, Faq
 from wiki.models import Category
 
 logger = logging.getLogger("default")
@@ -32,6 +35,8 @@ class Home(View):
         - Utilisateur connecté sur le campus, on lui propose des options pour son compte
         - la personne exterieure qui veut en savoir plus sur le ResEl
         - L'utilisateur à l'exterieur qui veut avoir des infos sur son compte
+
+    TODO: separate this functions in multiple ones...
     """
 
     template_name = 'pages/home.html'
@@ -45,7 +50,7 @@ class Home(View):
 
     def get(self, request, *args, **kwargs):
         ip = request.network_data['ip']
-        
+
         template_for_response = self.exterior_template
         args_for_response = {}
 
@@ -75,13 +80,30 @@ class Home(View):
             # Check his end fees date
             if is_in_resel:
                 try:
-                    device = LdapDevice.get(mac_address=request.network_data['mac'])
+                    mac = network.get_mac(request.network_data['ip'])
+                    device = LdapDevice.get(mac_address=mac)
+                    args_for_response['device'] = device
                     args_for_response['not_user_device'] = device.owner != request.ldap_user.pk
                     args_for_response['is_registered'] = True
                 except ObjectDoesNotExist:
                     args_for_response['is_registered'] = False
             template_for_response = self.logged_template
             args_for_response['end_fee'] = end_fee
+
+            # TODO:For the moment show his total amount downloaded, not the per device view
+            # TODO: ~once the new fw is done, we should improve that
+            try:
+                data_down = PeopleData.objects.filter(uid=request.ldap_user.uid, way=PeopleData.DOWN)
+                data_up = PeopleData.objects.filter(uid=request.ldap_user.uid, way=PeopleData.UP)
+
+                display_down = sizeof_fmt(sum(d.amount for d in data_down))
+                display_up = sizeof_fmt(sum(d.amount for d in data_up))
+                args_for_response['data_down'] = display_down
+                args_for_response['data_up'] = display_up
+            except (OperationalError, ProgrammingError):  # For the sake of stability we will be very loose with errors in that space
+                args_for_response['data_down'] = "ERR"
+                args_for_response['data_up'] = "ERR"
+
         elif network.is_resel_ip(ip):
             template_for_response = self.interior_template
 
@@ -93,10 +115,17 @@ class NewsListe(ListView):
 
     template_name = 'pages/news.html'
     context_object_name = 'derniers_billets'
+    paginate_by = 5
 
     def get_queryset(self):
         return News.objects.order_by('-date').all()
 
+class NewsDetail(DetailView):
+    """ Vue appelée pour afficher un billet particulié """
+
+    template_name = 'pages/piece_of_news.html'
+    context_object_name = 'pieceOfNews'
+    model = News
 
 class Contact(View):
     """ Vue appelée pour contacter les admin en cas de soucis """
@@ -154,7 +183,7 @@ def inscriptionZoneInfo(request):
     # First get device datas
     vlan = request.network_data['vlan']
     zone = request.network_data['zone']
-    mac = request.network_data['mac']
+    mac = network.get_mac(request.network_data['ip'])
     is_registered = False
     is_logged_in = request.user.is_authenticated()
     if "user" in zone or "inscription" in zone:
@@ -174,3 +203,18 @@ def inscriptionZoneInfo(request):
         'pages/inscription_zone_info.html',
         {'vlan': vlan, 'is_logged_in': is_logged_in, 'is_registered': is_registered}
     )
+
+class FaqList(ListView):
+    """ Vue appelée pour afficher les F.A.Q. au niveau du ResEl """
+
+    template_name = 'pages/faq.html'
+    context_object_name = 'questions'
+
+    def get_queryset(self):
+        return Faq.objects.order_by('-vote').all()
+
+def faqUpvote(request):
+
+    faq = get_object_or_404(Faq, pk=request.POST['faq_id'])
+    faq.upvote()
+    return HttpResponse('OK')

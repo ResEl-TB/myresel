@@ -511,3 +511,6 @@ class SendUidForm(forms.Form):
         )
 
         user_email.send()
+
+class RoutingMailForm(forms.Form):
+    new_routing_address = forms.EmailField(label='', required=False)

@@ -13,6 +13,7 @@ from fonctions.generic import hash_to_ntpass, compare_passwd
 from gestion_machines.models import LdapDevice
 from gestion_personnes.models import LdapUser, UserMetaData
 from gestion_personnes.tests import try_delete_user, create_full_user
+from gestion_personnes.views import MailResEl
 from myresel import settings
 
 
@@ -367,3 +368,76 @@ class TestCheckEmail(TestCase):
 
         user_s = UserMetaData.objects.get(uid=self.user.uid)
         self.assertTrue(user_s.email_validated)
+
+class MailResElViewCase(TestCase):
+    def setUp(self):
+        self.user = create_full_user()
+        try_delete_user(self.user.uid)
+        self.user.save()
+
+        self.client.login(username=self.user.uid, password=self.user.user_password)
+
+    def test_simple_mail_creation(self):
+        r = self.client.get(reverse("gestion-personnes:mail"),
+                            HTTP_HOST="10.0.3.99", follow=True)
+        self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed(r, "gestion_personnes/mail_resel_new.html")
+        self.assertContains(r, "alexandre.manoury@resel.fr")
+
+        r = self.client.post(
+            reverse("gestion-personnes:mail"),
+            HTTP_HOST="10.0.3.99", follow=True)
+
+        self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed(r, "gestion_personnes/mail_resel.html")
+        self.assertEqual(1, len(mail.outbox))
+
+        user_n = LdapUser.get(uid=self.user.uid)
+        self.assertEqual(user_n.uid + '/Maildir/', user_n.mail_dir)
+        self.assertEqual('/var/mail/virtual/'+user_n.uid, user_n.home_directory)
+        self.assertTrue("mailPerson" in user_n.object_classes)
+
+    def test_build_address(self):
+        # TODO : do a bit more tests
+        mv = MailResEl()
+        self.assertEqual(b"loic.carr", mv.build_address("lcarr", "Loïc", "Carr"))
+
+class DeleteMailResElViewCase(TestCase):
+    def setUp(self):
+        self.user = create_full_user()
+        try_delete_user(self.user.uid)
+
+        # Create a fake user
+        mv = MailResEl()
+        h = mv.build_address(self.user.uid, self.user.first_name, self.user.last_name)
+        self.user.mail_local_address = h + b"@resel.fr"
+        self.user.mail_dir = self.user.uid + '/Maildir/'
+        self.user.mail_del_date = None
+        self.user.home_directory = '/var/mail/virtual/' + self.user.uid
+        self.user.object_classes = ['mailPerson']
+        self.user.save()
+
+        self.client.login(username=self.user.uid, password=self.user.user_password)
+
+    def test_simple_delete_mail(self):
+        r = self.client.get(reverse("gestion-personnes:delete-mail"),
+                            HTTP_HOST="10.0.3.99", follow=True)
+        self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed(r, "gestion_personnes/delete_mail.html")
+
+        r = self.client.post(
+            reverse("gestion-personnes:delete-mail"),
+            data={
+                "delete_field": self.user.mail_local_address.decode("utf-8"),
+            },
+            HTTP_HOST="10.0.3.99", follow=True)
+
+        self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed(r, "gestion_personnes/mail_resel_new.html")
+
+        user_n = LdapUser.get(uid=self.user.uid)
+        self.assertEqual("", user_n.mail_routing_address)
+        self.assertNotEqual("", user_n.mail_del_date)  # TODO: Make a more reliable test
+
+# TODO: Test WebmailView
+# TODO: Test RedirectMailResEl

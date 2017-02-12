@@ -1,5 +1,5 @@
-#TODO: refactor configuration (username, pass...)
-#TODO: do not delete migrations
+# TODO: refactor configuration (username, pass...)
+# TODO: do not delete migrations
 
 image: docker.resel.fr/web  # Custom image made for the ResEl
 services:
@@ -19,6 +19,11 @@ variables:
   MYSQL_ROOT_PASSWORD: blah
   REDIS_HOST: redis
 
+  MYSQL_QOS_DATABASE: qos
+  MYSQL_QOS_HOST: mysql
+  MYSQL_QOS_USER: root
+  MYSQL_QOS_PASSWORD: blah
+
   ROOTDIR: ./
   CONFDIR: myresel/
   ETCDIR: .install/etc/
@@ -29,6 +34,8 @@ variables:
 
 before_script:
   - source .install/scripts/install_essentials.sh
+  - apt-get install -qq mysql-client
+  - echo "CREATE DATABASE qos" | mysql -uroot -pblah -h mysql
   - source .install/scripts/install_openldap.sh
   - source .install/scripts/install_latex.sh
   - pip3 install -qr requirements.txt
@@ -76,7 +83,7 @@ deploy to brest:
     - deploy
   environment:
     name: skynet
-    url: https://beta.resel.fr/
+    url: https://resel.fr/
 
 deploy to rennes:
   services: []
@@ -84,9 +91,9 @@ deploy to rennes:
     - apt-get -qq install curl
   stage: deploy
   script:
-    - curl http://doubidou.adm.rennes.resel.fr/deploy-resel
+    - curl http://doubidou.adm.resel.fr/deploy-resel
   only:
     - deploy
   environment:
     name: doubidou
-    url: https://beta.rennes.resel.fr/
+    url: https://rennes.resel.fr/
