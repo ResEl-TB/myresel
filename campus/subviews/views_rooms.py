@@ -66,14 +66,14 @@ def calendarView(request, room='all', year=timezone.now().year, month=timezone.n
                     )
             cal.append(week_events)
 
-    
-
     # Getting all the rooms
-    queryset = Q()
-    for club in Club.filter(members__contains='uid=%s' % request.ldap_user.uid):
-        queryset = queryset | Q(clubs__contains=club.cn)
-    private_rooms = Room.objects.filter(queryset)
-
+    if request.user.is_authenticated():
+        queryset = Q()
+        for club in Club.filter(members__contains='uid=%s' % request.ldap_user.uid):
+            queryset = queryset | Q(clubs__contains=club.cn)
+        private_rooms = Room.objects.filter(queryset)
+    else:
+        private_rooms = []
     rooms = [
         ('Salles clubs', private_rooms),
         ('Salles du foyer', Room.objects.filter(private=False, location='F')),
