@@ -34,9 +34,9 @@
 }
 /* évite d'avoir le texte collé sur le côté sur mobile */
 @media screen and (max-width: 765px) {
-   .home-user-management{
-      text-align:center;
-   }
+    .home-user-management{
+        text-align:center;
+    }
 }
 
 .home-user-management .home-login {
@@ -219,77 +219,77 @@ iframe {
 }
 
 .centered {
-   text-align: center;
+    text-align: center;
 }
 
 .clickable-title a:hover{
-   text-decoration: none;
+    text-decoration: none;
 }
 
 .pieceofnews-footer {
-   text-align: right;
-   margin-right: 2%;
-   margin-bottom: 2%;
-   font-weight: bold;
-   font-style: italic;
+    text-align: right;
+    margin-right: 2%;
+    margin-bottom: 2%;
+    font-weight: bold;
+    font-style: italic;
 }
 
 .news-container{
-   box-shadow: 3px 3px 15px rgba(0,0,0,0.2);
-   border: 1px solid #e8e8e8;
-   border-radius: 2px;
-   margin-bottom: 3%;
+    box-shadow: 3px 3px 15px rgba(0,0,0,0.2);
+    border: 1px solid #e8e8e8;
+    border-radius: 2px;
+    margin-bottom: 3%;
 }
 
 .slide-wrapper {
-   position:relative;
-   min-height: 300px;
+    position:relative;
+    min-height: 300px;
 }
 
 .slide {
-   animation: fading 1s;
+    animation: fading 1s;
 }
 
 .slide-btn:hover {
-   text-decoration: none;
-   cursor: pointer;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 .slide-btn-left {
-   position:absolute;
-   top: 50%;
-   left: 0%;
+    position:absolute;
+    top: 50%;
+    left: 0%;
 }
 
 .slide-btn-right {
-   float: right;
-   position:absolute;
-   top: 50%;
-   right: 0%;
+    float: right;
+    position:absolute;
+    top: 50%;
+    right: 0%;
 }
 
 .slide-ctrl-btn{
-   position: absolute;
-   bottom: 0;
-   margin-left: auto;
-   margin-right: auto;
-   left: 0;
-   right: 0;
+    position: absolute;
+    bottom: 0;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
 }
 
 .service {
-   margin-bottom: 5%;
+    margin-bottom: 5%;
 }
 
 .service-glyphicon {
-   color: #F79420;
+    color: #F79420;
 
    transform: scale(1.0);
    transition: all 2s;
 }
 
 .service-description-text {
-   color: #262626;
+    color: #262626;
    text-align: justify;
    border-bottom: 1px solid #e8e8e8;
 }
@@ -301,15 +301,15 @@ iframe {
 }
 
 .service-description a:hover{
-   text-decoration: none;
+    text-decoration: none;
 }
 
 .service-link{
-   margin-bottom: 5%;
+    margin-bottom: 5%;
 }
 
 .service-link:hover{
-   text-decoration: none;
+    text-decoration: none;
 }
 
 .revealOnScroll {
@@ -319,11 +319,116 @@ iframe {
 
 
 @keyframes fading {
-   0% {
-       opacity: 0;
-   }
+    0% {
+        opacity: 0;
+    }
 
-   100% {
-       opacity: 1;
-   }
+    100% {
+        opacity: 1;
+    }
+}
+
+.diagram {
+    position: relative;
+    height: 70px;
+    max-width: 500px;
+    margin: 50px auto;
+}
+
+.diagram * {
+    position: absolute;
+}
+
+.fa-cloud {
+    z-index: 2;
+    left: 2%;
+    font-size: 80px;
+    top: 0px;
+}
+
+.diagram .line {
+    height: 2px;
+    background-color: #F3FFE2;
+    width: 87%;
+    top: 70%;
+    left: 5%;
+}
+
+.diagram .wifi {
+    z-index: 2;
+    width: 25px;
+    height: 25px;
+    border-radius: 25px;
+    top: 37px;
+    right: 5%;
+    color: #F3FFE2;
+    background-color: #F3FFE2;
+}
+
+@keyframes packet-mover {
+    0% {
+        left: 6%;
+    }
+    20% {
+        left: 90%;
+    }
+    100% {
+        left: 90%;
+    }
+}
+
+@keyframes wifi-animation {
+    0% {
+        top: 37px;
+        margin-right: 0px;
+        width: 25px;
+        height: 25px;
+        border-radius: 25px;
+        opacity: 1;
+    }
+    20% {
+        top: 37px;
+        margin-right: 0px;
+        width: 25px;
+        height: 25px;
+        border-radius: 25px;
+        opacity: 1;
+    }
+    40% {
+        top: 24px;
+        margin-right: -12px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50px;
+        opacity: .6;
+    }
+    100% {
+        top: 24px;
+        margin-right: -12px;
+        width: 50px;
+        height: 50px;
+        border-radius: 50px;
+        opacity: 0;
+    }
+}
+
+.diagram .packet {
+    left: 5%;
+    z-index: 1;
+    width: 15px;
+    height: 2px;
+    top: 70%;
+    background: #ff9700;
+    animation-name: packet-mover;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+.diagram .wifi-poper {
+    animation-name: wifi-animation;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-out;
+    background: radial-gradient(ellipse at center, rgba(255,255,255,0) 50%,rgba(255,255,255,1) 100%); /* FF3.6-15 */
 }

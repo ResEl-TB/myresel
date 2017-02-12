@@ -29,12 +29,17 @@
     {% block presentation %}
         <div class="home-fragment home-presentation">
             <div class="container article">
-                <h2>{% blocktrans %}Le ResEl : l'association qui gère le réseau sur le campus de l'IMT Atlantique{% endblocktrans %}</h2>
+                <h2>{% blocktrans %}Le ResEl gère le réseau sur le campus de l'IMT Atlantique{% endblocktrans %}</h2>
                 {% blocktrans %}
                     <p>Le <strong>ResEl</strong> (pour Réseau des élèves de <a href="https://www.imt-atlantique.fr/">l'IMT Atlantique</a>) est l'association d'élèves qui gère le réseau informatique des résidences des élèves de l'IMT Atlantique, l'une à Plouzané, près de Brest, et l'autre à Rennes.</p>
                 {% endblocktrans %}
-                <div>
-                    <span class="fa fa-cloud service-icon"></span>
+                <div class="diagram">
+                    <div class="fa fa-cloud"></div>
+                    <div class="line"></div>
+                    <div class="wifi"></div>
+                    <div class="wifi wifi-poper"></div>
+                    <div class="packet packet1"></div>
+{#                    <div class="packet packet2"></div>#}
                 </div>
             </div>
 
