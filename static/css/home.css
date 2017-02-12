@@ -32,10 +32,23 @@
     color: #F3FFE2;
     box-shadow: inset 0 5px 6px 0 #122a3c;
 }
+
+
+#carousel-quotes {
+    height: 170px;
+}
+
+.carousel-indicators {
+    bottom: -20px;
+}
+
 /* évite d'avoir le texte collé sur le côté sur mobile */
 @media screen and (max-width: 765px) {
     .home-user-management{
         text-align:center;
+    }
+    #carousel-quotes {
+        height: 400px;
     }
 }
 
@@ -87,10 +100,6 @@
 .home-bg-img .row {
     margin-bottom: 20px;
     margin-top: 20px;
-}
-
-#carousel-quotes {
-    /*min-height: 350px;*/
 }
 
 .home-user-management~.home-presentation {
@@ -295,20 +304,20 @@ iframe {
 .service-glyphicon {
     color: #F79420;
 
-   transform: scale(1.0);
-   transition: all 2s;
+    transform: scale(1.0);
+    transition: all 2s;
 }
 
 .service-description-text {
     color: #262626;
-   text-align: justify;
-   border-bottom: 1px solid #e8e8e8;
+    text-align: justify;
+    border-bottom: 1px solid #e8e8e8;
 }
 
 @media screen and (max-width: 992px) {
-   .service-description-text {
-      text-align: center;
-   }
+    .service-description-text {
+        text-align: center;
+    }
 }
 
 .service-description a:hover{
@@ -324,8 +333,8 @@ iframe {
 }
 
 .revealOnScroll {
-   transform: scale(0.0);
-   transition: all 1s;
+    transform: scale(0.0);
+    transition: all 1s;
 }
 
 
@@ -391,7 +400,7 @@ iframe {
 @keyframes wifi-animation {
     0% {
         top: 37px;
-        margin-right: 0px;
+        margin-right: 0;
         width: 25px;
         height: 25px;
         border-radius: 25px;
@@ -399,26 +408,26 @@ iframe {
     }
     20% {
         top: 37px;
-        margin-right: 0px;
+        margin-right: 0;
         width: 25px;
         height: 25px;
         border-radius: 25px;
         opacity: 1;
     }
     40% {
-        top: 24px;
-        margin-right: -12px;
-        width: 50px;
-        height: 50px;
-        border-radius: 50px;
+        top: 14px;
+        margin-right: -23px;
+        width: 70px;
+        height: 70px;
+        border-radius: 70px;
         opacity: .6;
     }
     100% {
-        top: 24px;
-        margin-right: -12px;
-        width: 50px;
-        height: 50px;
-        border-radius: 50px;
+        top: 14px;
+        margin-right: -23px;
+        width: 70px;
+        height: 70px;
+        border-radius: 70px;
         opacity: 0;
     }
 }
