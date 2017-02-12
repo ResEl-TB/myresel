@@ -28,26 +28,39 @@
     {% endblock %}
     {% block presentation %}
         <div class="home-fragment home-presentation">
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-4 col-sm-offset-1">
-                        <span id="bigheart" class="fa fa-heart-o service-icon" aria-hidden="true"></span>
-                    </div>
-                    <div class="col-sm-6">
-                        <h2>{% blocktrans %}Le ResEl : l'association qui gère le réseau sur le campus de l'IMT Atlantique{% endblocktrans %}</h2>
-                        <br />
-                        {% blocktrans %}
-                            <p>Le <strong>ResEl</strong> (pour Réseau des élèves de <a href="https://www.imt-atlantique.fr/">l'IMT Atlantique</a>) est l'association d'élèves qui gère le réseau informatique des résidences des élèves de l'IMT Atlantique, l'une à Plouzané, près de Brest, et l'autre à Rennes.</p
-                            <p>Ce réseau relie entre elles les 600 chambres du campus de Brest et les 100 chambres du campus de Rennes. Les élèves disposant d'un ordinateur bénéficient donc d'un accès permanent à Internet.<p>
-                        {% endblocktrans %}
-                    </div>
+            <div class="container article">
+                <h2>{% blocktrans %}Le ResEl : l'association qui gère le réseau sur le campus de l'IMT Atlantique{% endblocktrans %}</h2>
+                {% blocktrans %}
+                    <p>Le <strong>ResEl</strong> (pour Réseau des élèves de <a href="https://www.imt-atlantique.fr/">l'IMT Atlantique</a>) est l'association d'élèves qui gère le réseau informatique des résidences des élèves de l'IMT Atlantique, l'une à Plouzané, près de Brest, et l'autre à Rennes.</p>
+                {% endblocktrans %}
+                <div>
+                    <span class="fa fa-cloud service-icon"></span>
+                </div>
+            </div>
+
+
+        </div>
+    {% endblock %}
+    <div class="home-fragment home-bg-img">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4 col-sm-offset-1">
+                    <span id="bigheart" class="fa fa-heart-o service-icon" aria-hidden="true"></span>
+                </div>
+                <div class="col-sm-6">
+                    <h2>{% blocktrans %}Le ResEl : l'association qui gère le réseau sur le campus de l'IMT Atlantique{% endblocktrans %}</h2>
+                    <br />
+                    {% blocktrans %}
+                        <p>Le <strong>ResEl</strong> (pour Réseau des élèves de <a href="https://www.imt-atlantique.fr/">l'IMT Atlantique</a>) est l'association d'élèves qui gère le réseau informatique des résidences des élèves de l'IMT Atlantique, l'une à Plouzané, près de Brest, et l'autre à Rennes.</p
+                        <p>Ce réseau relie entre elles les 600 chambres du campus de Brest et les 100 chambres du campus de Rennes. Les élèves disposant d'un ordinateur bénéficient donc d'un accès permanent à Internet.<p>
+                    {% endblocktrans %}
                 </div>
             </div>
         </div>
-    {% endblock %}
+    </div>
     <div class="home-fragment home-services">
         <div class="container">
-            <h2>{% trans "Les services du ResEl" %}</h2>
+            <h2 class="clickable-title"><a href="{% url 'services'%}">{% trans "Les services du ResEl" %}</a></h2>
             <div class="row">
                 {% for service in services %}
                     <div class="col-md-4">
@@ -62,7 +75,7 @@
                 <div class="col-md-4">
                     <a href="{% url 'services'%}">
                         <span class="fa fa-rocket service-icon" aria-hidden="true"></span>
-                        <h3 class="service-title">{% trans "Et plein d'autres services" %}</h3>
+                        <h3 class="service-title">{% trans "Et plein d'autres" %}</h3>
                         <p><span class="fa fa-ellipsis-h" aria-hidden="true"></span></p>
                     </a>
                 </div>
@@ -79,11 +92,11 @@
                         <div class="news-bloc">
                             <a href="{% url 'piece-of-news' pieceofnews.pk %}">
                                 <div class="row">
-                                    <h3 class="title">{{ pieceofnews.title|title }} <small> - {{ pieceofnews.date|date }} - {{ pieceofnews.author.first_name }}</small></h3>
+                                    <h3 class="title">{{ pieceofnews.title|title }}<small> le {{ pieceofnews.date|date }} par {{ pieceofnews.author.first_name }}</small></h3>
                                     <div>{{ pieceofnews.content|safe|truncatewords_html:20 }}</div>
                                 </div>
                             </a>
-                        <hr />
+                            {#                            <hr />#}
                         </div>
                     {% empty %}
                         <div class="news-bloc">{% trans "Pas de nouvelles à l'horizon" %}</div>
