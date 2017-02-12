@@ -179,11 +179,11 @@
 
 .bigger {
     transform: scale(1);
-    margin-top: 20px;
-    margin-bottom: 20px;
-    display: inline-block;
-    border: 0;
-    position: relative;
+    /*margin-top: 20px;*/
+    /*margin-bottom: 20px;*/
+    /*display: inline-block;*/
+    /*border: 0;*/
+    /*position: relative;*/
     z-index: 2;
     transition: all 1200ms cubic-bezier(0.165, 0.84, 0.44, 1);
 }
