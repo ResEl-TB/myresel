@@ -1,5 +1,5 @@
-from campus.subviews.views_rooms import *
-from campus.subviews.views_mails import *
+from campus.views.views_rooms import *
+from campus.views.views_mails import *
 
 
 def home_view(request):

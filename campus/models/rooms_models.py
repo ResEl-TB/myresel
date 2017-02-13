@@ -10,7 +10,7 @@ from datetime import timedelta
 
 from gestion_personnes.models import LdapUser
 import campus.async_tasks as async_tasks
-from campus.submodels.clubs_models import StudentOrganisation
+from campus.models.clubs_models import StudentOrganisation
 
 class Room(models.Model):
     class Meta:

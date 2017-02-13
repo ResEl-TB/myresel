@@ -8,7 +8,8 @@ from django.core.mail import EmailMessage
 from django.views.generic import FormView
 
 from campus.forms import SendMailForm, ClubManagementForm
-from campus.submodels.clubs_models import StudentOrganisation
+from campus.models.clubs_models import StudentOrganisation
+from fonctions.decorators import ae_required
 
 
 def list_clubs(request):
@@ -26,6 +27,7 @@ def list_clubs(request):
         }
     )
 
+@ae_required
 class NewClub(FormView):
     template_name = 'campus/clubs/new_club.html'
     form_class = ClubManagementForm
@@ -37,6 +39,7 @@ class NewClub(FormView):
 
 
 # TODO : gestion des droits
+@ae_required
 class EditClub(FormView):
     template_name = 'campus/clubs/new_club.html'
     form_class = ClubManagementForm

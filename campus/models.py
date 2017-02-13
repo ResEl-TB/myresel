@@ -16,6 +16,6 @@ class LdapGroup(ldapback.models.LdapModel):
     def is_member(self, uid):
         return uid in [member.split(',')[0].split('uid=')[1] for member in self.members]
 
-from campus.submodels.rooms_models import *
-from campus.submodels.mails_models import *
-from campus.submodels.clubs_models import *
+from campus.models.rooms_models import *
+from campus.models.mails_models import *
+from campus.models.clubs_models import *

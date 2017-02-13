@@ -12,10 +12,10 @@ from campus.forms import RoomBookingForm
 from campus.models import RoomBooking, Room, StudentOrganisation
 from fonctions.decorators import ae_required
 
-def calendarView(request, room='all', year=timezone.now().year, month=timezone.now().month, day='all'):
+def calendar_view(request, room='all', year=timezone.now().year, month=timezone.now().month, day='all'):
     """ View to display the month calendar of all events """
 
-    # Slight hack to convert string paremeters in good format
+    # Slight hack to convert string parameters in good format
     year = int(year)
     month = int(month)
 
@@ -33,11 +33,13 @@ def calendarView(request, room='all', year=timezone.now().year, month=timezone.n
             messages.error(request, _('Vous n\'avez pas accès à cette page'))
             return HttpResponseRedirect(reverse('home'))
 
+        # TODO: events that ends during the month also :/
         events = room.roombooking_set.filter(
             start_time__year=year, 
             start_time__month=month
         )
     else:
+        # TODO: events that ends during the month also :/
         events = RoomBooking.objects.filter(
             displayable=True, 
             start_time__year=year,
@@ -70,7 +72,7 @@ def calendarView(request, room='all', year=timezone.now().year, month=timezone.n
     if request.user.is_authenticated():
         queryset = Q()
         for club in StudentOrganisation.filter(members__contains='uid=%s' % request.ldap_user.uid):
-            queryset = queryset | Q(clubs__contains=club.cn)
+            queryset |= Q(clubs__contains=club.cn)
         private_rooms = Room.objects.filter(queryset)
     else:
         private_rooms = []
@@ -96,7 +98,7 @@ def calendarView(request, room='all', year=timezone.now().year, month=timezone.n
 
 @login_required
 @ae_required
-def bookingView(request, booking=None):
+def booking_view(request, booking=None):
     """ View to book a room """
     if booking:
         instance = get_object_or_404(RoomBooking, id=booking)
