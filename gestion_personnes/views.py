@@ -1,10 +1,14 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
+import time
+import re
 
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse, reverse_lazy
+from django.core.mail import EmailMessage
+
 from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
@@ -17,8 +21,8 @@ from gestion_machines.forms import AddDeviceForm
 from gestion_personnes.async_tasks import send_mails
 from gestion_personnes.models import LdapUser, UserMetaData
 from .forms import InscriptionForm, ModPasswdForm, CGUForm, InvalidUID, PersonnalInfoForm, ResetPwdSendForm, \
-    ResetPwdForm, SendUidForm
-
+    ResetPwdForm, SendUidForm, RoutingMailForm
+import unicodedata
 
 class Inscription(View):
     """
@@ -311,3 +315,241 @@ class CheckEmail(View):
             except ObjectDoesNotExist:
                 return HttpResponseForbidden()
         return HttpResponseRedirect(reverse("home"))
+
+
+class MailResEl(View):
+    """
+    Base view to present mail configuration parameters, to propose mail
+    creation and destruction.
+    """
+    template_name = 'gestion_personnes/mail_resel.html'
+
+    def build_address(self, uid, first_name, last_name):
+        handle = first_name + '.' + last_name
+        
+        # If he already exist...
+        uid_num_match = re.match("^[a-z._-]+?([0-9].*)$", uid)
+        if uid_num_match:
+            uid_num = str(uid_num_match.group(1))
+        else:
+            uid_num = ""
+        address = '%s%s@resel.fr' % (handle, uid_num)
+        bearer = LdapUser.filter(object_classes='mailPerson', mail_local_address=address)
+
+
+        if len(bearer) == 0:
+            # SO : http://stackoverflow.com/q/517923
+            handle = unicodedata.normalize(
+                'NFKD',
+                handle + str(uid_num)
+            ).encode('ASCII','ignore').lower()
+        else:
+            handle = None
+
+        return handle
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(MailResEl, self).dispatch(*args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        """ 
+            Display either :
+                - Creation form with rules if has no mail
+                - Configuration options and redirection if is a mailPerson
+        """
+
+        # Is he already a mailPerson ?
+        user = LdapUser.get(pk=request.user.username)
+        mail_proposed_address = None
+
+        if user.has_resel_email():
+            template_name = 'gestion_personnes/mail_resel.html'
+            mail_address = user.mail_local_address[0]
+
+            return render(request, template_name, {'user': user, 'user_mail_address': mail_address})
+
+        else:
+            template_name = 'gestion_personnes/mail_resel_new.html'
+            mail_proposed_address = self.build_address(user.uid, user.first_name, user.last_name)
+            mail_proposed_address += b'@resel.fr'
+
+            return render(request, template_name, {'user': user,
+            'mail_proposed_address': mail_proposed_address})
+
+
+    def post(self, request, *args, **kwargs):
+        # Turning him into a mail person.
+        user = LdapUser.get(pk=request.user.username)
+        if not user.has_resel_email():
+            # Get the right left part
+            homeDir = '/var/mail/virtual/' + user.uid
+            mailDir = user.uid + '/Maildir/'
+            
+            handle = self.build_address(user.uid, user.first_name, user.last_name)
+
+            if handle:
+                mail_address = handle + b'@resel.fr'
+
+                bearer = LdapUser.filter(object_classes='mailPerson', mail_local_address=str(mail_address))
+
+                if len(bearer) != 0:
+                    messages.error(request, 
+                                    'Impossible de créer une adresse mail unique. Contactez support@resel.fr.')
+
+                    return HttpResponseRedirect(reverse("gestion-personnes:mail"))
+
+
+                user.mail_local_address = mail_address
+                user.mail_dir = mailDir
+                user.mail_del_date = None
+                user.home_directory = homeDir
+                user.object_classes.append('mailPerson')
+                user.save()
+
+                # TODO: Send base instructions in first email
+                # TODO: Do not hardcode text (i18n)
+                # Validate mailbox
+                creation_mail = EmailMessage(
+                    subject='Création de votre boîte mail ResEl',
+                    body='Bonjour, \n' +
+                        'Votre nouvelle boîte mail vient d\'être créée.\n' +
+                        'Cordialement, \n L\'équipe ResEl',
+                    from_email='noreply@resel.fr',
+                    reply_to=('support@resel.fr',),
+                    to=mail_address)
+
+                creation_mail.send()
+                
+                messages.success(request, 
+                                'Votre boîte mail a été créée avec succès.')
+
+                return HttpResponseRedirect(reverse("gestion-personnes:mail"))
+            else:
+                messages.error(request,
+                    _("Impossible de créer correctement l'adresse. Contactez support@resel.fr"))
+                return HttpResponseRedirect(reverse("gestion-personnes:mail"))
+
+        else:
+            messages.error(request, 
+                    _("Vous avez déjà une adresse ResEl."))
+            return HttpResponseRedirect(reverse("gestion-personnes:mail"))
+
+
+class DeleteMailResEl(View):
+    """
+        Handles deletion of email address and explications to the user.
+    """
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(DeleteMailResEl, self).dispatch(*args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        user = LdapUser.get(pk=request.user.username)
+
+        if not user.has_resel_email():
+            messages.error(request, _("Cette adresse email n'existe pas ou plus."))
+            return HttpResponseRedirect(reverse("gestion-personnes:mail"))
+
+        template_name = "gestion_personnes/delete_mail.html"
+        mail_address = user.mail_local_address[0]
+        # TODO : check it exists and is linked to this user
+        return render(request, template_name, {'user_mail_address': mail_address})
+
+    def post(self, request, *args, **kwargs):
+        # Get the user address
+        user = LdapUser.get(pk=request.user.username)
+
+        if user.mail_local_address[0] is None:
+            messages.error(request, 
+                    _("Vous n'avez pas d'adresse."))
+            return HttpResponseRedirect(reverse("gestion-personnes:mail"))
+        else:
+            """ 
+                To delete a mail address : 
+                - Empty mail_local_address field
+                - Add maildeldate attribute
+            """
+            if request.POST.get('delete_field', None) == user.mail_local_address[0]:
+                # TODO: Delete this field !
+                user.mail_routing_address = ''
+                user.mail_local_address = ' '
+                user.mail_del_date = date.fromtimestamp(time.time() + 31 * 24 * 3600)
+                user.save()
+
+                messages.success(request, _("Votre demande de suppression a bien été enregistrée."))
+                return HttpResponseRedirect(reverse("gestion-personnes:mail"))
+            else:
+                messages.error(request, _("L'adresse entrée ne correspond pas à votre adresse email."))
+                return HttpResponseRedirect(reverse("gestion-personnes:delete-mail"))
+
+
+class RedirectMailResEl(View):
+    template_name = "gestion_personnes/mail_redirect.html"
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(RedirectMailResEl, self).dispatch(*args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        user = LdapUser.get(pk=request.user.username)
+
+        if not user.has_resel_email():
+                messages.error(request, _("Vous n'avez pas ou plus d'adresse email."))
+                return HttpResponseRedirect(reverse("gestion-personnes:mail"))
+        else:
+            routing_address = user.mail_routing_address
+            # TODO: Be sure to select @resel.fr (!)
+            # Some still have @resel.enst-bretagne.fr mail adresses (and they should keep it)
+            mail_address = user.mail_local_address[0]
+            mail_form = RoutingMailForm(initial={'new_routing_address': routing_address})
+
+            return render(request, self.template_name, {"user_mail_address": mail_address, "user_routing_address": routing_address, "mail_form": mail_form})
+
+    def post(self, request, *args, **kwargs):
+        user = LdapUser.get(pk=request.user.username)
+        if not user.has_resel_email():
+                messages.error(request, _("Vous n'avez pas encore d'adresse email."))
+                return HttpResponseRedirect(reverse("gestion-personnes:mail"))
+        else:
+            mail_form = RoutingMailForm(request.POST)
+            #new_routing_address = request.POST.get("new_routing_address", None)
+
+            if mail_form.is_valid():
+                new_routing_address = mail_form.cleaned_data.get('new_routing_address', None)
+            else:
+                new_routing_address = None
+
+            if new_routing_address is None:
+                return HttpResponseRedirect(reverse("gestion-personnes:redirect-mail"))
+            elif new_routing_address == "":
+                # User cancelled its redirection
+                user.mail_routing_address = ""
+                user.save()
+                messages.success(request, _("La redirection a bien été supprimée."))
+                return HttpResponseRedirect(reverse("gestion-personnes:redirect-mail"))
+            else:
+                user.mail_routing_address = new_routing_address
+                user.save()
+
+                messages.success(request, _("La redirection a bien été créée."))
+                return HttpResponseRedirect(reverse("gestion-personnes:redirect-mail"))
+
+class Webmail(View):
+    """
+        Access webmail or configuration page.
+    """
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(Webmail, self).dispatch(*args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        user = LdapUser.get(pk=request.user.username)
+
+        if user.has_resel_email():
+            return HttpResponseRedirect("https://webmail.resel.fr")
+        else:
+            return HttpResponseRedirect(reverse("gestion-personnes:mail"))
+

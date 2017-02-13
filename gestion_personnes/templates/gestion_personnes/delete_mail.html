@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block titre %}{% trans "Suppression boîte ResEl" %}{% endblock %}
+
+{% block content %}
+<div class="container">
+    
+  <div class="row">
+    <div class="bs-callout bs-callout-danger">
+      <h4> Suppression de votre adresse mail {{user_mail_address}}</h4>
+      <p>
+      Votre adresse sera d'abord désactivée, son contenu (emails et pièces jointes) resteront accessibles pendant 30 jours. <br />
+      Une fois ce délai écoulé, la suppression est définitive ! <br />
+      <strong>Pour annuler la suppression avant 30 jours, il suffit de recréer une boîte email depuis le site ResEl.</strong>
+      </p>
+    </div>
+  </div>
+
+  <div class="row">
+
+    <div class="bs-callout bs-callout-default">
+      <h4>Confirmation</h4>
+      <p>Pour confirmer votre demande de suppression, entrez votre adresse email ResEl actuelle.</p>
+      <p>
+        <form action="" method="POST" class="form-inline">
+            {% csrf_token %}
+            <input type="email" class="form-control" id="delete_field" name="delete_field" placeholder="Email"> 
+            <button type="submit" class="btn btn-danger">Valider la suppression</button>
+        </form>
+      </p>
+    </div>
+  </div>
+
+
+</div> <!-- /.container -->
+{% endblock %}

@@ -36,7 +36,8 @@ class AddDeviceViewCase(TestCase):
         try_delete_user("amanoury")
 
     def test_simple_get_page(self):
-        response = self.client.get(reverse("gestion-machines:ajout"), HTTP_HOST="10.0.3.95")
+        response = self.client.get(reverse("gestion-machines:ajout"),
+                                   HTTP_HOST="10.0.3.95", follow=True)
         self.assertEqual(200, response.status_code)
         self.assertTemplateUsed(response, "gestion_machines/add_device.html")
 
@@ -46,6 +47,13 @@ class AddDeviceViewCase(TestCase):
                                     HTTP_HOST="10.0.3.95", follow=True)
         self.assertEqual(200, response.status_code)
         self.assertEqual(user_machines + 1, len(LdapDevice.filter(owner=self.owner)))
+        self.assertEqual(1, len(mail.outbox))
+
+        # Check if the home page is up to date
+        r = self.client.get(reverse("home"), HTTP_HOST="10.0.3.99", follow=True)
+
+        self.assertEqual(200, r.status_code)
+        self.assertContains(r, "Connecté au ResEl")
         self.assertEqual(1, len(mail.outbox))
 
     # TODO: make test with concurency to try mutiple simultinate presses
@@ -196,6 +204,6 @@ class BandwidthUsageCase(TestCase):
                             HTTP_HOST="10.0.3.199", follow=True)
         self.assertEqual(200, r.status_code)
         data = json.loads(r.content.decode())
-        self.assertEqual(len(data["up"]), settings.BANDWIDTH_BATCHS + 1)
-        self.assertEqual(len(data["down"]), settings.BANDWIDTH_BATCHS + 1)
-        self.assertEqual(len(data["labels"]), settings.BANDWIDTH_BATCHS + 1)
+        self.assertGreaterEqual(settings.BANDWIDTH_BATCHS + 1, len(data["up"]))
+        self.assertGreaterEqual(settings.BANDWIDTH_BATCHS + 1, len(data["down"]), settings.BANDWIDTH_BATCHS )
+        self.assertGreaterEqual(settings.BANDWIDTH_BATCHS + 1, len(data["labels"]), settings.BANDWIDTH_BATCHS)

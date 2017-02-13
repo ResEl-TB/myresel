@@ -3,6 +3,7 @@ import logging
 import time
 from datetime import datetime, timedelta
 
+import math
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -38,7 +39,7 @@ class Reactivation(View):
         return super(Reactivation, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        mac = request.network_data['mac']
+        mac = network.get_mac(request.network_data['ip'])
 
         try:
             device = LdapDevice.get(mac_address=mac)
@@ -99,7 +100,7 @@ class AddDeviceView(View):
             hostname = ldap.get_free_alias(str(request.user))
             alias = form.cleaned_data['alias']
             campus = get_campus(request.network_data['ip'])
-            mac = request.network_data['mac']
+            mac = network.get_mac(request.network_data['ip'])
 
             # In case the user didn't specified any alias, don't make any
             if hostname == alias:
@@ -345,42 +346,36 @@ class BandwidthUsage(View):
         end_st = int(end_date.timestamp())
         duration_st = duration.days * 24 * 60 + duration.seconds
 
-        bare_up = PeopleHistory.objects.filter(
-            uid=self.request.ldap_user.uid,
-            timestamp__gte=start_date.timestamp(),
-            timestamp__lte=end_date.timestamp(),
-            way=PeopleHistory.UP).order_by("timestamp")
+        precision = -int(math.log10(duration_st / batchs))
 
-        bare_down = PeopleHistory.objects.filter(
-            uid=self.request.ldap_user.uid,
-            timestamp__gte=start_date.timestamp(),
-            timestamp__lte=end_date.timestamp(),
-            way=PeopleHistory.DOWN).order_by("timestamp")
+        bare_up = list(PeopleHistory.objects.raw(
+            'SELECT site, cn, way, flow, '
+            'ROUND(timestamp, %i) AS batch, '
+            'SUM(amount) AS amount FROM people_history '
+            'WHERE timestamp >= %i AND '
+            'timestamp <= %i AND '
+            'way="%s" AND '
+            'uid="%s" '
+            'GROUP BY site, cn, way, flow, batch '
+            'ORDER BY timestamp;' %
+            (precision, start_st, end_st, PeopleHistory.UP, self.request.ldap_user.uid)
+        ))
 
-        # Create 2 historygrams
-        hist_time_labels = [i for i in range(start_st, end_st, int(duration_st / batchs))]
-        hist_up = [0 for _ in range(start_st, end_st, int(duration_st / batchs))]
-        i = 0
-        for d in bare_up:
-            try:
-                if d.timestamp > hist_time_labels[i + 1]:
-                    i += 1
-                hist_up[i] += d.amount
-            except IndexError:
-                break
-
-        hist_down = [0 for _ in range(start_st, end_st, int(duration_st / batchs))]
-        i = 0
-        for d in bare_down:
-            try:
-                if d.timestamp > hist_time_labels[i + 1]:
-                    i += 1
-                hist_down[i] += d.amount
-            except IndexError:
-                break
+        bare_down = list(PeopleHistory.objects.raw(
+            'SELECT site, cn, way, flow, '
+            'ROUND(timestamp,%i) AS batch, '
+            'SUM(amount) AS amount FROM people_history '
+            'WHERE timestamp >= %i AND '
+            'timestamp <= %i AND '
+            'way="%s" AND '
+            'uid="%s" '
+            'GROUP BY site, cn, way, flow, batch '
+            'ORDER BY timestamp;' %
+            (precision, start_st, end_st, PeopleHistory.DOWN, self.request.ldap_user.uid)
+        ))
 
         return {
-            "up": hist_up,
-            "down": hist_down,
-            "labels": hist_time_labels,
+            "up": [int(p.amount) for p in bare_up],
+            "down": [int(p.amount) for p in bare_down],
+            "labels": [p.batch for p in bare_up],
         }
