@@ -37,7 +37,6 @@
             <a class="navbar-brand hidden-md hidden-lg" href="{% url 'campus:home' %}">
                 <img src="{% static 'images/campus/elephant-polygon.png' %}" alt="logo-elephant"/>
             </a>
-
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
@@ -57,7 +56,7 @@
                     <ul class="dropdown-menu">
                         <li><a href="{% url 'campus:rooms:booking' %}"><span class="fa fa-fw fa-calendar-plus-o"></span> Réserver une salle</a></li>
                         <li><a href="{% url 'campus:mails:send' %}"><span class="fa fa-fw fa-envelope"></span> Envoyer un mail campus@resel.fr</a></li>
-                        <li><a href="#"><span class="fa fa-fw fa-users"></span> Nouveau club</a></li>
+                        <li><a href="{% url 'campus:clubs:new' %}"><span class="fa fa-fw fa-users"></span> Nouveau club</a></li>
                     </ul>
                 </li>
                 {% if not request.user.is_authenticated %}
