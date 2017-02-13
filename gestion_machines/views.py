@@ -377,5 +377,5 @@ class BandwidthUsage(View):
         return {
             "up": [int(p.amount) for p in bare_up],
             "down": [int(p.amount) for p in bare_down],
-            "labels": [p.timestamp for p in bare_up],
+            "labels": [p.batch for p in bare_up],
         }
