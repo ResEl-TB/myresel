@@ -349,27 +349,27 @@ class BandwidthUsage(View):
         precision = -int(math.log10(duration_st / batchs))
 
         bare_up = list(PeopleHistory.objects.raw(
-            'SELECT uid, way, timestamp,'
+            'SELECT site, cn, way, flow, '
             'ROUND(timestamp, %i) AS batch, '
             'SUM(amount) AS amount FROM people_history '
             'WHERE timestamp >= %i AND '
             'timestamp <= %i AND '
             'way="%s" AND '
             'uid="%s" '
-            'GROUP BY batch '
+            'GROUP BY site, cn, way, flow, batch '
             'ORDER BY timestamp;' %
             (precision, start_st, end_st, PeopleHistory.UP, self.request.ldap_user.uid)
         ))
 
         bare_down = list(PeopleHistory.objects.raw(
-            'SELECT uid, way, timestamp,'
+            'SELECT site, cn, way, flow, '
             'ROUND(timestamp,%i) AS batch, '
             'SUM(amount) AS amount FROM people_history '
             'WHERE timestamp >= %i AND '
             'timestamp <= %i AND '
             'way="%s" AND '
             'uid="%s" '
-            'GROUP BY batch '
+            'GROUP BY site, cn, way, flow, batch '
             'ORDER BY timestamp;' %
             (precision, start_st, end_st, PeopleHistory.DOWN, self.request.ldap_user.uid)
         ))
