@@ -4,116 +4,138 @@
 {% block titre %}Réserver une salle{% endblock %}
 
 {% block css %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/campus/rooms.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'css/jquery.datetimepicker.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/campus/rooms.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.datetimepicker.min.css' %}">
 {% endblock %}
 
 {% block content %}
-<div class="container well" id="content">
-    <div class="row">
-        <div class="col-md-12">
-            <h1 style="margin-top: -10px;" class="text-center">
-                Réserver une salle
-                <span class="small">
+    <div class="container well" id="content">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 style="margin-top: -10px;" class="text-center">
+                    Réserver une salle
+                    <span class="small">
                     <a href="{% url 'campus:rooms:calendar' %}">retour au planning</a>
                 </span>
-            </h1>
-            <hr style="padding-bottom: 20px;">
+                </h1>
+                <hr style="padding-bottom: 20px;">
 
-            <form method="POST" class="form-horizontal">
-                {% csrf_token %}
-                
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group {% if form.description.errors %}has-error{% endif %}">
-                            <label class="col-sm-2 control-label">Description</label>
-                            <div class="col-sm-10">
-                                <textarea class="form-control" rows="5" name="description" placeholder="{{ form.description.help_text }}">{{ form.description.value }}</textarea>
-                                {% if form.description.errors %}<span class="help-block">{{ form.description.errors }}</span>{% endif %}
-                            </div>
-                        </div>
+                <form method="POST" class="form-horizontal">
+                    {% csrf_token %}
 
-                        <div class="form-group {% if form.room.errors %}has-error{% endif %}">
-                            <label class="col-sm-2 control-label">Salle(s)</label>
-                            <div class="col-sm-10">
-                                <select multiple name="room" class="form-control" size="{{ form.room.field.choices|length }}">
-                                    {% for choice_id, choice_label in form.room.field.choices %}
-                                    <option {% if choice_id in form.room.value %}selected{% endif %} value="{{ choice_id }}">{{ choice_label }}</option>
-                                    {% endfor %}
-                                </select>
-                                {% if form.room.errors %}<span class="help-block">{{ form.room.errors }}</span>{% endif %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group {% if form.description.errors %}has-error{% endif %}">
+                                <label class="col-sm-2 control-label">Description</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" rows="5" name="description" placeholder="{{ form.description.help_text }}">{{ form.description.value }}</textarea>
+                                    {% if form.description.errors %}<span class="help-block">{{ form.description.errors }}</span>{% endif %}
+                                </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <div class="col-md-6">
-                        <div class="form-group {% if form.booking_type.errors %}has-error{% endif %}">
-                            <label class="col-sm-2 control-label">Type</label>
-                            <div class="col-sm-10">
-                                <select name="booking_type" class="form-control">
-                                    {% for choice_id, choice_label in form.booking_type.field.choices %}
-                                    <option {% if form.booking_type.value == choice_id %}selected{% endif %} value="{{ choice_id }}">{{ choice_label }}</option>
-                                    {% endfor %}
-                                </select>
-                                {% if form.booking_type.errors %}<span class="help-block">{{ form.booking_type.errors }}</span>{% endif %}
-                            </div>
-                        </div>
-
-                        <div class="form-group {% if form.start_time.errors %}has-error{% endif %}">
-                            <label class="col-sm-2 control-label">Début</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control datetimepicker" name="start_time" value="{{ form.start_time.value|date:'Y-m-d H:i:00' }}">
-                                {% if form.start_time.errors %}<span class="help-block">{{ form.start_time.errors }}</span>{% endif %}
-                            </div>
-                        </div>
-
-                        <div class="form-group {% if form.end_time.errors %}has-error{% endif %}">
-                            <label class="col-sm-2 control-label">Fin</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control datetimepicker" name="end_time" value="{{ form.end_time.value|date:'Y-m-d H:i:00' }}">
-                                {% if form.end_time.errors %}<span class="help-block">{{ form.end_time.errors }}</span>{% endif %}
-                            </div>
-                        </div>
-                        
-                        {% if form.fields.user %}
-                        <div class="form-group {% if form.user.errors %}has-error{% endif %}">
-                            <label class="col-sm-2 control-label">Utilisateur</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" name="user" value="{{ form.user.value }}">
-                                {% if form.user.errors %}<span class="help-block">{{ form.user.errors }}</span>{% endif %}
-                            </div>
-                        </div>
-                        {% endif %}
-
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" {% if form.displayable.value %}checked{% endif %} name="displayable"> Cochez pour afficher sur le calendrier campus
-                                    </label>
+                            <div class="form-group {% if form.room.errors %}has-error{% endif %}">
+                                <label class="col-sm-2 control-label">Salle(s)</label>
+                                <div class="col-sm-10">
+                                    <select multiple name="room" class="form-control" size="{{ form.room.field.choices|length }}">
+                                        {% for choice_id, choice_label in form.room.field.choices %}
+                                            <option {% if choice_id in form.room.value %}selected{% endif %} value="{{ choice_id }}">{{ choice_label }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    {% if form.room.errors %}<span class="help-block">{{ form.room.errors }}</span>{% endif %}
                                 </div>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
-                                <button type="submit" class="btn btn-default">Réserver</button>
+                        <div class="col-md-6">
+                            <div class="form-group {% if form.booking_type.errors %}has-error{% endif %}">
+                                <label class="col-sm-2 control-label">Type</label>
+                                <div class="col-sm-10">
+                                    <select name="booking_type" class="form-control">
+                                        {% for choice_id, choice_label in form.booking_type.field.choices %}
+                                            <option {% if form.booking_type.value == choice_id %}selected{% endif %} value="{{ choice_id }}">{{ choice_label }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    {% if form.booking_type.errors %}<span class="help-block">{{ form.booking_type.errors }}</span>{% endif %}
+                                </div>
+                            </div>
+
+                            <div class="form-group {% if form.start_time.errors %}has-error{% endif %}">
+                                <label class="col-sm-2 control-label">Début</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control datetimepicker" name="start_time" value="{{ form.start_time.value|date:'Y-m-d H:i:00' }}">
+                                    {% if form.start_time.errors %}<span class="help-block">{{ form.start_time.errors }}</span>{% endif %}
+                                </div>
+                            </div>
+
+                            {# TODO: Auto-add 1h after start date #}
+                            <div class="form-group {% if form.end_time.errors %}has-error{% endif %}">
+                                <label class="col-sm-2 control-label">Fin</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control datetimepicker" name="end_time" value="{{ form.end_time.value|date:'Y-m-d H:i:00' }}">
+                                    {% if form.end_time.errors %}<span class="help-block">{{ form.end_time.errors }}</span>{% endif %}
+                                </div>
+                            </div>
+
+                            <div class="form-group {% if form.recurring_rule.errors %}has-error{% endif %}">
+                                <label class="col-sm-2 control-label">Récurrence</label>
+                                <div class="col-sm-10">
+                                    <select name="recurring_rule" class="form-control">
+                                        {% for choice_id, choice_label in form.recurring_rule.field.choices %}
+                                            <option {% if form.recurring_rule.value == choice_id %}selected{% endif %} value="{{ choice_id }}">{{ choice_label }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    {% if form.recurring_rule.errors %}<span class="help-block">{{ form.recurring_rule.errors }}</span>{% endif %}
+                                </div>
+                            </div>
+
+                            {# TODO: hide that when not necessary #}
+                            <div class="form-group {% if form.end_recurring_period.errors %}has-error{% endif %}">
+                                <label class="col-sm-2 control-label">Fin de récurrence</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control datetimepicker" name="end_recurring_period" value="{{ form.end_recurring_period.value|date:'Y-m-d H:i:00' }}">
+                                    {% if form.end_recurring_period.errors %}<span class="help-block">{{ form.end_recurring_period.errors }}</span>{% endif %}
+                                </div>
+                            </div>
+
+                            {% if form.fields.user %}
+                                <div class="form-group {% if form.user.errors %}has-error{% endif %}">
+                                    <label class="col-sm-2 control-label">Utilisateur</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" name="user" value="{{ form.user.value }}">
+                                        {% if form.user.errors %}<span class="help-block">{{ form.user.errors }}</span>{% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" {% if form.displayable.value %}checked{% endif %} name="displayable"> Cochez pour afficher sur le calendrier campus
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-offset-2 col-sm-10">
+                                    <button type="submit" class="btn btn-default">Réserver</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
-</div>
 {% endblock %}
 
 {% block javascript %}
-<script src="{% static 'js/jquery.datetimepicker.full.min.js' %}"></script>
-<script type="text/javascript">
-    jQuery.datetimepicker.setLocale( "{{ request.LANGUAGE_CODE }}" );
-    $( ".datetimepicker" ).datetimepicker({
-        format: 'Y-m-d H:i:00',
-    });
-</script>
+    <script src="{% static 'js/jquery.datetimepicker.full.min.js' %}"></script>
+    <script type="text/javascript">
+        jQuery.datetimepicker.setLocale( "{{ request.LANGUAGE_CODE }}" );
+        $( ".datetimepicker" ).datetimepicker({
+            format: 'Y-m-d H:i:00',
+        });
+    </script>
 {% endblock %}

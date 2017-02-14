@@ -16,14 +16,17 @@ class RoomBookingForm(ModelForm):
         user = kwargs.pop('user', None)
         super(RoomBookingForm, self).__init__(*args, **kwargs)
 
+        # Display the rooms the user is allowed to book
         self.user = user.uid
         if not RoomAdmin.objects.filter(user__username=user.uid):
             del self.fields['user']
             clubs = StudentOrganisation.filter(members__contains='uid=%s' % user.uid)
             queryset = Q(private=False)
             for club in clubs:
-                queryset = queryset | Q(private=True, clubs__contains=club.cn)
-            self.fields['room'] = ModelMultipleChoiceField(queryset=queryset)
+                queryset |= Q(private=True, clubs__contains=club.cn)
+            self.fields['room'] = ModelMultipleChoiceField(
+                queryset=Room.objects.filter(queryset)
+            )
 
     def save(self, commit=True, *args, **kwargs):
         m = super(RoomBookingForm, self).save(commit=False, *args, **kwargs)
@@ -66,11 +69,13 @@ class RoomBookingForm(ModelForm):
         m.notify_mailing_list()
         return m
 
+
     def clean(self):
         cleaned_data = super(RoomBookingForm, self).clean()
         start_time = cleaned_data['start_time']
         end_time = cleaned_data['end_time']
 
+        # DAT HACK
         piano, created = Room.objects.get_or_create(
             name='Salle piano',
             defaults={'location': 'F', 'private': True},
@@ -80,24 +85,26 @@ class RoomBookingForm(ModelForm):
             defaults={'location': 'F', 'private': False},
         )
 
-        if start_time < datetime.datetime.now():
-            self.add_error('start_time', _('La date de début est antérieure à aujourd\'hui'))
+        # Deactivated because it is possible to add past events for record
+        # if start_time < datetime.datetime.now():
+        #     self.add_error('start_time', _('La date de début est antérieure à aujourd\'hui'))
 
         if end_time < start_time:
             self.add_error('end_time', _('La date de fin est avant la date de début de l\'évènement'))
 
-        if start_time.date() != end_time.date():
-            self.add_error('end_time', _('Vous ne pouvez réserver sur plusieurs jours'))
+        # Deactivated because why hu ??
+        # if start_time.date() != end_time.date():
+        #     self.add_error('end_time', _('Vous ne pouvez réserver sur plusieurs jours'))
 
+        # Check if room are available
         for room in cleaned_data['room']:
+            # DAT HACK BIS
             if 'piano' in room.name.lower() or 'réunion' in room.name.lower():
                 if not piano.is_free(start_time, end_time) or \
                         not meeting.is_free(start_time, end_time):
-                    self.add_error('room', _('Une des salles n\'est pas libre'))
-                    break
+                    self.add_error('room', _("La salle %s n'est pas disponible") % room)
             elif not room.is_free(start_time, end_time):
-                self.add_error('room', _('Une des salles n\'est pas libre'))
-                break
+                self.add_error('room', _("La salle %s n'est pas disponible") % room)
 
 class SendMailForm(ModelForm):
     class Meta:
