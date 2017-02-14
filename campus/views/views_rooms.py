@@ -85,6 +85,12 @@ def calendar_view(request, room='all', year=timezone.now().year, month=timezone.
     q = construct_query(request, start_date, end_date, room)
     events = RoomBooking.objects.filter(q)
 
+    single_events = []
+
+    for event in events:
+        for occ in event.get_occurences():
+            single_events.append((occ, event))
+
     # calendar date limits
     if day > 0:  # Show a single day
         day = int(day)
@@ -105,7 +111,7 @@ def calendar_view(request, room='all', year=timezone.now().year, month=timezone.
                     )
                 else:
                     week_events.append(
-                        (datetime.date(year=year, month=month, day=day), [e for e in events if e.start_time.day == day])
+                        (datetime.date(year=year, month=month, day=day), [e[1] for e in single_events if e[0].day == day])
                     )
             cal.append(week_events)
 

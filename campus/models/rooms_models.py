@@ -1,3 +1,4 @@
+from dateutil.relativedelta import relativedelta
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
@@ -137,8 +138,8 @@ class RoomBooking(models.Model):
         ('NONE', _("Pas de récurrence")),
         ('DAILY', _("Quotidient")),
         ('WEEKLY', _("Hebdomadaire")),
-        # ('MONTHLY', _("Mensuel")),  TODO: Quand j'aurais le temps
-        # ('ANNUALLY', _("Annuel")),
+        ('MONTHLY', _("Mensuel")),
+        ('ANNUALLY', _("Annuel")),
     )
 
     description = models.TextField(
@@ -201,8 +202,10 @@ class RoomBooking(models.Model):
             return [self.start_time]
         else:
             delta = {
-                'DAILY': timedelta(days=1),
-                'WEEKLY': timedelta(week=1),
+                'DAILY': relativedelta(days=1),
+                'WEEKLY': relativedelta(weeks=1),
+                'MONTHLY': relativedelta(months=1),
+                'ANNUALLY': relativedelta(years=1),
             }
             # TODO: make a test to check if this condition is executed
             if self.end_recurring_period is None:
@@ -213,7 +216,7 @@ class RoomBooking(models.Model):
             while current_occ <= self.end_recurring_period:
                 occurrences.append(current_occ)
                 current_occ = current_occ + delta[self.recurring_rule]
-            return  occurrences
+            return occurrences
 
     def __str__(self):
         return '%s - %s' % (self.description, self.start_time.strftime('Début le %d %B %Y à %H:%M'))
