@@ -317,7 +317,7 @@ PHONENUMBER_DEFAULT_REGION = "FR"
 # QOS Conf
 
 # Number of batchs to do, smaller is faster but less precise
-BANDWIDTH_BATCHS = 5
+BANDWIDTH_BATCHS = 2
 
 
 # Redis conf
