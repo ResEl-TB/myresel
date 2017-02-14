@@ -1,8 +1,6 @@
 from django.db import models
-from django.core.mail import EmailMessage
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
-from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 
 import django_rq
@@ -113,7 +111,7 @@ class RoomBookingManager(models.Manager):
             start_time__year=start,
             start_time__month=end,
             *args,
-            **kwargs,
+            **kwargs
         )
 
 class RoomBooking(models.Model):
@@ -189,6 +187,7 @@ class RoomBooking(models.Model):
         choices=RECURRING_CHOICES,
         help_text=_('Type de recurrence'),
         default='NONE',
+        max_length=10,
     )
 
     end_recurring_period = models.DateTimeField(

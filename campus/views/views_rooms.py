@@ -22,6 +22,8 @@ def calendar_view(request, room='all', year=timezone.now().year, month=timezone.
     # Building calendar with events
     calendar.setfirstweekday(calendar.MONDAY)
     cal = list()
+
+    # View the calendar for a specific room
     if room != 'all':
         room = Room.objects.get(pk=int(room))
 
@@ -45,6 +47,8 @@ def calendar_view(request, room='all', year=timezone.now().year, month=timezone.
             start_time__year=year,
             start_time__month=month,
         )
+
+    # calendar date limits
     if day != 'all':
         day = int(day)
         current_date = datetime.date(year=year, month=month, day=day)

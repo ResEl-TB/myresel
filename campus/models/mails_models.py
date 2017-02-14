@@ -4,7 +4,7 @@ from django.dispatch import receiver
 
 import django_rq
 from gestion_personnes.models import LdapUser
-from campus.models import LdapGroup
+from gestion_personnes.models import LdapGroup
 from campus import async_tasks
 
 class Mail(models.Model):

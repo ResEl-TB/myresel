@@ -27,7 +27,7 @@ def list_clubs(request):
         }
     )
 
-@ae_required
+# TODO : gestion des droits
 class NewClub(FormView):
     template_name = 'campus/clubs/new_club.html'
     form_class = ClubManagementForm
@@ -39,7 +39,6 @@ class NewClub(FormView):
 
 
 # TODO : gestion des droits
-@ae_required
 class EditClub(FormView):
     template_name = 'campus/clubs/new_club.html'
     form_class = ClubManagementForm
