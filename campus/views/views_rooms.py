@@ -15,6 +15,11 @@ from campus.forms import RoomBookingForm
 from campus.models import RoomBooking, Room, StudentOrganisation
 from fonctions.decorators import ae_required
 
+class UserNotAuthenticatedException(Exception):
+    pass
+
+class NotAllowedException(Exception):
+    pass
 
 def construct_query(request, start_date, end_date, room='all'):
     """
@@ -31,14 +36,11 @@ def construct_query(request, start_date, end_date, room='all'):
     if room == 'all':
         q_rooms = Q()
     else:
-        room = Room.objects.get(pk=int(room))
         if not request.user.is_authenticated():
-            messages.error(request, _('Vous devez être connecté pour accéder à cette page'))
-            return HttpResponseRedirect(reverse('home'))
+            raise UserNotAuthenticatedException(_('Vous devez être connecté pour accéder à cette page'))
 
         if not room.user_can_access(request.ldap_user):
-            messages.error(request, _('Vous n\'avez pas accès à cette page'))
-            return HttpResponseRedirect(reverse('home'))
+            raise NotAllowedException(_('Vous n\'avez pas accès à cette page'))
 
         q_rooms &= Q(room__id=room.pk)
 
@@ -82,7 +84,13 @@ def calendar_view(request, room='all', year=timezone.now().year, month=timezone.
     calendar.setfirstweekday(calendar.MONDAY)
     cal = list()
 
-    q = construct_query(request, start_date, end_date, room)
+    if room != 'all':
+        room = Room.objects.get(pk=int(room))
+    try:
+        q = construct_query(request, start_date, end_date, room)
+    except (UserNotAuthenticatedException, NotAllowedException) as e :
+        messages.error(request, e)
+        return HttpResponseRedirect(reverse('campus:home'))
     events = RoomBooking.objects.filter(q)
 
     single_events = []
@@ -92,6 +100,7 @@ def calendar_view(request, room='all', year=timezone.now().year, month=timezone.
             single_events.append((occ, event))
 
     # calendar date limits
+    # TODO: show events that last multiple days
     if day > 0:  # Show a single day
         day = int(day)
         current_date = datetime.date(year=year, month=month, day=day)
