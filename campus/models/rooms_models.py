@@ -55,7 +55,7 @@ class Room(models.Model):
 
     def user_can_access(self, user):
         """ Checks if a user can access the room """
-        
+
         if self.private:
             granted = False
             for club in self.get_clubs():
@@ -91,7 +91,7 @@ class Room(models.Model):
         return clubs
 
     def __str__(self):
-        return '%s - %s' % (self.name, self.get_location_display()) 
+        return '%s - %s' % (self.name, self.get_location_display())
 
     def is_free(self, start_date, end_date):
         """ Checks if a room is free between the time range given """
@@ -101,9 +101,26 @@ class Room(models.Model):
             end_time__gt=start_date
         ).count() == 0
 
+
+class RoomBookingManager(models.Manager):
+    """
+    Custom Manager for RoomBooking object
+
+    Because some dates methods are hard, so we implement them once for all here.
+    """
+    def in_date_range(self, start, end, *args, **kwargs):
+        return self.filter(
+            start_time__year=start,
+            start_time__month=end,
+            *args,
+            **kwargs,
+        )
+
 class RoomBooking(models.Model):
     class Meta:
         verbose_name = _('réservation')
+
+    objects = RoomBookingManager()
 
     BOOKING_TYPES = (
         ('party', _('Soirée')),
@@ -118,22 +135,33 @@ class RoomBooking(models.Model):
         ('hidden', _('Ne pas afficher sur le calendrier')),
     )
 
+    RECURRING_CHOICES = (
+        ('NONE', _("Pas de récurrence")),
+        ('DAILY', _("Quotidient")),
+        ('WEEKLY', _("Hebdomadaire")),
+        # ('MONTHLY', _("Mensuel")),  TODO: Quand j'aurais le temps
+        # ('ANNUALLY', _("Annuel")),
+    )
+
     description = models.TextField(
         help_text=_('description de l\'évènement'),
     )
 
     room = models.ManyToManyField(
         'Room',
+        db_index=True,
         help_text=_('indique dans quelle salle se déroule l\'évènement'),
         verbose_name=_('Salle(s)'),
     )
 
     start_time = models.DateTimeField(
+        db_index=True,
         help_text=_('début de l\'évènement'),
         verbose_name=_('Début de l\'evènement'),
     )
 
     end_time = models.DateTimeField(
+        db_index=True,
         help_text=_('fin de l\'évènement'),
         verbose_name=_('Fin de l\'évènement'),
     )
@@ -148,7 +176,7 @@ class RoomBooking(models.Model):
         max_length=50,
         choices=BOOKING_TYPES,
         help_text=_('type d\'évènement'),
-        verbose_name='Type', 
+        verbose_name='Type',
     )
 
     displayable = models.BooleanField(
@@ -156,6 +184,37 @@ class RoomBooking(models.Model):
         default=True,
         verbose_name=_('Affichable'),
     )
+
+    recurring_rule = models.CharField(
+        choices=RECURRING_CHOICES,
+        help_text=_('Type de recurrence'),
+        default='NONE',
+    )
+
+    end_recurring_period = models.DateTimeField(
+        verbose_name=_("fin de la récurrence"),
+        null=True, blank=True, db_index=True,
+        help_text=_("Cette date est ignorée pour les événements uniques.")
+    )
+
+    def get_occurences(self):
+        if self.recurring_rule == 'NONE':
+            return [self.start_time]
+        else:
+            delta = {
+                'DAILY': timedelta(days=1),
+                'WEEKLY': timedelta(week=1),
+            }
+            # TODO: make a test to check if this condition is executed
+            if self.end_recurring_period is None:
+                return [self.start_time]
+
+            occurrences = []
+            current_occ = self.start_time
+            while current_occ <= self.end_recurring_period:
+                occurrences.append(current_occ)
+                current_occ = current_occ + delta[self.recurring_rule]
+            return  occurrences
 
     def __str__(self):
         return '%s - %s' % (self.description, self.start_time.strftime('Début le %d %B %Y à %H:%M'))
