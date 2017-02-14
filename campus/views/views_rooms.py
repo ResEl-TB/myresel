@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+from dateutil.relativedelta import relativedelta
 from django.shortcuts import render, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
@@ -12,21 +15,23 @@ from campus.forms import RoomBookingForm
 from campus.models import RoomBooking, Room, StudentOrganisation
 from fonctions.decorators import ae_required
 
-def calendar_view(request, room='all', year=timezone.now().year, month=timezone.now().month, day='all'):
-    """ View to display the month calendar of all events """
 
-    # Slight hack to convert string parameters in good format
-    year = int(year)
-    month = int(month)
+def construct_query(request, start_date, end_date, room='all'):
+    """
+    Construct a query to get all the events between 2 dates
+    and in specific rooms
 
-    # Building calendar with events
-    calendar.setfirstweekday(calendar.MONDAY)
-    cal = list()
-
-    # View the calendar for a specific room
-    if room != 'all':
+    :param request:
+    :param start_date:
+    :param end_date:
+    :param room:
+    :return:
+    """
+    q_rooms = Q()
+    if room == 'all':
+        q_rooms = Q()
+    else:
         room = Room.objects.get(pk=int(room))
-
         if not request.user.is_authenticated():
             messages.error(request, _('Vous devez être connecté pour accéder à cette page'))
             return HttpResponseRedirect(reverse('home'))
@@ -35,24 +40,56 @@ def calendar_view(request, room='all', year=timezone.now().year, month=timezone.
             messages.error(request, _('Vous n\'avez pas accès à cette page'))
             return HttpResponseRedirect(reverse('home'))
 
-        # TODO: events that ends during the month also :/
-        events = room.roombooking_set.filter(
-            start_time__year=year, 
-            start_time__month=month
-        )
+        q_rooms &= Q(room__id=room.pk)
+
+    q_dates_start_in = Q(
+        start_time__gte=start_date,
+        start_time__lt=end_date
+    )
+
+    q_dates_end_in = Q(
+        end_time__gte=start_date,
+        end_time__lt=end_date
+    )
+
+    q_recc_end = Q(
+        start_time__gte=start_date,
+        end_recurring_period__gte=end_date,
+    ) & (Q(recurring_rule='DAILY') | Q(recurring_rule='WEEKLY') | Q(recurring_rule='MONTHLY'))
+
+    return q_rooms & (q_dates_start_in | q_dates_end_in | q_recc_end)
+
+def calendar_view(request, room='all', year=timezone.now().year, month=timezone.now().month, day='all'):
+    """ View to display the month calendar of all events """
+
+    # Slight hack to convert string parameters in good format
+    year = int(year)
+    month = int(month)
+
+    # TODO: renormalize for missing day month ?
+    # Show either the whole month or a single day
+    if day == 'all':
+        day = -1
+        start_date = datetime.datetime(year=year, month=month, day=1)
+        end_date = start_date + relativedelta(months=+1)
+
     else:
-        # TODO: events that ends during the month also :/
-        events = RoomBooking.objects.filter(
-            displayable=True, 
-            start_time__year=year,
-            start_time__month=month,
-        )
+        day = int(day)
+        start_date = datetime.datetime(year=year, month=month, day=day)
+        end_date = start_date + relativedelta(days=+1)
+
+    # Building calendar with events
+    calendar.setfirstweekday(calendar.MONDAY)
+    cal = list()
+
+    q = construct_query(request, start_date, end_date, room)
+    events = RoomBooking.objects.filter(q)
 
     # calendar date limits
-    if day != 'all':
+    if day > 0:  # Show a single day
         day = int(day)
         current_date = datetime.date(year=year, month=month, day=day)
-        events = events.filter(start_time__day=day)
+
         cal.append(
             [(datetime.date(year=year, month=month, day=day), events)]
         )
