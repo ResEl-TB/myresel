@@ -3,6 +3,7 @@ import re
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.mail import EmailMessage
 from django.core.mail import mail_admins
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
@@ -91,3 +92,30 @@ class AjoutManuelForm(forms.Form):
         except ObjectDoesNotExist:
            pass
         return mac
+
+    def send_admin_email(self, ldap_user):
+        # Envoi d'un mail à support
+        mail = EmailMessage(
+            subject="Ajout machine sur le compte de %(user)s" % {'user': ldap_user.uid},
+            body="L'utilisateur %(user)s souhaite ajouter une machine à son compte."
+                 "\n\nuid : %(user)s"
+                 "\nPrénom NOM : %(firstname)s %(lastname)s"
+                 "\n\nMAC : %(mac)s"
+                 "\n\nDescription de la demande:"
+                 "\n\n%(desc)s"
+                 "\n\n----------------------------"
+                 "\nCe message est un message automatique généré par le site resel.fr, il convient de répondre à "
+                 "l'utilisateur et non ce message."
+                 "\nIl est important de noter que l'utilisateur doit expliquer pourquoi il ne peut pas inscrire sa"
+                 "machine normalement, le cas le plus courant étant les consoles de jeu." % {
+                     'user': ldap_user.uid,
+                     'lastname': ldap_user.last_name.upper(),
+                     'firstname': ldap_user.first_name,
+                     'mac': self.cleaned_data['mac'],
+                     'desc': self.cleaned_data['description']
+                 },
+            from_email=settings.SERVER_EMAIL,
+            reply_to=[ldap_user.email],
+            to=["support@resel.fr"],
+        )
+        mail.send()

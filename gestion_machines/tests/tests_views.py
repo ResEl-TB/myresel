@@ -246,7 +246,6 @@ class ManualAddCase(TestCase):
             self.assertContains(r, "Adresse MAC non valide")
 
     def test_valid_macs(self):
-
         for mac in self.valid_macs:
             r = self.client.post(reverse("gestion-machines:ajout-manuel"),
                                  {'mac': mac, 'description': "fake description"},

@@ -8,7 +8,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.mail import EmailMessage, mail_admins
+from django.core.mail import mail_admins
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
@@ -22,7 +22,6 @@ from fonctions.decorators import resel_required, unknown_machine
 from fonctions.network import get_campus
 from gestion_machines.models import LdapDevice, PeopleHistory
 from gestion_personnes.models import LdapUser
-from myresel.settings_local import SERVER_EMAIL
 from .forms import AddDeviceForm, AjoutManuelForm
 
 logger = logging.getLogger("default")
@@ -165,31 +164,7 @@ class AjoutManuel(View):
         form = self.form_class(request.POST)
 
         if form.is_valid():
-            # Envoi d'un mail à support
-            mail = EmailMessage(
-                subject="Ajout machine sur le compte de %(user)s" % {'user': request.ldap_user.uid},
-                body="L'utilisateur %(user)s souhaite ajouter une machine à son compte."
-                     "\n\nuid : %(user)s"
-                     "\nPrénom NOM : %(firstname)s %(lastname)s"
-                     "\n\nMAC : %(mac)s"
-                     "\n\nDescription de la demande:"
-                     "\n\n%(desc)s"
-                     "\n\n----------------------------"
-                     "\nCe message est un message automatique généré par le site resel.fr, il convient de répondre à "
-                     "l'utilisateur et non ce message."
-                     "\nIl est important de noter que l'utilisateur doit expliquer pourquoi il ne peut pas inscrire sa"
-                     "machine normalement, le cas le plus courant étant les consoles de jeu." % {
-                         'user': request.ldap_user.uid,
-                         'lastname': request.ldap_user.last_name.upper(),
-                         'firstname': request.ldap_user.first_name,
-                         'mac': form.cleaned_data['mac'],
-                         'desc': form.cleaned_data['description']
-                     },
-                from_email=SERVER_EMAIL,
-                reply_to=[request.user.email],
-                to=["support@resel.fr"],
-            )
-            mail.send()
+            form.send_admin_email(request.ldap_user)
 
             messages.success(request, _(
                 "Votre demande a été envoyée aux administrateurs. L'un d'eux vous contactera d'ici peu de temps."))
