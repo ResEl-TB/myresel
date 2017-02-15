@@ -1,7 +1,13 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% load static %}
 
 {% block titre %}{% trans "Demande d'enregistrement de machine" %}{% endblock %}
+
+
+{% block css %}
+    <link href="{% static 'css/add_manual_device.css' %}" rel="stylesheet">
+{% endblock %}
 
 {% block content %}
     <div class="container">
@@ -9,13 +15,12 @@
         <div class="row">
             <div class="col-sm-offset-1 col-sm-10">
                 {% blocktrans %}
-
                     <div class="alert alert-info">
-                        Vous pouvez par le biais de ce formulaire demander l'ajout d'une machine à votre compte ResEl, cela est utile
+                        Vous pouvez avec ce formulaire demander l'ajout d'une machine à votre compte, cela est utile
                         lorsque le système d'inscription automatique ne fonctionne pas (anciennes consoles de jeux, anciens téléphones...).
                     </div>
-                    <div class="alert alert-warning" style="font-size: 1.2em">
-                        <strong>Important : </strong>
+                    <div class="alert alert-warning" style="font-size: 1.3em">
+                        <strong><span class="fa fa-warning"></span> Important : </strong>
                         Il est important <strong>d'expliquer clairement</strong> pourquoi cette machine n'a pas pu être ajoutée via le système automatique, dans le cas contraire,
                         <strong>les administrateurs ResEl se donneront le droit de refuser l'ajout de la machine au compte</strong>.
                     </div>
@@ -38,4 +43,29 @@
             </div>
         </div>
     </div>
+
+    <div id="warning-overlay">
+        <div class="page-title">
+            <div class="container">
+                <span class="fa fa-fw fa-times close"></span>
+                <h1>Comment connecter une nouvelle machine au ResEl</h1>
+            </div>
+        </div>
+        <div class="container">
+
+
+            <div class="row">
+                <div class="col-md-4"><span class="fa fa-wifi"></span></div>
+                <div class="col-md-6">Connectez-vous avec votre nouvel appareil sur <strong>ResEl Secure</strong></div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
+
+{% block javascript %}
+    <script>
+        $(".close").on("click", function (e) {
+            $("#warning-overlay").fadeOut();
+        })
+    </script>
+{%  endblock %}
