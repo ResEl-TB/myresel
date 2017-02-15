@@ -2,13 +2,12 @@
     background: #225378;
     color: #ffffff;
     width: 100%;
-    min-height: 100%;
+    min-height: 1000%;
     z-index: 1000;
     position: absolute;
     left: 0;
     top: 0;
     font-family: 'Roboto', 'sans-serif';
-    font-size: 1.05em;
 }
 
 #warning-overlay .close {
@@ -17,6 +16,22 @@
     margin-top: 10px;
 }
 
+.text-tuto {
+    font-size: 1.3em;
+    min-height: 100px;
+    padding-top: 70px;
+}
+
+.close-btn {
+    font-size: 1.4em;
+}
+
+.tuto-nbr {
+    padding-top: 50px;
+    font-size: 4em;
+    color: #6289af;
+    font-weight: bolder;
+}
 #warning-overlay .btn {
     background: none;
     color: #F79420;
@@ -30,12 +45,16 @@
     margin: 20px;
 }
 
-#warning-overlay a, a:visited {
+#warning-overlay a, #warning-overlay a:visited {
     color: #F79420;
 }
 
 #warning-overlay a:hover, #warning-overlay a:active, #warning-overlay a:focus{
     color: #b96400;
+}
+
+#warning-overlay .row {
+    margin-top: 20px;
 }
 
 .page-title {
@@ -48,13 +67,13 @@
 
 }
 
-.col-sm-6 {
-    padding: 0;
+hr {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.75), rgba(0, 0, 0, 0));
 }
 
 .main-content {
-    box-shadow: inset 0 5px 6px 0 #122a3c;
-    padding-top: 30px;
 }
 
 .contact-zone {
@@ -62,7 +81,7 @@
 }
 
 
-strong {
+#warning-overlay strong {
     color: #F79420
 }
 

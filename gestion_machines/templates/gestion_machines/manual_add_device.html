@@ -48,15 +48,40 @@
         <div class="page-title">
             <div class="container">
                 <span class="fa fa-fw fa-times close"></span>
-                <h1>Comment connecter une nouvelle machine au ResEl</h1>
+                <h1>Nouvelle machine sur le ResEl</h1>
             </div>
         </div>
-        <div class="container">
-
+        <div class="container main-content text-center">
+            <div class="row">
+                <div class="col-md-2 tuto-nbr hidden-xs">1</div>
+                <div class="col-md-6 text-tuto">
+                    <div>Sur votre nouvel appareil connectez-vous à <strong>ResEl Secure</strong> <br />
+                        Ou branchez votre câble Ethernet dans votre chambre</div>
+                </div>
+                <div class="col-md-4"><img src="{% static "images/inscription-zone/subscribed-on-995-2.png" %}" width="270" class="img-responsive"/></div>
+            </div>
+            <hr />
 
             <div class="row">
-                <div class="col-md-4"><span class="fa fa-wifi"></span></div>
-                <div class="col-md-6">Connectez-vous avec votre nouvel appareil sur <strong>ResEl Secure</strong></div>
+                <div class="col-md-2 tuto-nbr hidden-xs">2</div>
+                <div class="col-md-6 text-tuto">
+                    <p>Rendez-vous dans votre sur <a href="https://resel.fr">https://resel.fr</a> <br />
+                        <strong>Connectez-vous</strong> avec vos identifiants ResEl</p>
+                </div>
+                <div class="col-md-4"><img src="{% static "images/manual_add_tuto/login_form.png" %}" width="270" class="img-responsive"/></div>
+            </div>
+            <hr />
+
+            <div class="row">
+                <div class="col-md-2 tuto-nbr hidden-xs">3</div>
+                <div class="col-md-6 text-tuto"><p><strong>Enregistrez</strong> votre nouvel appareil</p></div>
+                <div class="col-md-4"><img src="{% static "images/manual_add_tuto/add_device_button.png" %}" width="270" class="img-responsive"/></div>
+
+            </div>
+            <hr />
+
+            <div class="row">
+                <a class="close-btn btn btn-lg" href="#"><span class="fa fa-warning"></span> Cela ne fonctionne pas ?</a>
             </div>
         </div>
     </div>
@@ -64,8 +89,11 @@
 
 {% block javascript %}
     <script>
+        $(".close-btn").on("click", function (e) {
+            $("#warning-overlay").fadeOut();
+        });
         $(".close").on("click", function (e) {
             $("#warning-overlay").fadeOut();
-        })
+        });
     </script>
 {%  endblock %}
