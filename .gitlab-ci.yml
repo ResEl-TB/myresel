@@ -62,7 +62,7 @@ test_django:
       - htmlcov/
   stage: test
   script:
-    - coverage run --source=. manage.py test --noinput
+    - coverage run --rcfile=.coveragerc manage.py test --noinput
     - coverage report
     - coverage html
     - grep pc_cov htmlcov/index.html | egrep -o "[0-9]+\%" | awk '{ print "covered " $1;}'
@@ -73,7 +73,7 @@ pylint:
   script:
     - pip3 install pylint --quiet
     - pip3 install pylint-django --quiet
-    - pylint --rcfile=.pylintrc myresel
+    - pylint --rcfile=.pylintrc ./*
   allow_failure: true
 
 deploy to brest:
