@@ -142,6 +142,13 @@ class RoomBooking(models.Model):
         ('ANNUALLY', _("Annuel")),
     )
 
+    STATUS_CHOICES = (
+        ('NEW', _("Non validé")),
+        ('VALIDATED', _("Validé")),
+        ('REFUSED', _("Refusé")),
+        ('DELETED', _("Supprimé")),
+    )
+
     description = models.TextField(
         help_text=_('description de l\'évènement'),
     )
@@ -195,6 +202,20 @@ class RoomBooking(models.Model):
         verbose_name=_("fin de la récurrence"),
         null=True, blank=True, db_index=True,
         help_text=_("Cette date est ignorée pour les événements uniques.")
+    )
+
+    status = models.TextField(
+        choices=STATUS_CHOICES,
+        max_length=15,
+        default="NEW",
+        help_text=_('Statut'),
+    )
+
+    # If the event belongs to an organisation (club or association)
+    organisation = models.TextField(
+        max_length=60,
+        null=True,
+        blank=True,
     )
 
     def get_occurences(self):
