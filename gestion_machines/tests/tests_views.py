@@ -201,7 +201,7 @@ class ManualAddCase(TestCase):
         r = self.client.get(reverse("gestion-machines:ajout-manuel"),
                                     HTTP_HOST="10.0.3.99", follow=True)
         self.assertEqual(200, r.status_code)
-        self.assertTemplateUsed(r, "gestion_machines/ajout-manuel.html")
+        self.assertTemplateUsed(r, "gestion_machines/manual_add_device.html")
 
         r = self.client.post(reverse("gestion-machines:ajout-manuel"),
                                     {'mac': '01:12:23:34:45:56',
@@ -228,7 +228,7 @@ class ManualAddCase(TestCase):
                              HTTP_HOST="10.0.3.99", follow=True)
 
         self.assertEqual(200, r.status_code)
-        self.assertTemplateUsed(r, 'gestion_machines/ajout-manuel.html')
+        self.assertTemplateUsed(r, 'gestion_machines/manual_add_device.html')
         self.assertContains(r, "Cette machine est")
         self.assertEqual(1, len(mail.outbox))
 
@@ -238,7 +238,7 @@ class ManualAddCase(TestCase):
                                  {'mac': mac, 'description': "fake description"},
                                  HTTP_HOST="10.0.3.99", follow=True)
             self.assertEqual(200, r.status_code)
-            self.assertTemplateUsed(r, 'gestion_machines/ajout-manuel.html')
+            self.assertTemplateUsed(r, 'gestion_machines/manual_add_device.html')
             self.assertContains(r, "Adresse MAC non valide")
 
     def test_valid_macs(self):
@@ -257,7 +257,7 @@ class ManualAddCase(TestCase):
                                     HTTP_HOST="10.0.3.99", follow=True)
 
         self.assertEqual(200, r.status_code)
-        self.assertTemplateUsed(r, 'gestion_machines/ajout-manuel.html')
+        self.assertTemplateUsed(r, 'gestion_machines/manual_add_device.html')
         self.assertContains(r, "Ce champ est obligatoire.")
 
 

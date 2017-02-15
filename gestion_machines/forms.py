@@ -57,7 +57,7 @@ class AddDeviceForm(forms.Form):
         return alias
 
 
-class AjoutManuelForm(forms.Form):
+class ManualDeviceAddForm(forms.Form):
     mac = forms.CharField(label=_("Adresse MAC de la machine"),
                           widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'xx:xx:xx:xx:xx:xx'}))
     description = forms.CharField(label=_("Raison de la demande"),
@@ -94,7 +94,11 @@ class AjoutManuelForm(forms.Form):
         return mac
 
     def send_admin_email(self, ldap_user):
-        # Envoi d'un mail à support
+        """
+        Send an email for the support
+        :param ldap_user:
+        :return:
+        """
         mail = EmailMessage(
             subject="Ajout machine sur le compte de %(user)s" % {'user': ldap_user.uid},
             body="L'utilisateur %(user)s souhaite ajouter une machine à son compte."
@@ -115,7 +119,7 @@ class AjoutManuelForm(forms.Form):
                      'desc': self.cleaned_data['description']
                  },
             from_email=settings.SERVER_EMAIL,
-            reply_to=[ldap_user.email],
+            reply_to=[ldap_user.mail],
             to=["support@resel.fr"],
         )
         mail.send()

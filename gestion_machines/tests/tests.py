@@ -3,7 +3,7 @@ from django.core import mail
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
 
-from gestion_machines.forms import AjoutManuelForm
+from gestion_machines.forms import ManualDeviceAddForm
 from gestion_machines.models import LdapDevice
 
 
@@ -175,7 +175,7 @@ class AjoutManuelFormTestCase(TestCase):
             'description': "Je fais quoi de ma vie ?"
         }
 
-        form = AjoutManuelForm(data=form_data)
+        form = ManualDeviceAddForm(data=form_data)
         self.assertTrue(form.is_valid())
 
     def test_invalid_data(self):
@@ -189,7 +189,7 @@ class AjoutManuelFormTestCase(TestCase):
             },
         ]
         for form_data in inputs:
-            form = AjoutManuelForm(data=form_data)
+            form = ManualDeviceAddForm(data=form_data)
             self.assertFalse(form.is_valid())
 
     def test_notify_existing_mac(self):
@@ -198,6 +198,6 @@ class AjoutManuelFormTestCase(TestCase):
             'description': "Je fais quoi de ma vie ?"
         }
 
-        form = AjoutManuelForm(data=form_data)
+        form = ManualDeviceAddForm(data=form_data)
         self.assertFalse(form.is_valid())
         self.assertEqual(len(mail.outbox), 1)
