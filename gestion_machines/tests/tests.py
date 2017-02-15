@@ -20,6 +20,12 @@ def new_dummy_device(owner="lcarr", hostname="mymachine", activated=True, ip="12
 
 
 def try_delete_device(pk):
+    """
+    Try to delete a device
+
+    :param pk: pk of the device to delete
+    :return: True if the device was indeed deleted, False otherwise
+    """
     try:
         device_s = LdapDevice.get(pk=pk)
         device_s.delete()
