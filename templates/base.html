@@ -32,231 +32,231 @@
 </head>
 
 <body>
-    <div class="container-fluid">
-        <div class="alert alert-info" role="alert" style="margin-top: 5px; text-align: center"><strong>{% trans "NOUVEAU SITE ResEl !" %}</strong> {% trans "Vous pouvez toujours " %} <a style="color: #ffffff" href="https://old.resel.fr"><strong>accéder à l'ancien site</strong></a>.</div>
-    </div>
+<div class="container-fluid">
+    <div class="alert alert-info" role="alert" style="margin-top: 5px; text-align: center"><strong>{% trans "NOUVEAU SITE ResEl !" %}</strong> {% trans "Vous pouvez toujours " %} <a style="color: #ffffff" href="https://old.resel.fr"><strong>accéder à l'ancien site</strong></a>.</div>
+</div>
 
-    <!-- Navigation -->
-    <nav class="navbar navbar-main navbar-static-top" role="navigation">
-        <div class="container">
-            <div class="nav navbar-left navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                    <span class="menu-text">Menu</span>
-                    <span class="menu-bar">
+<!-- Navigation -->
+<nav class="navbar navbar-main navbar-static-top" role="navigation">
+    <div class="container">
+        <div class="nav navbar-left navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="menu-text">Menu</span>
+                <span class="menu-bar">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </span>
-                </button>
-                <div>
-                    <a class="navbar-brand" href="{% url 'home' %}"><img style="width: auto; height: 45px; margin-top: -13px;" src="{% static 'images/logo_resel_flat.png' %}"></a>
-                </div>
+            </button>
+            <div>
+                <a class="navbar-brand" href="{% url 'home' %}"><img style="width: auto; height: 45px; margin-top: -13px;" src="{% static 'images/logo_resel_flat.png' %}"></a>
             </div>
-            <ul id="navbar" class="nav navbar-top-links navbar-right navbar-collapse collapse">
-                {% if request.user.is_staff %}
-                    <li>
-                        <a href="/gestion"><i class="fa fa-gears fa-fw"></i></a>
-                    </li>
-                {% endif %}
-
-                <!-- Lists of categories -->
-                {% for category in categories %}
-                    <li class="dropdown">
-                        <a href="{% url 'wiki:show-category' slug=category.slug %}" class="dropdown-toggle" data-toggle="dropdown"><i class="fa {{ category.fa_icon_name }} fa-fw" aria-hidden="true"></i> <span class="hidden-sm">{{ category.name }}</span></a>
-                        <ul class="dropdown-menu">
-                            {% for stuff in category.get_articles_and_links_to_display %}
-                                <li>
-                                    <a href="{{ stuff.get_absolute_url }}">{{ stuff.name }}</a>
-                                </li>
-                            {% empty %}
-                                <li>
-                                    <a>{% trans "Aucun article" %}</a>
-                                </li>
-                            {% endfor %}
-
-                            {% if category.is_display_truncated %}
-                                <p><a href="{% url 'wiki:show-category' slug=category.slug%}">{% trans "... plus d'articles"%}</a></p>
-                            {% endif %}
-                        </ul>
-                    </li>
-                {% endfor %}
-                <li>
-                    <a href="{% url 'news' %}"><i class="fa fa-newspaper-o fa-fw"></i> <span class="hidden-sm hidden-md">{% trans "Actualités" %}</span></a>
-                </li>
-                <li>
-                    <a href="{% url 'contact' %}"><i class="fa fa-comment-o fa-fw"></i> {% trans "Contact" %}</a>
-                </li>
-
-                <hr class="visible-xs"/>
-
-                {% if request.user.is_authenticated %}
-                    <li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user fa-fw" aria-hidden="true"></i> {{ ldapuser.first_name }} <span class="hidden-sm">{{ ldapuser.last_name }} ({{ ldapuser.uid }})</span></a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="#"><i class="fa fa-sliders fa-fw"></i> {% trans "Paramètres" %}</a>
-                            </li>
-                            <li>
-                                <a href="{% url 'gestion-machines:liste' %}"><i class="fa fa-cubes fa-fw"></i> {% trans "Mes machines" %}</a>
-                            </li>
-                            <li>
-                                <a href="{% url 'gestion-personnes:mail' %}"><i class="fa fa-envelope-o fa-fw"></i> {% trans "Email ResEl" %}</a>
-                            </li>
-                            <li>
-                                <a href="https://mlistes.resel.fr"><i class="fa fa-rss fa-fw"></i> {% trans "Listes de diffusion" %}</a>
-                            </li>
-                            <hr />
-                            <li>
-                                <a href="/logout"><i class="fa fa-sign-out fa-fw"></i> {% trans "Déconnexion" %}</a>
-                            </li>
-                        </ul>
-                    </li>
-
-                {% else %}
-                    <li>
-                        <a href="/login"><i class="fa fa-sign-in fa-fw"></i> {% trans "Connexion" %}</a>
-                    </li>
-                {% endif %}
-                {#            <hr class="visible-xs"/>#}
-                {#                <li class="dropdown">#}
-                {#                    <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw" aria-hidden="true"></i> {% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE | upper }}</a>#}
-                {#                    <div class="dropdown-menu">#}
-                {#                        {% get_available_languages as LANGUAGES %}#}
-                {#                        {% get_language_info_list for LANGUAGES as languages %}#}
-                {#                        <form action="{% url 'set_language' %}" method="post">#}
-                {#                            {% csrf_token %}#}
-                {#                            <input name="next" type="hidden" value="{{ request.path }}"/>#}
-                {#                            {% for language in languages %}#}
-                {#                                    <button class="btn btn-link" name="language" type="submit" value="{{ language.code }}">{{ language.name_local|title }}</button>#}
-                {#                            {% endfor %}#}
-                {#                        </form>#}
-                {#                    </div>#}
-                {#                </li>#}
-            </ul>
-        </div><!-- /.container -->
-    </nav>
-    {% if has_paid_cotiz == "danger" %}
-        <div class="container-fluid">
-            <div class="alert alert-danger" role="alert" style="text-align: center"><strong>{% trans "Votre accès internet a expiré :" %}</strong> {% trans "Afin de bénéficier des services du ResEl, vous devez " %} <a style="color: #0f0f0f" href="{% url "tresorerie:home" %}"><strong>régulariser votre situation</strong></a> !</div>
         </div>
-    {% elif has_paid_cotiz == "warning" %}
-        <div class="container-fluid">
-            <div class="alert alert-warning" role="alert" style="text-align: center"><strong>{% trans "Votre accès internet va bientôt expirer :" %}</strong> {% trans "Afin de continuer à bénéficier des services du ResEl, vous devez " %} <a style="color: #0f0f0f" href="{% url "tresorerie:home" %}"><strong>régulariser votre situation</strong></a> !</div>
-        </div>
-    {% endif %}
-    {% if messages %}
+        <ul id="navbar" class="nav navbar-top-links navbar-right navbar-collapse collapse">
+            {% if request.user.is_staff %}
+                <li>
+                    <a href="/gestion"><i class="fa fa-gears fa-fw"></i></a>
+                </li>
+            {% endif %}
+
+            <!-- Lists of categories -->
+            {% for category in categories %}
+                <li class="dropdown">
+                    <a href="{% url 'wiki:show-category' slug=category.slug %}" class="dropdown-toggle" data-toggle="dropdown"><i class="fa {{ category.fa_icon_name }} fa-fw" aria-hidden="true"></i> <span class="hidden-sm">{{ category.name }}</span></a>
+                    <ul class="dropdown-menu">
+                        {% for stuff in category.get_articles_and_links_to_display %}
+                            <li>
+                                <a href="{{ stuff.get_absolute_url }}">{{ stuff.name }}</a>
+                            </li>
+                        {% empty %}
+                            <li>
+                                <a>{% trans "Aucun article" %}</a>
+                            </li>
+                        {% endfor %}
+
+                        {% if category.is_display_truncated %}
+                            <p><a href="{% url 'wiki:show-category' slug=category.slug%}">{% trans "... plus d'articles"%}</a></p>
+                        {% endif %}
+                    </ul>
+                </li>
+            {% endfor %}
+            <li>
+                <a href="{% url 'news' %}"><i class="fa fa-newspaper-o fa-fw"></i> <span class="hidden-sm hidden-md">{% trans "Actualités" %}</span></a>
+            </li>
+            <li>
+                <a href="{% url 'contact' %}"><i class="fa fa-comment-o fa-fw"></i> {% trans "Contact" %}</a>
+            </li>
+
+            <hr class="visible-xs"/>
+
+            {% if request.user.is_authenticated %}
+                <li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user fa-fw" aria-hidden="true"></i> {{ ldapuser.first_name }} <span class="hidden-sm">{{ ldapuser.last_name }} ({{ ldapuser.uid }})</span> <span class="fa fa-caret-down"></span></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="#"><i class="fa fa-sliders fa-fw"></i> {% trans "Paramètres" %}</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'gestion-machines:liste' %}"><i class="fa fa-cubes fa-fw"></i> {% trans "Mes machines" %}</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'gestion-personnes:mail' %}"><i class="fa fa-envelope-o fa-fw"></i> {% trans "Email ResEl" %}</a>
+                        </li>
+                        <li>
+                            <a href="https://mlistes.resel.fr"><i class="fa fa-rss fa-fw"></i> {% trans "Listes de diffusion" %}</a>
+                        </li>
+                        <hr />
+                        <li>
+                            <a href="/logout"><i class="fa fa-sign-out fa-fw"></i> {% trans "Déconnexion" %}</a>
+                        </li>
+                    </ul>
+                </li>
+
+            {% else %}
+                <li>
+                    <a href="/login"><i class="fa fa-sign-in fa-fw"></i> {% trans "Connexion" %}</a>
+                </li>
+            {% endif %}
+            {#            <hr class="visible-xs"/>#}
+            {#                <li class="dropdown">#}
+            {#                    <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw" aria-hidden="true"></i> {% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE | upper }}</a>#}
+            {#                    <div class="dropdown-menu">#}
+            {#                        {% get_available_languages as LANGUAGES %}#}
+            {#                        {% get_language_info_list for LANGUAGES as languages %}#}
+            {#                        <form action="{% url 'set_language' %}" method="post">#}
+            {#                            {% csrf_token %}#}
+            {#                            <input name="next" type="hidden" value="{{ request.path }}"/>#}
+            {#                            {% for language in languages %}#}
+            {#                                    <button class="btn btn-link" name="language" type="submit" value="{{ language.code }}">{{ language.name_local|title }}</button>#}
+            {#                            {% endfor %}#}
+            {#                        </form>#}
+            {#                    </div>#}
+            {#                </li>#}
+        </ul>
+    </div><!-- /.container -->
+</nav>
+{% if has_paid_cotiz == "danger" %}
+    <div class="container-fluid">
+        <div class="alert alert-danger" role="alert" style="text-align: center"><strong>{% trans "Votre accès internet a expiré :" %}</strong> {% trans "Afin de bénéficier des services du ResEl, vous devez " %} <a style="color: #0f0f0f" href="{% url "tresorerie:home" %}"><strong>régulariser votre situation</strong></a> !</div>
+    </div>
+{% elif has_paid_cotiz == "warning" %}
+    <div class="container-fluid">
+        <div class="alert alert-warning" role="alert" style="text-align: center"><strong>{% trans "Votre accès internet va bientôt expirer :" %}</strong> {% trans "Afin de continuer à bénéficier des services du ResEl, vous devez " %} <a style="color: #0f0f0f" href="{% url "tresorerie:home" %}"><strong>régulariser votre situation</strong></a> !</div>
+    </div>
+{% endif %}
+{% if messages %}
     <div class="container">
-            {# Gestion des messages d'erreur, d'info et de success #}
-                {% for message in messages %}
-                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-                        <div class="panel panel-danger">
-                            <div class="panel-heading"><h3 class="panel-title">{% trans "Erreur" %}</h3></div>
-                            <div class="panel-body">{{ message }}</div>
-                        </div>
-                    {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
-                        <div class="panel panel-success">
-                            <div class="panel-heading"><h3 class="panel-title">{% trans "Succès" %}</h3></div>
-                            <div class="panel-body">{{ message }}</div>
-                        </div>
-                    {% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
-                        <div class="panel panel-info">
-                            <div class="panel-heading"><h3 class="panel-title">{% trans "Information" %}</h3></div>
-                            <div class="panel-body">{{ message }}</div>
-                        </div>
-                    {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
-                        <div class="panel panel-warning">
-                            <div class="panel-heading"><h3 class="panel-title">{% trans "Attention" %}</h3></div>
-                            <div class="panel-body">{{ message }}</div>
-                        </div>
-                    {% endif %}
-                {% endfor %}
+        {# Gestion des messages d'erreur, d'info et de success #}
+        {% for message in messages %}
+            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                <div class="panel panel-danger">
+                    <div class="panel-heading"><h3 class="panel-title">{% trans "Erreur" %}</h3></div>
+                    <div class="panel-body">{{ message }}</div>
+                </div>
+            {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+                <div class="panel panel-success">
+                    <div class="panel-heading"><h3 class="panel-title">{% trans "Succès" %}</h3></div>
+                    <div class="panel-body">{{ message }}</div>
+                </div>
+            {% elif message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+                <div class="panel panel-info">
+                    <div class="panel-heading"><h3 class="panel-title">{% trans "Information" %}</h3></div>
+                    <div class="panel-body">{{ message }}</div>
+                </div>
+            {% elif message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+                <div class="panel panel-warning">
+                    <div class="panel-heading"><h3 class="panel-title">{% trans "Attention" %}</h3></div>
+                    <div class="panel-body">{{ message }}</div>
+                </div>
+            {% endif %}
+        {% endfor %}
 
-        </div>
-    {% endif %}
-    <div id="page-wrapper">
+    </div>
+{% endif %}
+<div id="page-wrapper">
     {% block content %}{% endblock %}
+</div>
+
+<footer class="footer">
+    <!-- Container for setting locale language -->
+    <div class="container text-center">
+        <div class="row">
+            <a href="https://www.facebook.com/Reselfr"><span class="fa fa-facebook social-links"></span></a>
+            <a href="https://twitter.com/resel_fr"><span class="fa fa-twitter social-links"></span></a>
+            <a href="https://github.com/ResEl-TB"><span class="fa fa-github social-links"></span></a>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <ul>
+                    <li><a href="{% static "files/statuts.pdf" %}">{% trans "Les statuts de l'association" %}</a></li>
+                    <li><a href="{% static "files/reglement-interieur.pdf" %}">{% trans "Le règlement intérieur" %}</a></li>
+                    <li><a href="{% url "tresorerie:prices" %}">{% trans "Tarifs et Cotisation" %}</a></li>
+                    <li><a href="{% url "contact" %}">{% trans "Contact" %}</a></li>
+                </ul>
+            </div>
+            <div class="col-sm-4">
+                <ul>
+                    {#                        <li><a href="https://status.resel.fr">{% trans "État du réseau" %}</a></li>#}
+                    <li><a href="https://clubs.resel.fr">{% trans "Les clubs" %}</a></li>
+                    <li><a href="https://campus.resel.fr">{% trans "Campus" %}</a></li>
+                    <li><a href="{% url 'gestion-personnes:webmail' %}">Webmail</a></li>
+                    {#                        <li><a href="{% url 'who:user-details'  'u' %}">{% trans "Annuaire" %}</a></li>#}
+                    <li><a href="/wiki/lassociation/devenez-administrateur-resel">{% trans "Devenez Administrateur ResEl !" %}</a></li>
+                </ul>
+            </div>
+            <div class="col-sm-4">
+                <ul>
+                    <li><a href="https://www.federez.net/">{% trans "Fédérez" %}</a></li>
+                    <li><a href="https://www.imt-atlantique.fr/">{% trans "IMT Atlantique" %}</a></li>
+                    <br />
+                    <li><a href="http://assos-tb.fr/">{% trans "Associations de l'IMT Atlantique" %}</a></li>
+                    <li><a href="http://www.aitb.org/">{% trans "Alumni" %}</a></li>
+                </ul>
+            </div>
+        </div>
     </div>
 
-    <footer class="footer">
-        <!-- Container for setting locale language -->
-        <div class="container text-center">
-            <div class="row">
-                <a href="https://www.facebook.com/Reselfr"><span class="fa fa-facebook social-links"></span></a>
-                <a href="https://twitter.com/resel_fr"><span class="fa fa-twitter social-links"></span></a>
-                <a href="https://github.com/ResEl-TB"><span class="fa fa-github social-links"></span></a>
-            </div>
-            <div class="row">
-                <div class="col-sm-4">
-                    <ul>
-                        <li><a href="{% static "files/statuts.pdf" %}">{% trans "Les statuts de l'association" %}</a></li>
-                        <li><a href="{% static "files/reglement-interieur.pdf" %}">{% trans "Le règlement intérieur" %}</a></li>
-                        <li><a href="{% url "tresorerie:prices" %}">{% trans "Tarifs et Cotisation" %}</a></li>
-                        <li><a href="{% url "contact" %}">{% trans "Contact" %}</a></li>
-                    </ul>
-                </div>
-                <div class="col-sm-4">
-                    <ul>
-{#                        <li><a href="https://status.resel.fr">{% trans "État du réseau" %}</a></li>#}
-                        <li><a href="https://clubs.resel.fr">{% trans "Les clubs" %}</a></li>
-                        <li><a href="https://campus.resel.fr">{% trans "Campus" %}</a></li>
-                        <li><a href="{% url 'gestion-personnes:webmail' %}">Webmail</a></li>
-{#                        <li><a href="{% url 'who:user-details'  'u' %}">{% trans "Annuaire" %}</a></li>#}
-                        <li><a href="/wiki/lassociation/devenez-administrateur-resel">{% trans "Devenez Administrateur ResEl !" %}</a></li>
-                    </ul>
-                </div>
-                <div class="col-sm-4">
-                    <ul>
-                        <li><a href="https://www.federez.net/">{% trans "Fédérez" %}</a></li>
-                        <li><a href="https://www.imt-atlantique.fr/">{% trans "IMT Atlantique" %}</a></li>
-                        <br />
-                        <li><a href="http://assos-tb.fr/">{% trans "Associations de l'IMT Atlantique" %}</a></li>
-                        <li><a href="http://www.aitb.org/">{% trans "Alumni" %}</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-            <div class="text-center bottom-row">
+    <div class="text-center bottom-row">
         <div class="container ">
-                <div class="col-sm-8 col-sm-offset-2">
-                    Association ResEl - 2003-{% now "Y" %} - Tous droits réservés - <a href="https://git.resel.fr/resel/myresel">{% trans "Code Source"%}</a>
-                </div>
+            <div class="col-sm-8 col-sm-offset-2">
+                Association ResEl - 2003-{% now "Y" %} - Tous droits réservés - <a href="https://git.resel.fr/resel/myresel">{% trans "Code Source"%}</a>
             </div>
         </div>
-    </footer>
+    </div>
+</footer>
 
-    <!-- jQuery -->
-    <script src="{% static 'jquery/jquery.min.js' %}"></script>
+<!-- jQuery -->
+<script src="{% static 'jquery/jquery.min.js' %}"></script>
 
-    <!-- Bootstrap Core JavaScript -->
-    <script src="{% static 'boostrap/js/bootstrap.min.js' %}"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="{% static 'boostrap/js/bootstrap.min.js' %}"></script>
 
-    <!-- Custom Theme JavaScript -->
+<!-- Custom Theme JavaScript -->
 {#    <script src="{% static 'js/base.js' %}"></script>#}
 
-    <!-- Piwik -->
+<!-- Piwik -->
 <script type="text/javascript">
-  var _paq = _paq || [];
-  _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
-  _paq.push(["setCookieDomain", "*.resel.fr"]);
-  _paq.push(["setDomains", ["*.beta.resel.fr","*.rennes.beta.resel.fr","*.rennes.resel.fr","*.resel.fr"]]);
-  _paq.push(['trackPageView']);
-  _paq.push(['enableLinkTracking']);
-  (function() {
-    var u="//stats.resel.fr/";
-    _paq.push(['setTrackerUrl', u+'piwik.php']);
-    _paq.push(['setSiteId', '1']);
-    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-    g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
-  })();
+    var _paq = _paq || [];
+    _paq.push(["setDocumentTitle", document.domain + "/" + document.title]);
+    _paq.push(["setCookieDomain", "*.resel.fr"]);
+    _paq.push(["setDomains", ["*.beta.resel.fr","*.rennes.beta.resel.fr","*.rennes.resel.fr","*.resel.fr"]]);
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function() {
+        var u="//stats.resel.fr/";
+        _paq.push(['setTrackerUrl', u+'piwik.php']);
+        _paq.push(['setSiteId', '1']);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+    })();
 </script>
 <noscript><p><img src="//stats.resel.fr/piwik.php?idsite=1" style="border:0;" alt="" /></p></noscript>
 <!-- End Piwik Code -->
 
-    <!-- Custom Javascript -->
-    {% block javascript %}{% endblock %}
+<!-- Custom Javascript -->
+{% block javascript %}{% endblock %}
 
 </body>
 </html>
