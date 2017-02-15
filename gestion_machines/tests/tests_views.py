@@ -197,10 +197,6 @@ class ManualAddCase(TestCase):
         for device in user_devices:
             device.delete()
 
-    @classmethod
-    def tearDownClass(cls):
-        try_delete_user("amanoury")
-
     def test_simple_add(self):
         r = self.client.get(reverse("gestion-machines:ajout-manuel"),
                                     HTTP_HOST="10.0.3.99", follow=True)
