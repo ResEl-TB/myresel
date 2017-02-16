@@ -91,10 +91,12 @@
                                                 {% endif %}
                                             </div>
                                             {% for event in events %}
-                                                <div class="alert alert-{{ event.booking_type }} event">
-                                                    <p class="time">{{ event.start_time|time:'H:i' }} - {{ event.end_time|time:'H:i' }}</p>
-                                                    <a href="{% url "campus:rooms:booking-detail"  event.pk %}">{{ event.description }}</a>
-                                                </div>
+                                                <a class="event" href="{% url "campus:rooms:booking-detail"  event.pk %}">
+                                                    <div class="alert-{{ event.booking_type }}">
+                                                        <span class="time">{{ event.start_time|time:'H:i' }} - {{ event.end_time|time:'H:i' }}</span>
+                                                        <span class="description">{{ event.description }}</span>
+                                                    </div>
+                                                </a>
                                             {% endfor %}
                                         </td>
                                     {% endif %}

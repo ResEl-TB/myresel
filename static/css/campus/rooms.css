@@ -93,12 +93,22 @@
 
 .time {
     color: #F3FFE2;
+    display: block;
 }
 
 .event {
-    padding: 3px;
+    padding: 0;
 }
 
+.event div {
+    border-radius: 3px;
+    margin: 0;
+    padding: 2px;
+}
+
+.event:hover {
+    text-decoration: none;
+}
 .current-day {
     background-color: #cfdfff !important;
 }
