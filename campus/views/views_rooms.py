@@ -73,7 +73,6 @@ def calendar_view(request, room='all', year=timezone.now().year, month=timezone.
     year = int(year)
     month = int(month)
 
-    # TODO: renormalize for missing day month ?
     # Show either the whole month or a single day
     if day == 'all':
         day = -1
@@ -149,6 +148,7 @@ def calendar_view(request, room='all', year=timezone.now().year, month=timezone.
         'current_date': current_date,
         'rooms': rooms,
         'current_room': room,
+        'current_day_nbr': str(timezone.now().day)
     }
 
     return render(
@@ -158,6 +158,9 @@ def calendar_view(request, room='all', year=timezone.now().year, month=timezone.
     )
 
 class BookingView(FormView):
+    """
+    View to book an event or edit an event
+    """
     template_name = 'campus/rooms/booking.html'
     success_url = reverse_lazy('campus:rooms:calendar')
     form_class = RoomBookingForm

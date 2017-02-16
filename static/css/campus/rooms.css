@@ -94,3 +94,11 @@
 .time {
     color: #F3FFE2;
 }
+
+.event {
+    padding: 3px;
+}
+
+.current-day {
+    background-color: #cfdfff !important;
+}
