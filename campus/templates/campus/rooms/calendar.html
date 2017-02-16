@@ -90,7 +90,7 @@
                                     {% for event in events %}
                                         <div class="alert alert-{{ event.booking_type }}">
                                             <p class="time">{{ event.start_time|time:'H:i' }} - {{ event.end_time|time:'H:i' }}</p>
-                                            <b>{{ event.description }}</b>
+                                            <a href="{% url "campus:rooms:booking-detail"  event.pk %}">{{ event.description }}</a>
                                             <p>
                                             {% for room in event.room.all %}
                                                 - <i>{{ room.name }}</i><br>

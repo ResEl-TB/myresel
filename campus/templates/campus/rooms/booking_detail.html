@@ -1,0 +1,29 @@
+{% extends "base_campus.html" %}
+{% load staticfiles %}
+
+{% block title %}Événement{% endblock %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/campus/clubs.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="container" id="content">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="page-header text-center" style="color: white;">
+                    Événement
+                </h1>
+                <h2>
+                    <a href="{% url "campus:rooms:mod-booking" object.pk %}">Modifier l'événement</a>
+                </h2>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="hard-content">
+        <div class="container">
+            <h2>{{ object.description }}</h2>
+        </div>
+    </div>
+{% endblock %}

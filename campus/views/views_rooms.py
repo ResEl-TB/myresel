@@ -13,6 +13,7 @@ from django.db.models import Q
 
 import calendar, datetime, json
 
+from django.views.generic import DetailView
 from django.views.generic import FormView
 
 from campus.forms import RoomBookingForm
@@ -181,3 +182,8 @@ class BookingView(FormView):
         form.save()
         messages.success(self.request, _('Opération réussie'))
         return super(BookingView, self).form_valid(form)
+
+class BookingDetailView(DetailView):
+    model = RoomBooking
+    template_name = 'campus/rooms/booking_detail.html'
+    slug_field = "pk"
