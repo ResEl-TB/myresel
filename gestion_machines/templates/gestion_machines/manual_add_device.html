@@ -6,22 +6,18 @@
 
 
 {% block css %}
-    <link href="{% static 'css/add_manual_device.css' %}" rel="stylesheet">
+    <link href="{% static 'css/manual_add_device.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
     <div class="container">
-        <h1 class="page-header">{% trans "Demande d'enregistrement de machine" %}</h1>
+        <h1 class="page-header">{% trans "Demande d'enregistrement manuel de machine" %}</h1>
         <div class="row">
             <div class="col-sm-offset-1 col-sm-10">
                 {% blocktrans %}
-                    <div class="alert alert-info">
-                        Vous pouvez avec ce formulaire demander l'ajout d'une machine à votre compte, cela est utile
-                        lorsque le système d'inscription automatique ne fonctionne pas (anciennes consoles de jeux, anciens téléphones...).
-                    </div>
                     <div class="alert alert-warning" style="font-size: 1.3em">
                         <strong><span class="fa fa-warning"></span> Important : </strong>
-                        Il est important <strong>d'expliquer clairement</strong> pourquoi cette machine n'a pas pu être ajoutée via le système automatique, dans le cas contraire,
+                        <strong>expliquer clairement</strong> pourquoi cette machine n'a pas pu être ajoutée via le système automatique (ancien téléphone, console de jeu...), dans le cas contraire,
                         <strong>les administrateurs ResEl se donneront le droit de refuser l'ajout de la machine au compte</strong>.
                     </div>
                 {% endblocktrans %}
