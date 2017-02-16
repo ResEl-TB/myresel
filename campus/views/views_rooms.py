@@ -2,15 +2,19 @@
 
 from dateutil.relativedelta import relativedelta
 from django.shortcuts import render, get_object_or_404
+from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
 from django.utils import timezone
 from django.contrib.auth.decorators import permission_required, login_required
 from django.http import HttpResponse, HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.db.models import Q
 
 import calendar, datetime, json
+
+from django.views.generic import FormView
+
 from campus.forms import RoomBookingForm
 from campus.models import RoomBooking, Room, StudentOrganisation
 from fonctions.decorators import ae_required
@@ -152,31 +156,28 @@ def calendar_view(request, room='all', year=timezone.now().year, month=timezone.
         context,
     )
 
-@login_required
-@ae_required
-def booking_view(request, booking=None):
-    """ View to book a room """
-    if booking:
-        instance = get_object_or_404(RoomBooking, id=booking)
-        granted = False
-        for room in instance.room.all():
-            if room.user_can_manage(request.ldap_user):
-                # User can manage reservations for this room
-                granted = True
+class BookingView(FormView):
+    template_name = 'campus/rooms/booking.html'
+    success_url = reverse_lazy('campus:rooms:calendar')
+    form_class = RoomBookingForm
 
-        if request.ldap_user.uid == instance.user:
-            # User can modify his own reservation
-            granted = True
+    @method_decorator(login_required)
+    @method_decorator(ae_required)
+    def dispatch(self, request, *args, **kwargs):
+        self.booking = None
+        if self.kwargs.get('booking', None):
+            self.booking = RoomBooking.objects.get(id=self.kwargs['booking'])
+            if not self.booking.user_can_manage(self.request.ldap_user):
+                messages.error(self.request, _('Vous ne pouvez pas modifier cette réservation'))
+                return HttpResponseRedirect(reverse('campus:rooms:calendar'))
+        return super(BookingView, self).dispatch(request, *args, **kwargs)
 
-        if not granted:
-            messages.error(request, _('Vous ne pouvez pas modifier cette réservation'))
-            return HttpResponseRedirect(reverse('campus:rooms:calendar'))
+    def get_form(self, form_class=None):
+        if form_class is None:
+            form_class = self.get_form_class()
+        return form_class(self.request.POST or None, user=self.request.ldap_user, instance=self.booking)
 
-        form = RoomBookingForm(request.POST or None, user=request.ldap_user, instance=instance)
-    else:
-        form = RoomBookingForm(request.POST or None, user=request.ldap_user)
-    if form.is_valid():
+    def form_valid(self, form):
         form.save()
-        messages.success(request, _('Opération réussie'))
-        return HttpResponseRedirect(reverse('campus:rooms:calendar'))
-    return render(request, 'campus/rooms/booking.html', {'form': form})
+        messages.success(self.request, _('Opération réussie'))
+        return super(BookingView, self).form_valid(form)

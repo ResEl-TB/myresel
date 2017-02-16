@@ -251,6 +251,20 @@ class RoomBooking(models.Model):
                     args=(LdapUser.get(pk=self.user), room),
                 )
 
+    def user_can_manage(self, user):
+        """
+        Tells if a user can manage this Booking
+        :param user: LdapUser to check
+        :return: True or False
+        """
+        # User can manage reservations for this room
+        for room in self.room.all():
+            if room.user_can_manage(user):
+                return True
+
+        # User can modify his own reservation
+        return user.uid == self.user
+
 class RoomAdmin(models.Model):
     class Meta:
         verbose_name = 'administrateur des salles'

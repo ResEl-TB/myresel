@@ -10,7 +10,8 @@ import datetime
 class RoomBookingForm(ModelForm):
     class Meta:
         model = RoomBooking
-        fields = '__all__'
+        fields = ("room", "description", "start_time", "end_time", "user", "booking_type", "displayable",
+                  "recurring_rule", "end_recurring_period",)
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
