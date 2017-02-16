@@ -3,7 +3,7 @@ from django.core import mail
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
 
-from gestion_machines.forms import AjoutManuelForm
+from gestion_machines.forms import ManualDeviceAddForm
 from gestion_machines.models import LdapDevice
 
 
@@ -20,6 +20,12 @@ def new_dummy_device(owner="lcarr", hostname="mymachine", activated=True, ip="12
 
 
 def try_delete_device(pk):
+    """
+    Try to delete a device
+
+    :param pk: pk of the device to delete
+    :return: True if the device was indeed deleted, False otherwise
+    """
     try:
         device_s = LdapDevice.get(pk=pk)
         device_s.delete()
@@ -169,7 +175,7 @@ class AjoutManuelFormTestCase(TestCase):
             'description': "Je fais quoi de ma vie ?"
         }
 
-        form = AjoutManuelForm(data=form_data)
+        form = ManualDeviceAddForm(data=form_data)
         self.assertTrue(form.is_valid())
 
     def test_invalid_data(self):
@@ -183,7 +189,7 @@ class AjoutManuelFormTestCase(TestCase):
             },
         ]
         for form_data in inputs:
-            form = AjoutManuelForm(data=form_data)
+            form = ManualDeviceAddForm(data=form_data)
             self.assertFalse(form.is_valid())
 
     def test_notify_existing_mac(self):
@@ -192,6 +198,6 @@ class AjoutManuelFormTestCase(TestCase):
             'description': "Je fais quoi de ma vie ?"
         }
 
-        form = AjoutManuelForm(data=form_data)
+        form = ManualDeviceAddForm(data=form_data)
         self.assertFalse(form.is_valid())
         self.assertEqual(len(mail.outbox), 1)

@@ -8,13 +8,14 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.mail import EmailMessage, mail_admins
-from django.core.urlresolvers import reverse
+from django.core.mail import mail_admins
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
+from django.views.generic import FormView
 from django.views.generic import View, ListView
 
 from fonctions import ldap, network
@@ -22,8 +23,7 @@ from fonctions.decorators import resel_required, unknown_machine
 from fonctions.network import get_campus
 from gestion_machines.models import LdapDevice, PeopleHistory
 from gestion_personnes.models import LdapUser
-from myresel.settings_local import SERVER_EMAIL
-from .forms import AddDeviceForm, AjoutManuelForm
+from .forms import AddDeviceForm, ManualDeviceAddForm
 
 logger = logging.getLogger("default")
 
@@ -147,55 +147,18 @@ class AddDeviceView(View):
         return render(request, self.template_name, {'form': form})
 
 
-class AjoutManuel(View):
+@method_decorator(login_required, name='dispatch')
+class ManualAddDeviceView(FormView):
     """ Vue appelée pour que l'utilisateur fasse une demande d'ajout de machine (PS4, Xboite, etc.) """
 
-    template_name = 'gestion_machines/ajout-manuel.html'
-    form_class = AjoutManuelForm
+    template_name = 'gestion_machines/manual_add_device.html'
+    form_class = ManualDeviceAddForm
+    success_url = reverse_lazy('gestion-machines:liste')
 
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(AjoutManuel, self).dispatch(*args, **kwargs)
-
-    def get(self, request, *args, **kwargs):
-        form = self.form_class()
-        return render(request, self.template_name, {'form': form})
-
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
-
-        if form.is_valid():
-            # Envoi d'un mail à support
-            mail = EmailMessage(
-                subject="Ajout machine sur le compte de %(user)s" % {'user': request.ldap_user.uid},
-                body="L'utilisateur %(user)s souhaite ajouter une machine à son compte."
-                     "\n\nuid : %(user)s"
-                     "\nPrénom NOM : %(firstname)s %(lastname)s"
-                     "\n\nMAC : %(mac)s"
-                     "\n\nDescription de la demande:"
-                     "\n\n%(desc)s"
-                     "\n\n----------------------------"
-                     "\nCe message est un message automatique généré par le site resel.fr, il convient de répondre à "
-                     "l'utilisateur et non ce message."
-                     "\nIl est important de noter que l'utilisateur doit expliquer pourquoi il ne peut pas inscrire sa"
-                     "machine normalement, le cas le plus courant étant les consoles de jeu." % {
-                         'user': request.ldap_user.uid,
-                         'lastname': request.ldap_user.last_name.upper(),
-                         'firstname': request.ldap_user.first_name,
-                         'mac': form.cleaned_data['mac'],
-                         'desc': form.cleaned_data['description']
-                     },
-                from_email=SERVER_EMAIL,
-                reply_to=[request.user.email],
-                to=["support@resel.fr"],
-            )
-            mail.send()
-
-            messages.success(request, _(
-                "Votre demande a été envoyée aux administrateurs. L'un d'eux vous contactera d'ici peu de temps."))
-            return HttpResponseRedirect(reverse('gestion-machines:liste'))
-
-        return render(request, self.template_name, {'form': form})
+    def form_valid(self, form):
+        form.send_admin_email(self.request.ldap_user)
+        messages.success(self.request, _("Votre demande a été envoyée aux administrateurs. L'un d'eux vous contactera d'ici peu de temps."))
+        return super(ManualAddDeviceView, self).form_valid(form)
 
 
 class ListDevices(ListView):

@@ -1,0 +1,11 @@
+[run]
+source=.
+timid=False
+omit=
+    */migrations/*
+    .install/*
+# plugins = django_coverage_plugin
+
+[report]
+show_missing=True
+skip_covered=True
