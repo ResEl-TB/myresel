@@ -28,16 +28,12 @@ from .forms import AddDeviceForm, ManualDeviceAddForm
 logger = logging.getLogger("default")
 
 
+@method_decorator(resel_required, name="dispatch")
 class Reactivation(View):
     """
     Vue appelée pour ré-activer une machine d'un utilisateur absent trop longtemps du campus
     Would a post REQUEST more adequate ? Maybe hard to implement.
     """
-
-    @method_decorator(resel_required)
-    def dispatch(self, *args, **kwargs):
-        return super(Reactivation, self).dispatch(*args, **kwargs)
-
     def get(self, request, *args, **kwargs):
         mac = network.get_mac(request.network_data['ip'])
 
@@ -61,7 +57,6 @@ class Reactivation(View):
                                                                                                 owner_uid,
                                                                                                 device.ip,
                                                                                                 device.mac_address)
-
         )
         messages.info(request, _("Votre machine vient d'être réactivée."))
         network.update_all()
@@ -69,6 +64,9 @@ class Reactivation(View):
         return HttpResponseRedirect(reverse('home'))
 
 
+@method_decorator(resel_required, name="dispatch")
+@method_decorator(unknown_machine, name="dispatch")
+@method_decorator(login_required, name="dispatch")
 class AddDeviceView(View):
     """
     View called when a user want to add a new device to his account
@@ -78,12 +76,6 @@ class AddDeviceView(View):
 
     template_name = 'devices/add_device.html'
     form_class = AddDeviceForm
-
-    @method_decorator(resel_required)
-    @method_decorator(unknown_machine)
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(AddDeviceView, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         proposed_alias = ldap.get_free_alias(str(request.user))
@@ -161,7 +153,8 @@ class ManualAddDeviceView(FormView):
         return super(ManualAddDeviceView, self).form_valid(form)
 
 
-class ListDevices(ListView):
+@method_decorator(login_required, name="dispatch")
+class ListDevicesView(ListView):
     """
     View called to show user device list
     """
@@ -169,30 +162,26 @@ class ListDevices(ListView):
     template_name = 'devices/list_devices.html'
     context_object_name = 'devices'
 
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(ListDevices, self).dispatch(*args, **kwargs)
-
     def get_queryset(self):
-        uid = str(self.request.user)
-        devices = LdapDevice.filter(
-            owner="uid=%(uid)s,%(dn_people)s" % {'uid': uid, 'dn_people': settings.LDAP_DN_PEOPLE})
+        return LdapDevice.filter(owner="uid=%(uid)s,%(dn_people)s" % {
+                'uid': self.request.ldap_user.uid,
+                'dn_people': settings.LDAP_DN_PEOPLE
+            })
 
-        return devices
 
-
-class Modifier(View):
+@method_decorator(login_required, name="dispatch")
+class EditDeviceView(View):
     """ Vue appelée pour modifier le nom et l'alias de sa machine """
 
-    template_name = 'devices/modifier.html'
+    template_name = 'devices/edit_device.html'
     form_class = AddDeviceForm
 
     @staticmethod
     def get_user_and_machine(username, hostname):
         """
         Check if the mac address exists and is known
-        :param request:
-        :param hostname:
+        :param username: uid of a user
+        :param hostname: device hostname
         :return:
         """
         machine = LdapDevice.get(hostname=hostname)
@@ -202,15 +191,12 @@ class Modifier(View):
 
         return ldap_user, machine
 
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(Modifier, self).dispatch(*args, **kwargs)
-
     def get(self, request, *args, **kwargs):
         hostname = self.kwargs.get('host', '')
 
+        # Check if the device belongs to the logged in user
         try:
-            ldap_user, machine = self.get_user_and_machine(request.user.username, hostname)
+            ldap_user, machine = self.get_user_and_machine(request.ldap_user.uid, hostname)
         except ObjectDoesNotExist:
             logger.warning("Tentative de modification d'une machine qui n'existe pas"
                            "\n\nuid: {uid}"
@@ -260,6 +246,7 @@ class Modifier(View):
         return render(request, self.template_name, {'form': form})
 
 
+@method_decorator(login_required, name="dispatch")
 class BandwidthUsage(View):
     """
     Display the bandwidth used by the user
@@ -267,10 +254,6 @@ class BandwidthUsage(View):
     imagine that it show bandwidth par device
     """
     template_name = "devices/bandwidth.html"
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(BandwidthUsage, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax():
@@ -287,7 +270,6 @@ class BandwidthUsage(View):
             return JsonResponse(data, safe=False)
         else:
             return render(request, self.template_name)
-
 
     def get_graph_data(self, start_date, end_date, device=None):
         """

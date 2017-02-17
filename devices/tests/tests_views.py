@@ -290,3 +290,11 @@ class BandwidthUsageCase(TestCase):
         self.assertGreaterEqual(settings.BANDWIDTH_BATCHS + 1, len(data["up"]))
         self.assertGreaterEqual(settings.BANDWIDTH_BATCHS + 1, len(data["down"]), settings.BANDWIDTH_BATCHS )
         self.assertGreaterEqual(settings.BANDWIDTH_BATCHS + 1, len(data["labels"]), settings.BANDWIDTH_BATCHS)
+
+
+class ListDevicesCase(TestCase):
+    pass  # TODO
+
+
+class EditDeviceCase(TestCase):
+    pass  # TODO

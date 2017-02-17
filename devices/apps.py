@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class GestionMachinesConfig(AppConfig):
+class DevicesConfig(AppConfig):
     name = 'devices'
