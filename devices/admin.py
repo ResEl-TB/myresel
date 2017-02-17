@@ -1,6 +1,6 @@
 # from django.contrib import admin
 #
-# from gestion_machines.models import LdapDevice
+# from devices.models import LdapDevice
 #
 #
 # @admin.register(LdapDevice)

@@ -54,7 +54,7 @@ create_config:
       - tresorerie/migrations/
       - pages/migrations/
       - gestion_personnes/migrations/
-      - gestion_machines/migrations/
+      - devices/migrations/
 
 test_django:
   artifacts:

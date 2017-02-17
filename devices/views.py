@@ -21,7 +21,7 @@ from django.views.generic import View, ListView
 from fonctions import ldap, network
 from fonctions.decorators import resel_required, unknown_machine
 from fonctions.network import get_campus
-from gestion_machines.models import LdapDevice, PeopleHistory
+from devices.models import LdapDevice, PeopleHistory
 from gestion_personnes.models import LdapUser
 from .forms import AddDeviceForm, ManualDeviceAddForm
 
@@ -76,7 +76,7 @@ class AddDeviceView(View):
     alias.
     """
 
-    template_name = 'gestion_machines/add_device.html'
+    template_name = 'devices/add_device.html'
     form_class = AddDeviceForm
 
     @method_decorator(resel_required)
@@ -151,7 +151,7 @@ class AddDeviceView(View):
 class ManualAddDeviceView(FormView):
     """ Vue appelée pour que l'utilisateur fasse une demande d'ajout de machine (PS4, Xboite, etc.) """
 
-    template_name = 'gestion_machines/manual_add_device.html'
+    template_name = 'devices/manual_add_device.html'
     form_class = ManualDeviceAddForm
     success_url = reverse_lazy('gestion-machines:liste')
 
@@ -166,7 +166,7 @@ class ListDevices(ListView):
     View called to show user device list
     """
 
-    template_name = 'gestion_machines/list_devices.html'
+    template_name = 'devices/list_devices.html'
     context_object_name = 'devices'
 
     @method_decorator(login_required)
@@ -184,7 +184,7 @@ class ListDevices(ListView):
 class Modifier(View):
     """ Vue appelée pour modifier le nom et l'alias de sa machine """
 
-    template_name = 'gestion_machines/modifier.html'
+    template_name = 'devices/modifier.html'
     form_class = AddDeviceForm
 
     @staticmethod
@@ -266,7 +266,7 @@ class BandwidthUsage(View):
     For the moment it only display per user, but in the future we can
     imagine that it show bandwidth par device
     """
-    template_name = "gestion_machines/bandwidth.html"
+    template_name = "devices/bandwidth.html"
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):

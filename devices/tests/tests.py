@@ -3,8 +3,8 @@ from django.core import mail
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
 
-from gestion_machines.forms import ManualDeviceAddForm
-from gestion_machines.models import LdapDevice
+from devices.forms import ManualDeviceAddForm
+from devices.models import LdapDevice
 
 
 def new_dummy_device(owner="lcarr", hostname="mymachine", activated=True, ip="120.45", mac="00:00:00:00:00"):
