@@ -18,6 +18,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.views.generic import RedirectView
+from django.views.generic import TemplateView
 from django.views.i18n import javascript_catalog
 from pages.views import Home, Contact, NewsListe, inscriptionZoneInfo, FaqList, faqUpvote, NewsDetail
 from myresel import settings
@@ -52,6 +53,8 @@ urlpatterns = [
     # Subcription related urls
     url(r'^inscription_zone/', inscriptionZoneInfo, name="inscription-zone"),
     url(r'^generate_204/', RedirectView.as_view(pattern_name="inscription-zone", permanent=False), name="generate_204"),
+
+    url(r'^help-needed/', TemplateView.as_view(template_name='help_needed.html'), name="help-needed"),
 
     url(r'^$', Home.as_view(), name='home'),
 ]
