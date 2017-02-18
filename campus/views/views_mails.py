@@ -14,7 +14,7 @@ from campus.models import LdapGroup, Mail, LdapUser
 @login_required
 def send_email_view(request):
     form = SendMailForm(
-        initial={'sender': request.ldap_user.mail or 'test@toi.fr'}
+        initial={'sender': request.ldap_user.mail}
     )
 
     if request.method == 'POST':
@@ -116,7 +116,7 @@ def moderate_view(request):
                 subject=m.subject,
                 body=m.content,
                 from_email=m.sender,
-                to=['campus@resel.fr'],
+                to=['campus-brest@resel.fr'],
             )
             mail_sympa.send()
 
