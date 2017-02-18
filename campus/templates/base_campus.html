@@ -71,6 +71,11 @@
                             <li>
                                 <a href="https://mlistes.resel.fr"><i class="fa fa-rss fa-fw"></i> Listes de diffusion</a>
                             </li>
+                            {% if ldapuser.is_campus_moderator %}
+                                <li>
+                                   <a href="{% url "campus:mails:moderate" %}"><i class="fa fa-eye fa-fw"></i> Modération mails campus</a>
+                                </li>
+                            {% endif %}
                             <hr />
                             <li>
                                 <a href="{% url "home" %}"><i class="fa fa-sliders fa-fw"></i> Paramètres ResEl</a>

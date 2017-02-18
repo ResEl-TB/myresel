@@ -47,10 +47,15 @@ def sendMailView(request):
     )
 
 @login_required
-def moderateView(request):
-    if not LdapGroup.get(pk='campusmodo').is_member(request.ldap_user.uid):
+def moderate_view(request):
+    """
+    View to moderate emails
+    :param request:
+    :return:
+    """
+    if not request.ldap_user.is_campus_moderator():
         messages.error(request, _("Vous n'êtes pas modérateur campus"))
-        return HttpResponseRedirect(reverse('campus:salles:calendar'))
+        return HttpResponseRedirect(reverse('campus:home'))
 
     if request.is_ajax():
         if request.method == 'GET':
@@ -90,7 +95,7 @@ def moderateView(request):
             )
             mail_sympa.send()
 
-            messages.success(request, _("Mail modéré !"))
+            messages.success(request, _("E-mail modéré, n'oubliez pas d'aller faire la double modération sur https://mliste.resel.fr !"))
             return HttpResponse()
 
     return render(

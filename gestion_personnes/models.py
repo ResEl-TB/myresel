@@ -122,6 +122,13 @@ class LdapUser(ldapback.models.LdapModel):
         """
         return 'mailPerson' in self.object_classes and " " not in self.mail_local_address
 
+    def is_campus_moderator(self):
+        """
+        Tels whether the user is allowed to moderate campus emails
+        :return: bool
+        """
+        return LdapGroup.get(pk='campusmodo').is_member(self.uid)
+
 
 class LdapOldUser(LdapUser):
     """
