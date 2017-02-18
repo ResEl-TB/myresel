@@ -536,6 +536,7 @@ class RedirectMailResEl(View):
                 messages.success(request, _("La redirection a bien été créée."))
                 return HttpResponseRedirect(reverse("gestion-personnes:redirect-mail"))
 
+
 class Webmail(View):
     """
         Access webmail or configuration page.

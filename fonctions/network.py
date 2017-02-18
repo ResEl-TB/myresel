@@ -5,7 +5,6 @@ import re
 import subprocess
 from ipaddress import ip_address
 
-from fonctions.generic import is_ip_in_subnet
 from myresel import settings
 
 logger = logging.getLogger("default")

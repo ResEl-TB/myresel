@@ -61,16 +61,6 @@ def search_ecole(query):
     l.unbind()
     return res
 
-
-def add(dn, object_class, attributes):
-    """ Fonction qui ajoute une fiche au LDAP """
-
-    l = new_connection()
-    l.add(dn, object_class, attributes)
-    l.unbind()
-    update_all()
-
-
 def get_status(ip):
     """ Fonction pour trouver le status d'une machine :
         - active
@@ -100,15 +90,6 @@ def get_status(ip):
 
     # Computer not in the ldap
     return 'unknown'
-
-
-def modify(dn, modifs):
-    """ Modifie une fiche LDAP """
-
-    l = new_connection()
-    l.modify(dn, modifs)
-    l.unbind()
-
 
 def get_free_ip(low, high):
     """ Retreive a free ip from the ldap """
@@ -147,19 +128,6 @@ def get_free_alias(name, prefix='pc'):
             alias = base_alias + str(i)
 
     return alias
-
-
-def cotisation(user, duree):
-    """ On stocke dans le LDAP la date de fin de cotisation """
-
-    l = new_connection()
-    l.modify(
-        'uid=%s,' % user + settings.LDAP_DN_PEOPLE,
-        {'cotiz': [(MODIFY_REPLACE, [str(generic.current_year())])],
-         'endInternet': [(MODIFY_REPLACE, [generic.get_end_date(duree)])]}
-    )
-    l.unbind()
-    update_all()
 
 
 def create_admin():

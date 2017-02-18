@@ -4,12 +4,12 @@ html, body {
     background-color: #225378;
     color: #ffffff;
     font-family: 'Roboto', 'sans-serif';
-
 }
 
 * {
     font-size: 1.05em;
 }
+
 .page-wrapper {
     min-height: 100%;
 }

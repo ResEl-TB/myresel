@@ -56,7 +56,7 @@ class AddDeviceViewCase(TestCase):
         self.assertContains(r, "Connecté au ResEl")
         self.assertEqual(1, len(mail.outbox))
 
-    # TODO: make test with concurency to try mutiple simultinate presses
+    # TODO: make test with concurrently to test multiple simultaneous presses
     def test_add_twice(self):
         user_machines = len(LdapDevice.filter(owner=self.owner))
         response = self.client.post(reverse("gestion-machines:ajout"),
@@ -178,6 +178,89 @@ class ChangeCampusCase(TestCase):
         self.assertEqual(len(mail.outbox), 1)
 
 
+class ManualAddCase(TestCase):
+    owner = ("uid=amanoury,%s" % settings.LDAP_DN_PEOPLE)
+    invalid_macs = ['dsfsdf', "0z:12:23:34:45:56", "12:23:34:45:56"]  # TODO: add : 00:00:00:00:00:00, ff:ff:ff:ff:ff:ff if necessary...
+    valid_macs = ['01:12:23:34:45:56', "0a:00:27:00:00:05", "0a-00-27-00-00-03", "0A:0D:27:00:00:03", "0A-0D-27-00-00-03"]
+
+    def setUp(self):
+        try_delete_user("amanoury")
+        try_delete_old_user("amanoury")
+        self.user = create_full_user()
+        self.user.save()
+
+        self.client.login(username=self.user.uid, password=self.user.user_password)
+        user_devices = LdapDevice.filter(owner=self.owner)
+        for mac in self.invalid_macs + self.valid_macs:
+            user_devices += LdapDevice.filter(mac_address=mac)
+
+        for device in user_devices:
+            device.delete()
+
+    def test_simple_add(self):
+        r = self.client.get(reverse("gestion-machines:ajout-manuel"),
+                                    HTTP_HOST="10.0.3.99", follow=True)
+        self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed(r, "gestion_machines/manual_add_device.html")
+
+        r = self.client.post(reverse("gestion-machines:ajout-manuel"),
+                                    {'mac': '01:12:23:34:45:56',
+                                     'description': "fake description"},
+                                    HTTP_HOST="10.0.3.99", follow=True)
+
+        self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed(r, 'gestion_machines/list_devices.html')
+        self.assertContains(r, "Votre demande a")
+        self.assertEqual(1, len(mail.outbox))
+
+    def test_double_add(self):
+        # Creating ldap form
+        device = LdapDevice()
+        device.hostname = "pcamanoury012"
+        device.set_owner(self.owner)
+        device.ip = "200.222"
+        device.mac_address = '01:12:23:34:45:56'
+        device.zones = ["Brest", "User"]
+        device.save()
+
+        r = self.client.post(reverse("gestion-machines:ajout-manuel"),
+                             {'mac': '01:12:23:34:45:56'},
+                             HTTP_HOST="10.0.3.99", follow=True)
+
+        self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed(r, 'gestion_machines/manual_add_device.html')
+        self.assertContains(r, "Cette machine est")
+        self.assertEqual(1, len(mail.outbox))
+
+    def test_invalid_mac(self):
+        for mac in self.invalid_macs:
+            r = self.client.post(reverse("gestion-machines:ajout-manuel"),
+                                 {'mac': mac, 'description': "fake description"},
+                                 HTTP_HOST="10.0.3.99", follow=True)
+            self.assertEqual(200, r.status_code)
+            self.assertTemplateUsed(r, 'gestion_machines/manual_add_device.html')
+            self.assertContains(r, "Adresse MAC non valide")
+
+    def test_valid_macs(self):
+        for mac in self.valid_macs:
+            r = self.client.post(reverse("gestion-machines:ajout-manuel"),
+                                 {'mac': mac, 'description': "fake description"},
+                                 HTTP_HOST="10.0.3.99", follow=True)
+
+            self.assertEqual(200, r.status_code)
+            self.assertTemplateUsed(r, 'gestion_machines/list_devices.html')
+            self.assertContains(r, "Votre demande a")
+
+    def test_invalid_description(self):
+        r = self.client.post(reverse("gestion-machines:ajout-manuel"),
+                                    {'mac': '01:12:23:34:45:56'},
+                                    HTTP_HOST="10.0.3.99", follow=True)
+
+        self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed(r, 'gestion_machines/manual_add_device.html')
+        self.assertContains(r, "Ce champ est obligatoire.")
+
+
 class BandwidthUsageCase(TestCase):
     def setUp(self):
         try_delete_user("amanoury")
@@ -204,6 +287,6 @@ class BandwidthUsageCase(TestCase):
                             HTTP_HOST="10.0.3.199", follow=True)
         self.assertEqual(200, r.status_code)
         data = json.loads(r.content.decode())
-        self.assertEqual(len(data["up"]), settings.BANDWIDTH_BATCHS + 1)
-        self.assertEqual(len(data["down"]), settings.BANDWIDTH_BATCHS + 1)
-        self.assertEqual(len(data["labels"]), settings.BANDWIDTH_BATCHS + 1)
+        self.assertGreaterEqual(settings.BANDWIDTH_BATCHS + 1, len(data["up"]))
+        self.assertGreaterEqual(settings.BANDWIDTH_BATCHS + 1, len(data["down"]), settings.BANDWIDTH_BATCHS )
+        self.assertGreaterEqual(settings.BANDWIDTH_BATCHS + 1, len(data["labels"]), settings.BANDWIDTH_BATCHS)

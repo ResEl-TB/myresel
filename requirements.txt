@@ -16,4 +16,5 @@ rq
 django-rq
 python-logstash>=0.4.6
 python-dateutil==2.6.0
-coverage>=4.2
+coverage>=4.3
+django_coverage_plugin>=1.4
