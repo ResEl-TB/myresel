@@ -144,8 +144,6 @@ INSTALLED_APPS = [
     'wiki',
     'pages',
     'django_rq',
-    'campus.whoswho',
-    'clubs',
     'campus',
 ]
 
