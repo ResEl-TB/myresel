@@ -9,12 +9,12 @@ from campus import async_tasks
 
 class Mail(models.Model):
     sender = models.CharField(
-        max_length=15,
+        max_length=127,
         verbose_name='Envoyeur',
     )
 
     subject = models.CharField(
-        max_length=50,
+        max_length=127,
         verbose_name='Sujet',
     )
 
@@ -29,7 +29,7 @@ class Mail(models.Model):
     )
 
     moderated_by = models.CharField(
-        max_length=15,
+        max_length=127,
         verbose_name='Modéré par',
         editable=False,
     )

@@ -46,24 +46,6 @@ def send_email_view(request):
                 for mod in LdapGroup.get(pk='campusmodo').members
             ]
 
-            moderators_email = EmailMessage(
-                subject="[mod-campus] Nouveau email campus à modérer de %s %s" %
-                        (request.ldap_user.first_name, request.ldap_user.last_name),
-                body="Bonjour,\n\n" +
-                     "Vous trouverez ci-joint une copie du mail qui est à modérer :\n\n" +
-                     "--------------------------------------\n\n" +
-                     m.content + "\n\n" +
-                     "--------------------------------------\n\n" +
-                     "Modérer : https://resel.fr" + reverse("campus:mails:moderate") + "\n"
-                     "Cordialement,\n" +
-                     "~ le gentil bot ResEl ~\n\n" +
-                     "Ce mail a été envoyé automatiquement, merci de ne pas y répondre.\n",
-                from_email="noreply@resel.fr",
-                to=moderators_emails_addresses
-            )
-
-            moderators_email.send()
-
             messages.success(request, _('Votre mail sera traité par les modérateurs.'))
             return HttpResponseRedirect(reverse('home'))
 
