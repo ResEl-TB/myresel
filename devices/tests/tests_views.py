@@ -9,8 +9,8 @@ from django.core import mail
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
-from gestion_machines.models import LdapDevice
-from gestion_machines.tests.tests import try_delete_device
+from devices.models import LdapDevice
+from devices.tests.tests import try_delete_device
 from gestion_personnes.tests import try_delete_user, try_delete_old_user, create_full_user
 from myresel import settings
 
@@ -39,7 +39,7 @@ class AddDeviceViewCase(TestCase):
         response = self.client.get(reverse("gestion-machines:ajout"),
                                    HTTP_HOST="10.0.3.95", follow=True)
         self.assertEqual(200, response.status_code)
-        self.assertTemplateUsed(response, "gestion_machines/add_device.html")
+        self.assertTemplateUsed(response, "devices/add_device.html")
 
     def test_add_simple_device(self):
         user_machines = len(LdapDevice.filter(owner=self.owner))
@@ -201,7 +201,7 @@ class ManualAddCase(TestCase):
         r = self.client.get(reverse("gestion-machines:ajout-manuel"),
                                     HTTP_HOST="10.0.3.99", follow=True)
         self.assertEqual(200, r.status_code)
-        self.assertTemplateUsed(r, "gestion_machines/manual_add_device.html")
+        self.assertTemplateUsed(r, "devices/manual_add_device.html")
 
         r = self.client.post(reverse("gestion-machines:ajout-manuel"),
                                     {'mac': '01:12:23:34:45:56',
@@ -209,7 +209,7 @@ class ManualAddCase(TestCase):
                                     HTTP_HOST="10.0.3.99", follow=True)
 
         self.assertEqual(200, r.status_code)
-        self.assertTemplateUsed(r, 'gestion_machines/list_devices.html')
+        self.assertTemplateUsed(r, 'devices/list_devices.html')
         self.assertContains(r, "Votre demande a")
         self.assertEqual(1, len(mail.outbox))
 
@@ -228,7 +228,7 @@ class ManualAddCase(TestCase):
                              HTTP_HOST="10.0.3.99", follow=True)
 
         self.assertEqual(200, r.status_code)
-        self.assertTemplateUsed(r, 'gestion_machines/manual_add_device.html')
+        self.assertTemplateUsed(r, 'devices/manual_add_device.html')
         self.assertContains(r, "Cette machine est")
         self.assertEqual(1, len(mail.outbox))
 
@@ -238,7 +238,7 @@ class ManualAddCase(TestCase):
                                  {'mac': mac, 'description': "fake description"},
                                  HTTP_HOST="10.0.3.99", follow=True)
             self.assertEqual(200, r.status_code)
-            self.assertTemplateUsed(r, 'gestion_machines/manual_add_device.html')
+            self.assertTemplateUsed(r, 'devices/manual_add_device.html')
             self.assertContains(r, "Adresse MAC non valide")
 
     def test_valid_macs(self):
@@ -248,7 +248,7 @@ class ManualAddCase(TestCase):
                                  HTTP_HOST="10.0.3.99", follow=True)
 
             self.assertEqual(200, r.status_code)
-            self.assertTemplateUsed(r, 'gestion_machines/list_devices.html')
+            self.assertTemplateUsed(r, 'devices/list_devices.html')
             self.assertContains(r, "Votre demande a")
 
     def test_invalid_description(self):
@@ -257,7 +257,7 @@ class ManualAddCase(TestCase):
                                     HTTP_HOST="10.0.3.99", follow=True)
 
         self.assertEqual(200, r.status_code)
-        self.assertTemplateUsed(r, 'gestion_machines/manual_add_device.html')
+        self.assertTemplateUsed(r, 'devices/manual_add_device.html')
         self.assertContains(r, "Ce champ est obligatoire.")
 
 
@@ -277,7 +277,7 @@ class BandwidthUsageCase(TestCase):
         response = self.client.get(reverse("gestion-machines:bandwidth-usage"),
                                    HTTP_HOST="10.0.3.199", follow=True)
         self.assertEqual(200, response.status_code)
-        self.assertTemplateUsed(response, "gestion_machines/bandwidth.html")
+        self.assertTemplateUsed(response, "devices/bandwidth.html")
 
     @skip("Temporarily disabled")
     def test_simple_ajax(self):
@@ -290,3 +290,11 @@ class BandwidthUsageCase(TestCase):
         self.assertGreaterEqual(settings.BANDWIDTH_BATCHS + 1, len(data["up"]))
         self.assertGreaterEqual(settings.BANDWIDTH_BATCHS + 1, len(data["down"]), settings.BANDWIDTH_BATCHS )
         self.assertGreaterEqual(settings.BANDWIDTH_BATCHS + 1, len(data["labels"]), settings.BANDWIDTH_BATCHS)
+
+
+class ListDevicesCase(TestCase):
+    pass  # TODO
+
+
+class EditDeviceCase(TestCase):
+    pass  # TODO

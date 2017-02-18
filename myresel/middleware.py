@@ -10,8 +10,6 @@ from django.http import HttpResponseBadRequest, HttpResponseRedirect
 from django.utils.translation import ugettext_lazy as _
 
 from fonctions import ldap, network
-from fonctions.network import NetworkError
-from gestion_machines.models import LdapDevice
 from gestion_personnes.models import LdapUser
 
 logger = logging.getLogger("default")

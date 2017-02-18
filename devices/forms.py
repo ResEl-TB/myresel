@@ -10,7 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from fonctions import ldap
 from fonctions.ldap import get_free_alias
-from gestion_machines.models import LdapDevice
+from devices.models import LdapDevice
 
 
 class AddDeviceForm(forms.Form):

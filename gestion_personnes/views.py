@@ -17,7 +17,7 @@ from django.views.generic import FormView, View
 
 from fonctions import ldap
 from fonctions.decorators import resel_required, unknown_machine
-from gestion_machines.forms import AddDeviceForm
+from devices.forms import AddDeviceForm
 from gestion_personnes.async_tasks import send_mails
 from gestion_personnes.models import LdapUser, UserMetaData
 from .forms import InscriptionForm, ModPasswdForm, CGUForm, InvalidUID, PersonnalInfoForm, ResetPwdSendForm, \

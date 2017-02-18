@@ -15,7 +15,7 @@ chacune des fonctionnalités du site.
  - `fonctions/` : des fonctions génériques utiles (en cours de depreciation)
  - `gestion_personnes/` : tout ce qui touche à la gestion des comptes 
  utilisateurs
- - `gestion_machines/` :  tout ce qui touche à la gestion des machines
+ - `devices/` :  tout ce qui touche à la gestion des machines
  - `tresorerie/` : la tréso obvously
  - `clubs/` : Gestion des clubs
  - `whoswho/` : La gestion de l'annuaire
