@@ -11,6 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from fonctions import ldap, network
 from gestion_personnes.models import LdapUser
+from campus.models import StudentOrganisation, Room
 
 logger = logging.getLogger("default")
 class IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAResElAdminSoCheckTheLdapBeforeMiddleware(object):
@@ -30,7 +31,6 @@ class IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAResElAdmi
                 user.is_staff = 1
                 user.is_superuser = 1
                 user.save()
-
 
 class NetworkConfiguration(object):
     """

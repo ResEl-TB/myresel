@@ -1,0 +1,147 @@
+{% extends "base_campus.html" %}
+{% load staticfiles %}
+{% load rooms_extras %}
+
+{% block title %}Calendrier campus{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/campus/rooms.css' %}">
+{% endblock css %}
+
+{% block content %}
+    <div class="container title">
+        <h1>Calendrier de l'AE</h1>
+    </div>
+    <div class="container well" id="content">
+        <div class="row">
+            <div class="col-xs-12" id="month-navigation">
+                <div class="btn-group" role="group" aria-label="previous-next-month">
+                    {% if current_room == 'all' %}
+                        <a class="btn btn-default" href="{% url 'campus:rooms:calendar-month' current_date|previous_month|date:'Y' current_date|previous_month|date:'n' %}">
+                            <span class="glyphicon glyphicon-chevron-left"></span>
+                        </a>
+                    {% else %}
+                        <a class="btn btn-default" href="{% url 'campus:rooms:calendar-room-month' current_room.pk current_date|previous_month|date:'Y' current_date|previous_month|date:'n' %}">
+                            <span class="glyphicon glyphicon-chevron-left"></span>
+                        </a>
+                    {% endif %}
+
+                    {% if current_room == 'all' %}
+                        <a class="btn btn-default" href="{% url 'campus:rooms:calendar-month' current_date|next_month|date:'Y' current_date|next_month|date:'n' %}">
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                        </a>
+                    {% else %}
+                        <a class="btn btn-default" href="{% url 'campus:rooms:calendar-room-month' current_room.pk current_date|next_month|date:'Y' current_date|next_month|date:'n' %}">
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                        </a>
+                    {% endif %}
+                </div>
+
+                <div class="btn btn-link">
+                    {{ current_date|date:'F Y' }}
+                </div>
+
+                <div class="btn btn-link">
+                    {% if current_room == 'all' %}
+                        Toutes les salles - <a href="{% url 'campus:rooms:booking' %}">Créer un événement</a>
+                    {% else %}
+                        {{ current_room.name }} (<a href="{% url 'campus:rooms:calendar' %}">voir toutes les salles</a>) - <a href="{% url 'campus:rooms:booking' %}">réserver la salle</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="table-responsive col-xs-12">
+                <div class="row">
+                    <table id="calendar" class="table">
+                        <thead>
+                        <tr>
+                            {% if calendar|length_is:'1' %}
+                                <th>{{ calendar.0.0.0|date:'l' }}</th>
+                            {% else %}
+                                {% for day, events in calendar.3 %}
+                                    <th>{{ day|date:'l' }}</th>
+                                {% endfor %}
+                            {% endif %}
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {% for week in calendar %}
+                            <tr>
+                                {% for day, events in week %}
+                                    {% if day == 0 %}
+                                        <td>
+                                            <div class='text-right small'></div>
+                                        </td>
+                                    {% else %}
+                                        <td {% if day|date:'j' == current_day_nbr %}class="current-day"{% endif %} >
+                                            <div class='text-right small'>
+                                                {% if current_room == 'all' %}
+                                                    <a href="{% url 'campus:rooms:calendar-day' day|date:'Y' day|date:'n' day|date:'j' %}">
+                                                        {{ day|date:'j' }}
+                                                    </a>
+                                                {% else %}
+                                                    <span {% if current_day_nbr == day|date:'j' %}class="label label-info"{% endif %}>
+                                                    <a href="{% url 'campus:rooms:calendar-room-day' current_room.pk day|date:'Y' day|date:'n' day|date:'j' %}">
+                                                        {{ day|date:'j' }}
+                                                    </a>
+                                                    </span>
+                                                {% endif %}
+                                            </div>
+                                            {% for event in events %}
+                                                <a class="event" href="{% url "campus:rooms:booking-detail"  event.pk %}">
+                                                    <div class="alert-{{ event.booking_type }}">
+                                                        <span class="time">{{ event.start_time|time:'H:i' }} - {{ event.end_time|time:'H:i' }}</span>
+                                                        <span class="description">{{ event.description }}</span>
+                                                    </div>
+                                                </a>
+                                            {% endfor %}
+                                        </td>
+                                    {% endif %}
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <table id="legend">
+                        <tr>
+                            <td><span class="alert alert-party">Soirée</span></td>
+                            <td><span class="alert alert-club">Activité de club</span></td>
+                            <td><span class="alert alert-meeting">Réunion</span></td>
+                            <td><span class="alert alert-training">Formation</span></td>
+                            <td><span class="alert alert-event">Évènement</span></td>
+                            <td><span class="alert alert-sport">Sport</span></td>
+                            <td><span class="alert alert-arts">Arts et culture</span></td>
+                            <td><span class="alert alert-other">Autre</span></td>
+                        </tr>
+                    </table>
+                </div>
+            </div> <!-- /.table-responsive -->
+
+        </div> <!-- /.row -->
+
+        <div class="row">
+            <div class="col-xs-12" >
+                {% for title, queryset in rooms %}
+                    {% if queryset %}
+                        <div class="col-xs-6 col-sm-3 room-list">
+                            <div class="panel panel-info">
+                                <div class="panel-heading">{{ title }}</div>
+
+                                <div class="panel-body">
+                                    {% for room in queryset %}
+                                        <a href="{% url 'campus:rooms:calendar-room' room.pk %}">{{ room.name }}</a><br>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+        </div>  <!-- /.row -->
+    </div>
+{% endblock %}

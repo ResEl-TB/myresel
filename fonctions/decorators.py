@@ -1,10 +1,13 @@
 import logging
 import re
+from datetime import datetime
+from functools import wraps
 
 from django.conf import settings
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
+from django.utils.decorators import available_attrs
 from django.utils.translation import ugettext_lazy as _
 
 from fonctions import ldap, network
@@ -138,3 +141,27 @@ def correct_vlan(function=None, redirect_to='home'):
         return _dec
     else:
         return _dec(function)
+
+def ae_required(function, redirect_to='campus:rooms:calendar'):
+    """ 
+    Checks if the user is a valid ae member
+    """
+
+    def _dec(view_func):
+        @wraps(view_func, assigned=available_attrs(view_func))
+        def _view(request, *args, **kwargs):
+            ae = False
+            for period in request.ldap_user.dates_membre:
+                [start, end] = list(map(lambda x: datetime.strptime(x, '%Y%m%d').date(), period.split('-')))
+                if start <= datetime.now().date() <= end:
+                    ae = True
+                    break
+            
+            if not ae:
+                messages.error(request, _('Vous n\'êtes pas membre de l\'AE, vous ne pouvez donc pas réserver de salle'))
+                return HttpResponseRedirect(reverse(redirect_to))             
+
+            return view_func(request, *args, **kwargs)
+        return _view
+
+    return _dec(function)

@@ -1,0 +1,63 @@
+{% extends "base_campus.html" %}
+{% load staticfiles %}
+
+{% block title %}Envoyer un mail{% endblock %}
+
+{% block content %}
+<div class="container" id="content">
+    <div class="row">
+
+        <div class="col-md-12">
+            <h1 class="page-header text-center" style="color: white;">
+                Envoi de mail à campus@resel.fr
+            </h1>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-5 col-md-offset-1 well">
+            <form method="POST" class="form-horizontal" style="padding: 0px 10px 0px 10px;">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                        {{ form.sender }}
+                    </div>
+                </div>
+
+                <div class="form-group {% if form.subject.errors %}has-error{% endif %}">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-envelope-o"></i></span>
+                        <input type="text" class="form-control" name="subject"  placeholder="Sujet">
+                    </div>
+                    {% if form.subject.errors %}<span class="help-block">{{ form.subject.errors }}</span>{% endif %}
+                </div>
+
+                <div class="form-group {% if form.content.errors %}has-error{% endif %}">
+                    <textarea style="resize: none;" rows="10" class="form-control" name="content"  placeholder="Contenu de votre message"></textarea>
+                    {% if form.content.errors %}<span class="help-block">{{ form.content.errors }}</span>{% endif %}
+                </div>
+
+                <div class="form-group text-right">
+                    <div class="btn-group" role="button" aria-label="submit">
+                        <button type="submit" class="btn btn-info">Envoyer</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-4 col-md-offset-1 well">
+            <h3>Infos à retenir</h3>
+            <ul>
+                <li>Votre mail sera soumis à la modération, il ne sera pas directement envoyé</li>
+                <li>Les modérateurs sont libre de corriger le contenu (orthographe, entre autres...)</li>
+                <li>Une trace de votre mail sera gardée</li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

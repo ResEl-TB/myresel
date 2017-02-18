@@ -1,0 +1,49 @@
+{% extends "base_campus.html" %}
+{% load staticfiles %}
+
+{% block title %}Les mails campus à modérer{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.0.3/jquery-confirm.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <h1 class="page-header text-center" style="color: white;">
+            Les mails à modérer
+        </h1>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 well">
+            <table class="table table-striped">
+                <thead>
+                    <th>Expéditeur</th>
+                    <th>Sujet</th>
+                    <th>Reçu le</th>
+                    <th>Rejeter</th>
+                </thead>
+
+                <tbody>
+                    {% for mail in mails %}
+                    <tr data-mailid="{{ mail.pk }}">
+                        <td class="moderate">{{ mail.sender }}</td>
+                        <td>{{ mail.subject }}</td>
+                        <td>{{ mail.date|date:'d F Y à H:i' }}</td>
+                        <td class="reject" style="cursor: pointer;">
+                            <span><i class="fa fa-ban" aria-hidden="true"></i></span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.0.3/jquery-confirm.min.js"></script>
+<script src="{% static 'js/campus/mails.js' %}"></script>
+{% endblock %}

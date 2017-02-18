@@ -302,6 +302,14 @@ attributeType ( 1.3.6.1.4.1.14628.19.0 NAME 'campagneYear'
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.36
 	SINGLE-VALUE )
 
+attributeType ( 1.3.6.1.4.1.14628.17.2 NAME 'mlist'
+        DESC 'Adresse email de la mliste'
+	EQUALITY caseIgnoreMatch
+        ORDERING caseIgnoreOrderingMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+	SINGLE-VALUE )
+
 #
 # Attributs pour reselSite
 #
@@ -846,10 +854,10 @@ objectClass ( 1.3.6.1.4.1.14628.1.16 NAME 'reselSite' SUP posixGroup STRUCTURAL
 objectClass ( 1.3.6.1.4.1.14628.1.17 NAME 'studentOrganisation' STRUCTURAL
 	DESC 'Organisation d étudiants de TELECOM Bretagne'
 	MUST ( cn $ orgaName $ mlInfos )
-	MAY ( uidPrezs $ uidMembres $ description ) )
+	MAY ( uidPrezs $ uidMembres $ description $ mlist ) )
 
 objectClass ( 1.3.6.1.4.1.14628.1.15 NAME 'tbClub' SUP studentOrganisation STRUCTURAL
-        DESC 'Club de TELECOM Bretagne' )
+        DESC 'StudentOrganisation de TELECOM Bretagne' )
 
 objectClass ( 1.3.6.1.4.1.14628.1.18 NAME 'tbAsso' SUP studentOrganisation STRUCTURAL
 	DESC 'Association de TELECOM Bretagne' )
@@ -862,7 +870,7 @@ objectClass ( 1.3.6.1.4.14628.1.19 NAME 'tbCampagne' SUP studentOrganisation STR
 # tbClubSport dérive de tbClub et représente un club sportif (BdS)
 #
 objectClass ( 1.3.6.1.4.1.14628.1.20 NAME 'tbClubSport' SUP tbClub STRUCTURAL
-        DESC 'Club sportif de TELECOM Bretagne' )
+        DESC 'StudentOrganisation sportif de TELECOM Bretagne' )
 
 # switch dans ou=In,ou=ap,dc=resel...
 objectclass ( 1.3.6.1.4.1.14628.1.21 NAME 'reselAP'  STRUCTURAL

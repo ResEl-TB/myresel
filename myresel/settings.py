@@ -144,8 +144,7 @@ INSTALLED_APPS = [
     'wiki',
     'pages',
     'django_rq',
-    'whoswho',
-    'clubs',
+    'campus',
 ]
 
 MIDDLEWARE_CLASSES = [

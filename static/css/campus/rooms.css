@@ -1,0 +1,114 @@
+#content.container {
+    font-family: Arial, Helvetica, sans-serif;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.table {
+    width: 100%;
+}
+
+.room-list {
+    font-size: .9em;
+}
+
+.room-list .panel-heading {
+    background-color: #EEF3FF;
+    border-color: #EEF3FF;
+}
+
+.room-list .panel {
+    border-color: #EEF3FF;
+}
+
+#legend {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+#legend td {
+    white-space: nowrap;
+}
+
+#legend td:last-child {
+    width:100%;
+}
+
+#legend span {
+    margin-right: 1px;
+    margin-left: 1px;
+}
+
+#calendar.table > thead th {
+    text-align: center;
+}
+
+#calendar.table > tbody tr {
+    height: 100px;
+}
+
+#calendar.table > tbody td {
+    background-color: #EEF3FF;
+    border: 3px solid white;
+    width: 100px;
+    font-size: .8em;
+}
+
+.alert {
+    padding: 8px;
+}
+
+.alert-party {
+    background-color: #93FFA4;
+}
+
+.alert-club {
+    background-color: #F9BDFD;
+}
+
+.alert-meeting {
+    background-color: #FAFF9A;
+}
+
+.alert-training {
+    background-color: #A3B2FC;
+}
+
+.alert-event {
+    background-color: #FBDB93;
+}
+
+.alert-sport {
+    background-color: #FA5E56;
+}
+
+.alert-arts {
+    background-color: #ADD56C;
+}
+
+.alert-other {
+    background-color: #D0D4CF;
+}
+
+.time {
+    color: #F3FFE2;
+    display: block;
+}
+
+.event {
+    padding: 0;
+}
+
+.event div {
+    border-radius: 3px;
+    margin: 0;
+    padding: 2px;
+}
+
+.event:hover {
+    text-decoration: none;
+}
+.current-day {
+    background-color: #cfdfff !important;
+}

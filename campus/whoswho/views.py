@@ -19,7 +19,7 @@ class UserDetails(View):
     goddaughter/godson
     """
     
-    template_name = 'whoswho/userDetails.html'
+    template_name = 'campus/whoswho/userDetails.html'
     
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
