@@ -16,7 +16,7 @@ from django.views.generic import View, ListView, DetailView
 
 from fonctions import network, decorators
 from fonctions.generic import sizeof_fmt
-from gestion_machines.models import LdapDevice, PeopleData
+from devices.models import LdapDevice, PeopleData
 from gestion_personnes.models import LdapUser, UserMetaData
 from pages.forms import ContactForm
 from pages.models import News, Faq

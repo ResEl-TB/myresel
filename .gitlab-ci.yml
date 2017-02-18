@@ -54,7 +54,7 @@ create_config:
       - tresorerie/migrations/
       - pages/migrations/
       - gestion_personnes/migrations/
-      - gestion_machines/migrations/
+      - devices/migrations/
 
 test_django:
   artifacts:
@@ -69,7 +69,6 @@ test_django:
 
 pylint:
   stage: test
-  services: []
   script:
     - pip3 install pylint --quiet
     - pip3 install pylint-django --quiet

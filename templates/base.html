@@ -82,6 +82,9 @@
                     </li>
                 {% endfor %}
                 <li>
+                    <a class="btn-campus" href="{% url 'campus:home' %}"><i class="fa fa-bicycle fa-fw"></i> <span class="hidden-sm hidden-md">{% trans "Campus" %}</span></a>
+                </li>
+                <li>
                     <a href="{% url 'news' %}"><i class="fa fa-newspaper-o fa-fw"></i> <span class="hidden-sm hidden-md">{% trans "Actualités" %}</span></a>
                 </li>
                 <li>

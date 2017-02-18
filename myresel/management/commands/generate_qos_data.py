@@ -6,7 +6,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.management.base import BaseCommand, CommandError
 from django.db import IntegrityError
 
-from gestion_machines.models import PeopleHistory, PeopleData
+from devices.models import PeopleHistory, PeopleData
 from gestion_personnes.models import LdapUser
 
 

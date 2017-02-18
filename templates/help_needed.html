@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block css %}
+    <link href="{% static 'css/home.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block titre %}News{% endblock %}
+
+{% block content %}
+    <div>
+        <div>
+            {# Affichage normal de la page #}
+            <div class="home-fragment home-user-management">
+            </div>
+            <div class="home-fragment home-presentation">
+                <div class="container text-left article">
+                   <div class="news-container">
+                      <div class="panel-heading centered"><h3 style="color: #2b669a;">Le ResEl a besoin de votre aide !<hr /></h3></div>
+                      <div class="panel-body">
+                          <p>Vous trouvez que le site manque de fonctionnalités ? Vous trouvez des bugs ? Vous aimeriez apporter
+                          votre pierre à l'édifice ? Alors venez nous aider à faire ce site ResEl !</p>
+                          <p>Nous faisons tout cela sur notre temps libre au ResEl, et nous n'en avons pas toujours. Hésitez
+                          pas à passer sur la <a href="https://git.resel.fr/resel/myresel/">page du projet</a> pour venir nous aider.
+                          Toute aide est la bienvenue !</p>
+                          <p>Vous pouvez aussi nous contacter en envoyant un e-mail à <a href="mailto:contact@resel.fr">contact@resel.fr</a>
+                              ou par la <a href="{% url "contact" %}">page de contact</a>.</p>
+                      </div><hr />
+                      <div class="pieceofnews-footer">Loïc Carr</div>
+                   </div>
+               </div>
+            </div>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+{% endblock %}

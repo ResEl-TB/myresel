@@ -1,0 +1,58 @@
+{% extends "base_campus.html" %}
+{% load staticfiles %}
+
+{% block title %}Associations et clubs{% endblock %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/campus/clubs.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="container" id="content">
+        <div class="row">
+
+            <div class="col-md-12">
+                <h1 class="page-header text-center" style="color: white;">
+                    Les clubs et associations
+                </h1>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="hard-content">
+        <div class="container">
+            <div class="nav navbar">
+                <ul class="nav navbar-nav navbar-right">
+                    <form class="navbar-form navbar-left">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Rechercher un club">
+                        </div>
+                        <button type="submit" class="btn btn-default"><span class="fa fa-fw fa-search"></span></button>
+                    </form>
+                    {% if request.user.is_authenticated %}<li><a href="#">Mes clubs</a></li>{% endif %}
+                    <li><a href="#"><span class="fa fa-plus"></span> Nouveau club ou association</a></li>
+                </ul>
+            </div>
+            <h2>Associations</h2>
+            <div class="row assos-card">
+                <div class="col-md-3 col-md-offset-1">
+                    <img class="assos-img" src="{% static 'images/logo_resel.png' %}" height="100" >
+                </div>
+                <div class="col-md-6 col-md-offset-1">
+                    <h2>Le ResEl</h2>
+                    <p>Association gérant le réseau sur le campus de télécom-bretagne</p>
+                    <a href="https://resel.fr">En savoir plus</a>
+                </div>
+            </div>
+            {% for asso in assos %}
+                {{ asso.orgaName }}
+            {% endfor %}
+
+            <h2>Clubs</h2>
+            {% for club in clubs %}
+                {{ club.orgaName }}
+            {% endfor %}
+        </div>
+    </div>
+    </div>
+{% endblock %}

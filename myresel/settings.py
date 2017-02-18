@@ -137,15 +137,14 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'phonenumber_field',
-    'gestion_machines',
+    'devices',
     'gestion_personnes',
     'myresel',
     'tresorerie',
     'wiki',
     'pages',
     'django_rq',
-    'whoswho',
-    'clubs',
+    'campus',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -207,7 +206,7 @@ DATABASES = {
         'HOST': DB_QOS_HOST,
     }
 }
-DATABASE_ROUTERS = ['gestion_machines.models.QoSRouter']
+DATABASE_ROUTERS = ['devices.models.QoSRouter']
 
 
 class DisableMigrations(object):

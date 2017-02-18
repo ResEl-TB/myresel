@@ -5,6 +5,8 @@ import re
 import subprocess
 from ipaddress import ip_address
 
+from rq.decorators import job
+
 from myresel import settings
 
 logger = logging.getLogger("default")
@@ -62,6 +64,7 @@ def get_campus(ip_str: str) -> str:
         raise NetworkError("The ip %s is not on any campus" % ip)
 
 
+# @job
 def update_all():
     """ Relance le DNS, le DHCP et le firewall """
     # TODO: do that in background
