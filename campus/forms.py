@@ -107,13 +107,17 @@ class RoomBookingForm(ModelForm):
             elif not room.is_free(start_time, end_time):
                 self.add_error('room', _("La salle %s n'est pas disponible") % room)
 
+
+class DisabledCharField(CharField):
+    def __init__(self, disabled=True, *args, **kwargs):
+        super(DisabledCharField, self).__init__(disabled=True, *args, **kwargs)
+
 class SendMailForm(ModelForm):
     class Meta:
         model = Mail
-        fields = '__all__'
-        widgets = {
-            'sender': TextInput(attrs={'readonly':'readonly', 'class': 'form-control'}),
-        }
+        fields = ("sender", "subject", "content")
+        widgets = {'sender': TextInput(attrs={'readonly':'readonly', 'class': 'form-control'}),}
+        field_classes = {'sender': DisabledCharField,}
 
 class ClubManagementForm(Form):
 

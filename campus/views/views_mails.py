@@ -18,7 +18,9 @@ def send_email_view(request):
     )
 
     if request.method == 'POST':
-        form = SendMailForm(request.POST)
+        form = SendMailForm(
+            request.POST,
+            initial={'sender': request.ldap_user.mail})
         if form.is_valid():
             m = form.save()
 
