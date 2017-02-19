@@ -397,6 +397,24 @@ class MailResElViewCase(TestCase):
         self.assertEqual('/var/mail/virtual/'+user_n.uid, user_n.home_directory)
         self.assertTrue("mailPerson" in user_n.object_classes)
 
+    def test_already_existing_mail_creation(self):
+        # Create a fake user
+        mv = MailResEl()
+        h = mv.build_address(self.user.uid, self.user.first_name, self.user.last_name)
+        self.user.mail_local_address = h + b"@resel.fr"
+        self.user.mail_dir = self.user.uid + '/Maildir/'
+        self.user.mail_del_date = None
+        self.user.home_directory = '/var/mail/virtual/' + self.user.uid
+        self.user.object_classes = ['mailPerson']
+        self.user.save()
+
+        r = self.client.get(reverse("gestion-personnes:mail"),
+                            HTTP_HOST="10.0.3.99", follow=True)
+        self.assertEqual(200, r.status_code)
+
+        # Better way to detect an error ? 
+        self.assertTemplateUsed(r, "gestion_personnes/mail_resel.html")
+
     def test_build_address(self):
         # TODO : do a bit more tests
         mv = MailResEl()
@@ -440,4 +458,50 @@ class DeleteMailResElViewCase(TestCase):
         self.assertNotEqual("", user_n.mail_del_date)  # TODO: Make a more reliable test
 
 # TODO: Test WebmailView
-# TODO: Test RedirectMailResEl
+
+class RedirectMailResElViewCase(TestCase):
+    def setUp(self):
+        self.user = create_full_user()
+        try_delete_user(self.user.uid)
+
+        # Fake mailPerson
+        mv = MailResEl()
+        h = mv.build_address(self.user.uid, self.user.first_name, self.user.last_name)
+        self.user.mail_local_address = h + b"@resel.fr"
+        self.user.mail_dir = self.user.uid + '/Maildir/'
+        self.user.mail_del_date = None
+        self.user.home_directory = '/var/mail/virtual/' + self.user.uid
+        self.user.object_classes = ['mailPerson']
+        self.user.save()
+
+        self.client.login(username=self.user.uid, password=self.user.user_password)
+
+    def test_create_redirection(self):
+        new_address = "bernard.lowe@westworld.us"
+
+        r = self.client.get(reverse("gestion-personnes:redirect-mail"),
+                            HTTP_HOST="10.0.3.99", follow=True)
+        self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed(r, "gestion_personnes/mail_redirect.html")
+
+        r = self.client.post(reverse("gestion-personnes:redirect-mail"),
+                                data={"new_routing_address": new_address},
+                                HTTP_HOST="10.0.3.99", follow=True)
+        self.assertEqual(200, r.status_code)
+
+        user_mod = LdapUser.get(uid=self.user.uid)
+        self.assertEqual(user_mod.mail_routing_address, new_address)
+
+    def test_delete_redirection(self):
+        r = self.client.get(reverse("gestion-personnes:redirect-mail"),
+                            HTTP_HOST="10.0.3.99", follow=True)
+        self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed(r, "gestion_personnes/mail_redirect.html")
+
+        r = self.client.post(reverse("gestion-personnes:redirect-mail"),
+                                data={"new_routing_address": ""},
+                                HTTP_HOST="10.0.3.99", follow=True)
+        self.assertEqual(200, r.status_code)
+
+        user_mod = LdapUser.get(uid=self.user.uid)
+        self.assertEqual(user_mod.mail_routing_address, "")
