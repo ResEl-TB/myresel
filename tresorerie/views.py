@@ -184,6 +184,7 @@ class Pay(View):
         if given_uuid != transaction_uuid:
             # TODO: show error message
             logger.warning("L'uuid d'une transaction n'est pas correcte. donnée : %s attendue : %s" % (given_uuid, transaction_uuid))
+            messages.error(request, _("Une erreur s'est produite lors de la commande. Les administrateurs en ont été informés"))
             return HttpResponseRedirect(reverse('tresorerie:pay', kwargs={'product_id': main_product_id}))
 
         if adhere and user.is_member():

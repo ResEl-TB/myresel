@@ -1,4 +1,4 @@
-from gestion_machines.models import LdapDevice
+from devices.models import LdapDevice
 from gestion_personnes.models import LdapUser
 
 

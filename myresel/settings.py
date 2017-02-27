@@ -137,15 +137,14 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'phonenumber_field',
-    'gestion_machines',
+    'devices',
     'gestion_personnes',
     'myresel',
     'tresorerie',
     'wiki',
     'pages',
     'django_rq',
-    'whoswho',
-    'clubs',
+    'campus',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -207,7 +206,7 @@ DATABASES = {
         'HOST': DB_QOS_HOST,
     }
 }
-DATABASE_ROUTERS = ['gestion_machines.models.QoSRouter']
+DATABASE_ROUTERS = ['devices.models.QoSRouter']
 
 
 class DisableMigrations(object):
@@ -317,7 +316,7 @@ PHONENUMBER_DEFAULT_REGION = "FR"
 # QOS Conf
 
 # Number of batchs to do, smaller is faster but less precise
-BANDWIDTH_BATCHS = 5
+BANDWIDTH_BATCHS = 2
 
 
 # Redis conf

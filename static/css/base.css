@@ -19,6 +19,10 @@ body {
     display: inline-block;
 }
 
+.nav .btn-campus {
+    font-weight: bold;
+}
+
 @media(max-width:768px) {
     body {
         font-size: 1.3em;

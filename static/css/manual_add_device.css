@@ -1,0 +1,95 @@
+#warning-overlay {
+    background: #225378;
+    color: #ffffff;
+    width: 100%;
+    min-height: 1000%;
+    z-index: 1000;
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-family: 'Roboto', 'sans-serif';
+}
+
+#warning-overlay .close {
+    font-size: 3em;
+    color: #ffffff;
+    margin-top: 10px;
+}
+
+.text-tuto {
+    font-size: 1.5em;
+    min-height: 100px;
+    padding-top: 70px;
+}
+
+.close-btn {
+    font-size: 1.4em;
+}
+
+.tuto-nbr {
+    padding-top: 50px;
+    font-size: 4em;
+    color: #6289af;
+    font-weight: bolder;
+}
+#warning-overlay .btn {
+    background: none;
+    color: #F79420;
+    border-color: #F79420;
+    margin: 20px;
+}
+
+#warning-overlay .btn:hover {
+    border-color: #b96400;
+    color: #b96400;
+    margin: 20px;
+}
+
+#warning-overlay a, #warning-overlay a:visited {
+    color: #F79420;
+}
+
+#warning-overlay a:hover, #warning-overlay a:active, #warning-overlay a:focus{
+    color: #b96400;
+}
+
+#warning-overlay .row {
+    margin-top: 20px;
+}
+
+.page-title {
+    display: block;
+    background-color: #173851;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 10px;
+    padding-bottom: 20px;
+
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.75), rgba(0, 0, 0, 0));
+}
+
+.main-content {
+}
+
+.contact-zone {
+    margin-top: 100px;
+}
+
+
+#warning-overlay strong {
+    color: #F79420
+}
+
+.dropup {
+    display: inline;
+    text-align: left    ;
+}
+
+.dropdown-menu {
+    min-width: 0;
+}

@@ -10,7 +10,7 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 
 from fonctions.generic import hash_to_ntpass, compare_passwd
-from gestion_machines.models import LdapDevice
+from devices.models import LdapDevice
 from gestion_personnes.models import LdapUser, UserMetaData
 from gestion_personnes.tests import try_delete_user, create_full_user
 from gestion_personnes.views import MailResEl

@@ -55,17 +55,23 @@ python3 manage.py runserver 0.0.0.0:8000
 ````
 
 Sur votre navigateur web rendez-vous sur :
- - `http://10.0.3.94:8000` Pour simuler le VLAN 994 (depuis l'extérieur)
- - `http://10.0.3.95:8000` Pour simuler le VLAN 995 (depuis le réseau d'inscription)
- - `http://10.0.3.99:8000` Pour simuler le VLAN 999 (Depuis une machine inscrite)
- - `http://10.0.3.199:8000` Pour simuler le VLAN 999 (Depuis une machine non inscrite)
+ - `http://10.0.3.94:8000` Simule le VLAN 994 (extérieur)
+ - `http://10.0.3.95:8000` Simule le VLAN 995 (réseau d'inscription)
+ - `http://10.0.3.99:8000` Simule le VLAN 999 (machine inscrite)
+ - `http://10.0.3.199:8000` Simule le VLAN 999 (machine non inscrite)
 
 Votre adresse MAC sera par défaut : "0a:00:27:00:00:10", Vous pouvez la changer
 dans le fichier `myresel/settings_local.py`.
 
+# Documentation
+## -> Voir [/doc](doc/README.md)
+
+N'hésitez pas à la lire avant de contribuer au projet, j'ai mis en gros, c'est pas
+pour rien ;-).
+
 # Faire un hotfix/modification sur les serveurs de prod
 
-:warning: Contrairement à 99% des autres services ResEl vous ne devez quasiment
+#### :warning: Contrairement à 99% des autres services ResEl vous ne devez quasiment
  en **aucun cas toucher aux serveurs de production**. Voici la procédure :
  
 Clonez le repo sur votre ordinateur :
@@ -74,14 +80,17 @@ git clone https://git.resel.fr/resel/myresel
 ```
 
 Faites les modifications nécessaires dans le repo. Si les modifications que
-vous souhaitez executer ne sont pas triviales je vous conseille de faire une
+vous souhaitez executer ne sont pas triviales je vous recommande de faire une
 branche :
 ```bash
 git checkout -b branch_name
 ```
 
 Vous pouvez ensuite effectuer vos modifications puis pusher la branche sur
-Gitlab `git push --set-upstream branch_name`
+Gitlab 
+```
+git push --set-upstream branch_name
+```
 
 Ou alors plus simplement si vous n'avez pas créé de branche : `git push`
 
@@ -93,10 +102,6 @@ Il faut ensuite pusher le code en production, pour ceci il suffit de [créer une
 merge request de `master` vers `deploy`](https://git.resel.fr/resel/myresel/merge_requests/new?utf8=✓&merge_request[source_branch]=master&merge_request[target_branch]=deploy)
 à la suite de quoi, si les tests passent, le code sera automatiquement pushé
 sur les serveurs de production.
-
-# Documentation
-La documentation complete est disponible dans le dossier [/doc](doc/README.md).  
-N'hésitez pas à la lire avant de contribuer au projet.
 
 
 # Zone d'inscription
@@ -121,7 +126,7 @@ avec de fausses ip.
 
 # Astuces
 
-## mettre le site en mode maintenance
+## Mettre le site en mode maintenance
 Lorsque vous avez de grosses migrations à faire, il est parfois nécéssaire de 
 mettre le site en mode maintenance pour éviter que les utilisateurs écrivent 
 dans la base de données en même temps que vos migrations. Pour cela il suffit
@@ -140,14 +145,12 @@ hack que je vous propose :
     ```python
     if res:
         user = User.objects.get(username=request.user.username)
-        ...
     ```
     
     par :
     ```python
     if True:
         user = User.objects.get(username=request.user.username)
-        ...
     ```
 
 2. Démarrer le serveur 

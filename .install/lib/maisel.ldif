@@ -40,3 +40,53 @@ modifiersName: uid=afratice,ou=admins,dc=resel,dc=enst-bretagne,dc=fr
 modifyTimestamp: 20050909092009Z
 subschemaSubentry: cn=Subschema
 hasSubordinates: TRUE
+
+dn: ou=organisations,dc=maisel,dc=enst-bretagne,dc=fr
+objectClass: organizationalUnit
+ou: organisations
+structuralObjectClass: organizationalUnit
+hasSubordinates: TRUE
+subschemaSubentry: cn=Subschema
+modifiersName: cn=admin,dc=maisel,dc=enst-bretagne,dc=fr
+modifyTimestamp: 20030907213019Z
+creatorsName: cn=admin,dc=maisel,dc=enst-bretagne,dc=fr
+createTimestamp: 20030826174116Z
+
+dn: ou=groups,dc=maisel,dc=enst-bretagne,dc=fr
+ou: groups
+objectClass: organizationalUnit
+creatorsName: uid=lcarr,ou=admins,dc=resel,dc=enst-bretagne,dc=fr
+createTimestamp: 20040727141220Z
+structuralObjectClass: organizationalUnit
+entryUUID: c69088ce-b19a-2503-8163-eda77459ad13
+entryCSN: 20041013193525.000000Z#0000e8#000#000000
+subschemaSubentry: cn=Subschema
+hasSubordinates: TRUE
+
+dn: uid=mrobin,ou=people,dc=maisel,dc=enst-bretagne,dc=fr
+uid: mrobin
+hasSubordinates: FALSE
+entryCSN: 20170124131047.338302Z#000000#001#000000
+entryUUID: 8413e6f6-ddff-1034-927d-1f0883182db6
+structuralObjectClass: genericPerson
+subschemaSubentry: cn=Subschema
+objectClass: genericPerson
+firstName: Morgan
+lastName: ROBIN
+userPassword: blah
+ntPassword: blah
+displayName: Morgan ROBIN
+postalAddress: blah
+memberOf: cn=campusmodo,ou=groups,dc=maisel,dc=enst-bretagne,dc=fr
+
+dn: cn=campusmodo,ou=groups,dc=maisel,dc=enst-bretagne,dc=fr
+cn: campusmodo
+objectClass: groupOfNames
+structuralObjectClass: groupOfNames
+hasSubordinates: FALSE
+subschemaSubentry: cn=Subschema
+modifiersName: cn=admin,dc=maisel,dc=enst-bretagne,dc=fr
+modifyTimestamp: 20030907213019Z
+creatorsName: cn=admin,dc=maisel,dc=enst-bretagne,dc=fr
+createTimestamp: 20030826174116Z
+member: uid=mrobin,ou=people,dc=maisel,dc=enst-bretagne,dc=fr

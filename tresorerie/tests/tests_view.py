@@ -43,8 +43,69 @@ class HistoryViewCase(TestCase):
         for p in transactions_values:
             self.assertContains(r, str(p))
 
+class HomeViewCaseMeta(type):
+    def __new__(mcs, name, bases, attrs):
+        """
+        For generating arbitrary test cases
+        https://chris-lamb.co.uk/posts/generating-dynamic-python-tests-using-metaclasses
+        """
+        for f in ('FIP', 'FIG', 'ANY'):
+            attrs['test_product_display_%s' % f.lower()] = mcs.product_display_gen(f)
+            attrs['test_do_pay_%s' % f.lower()] = mcs.do_pay_gen(f)
 
-class HomeViewCase(TestCase):
+        return super(HomeViewCaseMeta, mcs).__new__(mcs, name, bases, attrs)
+
+    @classmethod
+    def product_display_gen(mcs, formation):
+        def fn(self):
+            self.user.formation = formation
+            self.user.save()
+            r = self.client.get(reverse("tresorerie:home"),
+                                HTTP_HOST="10.0.3.99", follow=True)
+            self.assertEqual(200, r.status_code)
+
+            for p in (
+                    self.productFIG_1a,
+                    self.productFIG_6m,
+                    self.productFIP_1a,
+                    self.productFIP_6m,
+                    self.productAdhesion,
+                    self.productFIG_1m):
+                if p.autorisation[0] == 'ALL' or p.autorisation[0].lower() == formation.lower():
+                    self.assertContains(r, "%i€" % (p.prix / 100))
+
+        return fn
+
+    @classmethod
+    def do_pay_gen(mcs, formation):
+        def fn(self):
+            product = self.productFIG_1a
+            transaction_uuid, price = self.prepare_payment(product, formation=formation, do_test=True)
+            tok = self.create_token()
+
+            r = self.client.post(
+                reverse("tresorerie:pay", args=(product.id,)),
+                data={
+                    'uuid': transaction_uuid,
+                    'price': price,
+                    'stripeToken': tok.id,
+                },
+                HTTP_HOST="10.0.3.99",
+                follow=True,
+            )
+
+            self.assertTemplateUsed(r, "tresorerie/history.html")
+            self.assertContains(r, "%i€" % ((self.productAdhesion.prix + product.prix) / 100))
+
+            # Check in database if everything is correct:
+            user_s = LdapUser.get(pk=self.user.uid)
+            self.assertIn(str(current_year()), user_s.cotiz)
+            self.assertLessEqual(datetime.now() + timedelta(days=29), user_s.end_cotiz)
+
+        return fn
+
+class HomeViewCase(TestCase, metaclass=HomeViewCaseMeta):
+
     def setUp(self):
         self.user = create_full_user()
         self.user.cotiz = []
@@ -102,7 +163,7 @@ class HomeViewCase(TestCase):
         self.productFIP_6m.save()
         self.productAdhesion.save()
 
-    def prepare_payment(self, product, do_test=False):
+    def prepare_payment(self, product, formation="ANY", do_test=False):
         """
         Do all the first successful task to prepare a payment.
 
@@ -114,7 +175,7 @@ class HomeViewCase(TestCase):
         self.assertIn("test", settings.STRIPE_API_KEY)
 
         stripe.api_key = settings.STRIPE_API_KEY
-        self.user.formation = "ANY"
+        self.user.formation = formation
         self.user.cotiz = []
         self.user.end_cotiz = datetime.today()
         self.user.save()
@@ -157,6 +218,26 @@ class HomeViewCase(TestCase):
 
         return r.context["transaction"].uuid, r.context["transaction"].total_stripe
 
+    @staticmethod
+    def create_token(number='4242424242424242', exp_month=12, exp_year=2050, cvc='123'):
+        """
+        Create fastly a token from Stripe
+
+        :param number:
+        :param exp_month:
+        :param exp_year:
+        :param cvc:
+        :return:
+        """
+        return stripe.Token.create(
+            card={
+                "number": number,
+                "exp_month": exp_month,
+                "exp_year": exp_year,
+                "cvc": cvc
+            },
+        )
+
     def test_no_need_to_pay(self):
         self.user.end_cotiz = datetime.now() + timedelta(days=50)
         self.user.save()
@@ -166,96 +247,13 @@ class HomeViewCase(TestCase):
         self.assertEqual(200, r.status_code)
         self.assertTemplateUsed(r, 'pages/home/home.html')
 
-    def test_fip(self):
-        self.user.formation = "FIP"
-        self.user.save()
-        r = self.client.get(reverse("tresorerie:home"),
-                            HTTP_HOST="10.0.3.99", follow=True)
-        self.assertEqual(200, r.status_code)
-
-        for p in (
-                self.productFIP_1a,
-                self.productFIP_6m,
-                self.productAdhesion,
-                self.productFIG_1m):
-            self.assertContains(r, "%i€" % (p.prix/100))
-
-    def test_fig(self):
-        self.user.formation = "FIG"
-        self.user.save()
-        r = self.client.get(reverse("tresorerie:home"),
-                            HTTP_HOST="10.0.3.99", follow=True)
-        self.assertEqual(200, r.status_code)
-
-        for p in (
-                self.productFIG_1a,
-                self.productFIG_6m,
-                self.productAdhesion,
-                self.productFIG_1m):
-            self.assertContains(r, "%i€" % (p.prix/100))
-
-    def test_any(self):
-        self.user.formation = "ANY"
-        self.user.save()
-        r = self.client.get(reverse("tresorerie:home"),
-                            HTTP_HOST="10.0.3.99", follow=True)
-        self.assertEqual(200, r.status_code)
-
-        for p in (
-                self.productFIG_1a,
-                self.productFIG_6m,
-                self.productAdhesion,
-                self.productFIG_1m):
-            self.assertContains(r, "%i€" % (p.prix/100))
-
-    def test_do_pay_simple(self):
-        product = self.productFIG_1a
-
-        transaction_uuid, price = self.prepare_payment(product, do_test=True)
-
-        # Create a token
-        tok = stripe.Token.create(
-            card={
-                "number": '4242424242424242',
-                "exp_month": 12,
-                "exp_year": 2050,
-                "cvc": '123'
-            },
-        )
-
-        r = self.client.post(
-            reverse("tresorerie:pay", args=(product.id,)),
-            data={
-                'uuid': transaction_uuid,
-                'price': price,
-                'stripeToken': tok.id,
-            },
-            HTTP_HOST="10.0.3.99",
-            follow=True,
-        )
-
-        self.assertTemplateUsed(r, "tresorerie/history.html")
-        self.assertContains(r, "%i€" % ((self.productAdhesion.prix + product.prix) / 100))
-
-        # Check in database if everything is correct:
-        user_s = LdapUser.get(pk=self.user.uid)
-        self.assertIn(str(current_year()), user_s.cotiz)
-        self.assertLessEqual(datetime.now() + timedelta(days=29), user_s.end_cotiz)
-
     def test_declined_card(self):
         product = self.productFIG_1a
 
         transaction_uuid, price = self.prepare_payment(product)
 
         # Create a token
-        tok = stripe.Token.create(
-            card={
-                "number": '4000000000000341',
-                "exp_month": 12,
-                "exp_year": 2050,
-                "cvc": '123'
-            },
-        )
+        tok = self.create_token(number='4000000000000341')
 
         r = self.client.post(
             reverse("tresorerie:pay", args=(product.id,)),
@@ -270,6 +268,68 @@ class HomeViewCase(TestCase):
 
         self.assertTemplateUsed(r, "tresorerie/recap.html")
         self.assertContains(r, "Votre carte a été refusée")
+
+    def test_stripe_not_loaded(self):
+        product = self.productFIG_1a
+
+        transaction_uuid, price = self.prepare_payment(product)
+
+        # Create a token create a request without a token
+        r = self.client.post(
+            reverse("tresorerie:pay", args=(product.id,)),
+            data={
+                'uuid': transaction_uuid,
+                'price': price,
+            },
+            HTTP_HOST="10.0.3.99",
+            follow=True,
+        )
+
+        self.assertTemplateUsed(r, "tresorerie/recap.html")
+        self.assertContains(r, "Il semblerait que nous")
+
+    def test_wrong_transaction_uuid(self):
+        product = self.productFIG_1a
+        transaction_uuid, price = self.prepare_payment(product)
+        tok = self.create_token()
+
+        r = self.client.post(
+            reverse("tresorerie:pay", args=(product.id,)),
+            data={
+                'uuid': "e12a5a69-4ec4-4b44-83da-5c429fc6b0ad",
+                'price': price,
+                'stripeToken': tok.id,
+            },
+            HTTP_HOST="10.0.3.99",
+            follow=True,
+        )
+
+        self.assertTemplateUsed(r, "tresorerie/recap.html")
+        self.assertContains(r, "est produite lors de la commande.")
+
+    def test_pay_twice_cotiz(self):
+
+        product = self.productAdhesion
+        transaction_uuid, price = self.prepare_payment(product)
+        tok = self.create_token()
+
+        user_s = LdapUser.get(pk=self.user.uid)
+        user_s.cotiz = [current_year()]
+        user_s.save()
+
+        r = self.client.post(
+            reverse("tresorerie:pay", args=(product.id,)),
+            data={
+                'uuid': transaction_uuid,
+                'price': price,
+                'stripeToken': tok.id,
+            },
+            HTTP_HOST="10.0.3.99",
+            follow=True,
+        )
+
+        self.assertTemplateUsed(r, "tresorerie/recap.html")
+        self.assertContains(r, "avez pas besoin de payer")
 
 class ListProductCase(TestCase):
     # TODO : for the moment the test simply test that the page loads maybe do a bit more
