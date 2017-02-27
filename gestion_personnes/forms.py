@@ -228,7 +228,8 @@ class InscriptionForm(forms.Form):
         widget=PhoneNumberField.widget(attrs={
             'class': 'form-control',
             'placeholder': _("Numéro de téléphone"),
-        })
+        }),
+        required=False,
     )
 
     certify_truth = forms.BooleanField(

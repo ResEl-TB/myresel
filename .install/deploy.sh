@@ -1,6 +1,16 @@
 #!/usr/bin/env bash
 
-cd /srv/www/resel.fr/
+ROOT=/srv/www/resel.fr/
+PYTHON=/srv/www/resel.fr/env/bin/python
+
+cd ${ROOT}
 git pull
-source /srv/www/resel.fr/env/bin/activate
-python manage.py collectstatic --noinput
+
+echo 'Collection des fichiers statiques'
+${PYTHON} manage.py collectstatic --noinput
+
+echo 'Relance du daemon UWSGI'
+touch ${ROOT}/uwsgi.ini
+
+echo 'Relance de supervisorctl'
+sudo supervisorctl reload
