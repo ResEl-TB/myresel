@@ -19,7 +19,38 @@
                     </div>
                 </div>
             </div>
-            <div class="home-fragment home-presentation">
+            <div class="service-wrapper">
+               <div class="container service-container">
+                  {% for service in services %}
+                  <div class="service">
+                  {% if forloop.counter|add:-1|divisibleby:2 %}
+                     <div class="col-xs-offset-5 col-xs-2 service-icon">
+                         <img src="{% static 'images/git.png'%}">
+                     </div>
+                     <div class=" col-xs-5 service-description-right">
+                         <div class="service-content service-right">
+                             <p class="service-title">{{ service.name }}</p>
+                             <p>{{ service.description }}</p>
+                         </div>
+                     </div>
+                  {% endif %}
+                  {% if forloop.counter|divisibleby:2 %}
+                     <div class="col-xs-5 service-description-left">
+                         <div class="service-content service-left">
+                             <p class="service-title">{{ service.name }}</p>
+                             <p>{{ service.description }}</p>
+                         </div>
+                     </div>
+                     <div class="col-xs-2 service-icon">
+                         <img src="{% static 'images/git.png'%}">
+                     </div>
+
+                  {% endif %}
+                  </div>
+                  {% endfor%}
+               </div>
+            </div>
+      <!--  <div class="home-fragment home-presentation">
                 <div class="container">
                    {% for service in services %}
                    {% if forloop.counter|add:-1|divisibleby:2 %}
@@ -41,14 +72,14 @@
                            <a href="{{ service.get_absolute_url }}">En savoir plus</a>
                          </span>
                       </div>
-                   {% if forloop.counter|divisibleby:2 %
+                   {% if forloop.counter|divisibleby:2 %}
                      </div>
                    {% endif %}
                    {% empty %}
                    {% endfor %}
                   </div>
                </div>
-            </div>
+            </div> -->
         </div>
         <!-- /.col-lg-12 -->
     </div>
