@@ -492,7 +492,7 @@ iframe {
 }
 
 .service-container {
-    background-image: url(../images/service_bg.png);
+    background-image: url(../images/service-bg.png);
     background-repeat: repeat-y;
     background-position: center;
     padding-top: 100px;
@@ -514,16 +514,23 @@ iframe {
 
 }
 
-.service-icon{
+.icon-service{
     text-align: center;
 }
 
-.service-icon img{
+.icon-service img{
     border: 5px solid white;
     border-radius: 100%;
     background-color: white;
     width: 100px;
     height: 100px;
+    transition: all 1s;
+    transition-timing-function: cubic-bezier(.01,.66,.28,.64);
+}
+
+.icon-service img:hover {
+   width: 120px;
+   height: 120px;
 }
 
 .service-title {
@@ -535,6 +542,18 @@ iframe {
 .service-content {
     margin: 20px;
 
+}
+
+@media screen and (max-width: 992px)  {
+   .service-wrapper {
+      display: none;
+   }
+}
+
+@media screen and (min-width: 992px)  {
+   .service-wrapper-mobile {
+      display: none;
+   }
 }
 
 @keyframes description-animation-left {
