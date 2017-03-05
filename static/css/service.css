@@ -115,7 +115,7 @@
 .icon-service img{
     border: 5px solid white;
     border-radius: 100%;
-    background-color: white;
+    background-color: #25B7D3;
     width: 100px;
     height: 100px;
     transition: all 1s;
@@ -163,10 +163,15 @@
 
 .additional-icon {
    text-align: center;
-   padding-top: 5%;
+   padding-top: 3%;
 }
 
 .additional-icon img {
    height: 100px;
    width: auto;
+}
+
+.additional-icon-top {
+   border: 5px solid white;
+   border-radius: 50%;
 }
