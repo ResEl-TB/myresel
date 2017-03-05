@@ -1,0 +1,161 @@
+/*            */
+/* Mobile css */
+/*            */
+
+.service {
+    margin-bottom: 5%;
+}
+
+.service-glyphicon {
+    color: #F79420;
+
+    transform: scale(1.0);
+    transition: all 2s;
+}
+
+.service-description-text {
+    color: #262626;
+    text-align: justify;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+
+@media screen and (max-width: 992px) {
+    .service-description-text {
+        text-align: center;
+    }
+}
+
+.service-description a:hover{
+    text-decoration: none;
+}
+
+.service-link{
+    margin-bottom: 5%;
+}
+
+.service-link:hover{
+    text-decoration: none;
+}
+
+/* This class "hides" the icon when it's not visible and is remove when */
+
+.revealOnScroll {
+    transform: scale(0.0);
+    transition: all 1s;
+}
+/*             */
+/* Desktop css */
+/*             */
+
+.service{
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 10%;
+}
+
+.service-right::before{
+    content: '';
+    color: white;
+    right: 100%;
+    height: 0;
+    width: 0;
+    top: 40px;
+    border: 7px solid transparent;
+    border-right: 7px solid white;
+    position: absolute;
+
+}
+
+.service-left::after{
+    content: '';
+    color: white;
+    left: 100%;
+    height: 0;
+    width: 0;
+    top: 40px;
+    border: 7px solid transparent;
+    border-left: 7px solid white;
+    position: absolute;
+
+}
+
+.service-wrapper {
+   background-color: rgb(225, 230, 247);
+   width: 100%;
+}
+
+.service-container {
+    background-image: url(../images/service-bg.png);
+    background-repeat: repeat-y;
+    background-position: center;
+    padding-top: 100px;
+}
+
+.service-description-left {
+    background-color: white;
+    border-radius: 3px;
+    animation-name: description-animation-left;
+    animation-duration: 2s;
+
+}
+
+.service-description-right {
+    background-color: white;
+    border-radius: 3px;
+    animation-name: description-animation-right;
+    animation-duration: 2s;
+
+}
+
+.icon-service{
+    text-align: center;
+}
+
+.icon-service img{
+    border: 5px solid white;
+    border-radius: 100%;
+    background-color: white;
+    width: 100px;
+    height: 100px;
+    transition: all 1s;
+    transition-timing-function: cubic-bezier(.01,.66,.28,.64);
+}
+
+.icon-service img:hover {
+   width: 120px;
+   height: 120px;
+}
+
+.service-title {
+    font-weight: bold;
+    text-align: center;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.service-content {
+    margin: 20px;
+
+}
+
+@media screen and (max-width: 992px)  {
+   .service-wrapper {
+      display: none;
+   }
+}
+
+@media screen and (min-width: 992px)  {
+   .service-wrapper-mobile {
+      display: none;
+   }
+}
+
+@keyframes description-animation-left {
+    from {opacity: 0; right: 100px;}
+    to {opacity: 1; right: 0px;}
+}
+
+@keyframes description-animation-right {
+    from {opacity: 0; left: 100px;}
+    to {opacity: 1; left: 0px;}
+}
