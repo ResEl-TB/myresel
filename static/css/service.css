@@ -123,8 +123,9 @@
 }
 
 .icon-service img:hover {
-   width: 120px;
-   height: 120px;
+   transform: scale(1.2);
+   transition-timing-function: cubic-bezier(0,.64,.38,.99);
+   cursor: pointer;
 }
 
 .service-title {
@@ -158,4 +159,14 @@
 @keyframes description-animation-right {
     from {opacity: 0; left: 100px;}
     to {opacity: 1; left: 0px;}
+}
+
+.additional-icon {
+   text-align: center;
+   padding-top: 5%;
+}
+
+.additional-icon img {
+   height: 100px;
+   width: auto;
 }
