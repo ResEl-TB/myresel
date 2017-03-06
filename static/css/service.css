@@ -120,6 +120,8 @@
     height: 100px;
     transition: all 1s;
     transition-timing-function: cubic-bezier(.01,.66,.28,.64);
+    animation-name: rotation;
+    animation-duration: 2s;
 }
 
 .icon-service img:hover {
@@ -164,6 +166,8 @@
 .additional-icon {
    text-align: center;
    padding-top: 3%;
+   animation-name: rotation;
+   animation-duration: 1s;
 }
 
 .additional-icon img {
@@ -174,4 +178,9 @@
 .additional-icon-top {
    border: 5px solid white;
    border-radius: 50%;
+}
+
+@keyframes rotation {
+   from {transform: rotateY(360deg);}
+   to {transform: rotateY(0deg);}
 }
