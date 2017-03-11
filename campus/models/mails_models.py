@@ -39,17 +39,3 @@ class Mail(models.Model):
         auto_now_add=True,
         editable=False,
     )
-
-@receiver(post_save, sender=Mail, dispatch_uid='notify_campus_moderators')
-def notify_mods(sender, instance, created, **kwargs):
-    """
-    Send an email to campus moderators when the model is created
-    """
-    if created:
-        for member in LdapGroup.get(pk='campusmodo').members:
-            moderator = LdapUser.get(pk=member.split(',')[0].split('uid=')[1])
-            queue = django_rq.get_queue()
-            queue.enqueue_call(
-                async_tasks.notify_moderator,
-                args=(moderator.mail, instance.pk),
-            )

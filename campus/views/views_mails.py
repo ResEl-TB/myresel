@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
@@ -7,6 +8,7 @@ from django.core.urlresolvers import reverse
 from django.core.mail import EmailMessage
 
 import json
+from campus.async_tasks import notify_moderator
 from campus.forms import SendMailForm
 from campus.models import LdapGroup, Mail, LdapUser
 
@@ -45,6 +47,9 @@ def send_email_view(request):
                 LdapUser.get(pk=mod.split(',')[0].split('uid=')[1]).mail
                 for mod in LdapGroup.get(pk='campusmodo').members
             ]
+
+            for mod_email in moderators_emails_addresses:
+                notify_moderator(mod_email, m.pk)
 
             messages.success(request, _('Votre mail sera traité par les modérateurs.'))
             return HttpResponseRedirect(reverse('home'))
