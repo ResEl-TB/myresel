@@ -350,3 +350,13 @@ iframe {
     animation-timing-function: ease-out;
     background: radial-gradient(ellipse at center, rgba(255,255,255,0) 50%,rgba(255,255,255,1) 100%); /* FF3.6-15 */
 }
+
+.graph {
+    padding-bottom: 40%;
+}
+
+@media screen and (max-width: 765px) {
+    .graph {
+        padding-bottom: 60%;
+    }
+}
