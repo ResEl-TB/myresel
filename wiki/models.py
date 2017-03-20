@@ -37,7 +37,7 @@ class Category(models.Model):
         if self.nbToDisplay == 0:
             return stuff
         return stuff[:self.nbToDisplay]
-    
+
 
     def is_display_truncated(self):
         if self.nbToDisplay == 0:
@@ -60,8 +60,8 @@ class Category(models.Model):
 
     class Meta:
         verbose_name = "Catégorie"
-        
-    
+
+
 # Classe pour les articles
 # La category, le name et le texte sont plutôt explicites
 # La priority est l'ordre d'apparition dans la catégorie
@@ -78,6 +78,7 @@ class Article(models.Model):
     date_creation = models.DateField(auto_now_add=True)
     date_last_edit = models.DateField(auto_now=True)
     glyphicon_name = models.CharField(max_length=64, blank=True)
+    icon = models.ImageField(upload_to='image/service_icons', blank=True)
     slug = models.SlugField(max_length=255, blank=True, unique=True)
 
     def save(self, *args, **kwargs):
@@ -111,6 +112,7 @@ class Link(models.Model):
     url = models.URLField()
     fa_icon_name = models.CharField(max_length=64, blank=True)
     glyphicon_name = models.CharField(max_length=64, blank=True)
+    icon = models.ImageField(upload_to='image/service_icons', blank=True)
     slug = models.SlugField(max_length=255, blank=True, unique=True)
 
     def save(self, *args, **kwargs):

@@ -38,12 +38,16 @@
     text-decoration: none;
 }
 
-/* This class "hides" the icon when it's not visible and is remove when */
+/*
+This class "hides" the icon when it's not visible and is removed when the
+Class is visible
+ */
 
 .revealOnScroll {
     transform: scale(0.0);
     transition: all 1s;
 }
+
 /*             */
 /* Desktop css */
 /*             */
@@ -81,7 +85,8 @@
 }
 
 .service-wrapper {
-   background-color: rgb(241, 241, 241);
+   background: url("/static/images/service-wallpaper.jpg") no-repeat fixed center;
+   background-size: cover;
    width: 100%;
 }
 
@@ -109,20 +114,20 @@
 }
 
 .icon-service{
-    text-align: center;
+   text-align: center;
 }
 
 .icon-service img{
-    border: 5px solid white;
-    border-radius: 100%;
-    background-color: #25B7D3;
-    width: 100px;
-    height: 100px;
-    transition: all 1s;
-    transition-timing-function: cubic-bezier(.01,.66,.28,.64);
-    animation-name: rotation;
-    animation-duration: 2s;
-    animation-timing-function: cubic-bezier(.38,.03,.31,.96);
+   border: 5px solid white;
+   border-radius: 100%;
+   background-color: #259ed2;
+   width: 100px;
+   height: 100px;
+   transition: all 1s;
+   transition-timing-function: cubic-bezier(.01,.66,.28,.64);
+   animation-name: rotation;
+   animation-duration: 2s;
+   animation-timing-function: cubic-bezier(.38,.03,.31,.96);
 }
 
 .icon-service img:hover {

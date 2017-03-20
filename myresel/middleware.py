@@ -85,7 +85,7 @@ class inscriptionNetworkHandler(object):
         #    * If the device's IP is in user subnet:
         #      -> Ok
         #   * device's IP is in inscription-999 subnet:
-        #     -> Same as 1 except if his device is registered, we tell him to plug/unplug ethernet jack or 
+        #     -> Same as 1 except if his device is registered, we tell him to plug/unplug ethernet jack or
         #        disconnect/reconnect to Wifi
 
         # First get device datas

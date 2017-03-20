@@ -29,7 +29,7 @@
                   <div class="service">
                   {% if forloop.counter|add:-1|divisibleby:2 %}
                      <div class="col-xs-offset-5 col-xs-2 icon-service">
-                         <a href="{{ service.get_absolute_url }}"><img src="{% static 'images/icons/placeholder.png' %}"></a>
+                         <a href="{{ service.get_absolute_url }}"><img src="{{service.icon.url}}"></a>
                      </div>
                      <div class=" col-xs-5 service-description-right">
                          <div class="service-content service-right">
@@ -48,7 +48,7 @@
                          </div>
                      </div>
                      <div class="col-xs-2 icon-service">
-                         <a href="{{ service.get_absolute_url }}"><img src="{% static 'images/icons/placeholder.png' %}"></a>
+                         <a href="{{ service.get_absolute_url }}"><img src="{{service.icon.url}}"></a>
                      </div>
 
                   {% endif %}
