@@ -5,7 +5,7 @@
 {% block titre %}{{user.uid}}{% endblock %}
 
 {% block css %}
-    <link href="{% static 'css/whoswho.css' %}" rel="stylesheet"> 
+    <link href="{% static 'css/whoswho.css' %}" rel="stylesheet">
     <link href="{% static 'jquery/jquery-ui.min.css' %}" rel="Stylesheet"></link>
 {% endblock %}
 
@@ -50,11 +50,11 @@
     </div>
 </div>
 
-{% if ldapuser.uid == display_user.uid %} 
+{% if ldapuser.uid == display_user.uid %}
 <!-- Modal -->
 <div class="modal fade" id="addBizu" role="dialog">
     <div class="modal-dialog">
-    
+
         <!-- Modal content-->
         <div class="modal-content">
             <form class="form-horizontal" action="{% url 'who:add-godchild' %}" method="post">
@@ -68,16 +68,16 @@
                             <p>{% trans "Entrer le nom du filleul que vous souhaitez ajouter :" %}</p>
                         </div>
                         <div class="col-xs-12">
-                            <input type="text" name="id_user" id="id_utilisateur" style="width:70%;"></input>  
+                            <input type="text" name="id_user" id="id_utilisateur" style="width:70%;"></input>
                         </div>
-                    </div>       
-                </div>    
+                    </div>
+                </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-info">{% trans "Ajouter" %}</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Annuler" %}</button>
                 </div>
             </form>
-        </div>    
+        </div>
     </div>
 </div>
 {% endif %}
