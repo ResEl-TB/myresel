@@ -1,53 +1,53 @@
-{% extends 'base.html' %}
+{% extends "base_campus.html" %}
 {% load i18n %}
 {% load staticfiles %}
 
 {% block titre %}{{user.uid}}{% endblock %}
 
 {% block css %}
-    <link href="{% static 'css/whoswho.css' %}" rel="stylesheet">
+    <link href="{% static 'css/campus/whoswho.css' %}" rel="stylesheet">
     <link href="{% static 'jquery/jquery-ui.min.css' %}" rel="Stylesheet"></link>
 {% endblock %}
 
 {% block content %}
-<div class="who-fragment who-presentation">
-    <div class="container">
-        <h1>{{display_user.first_name}} {{display_user.last_name|upper}}</h1>
-        <ul>
-            <li><b>{% trans "Prénom" %} :</b> {{display_user.first_name}}</li>
-            <li><b>{% trans "Nom" %} :</b> {{display_user.last_name|upper}}</li>
-            <li><b>{% trans "Promo" %} :</b> {{display_user.promo}}</li>
-            {% if user.formation != "" %}<li><b>{% trans "Formation" %} :</b> {{display_user.formation}}</li>{% endif %}
-        </ul>
+ <div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="page-header text-center" style="color: white;">
+                {{display_user.first_name}} {{display_user.last_name|upper}}
+            </h1>
+        </div>
+        <div class="col-md-12">
+           <h3 class="text-center" style="color: white;">
+             <b>{% trans "Promo" %}</b> : {{display_user.promo}}
+             {% if user.formation != "" %}<b>{% trans "Formation" %}</b> : {{display_user.formation}}{% endif %}
+           </h3>
+        </div>
     </div>
-</div>
 
-<div class="who-fragment who-details">
-    <div class ="container">
-        <div class="row row-eq-height">
-            <div class="col-xs-6 who-elements">
-                <h2>{% trans "Parrains" %}</h2>
-                <ul>
-                {% for godparent in user.godparents %}
-                <li><a href="{% url 'who:user-details' godparent.uid %}">{{godparent.first_name}} {{godparent.last_name|upper}}</a> ({%trans 'Promo' %} {{godparent.promo}})</li>
-                {% endfor %}
-                </ul>
-            </div>
-            <div class="col-xs-6 who-elements">
-                <h2>{% trans "Filleuls" %} {% if ldapuser.uid == display_user.uid %}  <a style="padding:0 0 5px 0;" data-toggle="modal" class="glyphicon glyphicon-plus btn" data-target="#addBizu"></a>{% endif %}</h2>
-                <ul>
-                {% for godchild in user.godchildren %}
-                <li><a href="{% url 'who:user-details' godchild.uid %}">{{godchild.first_name}} {{godchild.last_name|upper}}</a> ({%trans 'Promo' %} {{godchild.promo}})</li>
-                {% endfor %}
-                </ul>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12 who-elements">
-                <h2>{% trans "Clubs" %}</h2>
-            </div>
-        </div>
-    </div>
+     <div class="row row-eq-height">
+         <div class="col-xs-5 well">
+             <h3 class="text-center">{% trans "Parrains" %}</h3>
+             <ul>
+             {% for godparent in user.godparents %}
+             <li><a href="{% url 'campus:who:user-details' godparent.uid %}">{{godparent.first_name}} {{godparent.last_name|upper}}</a> ({%trans 'Promo' %} {{godparent.promo}})</li>
+             {% endfor %}
+             </ul>
+         </div>
+         <div class="col-xs-5 col-xs-offset-2 well">
+             <h3 class="text-center">{% trans "Filleuls" %} {% if ldapuser.uid == display_user.uid %}  <a style="padding:0 0 5px 0;" data-toggle="modal" class="glyphicon glyphicon-plus btn" data-target="#addBizu"></a>{% endif %}</h3>
+             <ul>
+             {% for godchild in user.godchildren %}
+             <li><a href="{% url 'campus:who:user-details' godchild.uid %}">{{godchild.first_name}} {{godchild.last_name|upper}}</a> ({%trans 'Promo' %} {{godchild.promo}})</li>
+             {% endfor %}
+             </ul>
+         </div>
+     </div>
+     <div class="row">
+         <div class="col-xs-12 well">
+             <h3 class="text-center">{% trans "Clubs" %}</h3>
+         </div>
+     </div>
 </div>
 
 {% if ldapuser.uid == display_user.uid %}
@@ -57,7 +57,7 @@
 
         <!-- Modal content-->
         <div class="modal-content">
-            <form class="form-horizontal" action="{% url 'who:add-godchild' %}" method="post">
+            <form class="form-horizontal" action="{% url 'campus:who:add-godchild' %}" method="post">
                 {% csrf_token %}
                 <div class="modal-header">
                     <h4 class="modal-title">{% trans "Ajouter un filleul" %}</h4>
@@ -88,7 +88,7 @@
 <script>
     jQuery(document).ready(function ($) {
         $('#id_utilisateur').autocomplete({
-            source: "{% url 'who:request-user' %}",
+            source: "{% url 'campus:who:request-user' %}",
             minLength: 3,
         });
     });

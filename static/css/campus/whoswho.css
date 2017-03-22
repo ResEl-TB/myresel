@@ -1,0 +1,15 @@
+.row-eq-height {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display:         flex;
+}
+
+.ui-autocomplete-input {
+  border: 1px solid #DDD !important;
+  padding-top: 0px !important;
+}
+
+.ui-autocomplete {
+  z-index: 1510 !important;
+}
