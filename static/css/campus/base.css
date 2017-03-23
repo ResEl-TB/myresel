@@ -1,6 +1,16 @@
 /* General styles */
 
+/*
+This disabled css (and the rest) is a WIP aiming to stick the f*cking footer at
+the bottom of the webpage. Atm it only works on desktop screens.
+html {
+  position: relative;
+  min-height: 100%;
+}
+*/
+
 body {
+    /* margin-bottom: 400px; */
     background: url(/static/images/campus/bgimg.jpg) no-repeat center center fixed;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -104,6 +114,9 @@ body {
 /* Footer */
 
 .footer {
+    /* width: 100%;
+    position: absolute;
+    bottom: 0; */
     background-color: rgba(255, 255, 255, 0.9);
     padding-top: 15px;
     color: #8BBF82;

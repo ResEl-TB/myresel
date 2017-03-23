@@ -1,0 +1,25 @@
+{% extends "base_campus.html" %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block titre %}{{user.uid}}{% endblock %}
+
+{% block css %}
+    <link href="{% static 'css/campus/whoswho.css' %}" rel="stylesheet">
+    <link href="{% static 'jquery/jquery-ui.min.css' %}" rel="Stylesheet"></link>
+{% endblock %}
+
+{% block content %}
+ <div class="container">
+    <div class="row">
+        <div class="col-md-12">
+          <div class="page-header text-center">
+            <img src="{% static 'images/campus/whoswho_logo.png'%}">
+          </div>
+        </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}

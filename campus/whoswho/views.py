@@ -56,9 +56,14 @@ class UserHome(View):
     goddaughter/godson
     """
 
+    template_name = 'campus/whoswho/userHome.html'
+
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(UserHome, self).dispatch(*args, **kwargs)
+
+    def get(self, request):
+        return render(request, self.template_name, {})
 
 
 class RequestUser(View):
