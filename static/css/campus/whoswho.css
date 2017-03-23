@@ -3,6 +3,7 @@
   display: -webkit-flex;
   display: -ms-flexbox;
   display:         flex;
+  margin-top: 5%;
 }
 
 .ui-autocomplete-input {

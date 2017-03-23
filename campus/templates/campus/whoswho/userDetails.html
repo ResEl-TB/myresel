@@ -26,26 +26,31 @@
     </div>
 
      <div class="row row-eq-height">
-         <div class="col-xs-5 well">
+         <div class="col-xs-4 col-xs-offset-1 well">
              <h3 class="text-center">{% trans "Parrains" %}</h3>
              <ul>
-             {% for godparent in user.godparents %}
+             {% for godparent in display_user.godparents %}
              <li><a href="{% url 'campus:who:user-details' godparent.uid %}">{{godparent.first_name}} {{godparent.last_name|upper}}</a> ({%trans 'Promo' %} {{godparent.promo}})</li>
+             {% empty %}
+             {% trans "Aucun parrain trouvé pour " %}{{display_user.first_name}} {{display_user.last_name|upper}}
              {% endfor %}
              </ul>
          </div>
-         <div class="col-xs-5 col-xs-offset-2 well">
+         <div class="col-xs-4 col-xs-offset-2 well">
              <h3 class="text-center">{% trans "Filleuls" %} {% if ldapuser.uid == display_user.uid %}  <a style="padding:0 0 5px 0;" data-toggle="modal" class="glyphicon glyphicon-plus btn" data-target="#addBizu"></a>{% endif %}</h3>
              <ul>
-             {% for godchild in user.godchildren %}
+             {% for godchild in display_user.godchildren %}
              <li><a href="{% url 'campus:who:user-details' godchild.uid %}">{{godchild.first_name}} {{godchild.last_name|upper}}</a> ({%trans 'Promo' %} {{godchild.promo}})</li>
+             {% empty %}
+             {% trans "Aucun Filleul trouvé pour " %}{{display_user.first_name}} {{display_user.last_name|upper}}
              {% endfor %}
              </ul>
          </div>
      </div>
      <div class="row">
-         <div class="col-xs-12 well">
+         <div class="col-xs-10 col-xs-offset-1 well">
              <h3 class="text-center">{% trans "Clubs" %}</h3>
+             Cette personne ne fait partie d'aucun club
          </div>
      </div>
 </div>
