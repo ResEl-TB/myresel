@@ -42,8 +42,8 @@ body {
 }
 
 .navbar-brand img {
-    width: auto; 
-    height: 45px; 
+    width: auto;
+    height: 45px;
     margin-top: -13px;
 }
 
@@ -56,8 +56,8 @@ body {
 
 .dropdown-menu > li > a:hover,
 .navbar .navbar-nav > li > a:hover,
-.navbar-default .navbar-nav > .open > a, 
-.navbar-default .navbar-nav > .open > a:focus, 
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:focus,
 .navbar-default .navbar-nav > .open > a:hover {
     color: white !important;
     background-color: #8BBF82;
@@ -78,6 +78,13 @@ body {
 
 #month-navigation .btn-link:hover {
     cursor: default;
+}
+
+/* Form Style */
+
+.form-control:focus {
+  box-shadow: 1px 0px 5px #8BBF82;
+  border-color: #a6d69e;
 }
 
 /* Fonts */
