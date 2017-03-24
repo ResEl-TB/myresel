@@ -15,16 +15,16 @@
   z-index: 1510 !important;
 }
 
-.godparents {
-  margin-right: 1%;
-}
-
-.godchilds {
-  margin-left: 1%;
-}
-
 .modal-header {
   color: white;
   text-align: center;
   background: url(/static/images/campus/bgimg.jpg) no-repeat center center fixed;
+}
+
+.who_logo {
+   max-width: 100%;
+}
+
+.margin-top {
+   margin-top: 5%;
 }

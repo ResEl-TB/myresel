@@ -25,32 +25,38 @@
         </div>
     </div>
 
-     <div class="row row-eq-height">
-         <div class="col-xs-6 well godparents">
-             <h3 class="text-center">{% trans "Parrains" %}</h3>
-             <ul>
-             {% for godparent in display_user.godparents %}
-             <li><a href="{% url 'campus:who:user-details' godparent.uid %}">{{godparent.first_name}} {{godparent.last_name|upper}}</a> ({%trans 'Promo' %} {{godparent.promo}})</li>
-             {% empty %}
-             {% trans "Aucun parrain trouvé pour " %}{{display_user.first_name}} {{display_user.last_name|upper}}
-             {% endfor %}
-             </ul>
+     <div class="row">
+         <div class="col-md-6">
+            <div class="col-md-12 well">
+                <h3 class="text-center">{% trans "Parrains" %}</h3>
+                <ul>
+                {% for godparent in display_user.godparents %}
+                <li><a href="{% url 'campus:who:user-details' godparent.uid %}">{{godparent.first_name}} {{godparent.last_name|upper}}</a> ({%trans 'Promo' %} {{godparent.promo}})</li>
+                {% empty %}
+                {% trans "Aucun parrain trouvé pour " %}{{display_user.first_name}} {{display_user.last_name|upper}}
+                {% endfor %}
+                </ul>
+            </div>
          </div>
-         <div class="col-xs-6 well godchilds">
-             <h3 class="text-center">{% trans "Filleuls" %} {% if ldapuser.uid == display_user.uid %}  <a style="padding:0 0 5px 0;" class="btn" data-toggle="modal" data-target="#addBizu"><span class="glyphicon glyphicon-plus" style="color:#8BBF82"></span></a>{% endif %}</h3>
-             <ul>
-             {% for godchild in display_user.godchildren %}
-             <li><a href="{% url 'campus:who:user-details' godchild.uid %}">{{godchild.first_name}} {{godchild.last_name|upper}}</a> ({%trans 'Promo' %} {{godchild.promo}})</li>
-             {% empty %}
-             {% trans "Aucun Filleul trouvé pour " %}{{display_user.first_name}} {{display_user.last_name|upper}}
-             {% endfor %}
-             </ul>
+         <div class="col-md-6">
+            <div class="col-md-12 well">
+                <h3 class="text-center">{% trans "Filleuls" %} {% if ldapuser.uid == display_user.uid %}  <a style="padding:0 0 5px 0;" class="btn" data-toggle="modal" data-target="#addBizu"><span class="glyphicon glyphicon-plus" style="color:#8BBF82"></span></a>{% endif %}</h3>
+                <ul>
+                {% for godchild in display_user.godchildren %}
+                <li><a href="{% url 'campus:who:user-details' godchild.uid %}">{{godchild.first_name}} {{godchild.last_name|upper}}</a> ({%trans 'Promo' %} {{godchild.promo}})</li>
+                {% empty %}
+                {% trans "Aucun Filleul trouvé pour " %}{{display_user.first_name}} {{display_user.last_name|upper}}
+                {% endfor %}
+                </ul>
+            </div>
          </div>
      </div>
      <div class="row">
-         <div class="col-xs-12 well">
-             <h3 class="text-center">{% trans "Clubs" %}</h3>
-             Cette personne ne fait partie d'aucun club
+         <div class="col-xs-12">
+            <div class="col-xs-12 well">
+               <h3 class="text-center">{% trans "Clubs" %}</h3>
+               Cette personne ne fait partie d'aucun club
+            </div>
          </div>
      </div>
 </div>

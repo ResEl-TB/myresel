@@ -33,7 +33,7 @@
                      </div>
                      <div class=" col-xs-5 service-description-right">
                          <div class="service-content service-right">
-                             <p class="service-title">{{ service.name }}</p>
+                             <h2 class="service-title">{{ service.name }}</h2>
                              <p>{{ service.description }}</p>
                              <a href="{{ service.get_absolute_url }}">En savoir plus</a>
                          </div>
@@ -42,7 +42,7 @@
                   {% if forloop.counter|divisibleby:2 %}
                      <div class="col-xs-5 service-description-left">
                          <div class="service-content service-left">
-                             <p class="service-title">{{ service.name }}</p>
+                             <h2 class="service-title">{{ service.name }}</h2>
                              <p>{{ service.description }}</p>
                              <a href="{{ service.get_absolute_url }}">En savoir plus</a>
                          </div>
@@ -55,7 +55,7 @@
                   </div>
                   {% endfor%}
                   <div class="additional-icon">
-                     <img src="{% static 'images/icons/computer_best.png'%}" />
+                     <img src="{% static 'images/icons/computer.png'%}" />
                   </div>
                </div>
             </div>

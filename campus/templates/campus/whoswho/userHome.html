@@ -10,15 +10,51 @@
 {% endblock %}
 
 {% block content %}
- <div class="container">
-    <div class="row">
-        <div class="col-md-12">
-          <div class="page-header text-center">
-            <img src="{% static 'images/campus/whoswho_logo.png'%}">
-          </div>
-        </div>
-    </div>
-  </div>
+<div class="container">
+   <div class="row">
+      <div class="col-md-12">
+         <div class="page-header text-center">
+            <img class="who_logo" src="{% static 'images/campus/whoswho_logo.png'%}">
+         </div>
+      </div>
+   </div>
+</div>
+
+<div class="container">
+   <div class="row">
+      <div class="col-md-6">
+         <div class="col-md-12 well">
+            <h3 class="text-center">Mon Profil</h3>
+         </div>
+      </div>
+      <div class="col-md-4 col-md-offset-1">
+         <div class="col-md-12 well">
+            <h3 class="text-center" >Rechercher quelqu'un</h3>
+            <form class="form-horizontal" action="#" method="post">
+               <div class="input-group" style="width:100%">
+                 <span class="input-group-addon" id="basic-addon1"><span class="fa fa-user"></span></span>
+                 <input type="text" class="form-control" name="id_user" id="id_utilisateur" placeholder="ex: rsiffredi"></input>
+              </div>
+              <label class="margin-top"><input type="checkbox" name="is_aprox" />Recherche approximative</label>
+               <div>
+                  Vous pouvez rechercher:
+                  <ul>
+                     <li>Un nom</li>
+                     <li>Un prenom</li>
+                     <li>Une chambre</li>
+                     <li>Une adresse email</li>
+                  </ul>
+               </div>
+               <div class="form-group text-center">
+                  <div class="btn-group" role="button" aria-label="submit">
+                      <button type="submit" class="btn btn-success">C'est partis</button>
+                  </div>
+              </div>
+            </form>
+         </div>
+      </div>
+   </div>
+</div>
 {% endblock %}
 
 {% block javascript %}

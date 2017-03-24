@@ -15,11 +15,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='article',
             name='icon',
-            field=models.ImageField(blank=True, upload_to=''),
+            field=models.ImageField(blank=True, default='static/images/icons/placeholder.png', upload_to='image/service_icons'),
         ),
         migrations.AddField(
             model_name='link',
             name='icon',
-            field=models.ImageField(blank=True, upload_to=''),
+            field=models.ImageField(blank=True, default='static/images/icons/placeholder.png', upload_to='image/service_icons'),
         ),
     ]

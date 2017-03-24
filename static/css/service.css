@@ -144,7 +144,10 @@ Class is visible
 
 .service-content {
     margin: 20px;
+}
 
+.service-content h2 {
+   font-size: 1.1em;
 }
 
 @media screen and (max-width: 992px)  {
