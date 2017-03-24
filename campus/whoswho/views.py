@@ -63,7 +63,9 @@ class UserHome(View):
         return super(UserHome, self).dispatch(*args, **kwargs)
 
     def get(self, request):
-        return render(request, self.template_name, {})
+
+        user = LdapUser.get(uid=request.user.username)
+        return render(request, self.template_name, {'user': user,})
 
 
 class RequestUser(View):

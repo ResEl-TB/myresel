@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load staticfiles %}
 
-{% block titre %}{{user.uid}}{% endblock %}
+{% block titre %}WhosWho{% endblock %}
 
 {% block css %}
     <link href="{% static 'css/campus/whoswho.css' %}" rel="stylesheet">
@@ -25,6 +25,11 @@
       <div class="col-md-6">
          <div class="col-md-12 well">
             <h3 class="text-center">Mon Profil</h3>
+            <p class="text-center">
+               {{user.first_name}}<br>
+               {{user.last_name}}<br>
+               <a href="mailto:{{user.mail}}">{{user.mail}}</a><br>
+            </p>
          </div>
       </div>
       <div class="col-md-4 col-md-offset-1">
@@ -35,7 +40,7 @@
                  <span class="input-group-addon" id="basic-addon1"><span class="fa fa-user"></span></span>
                  <input type="text" class="form-control" name="id_user" id="id_utilisateur" placeholder="ex: rsiffredi"></input>
               </div>
-              <label class="margin-top"><input type="checkbox" name="is_aprox" />Recherche approximative</label>
+              <label class="margin-top"><input type="checkbox" name="is_aprox"/>Recherche approximative</label>
                <div>
                   Vous pouvez rechercher:
                   <ul>
