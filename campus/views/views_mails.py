@@ -55,7 +55,7 @@ def send_email_view(request):
             return HttpResponseRedirect(reverse('home'))
 
     return render(
-        request, 
+        request,
         'campus/mails/send_mail.html',
         {'form': form}
     )

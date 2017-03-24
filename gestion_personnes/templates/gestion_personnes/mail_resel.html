@@ -7,15 +7,15 @@
 <div class="container">
   <div class="page-header"><h2>{% trans "Votre boîte mail " %} {{user_mail_address}}</h2></div>
 
-    
+
   <div class="row">
   	<div class="col-md-6">
       <h3>Accès par un logiciel de courrier électronique :</h3>
-      <p> 
+      <p>
       <em>Par exemple Thunderbird ou Gmail.</em>
       	<ul>
          <li> Serveur POP/IMAP (SSL/TLS obligatoire) : mail.resel.fr sur le port 995 (POP) ou 993 (IMAP); </li>
-         <li> Nom d'utilisateur : {{user.uid}};</li>
+         <li> Nom d'utilisateur : {{user_mail_address}};</li>
          <li> Mot de passe : votre mot de passe ResEl;</li>
          <li> Serveur SMTP (courrier sortant) : mail.resel.fr sur le port 587, en activant le TLS.</li>
       	</ul>
@@ -33,7 +33,7 @@
   </div>
 
   <br>
-  
+
   <div class="row">
     <div class="col-md-6">
       <h3>Gestion de mon adresse</h2>
@@ -48,7 +48,7 @@
     <div class="col-md-4 center-block">
       <center>
       <a href="{% url 'gestion-personnes:redirect-mail' %}">
-  		<button type="button" class="btn btn-primary btn-lg">Redirection email</button>	
+  		<button type="button" class="btn btn-primary btn-lg">Redirection email</button>
       </a>
       </center>
     </div>

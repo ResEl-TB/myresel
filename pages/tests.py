@@ -101,3 +101,27 @@ class HomeViewCase(TestCase):
         self.assertContains(r, self.ln.description)
         self.assertContains(r, self.ln.url)
 
+class ServiceViewCase(TestCase):
+    def setUp(self):
+        cat = Category()
+        cat.name = "Services"
+        cat.save()
+
+        ln = Link()
+        ln.name = "Another dumb link to a site"
+        ln.url = "https://wiki.resel.fr/"
+        ln.description = "This is simple link to a questionable website"
+        ln.category = cat
+        ln.save()
+
+        self.ln = ln
+
+    def test_simple_load(self):
+        r = self.client.get(reverse("services"),
+                                   HTTP_HOST="10.0.3.99", follow=True)
+
+        self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed(r, "pages/service.html")
+        self.assertContains(r, self.ln.name)
+        self.assertContains(r, self.ln.description)
+        self.assertContains(r, self.ln.url)
