@@ -10,7 +10,10 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
 from django.views.generic import View
 
-from gestion_personnes.models import LdapUser
+from campus.forms import MajPersonnalInfo
+
+from gestion_personnes.async_tasks import send_mails
+from gestion_personnes.models import LdapUser, UserMetaData
 
 
 class UserDetails(View):
@@ -57,15 +60,64 @@ class UserHome(View):
     """
 
     template_name = 'campus/whoswho/userHome.html'
+    form_class = MajPersonnalInfo
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(UserHome, self).dispatch(*args, **kwargs)
 
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
 
-        user = LdapUser.get(uid=request.user.username)
-        return render(request, self.template_name, {'user': user,})
+        user = request.ldap_user
+
+        #TODO: show_room & show_email
+
+        form = self.form_class(initial={
+            'mail' : user.mail,
+            'campus' : user.campus,
+            'building' : user.building,
+            'room_number' : user.room_number,
+            'address' : user.postal_address,
+        })
+
+        context = {'user': user, 'form': form}
+
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+
+        form = self.form_class(request.POST)
+        user = request.ldap_user
+        context={'form': form, 'user': user,}
+
+        if form.is_valid():
+
+            mail = form.cleaned_data["mail"]
+
+            if mail != user.mail and len(LdapUser.filter(mail=mail)) > 0:
+                form.add_error("email", _("Addresse e-mail déjà utilisée"))
+                return render(request, self.template_name, context)
+
+            address = form.cleaned_data["address"]
+
+            if form.cleaned_data["campus"] != "None":
+                address = LdapUser.generate_address(form.cleaned_data["campus"], form.cleaned_data["building"], form.cleaned_data["room_number"])
+
+            if user.mail != mail:
+                user_meta, __ = UserMetaData.objects.get_or_create(uid=user.uid)
+                user_meta.send_email_validation(mail, request.build_absolute_uri)
+
+            user.mail = mail
+            user.campus = form.cleaned_data["campus"]
+            user.building = form.cleaned_data["building"]
+            user.room_number = form.cleaned_data["room_number"]
+            user.postal_address = address
+            user.save()
+
+            messages.success(request, _("Vos Informations ont été mises à jour"))
+
+        context={'form': form, 'user': user,}
+        return render(request, self.template_name, context)
 
 
 class RequestUser(View):

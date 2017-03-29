@@ -28,3 +28,23 @@
 .margin-top {
    margin-top: 5%;
 }
+
+label input {
+    position: relative;
+    vertical-align: bottom;;
+    bottom: 4px;
+}
+
+.user-form {
+   width: 100%;
+}
+
+.user-form a:hover, .user-form a:active, .user-form a:visited, .user-form a:focus, a {
+   color: inherit;
+   cursor: pointer;
+   text-decoration: none;
+}
+
+.form-category label{
+   font-weight: normal;
+}

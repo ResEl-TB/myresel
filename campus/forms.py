@@ -1,4 +1,6 @@
+from django import forms
 from django.core.validators import MaxLengthValidator
+from django.core.exceptions import ValidationError
 from django.forms import ModelForm, CharField, TextInput, Form
 from django.forms.models import ModelMultipleChoiceField
 from django.utils.translation import ugettext_lazy as _
@@ -174,3 +176,93 @@ class ClubManagementForm(Form):
         }),
         validators=[MaxLengthValidator(50)],
     )
+
+class MajPersonnalInfo(forms.Form):
+    CAMPUS = [('Brest', "Brest"), ('Rennes', 'Rennes'), ('None', _('Je n\'habite pas à la Maisel'))]
+    BUILDINGS_BREST = [('I%d' % i, 'I%d' % i) for i in range(1, 13)]
+    BUILDINGS_RENNES = [('S1', 'Studios'), ('C1', 'Chambres')]
+
+    BUILDINGS = [(0, _("Sélectionnez un Bâtiment"))]
+    BUILDINGS += BUILDINGS_BREST
+    BUILDINGS += BUILDINGS_RENNES
+
+    mail = forms.EmailField(
+        widget = forms.EmailInput(attrs={
+            'class': 'form-control',
+            'placeholder': _('Addresse e-mail'),
+        }),
+    )
+
+    show_email = forms.BooleanField(
+        widget = forms.CheckboxInput(),
+        label = _("Rendre publique mon mail."),
+        required = False,
+
+    )
+
+    campus = forms.ChoiceField(
+        choices = CAMPUS,
+        widget = forms.Select(attrs={
+            'class': 'form-control',
+            'placeholder': _('Campus')
+        }),
+    )
+
+    building = forms.ChoiceField(
+        choices = BUILDINGS,
+        widget = forms.Select(attrs={
+            'class' : 'form-control',
+            'placeholder': _('Batiment')
+        }),
+    )
+
+    room_number = forms.IntegerField(
+        min_value = 0,
+        max_value = 330,
+        widget = forms.NumberInput(attrs={
+            'class' : 'form-control',
+            'placeholder' : _('N° de chambre')
+        }),
+        required = False,
+    )
+
+    address = forms.CharField(
+        max_length=512,
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'style': 'resize: vertical;',
+            'placeholder': _("Addresse postale complète"),
+            'rows': '5'
+        }),
+        required=False,
+    )
+
+    show_room = forms.BooleanField(
+        widget = forms.CheckboxInput(),
+        label = _("Rendre publique ma chambre."),
+        required = False,
+    )
+
+    def clean_campus(self):
+        campus = self.cleaned_data["campus"]
+
+        if campus == "0":
+            raise ValidationError(message=_("Veuillez sélectionner un campus"), code='NO CAMPUS')
+        return(campus)
+
+    def clean(self):
+        cleaned_data = super(MajPersonnalInfo, self).clean()
+
+        campus = cleaned_data['campus']
+        building = cleaned_data['building']
+        room_number = cleaned_data['room_number']
+        address = cleaned_data['address']
+
+        if (campus == "Brest" or campus == "Rennes") and room_number is None:
+            self.add_error('room', _("Ce champ est obligatoire"))
+        if campus == "Brest" and building in [ k[0] for k in self.BUILDINGS_RENNES ]:
+            self.add_error('building',_('Sélectionnez un batiment à Brest'))
+        if campus == "Rennes" and building in [ k[0] for k in self.BUILDINGS_BREST ]:
+            self.add_error('building',_('Sélectionnez un batiment à Rennes'))
+        if campus == "None" and address == "":
+            self.add_error('address',_('Veuillez renseigner une adresse postale'))
