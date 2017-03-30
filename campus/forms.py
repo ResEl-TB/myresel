@@ -1,4 +1,5 @@
 from django import forms
+from django.conf import settings
 from django.core.validators import MaxLengthValidator
 from django.core.exceptions import ValidationError
 from django.forms import ModelForm, CharField, TextInput, Form
@@ -7,7 +8,13 @@ from django.utils.translation import ugettext_lazy as _
 from django.db.models import Q
 
 from campus.models import RoomBooking, Room, RoomAdmin, StudentOrganisation, Mail
+from gestion_personnes.models import LdapUser
+
+from ldap3 import LDAPException
+from fonctions import ldap
+
 import datetime
+import re
 
 class RoomBookingForm(ModelForm):
     class Meta:
@@ -266,3 +273,59 @@ class MajPersonnalInfo(forms.Form):
             self.add_error('building',_('Sélectionnez un batiment à Rennes'))
         if campus == "None" and address == "":
             self.add_error('address',_('Veuillez renseigner une adresse postale'))
+
+class SearchSomeone(forms.Form):
+
+    what = forms.CharField(
+        widget = forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': _('ex: rsiffredi')
+        }),
+    )
+
+    is_approx = forms.BooleanField(
+        widget = forms.CheckboxInput(),
+        label = _('Recherche approximative'),
+        label_suffix = _(''),
+        required = False,
+    )
+
+    def getResult(self, what):
+        what = what.strip()
+
+        if re.match(r'^[a-z1-9-_.+]+\@[a-z1-9-]+\.[a-z0-9-]+$', what.lower()):
+
+            return LdapUser.filter(mail=what)
+
+        elif re.match(r'^[a-z- ]+ ([a-z-]+)', what.lower()):
+
+            try:
+                elList = what.split(' ')
+                name1, name2 = elList[0], elList[-1]
+                res = LdapUser.filter(first_name=name1)
+                res += LdapUser.filter(first_name=name2)
+                res += LdapUser.filter(last_name=name1)
+                res += LdapUser.filter(last_name=name2)
+                return res
+            
+            except LDAPException as e:
+                return False
+            except Exception as e:
+                return False
+
+        elif re.match(r'^[a-z-]+', what.lower()):
+
+            try:
+                res = LdapUser.filter(first_name=what)
+                res += LdapUser.filter(last_name=what)
+                return(res)
+
+            except LDAPException as e:
+                return False
+            except Exception as e:
+                return False
+
+        return False
+
+    def clean(self):
+        cleaned_data = super(SearchSomeone, self).clean()

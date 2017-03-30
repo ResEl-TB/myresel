@@ -25,7 +25,7 @@
       <div class="col-md-6">
          <div class="col-md-12 well test">
             <div class="user-form">
-               <a href="#collapse-form" data-toggle="collapse">
+               <a href="#collapse-form" data-toggle="collapse" class="edit-info-link">
                   <span class="fa fa-pencil-square-o"></span> Éditer
                </a>
                <div class="collapse" id="collapse-form">
@@ -119,24 +119,26 @@
       <div class="col-md-4 col-md-offset-1">
          <div class="col-md-12 well">
             <h3 class="text-center" >Rechercher quelqu'un</h3>
-            <form class="form-horizontal" action="#" method="post">
+            <form class="form-horizontal" action="{% url 'campus:who:search-user' %}" method="post">
+               {% csrf_token %}
                <div class="input-group" style="width:100%">
                   <span class="input-group-addon" id="basic-addon1"><span class="fa fa-user"></span></span>
-                  <input type="text" class="form-control" name="id_user" id="id_utilisateur" placeholder="ex: rsiffredi"></input>
+                  {{ formSearchUser.what.errors }}
+                  {{ formSearchUser.what }}
                </div>
-               <label><input type="checkbox" name="is_aprox"/> Recherche approximative</label>
+               {{ formSearchUser.is_approx.errors }}
+               {{ formSearchUser.is_approx }} {{ formSearchUser.is_approx.label_tag }}
                <div>
                   Vous pouvez rechercher:
                   <ul>
                      <li>Un nom</li>
                      <li>Un prenom</li>
-                     <li>Une chambre</li>
                      <li>Une adresse email</li>
                   </ul>
                </div>
                <div class="form-group text-center">
                   <div class="btn-group" role="button" aria-label="submit">
-                     <button type="submit" class="btn btn-success">C'est partis</button>
+                     <button type="submit" class="btn btn-success">C'est parti !</button>
                   </div>
                </div>
             </form>

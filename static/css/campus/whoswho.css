@@ -39,7 +39,7 @@ label input {
    width: 100%;
 }
 
-.user-form a:hover, .user-form a:active, .user-form a:visited, .user-form a:focus, a {
+.user-form a:hover, .user-form a:active, .user-form a:visited, .user-form a:focus, .edit-info-link{
    color: inherit;
    cursor: pointer;
    text-decoration: none;
@@ -47,4 +47,8 @@ label input {
 
 .form-category label{
    font-weight: normal;
+}
+
+.results h3 {
+   font-size: 1.1em;
 }

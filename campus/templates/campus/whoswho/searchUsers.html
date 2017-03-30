@@ -1,0 +1,37 @@
+{% extends "base_campus.html" %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block title %} Résultat {% endblock %}
+
+{% block css %}
+<link href="{% static 'css/campus/whoswho.css' %}" rel="stylesheet">
+<link href="{% static 'jquery/jquery-ui.min.css' %}" rel="Stylesheet"></link>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+   <div class="row">
+      <div class="col-md-12">
+         <div class="page-header text-center">
+
+         </div>
+      </div>
+   </div>
+</div>
+
+<div class="container text-center results">
+   <div class="row">
+      {% for user in users %}
+         <div class="col-md-4 well">
+            <h3>{{ user.first_name }} {{user.last_name}}</h3>
+            <p>Campus de {{ user.campus }}</p>
+            <a href="{% url "campus:who:user-details" uid=user.uid %}">Details</a>
+         </div>
+      {% endfor %}
+   </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}

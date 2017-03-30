@@ -5,12 +5,12 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
 from django.views.generic import View
 
-from campus.forms import MajPersonnalInfo
+from campus.forms import MajPersonnalInfo, SearchSomeone
 
 from gestion_personnes.async_tasks import send_mails
 from gestion_personnes.models import LdapUser, UserMetaData
@@ -56,8 +56,11 @@ class UserDetails(View):
 class UserHome(View):
     """
     View used to see and update user's godparents and
-    goddaughter/godson
+    goddaughter/godson and also search for another user/users
+    This is the default view for the whoswho
     """
+
+    #TODO add an option to update godparents/childrens
 
     template_name = 'campus/whoswho/userHome.html'
     form_class = MajPersonnalInfo
@@ -70,8 +73,6 @@ class UserHome(View):
 
         user = request.ldap_user
 
-        #TODO: show_room & show_email
-
         form = self.form_class(initial={
             'mail' : user.mail,
             'campus' : user.campus,
@@ -80,13 +81,16 @@ class UserHome(View):
             'address' : user.postal_address,
         })
 
-        context = {'user': user, 'form': form}
+        formSearchUser = SearchSomeone()
+
+        context = {'user': user, 'form': form, 'formSearchUser': formSearchUser}
 
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
 
         form = self.form_class(request.POST)
+        formSearchUser = SearchSomeone()
         user = request.ldap_user
         context={'form': form, 'user': user,}
 
@@ -107,6 +111,7 @@ class UserHome(View):
                 user_meta, __ = UserMetaData.objects.get_or_create(uid=user.uid)
                 user_meta.send_email_validation(mail, request.build_absolute_uri)
 
+            #TODO: show_room & show_email
             user.mail = mail
             user.campus = form.cleaned_data["campus"]
             user.building = form.cleaned_data["building"]
@@ -116,9 +121,33 @@ class UserHome(View):
 
             messages.success(request, _("Vos Informations ont été mises à jour"))
 
-        context={'form': form, 'user': user,}
+        context={'user': user, 'form': form, 'formSearchUser': formSearchUser}
         return render(request, self.template_name, context)
 
+class SearchUsers(View):
+    """
+    View used to search for users
+    """
+
+    template_name = 'campus/whoswho/searchUsers.html'
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(SearchUsers, self).dispatch(*args, **kwargs)
+
+    #Je passerais en get quand j'aurais pas la flemme
+    def post(self, request, *args, **kwargs):
+
+        form = SearchSomeone(request.POST)
+        if form.is_valid():
+            res = form.getResult(form.cleaned_data["what"])
+            if res != False and len(res) != 0:
+                return render(request, self.template_name, {'users': res})
+            else:
+                messages.info(request, _("La recherche n'a rien retourné"))
+        else:
+            messages.error(request, _("Le contenue de la recherche ne peut être vide."))
+        return redirect('campus:who:user-home')
 
 class RequestUser(View):
     """
