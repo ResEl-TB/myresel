@@ -11,25 +11,60 @@
 
 {% block content %}
 <div class="container">
-   <div class="row">
-      <div class="col-md-12">
-         <div class="page-header text-center">
-
-         </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="page-header text-center" style="color: white;">
+        <h1>{% trans 'Résultats de la recherche' %}</h1>
       </div>
-   </div>
+    </div>
+  </div>
 </div>
 
-<div class="container text-center results">
-   <div class="row">
-      {% for user in users %}
-         <div class="col-md-4 well">
+<div class="container results">
+  <div class="row">
+    {% for user in users %}
+       <div class="col-md-4">
+         <div class="col-md-12 text-center well">
             <h3>{{ user.first_name }} {{user.last_name}}</h3>
             <p>Campus de {{ user.campus }}</p>
             <a href="{% url "campus:who:user-details" uid=user.uid %}">Details</a>
          </div>
-      {% endfor %}
-   </div>
+       </div>
+    {% if users|length == 1 or forloop.counter == 2%}
+       {% if users|length == 1 %}
+         <div class="col-md-4"></div>
+       {% endif %}
+       <div class="col-md-4">
+         <div class="col-md-12 well">
+             <h3 class="text-center" >Éffectuer une autre recherche</h3>
+             <form class="form-horizontal" action="{% url 'campus:who:search-user' %}" method="post">
+                {% csrf_token %}
+                <div class="input-group" style="width:100%">
+                   <span class="input-group-addon" id="basic-addon1"><span class="fa fa-user"></span></span>
+                   {{ form.what.errors }}
+                   {{ form.what }}
+                </div>
+                {{ form.is_approx.errors }}
+                {{ form.is_approx }} {{ form.is_approx.label_tag }}
+                <div>
+                   Vous pouvez rechercher:
+                   <ul>
+                      <li>Un nom</li>
+                      <li>Un prenom</li>
+                      <li>Une adresse email</li>
+                   </ul>
+                </div>
+                <div class="form-group text-center">
+                   <div class="btn-group" role="button" aria-label="submit">
+                      <button type="submit" class="btn btn-success">C'est parti !</button>
+                   </div>
+                </div>
+             </form>
+         </div>
+       </div>
+    {% endif %}
+    {% endfor %}
+  </div>
 </div>
 {% endblock %}
 

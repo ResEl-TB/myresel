@@ -48,13 +48,8 @@
                      <div class="form-group">
                         <label for="uid" class="col-sm-3 control-label">{% trans "Email" %}</label>
                         <div class="col-sm-8">
-                           {{form.mail.errors}}
-                           {{form.mail}}
-                        </div>
-                     </div>
-                     <div class="form-category">
-                        <div class="col-sm-offset-3 col-sm-8">
-                           {{form.show_email}} {{form.show_email.label_tag}}
+                           {{form.email.errors}}
+                           {{form.email}}
                         </div>
                      </div>
                      <div class="form-group">
@@ -75,8 +70,8 @@
                         <div class="form-group">
                            <label for="uid" class="col-sm-3 control-label">{% trans "Chambre" %}</label>
                            <div class="col-sm-8">
-                              {{form.room_number.errors}}
-                              {{form.room_number}}
+                              {{form.room.errors}}
+                              {{form.room}}
                            </div>
                         </div>
                      </span>
@@ -89,7 +84,7 @@
                      </div>
                      <div class="form-category">
                         <div class="col-sm-offset-3 col-sm-8">
-                           {{form.show_room}} {{form.show_room.label_tag}}
+                           {{form.show_info}} {{form.show_info.label_tag}}
                         </div>
                     </div>
                      <div class="form-category">

@@ -20,7 +20,7 @@
         <div class="col-md-12">
            <h3 class="text-center" style="color: white;">
              <b>{% trans "Promo" %}</b> : {{display_user.promo}}
-             {% if user.formation != "" %}<b>{% trans "Formation" %}</b> : {{display_user.formation}}{% endif %}
+             {% if display_user.formation != "" %}<b>{% trans "Formation" %}</b> : {{display_user.formation}}{% endif %}
            </h3>
         </div>
     </div>

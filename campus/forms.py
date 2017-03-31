@@ -9,6 +9,7 @@ from django.db.models import Q
 
 from campus.models import RoomBooking, Room, RoomAdmin, StudentOrganisation, Mail
 from gestion_personnes.models import LdapUser
+from gestion_personnes.forms import PersonnalInfoForm
 
 from ldap3 import LDAPException
 from fonctions import ldap
@@ -184,7 +185,7 @@ class ClubManagementForm(Form):
         validators=[MaxLengthValidator(50)],
     )
 
-class MajPersonnalInfo(forms.Form):
+class MajPersonnalInfo(PersonnalInfoForm):
     CAMPUS = [('Brest', "Brest"), ('Rennes', 'Rennes'), ('None', _('Je n\'habite pas à la Maisel'))]
     BUILDINGS_BREST = [('I%d' % i, 'I%d' % i) for i in range(1, 13)]
     BUILDINGS_RENNES = [('S1', 'Studios'), ('C1', 'Chambres')]
@@ -193,93 +194,22 @@ class MajPersonnalInfo(forms.Form):
     BUILDINGS += BUILDINGS_BREST
     BUILDINGS += BUILDINGS_RENNES
 
-    mail = forms.EmailField(
-        widget = forms.EmailInput(attrs={
-            'class': 'form-control',
-            'placeholder': _('Addresse e-mail'),
-        }),
-    )
-
-    show_email = forms.BooleanField(
+    show_info = forms.BooleanField(
         widget = forms.CheckboxInput(),
-        label = _("Rendre publique mon mail."),
-        required = False,
-
-    )
-
-    campus = forms.ChoiceField(
-        choices = CAMPUS,
-        widget = forms.Select(attrs={
-            'class': 'form-control',
-            'placeholder': _('Campus')
-        }),
-    )
-
-    building = forms.ChoiceField(
-        choices = BUILDINGS,
-        widget = forms.Select(attrs={
-            'class' : 'form-control',
-            'placeholder': _('Batiment')
-        }),
-    )
-
-    room_number = forms.IntegerField(
-        min_value = 0,
-        max_value = 330,
-        widget = forms.NumberInput(attrs={
-            'class' : 'form-control',
-            'placeholder' : _('N° de chambre')
-        }),
+        label = _("Rendre publiques mes informations."),
         required = False,
     )
 
-    address = forms.CharField(
-        max_length=512,
-        widget=forms.Textarea(attrs={
-            'class': 'form-control',
-            'style': 'resize: vertical;',
-            'placeholder': _("Addresse postale complète"),
-            'rows': '5'
-        }),
-        required=False,
+    certify_truth = forms.BooleanField(
+        required = False
     )
-
-    show_room = forms.BooleanField(
-        widget = forms.CheckboxInput(),
-        label = _("Rendre publique ma chambre."),
-        required = False,
-    )
-
-    def clean_campus(self):
-        campus = self.cleaned_data["campus"]
-
-        if campus == "0":
-            raise ValidationError(message=_("Veuillez sélectionner un campus"), code='NO CAMPUS')
-        return(campus)
-
-    def clean(self):
-        cleaned_data = super(MajPersonnalInfo, self).clean()
-
-        campus = cleaned_data['campus']
-        building = cleaned_data['building']
-        room_number = cleaned_data['room_number']
-        address = cleaned_data['address']
-
-        if (campus == "Brest" or campus == "Rennes") and room_number is None:
-            self.add_error('room', _("Ce champ est obligatoire"))
-        if campus == "Brest" and building in [ k[0] for k in self.BUILDINGS_RENNES ]:
-            self.add_error('building',_('Sélectionnez un batiment à Brest'))
-        if campus == "Rennes" and building in [ k[0] for k in self.BUILDINGS_BREST ]:
-            self.add_error('building',_('Sélectionnez un batiment à Rennes'))
-        if campus == "None" and address == "":
-            self.add_error('address',_('Veuillez renseigner une adresse postale'))
 
 class SearchSomeone(forms.Form):
 
     what = forms.CharField(
         widget = forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': _('ex: rsiffredi')
+            'placeholder': _('ex: Siffredi')
         }),
     )
 
@@ -306,8 +236,8 @@ class SearchSomeone(forms.Form):
                 res += LdapUser.filter(first_name=name2)
                 res += LdapUser.filter(last_name=name1)
                 res += LdapUser.filter(last_name=name2)
-                return res
-            
+                return list(dict((obj.first_name, obj) for obj in res).values()) #exludes duplicates
+
             except LDAPException as e:
                 return False
             except Exception as e:

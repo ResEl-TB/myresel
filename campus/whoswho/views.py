@@ -74,10 +74,10 @@ class UserHome(View):
         user = request.ldap_user
 
         form = self.form_class(initial={
-            'mail' : user.mail,
+            'email' : user.mail,
             'campus' : user.campus,
             'building' : user.building,
-            'room_number' : user.room_number,
+            'room' : user.room_number,
             'address' : user.postal_address,
         })
 
@@ -96,7 +96,7 @@ class UserHome(View):
 
         if form.is_valid():
 
-            mail = form.cleaned_data["mail"]
+            mail = form.cleaned_data["email"]
 
             if mail != user.mail and len(LdapUser.filter(mail=mail)) > 0:
                 form.add_error("email", _("Addresse e-mail déjà utilisée"))
@@ -105,7 +105,7 @@ class UserHome(View):
             address = form.cleaned_data["address"]
 
             if form.cleaned_data["campus"] != "None":
-                address = LdapUser.generate_address(form.cleaned_data["campus"], form.cleaned_data["building"], form.cleaned_data["room_number"])
+                address = LdapUser.generate_address(form.cleaned_data["campus"], form.cleaned_data["building"], form.cleaned_data["room"])
 
             if user.mail != mail:
                 user_meta, __ = UserMetaData.objects.get_or_create(uid=user.uid)
@@ -115,11 +115,13 @@ class UserHome(View):
             user.mail = mail
             user.campus = form.cleaned_data["campus"]
             user.building = form.cleaned_data["building"]
-            user.room_number = form.cleaned_data["room_number"]
+            user.room_number = form.cleaned_data["room"]
             user.postal_address = address
             user.save()
 
             messages.success(request, _("Vos Informations ont été mises à jour"))
+        else:
+            messages.warning(request, _("Une ou plusieurs informations sont invalides"))
 
         context={'user': user, 'form': form, 'formSearchUser': formSearchUser}
         return render(request, self.template_name, context)
@@ -142,12 +144,13 @@ class SearchUsers(View):
         if form.is_valid():
             res = form.getResult(form.cleaned_data["what"])
             if res != False and len(res) != 0:
-                return render(request, self.template_name, {'users': res})
+                form = SearchSomeone()
+                return render(request, self.template_name, {'users': res, 'form': form})
             else:
                 messages.info(request, _("La recherche n'a rien retourné"))
         else:
             messages.error(request, _("Le contenue de la recherche ne peut être vide."))
-        return redirect('campus:who:user-home')
+        return HttpResponseRedirect(reverse('campus:who:user-home'))
 
 class RequestUser(View):
     """
@@ -168,11 +171,10 @@ class RequestUser(View):
             #    settings.LDAP_DN_PEOPLE,
             #    '(|(uid=*%(what)s*)(firstname=*%(what)s*)(lastname=*%(what)s*)(displayname=*%(what)s*))' % {'what': what},
             #)
-            res = set()
-            res |= set(LdapUser.filter(uid__contains=what))
-            res |= set(LdapUser.filter(first_name__contains=what))
-            res |= set(LdapUser.filter(last_name__contains=what))
-            res = list(res)[:20]
+            res = LdapUser.filter(uid__contains=what)
+            res += LdapUser.filter(first_name__contains=what)
+            res += LdapUser.filter(last_name__contains=what)
+            res = list(dict((obj.first_name, obj) for obj in res).values())[:20]
             results = []
             if res:
                 for user in res:

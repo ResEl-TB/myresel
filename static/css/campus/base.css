@@ -147,3 +147,9 @@ body {
     margin-left: 20px;
     margin-right: 20px;
 }
+
+.ui-state-focus {
+   background: #cbf9c2 !important;
+   color: inherit !important;
+   border-color: #8BBF82 !important;
+}
