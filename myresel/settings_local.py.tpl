@@ -5,7 +5,7 @@
 #
 
 import sys
-from ldap3 import AUTO_BIND_TLS_BEFORE_BIND, AUTO_BIND_NONE
+from ldap3 import AUTO_BIND_TLS_BEFORE_BIND, AUTO_BIND_NO_TLS
 
 # SECURITY WARNING: Change this in production!
 SECRET_KEY = '7_gz^zjk+lj+72utudq+l(xd-!@3xlo5c*20&dz$mdgn2p22g-'
