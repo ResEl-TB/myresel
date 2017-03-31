@@ -72,7 +72,7 @@ pylint:
   script:
     - pip3 install pylint --quiet
     - pip3 install pylint-django --quiet
-    - pylint --rcfile=.pylintrc campus devices fonctions gestion_personnes ldapback myresel pages tresorerie wiki; $(exit $((35 & $?)))
+    - pylint --rcfile=.pylintrc campus devices fonctions gestion_personnes ldapback myresel pages tresorerie wiki || exit $((35 & $?))
   allow_failure: true
 
 deploy to brest:
