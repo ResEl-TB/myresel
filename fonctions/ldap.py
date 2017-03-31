@@ -3,7 +3,7 @@ import itertools
 from django.conf import settings
 from django.template.defaultfilters import slugify
 from django_python3_ldap.ldap import Connection as UserConnection
-from ldap3 import Server, Connection, MODIFY_REPLACE, ALL_ATTRIBUTES, AUTO_BIND_TLS_BEFORE_BIND
+from ldap3 import Server, Connection, MODIFY_REPLACE, ALL_ATTRIBUTES
 
 from fonctions import generic
 from .generic import hash_passwd
@@ -19,7 +19,7 @@ def new_connection():
         Server(settings.LDAP_URL, use_ssl=False),
         user=settings.LDAP_DN_ADMIN,
         password=settings.LDAP_PASSWD,
-        auto_bind=AUTO_BIND_TLS_BEFORE_BIND
+        auto_bind=settings.LDAP_AUTO_BIND
     )
 
 
