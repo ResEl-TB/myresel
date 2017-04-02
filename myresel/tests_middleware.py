@@ -17,7 +17,7 @@ from fonctions import ldap
 class AdminMiddlewareTestCase(TestCase):
 
     def setUp(self):
-        self.cm = middleware.IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAResElAdminSoCheckTheLdapBeforeMiddleware()
+        self.cm = middleware.IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAResElAdminSoCheckTheLdapBeforeMiddleware(lambda x:None)
         self.request = Mock()
         self.request.session = {}
         self.request.user.username = ""
@@ -41,7 +41,7 @@ class AdminMiddlewareTestCase(TestCase):
     def test_user_is_admin(self):
         self.request.user.username = self.admin_uid
 
-        self.assertEqual(self.cm.process_request(self.request), None)
+        self.assertEqual(self.cm(self.request), None)
         self.request.user = User.objects.get(username=self.request.user.username)
         self.assertEqual(self.request.user.is_staff, 1)
         self.assertEqual(self.request.user.is_superuser, 1)
@@ -49,7 +49,7 @@ class AdminMiddlewareTestCase(TestCase):
     def test_user_is_not_admin(self):
         self.request.user.username = self.user.uid
 
-        self.assertEqual(self.cm.process_request(self.request), None)
+        self.assertEqual(self.cm(self.request), None)
         self.assertEqual(self.request.user.is_staff, 0)
         self.assertEqual(self.request.user.is_superuser, 0)
 

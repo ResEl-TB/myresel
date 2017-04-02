@@ -146,7 +146,7 @@ INSTALLED_APPS = [
     'campus',
 ]
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -159,7 +159,7 @@ MIDDLEWARE_CLASSES = [
     'myresel.middleware.SimulateProductionNetwork',
     'myresel.middleware.IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAResElAdminSoCheckTheLdapBeforeMiddleware',
     'myresel.middleware.NetworkConfiguration',
-    'myresel.middleware.inscriptionNetworkHandler',
+    'myresel.middleware.InscriptionNetworkHandler',
 ]
 
 ROOT_URLCONF = 'myresel.urls'
