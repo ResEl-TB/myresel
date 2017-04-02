@@ -24,15 +24,15 @@ def try_delete_old_user(uid):
         return False
 
 
-def create_full_user():
+def create_full_user(uid="amanoury", pwd="blahblah"):
     now = datetime.now()
     now = now.replace(microsecond=0)
     user = LdapUser()
-    user.uid = "amanoury"
+    user.uid = uid
     user.first_name = "Alexandre"
     user.last_name = "Manoury"
-    user.user_password = "blahblah"
-    user.nt_password = "blahblah"
+    user.user_password = pwd
+    user.nt_password = pwd
     user.display_name = "Alexandre Manoury"
 
     user.inscr_date = now

@@ -130,13 +130,22 @@ def get_free_alias(name, prefix='pc'):
     return alias
 
 
-def create_admin():
+def create_admin(uid='lcarr', pwd="blahblah"):
+    """
+    Create a new administrator, should be used for tests only
+    :param uid: 
+    :param pwd: 
+    :return: 
+    """
+    if not settings.DEBUG and not settings.TESTING:
+        raise Exception("MUST NOT BE CALLED IN PRODUCTION")
+
     l = new_connection()
     dn = "uid=lcarr,ou=admins,dc=resel,dc=enst-bretagne,dc=fr"
     object_class = "reselAdmin"
     attributes = {
-        'uid': 'lcarr',
-        'userpassword': hash_passwd("123zizou"),
+        'uid': uid,
+        'userpassword': hash_passwd(pwd),
         'droit': ["Cisco",
                   "ae",
                   "agora",
@@ -151,6 +160,10 @@ def create_admin():
                   "trac",
                   "tracadmin"]
     }
-    # l.delete(dn)
+    try:
+        l.delete(dn)
+    except:
+        pass
     l.add(dn, object_class, attributes)
     l.unbind()
+    return dn

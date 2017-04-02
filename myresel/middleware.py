@@ -11,11 +11,41 @@ from django.utils.translation import ugettext_lazy as _
 
 from fonctions import ldap, network
 from gestion_personnes.models import LdapUser
-from campus.models import StudentOrganisation, Room
 
 logger = logging.getLogger("default")
 class IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAResElAdminSoCheckTheLdapBeforeMiddleware(object):
+    @staticmethod
+    def make_user_staff(username):
+        """
+        Save in Django database if a user is part of the staff
+        :param username: 
+        :return: 
+        """
+        user = User.objects.get(username=username)
+        user.is_staff = 1
+        user.is_superuser = 1
+        user.save()
+
+    @staticmethod
+    def is_staff(user):
+        """
+        Tells if a DjangoUser is part of RENAS
+        :param user: DjangoUser
+        :return: bool
+        """
+        # TODO: move this code to the new backend
+        return (
+            user.is_authenticated() and
+            not (user.is_staff and user.is_superuser) and
+            ldap.search(settings.LDAP_OU_ADMIN, '(&(uid=%s))' % user.username)
+        )
+
     def process_request(self, request):
+        """
+        Django Middleware request processer
+        :param request: 
+        :return: 
+        """
         # Check if the user is a ResEl admin. If so, its credentials will be updated to superuser and staff
         if request.user.is_authenticated():
             try:
@@ -23,21 +53,16 @@ class IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAResElAdmi
             except ObjectDoesNotExist:
                 logout(request)
 
-        # TODO: move this code to the new backend
-        if request.user.is_authenticated() and not (request.user.is_staff and request.user.is_superuser):
-            res = ldap.search(settings.LDAP_OU_ADMIN, '(&(uid=%s))' % request.user.username)
-            if res:
-                user = User.objects.get(username=request.user.username)
-                user.is_staff = 1
-                user.is_superuser = 1
-                user.save()
+        if self.is_staff(request.user):
+            self.make_user_staff(username=request.user.username)
 
 class NetworkConfiguration(object):
     """
     Retrieve every useful piece of information about the device network configuration
     To be available in every view
     """
-    def process_request(self, request):
+    @staticmethod
+    def process_request(request):
         request.network_data = {}
         if 'HTTP_X_FORWARDED_FOR' in request.META:
             ip = request.META['HTTP_X_FORWARDED_FOR']
@@ -68,26 +93,27 @@ class NetworkConfiguration(object):
 
 class inscriptionNetworkHandler(object):
     # Before the request is sent to the website, we need to handle if the user is in an inscription network
-    def process_request(self, request):
+    @staticmethod
+    def process_request(request):
+        """
+        We need to check two things:
+        1. If the user is in vlan inscription (995):
+         * He browse any non-resel page (but the DNS server sends him to r.f):
+           -> He is sent to an informative page that tell him either to subscribe/activate his device
+               if his device is unknown, either change WLAN if his device is registered.
+         * He browse the ResEl:
+           + He is logged in & his device is registered:
+               -> Let him access the website but send a warning that he needs to log on the other network
+           + He isn't logged in / His device isn't registered:
+              -> Let him access only the homepage the login page, and the activation page
 
-        # We need to check two things:
-        # 1. If the user is in vlan inscription (995):
-        #  * He browse any non-resel page (but the DNS server sends him to r.f):
-        #    -> He is sent to an informative page that tell him either to subscribe/activate his device
-        #        if his device is unknown, either change WLAN if his device is registered.
-        #  * He browse the ResEl:
-        #    + He is logged in & his device is registered:
-        #        -> Let him access the website but send a warning that he needs to log on the other network
-        #    + He isn't logged in / His device isn't registered:
-        #       -> Let him access only the homepage the login page, and the activation page
-        #
-        # 2. If the user is in vlan user (999):
-        #    * If the device's IP is in user subnet:
-        #      -> Ok
-        #   * device's IP is in inscription-999 subnet:
-        #     -> Same as 1 except if his device is registered, we tell him to plug/unplug ethernet jack or
-        #        disconnect/reconnect to Wifi
-
+        2. If the user is in vlan user (999):
+           * If the device's IP is in user subnet:
+             -> Ok
+          * device's IP is in inscription-999 subnet:
+            -> Same as 1 except if his device is registered, we tell him to plug/unplug ethernet jack or
+               disconnect/reconnect to Wifi
+        """
         # First get device datas
         ip = request.network_data['ip']
         vlan = request.network_data['vlan']
@@ -172,10 +198,12 @@ class inscriptionNetworkHandler(object):
 
 
 class SimulateProductionNetwork(object):
-
+    """
+    Simulate a production environment for the Vagrant env
+    This is because the ResEl is hard
+    """
     @staticmethod
     def process_request(request):
-
         if not (settings.DEBUG or settings.TESTING):
             return
 
