@@ -111,7 +111,7 @@ class UserHome(View):
                 user_meta, __ = UserMetaData.objects.get_or_create(uid=user.uid)
                 user_meta.send_email_validation(mail, request.build_absolute_uri)
 
-            #TODO: show_room & show_email
+            #TODO: is publiable ?
             user.mail = mail
             user.campus = form.cleaned_data["campus"]
             user.building = form.cleaned_data["building"]
@@ -228,4 +228,49 @@ class AddBizu(View):
             godchild.save()
 
         messages.success(request, _("Votre filleul est correctement enregistré."))
+        return HttpResponseRedirect(reverse('campus:who:user-details', args=[request.user.username]))
+
+class RemovePerson(View):
+    """
+    View used to remove a godchild
+    """
+
+    def __init__(self, *args, **kargs):
+        super(RemovePerson, self).__init__(*args, **kargs)
+
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(RemovePerson, self).dispatch(*args, **kwargs)
+
+    def post(self, request, uid, is_gp):
+        """
+        is_gp reports if the user that our beloved user wants to remove
+        is a godchild or a godparent
+        """
+
+        if is_gp == 'True':
+            godparent_uid = uid
+            godchild_uid = request.user.username
+        else:
+            godparent_uid = request.user.username
+            godchild_uid = uid
+
+        try:
+            godchild = LdapUser.get(uid=godchild_uid)
+        except ObjectDoesNotExist:
+            messages.error(request, _("L'utilisateur que vous souhaitez supprimer n'existe pas"))
+
+        godparent = LdapUser.get(uid=godparent_uid)
+
+        if godchild.pk in godparent.uid_godchildren:
+            godparent.uid_godchildren.remove(godchild.pk)
+            godparent.save()
+
+        if godparent.pk in godchild.uid_godparents:
+            godchild.uid_godparents.remove(godparent.pk)
+            godchild.save()
+
+        messages.success(request, _("La modification a été effectuée avec succès"))
+
         return HttpResponseRedirect(reverse('campus:who:user-details', args=[request.user.username]))

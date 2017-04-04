@@ -238,7 +238,7 @@ class LdapModel(object):
         if self.pk is None:
             self.pk = ldap.add(self)
         else:
-            self.pk = ldap.update(self)
+            ldap.update(self)
 
     def delete(self):
         """

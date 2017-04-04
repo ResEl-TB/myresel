@@ -31,7 +31,16 @@
                 <h3 class="text-center">{% trans "Parrains" %}</h3>
                 <ul>
                 {% for godparent in display_user.godparents %}
-                <li><a href="{% url 'campus:who:user-details' godparent.uid %}">{{godparent.first_name}} {{godparent.last_name|upper}}</a> ({%trans 'Promo' %} {{godparent.promo}})</li>
+                <li>
+                  <a href="{% url 'campus:who:user-details' godparent.uid %}">{{godparent.first_name}} {{godparent.last_name|upper}}</a>
+                  ({%trans 'Promo' %} {{godparent.promo}})
+                  {% if ldap_user.uid == user.uid %}
+                  <form style="float: right" action="{% url 'campus:who:remove-person' godparent.uid True %}" method="post">
+                    {% csrf_token %}
+                    <button class="fa fa-trash-o" title="{% trans 'Supprimer' %}"></button>
+                  </form>
+                  {% endif %}
+                </li>
                 {% empty %}
                 {% trans "Aucun parrain trouvé pour " %}{{display_user.first_name}} {{display_user.last_name|upper}}
                 {% endfor %}
@@ -43,7 +52,16 @@
                 <h3 class="text-center">{% trans "Filleuls" %} {% if ldapuser.uid == display_user.uid %}  <a style="padding:0 0 5px 0;" class="btn" data-toggle="modal" data-target="#addBizu"><span class="glyphicon glyphicon-plus" style="color:#8BBF82"></span></a>{% endif %}</h3>
                 <ul>
                 {% for godchild in display_user.godchildren %}
-                <li><a href="{% url 'campus:who:user-details' godchild.uid %}">{{godchild.first_name}} {{godchild.last_name|upper}}</a> ({%trans 'Promo' %} {{godchild.promo}})</li>
+                <li>
+                  <a href="{% url 'campus:who:user-details' godchild.uid %}">{{godchild.first_name}} {{godchild.last_name|upper}}</a>
+                  ({%trans 'Promo' %} {{godchild.promo}})
+                  {% if ldap_user.uid == user.uid %}
+                  <form style="float: right" action="{% url 'campus:who:remove-person' godchild.uid False %}" method="post">
+                    {% csrf_token %}
+                    <button class="fa fa-trash-o" title="{% trans 'Supprimer' %}"></button>
+                  </form>
+                  {% endif %}
+                </li>
                 {% empty %}
                 {% trans "Aucun Filleul trouvé pour " %}{{display_user.first_name}} {{display_user.last_name|upper}}
                 {% endfor %}
