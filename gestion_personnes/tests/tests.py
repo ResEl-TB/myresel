@@ -13,7 +13,6 @@ from ldapback.models.fields import LdapCharField
 
 
 class LdapUserTestCase(TestCase):
-    @skip("Not passing in gilab for encoding reasons...")
     def test_new_user(self):
         user = create_full_user()
         try_delete_user(user.uid)

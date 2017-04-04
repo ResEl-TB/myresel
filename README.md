@@ -114,7 +114,7 @@ sur plusieurs réseaux.
 
 Dépendant du VLAN d'origine, le serveur NGINX taggera les requêtes HTTP 
 différement. Puis, en fonction du tag les middlewares `NetworkConfiguration` 
-et `inscriptionNetworkHandler` ajouterons des métadonnées aux requetes (comme 
+et `InscriptionNetworkHandler` ajouterons des métadonnées aux requetes (comme 
 par exemple l'adresse mac de l'utilisateur) puis vont rerouter les requêtes 
 vers les bonnes vues.
 
