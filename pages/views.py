@@ -194,25 +194,34 @@ class Contact(View):
         return render(request, self.template_name, {'form': form})
 
 
-def inscriptionZoneInfo(request):
-    # First get device datas
-    vlan = request.network_data['vlan']
+def inscription_zone_info(request):
+    """
+    View which explains the users on how to register to the ResEl
+    
+    If the device is not registered show the information
+    If the device is simply not active, it redirect the user to the 
+    reactivation view
+    :param request: 
+    :return: HttpResponse
+    """
     zone = request.network_data['zone']
-    mac = network.get_mac(request.network_data['ip'])
     is_registered = False
-    is_logged_in = request.user.is_authenticated()
     if "user" in zone or "inscription" in zone:
+        mac = network.get_mac(request.network_data['ip'])
         try:
             device = LdapDevice.get(mac_address=mac)
             is_registered = device.get_status() == 'active'
             if not is_registered:
                 return HttpResponseRedirect(reverse("gestion-machines:reactivation"))
         except ObjectDoesNotExist:
-            pass
+            logger.warning("The device with the mac %s was not found in the LDAP" % mac)
 
     if "inscription" not in zone:
         return HttpResponseRedirect(reverse("home"))
 
+
+    vlan = request.network_data['vlan']
+    is_logged_in = request.user.is_authenticated()
     return render(
         request,
         'pages/inscription_zone_info.html',
