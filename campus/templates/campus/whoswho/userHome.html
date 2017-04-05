@@ -28,6 +28,9 @@
                <a href="#collapse-form" data-toggle="collapse" class="edit-info-link">
                   <span class="fa fa-pencil-square-o"></span> Éditer
                </a>
+               <a href="{% url 'campus:who:user-details' uid=user.uid %}" style="float: right;">
+                  <span class="fa fa-eye"></span> Profil publique
+               </a>
                <div class="collapse" id="collapse-form">
                   <form action="" method="post" class="form form-horizontal">
                      {% csrf_token %}
@@ -108,8 +111,24 @@
                   Ne réside pas à la Maisel <br>
                   {{ user.postal_address }}
                {% endif %}
-               <br><br>
-               <a href="{% url 'campus:who:user-details' user.uid %}">Voir mon profil publique </a>
+            </p>
+            <h3 class="text-center">Mes filleuls <a style="padding:0 0 0 0;" class="btn" data-toggle="modal" data-target="#addBizu"><span class="fa fa-plus-circle" style="color:#8BBF82"></span></a></h3>
+            <p class="text-center">
+               {% for godchild in user.godchildren %}
+                  <a href="{% url 'campus:who:user-details' uid=godchild.uid %}">{{ godchild.first_name }} {{godchild.last_name}}</a> (Promo {{godchild.promo}})
+                  <a class="fa fa-trash-o dell-user" href="{% url 'campus:who:remove-person' godchild.uid False %}" title="{% trans 'Supprimer' %}"></a>
+               {% empty %}
+                  Vous n'avez pas de filleuls :o
+               {% endfor %}
+            </p>
+            <h3 class="text-center">Mes parains <a style="padding:0 0 0 0;" class="btn" data-toggle="modal" data-target="#addParain"><span class="fa fa-plus-circle" style="color:#8BBF82"></span></a></h3>
+            <p class="text-center">
+               {% for godparent in user.godparents %}
+                  <a href="{% url 'campus:who:user-details' uid=godparent.uid %}">{{ godparent.first_name }} {{godparent.last_name}}</a> (Promo {{godparent.promo}})
+                  <a class="fa fa-trash-o dell-user" href="{% url 'campus:who:remove-person' godparent.uid True %}" title="{% trans 'Supprimer' %}"></a>
+               {% empty %}
+                  Vous n'avez pas de parains :o
+               {% endfor %}
             </p>
          </div>
       </div>
@@ -142,6 +161,58 @@
          </div>
       </div>
    </div>
+</div>
+<!-- MODAL -->
+<div class="modal fade" id="addBizu" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <form class="form-horizontal" action="{% url 'campus:who:add-person' False %}" method="post">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h4 class="modal-title">{% trans "Ajouter un filleul" %}</h4>
+                </div>
+                <div class="modal-body">
+                  <p>{% trans "Entrer le nom du filleul que vous souhaitez ajouter :" %}</p>
+                  <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1"><span class="fa fa-user"></span></span>
+                    <input type="text" class="form-control" name="id_user" id="id_parain" style="width:70%;"></input>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">{% trans "Ajouter" %}</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Annuler" %}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addParain" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <form class="form-horizontal" action="{% url 'campus:who:add-person' True %}" method="post">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h4 class="modal-title">{% trans "Ajouter un parain" %}</h4>
+                </div>
+                <div class="modal-body">
+                  <p>{% trans "Entrer le nom du parain que vous souhaitez ajouter :" %}</p>
+                  <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1"><span class="fa fa-user"></span></span>
+                    <input type="text" class="form-control" name="id_user" id="id_bizzu" style="width:70%;"></input>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">{% trans "Ajouter" %}</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Annuler" %}</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
@@ -185,5 +256,18 @@
         $( document ).on("ready", function( event ){
             update_buildings();
         });
+    </script>
+    <script src="{% static 'jquery/jquery-ui.min.js' %}"></script>
+    <script>
+        jQuery(document).ready(function ($) {
+          $('#id_parain').autocomplete({
+              source: "{% url 'campus:who:request-user' %}",
+              minLength: 3,
+          });
+          $('#id_bizzu').autocomplete({
+              source: "{% url 'campus:who:request-user' %}",
+              minLength: 3,
+          });
+        })
     </script>
 {% endblock %}

@@ -34,23 +34,32 @@ class UserDetails(View):
         except ObjectDoesNotExist:
             raise Http404
 
-        user.godchildren = []
+        user.godchildren, user.godparents = self.getGods(user)
+        return render(request, self.template_name, {'display_user' : user})
+
+    def getGods(self, user):
+        """
+        function used to get user's godchildren and godparents
+        """
+
+        godparents = []
+        godchildren = []
         for line in user.uid_godchildren:
             try:
-                user.godchildren.append(LdapUser.get(uid=line[4:line.find(',')]))
+                godchildren.append(LdapUser.get(uid=line[4:line.find(',')]))
             except ObjectDoesNotExist:
                 pass
-        sorted(user.godchildren, key=lambda e: e.first_name + " " + e.last_name.upper())
 
-        user.godparents = []
         for line in user.uid_godparents:
             try:
-                user.godparents.append(LdapUser.get(uid=line[4:line.find(',')]))
+                godparents.append(LdapUser.get(uid=line[4:line.find(',')]))
             except ObjectDoesNotExist:
                 pass
-        sorted(user.godparents, key=lambda e: e.first_name + " " + e.last_name.upper())
 
-        return render(request, self.template_name, {'display_user' : user})
+        sorted(godchildren, key=lambda e: e.first_name + " " + e.last_name.upper())
+        sorted(godparents, key=lambda e: e.first_name + " " + e.last_name.upper())
+
+        return(godchildren, godparents)
 
 
 class UserHome(View):
@@ -83,6 +92,8 @@ class UserHome(View):
 
         formSearchUser = SearchSomeone()
 
+        user.godchildren, user.godparents = UserDetails.getGods(self, user)
+
         context = {'user': user, 'form': form, 'formSearchUser': formSearchUser}
 
         return render(request, self.template_name, context)
@@ -92,6 +103,7 @@ class UserHome(View):
         form = self.form_class(request.POST)
         formSearchUser = SearchSomeone()
         user = request.ldap_user
+        user.godchildren, user.godparents = UserDetails.getGods(self, user)
         context={'form': form, 'user': user,}
 
         if form.is_valid():
@@ -222,11 +234,11 @@ class AddPerson(View):
             godparent = LdapUser.get(uid=godparent_uid)
         except ObjectDoesNotExist:
             messages.error(request, _("L'utilisateur que vous souhaitez ajouter n'existe pas."))
-            return HttpResponseRedirect(reverse('campus:who:user-details', args=[request.user.username]))
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
         if godparent.pk == godchild.pk:
             messages.success(request, _("Vous ne pouvez pas vous ajouter vous même."))
-            return HttpResponseRedirect(reverse('campus:who:user-details', args=[request.user.username]))
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
         if not godchild.pk in godparent.uid_godchildren :
             godparent.uid_godchildren.append(godchild.pk)
@@ -237,7 +249,7 @@ class AddPerson(View):
             godchild.save()
 
         messages.success(request, _("Votre filleul est correctement enregistré."))
-        return HttpResponseRedirect(reverse('campus:who:user-details', args=[request.user.username]))
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 class RemovePerson(View):
     """
@@ -252,7 +264,7 @@ class RemovePerson(View):
     def dispatch(self, *args, **kwargs):
         return super(RemovePerson, self).dispatch(*args, **kwargs)
 
-    def post(self, request, uid, is_gp):
+    def get(self, request, uid, is_gp):
         #is_gp reports if the user that our beloved user wants to remove
         #is a godchild or a godparent
 
@@ -268,7 +280,7 @@ class RemovePerson(View):
             godchild = LdapUser.get(uid=godchild_uid)
         except ObjectDoesNotExist:
             messages.error(request, _("L'utilisateur que vous souhaitez supprimer n'existe pas"))
-            return HttpResponseRedirect(reverse('campus:who:user-details', args=[request.user.username]))
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
         if godchild.pk in godparent.uid_godchildren:
             godparent.uid_godchildren.remove(godchild.pk)
@@ -280,4 +292,4 @@ class RemovePerson(View):
 
         messages.success(request, _("La modification a été effectuée avec succès"))
 
-        return HttpResponseRedirect(reverse('campus:who:user-details', args=[request.user.username]))
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
