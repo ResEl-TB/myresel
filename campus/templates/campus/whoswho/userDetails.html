@@ -20,7 +20,12 @@
         <div class="col-md-12">
            <h3 class="text-center" style="color: white;">
              <b>{% trans "Promo" %}</b> : {{display_user.promo}}
-             {% if display_user.formation != "" %}<b>{% trans "Formation" %}</b> : {{display_user.formation}}{% endif %}
+             {% if display_user.formation != "" %}<b>{% trans "Formation" %}</b> : {{display_user.formation}}<br />{% endif %}
+             {% if display_user.campus != "None"%}
+                <b>Batiment:</b> {{display_user.building}} <b>Chambre:</b> {{display_user.room_number}}<br>
+             {% else %}
+                <b>Adresse:</b> {{display_user.postal_address}}
+             {% endif %}
            </h3>
         </div>
     </div>
@@ -28,13 +33,13 @@
      <div class="row">
          <div class="col-md-6">
             <div class="col-md-12 well">
-                <h3 class="text-center">{% trans "Parrains" %}</h3>
+                <h3 class="text-center">{% trans "Parrains" %}{% if ldapuser.uid == display_user.uid %}  <a style="padding:0 0 5px 0;" class="btn" data-toggle="modal" data-target="#addParain"><span class="glyphicon glyphicon-plus" style="color:#8BBF82"></span></a>{% endif %}</h3>
                 <ul>
                 {% for godparent in display_user.godparents %}
                 <li>
                   <a href="{% url 'campus:who:user-details' godparent.uid %}">{{godparent.first_name}} {{godparent.last_name|upper}}</a>
                   ({%trans 'Promo' %} {{godparent.promo}})
-                  {% if ldap_user.uid == user.uid %}
+                  {% if ldapuser.uid == display_user.uid %}
                   <form style="float: right" action="{% url 'campus:who:remove-person' godparent.uid True %}" method="post">
                     {% csrf_token %}
                     <button class="fa fa-trash-o" title="{% trans 'Supprimer' %}"></button>
@@ -55,7 +60,7 @@
                 <li>
                   <a href="{% url 'campus:who:user-details' godchild.uid %}">{{godchild.first_name}} {{godchild.last_name|upper}}</a>
                   ({%trans 'Promo' %} {{godchild.promo}})
-                  {% if ldap_user.uid == user.uid %}
+                  {% if ldapuser.uid == display_user.uid %}
                   <form style="float: right" action="{% url 'campus:who:remove-person' godchild.uid False %}" method="post">
                     {% csrf_token %}
                     <button class="fa fa-trash-o" title="{% trans 'Supprimer' %}"></button>
@@ -86,7 +91,7 @@
 
         <!-- Modal content-->
         <div class="modal-content">
-            <form class="form-horizontal" action="{% url 'campus:who:add-godchild' %}" method="post">
+            <form class="form-horizontal" action="{% url 'campus:who:add-person' False %}" method="post">
                 {% csrf_token %}
                 <div class="modal-header">
                     <h4 class="modal-title">{% trans "Ajouter un filleul" %}</h4>
@@ -95,7 +100,32 @@
                   <p>{% trans "Entrer le nom du filleul que vous souhaitez ajouter :" %}</p>
                   <div class="input-group">
                     <span class="input-group-addon" id="basic-addon1"><span class="fa fa-user"></span></span>
-                    <input type="text" class="form-control" name="id_user" id="id_utilisateur" style="width:70%;"></input>
+                    <input type="text" class="form-control" name="id_user" id="id_parain" style="width:70%;"></input>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">{% trans "Ajouter" %}</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Annuler" %}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="addParain" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <form class="form-horizontal" action="{% url 'campus:who:add-person' True %}" method="post">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h4 class="modal-title">{% trans "Ajouter un parain" %}</h4>
+                </div>
+                <div class="modal-body">
+                  <p>{% trans "Entrer le nom du parain que vous souhaitez ajouter :" %}</p>
+                  <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1"><span class="fa fa-user"></span></span>
+                    <input type="text" class="form-control" name="id_user" id="id_bizzu" style="width:70%;"></input>
                   </div>
                 </div>
                 <div class="modal-footer">
@@ -113,10 +143,14 @@
 <script src="{% static 'jquery/jquery-ui.min.js' %}"></script>
 <script>
     jQuery(document).ready(function ($) {
-        $('#id_utilisateur').autocomplete({
-            source: "{% url 'campus:who:request-user' %}",
-            minLength: 3,
-        });
-    });
+      $('#id_parain').autocomplete({
+          source: "{% url 'campus:who:request-user' %}",
+          minLength: 3,
+      });
+      $('#id_bizzu').autocomplete({
+          source: "{% url 'campus:who:request-user' %}",
+          minLength: 3,
+      });
+    })
 </script>
 {% endblock %}

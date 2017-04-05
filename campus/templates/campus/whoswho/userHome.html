@@ -108,6 +108,8 @@
                   Ne réside pas à la Maisel <br>
                   {{ user.postal_address }}
                {% endif %}
+               <br><br>
+               <a href="{% url 'campus:who:user-details' user.uid %}">Voir mon profil publique </a>
             </p>
          </div>
       </div>

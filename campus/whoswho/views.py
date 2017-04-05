@@ -196,24 +196,33 @@ class RequestUser(View):
             raise Http404
 
 
-class AddBizu(View):
+class AddPerson(View):
     """
     View used to add godchild
     """
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
-        return super(AddBizu, self).dispatch(*args, **kwargs)
+        return super(AddPerson, self).dispatch(*args, **kwargs)
 
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, is_gp):
+        #is_gp reports if the user that our beloved user wants to add
+        #is a godchild or a godparent
+
+        if is_gp == 'True':
+            godparent_uid = request.POST.get('id_user', '')
+            godchild_uid = request.user.username
+        else:
+            godparent_uid = request.user.username
+            godchild_uid = request.POST.get('id_user', '')
+
         try:
-            godchild = LdapUser.get(uid=request.POST.get('id_user', ''))
+            godchild = LdapUser.get(uid=godchild_uid)
+            godparent = LdapUser.get(uid=godparent_uid)
         except ObjectDoesNotExist:
-            messages.error(request, _("L'utilisateur que vous souhaitez ajouter comme filleul n'existe pas."))
+            messages.error(request, _("L'utilisateur que vous souhaitez ajouter n'existe pas."))
             return HttpResponseRedirect(reverse('campus:who:user-details', args=[request.user.username]))
-
-        godparent = LdapUser.get(uid=request.user.username)
 
         if godparent.pk == godchild.pk:
             messages.success(request, _("Vous ne pouvez pas vous ajouter vous même."))
@@ -244,10 +253,8 @@ class RemovePerson(View):
         return super(RemovePerson, self).dispatch(*args, **kwargs)
 
     def post(self, request, uid, is_gp):
-        """
-        is_gp reports if the user that our beloved user wants to remove
-        is a godchild or a godparent
-        """
+        #is_gp reports if the user that our beloved user wants to remove
+        #is a godchild or a godparent
 
         if is_gp == 'True':
             godparent_uid = uid
@@ -257,11 +264,11 @@ class RemovePerson(View):
             godchild_uid = uid
 
         try:
+            godparent = LdapUser.get(uid=godparent_uid)
             godchild = LdapUser.get(uid=godchild_uid)
         except ObjectDoesNotExist:
             messages.error(request, _("L'utilisateur que vous souhaitez supprimer n'existe pas"))
-
-        godparent = LdapUser.get(uid=godparent_uid)
+            return HttpResponseRedirect(reverse('campus:who:user-details', args=[request.user.username]))
 
         if godchild.pk in godparent.uid_godchildren:
             godparent.uid_godchildren.remove(godchild.pk)

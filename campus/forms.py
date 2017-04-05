@@ -196,7 +196,8 @@ class MajPersonnalInfo(PersonnalInfoForm):
 
     show_info = forms.BooleanField(
         widget = forms.CheckboxInput(),
-        label = _("Rendre publiques mes informations."),
+        label = _("Rendre publiques les details de mon profil"),
+        label_suffix = _(''),
         required = False,
     )
 
