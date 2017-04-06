@@ -78,6 +78,13 @@
                            </div>
                         </div>
                      </span>
+                     <div class="form-group" id="form-group">
+                        <label for="uid" class="col-sm-3 control-label">{% trans "Date de naissance" %}</label>
+                        <div class="col-sm-8">
+                           {{form.birth_date.errors}}
+                           {{form.birth_date}}
+                        </div>
+                     </div>
                      <div class="form-group" id="home-address">
                         <label for="uid" class="col-sm-3 control-label">{% trans "Adresse" %}</label>
                         <div class="col-sm-8">
@@ -87,7 +94,7 @@
                      </div>
                      <div class="form-category">
                         <div class="col-sm-offset-3 col-sm-8">
-                           {{form.show_info}} {{form.show_info.label_tag}}
+                           {{form.is_public}} {{form.is_public.label_tag}}
                         </div>
                     </div>
                      <div class="form-category">
@@ -257,6 +264,7 @@
             update_buildings();
         });
     </script>
+    <script src="{% static 'jquery/jquery.min.js' %}"></script>
     <script src="{% static 'jquery/jquery-ui.min.js' %}"></script>
     <script>
         jQuery(document).ready(function ($) {
@@ -269,5 +277,17 @@
               minLength: 3,
           });
         })
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#datePicker').datepicker({
+              changeMonth: true,
+              changeYear: true,
+              yearRange: "1977:2420",
+              dateFormat: "dd/mm/yy",
+              defaultDate: '10/12/1996',
+
+            });
+        });
     </script>
 {% endblock %}

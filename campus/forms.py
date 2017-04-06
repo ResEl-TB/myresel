@@ -194,11 +194,18 @@ class MajPersonnalInfo(PersonnalInfoForm):
     BUILDINGS += BUILDINGS_BREST
     BUILDINGS += BUILDINGS_RENNES
 
-    show_info = forms.BooleanField(
+    is_public = forms.BooleanField(
         widget = forms.CheckboxInput(),
         label = _("Rendre publiques les details de mon profil"),
         label_suffix = _(''),
         required = False,
+    )
+
+    birth_date = forms.DateField(
+        widget = forms.DateInput(attrs={
+            'class' : 'form-control',
+            'id' : 'datePicker'
+        }),
     )
 
     certify_truth = forms.BooleanField(

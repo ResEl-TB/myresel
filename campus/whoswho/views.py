@@ -88,6 +88,8 @@ class UserHome(View):
             'building' : user.building,
             'room' : user.room_number,
             'address' : user.postal_address,
+            'birth_date' : user.birth_date,
+            'is_public' : user.is_public,
         })
 
         formSearchUser = SearchSomeone()
@@ -129,6 +131,8 @@ class UserHome(View):
             user.building = form.cleaned_data["building"]
             user.room_number = form.cleaned_data["room"]
             user.postal_address = address
+            user.birth_date = form.cleaned_data["birth_date"]
+            user.is_public = form.cleaned_data["is_public"]
             user.save()
 
             messages.success(request, _("Vos Informations ont été mises à jour"))

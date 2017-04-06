@@ -6,15 +6,6 @@
   margin-top: 5%;
 }
 
-.ui-autocomplete-input {
-  border: 1px solid #DDD !important;
-  padding-top: 0px !important;
-}
-
-.ui-autocomplete {
-  z-index: 1510 !important;
-}
-
 .modal-header {
   color: white;
   text-align: center;
