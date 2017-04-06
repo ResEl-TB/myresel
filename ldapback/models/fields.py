@@ -84,13 +84,21 @@ class LdapCharField(LdapField):
 
 class LdapBooleanField(LdapField):
     def to_ldap(self, obj):
+        if isinstance(obj, self.__class__) or obj == "":
+            return ""
         if type(obj) != bool:
             raise ValueError("Value for field %s must be a boolean" % self.__class__)
         return str(obj).upper()
 
     @classmethod
     def from_ldap(cls, obj):
-        return super().from_ldap(obj).lower() == 'true'
+        str_value = super().from_ldap(obj).lower()
+        if str_value == 'true':
+            return True
+        elif str_value == 'false':
+            return False
+        else:
+            return ""
 
 class LdapPasswordField(LdapCharField):
     hash_method = "ssha"
