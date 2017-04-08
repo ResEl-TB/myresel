@@ -310,11 +310,11 @@ class ListBirthdays(View):
 
     def get(self, request, *args, **kwarg):
         users = []
-        daysDate = datetime.date.today().strftime('%m%d%H%M%SZ')
-        daysDate = str(daysDate)
+        daysDate = datetime.date.today().strftime('%Y%m%d%H%M%SZ')
+        print(request.ldap_user.birth_date)
         print(daysDate)
         try:
-            users = LdapUser.filter(birth_date__startswith=daysDate)
+            users = LdapUser.filter(birth_date__contains=daysDate)
         except LDAPException as e:
             pass
         except Exception as e:

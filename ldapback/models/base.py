@@ -28,7 +28,6 @@ class LdapModel(object):
         :param kwargs:
         :return:
         """
-        print(kwargs)
         new_kwargs = {}
         for arg, arg_value in kwargs.items():
             new_arg = arg
