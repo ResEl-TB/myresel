@@ -1,4 +1,5 @@
 import json
+import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -9,6 +10,8 @@ from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
 from django.views.generic import View
+
+from ldap3 import LDAPException
 
 from campus.forms import MajPersonnalInfo, SearchSomeone
 
@@ -158,7 +161,7 @@ class SearchUsers(View):
 
         form = SearchSomeone(request.POST)
         if form.is_valid():
-            res = form.getResult(form.cleaned_data["what"])
+            res = form.getResult(form.cleaned_data["what"], form.cleaned_data["is_approx"])
             if res != False and len(res) != 0:
                 form = SearchSomeone()
                 return render(request, self.template_name, {'users': res, 'form': form})
@@ -260,10 +263,6 @@ class RemovePerson(View):
     View used to remove a godchild
     """
 
-    def __init__(self, *args, **kargs):
-        super(RemovePerson, self).__init__(*args, **kargs)
-
-
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(RemovePerson, self).dispatch(*args, **kwargs)
@@ -297,3 +296,27 @@ class RemovePerson(View):
         messages.success(request, _("La modification a été effectuée avec succès"))
 
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+class ListBirthdays(View):
+    """
+    View used to list persons that have their birthday today
+    """
+
+    template_name = 'campus/whoswho/birthdayList.html'
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(ListBirthdays, self).dispatch(*args, **kwargs)
+
+    def get(self, request, *args, **kwarg):
+        users = []
+        daysDate = datetime.date.today().strftime('%m%d%H%M%SZ')
+        daysDate = str(daysDate)
+        print(daysDate)
+        try:
+            users = LdapUser.filter(birth_date__startswith=daysDate)
+        except LDAPException as e:
+            pass
+        except Exception as e:
+            pass
+        return render(request, self.template_name, {'users' : users})

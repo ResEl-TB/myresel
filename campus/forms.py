@@ -228,22 +228,30 @@ class SearchSomeone(forms.Form):
         required = False,
     )
 
-    def getResult(self, what):
+    def getResult(self, what, is_approx):
         what = what.strip()
 
         if re.match(r'^[a-z1-9-_.+]+\@[a-z1-9-]+\.[a-z0-9-]+$', what.lower()):
-
             return LdapUser.filter(mail=what)
+
+        elif "@" in what and is_approx == True:
+            return LdapUser.filter(mail__contains=what)
 
         elif re.match(r'^[a-z- ]+ ([a-z-]+)', what.lower()):
 
             try:
                 elList = what.split(' ')
                 name1, name2 = elList[0], elList[-1]
-                res = LdapUser.filter(first_name=name1)
-                res += LdapUser.filter(first_name=name2)
-                res += LdapUser.filter(last_name=name1)
-                res += LdapUser.filter(last_name=name2)
+                if is_approx == True:
+                    res = LdapUser.filter(first_name__contains=name1)
+                    res += LdapUser.filter(first_name__contains=name2)
+                    res += LdapUser.filter(last_name__contains=name1)
+                    res += LdapUser.filter(last_name__contains=name2)
+                else:
+                    res = LdapUser.filter(first_name=name1)
+                    res += LdapUser.filter(first_name=name2)
+                    res += LdapUser.filter(last_name=name1)
+                    res += LdapUser.filter(last_name=name2)
                 return list(dict((obj.first_name, obj) for obj in res).values()) #exludes duplicates
 
             except LDAPException as e:
@@ -252,10 +260,13 @@ class SearchSomeone(forms.Form):
                 return False
 
         elif re.match(r'^[a-z-]+', what.lower()):
-
             try:
-                res = LdapUser.filter(first_name=what)
-                res += LdapUser.filter(last_name=what)
+                if is_approx == True:
+                    res = LdapUser.filter(first_name__contains=what)
+                    res += LdapUser.filter(last_name__contains=what)
+                else:
+                    res = LdapUser.filter(first_name=what)
+                    res += LdapUser.filter(last_name=what)
                 return(res)
 
             except LDAPException as e:

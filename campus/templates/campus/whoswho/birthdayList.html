@@ -1,0 +1,39 @@
+{% extends 'base_campus.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block titre %}Anniversaires{% endblock %}
+
+{% block css %}
+<link href="{% static 'css/campus/whoswho.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="page-header text-center" style="color: white;">
+        <h1>{% trans "Aujourd'hui on fête l'anniversaire de:" %}</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    {% for user in users%}
+      <div class="col-md-2 text-center">
+        <div class="col-xs-12 well">
+          {{user.first_name}}<br>
+          {{user.last_name}}<br>
+          Promo {{user.promo}}
+        </div>
+      </div>
+    {% empty %}
+      <div class="col-md-offset-4 col-md-4 text-center" style="color:white; min-height: 50px;">
+        Personne :(
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
