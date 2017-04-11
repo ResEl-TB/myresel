@@ -1,3 +1,4 @@
+# pylint: disable=unexpected-keyword-arg
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 

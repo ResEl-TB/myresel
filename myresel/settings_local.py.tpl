@@ -5,10 +5,9 @@
 #
 
 import sys
+from ldap3 import AUTO_BIND_TLS_BEFORE_BIND, AUTO_BIND_NO_TLS
 
 # SECURITY WARNING: Change this in production!
-
-
 SECRET_KEY = '7_gz^zjk+lj+72utudq+l(xd-!@3xlo5c*20&dz$mdgn2p22g-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -44,6 +43,8 @@ EMAIL_SUBJECT_PREFIX = '[resel.fr]'
 LDAP_URL = "localhost"
 LDAP_PORT = "389"
 LDAP_PASSWD = 'blah'
+LDAP_AUTH_USE_TLS = False  # or True for production
+LDAP_AUTO_BIND = AUTO_BIND_NO_TLS  # or AUTO_BIND_TLS_BEFORE_BIND for production
 
 LDAP_DC_MAISEL = "dc=maisel,dc=enst-bretagne,dc=fr"
 LDAP_DC_RESEL = "dc=resel,dc=enst-bretagne,dc=fr"

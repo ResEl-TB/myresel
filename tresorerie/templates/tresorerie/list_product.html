@@ -120,26 +120,6 @@
             </div>
         </div>
     </div>
-    <form action="" method="post" class="col-lg-6 col-lg-offset-3 text-center form-horizontal">
-        {% csrf_token %}
-        <div class="choices"></div>
-        <div class="stripe hidden">
-            <input
-                    type="submit"
-                    class="btn btn-info fa-input"
-                    value="&#xf09d; {% trans 'Payer par carte' %}"
-                    data-key="pk_test_KE9qQquz3hhdRI54CcfBaukl"
-                    data-currency="eur"
-                    data-name="Association ResEl"
-                    data-image="{% static 'images/tresorerie/marketplace.png' %}"
-                    data-locale="auto"
-                    data-email="{{ request.session.mail }}"
-            />
-        </div>
-        <br>
-        <input name='price' type='hidden'>
-    </form>
-    </div>
 {% endblock %}
 
 {% block javascript %}

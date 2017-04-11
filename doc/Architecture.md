@@ -62,7 +62,7 @@ dans le dictionnaire `request.network_data` les informations suivantes :
 - `is_resel` : la machine distantes est-elle dans le ResEl ?
 - `device` : si la machine est enregistrée, l'objet LdapDevice associée
 
-### `inscriptionNetworkHandler`
+### `InscriptionNetworkHandler`
 
 Ce middleware permet de router l'utilisateur vers les vues autorisées lorsqu'il
 se trouve dans le VLAN d'inscription.

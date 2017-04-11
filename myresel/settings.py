@@ -86,7 +86,6 @@ AUTHENTICATION_BACKENDS = (
 )
 
 LDAP_AUTH_URL = "ldap://%s:%s" % (LDAP_URL, LDAP_PORT)
-LDAP_AUTH_USE_TLS = False
 LDAP_AUTH_SEARCH_BASE = LDAP_DN_PEOPLE
 LDAP_AUTH_OBJECT_CLASS = "genericPerson"
 LDAP_AUTH_USER_FIELDS = {
@@ -147,7 +146,7 @@ INSTALLED_APPS = [
     'campus',
 ]
 
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -160,7 +159,7 @@ MIDDLEWARE_CLASSES = [
     'myresel.middleware.SimulateProductionNetwork',
     'myresel.middleware.IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAResElAdminSoCheckTheLdapBeforeMiddleware',
     'myresel.middleware.NetworkConfiguration',
-    'myresel.middleware.inscriptionNetworkHandler',
+    'myresel.middleware.InscriptionNetworkHandler',
 ]
 
 ROOT_URLCONF = 'myresel.urls'

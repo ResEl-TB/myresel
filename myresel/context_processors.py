@@ -14,20 +14,21 @@ def resel_context(request):
     context = dict(request.network_data)
 
     context['need_to_pay'] = False
-    context['has_paid_cotiz'] = None
+    context['has_paid_cotiz'] = 'success'
     if request.user.is_authenticated():
         user = LdapUser.get(pk=request.user.username)
         context['need_to_pay'] = user.need_to_pay()
         context['ldapuser'] = user
         context['has_paid_cotiz'] = user.need_to_pay()
-    elif request.network_data['zone'] != "Internet":
-        try:
-            # FIXME: here 2 requests to the Ldap each time...
-            device = LdapDevice.get(request.network_data['ip'])
-            owner_short_uid = device.owner.split(",")[0][4:]
-            user = LdapUser.get(uid=owner_short_uid)
-            context['has_paid_cotiz'] = user.need_to_pay()
-        except:
-            context['has_paid_cotiz'] = 'success'
-
+    ## FIXME: The code down here is bullshit so if somebody want to fix it go on
+    ## But not on my watch
+    # elif request.network_data['zone'] != "Internet":
+    #     try:
+    #         # FIXME: here 2 requests to the Ldap each time...
+    #         device = LdapDevice.get(request.network_data['ip'])
+    #         owner_short_uid = device.owner.split(",")[0][4:]
+    #         user = LdapUser.get(uid=owner_short_uid)
+    #         context['has_paid_cotiz'] = user.need_to_pay()
+    #     except:
+    #         pass
     return context

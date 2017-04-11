@@ -113,15 +113,23 @@ class LdapUser(ldapback.models.LdapModel):
         return address
 
     def is_member(self):
-        # TODO : possible bug if self.cotiz is not defined as a list
-        return str(generic.current_year()) in [c.strip() for c in self.cotiz]
+        if isinstance(self.cotiz, list):
+            # Pylint disabled because it wrongly guess that self.cotiz is always a LdapListField
+            # pylint: disable=not-an-iterable
+            return str(generic.current_year()) in [c.strip() for c in self.cotiz]
+        return False
 
     def has_resel_email(self):
         """
         Tells if according to the Ldap the user has a @resel.fr address
         :return: bool
         """
-        return 'mailPerson' in self.object_classes and " " not in self.mail_local_address
+        if isinstance(self.mail_local_address, list):
+            # Pylint disabled because it wrongly guess that self.mail_local_address is a LdapListField
+            # pylint: disable=unsupported-membership-test
+            return 'mailPerson' in self.object_classes and " " not in self.mail_local_address
+        else:
+            return False
 
     def is_campus_moderator(self):
         """
@@ -197,4 +205,8 @@ class LdapGroup(ldapback.models.LdapModel):
     members = LdapListField(db_column='member', object_classes=['groupOfNames'])
 
     def is_member(self, uid):
-        return uid in [member.split(',')[0].split('uid=')[1] for member in self.members]
+        if isinstance(self.members, list):
+            # Pylint disabled because it wrongly guess that self.members is a LdapListField
+            # pylint: disable=not-an-iterable
+            return uid in [member.split(',')[0].split('uid=')[1] for member in self.members]
+        return False

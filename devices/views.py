@@ -49,6 +49,7 @@ class Reactivation(View):
         device.activate(campus=settings.CURRENT_CAMPUS)
         device.save()
         owner_uid = device.owner.split(',')[0][4:]
+        network.update_all()
         mail_admins(
             "[Reactivation {}] 172.22.{} - {} [{}] par {}".format(settings.CURRENT_CAMPUS,
                                                                   device.ip, device.mac_address, device.hostname,
@@ -59,7 +60,6 @@ class Reactivation(View):
                                                                                                 device.mac_address)
         )
         messages.info(request, _("Votre machine vient d'être réactivée."))
-        network.update_all()
 
         return HttpResponseRedirect(reverse('home'))
 
