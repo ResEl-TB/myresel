@@ -32,7 +32,7 @@
                   <span class="fa fa-eye"></span> Profil publique
                </a>
                <div class="collapse" id="collapse-form">
-                  <form action="" method="post" class="form form-horizontal">
+                  <form enctype="multipart/form-data" action="" method="post" class="form form-horizontal">
                      {% csrf_token %}
                      <h3 class="text-center">Éditer mes informations</h3>
                      <div class="form-group">
@@ -47,7 +47,13 @@
                            <input type="text" class="form-control" id="uid" placeholder="{% trans "Nom" %}" value="{{ user.first_name }}" disabled="disabled">
                         </div>
                      </div>
-                     <!-- Changer pour un form django ! -->
+                     <div class="form-group">
+                        <label for="uid" class="col-sm-3 control-label">{% trans "Photo" %}</label>
+                        <div class="col-sm-8">
+                           {{form.photo.errors}}
+                           {{form.photo}}
+                        </div>
+                     </div>
                      <div class="form-group">
                         <label for="uid" class="col-sm-3 control-label">{% trans "Email" %}</label>
                         <div class="col-sm-8">
@@ -108,6 +114,11 @@
                </div>
             </div>
             <h3 class="text-center">Mon Profil</h3>
+            {% if user.photo_is_legacy == False %}
+            <div class="user-photo">
+              <img src="/media/image/{{user.photo_file}}" />
+            </div>
+            {% endif %}
             <p class="text-center">
                {{user.first_name}} {{user.last_name}}, {{user.formation}} promo {{user.promo}} <br>
                <a href="mailto:{{user.mail}}">{{user.mail}}</a><br>

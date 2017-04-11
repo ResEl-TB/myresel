@@ -19,6 +19,11 @@
         </div>
         <div class="col-md-12">
            <h3 class="text-center" style="color: white;">
+             {% if display_user.photo_is_legacy == False %}
+             <div class="user-photo">
+               <img src="/media/image/{{display_user.photo_file}}" />
+             </div>
+             {% endif %}
              <b>{% trans "Promo" %}</b> : {{display_user.promo}}
              {% if display_user.formation != "" %}<b>{% trans "Formation" %}</b> : {{display_user.formation}}<br />{% endif %}
              {% if display_user.is_public == True %}

@@ -1,5 +1,9 @@
 import json
 import datetime
+import os
+
+from io import BytesIO
+from PIL import Image
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -17,6 +21,8 @@ from campus.forms import MajPersonnalInfo, SearchSomeone
 
 from gestion_personnes.async_tasks import send_mails
 from gestion_personnes.models import LdapUser, UserMetaData
+
+from myresel.settings import MEDIA_ROOT
 
 
 class UserDetails(View):
@@ -36,6 +42,10 @@ class UserDetails(View):
             user = LdapUser.get(uid=uid)
         except ObjectDoesNotExist:
             raise Http404
+
+        user.photo_is_legacy = False
+        if user.photo_file[:8] != "PROMO_V2":
+            user.photo_is_legacy = True
 
         user.godchildren, user.godparents = self.getGods(user)
         return render(request, self.template_name, {'display_user' : user})
@@ -85,6 +95,10 @@ class UserHome(View):
 
         user = request.ldap_user
 
+        user.photo_is_legacy = False
+        if user.photo_file[:8] != "PROMO_V2":
+            user.photo_is_legacy = True
+
         form = self.form_class(initial={
             'email' : user.mail,
             'campus' : user.campus,
@@ -94,6 +108,7 @@ class UserHome(View):
             'birth_date' : user.birth_date,
             'is_public' : user.is_public,
         })
+
 
         formSearchUser = SearchSomeone()
 
@@ -108,6 +123,11 @@ class UserHome(View):
         form = self.form_class(request.POST)
         formSearchUser = SearchSomeone()
         user = request.ldap_user
+
+        user.photo_is_legacy = False
+        if user.photo_file[:8] != "PROMO_V2":
+            user.photo_is_legacy = True
+
         user.godchildren, user.godparents = UserDetails.getGods(self, user)
         context={'form': form, 'user': user,}
 
@@ -128,7 +148,17 @@ class UserHome(View):
                 user_meta, __ = UserMetaData.objects.get_or_create(uid=user.uid)
                 user_meta.send_email_validation(mail, request.build_absolute_uri)
 
-            #TODO: is publiable ?
+            photo_file = request.FILES.get('photo', False)
+            if photo_file:
+                photo = Image.open(BytesIO(photo_file.read()))
+                try:
+                    path = MEDIA_ROOT+"/image/PROMO_V2_"+user.promo+"/"
+                    os.makedirs(path)
+                except FileExistsError:
+                    pass
+                photo.save(path+user.uid, "PNG")
+                user.photo_file = "PROMO_V2_"+user.promo+"/"+user.uid
+
             user.mail = mail
             user.campus = form.cleaned_data["campus"]
             user.building = form.cleaned_data["building"]

@@ -194,6 +194,16 @@ class MajPersonnalInfo(PersonnalInfoForm):
     BUILDINGS += BUILDINGS_BREST
     BUILDINGS += BUILDINGS_RENNES
 
+    photo = forms.ImageField(
+        widget = forms.ClearableFileInput({
+            'class' : 'form-control'
+        }),
+        label = 'Photo',
+        label_suffix = _(''),
+        required = False,
+
+    )
+
     is_public = forms.BooleanField(
         widget = forms.CheckboxInput(),
         label = _("Rendre publiques les details de mon profil"),
