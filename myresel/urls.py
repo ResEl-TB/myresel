@@ -20,7 +20,7 @@ from django.contrib.auth import views as auth_views
 from django.views.generic import RedirectView
 from django.views.generic import TemplateView
 from django.views.i18n import javascript_catalog
-from pages.views import Home, Contact, NewsListe, inscriptionZoneInfo, FaqList, faqUpvote, NewsDetail, Services
+from pages.views import Home, Contact, NewsListe, inscription_zone_info, FaqList, faqUpvote, NewsDetail, Services
 from myresel import settings
 
 
@@ -52,7 +52,7 @@ urlpatterns = [
     url(r'^campus/', include('campus.urls', namespace='campus')),
 
     # Subcription related urls
-    url(r'^inscription_zone/', inscriptionZoneInfo, name="inscription-zone"),
+    url(r'^inscription_zone/', inscription_zone_info, name="inscription-zone"),
     url(r'^generate_204/', RedirectView.as_view(pattern_name="inscription-zone", permanent=False), name="generate_204"),
 
     url(r'^help-needed/', TemplateView.as_view(template_name='help_needed.html'), name="help-needed"),

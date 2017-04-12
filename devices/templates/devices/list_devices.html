@@ -26,7 +26,7 @@
                         <tbody>
                     {% endif %}
 
-                <tr style="cursor: pointer;" class="clickable {% if current_device.hostname == m.hostname %}active{% endif %}" data-href="{% url 'gestion-machines:modifier' m.hostname %}">
+                <tr style="cursor: pointer;" class="clickable" data-href="{% url 'gestion-machines:modifier' m.hostname %}">
                     <td>{{ m.hostname|capfirst }}</td>
                     <td>{{ m.aliases|first|capfirst }}</td>
                     <td>{{ m.mac_address|upper }}</td>
@@ -41,9 +41,9 @@
                         {% else %}
                             <span class="label label-danger">{% trans "Erreur" %}</span>
                         {% endif %}
-                        {% if current_device.hostname == m.hostname %}
-                            <span class="label label-info">{% trans "Machine courante" %}</span>
-                        {% endif %}
+{#                        {% if current_device.hostname == m.hostname %}#}
+{#                            <span class="label label-info">{% trans "Machine courante" %}</span>#}
+{#                        {% endif %}#}
                     </td>
                 </tr>
                 {% if forloop.last %}
@@ -58,12 +58,6 @@
             </div> <!-- /.col-lg-12 -->
 
         </div> <!-- /.row -->
-
-        {% if current_device == None %}
-            <div class="text-center">
-                <a href="{% url 'gestion-machines:ajout' %}" class="btn btn-info btn-lg">{%  trans "Enregistrer mon ordinateur"%} </a>
-            </div>
-        {% endif %}
     </div> <!-- /.container -->
 {% endblock %}
 

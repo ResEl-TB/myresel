@@ -1,7 +1,7 @@
 # TODO: refactor configuration (username, pass...)
 # TODO: do not delete migrations
 
-image: docker.resel.fr/web  # Custom image made for the ResEl
+image: docker.resel.fr/web:latest  # Custom image made for the ResEl
 services:
   - redis:latest
   - mysql:latest
@@ -38,7 +38,7 @@ before_script:
   - echo "CREATE DATABASE qos" | mysql -uroot -pblah -h mysql
   - source .install/scripts/install_openldap.sh
   - source .install/scripts/install_latex.sh
-  - pip3 install -qr requirements.txt
+  - pip3 install -qUr requirements.txt
 
 create_config:
   stage: configure
@@ -71,9 +71,9 @@ pylint:
   stage: test
   script:
     - pip3 install pylint --quiet
-    - pip3 install pylint-django --quiet
-    - pylint --rcfile=.pylintrc ./*
-  allow_failure: true
+    - pip3 install pylint-django --quiet  --upgrade
+    - pylint --rcfile=.pylintrc campus devices fonctions gestion_personnes ldapback myresel pages tresorerie wiki || exit $((35 & $?))
+  allow_failure: false
 
 deploy to brest:
   services: []

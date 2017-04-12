@@ -26,6 +26,10 @@ class UserNotAuthenticatedException(Exception):
 class NotAllowedException(Exception):
     pass
 
+
+# Linting disabled because it wrongly guess that room is always a str
+# noinspection PyUnresolvedReferences
+# pylint: disable=no-member
 def construct_query(request, start_date, end_date, room='all'):
     """
     Construct a query to get all the events between 2 dates

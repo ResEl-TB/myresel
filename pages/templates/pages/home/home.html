@@ -127,7 +127,7 @@
                         <div class="news-bloc">
                             <a href="{% url 'piece-of-news' pieceofnews.pk %}">
                                 <div class="row">
-                                    <h3 class="title">{{ pieceofnews.title|title }}<small> le {{ pieceofnews.date|date }} par {{ pieceofnews.author.first_name }}</small></h3>
+                                    <h3 class="title">{{ pieceofnews.title }}<small> le {{ pieceofnews.date|date }} par {{ pieceofnews.author.first_name }}</small></h3>
                                     <div>{{ pieceofnews.content|safe|truncatewords_html:15 }}</div>
                                 </div>
                             </a>
@@ -156,7 +156,7 @@
 
     <div class="home-fragment">
         <div class="container article">
-            <h1>Bande passante générale</h1>
+            <h1><a href="https://graph.resel.fr/dashboard/db/tete-de-reseau">Bande passante générale</a></h1>
             <div class="embed-responsive graph">
                 <iframe src="https://graph.resel.fr/dashboard-solo/db/public-stats?panelId=1&from=now-13h&to=now" width="450" height="200" frameborder="0"></iframe>
             </div>

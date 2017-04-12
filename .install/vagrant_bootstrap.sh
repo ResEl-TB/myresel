@@ -46,7 +46,7 @@ echo ">>> Installing LateX <<<"
 source ${ROOTDIR}.install/scripts/install_latex.sh
 
 echo ">>> Installing Python requirements <<<"
-pip3 install -qr ${ROOTDIR}requirements.txt
+pip3 install -qUr ${ROOTDIR}requirements.txt
 
 echo ">>> Initializing repo <<<"
 source ${ROOTDIR}.install/scripts/configure.sh
