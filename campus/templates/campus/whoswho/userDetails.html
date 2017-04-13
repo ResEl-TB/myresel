@@ -19,7 +19,11 @@
         </div>
         <div class="col-md-12">
            <h3 class="text-center" style="color: white;">
-             {% if display_user.photo_is_legacy == False %}
+             {% if display_user.photo_file == "images/campus/no-image.png" %}
+             <div class="user-photo">
+               <img src="{% static display_user.photo_file %}" />
+             </div>
+             {% elif display_user.photo_is_legacy == False %}
              <div class="user-photo">
                <img src="/media/image/{{display_user.photo_file}}" />
              </div>

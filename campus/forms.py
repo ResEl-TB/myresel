@@ -204,10 +204,18 @@ class MajPersonnalInfo(PersonnalInfoForm):
 
     )
 
+    remove_photo = forms.BooleanField(
+        widget = forms.CheckboxInput(),
+        label = _("Supprimer ma photo"),
+        label_suffix = _(''),
+        required = False,
+    )
+
     is_public = forms.BooleanField(
         widget = forms.CheckboxInput(),
         label = _("Rendre publiques les details de mon profil"),
         label_suffix = _(''),
+        initial = False,
         required = False,
     )
 
@@ -216,6 +224,7 @@ class MajPersonnalInfo(PersonnalInfoForm):
             'class' : 'form-control',
             'id' : 'datePicker'
         }),
+        required = False,
     )
 
     certify_truth = forms.BooleanField(

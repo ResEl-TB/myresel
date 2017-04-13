@@ -43,12 +43,18 @@ class UserDetails(View):
         except ObjectDoesNotExist:
             raise Http404
 
-        user.photo_is_legacy = False
-        if user.photo_file[:8] != "PROMO_V2":
-            user.photo_is_legacy = True
+        user = self.getUserPhoto(user)
 
         user.godchildren, user.godparents = self.getGods(user)
         return render(request, self.template_name, {'display_user' : user})
+
+    def getUserPhoto(self, user):
+        user.photo_is_legacy = False
+        if user.photo_file == "":
+            user.photo_file = "images/campus/no-image.png"
+        elif user.photo_file[:8] != "PROMO_V2":
+            user.photo_is_legacy = True
+        return(user)
 
     def getGods(self, user):
         """
@@ -82,8 +88,6 @@ class UserHome(View):
     This is the default view for the whoswho
     """
 
-    #TODO add an option to update godparents/childrens
-
     template_name = 'campus/whoswho/userHome.html'
     form_class = MajPersonnalInfo
 
@@ -94,10 +98,7 @@ class UserHome(View):
     def get(self, request, *args, **kwargs):
 
         user = request.ldap_user
-
-        user.photo_is_legacy = False
-        if user.photo_file[:8] != "PROMO_V2":
-            user.photo_is_legacy = True
+        user = UserDetails.getUserPhoto(self, user)
 
         form = self.form_class(initial={
             'email' : user.mail,
@@ -124,10 +125,6 @@ class UserHome(View):
         formSearchUser = SearchSomeone()
         user = request.ldap_user
 
-        user.photo_is_legacy = False
-        if user.photo_file[:8] != "PROMO_V2":
-            user.photo_is_legacy = True
-
         user.godchildren, user.godparents = UserDetails.getGods(self, user)
         context={'form': form, 'user': user,}
 
@@ -149,7 +146,8 @@ class UserHome(View):
                 user_meta.send_email_validation(mail, request.build_absolute_uri)
 
             photo_file = request.FILES.get('photo', False)
-            if photo_file:
+            remove_photo = form.cleaned_data["remove_photo"]
+            if photo_file and remove_photo == False:
                 photo = Image.open(BytesIO(photo_file.read()))
                 try:
                     path = MEDIA_ROOT+"/image/PROMO_V2_"+user.promo+"/"
@@ -158,6 +156,9 @@ class UserHome(View):
                     pass
                 photo.save(path+user.uid, "PNG")
                 user.photo_file = "PROMO_V2_"+user.promo+"/"+user.uid
+            elif remove_photo:
+                user.photo_file = ""
+                form.data["remove_photo"] = False
 
             user.mail = mail
             user.campus = form.cleaned_data["campus"]
@@ -171,6 +172,8 @@ class UserHome(View):
             messages.success(request, _("Vos Informations ont été mises à jour"))
         else:
             messages.warning(request, _("Une ou plusieurs informations sont invalides"))
+
+        user = UserDetails.getUserPhoto(self, user)
 
         context={'user': user, 'form': form, 'formSearchUser': formSearchUser}
         return render(request, self.template_name, context)

@@ -54,6 +54,13 @@
                            {{form.photo}}
                         </div>
                      </div>
+                     <div class="form-category">
+                        <label for="uid" class="col-sm-3 control-label">{% trans "" %}</label>
+                        <div class="col-sm-8">
+                           {{form.remove_photo.errors}}
+                           {{form.remove_photo}} {{form.remove_photo.label_tag}}
+                        </div>
+                     </div>
                      <div class="form-group">
                         <label for="uid" class="col-sm-3 control-label">{% trans "Email" %}</label>
                         <div class="col-sm-8">
@@ -114,7 +121,11 @@
                </div>
             </div>
             <h3 class="text-center">Mon Profil</h3>
-            {% if user.photo_is_legacy == False %}
+            {% if user.photo_file == "images/campus/no-image.png" %}
+            <div class="user-photo">
+              <img src="{% static user.photo_file %}" />
+            </div>
+            {% elif user.photo_is_legacy == False %}
             <div class="user-photo">
               <img src="/media/image/{{user.photo_file}}" />
             </div>
@@ -150,7 +161,7 @@
             </p>
          </div>
       </div>
-      <div class="col-md-4 col-md-offset-1">
+      <div class="col-md-5 col-md-offset-1">
          <div class="col-md-12 well">
             <h3 class="text-center" >Rechercher quelqu'un</h3>
             <form class="form-horizontal" action="{% url 'campus:who:search-user' %}" method="post">
