@@ -12,11 +12,18 @@
 {% block content %}
  <div class="container">
     <div class="row">
+        <div class="col-md-2" style="color: white">
+            <a href="{% url 'campus:who:user-home' %}" class="noncolored-a"><span class="fa fa-arrow-circle-o-left"> {% trans "Retour à l'acceuil" %} </span></a>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-12">
             <h1 class="page-header text-center" style="color: white;">
                 {{display_user.first_name}} {{display_user.last_name|upper}}
             </h1>
         </div>
+    </div>
+    <div class="row">
         <div class="col-md-12">
            <h3 class="text-center" style="color: white;">
              {% if display_user.photo_file == "images/campus/no-image.png" %}
@@ -82,7 +89,7 @@
          </div>
      </div>
      <div class="row">
-         <div class="col-xs-offset-1 col-xs-5">
+         <div class="col-md-offset-1 col-md-5">
             <div class="col-xs-12 well">
                <h3 class="text-center">{% trans "Clubs" %}</h3>
                Cette personne ne fait partie d'aucun club

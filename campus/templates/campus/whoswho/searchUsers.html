@@ -12,6 +12,11 @@
 {% block content %}
 <div class="container">
   <div class="row">
+    <div class="col-md-2" style="color: white">
+      <a href="{% url 'campus:who:user-home' %}" class="noncolored-a"><span class="fa fa-arrow-circle-o-left"> {% trans "Retour à l'acceuil" %} </span></a>
+    </div>
+  </div>
+  <div class="row">
     <div class="col-md-12">
       <div class="page-header text-center" style="color: white;">
         <h1>{% trans 'Résultats de la recherche' %}</h1>

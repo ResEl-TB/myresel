@@ -30,7 +30,7 @@ label input {
    width: 100%;
 }
 
-.user-form a:hover, .user-form a:active, .user-form a:visited, .user-form a:focus, .edit-info-link{
+.user-form a:hover, .user-form a:active, .user-form a:visited, .user-form a:focus, .edit-info-link, .noncolored-a, .noncolored-a:hover{
    color: inherit;
    cursor: pointer;
    text-decoration: none;
@@ -55,5 +55,5 @@ label input {
 
 .user-photo img{
   max-width: 100px;
-  box-shadow: 0px 0px 10px black;
+  box-shadow: -1px 0px 15px rgba(0,0,0,0.5);
 }
