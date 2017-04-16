@@ -241,7 +241,7 @@ class SearchSomeone(forms.Form):
     what = forms.CharField(
         widget = forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': _('ex: Siffredi')
+            'placeholder': _('ex: Hervé Rétif')
         }),
     )
 
