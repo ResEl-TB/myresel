@@ -41,7 +41,7 @@ class HomeTestCase(TestCase):
         )
 
         self.assertEqual(200, r.status_code)
-
+'''
     def testInvalidInfo(self):
         user = LdapUser.get(pk="jbvallad")
         form = MajPersonnalInfo(initial={
@@ -59,6 +59,7 @@ class HomeTestCase(TestCase):
         #form.data['campus'] = "Brest"
 
         #self.assertTrue(form.is_valid())
+'''
 
 class SearchTestCase(TestCase):
 
