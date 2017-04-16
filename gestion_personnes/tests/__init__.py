@@ -24,7 +24,7 @@ def try_delete_old_user(uid):
         return False
 
 
-def create_full_user(uid="amanoury", pwd="blahblah"):
+def create_full_user(uid="amanoury", pwd="blahblah", email="alexandre.manoury@telecom-bretagne.eu"):
     now = datetime.now()
     now = now.replace(microsecond=0)
     user = LdapUser()
@@ -44,7 +44,7 @@ def create_full_user(uid="amanoury", pwd="blahblah"):
     user.postal_address = LdapUser.generate_address(user.campus, user.building, user.room_number)
 
     user.promo = "2020"
-    user.mail = "alexandre.manoury@telecom-bretagne.eu"
+    user.mail = email
     user.anneeScolaire = "2015"
     user.mobile = "33676675525"
     user.option = "Brest"
