@@ -48,17 +48,17 @@
                 </a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="{% url "help-needed" %}"><span class="fa fa-users"></span> Clubs et associations <span class="label label-success">bientôt</span></a></li>
+                <li><a href="{% url "help-needed" %}"><span class="fa fa-users"></span> Vie associative <span class="label label-success">bientôt</span></a></li>
+                <li><a href="https://campus.resel.fr"><span class="fa fa-fw fa-calendar"></span> Calendrier </a></li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-bars"></span> Annuaire <span class="fa fa-fw fa-caret-down"></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-address-book"></span> Annuaire <span class="fa fa-fw fa-caret-down"></a>
                     <ul class="dropdown-menu">
                         <li><a href="{% url "campus:who:user-home" %}"><span class="fa fa-users"></span> Who's Who </a></li>
                         <li><a href="{% url "campus:who:list-birthdays" %}"><span class="fa fa-birthday-cake"></span> Anniversaires </a></li>
                     </ul>
                 </li>
-                <li><a href="{% url "help-needed" %}"><span class="fa fa-fw fa-calendar"></span> Calendrier campus <span class="label label-success">bientôt</span></a></li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-fw fa-plus"></span> <span class="fa fa-fw fa-caret-down"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-fw fa-plus"></span> Mail campus<span class="fa fa-fw fa-caret-down"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="{% url "help-needed" %}"><span class="fa fa-fw fa-calendar-plus-o"></span> Créer un événement <span class="label label-success">bientôt</span></a></li>
                         <li><a href="{% url 'campus:mails:send' %}"><span class="fa fa-fw fa-envelope"></span> Envoyer un mail campus@resel.fr</a></li>
@@ -83,6 +83,10 @@
                                 </li>
                             {% endif %}
                             <hr />
+                            <li>
+                                <a href="{% url "campus:who:user-home" %}"><i class="fa fa-sliders fa-id-card"></i> Mon profil</a>
+                            </li>
+                            <li>
                             <li>
                                 <a href="{% url "home" %}"><i class="fa fa-sliders fa-fw"></i> Paramètres ResEl</a>
                             </li>
