@@ -40,7 +40,7 @@
              {% if display_user.is_public == True %}
                <b>Email:</b> <a href="mailto:{{ display_user.mail}}" style="color: inherit !important;">{{ display_user.mail }}</a><br>
                {% if display_user.campus != "None"%}
-                  <b>Anniverssaire: </b>{{ display_user.birth_date.date }}<br>
+                  <b>Anniversaire: </b>{{ display_user.birth_date.date }}<br>
                   <b>Batiment:</b> {{display_user.building}} <b>Chambre:</b> {{display_user.room_number}}<br>
                {% else %}
                   <b>Adresse:</b> {{display_user.postal_address}}
