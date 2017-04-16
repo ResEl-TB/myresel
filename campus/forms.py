@@ -225,6 +225,11 @@ class MajPersonnalInfo(PersonnalInfoForm):
             'id' : 'datePicker'
         }),
         required = False,
+        input_formats = [
+            '%Y-%m-%d',      # '2006-10-25'
+            '%d/%m/%Y',      # '10/25/2006'
+            '%d/%m/%y'
+        ]
     )
 
     certify_truth = forms.BooleanField(
