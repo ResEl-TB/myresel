@@ -46,8 +46,7 @@
     <div class="col-md-4">
       <div class="col-md-12 well">
         <h3 class="text-center" >Éffectuer une autre recherche</h3>
-        <form class="form-horizontal" action="{% url 'campus:who:search-user' %}" method="post">
-          {% csrf_token %}
+        <form class="form-horizontal" action="{% url 'campus:who:search-user' %}" method="GET">
           <div class="input-group" style="width:100%">
             <span class="input-group-addon" id="basic-addon1"><span class="fa fa-user"></span></span>
             {{ form.what.errors }}

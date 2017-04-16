@@ -178,6 +178,7 @@ class UserHome(View):
         context={'user': user, 'form': form, 'formSearchUser': formSearchUser}
         return render(request, self.template_name, context)
 
+@method_decorator(login_required, name="dispatch")
 class SearchUsers(View):
     """
     View used to search for users
@@ -185,14 +186,8 @@ class SearchUsers(View):
 
     template_name = 'campus/whoswho/searchUsers.html'
 
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(SearchUsers, self).dispatch(*args, **kwargs)
-
-    #Je passerais en get quand j'aurais pas la flemme
-    def post(self, request, *args, **kwargs):
-
-        form = SearchSomeone(request.POST)
+    def get(self, request, *args, **kwargs):
+        form = SearchSomeone(request.GET)
         if form.is_valid():
             res = form.getResult(form.cleaned_data["what"], form.cleaned_data["is_approx"])
             if res != False and len(res) != 0:
