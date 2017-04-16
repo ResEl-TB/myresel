@@ -50,7 +50,7 @@ class SearchTestCase(TestCase):
         self.client.login(username="jbvallad", password="penis")
 
     def testSimpleLoad(self):
-        r = self.client.post(
+        r = self.client.get(
             reverse("campus:who:search-user"),
             data={
                 'what': "Alexandre",
