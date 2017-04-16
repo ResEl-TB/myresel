@@ -31,7 +31,6 @@ class Inscription(View):
     On lui affiche le réglement intérieur, et un formulaire pour remplir les champs LDAP
     """
     # TODO: Choix de la promo
-    # TODO: Virer téléphone portable obligatoire
 
     template_name = 'gestion_personnes/inscription.html'
     form_class = InscriptionForm
@@ -197,7 +196,7 @@ class PersonalInfo(View):
 
             address = form.cleaned_data["address"]
             # Generate an address if
-            if form.cleaned_data["building"] != "":
+            if form.cleaned_data["campus"] != "None":
                 address = LdapUser.generate_address(form.cleaned_data["campus"], form.cleaned_data["building"], form.cleaned_data["room"])
 
             if user.mail != email:
@@ -326,7 +325,7 @@ class MailResEl(View):
 
     def build_address(self, uid, first_name, last_name):
         handle = first_name + '.' + last_name
-        
+
         # If he already exist...
         uid_num_match = re.match("^[a-z._-]+?([0-9].*)$", uid)
         if uid_num_match:
@@ -353,7 +352,7 @@ class MailResEl(View):
         return super(MailResEl, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        """ 
+        """
             Display either :
                 - Creation form with rules if has no mail
                 - Configuration options and redirection if is a mailPerson
@@ -385,7 +384,7 @@ class MailResEl(View):
             # Get the right left part
             homeDir = '/var/mail/virtual/' + user.uid
             mailDir = user.uid + '/Maildir/'
-            
+
             handle = self.build_address(user.uid, user.first_name, user.last_name)
 
             if handle:
@@ -394,7 +393,7 @@ class MailResEl(View):
                 bearer = LdapUser.filter(object_classes='mailPerson', mail_local_address=str(mail_address))
 
                 if len(bearer) != 0:
-                    messages.error(request, 
+                    messages.error(request,
                                     'Impossible de créer une adresse mail unique. Contactez support@resel.fr.')
 
                     return HttpResponseRedirect(reverse("gestion-personnes:mail"))
@@ -420,8 +419,8 @@ class MailResEl(View):
                     to=mail_address)
 
                 creation_mail.send()
-                
-                messages.success(request, 
+
+                messages.success(request,
                                 'Votre boîte mail a été créée avec succès.')
 
                 return HttpResponseRedirect(reverse("gestion-personnes:mail"))
@@ -431,7 +430,7 @@ class MailResEl(View):
                 return HttpResponseRedirect(reverse("gestion-personnes:mail"))
 
         else:
-            messages.error(request, 
+            messages.error(request,
                     _("Vous avez déjà une adresse ResEl."))
             return HttpResponseRedirect(reverse("gestion-personnes:mail"))
 
@@ -462,12 +461,12 @@ class DeleteMailResEl(View):
         user = LdapUser.get(pk=request.user.username)
 
         if user.mail_local_address[0] is None:
-            messages.error(request, 
+            messages.error(request,
                     _("Vous n'avez pas d'adresse."))
             return HttpResponseRedirect(reverse("gestion-personnes:mail"))
         else:
-            """ 
-                To delete a mail address : 
+            """
+                To delete a mail address :
                 - Empty mail_local_address field
                 - Add maildeldate attribute
             """
@@ -553,4 +552,3 @@ class Webmail(View):
             return HttpResponseRedirect("https://webmail.resel.fr")
         else:
             return HttpResponseRedirect(reverse("gestion-personnes:mail"))
-

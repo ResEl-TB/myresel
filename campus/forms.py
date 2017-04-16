@@ -1,11 +1,21 @@
+from django import forms
+from django.conf import settings
 from django.core.validators import MaxLengthValidator
+from django.core.exceptions import ValidationError
 from django.forms import ModelForm, CharField, TextInput, Form
 from django.forms.models import ModelMultipleChoiceField
 from django.utils.translation import ugettext_lazy as _
 from django.db.models import Q
 
 from campus.models import RoomBooking, Room, RoomAdmin, StudentOrganisation, Mail
+from gestion_personnes.models import LdapUser
+from gestion_personnes.forms import PersonnalInfoForm
+
+from ldap3 import LDAPException
+from fonctions import ldap
+
 import datetime
+import re
 
 class RoomBookingForm(ModelForm):
     class Meta:
@@ -174,3 +184,121 @@ class ClubManagementForm(Form):
         }),
         validators=[MaxLengthValidator(50)],
     )
+
+class MajPersonnalInfo(PersonnalInfoForm):
+    CAMPUS = [('Brest', "Brest"), ('Rennes', 'Rennes'), ('None', _('Je n\'habite pas à la Maisel'))]
+    BUILDINGS_BREST = [('I%d' % i, 'I%d' % i) for i in range(1, 13)]
+    BUILDINGS_RENNES = [('S1', 'Studios'), ('C1', 'Chambres')]
+
+    BUILDINGS = [(0, _("Sélectionnez un Bâtiment"))]
+    BUILDINGS += BUILDINGS_BREST
+    BUILDINGS += BUILDINGS_RENNES
+
+    photo = forms.ImageField(
+        widget = forms.ClearableFileInput({
+            'class' : 'form-control'
+        }),
+        label = 'Photo',
+        label_suffix = _(''),
+        required = False,
+
+    )
+
+    remove_photo = forms.BooleanField(
+        widget = forms.CheckboxInput(),
+        label = _("Supprimer ma photo"),
+        label_suffix = _(''),
+        required = False,
+    )
+
+    is_public = forms.BooleanField(
+        widget = forms.CheckboxInput(),
+        label = _("Rendre publiques les details de mon profil"),
+        label_suffix = _(''),
+        initial = False,
+        required = False,
+    )
+
+    birth_date = forms.DateField(
+        widget = forms.DateInput(attrs={
+            'class' : 'form-control',
+            'id' : 'datePicker'
+        }),
+        required = False,
+        input_formats = [
+            '%Y-%m-%d',      # '2006-10-25'
+            '%d/%m/%Y',      # '10/25/2006'
+            '%d/%m/%y'
+        ]
+    )
+
+    certify_truth = forms.BooleanField(
+        required = False
+    )
+
+class SearchSomeone(forms.Form):
+
+    what = forms.CharField(
+        widget = forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': _('ex: Siffredi')
+        }),
+    )
+
+    is_approx = forms.BooleanField(
+        widget = forms.CheckboxInput(),
+        label = _('Recherche approximative'),
+        label_suffix = _(''),
+        required = False,
+    )
+
+    def getResult(self, what, is_approx):
+        what = what.strip()
+
+        if re.match(r'^[a-z1-9-_.+]+\@[a-z1-9-]+\.[a-z0-9-]+$', what.lower()):
+            return LdapUser.filter(mail=what)
+
+        elif "@" in what and is_approx == True:
+            return LdapUser.filter(mail__contains=what)
+
+        elif re.match(r'^[a-z- ]+ ([a-z-]+)', what.lower()):
+
+            try:
+                elList = what.split(' ')
+                name1, name2 = elList[0], elList[-1]
+                if is_approx == True:
+                    res = LdapUser.filter(first_name__contains=name1)
+                    res += LdapUser.filter(first_name__contains=name2)
+                    res += LdapUser.filter(last_name__contains=name1)
+                    res += LdapUser.filter(last_name__contains=name2)
+                else:
+                    res = LdapUser.filter(first_name=name1)
+                    res += LdapUser.filter(first_name=name2)
+                    res += LdapUser.filter(last_name=name1)
+                    res += LdapUser.filter(last_name=name2)
+                return list(dict((obj.first_name, obj) for obj in res).values()) #exludes duplicates
+
+            except LDAPException as e:
+                return False
+            except Exception as e:
+                return False
+
+        elif re.match(r'^[a-z-]+', what.lower()):
+            try:
+                if is_approx == True:
+                    res = LdapUser.filter(first_name__contains=what)
+                    res += LdapUser.filter(last_name__contains=what)
+                else:
+                    res = LdapUser.filter(first_name=what)
+                    res += LdapUser.filter(last_name=what)
+                return(res)
+
+            except LDAPException as e:
+                return False
+            except Exception as e:
+                return False
+
+        return False
+
+    def clean(self):
+        cleaned_data = super(SearchSomeone, self).clean()

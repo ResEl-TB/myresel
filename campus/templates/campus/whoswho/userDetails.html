@@ -12,38 +12,75 @@
 {% block content %}
  <div class="container">
     <div class="row">
+        <div class="col-md-2" style="color: white">
+            <a href="{% url 'campus:who:user-home' %}" class="noncolored-a"><span class="fa fa-arrow-circle-o-left"> {% trans "Retour à l'acceuil" %} </span></a>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-12">
             <h1 class="page-header text-center" style="color: white;">
                 {{display_user.first_name}} {{display_user.last_name|upper}}
             </h1>
         </div>
+    </div>
+    <div class="row">
         <div class="col-md-12">
            <h3 class="text-center" style="color: white;">
+             {% if display_user.photo_file == "" %}
+             <div class="user-photo">
+               <img src="{% static "images/campus/no-image.png" %}" />
+             </div>
+             {% else %}
+             <div class="user-photo">
+               <img src="/media/image/users_photo/{{display_user.photo_file}}" />
+             </div>
+             {% endif %}
              <b>{% trans "Promo" %}</b> : {{display_user.promo}}
-             {% if user.formation != "" %}<b>{% trans "Formation" %}</b> : {{display_user.formation}}{% endif %}
+             {% if display_user.formation != "" %}<b>{% trans "Formation" %}</b> : {{display_user.formation}}<br />{% endif %}
+             {% if display_user.is_public == True %}
+               <b>Email:</b> <a href="mailto:{{ display_user.mail}}" style="color: inherit !important;">{{ display_user.mail }}</a><br>
+               {% if display_user.campus != "None"%}
+                  <b>Anniverssaire: </b>{{ display_user.birth_date.date }}<br>
+                  <b>Batiment:</b> {{display_user.building}} <b>Chambre:</b> {{display_user.room_number}}<br>
+               {% else %}
+                  <b>Adresse:</b> {{display_user.postal_address}}
+               {% endif %}
+              {% endif %}
            </h3>
         </div>
     </div>
 
-     <div class="row">
-         <div class="col-md-6">
+     <div class="row margin-top">
+         <div class="col-md-offset-1 col-md-5">
             <div class="col-md-12 well">
-                <h3 class="text-center">{% trans "Parrains" %}</h3>
+                <h3 class="text-center category-title">{% trans "Parrains" %}{% if ldapuser.uid == display_user.uid %}  <a style="padding:0 0 0 0;" class="btn" data-toggle="modal" data-target="#addParain"><span class="fa fa-plus-circle" style="color:#8BBF82"></span></a>{% endif %}</h3>
                 <ul>
                 {% for godparent in display_user.godparents %}
-                <li><a href="{% url 'campus:who:user-details' godparent.uid %}">{{godparent.first_name}} {{godparent.last_name|upper}}</a> ({%trans 'Promo' %} {{godparent.promo}})</li>
+                <li>
+                  <a href="{% url 'campus:who:user-details' godparent.uid %}">{{godparent.first_name}} {{godparent.last_name|upper}}</a>
+                  ({%trans 'Promo' %} {{godparent.promo}})
+                  {% if ldapuser.uid == display_user.uid %}
+                    <a class="fa fa-trash-o dell-user" href="{% url 'campus:who:remove-person' godparent.uid True %}" title="{% trans 'Supprimer' %}"></a>
+                  {% endif %}
+                </li>
                 {% empty %}
                 {% trans "Aucun parrain trouvé pour " %}{{display_user.first_name}} {{display_user.last_name|upper}}
                 {% endfor %}
                 </ul>
             </div>
          </div>
-         <div class="col-md-6">
+         <div class="col-md-5">
             <div class="col-md-12 well">
-                <h3 class="text-center">{% trans "Filleuls" %} {% if ldapuser.uid == display_user.uid %}  <a style="padding:0 0 5px 0;" class="btn" data-toggle="modal" data-target="#addBizu"><span class="glyphicon glyphicon-plus" style="color:#8BBF82"></span></a>{% endif %}</h3>
+                <h3 class="text-center">{% trans "Filleuls" %} {% if ldapuser.uid == display_user.uid %}  <a style="padding:0 0 0 0;" class="btn" data-toggle="modal" data-target="#addBizu"><span class="fa fa-plus-circle" style="color:#8BBF82"></span></a>{% endif %}</h3>
                 <ul>
                 {% for godchild in display_user.godchildren %}
-                <li><a href="{% url 'campus:who:user-details' godchild.uid %}">{{godchild.first_name}} {{godchild.last_name|upper}}</a> ({%trans 'Promo' %} {{godchild.promo}})</li>
+                <li>
+                  <a href="{% url 'campus:who:user-details' godchild.uid %}">{{godchild.first_name}} {{godchild.last_name|upper}}</a>
+                  ({%trans 'Promo' %} {{godchild.promo}})
+                  {% if ldapuser.uid == display_user.uid %}
+                    <a class="fa fa-trash-o dell-user" href="{% url 'campus:who:remove-person' godchild.uid False %}" title="{% trans 'Supprimer' %}"></a>
+                  {% endif %}
+                </li>
                 {% empty %}
                 {% trans "Aucun Filleul trouvé pour " %}{{display_user.first_name}} {{display_user.last_name|upper}}
                 {% endfor %}
@@ -52,7 +89,7 @@
          </div>
      </div>
      <div class="row">
-         <div class="col-xs-12">
+         <div class="col-md-offset-1 col-md-5">
             <div class="col-xs-12 well">
                <h3 class="text-center">{% trans "Clubs" %}</h3>
                Cette personne ne fait partie d'aucun club
@@ -68,7 +105,7 @@
 
         <!-- Modal content-->
         <div class="modal-content">
-            <form class="form-horizontal" action="{% url 'campus:who:add-godchild' %}" method="post">
+            <form class="form-horizontal" action="{% url 'campus:who:add-person' False %}" method="post">
                 {% csrf_token %}
                 <div class="modal-header">
                     <h4 class="modal-title">{% trans "Ajouter un filleul" %}</h4>
@@ -77,7 +114,32 @@
                   <p>{% trans "Entrer le nom du filleul que vous souhaitez ajouter :" %}</p>
                   <div class="input-group">
                     <span class="input-group-addon" id="basic-addon1"><span class="fa fa-user"></span></span>
-                    <input type="text" class="form-control" name="id_user" id="id_utilisateur" style="width:70%;"></input>
+                    <input type="text" class="form-control" name="id_user" id="id_parain" style="width:70%;"></input>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">{% trans "Ajouter" %}</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Annuler" %}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="addParain" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <form class="form-horizontal" action="{% url 'campus:who:add-person' True %}" method="post">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h4 class="modal-title">{% trans "Ajouter un parain" %}</h4>
+                </div>
+                <div class="modal-body">
+                  <p>{% trans "Entrer le nom du parain que vous souhaitez ajouter :" %}</p>
+                  <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1"><span class="fa fa-user"></span></span>
+                    <input type="text" class="form-control" name="id_user" id="id_bizzu" style="width:70%;"></input>
                   </div>
                 </div>
                 <div class="modal-footer">
@@ -95,10 +157,14 @@
 <script src="{% static 'jquery/jquery-ui.min.js' %}"></script>
 <script>
     jQuery(document).ready(function ($) {
-        $('#id_utilisateur').autocomplete({
-            source: "{% url 'campus:who:request-user' %}",
-            minLength: 3,
-        });
-    });
+      $('#id_parain').autocomplete({
+          source: "{% url 'campus:who:request-user' %}",
+          minLength: 3,
+      });
+      $('#id_bizzu').autocomplete({
+          source: "{% url 'campus:who:request-user' %}",
+          minLength: 3,
+      });
+    })
 </script>
 {% endblock %}

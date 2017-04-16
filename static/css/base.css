@@ -318,3 +318,21 @@ body {
 .bs-callout-info h4 {
     color: #5bc0de;
 }
+
+}
+
+@media screen and (max-width: 765px) {
+    .graph {
+        padding-bottom: 60%;
+    }
+}
+
+.graph {
+    padding-bottom: 40%;
+}
+
+@media screen and (max-width: 765px) {
+    .graph {
+        padding-bottom: 60%;
+    }
+}

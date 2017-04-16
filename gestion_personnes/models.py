@@ -10,7 +10,7 @@ from django.db import models
 import ldapback
 from fonctions import generic
 from ldapback.models.fields import LdapCharField, LdapPasswordField, LdapNtPasswordField, LdapListField, \
-    LdapDatetimeField
+    LdapDatetimeField, LdapBooleanField
 from myresel.settings import LDAP_DN_PEOPLE
 from myresel.settings_local import LDAP_DN_GROUPS
 
@@ -57,7 +57,8 @@ class LdapUser(ldapback.models.LdapModel):
     uid_godchildren = LdapListField(db_column='uidFillot', object_classes=['enstbPerson'])
     uid_godparents = LdapListField(db_column='uidParrain', object_classes=['enstbPerson'])
     origin = LdapCharField(db_column='provenance', object_classes=['enstbPerson'])
-    # TODO : publiable
+    is_public = LdapBooleanField(db_column='publiable', object_classes=['enstbPerson'])
+    birth_date = LdapDatetimeField(db_column='birthDate', object_classes=['enstbPerson'])
     # TODO : altmail
 
 
