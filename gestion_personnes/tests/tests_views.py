@@ -43,7 +43,7 @@ class InscriptionCase(TestCase):
         self.assertTemplateUsed(response, "gestion_personnes/inscription.html")
 
     def test_full_signup(self):
-        user = create_full_user()
+        user = create_full_user(email="dsqfsdfjnsdfs@fdsfsdf.qsd")
         try_delete_user(user.uid)
 
         response = self.client.get(reverse("gestion-personnes:inscription"),
@@ -412,7 +412,7 @@ class MailResElViewCase(TestCase):
                             HTTP_HOST="10.0.3.99", follow=True)
         self.assertEqual(200, r.status_code)
 
-        # Better way to detect an error ? 
+        # Better way to detect an error ?
         self.assertTemplateUsed(r, "gestion_personnes/mail_resel.html")
 
     def test_build_address(self):
