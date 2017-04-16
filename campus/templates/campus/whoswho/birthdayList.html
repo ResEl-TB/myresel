@@ -22,8 +22,17 @@
 <div class="container">
   <div class="row">
     {% for user in users%}
-      <div class="col-md-2 text-center">
+      <div class="col-md-2 col-sm-6 col-xs-12 text-center">
         <div class="col-xs-12 well">
+          {% if user.photo_file == "" %}
+          <div class="user-photo">
+            <img src="{% static "images/campus/no-image.png" %}" />
+          </div>
+          {% else %}
+          <div class="user-photo">
+            <img src="/media/image/users_photo/{{user.photo_file}}" />
+          </div>
+          {% endif %}
           {{user.first_name}}<br>
           {{user.last_name}}<br>
           Promo {{user.promo}}

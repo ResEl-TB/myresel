@@ -121,13 +121,13 @@
                </div>
             </div>
             <h3 class="text-center">Mon Profil</h3>
-            {% if user.photo_file == "images/campus/no-image.png" %}
+            {% if user.photo_file == "" %}
             <div class="user-photo">
-              <img src="{% static user.photo_file %}" />
+              <img src="{% static "images/campus/no-image.png" %}" />
             </div>
-            {% elif user.photo_is_legacy == False %}
+            {% else %}
             <div class="user-photo">
-              <img src="/media/image/{{user.photo_file}}" />
+              <img src="/media/image/users_photo/{{user.photo_file}}" />
             </div>
             {% endif %}
             <p class="text-center">

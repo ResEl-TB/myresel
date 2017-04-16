@@ -43,18 +43,8 @@ class UserDetails(View):
         except ObjectDoesNotExist:
             raise Http404
 
-        user = self.getUserPhoto(user)
-
         user.godchildren, user.godparents = self.getGods(user)
         return render(request, self.template_name, {'display_user' : user})
-
-    def getUserPhoto(self, user):
-        user.photo_is_legacy = False
-        if user.photo_file == "":
-            user.photo_file = "images/campus/no-image.png"
-        elif user.photo_file[:8] != "PROMO_V2":
-            user.photo_is_legacy = True
-        return(user)
 
     def getGods(self, user):
         """
@@ -98,7 +88,6 @@ class UserHome(View):
     def get(self, request, *args, **kwargs):
 
         user = request.ldap_user
-        user = UserDetails.getUserPhoto(self, user)
 
         form = self.form_class(initial={
             'email' : user.mail,
@@ -145,17 +134,18 @@ class UserHome(View):
                 user_meta, __ = UserMetaData.objects.get_or_create(uid=user.uid)
                 user_meta.send_email_validation(mail, request.build_absolute_uri)
 
+            #TODO: something better and re-usable
             photo_file = request.FILES.get('photo', False)
             remove_photo = form.cleaned_data["remove_photo"]
             if photo_file and remove_photo == False:
                 photo = Image.open(BytesIO(photo_file.read()))
                 try:
-                    path = MEDIA_ROOT+"/image/PROMO_V2_"+user.promo+"/"
+                    path = MEDIA_ROOT+"/image/users_photo/PROMO_"+user.promo+"/"
                     os.makedirs(path)
                 except FileExistsError:
                     pass
                 photo.save(path+user.uid, "PNG")
-                user.photo_file = "PROMO_V2_"+user.promo+"/"+user.uid
+                user.photo_file = "PROMO_"+user.promo+"/"+user.uid
             elif remove_photo:
                 user.photo_file = ""
                 form.data["remove_photo"] = False
@@ -172,8 +162,6 @@ class UserHome(View):
             messages.success(request, _("Vos Informations ont été mises à jour"))
         else:
             messages.warning(request, _("Une ou plusieurs informations sont invalides"))
-
-        user = UserDetails.getUserPhoto(self, user)
 
         context={'user': user, 'form': form, 'formSearchUser': formSearchUser}
         return render(request, self.template_name, context)
@@ -337,12 +325,18 @@ class ListBirthdays(View):
         return super(ListBirthdays, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwarg):
+        #Since the Ldpa don't understand requests without years or something,
+        #we have to select people that are between 15 and 30 y/o:
         users = []
-        daysDate = datetime.date.today().strftime('%m%d%H%M%SZ')
-        try:
-            users = LdapUser.filter(birth_date__contains=daysDate)
-        except LDAPException as e:
-            pass
-        except Exception as e:
-            pass
+        todayDate = datetime.date.today().strftime('%Y%m%d%H%M%SZ')
+        todayYear, todayDate = int(todayDate[0:4]), todayDate[4:]
+        for year in range(todayYear - 30, todayYear - 16):
+            try:
+                test=str(year)+todayDate
+                print(test)
+                users += LdapUser.filter(birth_date=str(year)+todayDate)
+            except LDAPException as e:
+                pass
+            except Exception as e:
+                pass
         return render(request, self.template_name, {'users' : users})

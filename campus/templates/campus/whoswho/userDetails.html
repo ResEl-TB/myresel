@@ -26,13 +26,13 @@
     <div class="row">
         <div class="col-md-12">
            <h3 class="text-center" style="color: white;">
-             {% if display_user.photo_file == "images/campus/no-image.png" %}
+             {% if display_user.photo_file == "" %}
              <div class="user-photo">
-               <img src="{% static display_user.photo_file %}" />
+               <img src="{% static "images/campus/no-image.png" %}" />
              </div>
-             {% elif display_user.photo_is_legacy == False %}
+             {% else %}
              <div class="user-photo">
-               <img src="/media/image/{{display_user.photo_file}}" />
+               <img src="/media/image/users_photo/{{display_user.photo_file}}" />
              </div>
              {% endif %}
              <b>{% trans "Promo" %}</b> : {{display_user.promo}}

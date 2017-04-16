@@ -31,7 +31,6 @@ class Inscription(View):
     On lui affiche le réglement intérieur, et un formulaire pour remplir les champs LDAP
     """
     # TODO: Choix de la promo
-    # TODO: Virer téléphone portable obligatoire
 
     template_name = 'gestion_personnes/inscription.html'
     form_class = InscriptionForm
