@@ -147,3 +147,42 @@ body {
     margin-left: 20px;
     margin-right: 20px;
 }
+
+/* Default jquery-ui's css looks like shit so we make slightly better */
+
+.ui-state-focus {
+   background: #cbf9c2 !important;
+   color: inherit !important;
+   border-color: #8BBF82 !important;
+}
+
+.ui-autocomplete-input {
+  border: 1px solid #DDD !important;
+  padding-top: 0px !important;
+}
+
+.ui-autocomplete {
+  z-index: 1510 !important;
+}
+
+.ui-state-default {
+  color: #59934f !important;
+}
+
+.ui-widget-header, .ui-state-highlight, .ui-state-hover {
+  background: #95db87 !important;
+  color: inherit !important;
+  border-color: #8BBF82 !important;
+}
+
+.ui-state-hover{
+  background: #cbf9c2 !important;
+  color: inherit !important;
+  border-color: #8BBF82 !important;
+}
+
+.ui-widget-content .ui-state-active {
+  background: #95db87 !important;
+  color: inherit !important;
+  border-color: #8BBF82 !important;
+}

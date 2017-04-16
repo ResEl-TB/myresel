@@ -1,0 +1,78 @@
+{% extends "base_campus.html" %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block title %} Résultat {% endblock %}
+
+{% block css %}
+<link href="{% static 'css/campus/whoswho.css' %}" rel="stylesheet">
+<link href="{% static 'jquery/jquery-ui.min.css' %}" rel="Stylesheet"></link>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-2" style="color: white">
+      <a href="{% url 'campus:who:user-home' %}" class="noncolored-a"><span class="fa fa-arrow-circle-o-left"> {% trans "Retour à l'acceuil" %} </span></a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="page-header text-center" style="color: white;">
+        <h1>{% trans 'Résultats de la recherche' %}</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container results">
+  <div class="row">
+    <div class="col-md-8">
+      <div class="row">
+        {% for user in users %}
+        <div class="col-md-6">
+          <div class="col-md-12 text-center well">
+            <h3>{{ user.first_name }} {{user.last_name}}</h3>
+            <p>Campus de {{ user.campus }}<br>Promo {{user.promo}}</p>
+            <a href="{% url "campus:who:user-details" uid=user.uid %}">Details</a>
+          </div>
+        </div>
+        {% if users|length == 1 %}
+        <div class="col-md-4"></div>
+        {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="col-md-12 well">
+        <h3 class="text-center" >Éffectuer une autre recherche</h3>
+        <form class="form-horizontal" action="{% url 'campus:who:search-user' %}" method="GET">
+          <div class="input-group" style="width:100%">
+            <span class="input-group-addon" id="basic-addon1"><span class="fa fa-user"></span></span>
+            {{ form.what.errors }}
+            {{ form.what }}
+          </div>
+          {{ form.is_approx.errors }}
+          {{ form.is_approx }} {{ form.is_approx.label_tag }}
+          <div>
+            Vous pouvez rechercher:
+            <ul>
+              <li>Un nom</li>
+              <li>Un prenom</li>
+              <li>Une adresse email</li>
+            </ul>
+          </div>
+          <div class="form-group text-center">
+            <div class="btn-group" role="button" aria-label="submit">
+              <button type="submit" class="btn btn-success">C'est parti !</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+{% endblock %}
