@@ -11,6 +11,8 @@ uwsgi.*
 db.sqlite3
 db.sqlite3_admin
 
+media/image/users_photo/
+
 # Editor auto save file
 .DS_Store
 *~
