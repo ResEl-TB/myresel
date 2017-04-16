@@ -58,6 +58,22 @@
             </div> <!-- /.col-lg-12 -->
 
         </div> <!-- /.row -->
+    
+    <div class="home-fragment">
+        <div class="container article"><a name="bandwidth">
+                <h1>Consomation de bande passante</h1></a>
+            <div class="embed-responsive graph">
+                <iframe id="graph" src="https://graph.resel.fr/dashboard-solo/db/qos?panelId=2&from=now-13h&to=now&var-uid={{ request.ldap_user.uid }}" width="450" height="200" frameborder="0"></iframe>
+            </div>
+            <div class="btn-group">
+            <button class="btn btn-default active hdur" x-act="now-13h">12h</button>
+            <button class="btn btn-default hdur" x-act="now-25h" >24h</button>
+            <button class="btn btn-default hdur" x-act="now-1w">1 semaine</button>
+            <button class="btn btn-default hdur" x-act="now-1M">1 mois</button>
+            <button class="btn btn-default hdur" x-act="now-6M">6 mois</button>
+            </div>
+        </div>
+    </div>
     </div> <!-- /.container -->
 {% endblock %}
 
@@ -67,6 +83,11 @@
             $(".clickable").click(function() {
                 window.document.location = $(this).data("href");
             });
+        });
+        $(".hdur").click(function() {
+            $('#graph').attr('src', "https://graph.resel.fr/dashboard-solo/db/qos?panelId=2&from=" + $(this).attr("x-act") + "&to=now&var-uid={{ request.ldap_user.uid }}");
+            $(".hdur").removeClass("active");
+            $(this).addClass("active");
         });
     </script>
 {% endblock %}
