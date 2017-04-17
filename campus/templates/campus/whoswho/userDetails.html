@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load staticfiles %}
 
-{% block titre %}{{user.uid}}{% endblock %}
+{% block title %}{{display_user.first_name}}{% endblock %}
 
 {% block css %}
     <link href="{% static 'css/campus/whoswho.css' %}" rel="stylesheet">
@@ -28,7 +28,7 @@
            <h3 class="text-center" style="color: white;">
              {% if display_user.photo_file == "" %}
              <div class="user-photo">
-               <img src="{% static "images/campus/no-image.png" %}" />
+               <img src="{% static "images/campus/photo-placeholder.jpg" %}" />
              </div>
              {% else %}
              <div class="user-photo">
@@ -92,7 +92,7 @@
          <div class="col-md-offset-1 col-md-5">
             <div class="col-xs-12 well">
                <h3 class="text-center">{% trans "Clubs" %}</h3>
-               Cette personne ne fait partie d'aucun club
+               <div class="text-center"><span class="label label-success">Bientôt !</span></div>
             </div>
          </div>
      </div>

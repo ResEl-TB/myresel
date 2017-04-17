@@ -333,7 +333,6 @@ class ListBirthdays(View):
         for year in range(todayYear - 30, todayYear - 16):
             try:
                 test=str(year)+todayDate
-                print(test)
                 users += LdapUser.filter(birth_date=str(year)+todayDate)
             except LDAPException as e:
                 pass

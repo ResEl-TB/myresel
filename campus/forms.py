@@ -195,9 +195,7 @@ class MajPersonnalInfo(PersonnalInfoForm):
     BUILDINGS += BUILDINGS_RENNES
 
     photo = forms.ImageField(
-        widget = forms.ClearableFileInput({
-            'class' : 'form-control'
-        }),
+        widget = forms.ClearableFileInput(),
         label = 'Photo',
         label_suffix = _(''),
         required = False,
@@ -241,7 +239,7 @@ class SearchSomeone(forms.Form):
     what = forms.CharField(
         widget = forms.TextInput(attrs={
             'class': 'form-control',
-            'placeholder': _('ex: Hervé Rétif')
+            'placeholder': _('Votre recherche')
         }),
     )
 
