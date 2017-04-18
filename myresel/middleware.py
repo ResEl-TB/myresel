@@ -18,8 +18,8 @@ class IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAResElAdmi
     def make_user_staff(username):
         """
         Save in Django database if a user is part of the staff
-        :param username: 
-        :return: 
+        :param username:
+        :return:
         """
         user = User.objects.get(username=username)
         user.is_staff = 1
@@ -98,7 +98,7 @@ class NetworkConfiguration(object):
 
 class InscriptionNetworkHandler(object):
     """
-    Before the request is sent to the website, we need to handle if the user 
+    Before the request is sent to the website, we need to handle if the user
     is in an inscription network
     """
     def __init__(self, get_response):
@@ -145,7 +145,14 @@ class InscriptionNetworkHandler(object):
                              "\n VLAN : %s"
                              "\n Utilisateur : %s"
                              "\n Machine : %s"
-                             % (ip, host, zone, vlan, is_logged_in, is_registered))
+                             % (ip, host, zone, vlan, is_logged_in, is_registered),
+                             extra={
+                                 "device_ip": ip,
+                                 "device_hostname": host,
+                                 "device_zone": zone,
+                                 "device_vlan": vlan
+                                 "user": is_logged_in
+                             })
 
                 # Error ! In vlan 995 without inscription IP address
                 return HttpResponseBadRequest(_("Vous vous trouvez sur un réseau d'inscription mais ne possédez pas d'IP dans ce réseau. Veuillez contacter un administrateur."))
