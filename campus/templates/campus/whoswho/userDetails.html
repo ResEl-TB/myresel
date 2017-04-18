@@ -2,7 +2,7 @@
 {% load i18n %}
 {% load staticfiles %}
 
-{% block titre %}{{user.uid}}{% endblock %}
+{% block title %}{{display_user.first_name}}{% endblock %}
 
 {% block css %}
     <link href="{% static 'css/campus/whoswho.css' %}" rel="stylesheet">
@@ -13,7 +13,7 @@
  <div class="container">
     <div class="row">
         <div class="col-md-2" style="color: white">
-            <a href="{% url 'campus:who:user-home' %}" class="noncolored-a"><span class="fa fa-arrow-circle-o-left"> {% trans "Retour à l'acceuil" %} </span></a>
+            <a href="{% url 'campus:who:user-home' %}" class="noncolored-a"><span class="fa fa-arrow-circle-o-left"> {% trans "Retour à l'accueil" %} </span></a>
         </div>
     </div>
     <div class="row">
@@ -28,7 +28,7 @@
            <h3 class="text-center" style="color: white;">
              {% if display_user.photo_file == "" %}
              <div class="user-photo">
-               <img src="{% static "images/campus/no-image.png" %}" />
+               <img src="{% static "images/campus/photo-placeholder.jpg" %}" />
              </div>
              {% else %}
              <div class="user-photo">
@@ -40,7 +40,7 @@
              {% if display_user.is_public == True %}
                <b>Email:</b> <a href="mailto:{{ display_user.mail}}" style="color: inherit !important;">{{ display_user.mail }}</a><br>
                {% if display_user.campus != "None"%}
-                  <b>Anniverssaire: </b>{{ display_user.birth_date.date }}<br>
+                  <b>Anniversaire: </b>{{ display_user.birth_date.date }}<br>
                   <b>Batiment:</b> {{display_user.building}} <b>Chambre:</b> {{display_user.room_number}}<br>
                {% else %}
                   <b>Adresse:</b> {{display_user.postal_address}}
@@ -92,7 +92,7 @@
          <div class="col-md-offset-1 col-md-5">
             <div class="col-xs-12 well">
                <h3 class="text-center">{% trans "Clubs" %}</h3>
-               Cette personne ne fait partie d'aucun club
+               <div class="text-center"><span class="label label-success">Bientôt !</span></div>
             </div>
          </div>
      </div>

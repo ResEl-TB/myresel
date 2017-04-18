@@ -30,7 +30,7 @@ label input {
    width: 100%;
 }
 
-.user-form a:hover, .user-form a:active, .user-form a:visited, .user-form a:focus, .edit-info-link, .noncolored-a, .noncolored-a:hover{
+.noncolored-a, .noncolored-a:hover, .noncolored-a:visited, .noncolored-a:focus{
    color: inherit;
    cursor: pointer;
    text-decoration: none;

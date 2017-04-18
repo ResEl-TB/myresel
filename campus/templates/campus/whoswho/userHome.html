@@ -25,10 +25,10 @@
       <div class="col-md-6">
          <div class="col-md-12 well test">
             <div class="user-form">
-               <a href="#collapse-form" data-toggle="collapse" class="edit-info-link">
+               <a href="#collapse-form" data-toggle="collapse" class="noncolored-a">
                   <span class="fa fa-pencil-square-o"></span> Éditer
                </a>
-               <a href="{% url 'campus:who:user-details' uid=user.uid %}" style="float: right;">
+               <a href="{% url 'campus:who:user-details' uid=user.uid %}" style="float: right;" class="noncolored-a">
                   <span class="fa fa-eye"></span> Profil publique
                </a>
                <div class="collapse" id="collapse-form">
@@ -48,28 +48,34 @@
                         </div>
                      </div>
                      <div class="form-group">
-                        <label for="uid" class="col-sm-3 control-label">{% trans "Photo" %}</label>
+                        <label for="photo" class="col-sm-3 control-label">{% trans "Photo" %}</label>
                         <div class="col-sm-8">
                            {{form.photo.errors}}
                            {{form.photo}}
                         </div>
                      </div>
                      <div class="form-category">
-                        <label for="uid" class="col-sm-3 control-label">{% trans "" %}</label>
+                        <label for="remove_photo" class="col-sm-3 control-label">{% trans "" %}</label>
                         <div class="col-sm-8">
                            {{form.remove_photo.errors}}
                            {{form.remove_photo}} {{form.remove_photo.label_tag}}
                         </div>
                      </div>
+                     <div class="form-category">
+                        <label class="col-sm-3 control-label"> {% trans "" %}</label>
+                        <div class="col-sm-8 text-center">
+                           <h4 class="well">Merci de respecter le format 300x400 pixels ou un ratio identique</h4>
+                        </div>
+                     </div>
                      <div class="form-group">
-                        <label for="uid" class="col-sm-3 control-label">{% trans "Email" %}</label>
+                        <label for="email" class="col-sm-3 control-label">{% trans "Email" %}</label>
                         <div class="col-sm-8">
                            {{form.email.errors}}
                            {{form.email}}
                         </div>
                      </div>
                      <div class="form-group">
-                        <label for="uid" class="col-sm-3 control-label">{% trans "Campus" %}</label>
+                        <label for="campus" class="col-sm-3 control-label">{% trans "Campus" %}</label>
                         <div class="col-sm-8">
                            {{form.campus.errors}}
                            {{form.campus}}
@@ -77,14 +83,14 @@
                      </div>
                      <span id="maisel-information">
                         <div class="form-group">
-                           <label for="uid" class="col-sm-3 control-label">{% trans "Bâtiment" %}</label>
+                           <label for="building" class="col-sm-3 control-label">{% trans "Bâtiment" %}</label>
                            <div class="col-sm-8">
                               {{ form.building.errors }}
                               {{form.building}}
                            </div>
                         </div>
                         <div class="form-group">
-                           <label for="uid" class="col-sm-3 control-label">{% trans "Chambre" %}</label>
+                           <label for="room" class="col-sm-3 control-label">{% trans "Chambre" %}</label>
                            <div class="col-sm-8">
                               {{form.room.errors}}
                               {{form.room}}
@@ -99,7 +105,7 @@
                         </div>
                      </div>
                      <div class="form-group" id="home-address">
-                        <label for="uid" class="col-sm-3 control-label">{% trans "Adresse" %}</label>
+                        <label for="adress" class="col-sm-3 control-label">{% trans "Adresse" %}</label>
                         <div class="col-sm-8">
                            {{form.address.errors}}
                            {{form.address}}
@@ -123,7 +129,7 @@
             <h3 class="text-center">Mon Profil</h3>
             {% if user.photo_file == "" %}
             <div class="user-photo">
-              <img src="{% static "images/campus/no-image.png" %}" />
+              <img src="{% static "images/campus/photo-placeholder.jpg" %}" />
             </div>
             {% else %}
             <div class="user-photo">
@@ -147,7 +153,7 @@
                   <a href="{% url 'campus:who:user-details' uid=godchild.uid %}">{{ godchild.first_name }} {{godchild.last_name}}</a> (Promo {{godchild.promo}})
                   <a class="fa fa-trash-o dell-user" href="{% url 'campus:who:remove-person' godchild.uid False %}" title="{% trans 'Supprimer' %}"></a>
                {% empty %}
-                  Vous n'avez pas de filleuls :o
+                  Vous n'avez pas de filleuls
                {% endfor %}
             </p>
             <h3 class="text-center">Mes parains <a style="padding:0 0 0 0;" class="btn" data-toggle="modal" data-target="#addParain"><span class="fa fa-plus-circle" style="color:#8BBF82"></span></a></h3>
@@ -156,7 +162,7 @@
                   <a href="{% url 'campus:who:user-details' uid=godparent.uid %}">{{ godparent.first_name }} {{godparent.last_name}}</a> (Promo {{godparent.promo}})
                   <a class="fa fa-trash-o dell-user" href="{% url 'campus:who:remove-person' godparent.uid True %}" title="{% trans 'Supprimer' %}"></a>
                {% empty %}
-                  Vous n'avez pas de parains :o
+                  Vous n'avez pas de parains
                {% endfor %}
             </p>
          </div>

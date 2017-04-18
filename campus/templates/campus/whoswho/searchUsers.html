@@ -13,7 +13,7 @@
 <div class="container">
   <div class="row">
     <div class="col-md-2" style="color: white">
-      <a href="{% url 'campus:who:user-home' %}" class="noncolored-a"><span class="fa fa-arrow-circle-o-left"> {% trans "Retour à l'acceuil" %} </span></a>
+      <a href="{% url 'campus:who:user-home' %}" class="noncolored-a"><span class="fa fa-arrow-circle-o-left"> {% trans "Retour à l'accueil" %} </span></a>
     </div>
   </div>
   <div class="row">
@@ -32,6 +32,15 @@
         {% for user in users %}
         <div class="col-md-6">
           <div class="col-md-12 text-center well">
+            {% if user.photo_file == "" %}
+            <div class="user-photo">
+              <img src="{% static "images/campus/photo-placeholder.jpg" %}" />
+            </div>
+            {% else %}
+            <div class="user-photo">
+              <img src="/media/image/users_photo/{{user.photo_file}}" />
+            </div>
+            {% endif %}
             <h3>{{ user.first_name }} {{user.last_name}}</h3>
             <p>Campus de {{ user.campus }}<br>Promo {{user.promo}}</p>
             <a href="{% url "campus:who:user-details" uid=user.uid %}">Details</a>
