@@ -150,7 +150,7 @@ class InscriptionNetworkHandler(object):
                                  "device_ip": ip,
                                  "device_hostname": host,
                                  "device_zone": zone,
-                                 "device_vlan": vlan
+                                 "device_vlan": vlan,
                                  "user": is_logged_in
                              })
 
