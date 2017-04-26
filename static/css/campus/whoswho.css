@@ -54,6 +54,7 @@ label input {
 }
 
 .user-photo img{
-  max-width: 100px;
+  height: 150px;
+  max-width: 150px;
   box-shadow: -1px 0px 15px rgba(0,0,0,0.5);
 }

@@ -28,8 +28,10 @@
 <div class="container results">
   <div class="row">
     <div class="col-md-8">
+      {% for user in users %}
+      {%if forloop.counter|add:-1|divisibleby:2 %}
       <div class="row">
-        {% for user in users %}
+      {% endif %}
         <div class="col-md-6">
           <div class="col-md-12 text-center well">
             {% if user.photo_file == "" %}
@@ -41,16 +43,15 @@
               <img src="/media/image/users_photo/{{user.photo_file}}" />
             </div>
             {% endif %}
-            <h3>{{ user.first_name }} {{user.last_name}}</h3>
+            <h3>{{ user.first_name }} {{user.last_name}}{{forloo}}</h3>
             <p>Campus de {{ user.campus }}<br>Promo {{user.promo}}</p>
             <a href="{% url "campus:who:user-details" uid=user.uid %}">Details</a>
           </div>
         </div>
-        {% if users|length == 1 %}
-        <div class="col-md-4"></div>
-        {% endif %}
-        {% endfor %}
+      {% if forloop.counter|divisibleby:2 or forloop.last %}
       </div>
+      {% endif %}
+      {% endfor %}
     </div>
     <div class="col-md-4">
       <div class="col-md-12 well">
