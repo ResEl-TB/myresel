@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-
+<!-- TODO: La barre ne colapse pas en version mobile -->
 <nav class="navbar navbar-toggleable-md navbar-light bg-faded navbar-clubs">
     <div class="container-fluid">
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -26,26 +26,39 @@
 </nav>
 
 <div class="container">
-    <div class="col-md-12 well">
-        <h2>Associations</h2>
-        <div class="row assos-card">
-            <div class="col-md-3 col-md-offset-1">
-                <img class="assos-img" src="{% static 'images/logo_resel.png' %}" height="100" >
+    <div class="row">
+        <div class="col-md-12 well">
+          <h2>Assos</h2>
+            {% for asso in assos %}
+            <div class="row assos-card">
+                <div class="col-md-3 col-md-offset-1">
+                    <img class="assos-img" src="{% static 'images/logo_resel.png' %}" height="100" >
+                </div>
+                <div class="col-md-6 col-md-offset-1">
+                    <h2>{{ asso.name }}</h2>
+                    <p>{{ asso.description }}</p>
+                    <a href="https://resel.fr">En savoir plus</a>
+                </div>
             </div>
-            <div class="col-md-6 col-md-offset-1">
-                <h2>Le ResEl</h2>
-                <p>Association gérant le réseau sur le campus de télécom-bretagne</p>
-                <a href="https://resel.fr">En savoir plus</a>
-            </div>
+            {% endfor %}
         </div>
-        {% for asso in assos %}
-            {{ asso.orgaName }}
-        {% endfor %}
-
-        <h2>Clubs</h2>
-        {% for club in clubs %}
-            {{ club.orgaName }}
-        {% endfor %}
+    </div>
+    <div class="row">
+        <div class="col-md-12 well">
+            <h2>Clubs</h2>
+            {% for club in clubs %}
+            <div class="row assos-card">
+                <div class="col-md-3 col-md-offset-1">
+                    <img class="assos-img" src="{% static 'images/logo_resel.png' %}" height="100" >
+                </div>
+                <div class="col-md-6 col-md-offset-1">
+                    <h2>{{ club.name }}</h2>
+                    <p>{{ club.description }}</p>
+                    <a href="https://resel.fr">En savoir plus</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
     </div>
 </div>
 {% endblock %}

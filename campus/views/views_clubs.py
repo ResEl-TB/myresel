@@ -13,10 +13,25 @@ from fonctions.decorators import ae_required
 
 
 def list_clubs(request):
+
+    #TODO: Peupler le LDAP avec des placeholders
+    '''
+    test = StudentOrganisation()
+    test.cn="test"
+    test.name="Test"
+    test.ml_infos=False
+    test.description="Ceci est un test, ce n'est donc pas un vrai club, mais ça vous vous en doutez !"
+    test.object_classes="tbClub"
+    test.save()
+    '''
+
     organisations = StudentOrganisation.all()
 
-    clubs = [o for o in organisations if o.object_classes == "tbClub"]
-    assos = [o for o in organisations if o.object_classes == "tbAsso"]
+    #TODO: Gérer les clubs dont l'object_classes n'est pas tbClub
+    #TODO: Image pour les clubs (?) Et pour les assos
+
+    clubs = [o for o in organisations if "tbClub" in o.object_classes]
+    assos = [o for o in organisations if "tbAsso" in o.object_classes]
 
     return render(
         request,
