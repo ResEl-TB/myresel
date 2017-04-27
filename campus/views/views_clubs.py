@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.core.mail import EmailMessage
-from django.views.generic import FormView
+from django.views.generic import FormView, View
 
 from campus.forms import SendMailForm, ClubManagementForm
 from campus.models.clubs_models import StudentOrganisation
@@ -14,23 +14,13 @@ from fonctions.decorators import ae_required
 
 def list_clubs(request):
 
-    #TODO: Peupler le LDAP avec des placeholders
-    '''
-    test = StudentOrganisation()
-    test.cn="test"
-    test.name="Test"
-    test.ml_infos=False
-    test.description="Ceci est un test, ce n'est donc pas un vrai club, mais ça vous vous en doutez !"
-    test.object_classes="tbClub"
-    test.save()
-    '''
-
     organisations = StudentOrganisation.all()
 
     #TODO: Gérer les clubs dont l'object_classes n'est pas tbClub
     #TODO: Image pour les clubs (?) Et pour les assos
 
     clubs = [o for o in organisations if "tbClub" in o.object_classes]
+    clubs_sport = [o for o in organisations if "tbClubSport" in o.object_classes]
     assos = [o for o in organisations if "tbAsso" in o.object_classes]
 
     return render(
@@ -38,6 +28,7 @@ def list_clubs(request):
         'campus/clubs/list.html',
         {
             'clubs': clubs,
+            'clubs_sport': clubs_sport,
             'assos': assos,
         }
     )
@@ -62,3 +53,14 @@ class EditClub(FormView):
     def form_valid(self, form):
         form.edit_club()
         return super(EditClub, self).form_valid(form)
+
+class SearchClub(View):
+
+    template_name='campus/clubs/search_club.html'
+
+    def get(self, request):
+        what = request.GET.get('what', '').strip()
+        organisations = StudentOrganisation.filter(name__contains=what)
+        clubs = [o for o in organisations if "tbClub" in o.object_classes or "tbClubSport" in o.object_classes]
+        context={'clubs': clubs}
+        return render(request, self.template_name, context)

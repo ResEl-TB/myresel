@@ -1,5 +1,6 @@
 {% extends "base_campus.html" %}
 {% load staticfiles %}
+{% load i18n %}
 
 {% block title %}Associations et clubs{% endblock %}
 {% block css %}
@@ -7,28 +8,13 @@
 {% endblock %}
 
 {% block content %}
-<!-- TODO: La barre ne colapse pas en version mobile -->
-<nav class="navbar navbar-toggleable-md navbar-light bg-faded navbar-clubs">
-    <div class="container-fluid">
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="nav navbar-nav navbar-right">
-                <form class="navbar-form navbar-left">
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Rechercher un club">
-                    </div>
-                    <button type="submit" class="btn btn-default"><span class="fa fa-fw fa-search"></span></button>
-                </form>
-                {% if request.user.is_authenticated %}<li><a href="#">Mes clubs</a></li>{% endif %}
-                <li><a href="#"><span class="fa fa-plus"></span> Nouveau club ou association</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
+
+{% include "./base_clubs.html" %}
 
 <div class="container">
     <div class="row">
         <div class="col-md-12 well">
-          <h2>Assos</h2>
+          <h2>{% trans 'Assos' %}</h2>
             {% for asso in assos %}
             <div class="row assos-card">
                 <div class="col-md-3 col-md-offset-1">
@@ -40,23 +26,38 @@
                     <a href="https://resel.fr">En savoir plus</a>
                 </div>
             </div>
+            {% empty%}
+            {% trans "Une erreur est servenue pendant la récupération des assos ou bien il n'y en a simplement pas." %}
             {% endfor %}
         </div>
     </div>
     <div class="row">
         <div class="col-md-12 well">
-            <h2>Clubs</h2>
+            <h2>{% trans 'Clubs' %}</h2>
             {% for club in clubs %}
             <div class="row assos-card">
-                <div class="col-md-3 col-md-offset-1">
-                    <img class="assos-img" src="{% static 'images/logo_resel.png' %}" height="100" >
-                </div>
                 <div class="col-md-6 col-md-offset-1">
                     <h2>{{ club.name }}</h2>
                     <p>{{ club.description }}</p>
-                    <a href="https://resel.fr">En savoir plus</a>
                 </div>
             </div>
+            {% empty %}
+            {% trans "Une erreur est servenue pendant la récupération des assos ou bien il n'y en a simplement pas." %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 well">
+            <h2>{% trans 'Clubs sportifs' %}</h2>
+            {% for club in clubs_sport %}
+            <div class="row assos-card">
+                <div class="col-md-6 col-md-offset-1">
+                    <h2>{{ club.name }}</h2>
+                    <p>{{ club.description }}</p>
+                </div>
+            </div>
+            {% empty%}
+            {% trans "Une erreur est servenue pendant la récupération des assos ou bien il n'y en a simplement pas." %}
             {% endfor %}
         </div>
     </div>

@@ -6,7 +6,7 @@ from myresel.settings import LDAP_OU_CLUBS
 
 class StudentOrganisation(ldapback.models.LdapModel):
     """
-    The class having all the element for a user
+    The class having all the element for a club
     """
     base_dn = LDAP_OU_CLUBS
     object_classes = LdapListField(db_column='objectClass')

@@ -1,0 +1,17 @@
+<!-- TODO: La barre ne colapse pas en version mobile -->
+<nav class="navbar navbar-toggleable-md navbar-light bg-faded navbar-clubs">
+    <div class="container-fluid">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="nav navbar-nav navbar-right">
+                <form class="navbar-form navbar-left" action="{% url 'campus:clubs:search'%}" method="get">
+                    <div class="form-group">
+                        <input name="what" id="id_what" type="text" class="form-control" placeholder="Rechercher un club">
+                    </div>
+                    <button type="submit" class="btn btn-default"><span class="fa fa-fw fa-search"></span></button>
+                </form>
+                {% if request.user.is_authenticated %}<li><a href="#">Mes clubs</a></li>{% endif %}
+                <li><a href="{% url 'campus:clubs:new'%}"><span class="fa fa-plus"></span> Nouveau club ou association</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
