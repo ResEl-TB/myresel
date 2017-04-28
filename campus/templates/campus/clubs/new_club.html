@@ -11,12 +11,52 @@
 {% include './base_clubs.html' %}
     <div class="container" id="content">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6 col-md-offset-3">
                 <h1 class="page-header text-center" style="color: white;">
                     {% trans "Nouveau club ou association" %}
                 </h1>
             </div>
-
+        </div>
+        <div class="col-md-8 col-md-offset-2">
+            <form class="form well" action="{% url 'campus:clubs:new'%}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    {{ form.type.errors }}
+                    <label for="name">{{ form.type.label }}:</label>
+                    {{ form.type }}
+                </div>
+                <div class="form-group">
+                    {{ form.name.errors }}
+                    <label for="name">{{ form.name.label }}:</label>
+                    {{ form.name }}
+                </div>
+                <div class="form-group">
+                    {{ form.cn.errors }}
+                    <label for="name">{{ form.cn.label }}:</label>
+                    {{ form.cn }}
+                </div>
+                <div class="form-group">
+                    {{ form.description.errors }}
+                    <label for="name">{{ form.description.label }}:</label>
+                    {{ form.description }}
+                </div>
+                <div class="form-group">
+                    {{ form.logo.errors }}
+                    <label for="name">{{ form.logo.label }}:</label>
+                    {{ form.logo }}
+                </div>
+                <div class="form-group">
+                    {{ form.email.errors }}
+                    <label for="name">{{ form.email.label }}:</label>
+                    {{ form.email }}
+                </div>
+                <div class="form-group">
+                    {{ form.website.errors }}
+                    <label for="name">{{ form.website.label }}:</label>
+                    {{ form.website }}
+                </div>
+                <button class="btn btn-success">{% trans 'Créer le club' %}
+            </form>
         </div>
     </div>
 {% endblock %}

@@ -2,7 +2,7 @@ from django import forms
 from django.conf import settings
 from django.core.validators import MaxLengthValidator
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm, CharField, TextInput, Form
+from django.forms import ModelForm, CharField, TextInput, Form, Textarea, ChoiceField, EmailField
 from django.forms.models import ModelMultipleChoiceField
 from django.utils.translation import ugettext_lazy as _
 from django.db.models import Q
@@ -10,6 +10,7 @@ from django.db.models import Q
 from campus.models import RoomBooking, Room, RoomAdmin, StudentOrganisation, Mail
 from gestion_personnes.models import LdapUser
 from gestion_personnes.forms import PersonnalInfoForm
+
 
 from ldap3 import LDAPException
 from fonctions import ldap
@@ -137,12 +138,21 @@ class ClubManagementForm(Form):
         ("LIST", "Liste de campagne"),
     ]
 
+    type = ChoiceField(
+        widget=forms.Select(attrs={
+            'class':'form-control'
+        }),
+        choices=ORGA_TYPE,
+        label=_("Sélectionner ce que vous souhaitez créer"),
+    )
+
     name = CharField(  # orgaName
         widget=TextInput(attrs={
             'class': 'form-control',
             'placeholder': _("Nom du club"),
         }),
         validators=[MaxLengthValidator(50)],
+        label=_("Nom"),
     )
 
     cn = CharField(  # cn
@@ -151,30 +161,33 @@ class ClubManagementForm(Form):
             'placeholder': _("Nom court"),
         }),
         validators=[MaxLengthValidator(50)],
+        label=_("Nom court"),
     )
 
     description = CharField(  # description
-        widget=TextInput(attrs={
+        widget=Textarea(attrs={
             'class': 'form-control',
-            'placeholder': _("Présentation "),
+            'placeholder': _("Présentation du club"),
+            'rows': 5
         }),
         validators=[MaxLengthValidator(50)],
+        label=_("Description"),
     )
 
-    logo = CharField(  # deduced from the cn
-        widget=TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': _("lien vers le logo"),
-        }),
-        validators=[MaxLengthValidator(50)],
+    logo = forms.ImageField(
+        widget = forms.ClearableFileInput(),
+        label = 'Logo',
+        required = False,
+
     )
 
-    email = CharField(   # mlist
-        widget=TextInput(attrs={
+    email = EmailField(   # mlist
+        widget=forms.EmailInput(attrs={
             'class': 'form-control',
-            'placeholder': _("Mailing liste "),
+            'placeholder': _("Adresse de la mailing liste "),
         }),
         validators=[MaxLengthValidator(50)],
+        label=_('Mailing liste'),
     )
 
     website = CharField(  # Website (if not a ResEl website)
@@ -184,6 +197,50 @@ class ClubManagementForm(Form):
         }),
         validators=[MaxLengthValidator(50)],
     )
+
+    def clean_type(self):
+        type = self.cleaned_data['type']
+        if type not in [o[0] for o in self.ORGA_TYPE]:
+            raise ValidationError(message=_("Merci de sélectionner un choix valide"), code="CLUBLOGO")
+        return (type)
+
+    def clean_logo(self):
+        logo = self.cleaned_data['logo']
+        if self.cleaned_data['type'] == 'CLUB' and logo != None:
+            raise ValidationError(message=_("Les images pour les clubs n'est pas supporté"), code="CLUBLOGO")
+        elif self.cleaned_data['type'] != 'CLUB' and logo == None:
+            raise ValidationError(message=_("Merci de renseigner un logo pour votre association/liste"), code="NOLOGO")
+        #TODO: Gérer le fichier image
+        return(logo)
+
+    def clean_website(self):
+        website = self.cleaned_data['website'].lower()
+        if not re.match(r'[a-z0-9.-]+\.[a-z0-9]{1,3}', website):
+            raise ValidationError(message=_("Veuillez rentrer une adresse web valide"), code="BADWEBSITE")
+        return(website)
+
+    def clean_email(self):
+        email = self.cleaned_data['email'].lower()
+        if not re.match(r'^[a-z1-9-_.+]+\@[a-z1-9-]+\.[a-z0-9-]+$', email):
+            raise ValidationError(message=_("Veuillez rentrer une adresse mail valide"), code="BADMAIL")
+        return(email)
+
+    def clean(self):
+        cleaned_data = super(ClubManagementForm, self).clean()
+
+    def create_club(self):
+        #TODO: ajouter les champs pour le logo, la mailing list et le site web
+        new_club = StudentOrganisation()
+        new_club.name = self.cleaned_data['name']
+        new_club.cn = self.cleaned_data['cn']
+        new_club.email = self.cleaned_data['email']
+        if new_club.email != '':
+            new_club.ml_infos = True
+        else:
+            new_club.ml_infos = False
+        new_club.description = self.cleaned_data['description']
+        new_club.save()
+
 
 class MajPersonnalInfo(PersonnalInfoForm):
     CAMPUS = [('Brest', "Brest"), ('Rennes', 'Rennes'), ('None', _('Je n\'habite pas à la Maisel'))]

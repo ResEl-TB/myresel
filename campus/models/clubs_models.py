@@ -17,6 +17,8 @@ class StudentOrganisation(ldapback.models.LdapModel):
     prezs = LdapListField(db_column='uidPrezs', object_classes=['tbClub'])
     members = LdapListField(db_column='uidMembres', object_classes=['tbClub'])
     ml_infos = LdapBooleanField(db_column='mlInfos', object_classes=['tbClub'])
+    email = LdapCharField(db_column='mlAdress', object_classes=['tbClub'])
+    website = LdapCharField(db_column='website', object_classes=['tbClub'])
     description = LdapCharField(db_column='description', object_classes=['tbClub'])
 
     def __str__(self):

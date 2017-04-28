@@ -37,7 +37,7 @@ def list_clubs(request):
 class NewClub(FormView):
     template_name = 'campus/clubs/new_club.html'
     form_class = ClubManagementForm
-    success_url = '/thanks/'
+    success_url = '/campus/clubs'
 
     def form_valid(self, form):
         form.create_club()
