@@ -10,7 +10,7 @@
 {% block content %}
 
 {% include "./base_clubs.html" %}
-
+<!-- TODO: conditions sur l'affichage -->
 <div class="container">
     <div class="row">
         <div class="col-md-12 well">
@@ -18,16 +18,18 @@
             {% for asso in assos %}
             <div class="row assos-card">
                 <div class="col-md-3 col-md-offset-1">
-                    <img class="assos-img" src="{% static 'images/logo_resel.png' %}" height="100" >
+                  {% if asso.logo %}
+                  <img class="assos-img" src="/media/image/ASSOS/{{ asso.logo }}">
+                  {% endif %}
                 </div>
                 <div class="col-md-6 col-md-offset-1">
                     <h2>{{ asso.name }}</h2>
                     <p>{{ asso.description }}</p>
-                    <a href="https://resel.fr">En savoir plus</a>
+                    <a href="http://{{ asso.website }}">En savoir plus</a>
                 </div>
             </div>
             {% empty%}
-            {% trans "Une erreur est servenue pendant la récupération des assos ou bien il n'y en a simplement pas." %}
+            {% trans "Une erreur est servenue pendant la récupération des assos" %}
             {% endfor %}
         </div>
     </div>
@@ -38,26 +40,34 @@
             <div class="row assos-card">
                 <div class="col-md-6 col-md-offset-1">
                     <h2>{{ club.name }}</h2>
+                    <p>Mailing list: </p>
                     <p>{{ club.description }}</p>
                 </div>
             </div>
             {% empty %}
-            {% trans "Une erreur est servenue pendant la récupération des assos ou bien il n'y en a simplement pas." %}
+            {% trans "Une erreur est servenue pendant la récupération des clubs" %}
             {% endfor %}
         </div>
     </div>
     <div class="row">
         <div class="col-md-12 well">
-            <h2>{% trans 'Clubs sportifs' %}</h2>
-            {% for club in clubs_sport %}
+            <h2>{% trans 'Listes' %}</h2>
+            {% for list in lists %}
             <div class="row assos-card">
+                <div class="col-md-3 col-md-offset-1">
+                    {% if list.logo %}
+                    <img class="assos-img" src="/media/image/LIST/{{ list.logo }}">
+                    {% endif %}
+                </div>
                 <div class="col-md-6 col-md-offset-1">
-                    <h2>{{ club.name }}</h2>
-                    <p>{{ club.description }}</p>
+                    <h2>{{ list.name }}</h2>
+                    <p>{{ list.description }}</p>
+                    <p>Année de campagne: {{ list.campagneYear }}</p>
+                    <a href="http://{{list.website}}">En savoir plus</a>
                 </div>
             </div>
-            {% empty%}
-            {% trans "Une erreur est servenue pendant la récupération des assos ou bien il n'y en a simplement pas." %}
+            {% empty %}
+            {% trans "Une erreur est servenue pendant la récupération des listes" %}
             {% endfor %}
         </div>
     </div>

@@ -2,7 +2,7 @@ from django import forms
 from django.conf import settings
 from django.core.validators import MaxLengthValidator
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm, CharField, TextInput, Form, Textarea, ChoiceField, EmailField
+from django.forms import ModelForm, CharField, TextInput, Form, Textarea, ChoiceField, EmailField, IntegerField
 from django.forms.models import ModelMultipleChoiceField
 from django.utils.translation import ugettext_lazy as _
 from django.db.models import Q
@@ -188,6 +188,7 @@ class ClubManagementForm(Form):
         }),
         validators=[MaxLengthValidator(50)],
         label=_('Mailing liste'),
+        required=False
     )
 
     website = CharField(  # Website (if not a ResEl website)
@@ -196,49 +197,79 @@ class ClubManagementForm(Form):
             'placeholder': _("Site web de contact"),
         }),
         validators=[MaxLengthValidator(50)],
+        required=False
+    )
+
+    campagneYear = forms.IntegerField(
+        min_value=1997,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': _("Année de campagne"),
+        }),
+        required=False
     )
 
     def clean_type(self):
         type = self.cleaned_data['type']
         if type not in [o[0] for o in self.ORGA_TYPE]:
-            raise ValidationError(message=_("Merci de sélectionner un choix valide"), code="CLUBLOGO")
+            raise ValidationError(message=_("Merci de sélectionner un choix valide"), code="BAD TYPE")
         return (type)
+
+    def clean_cn(self):
+        cn = self.cleaned_data['cn']
+        if StudentOrganisation.filter(cn=cn):
+            raise ValidationError(_("Ce nom existe déjà, assurez vous de créer un club/asso qui n'existe pas déjà"), code="CN EXISTS")
+        return(cn)
 
     def clean_logo(self):
         logo = self.cleaned_data['logo']
         if self.cleaned_data['type'] == 'CLUB' and logo != None:
-            raise ValidationError(message=_("Les images pour les clubs n'est pas supporté"), code="CLUBLOGO")
+            raise ValidationError(message=_("Les images pour les clubs n'est pas supporté"), code="CLUB LOGO")
         elif self.cleaned_data['type'] != 'CLUB' and logo == None:
-            raise ValidationError(message=_("Merci de renseigner un logo pour votre association/liste"), code="NOLOGO")
-        #TODO: Gérer le fichier image
+            raise ValidationError(message=_("Merci de renseigner un logo pour votre association/liste"), code="NO LOGO")
         return(logo)
 
     def clean_website(self):
         website = self.cleaned_data['website'].lower()
-        if not re.match(r'[a-z0-9.-]+\.[a-z0-9]{1,3}', website):
-            raise ValidationError(message=_("Veuillez rentrer une adresse web valide"), code="BADWEBSITE")
+        if not re.match(r'[a-z0-9.-]+\.[a-z0-9]{1,3}', website) and website != "":
+            raise ValidationError(message=_("Veuillez rentrer une adresse web valide"), code="BAD WEBSITE")
         return(website)
 
     def clean_email(self):
         email = self.cleaned_data['email'].lower()
-        if not re.match(r'^[a-z1-9-_.+]+\@[a-z1-9-]+\.[a-z0-9-]+$', email):
-            raise ValidationError(message=_("Veuillez rentrer une adresse mail valide"), code="BADMAIL")
+        if not re.match(r'^[a-z1-9-_.+]+\@[a-z1-9-]+\.[a-z0-9-]+$', email) and email != "":
+            raise ValidationError(message=_("Veuillez rentrer une adresse mail valide"), code="BAD MAIL")
         return(email)
+
+    def clean_campagneYear(self):
+        year = self.cleaned_data['campagneYear']
+        if self.cleaned_data['type'] == "LIST" and year == None:
+            raise ValidationError(_("Veuillez entrer une année de campagne valide"), code="WRONG YEAR")
+        return(year)
 
     def clean(self):
         cleaned_data = super(ClubManagementForm, self).clean()
 
     def create_club(self):
-        #TODO: ajouter les champs pour le logo, la mailing list et le site web
         new_club = StudentOrganisation()
         new_club.name = self.cleaned_data['name']
         new_club.cn = self.cleaned_data['cn']
         new_club.email = self.cleaned_data['email']
+        new_club.website = self.cleaned_data['website']
+        new_club.logo = self.cleaned_data['logo']
         if new_club.email != '':
             new_club.ml_infos = True
         else:
             new_club.ml_infos = False
         new_club.description = self.cleaned_data['description']
+        new_club.object_classes = ["studentOrganisation"]
+        if self.cleaned_data['type'] == "CLUB":
+            new_club.object_classes += ["tbClub"]
+        elif self.cleaned_data['type'] == "ASSOS":
+            new_club.object_classes += ["tbAsso"]
+        elif self.cleaned_data['type'] == "LIST":
+            new_club.object_classes += ["tbCampagne"]
+            new_club.campagneYear = self.cleaned_data['campagneYear']
         new_club.save()
 
 

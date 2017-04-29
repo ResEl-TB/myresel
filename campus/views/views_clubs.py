@@ -1,3 +1,4 @@
+import os
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
@@ -7,29 +8,38 @@ from django.core.urlresolvers import reverse
 from django.core.mail import EmailMessage
 from django.views.generic import FormView, View
 
+from io import BytesIO
+from PIL import Image
+
 from campus.forms import SendMailForm, ClubManagementForm
 from campus.models.clubs_models import StudentOrganisation
 from fonctions.decorators import ae_required
+
+from myresel.settings import MEDIA_ROOT
 
 
 def list_clubs(request):
 
     organisations = StudentOrganisation.all()
 
+    #StudentOrganisation.filter(cn="bda")[0].delete()
+
+
+
     #TODO: Gérer les clubs dont l'object_classes n'est pas tbClub
     #TODO: Image pour les clubs (?) Et pour les assos
 
-    clubs = [o for o in organisations if "tbClub" in o.object_classes]
-    clubs_sport = [o for o in organisations if "tbClubSport" in o.object_classes]
+    clubs = [o for o in organisations if "tbClubSport" in o.object_classes or "tbClub" in o.object_classes]
     assos = [o for o in organisations if "tbAsso" in o.object_classes]
+    lists = [o for o in organisations if "tbCampagne" in o.object_classes]
 
     return render(
         request,
         'campus/clubs/list.html',
         {
             'clubs': clubs,
-            'clubs_sport': clubs_sport,
             'assos': assos,
+            'lists': lists,
         }
     )
 
@@ -40,6 +50,16 @@ class NewClub(FormView):
     success_url = '/campus/clubs'
 
     def form_valid(self, form):
+        if form.cleaned_data['type'] != "CLUB":
+            logo = form.cleaned_data['logo']
+            logo = Image.open(BytesIO(logo.read()))
+            try:
+                path = MEDIA_ROOT+"/image/"+form.cleaned_data['type']+"/"
+                os.makedirs(path)
+            except FileExistsError:
+                pass
+            logo.save(path+form.cleaned_data['cn']+".png", "PNG")
+            form.cleaned_data['logo'] = form.cleaned_data['cn']+".png"
         form.create_club()
         return super(NewClub, self).form_valid(form)
 

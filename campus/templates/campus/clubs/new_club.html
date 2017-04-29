@@ -18,7 +18,7 @@
             </div>
         </div>
         <div class="col-md-8 col-md-offset-2">
-            <form class="form well" action="{% url 'campus:clubs:new'%}" method="post">
+            <form class="form well" action="{% url 'campus:clubs:new'%}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="form-group">
                     {{ form.type.errors }}
@@ -55,7 +55,12 @@
                     <label for="name">{{ form.website.label }}:</label>
                     {{ form.website }}
                 </div>
-                <button class="btn btn-success">{% trans 'Créer le club' %}
+                <div class="form-group">
+                    {{ form.campagneYear.errors }}
+                    <label for="name">{{ form.campagneYear.label }}:</label>
+                    {{ form.campagneYear }}
+                </div>
+                <button class="btn btn-success">{% trans 'Créer !' %}
             </form>
         </div>
     </div>
