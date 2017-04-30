@@ -4,11 +4,21 @@
 }
 
 .assos-img {
-    max-width: 200px;
-    max-height: 200px;
+    max-width: 100%;
+    max-height: 100%;
 }
 
 .navbar-clubs {
     margin-top: -20px;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2) inset;
+}
+
+.green {
+    color: #8BBF82 !important;
+}
+
+.modal-header {
+  color: white;
+  text-align: center;
+  background: url(/static/images/campus/bgimg.jpg) no-repeat center center fixed;
 }

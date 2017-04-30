@@ -40,7 +40,7 @@
                     <label for="name">{{ form.description.label }}:</label>
                     {{ form.description }}
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="logo">
                     {{ form.logo.errors }}
                     <label for="name">{{ form.logo.label }}:</label>
                     {{ form.logo }}
@@ -55,13 +55,60 @@
                     <label for="name">{{ form.website.label }}:</label>
                     {{ form.website }}
                 </div>
-                <div class="form-group">
+                <div class="form-group" id="campagneYear">
                     {{ form.campagneYear.errors }}
                     <label for="name">{{ form.campagneYear.label }}:</label>
                     {{ form.campagneYear }}
                 </div>
-                <button class="btn btn-success">{% trans 'Créer !' %}
+                <button class="btn btn-success">{% trans 'Confirmer' %}
+                {% if pk%}
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete" style="float: right">Supprimer</button>
+                {% endif%}
             </form>
         </div>
     </div>
+    <div id="delete" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Supprimer ?</h4>
+          </div>
+          <div class="modal-body">
+            <p>Êtes vous vertain de vouloir faire ça ?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" data-dismiss="modal">Annuler</button>
+            <a href={% url 'campus:clubs:delete' pk %} class="btn btn-danger" >Confirmer</a>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    <script src="{% static 'jquery/jquery-ui.min.js' %}"></script>
+    <script>
+        function update_required_info() {
+            var selected_type = $("#type").find("option:selected").text();
+            if (selected_type === "Club"){
+              $("#logo").hide();
+              $("#campagneYear").hide();
+          } else if (selected_type === "Association") {
+              $("#logo").show();
+              $("#campagneYear").hide();
+            } else {
+              $("#logo").show();
+              $("#campagneYear").show();
+            }
+        }
+
+        $("#type").on("change", function (event) {
+            update_required_info();
+        });
+
+        $( document ).on("ready", function( event ){
+            update_required_info();
+        });
+    </script>
 {% endblock %}

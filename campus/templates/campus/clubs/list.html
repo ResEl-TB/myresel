@@ -25,7 +25,13 @@
                 <div class="col-md-6 col-md-offset-1">
                     <h2>{{ asso.name }}</h2>
                     <p>{{ asso.description }}</p>
-                    <a href="http://{{ asso.website }}">En savoir plus</a>
+                    {% if asso.website %}
+                    <p>Mailing list: <a href="mailto:{{ asso.email }}">{{ asso.email}}</a></p>
+                    {% endif %}
+                    {% if asso.website %}
+                    <p><a href="http://{{ asso.website }}">En savoir plus</a></p>
+                    {% endif %}
+                    <p><a href="{% url 'campus:clubs:edit' asso.cn%}"<span class="fa fa-edit"></span> éditer</a></p>
                 </div>
             </div>
             {% empty%}
@@ -42,6 +48,13 @@
                     <h2>{{ club.name }}</h2>
                     <p>Mailing list: </p>
                     <p>{{ club.description }}</p>
+                    {% if club.website %}
+                    <p>Mailing list: <a href="mailto:{{ club.email }}">{{ club.email}}</a></p>
+                    {% endif %}
+                    {% if club.website %}
+                    <p><a href="http://{{ club.website }}">En savoir plus</a></p>
+                    {% endif %}
+                    <p><a href="{% url 'campus:clubs:edit' club.cn%}"<span class="fa fa-edit"></span> éditer</a></p>
                 </div>
             </div>
             {% empty %}
@@ -63,7 +76,13 @@
                     <h2>{{ list.name }}</h2>
                     <p>{{ list.description }}</p>
                     <p>Année de campagne: {{ list.campagneYear }}</p>
-                    <a href="http://{{list.website}}">En savoir plus</a>
+                    {% if list.website %}
+                    <p>Mailing list: <a href="mailto:{{ list.email }}">{{ list.email}}</a></p>
+                    {% endif %}
+                    {% if list.website %}
+                    <p><a href="http://{{ list.website }}">En savoir plus</a></p>
+                    {% endif %}
+                    <p><a href="{% url 'campus:clubs:edit' list.cn%}"<span class="fa fa-edit"></span> éditer</a></p>
                 </div>
             </div>
             {% empty %}

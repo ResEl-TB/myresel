@@ -1,7 +1,7 @@
 import os
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
 from django.core.urlresolvers import reverse
@@ -21,13 +21,6 @@ from myresel.settings import MEDIA_ROOT
 def list_clubs(request):
 
     organisations = StudentOrganisation.all()
-
-    #StudentOrganisation.filter(cn="bda")[0].delete()
-
-
-
-    #TODO: Gérer les clubs dont l'object_classes n'est pas tbClub
-    #TODO: Image pour les clubs (?) Et pour les assos
 
     clubs = [o for o in organisations if "tbClubSport" in o.object_classes or "tbClub" in o.object_classes]
     assos = [o for o in organisations if "tbAsso" in o.object_classes]
@@ -70,9 +63,41 @@ class EditClub(FormView):
     form_class = ClubManagementForm
     success_url = '/thanks/'
 
+    def get(self, request, pk):
+        try:
+            orga = StudentOrganisation.filter(cn=pk)[0]
+        except IndexError:
+            raise Http404
+        if 'tbClub' in orga.object_classes or 'tbClubSport' in orga.object_classes:
+            type='CLUB'
+        elif 'tbAsso' in orga.object_classes:
+            type='ASSOS'
+        elif 'tbCampagne' in orga.object_classes:
+            type='LIST'
+        form = self.form_class(initial={
+            'type': type,
+            'name': orga.name,
+            'cn': orga.cn,
+            'description': orga.description,
+            'website': orga.website,
+            'email': orga.email,
+            'campagneYear': orga.campagneYear,
+        })
+        return render(request, self.template_name, {'form': form, 'pk': pk})
+
     def form_valid(self, form):
         form.edit_club()
         return super(EditClub, self).form_valid(form)
+
+class DeleteClub(View):
+    def get(self, request, pk):
+        try:
+            StudentOrganisation.filter(cn=pk)[0].delete()
+            return redirect('campus:clubs:list')
+        except IndexError:
+            raise Http404
+
+
 
 class SearchClub(View):
 

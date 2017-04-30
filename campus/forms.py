@@ -140,7 +140,8 @@ class ClubManagementForm(Form):
 
     type = ChoiceField(
         widget=forms.Select(attrs={
-            'class':'form-control'
+            'class':'form-control',
+            'id':'type',
         }),
         choices=ORGA_TYPE,
         label=_("Sélectionner ce que vous souhaitez créer"),
@@ -149,7 +150,7 @@ class ClubManagementForm(Form):
     name = CharField(  # orgaName
         widget=TextInput(attrs={
             'class': 'form-control',
-            'placeholder': _("Nom du club"),
+            'placeholder': _("Nom"),
         }),
         validators=[MaxLengthValidator(50)],
         label=_("Nom"),
@@ -158,7 +159,7 @@ class ClubManagementForm(Form):
     cn = CharField(  # cn
         widget=TextInput(attrs={
             'class': 'form-control',
-            'placeholder': _("Nom court"),
+            'placeholder': _("Nom court; ex: tennis pour les Club tennis"),
         }),
         validators=[MaxLengthValidator(50)],
         label=_("Nom court"),
@@ -167,7 +168,7 @@ class ClubManagementForm(Form):
     description = CharField(  # description
         widget=Textarea(attrs={
             'class': 'form-control',
-            'placeholder': _("Présentation du club"),
+            'placeholder': _("Présentation du l'organisation"),
             'rows': 5
         }),
         validators=[MaxLengthValidator(50)],
@@ -188,16 +189,16 @@ class ClubManagementForm(Form):
         }),
         validators=[MaxLengthValidator(50)],
         label=_('Mailing liste'),
-        required=False
+        required=False,
     )
 
     website = CharField(  # Website (if not a ResEl website)
         widget=TextInput(attrs={
             'class': 'form-control',
-            'placeholder': _("Site web de contact"),
+            'placeholder': _("Site web"),
         }),
         validators=[MaxLengthValidator(50)],
-        required=False
+        required=False,
     )
 
     campagneYear = forms.IntegerField(
@@ -206,7 +207,8 @@ class ClubManagementForm(Form):
             'class': 'form-control',
             'placeholder': _("Année de campagne"),
         }),
-        required=False
+        label=_('Année de Campagne'),
+        required=False,
     )
 
     def clean_type(self):
@@ -216,9 +218,11 @@ class ClubManagementForm(Form):
         return (type)
 
     def clean_cn(self):
-        cn = self.cleaned_data['cn']
+        cn = self.cleaned_data['cn'].lower()
         if StudentOrganisation.filter(cn=cn):
             raise ValidationError(_("Ce nom existe déjà, assurez vous de créer un club/asso qui n'existe pas déjà"), code="CN EXISTS")
+        elif not re.match('^[a-z0-9]+', cn):
+            raise ValidationError(message=_("Le nom court ne doit pas contenir d'espace est n'est contitué que de lettres et de chiffres"))
         return(cn)
 
     def clean_logo(self):

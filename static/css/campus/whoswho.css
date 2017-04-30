@@ -6,12 +6,6 @@
   margin-top: 5%;
 }
 
-.modal-header {
-  color: white;
-  text-align: center;
-  background: url(/static/images/campus/bgimg.jpg) no-repeat center center fixed;
-}
-
 .who_logo {
    max-width: 100%;
 }
