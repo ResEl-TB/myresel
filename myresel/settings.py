@@ -376,12 +376,12 @@ PROD_LOGGING_CONF = {
     },
     'loggers': {
         'default': {
-            'handlers': ['file', 'mail_admins', 'logstash'],
+            'handlers': ['file', 'logstash'],
             'level': 'DEBUG',
             'propagate': True,
         },
         'django': {
-            'handlers': ['file', 'mail_admins', 'logstash'],
+            'handlers': ['file', 'logstash'],
             'level': 'DEBUG',
             'propagate': True,
         },

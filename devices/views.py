@@ -202,7 +202,8 @@ class EditDeviceView(View):
                            "\n\nuid: {uid}"
                            "\nhostname: {hostname}".format(
                 uid=request.user.username,
-                hostname=hostname)
+                hostname=hostname),
+                           extra={"uid": request.user.username, "device_hostname": hostname},
             )
             messages.error(request, _("Cette machine n'existe pas ou ne vous appartient pas."))
             return HttpResponseRedirect(reverse('gestion-machines:liste'))
@@ -230,7 +231,8 @@ class EditDeviceView(View):
                                "\nnew alias: {alias}".format(
                     uid=request.user.username,
                     alias=alias,
-                    hostname=hostname)
+                    hostname=hostname),
+                               extra={"uid": request.user.username, "new_alias": alias, "device_hostname": hostname}
                 )
                 messages.error(request, _("Cette machine n'existe pas ou ne vous appartient pas."))
                 return HttpResponseRedirect(reverse('gestion-machines:liste'))
