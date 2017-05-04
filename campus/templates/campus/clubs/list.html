@@ -22,7 +22,7 @@
                   <img class="assos-img" src="/media/image/ASSOS/{{ asso.logo }}">
                   {% endif %}
                 </div>
-                <div class="col-md-6 col-md-offset-1">
+                <div class="col-md-5">
                     <h2>{{ asso.name }}</h2>
                     <p>{{ asso.description }}</p>
                     {% if asso.website %}
@@ -31,7 +31,12 @@
                     {% if asso.website %}
                     <p><a href="http://{{ asso.website }}">En savoir plus</a></p>
                     {% endif %}
-                    <p><a href="{% url 'campus:clubs:edit' asso.cn%}"<span class="fa fa-edit"></span> éditer</a></p>
+                </div>
+                <div class="col-md-3">
+                    {% if request.user.is_authenticated %}
+                    <p>Actions:</p>
+                    <p><a href="{% url 'campus:clubs:edit' asso.cn%}"><span class="fa fa-edit"></span> éditer</a></p>
+                    {% endif %}
                 </div>
             </div>
             {% empty%}
@@ -44,7 +49,7 @@
             <h2>{% trans 'Clubs' %}</h2>
             {% for club in clubs %}
             <div class="row assos-card">
-                <div class="col-md-6 col-md-offset-1">
+                <div class="col-md-8 col-md-offset-1">
                     <h2>{{ club.name }}</h2>
                     <p>Mailing list: </p>
                     <p>{{ club.description }}</p>
@@ -54,7 +59,13 @@
                     {% if club.website %}
                     <p><a href="http://{{ club.website }}">En savoir plus</a></p>
                     {% endif %}
-                    <p><a href="{% url 'campus:clubs:edit' club.cn%}"<span class="fa fa-edit"></span> éditer</a></p>
+                </div>
+                <div class="col-md-3">
+                    {% if request.user.is_authenticated %}
+                    <p>Actions:</p>
+                    <p><a href="{% url 'campus:clubs:edit' club.cn%}"><span class="fa fa-edit"></span> éditer</a></p>
+                    <p><a href="{% url 'campus:clubs:addself' club.cn%}"><span class="fa fa-user-plus"></span> m'inscrire</a></p>
+                    {% endif %}
                 </div>
             </div>
             {% empty %}
@@ -72,7 +83,7 @@
                     <img class="assos-img" src="/media/image/LIST/{{ list.logo }}">
                     {% endif %}
                 </div>
-                <div class="col-md-6 col-md-offset-1">
+                <div class="col-md-5">
                     <h2>{{ list.name }}</h2>
                     <p>{{ list.description }}</p>
                     <p>Année de campagne: {{ list.campagneYear }}</p>
@@ -82,7 +93,12 @@
                     {% if list.website %}
                     <p><a href="http://{{ list.website }}">En savoir plus</a></p>
                     {% endif %}
-                    <p><a href="{% url 'campus:clubs:edit' list.cn%}"<span class="fa fa-edit"></span> éditer</a></p>
+                </div>
+                <div class="col-md-3">
+                    {% if request.user.is_authenticated %}
+                    <p>Actions:</p>
+                    <p><a href="{% url 'campus:clubs:edit' list.cn%}"><span class="fa fa-edit"></span> éditer</a></p>
+                    {% endif %}
                 </div>
             </div>
             {% empty %}

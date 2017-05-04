@@ -13,6 +13,7 @@ from PIL import Image
 
 from campus.forms import SendMailForm, ClubManagementForm
 from campus.models.clubs_models import StudentOrganisation
+from gestion_personnes.models import LdapUser
 from fonctions.decorators import ae_required
 
 from myresel.settings import MEDIA_ROOT
@@ -92,12 +93,10 @@ class EditClub(FormView):
 class DeleteClub(View):
     def get(self, request, pk):
         try:
-            StudentOrganisation.filter(cn=pk)[0].delete()
+            StudentOrganisation.get(cn=pk).delete()
             return redirect('campus:clubs:list')
-        except IndexError:
+        except ObjectDoesNotExist:
             raise Http404
-
-
 
 class SearchClub(View):
 
@@ -109,3 +108,28 @@ class SearchClub(View):
         clubs = [o for o in organisations if "tbClub" in o.object_classes or "tbClubSport" in o.object_classes]
         context={'clubs': clubs}
         return render(request, self.template_name, context)
+
+class AddPersonToClub(View):
+
+    def get(self, request, pk, user=None):
+
+        try:
+            club=StudentOrganisation.get(cn=pk)
+        except ObjectDoesNotExist:
+            raise Http404
+        if user == None:
+            user = request.ldap_user
+        else:
+            if not request.ldap_user.is_campus_moderator():
+                messages.error(request, _("Vous n'êtes pas modérateur campus"))
+                return HttpResponseRedirect(reverse('campus:clubs:list'))
+            else:
+                try:
+                    LdapUser.get("user")
+                except ObjectDoesNotExist:
+                    raise Http404
+        if "tbAsso" not in club.object_classes and user.pk not in club.members:
+            club.members.append(user.pk)
+            print(club.object_classes)
+            club.save()
+        return redirect('campus:clubs:list')

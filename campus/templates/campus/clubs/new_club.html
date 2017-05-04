@@ -67,6 +67,7 @@
             </form>
         </div>
     </div>
+    {% if pk%}
     <div id="delete" class="modal fade" role="dialog">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -84,6 +85,7 @@
         </div>
       </div>
     </div>
+    {% endif %}
 {% endblock %}
 
 {% block javascript %}
