@@ -16,9 +16,3 @@
 .green {
     color: #8BBF82 !important;
 }
-
-.modal-header {
-  color: white;
-  text-align: center;
-  background: url(/static/images/campus/bgimg.jpg) no-repeat center center fixed;
-}

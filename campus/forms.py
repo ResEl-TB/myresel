@@ -261,6 +261,8 @@ class ClubManagementForm(Form):
         new_club.email = self.cleaned_data['email']
         new_club.website = self.cleaned_data['website']
         new_club.logo = self.cleaned_data['logo']
+        new_club.memebers = []
+        new_club.prezs = []
         if new_club.email != '':
             new_club.ml_infos = True
         else:

@@ -5,12 +5,12 @@
 {% block title %}Associations et clubs{% endblock %}
 {% block css %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/campus/clubs.css' %}">
+    <link href="{% static 'jquery/jquery-ui.min.css' %}" rel="Stylesheet"></link>
 {% endblock %}
 
 {% block content %}
 
 {% include "./base_clubs.html" %}
-<!-- TODO: conditions sur l'affichage -->
 <div class="container">
     <div class="row">
         <div class="col-md-12 well">
@@ -65,10 +65,14 @@
                     <p>Actions:</p>
                     <p><a href="{% url 'campus:clubs:edit' club.cn%}"><span class="fa fa-edit"></span> éditer</a></p>
                     {% if not 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in club.members%}
-                    <p><a href="{% url 'campus:clubs:addself' club.cn%}"><span class="fa fa-user-plus"></span> m'inscrire</a></p>
+                    <p><a href="{% url 'campus:clubs:add-person' club.cn%}"><span class="fa fa-sign-in"></span> m'inscrire</a></p>
                     {% else %}
-                    <p><a href="{% url 'campus:clubs:removeself' club.cn%}"><span class="fa fa-eraser"></span> me désinscrire</a></p>
+                    <p><a href="{% url 'campus:clubs:remove-person' club.cn%}"><span class="fa fa-sign-out"></span> me désinscrire</a></p>
                     {% endif %}
+                    {% if request.ldap_user.is_campus_moderator %}
+                    <p><a data-toggle="modal" data-target="#addPerson"><span class="fa fa-user-plus"></span> inscrire un membre</a></p>
+                    <p><a href=""><span class="fa fa-user-times"></span> désinscrire un membre</a></p>
+                    {% endif%}
                     {% endif %}
                 </div>
             </div>
@@ -77,6 +81,7 @@
             {% endfor %}
         </div>
     </div>
+    <!--
     <div class="row">
         <div class="col-md-12 well">
             <h2>{% trans 'Listes' %}</h2>
@@ -110,5 +115,47 @@
             {% endfor %}
         </div>
     </div>
+    -->
 </div>
+{% if request.ldap_user.is_campus_moderator %}
+<div class="modal fade" id="addPerson" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="form-horizontal" action="{% url 'campus:clubs:add-person' 'placeholder' %}" method="post">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h4 class="modal-title">{% trans "Ajouter une Personne" %}</h4>
+                </div>
+                <div class="modal-body">
+                  <p>{% trans "Entrer la personne à ajouter à ce club:" %}</p>
+                  <div class="input-group">
+                    <span class="input-group-addon" id="basic-addon1"><span class="fa fa-user"></span></span>
+                    <input type="text" class="form-control" name="id_user" style="width:70%;"></input>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">{% trans "Ajouter" %}</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Annuler" %}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block javascript %}
+<script src="{% static 'jquery/jquery-ui.min.js' %}"></script>
+<script>
+    jQuery(document).ready(function ($) {
+      $('#id_parain').autocomplete({
+          source: "{% url 'campus:who:request-user' %}",
+          minLength: 3,
+      });
+      $('#id_bizzu').autocomplete({
+          source: "{% url 'campus:who:request-user' %}",
+          minLength: 3,
+      });
+    })
+</script>
 {% endblock %}
