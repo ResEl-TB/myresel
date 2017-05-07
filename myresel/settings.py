@@ -78,6 +78,9 @@ INSCRIPTION_ZONE_ALLOWED_URLNAMESPACE = [
 
 NUMBER_NEWS_IN_HOME = 4
 
+# Cookies settings
+SESSION_COOKIE_AGE = 365 * 24 * 60 * 60
+
 #
 
 AUTHENTICATION_BACKENDS = (
@@ -213,7 +216,7 @@ class DisableMigrations(object):
         return True
 
     def __getitem__(self, item):
-        return None
+        return "notmigrations"
 
 
 ####
@@ -249,9 +252,9 @@ class UnManagedModelTestRunner(DiscoverRunner):
         for m in self.unmanaged_models:
             m._meta.managed = False
 
-# if 'test' in sys.argv or 'test_coverage' in sys.argv:  # Covers regular testing and django-coverage
-    # MIGRATION_MODULES = DisableMigrations()
-    # TEST_RUNNER = 'myresel.settings.UnManagedModelTestRunner'
+if 'test' in sys.argv or 'test_coverage' in sys.argv:  # Covers regular testing and django-coverage
+    MIGRATION_MODULES = DisableMigrations()
+    TEST_RUNNER = 'myresel.settings.UnManagedModelTestRunner'
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
@@ -373,12 +376,12 @@ PROD_LOGGING_CONF = {
     },
     'loggers': {
         'default': {
-            'handlers': ['file', 'mail_admins', 'logstash'],
+            'handlers': ['file', 'logstash'],
             'level': 'DEBUG',
             'propagate': True,
         },
         'django': {
-            'handlers': ['file', 'mail_admins', 'logstash'],
+            'handlers': ['file', 'logstash'],
             'level': 'DEBUG',
             'propagate': True,
         },
