@@ -1,5 +1,6 @@
 {% extends "base_campus.html" %}
 {% load staticfiles %}
+{% load i18n %}
 
 {% block title %}Rechercher un club{% endblock %}
 {% block css %}
@@ -21,7 +22,7 @@
                 </div>
             </div>
             {% empty %}
-            {% trans 'Aucun résultat n'a été retourné' %}
+            {% trans "Aucun résultat n'a été retourné" %}
             {% endfor %}
         </div>
     </div>

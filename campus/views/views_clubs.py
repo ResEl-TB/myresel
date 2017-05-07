@@ -17,7 +17,7 @@ from campus.models.clubs_models import StudentOrganisation
 from gestion_personnes.models import LdapUser
 from fonctions.decorators import ae_required
 
-from myresel.settings import MEDIA_ROOT
+from myresel.settings import MEDIA_ROOT, LDAP_DN_PEOPLE
 
 
 def list_clubs(request):
@@ -35,6 +35,7 @@ def list_clubs(request):
             'clubs': clubs,
             'assos': assos,
             'lists': lists,
+            'ldapOuPeople': LDAP_DN_PEOPLE,
         }
     )
 
@@ -56,6 +57,7 @@ class NewClub(FormView):
             logo.save(path+form.cleaned_data['cn']+".png", "PNG")
             form.cleaned_data['logo'] = form.cleaned_data['cn']+".png"
         form.create_club()
+        pk = None
         return super(NewClub, self).form_valid(form)
 
 
@@ -131,6 +133,28 @@ class AddPersonToClub(View):
                     raise Http404
         if "tbAsso" not in club.object_classes and user.pk not in club.members:
             club.members.append(user.pk)
-            print(club.object_classes)
+            club.save()
+        return redirect('campus:clubs:list')
+
+class RemovePersonFromClub(View):
+
+    def get(self, request, pk, user=None):
+        try:
+            club=StudentOrganisation.get(cn=pk)
+        except ObjectDoesNotExist:
+            raise Http404
+        if user == None:
+            user = request.ldap_user
+        else:
+            if not request.ldap_user.is_campus_moderator():
+                messages.error(request, _("Vous n'êtes pas modérateur campus"))
+                return HttpResponseRedirect(reverse('campus:clubs:list'))
+            else:
+                try:
+                    LdapUser.get("user")
+                except ObjectDoesNotExist:
+                    raise Http404
+        if "tbAsso" not in club.object_classes and user.pk in club.members:
+            club.members.remove(user.pk)
             club.save()
         return redirect('campus:clubs:list')

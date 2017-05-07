@@ -64,7 +64,11 @@
                     {% if request.user.is_authenticated %}
                     <p>Actions:</p>
                     <p><a href="{% url 'campus:clubs:edit' club.cn%}"><span class="fa fa-edit"></span> éditer</a></p>
+                    {% if not 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in club.members%}
                     <p><a href="{% url 'campus:clubs:addself' club.cn%}"><span class="fa fa-user-plus"></span> m'inscrire</a></p>
+                    {% else %}
+                    <p><a href="{% url 'campus:clubs:removeself' club.cn%}"><span class="fa fa-eraser"></span> me désinscrire</a></p>
+                    {% endif %}
                     {% endif %}
                 </div>
             </div>
