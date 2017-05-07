@@ -128,7 +128,7 @@ class AddPersonToClub(View):
                 return HttpResponseRedirect(reverse('campus:clubs:list'))
             else:
                 try:
-                    LdapUser.get("user")
+                    LdapUser.get(uid=user.uid)
                 except ObjectDoesNotExist:
                     raise Http404
         if "tbAsso" not in club.object_classes and user.pk not in club.members:
@@ -151,7 +151,7 @@ class RemovePersonFromClub(View):
                 return HttpResponseRedirect(reverse('campus:clubs:list'))
             else:
                 try:
-                    LdapUser.get("user")
+                    LdapUser.get(uid=user.uid)
                 except ObjectDoesNotExist:
                     raise Http404
         if "tbAsso" not in club.object_classes and user.pk in club.members:
