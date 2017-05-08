@@ -53,6 +53,7 @@ source ${ROOTDIR}.install/scripts/configure.sh
 
 echo ">>> Populating database <<<"
 source ${ROOTDIR}.install/scripts/populate_db.sh
+python3 ${ROOTDIR}manage.py populate_redis
 
 echo "================================================"
 echo "| My ResEl DEV environment installation done   |"

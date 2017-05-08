@@ -39,6 +39,7 @@ before_script:
   - source .install/scripts/install_openldap.sh
   - source .install/scripts/install_latex.sh
   - pip3 install -qUr requirements.txt
+  - python3 manage.py populate_redis
 
 create_config:
   stage: configure
