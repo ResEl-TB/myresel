@@ -29,6 +29,8 @@ def list_clubs(request):
     assos = [o for o in organisations if "tbAsso" in o.object_classes]
     lists = [o for o in organisations if "tbCampagne" in o.object_classes]
 
+    hardLinkAdd = reverse('campus:clubs:add-person', kwargs={'pk': "a"})[:-1]
+    hardLinkDel = reverse('campus:clubs:remove-person', kwargs={'pk': "a"})[:-1]
 
     return render(
         request,
@@ -37,8 +39,9 @@ def list_clubs(request):
             'clubs': clubs,
             'assos': assos,
             'lists': lists,
-
             'ldapOuPeople': LDAP_DN_PEOPLE,
+            'hardLinkAdd': hardLinkAdd,
+            'hardLinkDel': hardLinkDel,
         }
     )
 
@@ -54,7 +57,7 @@ class NewClub(FormView):
         return super(NewClub, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form):
-        if not request.ldap_user.is_campus_moderator():
+        if not self.request.ldap_user.is_campus_moderator():
             messages.error(request, _("Vous n'êtes pas modérateur campus"))
             return HttpResponseRedirect(reverse('campus:clubs:list'))
         if form.cleaned_data['type'] != "CLUB":
@@ -72,7 +75,7 @@ class NewClub(FormView):
         return super(NewClub, self).form_valid(form)
 
 
-# TODO : gestion des droits
+#TODO GESTION DU PKKKKKKKKK
 class EditClub(FormView):
 
     template_name = 'campus/clubs/new_club.html'
@@ -138,7 +141,6 @@ class SearchClub(View):
         context={'clubs': clubs}
         return render(request, self.template_name, context)
 
-#TODO gérer l'ajout par un modo campus en methode post (si pas trouvé mieux en attendant)
 class AddPersonToClub(View):
 
     @method_decorator(login_required)
@@ -146,27 +148,29 @@ class AddPersonToClub(View):
         return super(AddPersonToClub, self).dispatch(*args, **kwargs)
 
     def get(self, request, pk):
+        uid=request.GET.get('id_user', None)
         try:
             club=StudentOrganisation.get(cn=pk)
         except ObjectDoesNotExist:
             raise Http404
-        user = request.ldap_user
-        if "tbAsso" not in club.object_classes and user.pk not in club.members:
+        if uid == None:
+            user = request.ldap_user
+        else:
+            if not request.ldap_user.is_campus_moderator():
+                messages.error(request, _("Vous n'êtes pas modérateur campus"))
+                return HttpResponseRedirect(reverse('campus:clubs:list'))
+            else:
+                try:
+                    user = LdapUser.get(uid=uid)
+                except ObjectDoesNotExist:
+                    raise Http404
+        if "tbClub" in club.object_classes and not user.pk in club.members:
+            messages.success(request, _("Le membre viens d'être ajouté"))
             club.members.append(user.pk)
             club.save()
-        return redirect('campus:clubs:list')
-
-    def post(self, request, pk):
-        if not request.ldap_user.is_campus_moderator():
-            messages.error(request, _("Vous n'êtes pas modérateur campus"))
-            return HttpResponseRedirect(reverse('campus:clubs:list'))
         else:
-            uid = request.POST.get("id_user", "")
-            try:
-                LdapUser.get(uid=uid)
-            except ObjectDoesNotExist:
-                raise Http404
-        #TO BE CONTINUED -->
+            messages.info(request, _("Cette personne est déjà inscrite"))
+        return redirect('campus:clubs:list')
 
 class RemovePersonFromClub(View):
 
@@ -174,26 +178,27 @@ class RemovePersonFromClub(View):
     def dispatch(self, *args, **kwargs):
         return super(RemovePersonFromClub, self).dispatch(*args, **kwargs)
 
-    def get(self, request, pk, user=None):
+    def get(self, request, pk):
+        uid=request.GET.get('id_user', None)
         try:
             club=StudentOrganisation.get(cn=pk)
         except ObjectDoesNotExist:
             raise Http404
-        if user == None:
+        if uid == None:
             user = request.ldap_user
-        if "tbAsso" not in club.object_classes and user.pk in club.members:
-            club.members.remove(user.pk)
-            club.save()
-        return redirect('campus:clubs:list')
-
-        def post(self, request, pk):
+        else:
             if not request.ldap_user.is_campus_moderator():
                 messages.error(request, _("Vous n'êtes pas modérateur campus"))
                 return HttpResponseRedirect(reverse('campus:clubs:list'))
             else:
-                uid = request.POST.get("id_user", "")
                 try:
-                    LdapUser.get(uid=uid)
+                    user = LdapUser.get(uid=uid)
                 except ObjectDoesNotExist:
                     raise Http404
-            #TO BE CONTINUED -->
+        if "tbAsso" not in club.object_classes and user.pk in club.members:
+            club.members.remove(user.pk)
+            club.save()
+            messages.success(request, _("Le membre viens d'être supprimé"))
+        else:
+            messages.info(request, _("Cette personne ne fait pas partie de ce club"))
+        return redirect('campus:clubs:list')
