@@ -112,7 +112,7 @@ class EditClub(FormView):
         return render(request, self.template_name, {'form': form, 'pk': pk})
 
     def form_valid(self, form):
-        if not request.ldap_user.is_campus_moderator():
+        if not self.request.ldap_user.is_campus_moderator():
             messages.error(request, _("Vous n'êtes pas modérateur campus"))
             return HttpResponseRedirect(reverse('campus:clubs:list'))
         form.edit_club()
