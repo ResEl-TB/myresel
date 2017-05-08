@@ -1,6 +1,8 @@
-from datetime import datetime, timedelta, date
 import time
 import re
+import unicodedata
+
+from datetime import datetime, timedelta, date
 
 from django.contrib import messages
 from django.contrib.auth import login
@@ -22,7 +24,7 @@ from gestion_personnes.async_tasks import send_mails
 from gestion_personnes.models import LdapUser, UserMetaData
 from .forms import InscriptionForm, ModPasswdForm, CGUForm, InvalidUID, PersonnalInfoForm, ResetPwdSendForm, \
     ResetPwdForm, SendUidForm, RoutingMailForm
-import unicodedata
+
 
 class Inscription(View):
     """
@@ -147,7 +149,6 @@ class ModPasswd(View):
             return HttpResponseRedirect(reverse('home'))
 
         return render(request, self.template_name, {'form': form})
-
 
 class Settings(View):
     template_name = 'gestion_personnes/settings.html'
