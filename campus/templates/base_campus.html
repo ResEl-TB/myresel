@@ -112,7 +112,7 @@
                     </div>
                     <button type="submit" class="btn btn-default"><span class="fa fa-fw fa-search"></span></button>
                 </form>
-                {% if request.user.is_authenticated %}<li><a href="#">Mes clubs</a></li>{% endif %}
+                {% if request.user.is_authenticated %}<li><a href="{% url 'campus:clubs:my-clubs'%}">Mes clubs</a></li>{% endif %}
                 {% if request.ldap_user.is_campus_moderator %}<li><a href="{% url 'campus:clubs:new'%}"><span class="fa fa-plus"></span> Nouveau club ou association</a></li>{% endif %}
             </ul>
         </div>

@@ -1,0 +1,51 @@
+{% extends "base_campus.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block title %}Mes clubs{% endblock %}
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/campus/clubs.css' %}">
+    <link href="{% static 'jquery/jquery-ui.min.css' %}" rel="Stylesheet"></link>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 well">
+          {% for club in clubs %}
+          <div class="row assos-card">
+              <div class="col-md-8 col-md-offset-1">
+                  <h2>{{ club.name }}</h2>
+                  <p>{{ club.description }}</p>
+                  {% if club.website %}
+                  <p>Mailing list: <a href="mailto:{{ club.email }}">{{ club.email}}</a></p>
+                  {% endif %}
+                  {% if club.website %}
+                  <p><a href="http://{{ club.website }}">En savoir plus</a></p>
+                  {% endif %}
+              </div>
+              <!-- TODO: colapse -->
+              <div class="col-md-3">
+                  {% if request.user.is_authenticated %}
+                  <p><button class="btn btn-info" data-toggle="collapse" data-target="#{{club.cn}}"><span class="fa fa-angle-double-down"></span> Actions <span class="fa fa-angle-double-down"></span></button></p>
+                  <div class="collapse" id="{{club.cn}}">
+                      {% if not 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in club.members%}
+                      <p><a href="{% url 'campus:clubs:add-person' club.cn%}"><span class="fa fa-sign-in"></span> m'inscrire</a></p>
+                      {% else %}
+                      <p><a href="{% url 'campus:clubs:remove-person' club.cn%}"><span class="fa fa-sign-out"></span> me désinscrire</a></p>
+                      {% endif %}
+                      {% if request.ldap_user.is_campus_moderator %}
+                      <p><a href="{% url 'campus:clubs:edit' club.cn%}"><span class="fa fa-edit"></span> éditer</a></p>
+                      <p><a class="addPersonLink" data-toggle="modal" data-target="#addPerson" data="{{club.cn}}"><span class="fa fa-user-plus"></span> inscrire un membre</a></p>
+                      <p><a class="delPersonLink" data-toggle="modal" data-target="#delPerson" data="{{club.cn}}"><span class="fa fa-user-times"></span> désinscrire un membre</a></p>
+                      {% endif%}
+                  </div>
+                  {% endif %}
+              </div>
+          </div>
+          {% empty %}
+          {% trans "Une erreur est servenue pendant la récupération des clubs" %}
+          {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

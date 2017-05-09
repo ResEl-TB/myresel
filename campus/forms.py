@@ -175,7 +175,7 @@ class ClubManagementForm(Form):
         label=_("Description"),
     )
 
-    logo = forms.ImageField(
+    logo = forms.ImageField( #logo
         widget = forms.ClearableFileInput(),
         label = 'Logo',
         required = False,
@@ -201,7 +201,7 @@ class ClubManagementForm(Form):
         required=False,
     )
 
-    campagneYear = forms.IntegerField(
+    campagneYear = forms.IntegerField( # Année de campagne
         min_value=1997,
         widget=forms.NumberInput(attrs={
             'class': 'form-control',
@@ -277,6 +277,27 @@ class ClubManagementForm(Form):
             new_club.object_classes += ["tbCampagne"]
             new_club.campagneYear = self.cleaned_data['campagneYear']
         new_club.save()
+
+class ClubEditionForm(ClubManagementForm):
+
+    def clean_cn(self):
+        return(self.cleaned_data['cn'].lower())
+
+    def clean_logo(self):
+        logo = self.cleaned_data['logo']
+        if self.cleaned_data['type'] == 'CLUB' and logo != None:
+            raise ValidationError(message=_("Les images pour les clubs n'est pas supporté"), code="CLUB LOGO")
+        return(logo)
+
+    def edit_club(self, pk):
+        club = StudentOrganisation.filter(cn=pk)[0]
+        club.name = self.cleaned_data['name']
+        club.description = self.cleaned_data['description']
+        club.email = self.cleaned_data['email']
+        club.website = self.cleaned_data['website']
+        club.logo = self.cleaned_data['logo']
+        club.save()
+
 
 
 class MajPersonnalInfo(PersonnalInfoForm):

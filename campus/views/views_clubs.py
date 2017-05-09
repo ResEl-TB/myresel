@@ -13,7 +13,7 @@ from django.views.generic import FormView, View
 from io import BytesIO
 from PIL import Image
 
-from campus.forms import SendMailForm, ClubManagementForm
+from campus.forms import SendMailForm, ClubManagementForm, ClubEditionForm
 from campus.models.clubs_models import StudentOrganisation
 from gestion_personnes.models import LdapUser, LdapGroup
 from fonctions.decorators import ae_required
@@ -79,8 +79,8 @@ class NewClub(FormView):
 class EditClub(FormView):
 
     template_name = 'campus/clubs/new_club.html'
-    form_class = ClubManagementForm
-    success_url = '/thanks/'
+    form_class = ClubEditionForm
+    success_url = '/campus/clubs'
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
@@ -102,8 +102,8 @@ class EditClub(FormView):
             type='LIST'
         form = self.form_class(initial={
             'type': type,
-            'name': orga.name,
             'cn': orga.cn,
+            'name': orga.name,
             'description': orga.description,
             'website': orga.website,
             'email': orga.email,
@@ -112,10 +112,20 @@ class EditClub(FormView):
         return render(request, self.template_name, {'form': form, 'pk': pk})
 
     def form_valid(self, form):
+        pk = self.kwargs['pk']
         if not self.request.ldap_user.is_campus_moderator():
             messages.error(request, _("Vous n'êtes pas modérateur campus"))
             return HttpResponseRedirect(reverse('campus:clubs:list'))
-        form.edit_club()
+        if form.cleaned_data['type'] != "CLUB" and form.cleaned_data['logo'] != None:
+            logo = Image.open(BytesIO(logo.read()))
+            try:
+                path = MEDIA_ROOT+"/image/"+form.cleaned_data['type']+"/"
+                os.makedirs(path)
+            except FileExistsError:
+                pass
+            logo.save(path+form.cleaned_data['cn']+".png", "PNG")
+            form.cleaned_data['logo'] = form.cleaned_data['cn']+".png"
+        form.edit_club(pk)
         return super(EditClub, self).form_valid(form)
 
 class DeleteClub(View):
@@ -129,6 +139,25 @@ class DeleteClub(View):
             return redirect('campus:clubs:list')
         except ObjectDoesNotExist:
             raise Http404
+
+class MyClubs(View):
+
+    template_name = 'campus/clubs/my_clubs.html'
+
+    def get(self, request):
+        clubs = StudentOrganisation.all()
+        clubs = [c for c in clubs if request.ldap_user.pk in c.members]
+
+        hardLinkAdd = reverse('campus:clubs:add-person', kwargs={'pk': "a"})[:-1]
+        hardLinkDel = reverse('campus:clubs:remove-person', kwargs={'pk': "a"})[:-1]
+
+        context = {
+            'clubs': clubs,
+            'ldapOuPeople': LDAP_DN_PEOPLE,
+            'hardLinkAdd': hardLinkAdd,
+            'hardLinkDel': hardLinkDel,
+        }
+        return render(request, self.template_name, context)
 
 class SearchClub(View):
 
@@ -170,7 +199,7 @@ class AddPersonToClub(View):
             club.save()
         else:
             messages.info(request, _("Cette personne est déjà inscrite"))
-        return redirect('campus:clubs:list')
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 class RemovePersonFromClub(View):
 
@@ -201,4 +230,4 @@ class RemovePersonFromClub(View):
             messages.success(request, _("Le membre viens d'être supprimé"))
         else:
             messages.info(request, _("Cette personne ne fait pas partie de ce club"))
-        return redirect('campus:clubs:list')
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
