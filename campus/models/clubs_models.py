@@ -13,13 +13,13 @@ class StudentOrganisation(ldapback.models.LdapModel):
 
     # studentOrganisation
     cn = LdapCharField(db_column='cn', object_classes=['studentOrganisation'], pk=True)
-    name = LdapCharField(db_column='orgaName', object_classes=['studentOrganisation'])
+    name = LdapCharField(db_column='orgaName', object_classes=['studentOrganisation', 'tbClub'])
     prezs = LdapListField(db_column='uidPrezs', object_classes=['studentOrganisation','tbClub'])
     members = LdapListField(db_column='uidMembres', object_classes=['studentOrganisation','tbClub'])
     ml_infos = LdapBooleanField(db_column='mlInfos', object_classes=['studentOrganisation'])
-    email = LdapCharField(db_column='mlist', object_classes=['studentOrganisation'])
-    website = LdapCharField(db_column='website', object_classes=['studentOrganisation'])
-    description = LdapCharField(db_column='description', object_classes=['studentOrganisation'])
+    email = LdapCharField(db_column='mlist', object_classes=['studentOrganisation', 'tbClub'])
+    website = LdapCharField(db_column='website', object_classes=['studentOrganisation', 'tbClub'])
+    description = LdapCharField(db_column='description', object_classes=['studentOrganisation', 'tbClub'])
     logo = LdapCharField(db_column='logo', object_classes=['studentOrganisation'])
 
     #tbCampagne

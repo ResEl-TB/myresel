@@ -295,7 +295,6 @@ class ClubEditionForm(ClubManagementForm):
         club.description = self.cleaned_data['description']
         club.email = self.cleaned_data['email']
         club.website = self.cleaned_data['website']
-        club.logo = self.cleaned_data['logo']
         club.save()
 
 

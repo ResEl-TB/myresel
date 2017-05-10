@@ -31,6 +31,7 @@ def list_clubs(request):
 
     hardLinkAdd = reverse('campus:clubs:add-person', kwargs={'pk': "a"})[:-1]
     hardLinkDel = reverse('campus:clubs:remove-person', kwargs={'pk': "a"})[:-1]
+    hardLinkAddPrez = reverse('campus:clubs:add-prez', kwargs={'pk': "a"})[:-1]
 
     return render(
         request,
@@ -42,6 +43,7 @@ def list_clubs(request):
             'ldapOuPeople': LDAP_DN_PEOPLE,
             'hardLinkAdd': hardLinkAdd,
             'hardLinkDel': hardLinkDel,
+            'hardLinkAddPrez': hardLinkAddPrez,
         }
     )
 
@@ -75,7 +77,6 @@ class NewClub(FormView):
         return super(NewClub, self).form_valid(form)
 
 
-#TODO GESTION DU PKKKKKKKKK
 class EditClub(FormView):
 
     template_name = 'campus/clubs/new_club.html'
@@ -124,7 +125,6 @@ class EditClub(FormView):
             except FileExistsError:
                 pass
             logo.save(path+form.cleaned_data['cn']+".png", "PNG")
-            form.cleaned_data['logo'] = form.cleaned_data['cn']+".png"
         form.edit_club(pk)
         return super(EditClub, self).form_valid(form)
 
@@ -142,7 +142,7 @@ class DeleteClub(View):
 
 class MyClubs(View):
 
-    template_name = 'campus/clubs/my_clubs.html'
+    template_name = 'campus/clubs/list_clubs.html'
 
     def get(self, request):
         clubs = StudentOrganisation.all()
@@ -150,24 +150,38 @@ class MyClubs(View):
 
         hardLinkAdd = reverse('campus:clubs:add-person', kwargs={'pk': "a"})[:-1]
         hardLinkDel = reverse('campus:clubs:remove-person', kwargs={'pk': "a"})[:-1]
+        hardLinkAddPrez = reverse('campus:clubs:add-prez', kwargs={'pk': "a"})[:-1]
 
         context = {
             'clubs': clubs,
             'ldapOuPeople': LDAP_DN_PEOPLE,
             'hardLinkAdd': hardLinkAdd,
             'hardLinkDel': hardLinkDel,
+            'hardLinkAddPrez': hardLinkAddPrez,
         }
         return render(request, self.template_name, context)
 
 class SearchClub(View):
 
-    template_name='campus/clubs/search_club.html'
+    template_name='campus/clubs/list_clubs.html'
 
     def get(self, request):
         what = request.GET.get('what', '').strip()
         organisations = StudentOrganisation.filter(name__contains=what)
         clubs = [o for o in organisations if "tbClub" in o.object_classes or "tbClubSport" in o.object_classes]
-        context={'clubs': clubs}
+
+        hardLinkAdd = reverse('campus:clubs:add-person', kwargs={'pk': "a"})[:-1]
+        hardLinkDel = reverse('campus:clubs:remove-person', kwargs={'pk': "a"})[:-1]
+        hardLinkAddPrez = reverse('campus:clubs:add-prez', kwargs={'pk': "a"})[:-1]
+
+        context = {
+            'clubs': clubs,
+            'ldapOuPeople': LDAP_DN_PEOPLE,
+            'hardLinkAdd': hardLinkAdd,
+            'hardLinkDel': hardLinkDel,
+            'hardLinkAddPrez': hardLinkAddPrez,
+        }
+
         return render(request, self.template_name, context)
 
 class AddPersonToClub(View):
@@ -200,6 +214,33 @@ class AddPersonToClub(View):
         else:
             messages.info(request, _("Cette personne est déjà inscrite"))
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+class AddPrezToClub(View):
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(AddPersonToClub, self).dispatch(*args, **kwargs)
+
+    def get(self, request, pk):
+        if not request.ldap_user.is_campus_moderator():
+            messages.error(request, _("Vous n'êtes pas modérateur campus"))
+            return HttpResponseRedirect(reverse('campus:clubs:list'))
+        try:
+            club=StudentOrganisation.get(cn=pk)
+        except ObjectDoesNotExist:
+            raise Http404
+        try:
+            user = LdapUser.get(uid=uid)
+        except ObjectDoesNotExist:
+            raise Http404
+        if "tbClub" in club.object_classes and not user.pk in club.prezs:
+            messages.success(request, _("Le président viens d'être ajouté"))
+            club.prezs.append(user.pk)
+            club.save()
+        else:
+            messages.info(request, _("Cette personne est déjà président(e)"))
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
 
 class RemovePersonFromClub(View):
 

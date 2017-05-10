@@ -192,3 +192,8 @@ body {
   text-align: center;
   background: url(/static/images/campus/bgimg.jpg) no-repeat center center fixed;
 }
+
+/* removes bootsrap component's radius */
+.remove-radius {
+    border-radius: 0px !important;
+}
