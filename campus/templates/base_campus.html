@@ -23,6 +23,15 @@
     <link href='http://fonts.googleapis.com/css?family=Droid+Serif' rel='stylesheet' type='text/css'>
 </head>
 <body>
+  <div class="floatin_hugo_1 floating_meme"></div>
+  <div class="floatin_hugo_2 floating_meme"></div>
+  <div class="floatin_hugo_3 floating_meme"></div>
+  <div class="floatin_hugo_4 floating_meme"></div>
+  <div class="floatin_hugo_5 floating_meme"></div>
+  <div class="floatin_hugo_6 floating_meme"></div>
+  <div class="floatin_hugo_7 floating_meme"></div>
+  <div class="floatin_hugo_8 floating_meme"></div>
+  <div class="floatin_hugo_9 floating_meme"></div>
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -205,6 +214,73 @@
 {# javascript #}
 <script type="text/javascript" src="{% static 'jquery/jquery.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'boostrap/js/bootstrap.min.js' %}"></script>
+<script>
+var k = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65],
+n = 0;
+$(document).keydown(function (e) {
+    if (e.keyCode === k[n++]) {
+        if (n === k.length) {
+            animateDiv($('.floatin_hugo_1'));
+            animateDiv($('.floatin_hugo_2'));
+            animateDiv($('.floatin_hugo_3'));
+            animateDiv($('.floatin_hugo_4'));
+            animateDiv($('.floatin_hugo_5'));
+            animateDiv($('.floatin_hugo_6'));
+            animateDiv($('.floatin_hugo_7'));
+            animateDiv($('.floatin_hugo_8'));
+            animateDiv($('.floatin_hugo_9'));
+            n = 0;
+            return false;
+        }
+    }
+    else {
+        n = 0;
+    }
+});
+
+function makeNewPosition($container) {
+
+    // Get viewport dimensions (remove the dimension of the div)
+    var h = $(window).height();
+    var w = $(window).width();
+
+    var nh = Math.floor(Math.random() * h);
+    var nw = Math.floor(Math.random() * w);
+
+    return [nh, nw];
+
+}
+
+function animateDiv($target) {
+    $target.css('display','block');
+    var newq = makeNewPosition($target.parent());
+    var oldq = $target.offset();
+    var speed = calcSpeed([oldq.top, oldq.left], newq);
+
+    $target.animate({
+        top: newq[0],
+        left: newq[1]
+    }, speed, function() {
+        animateDiv($target);
+    });
+
+};
+
+function calcSpeed(prev, next) {
+
+    var x = Math.abs(prev[1] - next[1]);
+    var y = Math.abs(prev[0] - next[0]);
+
+    var greatest = x > y ? x : y;
+
+    var speedModifier = 0.1;
+
+    var speed = Math.ceil(greatest / speedModifier);
+
+    return speed;
+
+}
+</script>
 
 <!-- Piwik -->
 <script type="text/javascript">

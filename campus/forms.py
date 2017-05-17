@@ -227,9 +227,7 @@ class ClubManagementForm(Form):
 
     def clean_logo(self):
         logo = self.cleaned_data['logo']
-        if self.cleaned_data['type'] == 'CLUB' and logo != None:
-            raise ValidationError(message=_("Les images pour les clubs n'est pas supporté"), code="CLUB LOGO")
-        elif self.cleaned_data['type'] != 'CLUB' and logo == None:
+        if self.cleaned_data['type'] != 'CLUB' and logo == None:
             raise ValidationError(message=_("Merci de renseigner un logo pour votre association/liste"), code="NO LOGO")
         return(logo)
 
@@ -285,16 +283,14 @@ class ClubEditionForm(ClubManagementForm):
 
     def clean_logo(self):
         logo = self.cleaned_data['logo']
-        if self.cleaned_data['type'] == 'CLUB' and logo != None:
-            raise ValidationError(message=_("Les images pour les clubs n'est pas supporté"), code="CLUB LOGO")
         return(logo)
-
     def edit_club(self, pk):
         club = StudentOrganisation.filter(cn=pk)[0]
         club.name = self.cleaned_data['name']
         club.description = self.cleaned_data['description']
         club.email = self.cleaned_data['email']
         club.website = self.cleaned_data['website']
+        club.logo = self.cleaned_data['logo']
         club.save()
 
 

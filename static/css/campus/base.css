@@ -197,3 +197,13 @@ body {
 .remove-radius {
     border-radius: 0px !important;
 }
+
+.floating_meme {
+    display: none;
+    z-index: 10000;
+    height: 50px;
+    width: 50px;
+    background-size: cover;
+    background-image: url(/static/images/campus/hugo.png);
+    position:fixed;
+}

@@ -1,4 +1,6 @@
 import os
+import re
+import json
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -22,6 +24,10 @@ from myresel.settings import MEDIA_ROOT, LDAP_DN_PEOPLE
 
 
 def list_clubs(request):
+    """
+    The default view, used to list every club, list and assos
+    Users can subscribe, prezs can add memebers, edit the club etc.
+    """
 
     organisations = StudentOrganisation.all()
 
@@ -32,6 +38,7 @@ def list_clubs(request):
     hardLinkAdd = reverse('campus:clubs:add-person', kwargs={'pk': "a"})[:-1]
     hardLinkDel = reverse('campus:clubs:remove-person', kwargs={'pk': "a"})[:-1]
     hardLinkAddPrez = reverse('campus:clubs:add-prez', kwargs={'pk': "a"})[:-1]
+    hardLinkWhoUser = reverse('campus:who:user-details', kwargs={'uid': "a"})[:-1]
 
     return render(
         request,
@@ -44,11 +51,16 @@ def list_clubs(request):
             'hardLinkAdd': hardLinkAdd,
             'hardLinkDel': hardLinkDel,
             'hardLinkAddPrez': hardLinkAddPrez,
+            'hardLinkWhoUser': hardLinkWhoUser,
         }
     )
 
 # TODO : gestion des droits des prezs
 class NewClub(FormView):
+    """
+    View used to add a new club, list or asso. It shares the same template used
+    for club/list/asso edition
+    """
 
     template_name = 'campus/clubs/new_club.html'
     form_class = ClubManagementForm
@@ -62,7 +74,7 @@ class NewClub(FormView):
         if not self.request.ldap_user.is_campus_moderator():
             messages.error(request, _("Vous n'êtes pas modérateur campus"))
             return HttpResponseRedirect(reverse('campus:clubs:list'))
-        if form.cleaned_data['type'] != "CLUB":
+        if form.cleaned_data['logo'] != None:
             logo = form.cleaned_data['logo']
             logo = Image.open(BytesIO(logo.read()))
             try:
@@ -78,6 +90,9 @@ class NewClub(FormView):
 
 
 class EditClub(FormView):
+    """
+    View used to edit a club/asso/campagne
+    """
 
     template_name = 'campus/clubs/new_club.html'
     form_class = ClubEditionForm
@@ -88,19 +103,23 @@ class EditClub(FormView):
         return super(EditClub, self).dispatch(*args, **kwargs)
 
     def get(self, request, pk):
-        if not request.ldap_user.is_campus_moderator():
-            messages.error(request, _("Vous n'êtes pas modérateur campus"))
-            return HttpResponseRedirect(reverse('campus:clubs:list'))
         try:
             orga = StudentOrganisation.filter(cn=pk)[0]
         except IndexError:
             raise Http404
+        print(request.ldap_user.pk, orga.prezs)
+
+        if not (request.ldap_user.is_campus_moderator() or request.ldap_user.pk in orga.prezs):
+            messages.error(request, _("Vous n'êtes pas modérateur campus ou président(e) de ce club"))
+            return HttpResponseRedirect(reverse('campus:clubs:list'))
+
         if 'tbClub' in orga.object_classes or 'tbClubSport' in orga.object_classes:
             type='CLUB'
         elif 'tbAsso' in orga.object_classes:
             type='ASSOS'
         elif 'tbCampagne' in orga.object_classes:
             type='LIST'
+
         form = self.form_class(initial={
             'type': type,
             'cn': orga.cn,
@@ -114,10 +133,17 @@ class EditClub(FormView):
 
     def form_valid(self, form):
         pk = self.kwargs['pk']
-        if not self.request.ldap_user.is_campus_moderator():
-            messages.error(request, _("Vous n'êtes pas modérateur campus"))
+        try:
+            orga = StudentOrganisation.filter(cn=pk)[0]
+        except IndexError:
+            raise Http404
+
+        if not (self.request.ldap_user.is_campus_moderator() or self.request.ldap_user.pk in orga.prezs):
+            messages.error(request, _("Vous n'êtes pas modérateur campus ou président(e) de ce club"))
             return HttpResponseRedirect(reverse('campus:clubs:list'))
-        if form.cleaned_data['type'] != "CLUB" and form.cleaned_data['logo'] != None:
+
+        if form.cleaned_data['logo'] != None:
+            logo = form.cleaned_data['logo']
             logo = Image.open(BytesIO(logo.read()))
             try:
                 path = MEDIA_ROOT+"/image/"+form.cleaned_data['type']+"/"
@@ -125,10 +151,16 @@ class EditClub(FormView):
             except FileExistsError:
                 pass
             logo.save(path+form.cleaned_data['cn']+".png", "PNG")
+            form.cleaned_data['logo'] = form.cleaned_data['cn']+".png"
+
         form.edit_club(pk)
+
         return super(EditClub, self).form_valid(form)
 
 class DeleteClub(View):
+    """
+    View used to remove a club/asso/list
+    """
 
     def get(self, request, pk):
         if not request.ldap_user.is_campus_moderator():
@@ -141,6 +173,9 @@ class DeleteClub(View):
             raise Http404
 
 class MyClubs(View):
+    """
+    View used to list the current user's clubs
+    """
 
     template_name = 'campus/clubs/list_clubs.html'
 
@@ -162,6 +197,9 @@ class MyClubs(View):
         return render(request, self.template_name, context)
 
 class SearchClub(View):
+    """
+    View used to list clubs matching the user request
+    """
 
     template_name='campus/clubs/list_clubs.html'
 
@@ -185,6 +223,9 @@ class SearchClub(View):
         return render(request, self.template_name, context)
 
 class AddPersonToClub(View):
+    """
+    View used to add a person to a specific club
+    """
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
@@ -196,17 +237,19 @@ class AddPersonToClub(View):
             club=StudentOrganisation.get(cn=pk)
         except ObjectDoesNotExist:
             raise Http404
+
         if uid == None:
             user = request.ldap_user
         else:
-            if not request.ldap_user.is_campus_moderator():
-                messages.error(request, _("Vous n'êtes pas modérateur campus"))
+            if not (self.request.ldap_user.is_campus_moderator() or self.request.ldap_user.pk in club.prezs):
+                messages.error(request, _("Vous n'êtes pas modérateur campus ou président de ce club"))
                 return HttpResponseRedirect(reverse('campus:clubs:list'))
             else:
                 try:
                     user = LdapUser.get(uid=uid)
                 except ObjectDoesNotExist:
                     raise Http404
+
         if "tbClub" in club.object_classes and not user.pk in club.members:
             messages.success(request, _("Le membre viens d'être ajouté"))
             club.members.append(user.pk)
@@ -216,33 +259,44 @@ class AddPersonToClub(View):
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 class AddPrezToClub(View):
+    """
+    View used to add a person to a specific club as a prez
+    """
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
-        return super(AddPersonToClub, self).dispatch(*args, **kwargs)
+        return super(AddPrezToClub, self).dispatch(*args, **kwargs)
 
     def get(self, request, pk):
+        uid=request.GET.get('id_user', None)
         if not request.ldap_user.is_campus_moderator():
             messages.error(request, _("Vous n'êtes pas modérateur campus"))
             return HttpResponseRedirect(reverse('campus:clubs:list'))
+
         try:
             club=StudentOrganisation.get(cn=pk)
         except ObjectDoesNotExist:
             raise Http404
+
         try:
             user = LdapUser.get(uid=uid)
         except ObjectDoesNotExist:
             raise Http404
+
         if "tbClub" in club.object_classes and not user.pk in club.prezs:
             messages.success(request, _("Le président viens d'être ajouté"))
             club.prezs.append(user.pk)
             club.save()
         else:
             messages.info(request, _("Cette personne est déjà président(e)"))
+
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 class RemovePersonFromClub(View):
+    """
+    View used to remove a person from a specific club
+    """
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
@@ -257,8 +311,8 @@ class RemovePersonFromClub(View):
         if uid == None:
             user = request.ldap_user
         else:
-            if not request.ldap_user.is_campus_moderator():
-                messages.error(request, _("Vous n'êtes pas modérateur campus"))
+            if not (self.request.ldap_user.is_campus_moderator() or self.request.ldap_user.pk in club.prezs):
+                messages.error(request, _("Vous n'êtes pas modérateur campus ou président de ce club"))
                 return HttpResponseRedirect(reverse('campus:clubs:list'))
             else:
                 try:
@@ -272,3 +326,38 @@ class RemovePersonFromClub(View):
         else:
             messages.info(request, _("Cette personne ne fait pas partie de ce club"))
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+class RequestMembers(View):
+    """
+    View used to request (using ajax or ajaJ :D) the list of users from a club
+    """
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(RequestMembers, self).dispatch(*args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            pk = request.GET.get('pk', None)
+            if pk == None:
+                raise Http404
+            try:
+                club=StudentOrganisation.get(cn=pk)
+            except ObjectDoesNotExist:
+                raise Http404
+            members = []
+            for member in club.members:
+                uid = re.search('uid=([a-z0-9]+),', member).group(1)
+                user = LdapUser.filter(pk=uid)[0]
+                user_json = {}
+                user_json['uid'] = user.uid
+                user_json['full_name'] = '%(first_name)s %(last_name)s' % {
+                    'first_name': user.first_name,
+                    'last_name': user.last_name,
+                }
+                members.append(user_json)
+            data = json.dumps(members)
+            mimetype = 'application/json'
+            return HttpResponse(data, mimetype)
+        else:
+            raise Http404
