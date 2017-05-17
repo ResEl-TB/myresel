@@ -11,9 +11,9 @@ from django_rq import job
 def notify_mailing_list(user, room):
     """
     Notify a club mailing list that a room is reserved
-    :param user: 
-    :param room: 
-    :return: 
+    :param user:
+    :param room:
+    :return:
     """
     # TODO: add reservation start and end
     mail = EmailMessage(
@@ -31,7 +31,7 @@ def notify_mailing_list(user, room):
                     # 'start_date': self.start_time,
                     # 'end_date': self.end_time,
                 },
-        from_email='noreply@resel.fr',
+        from_email='secretaire@resel.fr',
         reply_to=[user.mail],
         to=[room.mailing_list],
     )
@@ -41,9 +41,9 @@ def notify_mailing_list(user, room):
 def notify_moderator(moderator_address, mail_id):
     """
     Notify the campus moderators that an email has arrived
-    :param moderator_address: 
-    :param mail_id: 
-    :return: 
+    :param moderator_address:
+    :param mail_id:
+    :return:
     """
     # TODO: create direct validate lik
     mail = EmailMessage(
@@ -54,7 +54,7 @@ def notify_moderator(moderator_address, mail_id):
               'Have fun,\n' +
               '~ Le gentil bot ResEl ~'
         ),
-        from_email='noreply@resel.fr',
+        from_email='secretaire@resel.fr',
         to=[moderator_address],
     )
     mail.send()
