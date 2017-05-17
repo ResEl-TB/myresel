@@ -72,7 +72,7 @@ class NewClub(FormView):
 
     def form_valid(self, form):
         if not self.request.ldap_user.is_campus_moderator():
-            messages.error(request, _("Vous n'êtes pas modérateur campus"))
+            messages.error(self.request, _("Vous n'êtes pas modérateur campus"))
             return HttpResponseRedirect(reverse('campus:clubs:list'))
         if form.cleaned_data['logo'] != None:
             logo = form.cleaned_data['logo']
@@ -107,8 +107,6 @@ class EditClub(FormView):
             orga = StudentOrganisation.filter(cn=pk)[0]
         except IndexError:
             raise Http404
-        print(request.ldap_user.pk, orga.prezs)
-
         if not (request.ldap_user.is_campus_moderator() or request.ldap_user.pk in orga.prezs):
             messages.error(request, _("Vous n'êtes pas modérateur campus ou président(e) de ce club"))
             return HttpResponseRedirect(reverse('campus:clubs:list'))
@@ -139,7 +137,7 @@ class EditClub(FormView):
             raise Http404
 
         if not (self.request.ldap_user.is_campus_moderator() or self.request.ldap_user.pk in orga.prezs):
-            messages.error(request, _("Vous n'êtes pas modérateur campus ou président(e) de ce club"))
+            messages.error(self.request, _("Vous n'êtes pas modérateur campus ou président(e) de ce club"))
             return HttpResponseRedirect(reverse('campus:clubs:list'))
 
         if form.cleaned_data['logo'] != None:
