@@ -14,6 +14,7 @@ db.sqlite3_admin
 media/image/users_photo/
 media/image/ASSOS/
 media/image/LIST/
+media/image/CLUB/
 
 # Editor auto save file
 .DS_Store

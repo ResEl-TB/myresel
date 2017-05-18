@@ -101,8 +101,8 @@ class EditClub(FormView):
 
     def get(self, request, pk):
         try:
-            orga = StudentOrganisation.filter(cn=pk)[0]
-        except IndexError:
+            orga = StudentOrganisation.get(cn=pk)
+        except ObjectDoesNotExist:
             raise Http404
         if not (request.ldap_user.is_campus_moderator() or request.ldap_user.pk in orga.prezs):
             messages.error(request, _("Vous n'êtes pas modérateur campus ou président(e) de ce club"))
@@ -129,8 +129,8 @@ class EditClub(FormView):
     def form_valid(self, form):
         pk = self.kwargs['pk']
         try:
-            orga = StudentOrganisation.filter(cn=pk)[0]
-        except IndexError:
+            orga = StudentOrganisation.get(cn=pk)
+        except ObjectDoesNotExist:
             raise Http404
 
         if not (self.request.ldap_user.is_campus_moderator() or self.request.ldap_user.pk in orga.prezs):
@@ -203,6 +203,7 @@ class SearchClub(View):
 
     def get(self, request):
         what = request.GET.get('what', '').strip()
+        print(what)
         organisations = StudentOrganisation.filter(name__contains=what)
         clubs = [o for o in organisations if "tbClub" in o.object_classes or "tbClubSport" in o.object_classes]
 
@@ -357,7 +358,7 @@ class RequestMembers(View):
             results = []
             for entry in entries:
                 uid = re.search('uid=([a-z0-9]+),', entry).group(1)
-                user = LdapUser.filter(pk=uid)[0]
+                user = LdapUser.get(pk=uid)
                 user_json = {}
                 user_json['uid'] = user.uid
                 user_json['full_name'] = '%(first_name)s %(last_name)s' % {

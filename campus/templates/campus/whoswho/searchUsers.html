@@ -43,7 +43,7 @@
               <img src="/media/image/users_photo/{{user.photo_file}}" />
             </div>
             {% endif %}
-            <h3>{{ user.first_name }} {{user.last_name}}{{forloo}}</h3>
+            <h3>{{ user.first_name }} {{user.last_name}}</h3>
             <p>Campus de {{ user.campus }}<br>Promo {{user.promo}}</p>
             <a href="{% url "campus:who:user-details" uid=user.uid %}">Details</a>
           </div>
