@@ -35,10 +35,7 @@ def list_clubs(request):
     assos = [o for o in organisations if "tbAsso" in o.object_classes]
     lists = [o for o in organisations if "tbCampagne" in o.object_classes]
 
-    hardLinkAdd = reverse('campus:clubs:add-person', kwargs={'pk': "a"})[:-1]
-    hardLinkDel = reverse('campus:clubs:remove-person', kwargs={'pk': "a"})[:-1]
-    hardLinkAddPrez = reverse('campus:clubs:add-prez', kwargs={'pk': "a"})[:-1]
-    hardLinkWhoUser = reverse('campus:who:user-details', kwargs={'uid': "a"})[:-1]
+    hardLinkAdd, hardLinkDel, hardLinkAddPrez, hardLinkWhoUser = getHardLinks()
 
     return render(
         request,
@@ -177,13 +174,15 @@ class MyClubs(View):
 
     template_name = 'campus/clubs/list_clubs.html'
 
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(MyClubs, self).dispatch(*args, **kwargs)
+
     def get(self, request):
         clubs = StudentOrganisation.all()
         clubs = [c for c in clubs if request.ldap_user.pk in c.members]
 
-        hardLinkAdd = reverse('campus:clubs:add-person', kwargs={'pk': "a"})[:-1]
-        hardLinkDel = reverse('campus:clubs:remove-person', kwargs={'pk': "a"})[:-1]
-        hardLinkAddPrez = reverse('campus:clubs:add-prez', kwargs={'pk': "a"})[:-1]
+        hardLinkAdd, hardLinkDel, hardLinkAddPrez, hardLinkWhoUser = getHardLinks()
 
         context = {
             'clubs': clubs,
@@ -191,6 +190,7 @@ class MyClubs(View):
             'hardLinkAdd': hardLinkAdd,
             'hardLinkDel': hardLinkDel,
             'hardLinkAddPrez': hardLinkAddPrez,
+            'hardLinkWhoUser': hardLinkWhoUser,
         }
         return render(request, self.template_name, context)
 
@@ -206,9 +206,11 @@ class SearchClub(View):
         organisations = StudentOrganisation.filter(name__contains=what)
         clubs = [o for o in organisations if "tbClub" in o.object_classes or "tbClubSport" in o.object_classes]
 
-        hardLinkAdd = reverse('campus:clubs:add-person', kwargs={'pk': "a"})[:-1]
-        hardLinkDel = reverse('campus:clubs:remove-person', kwargs={'pk': "a"})[:-1]
-        hardLinkAddPrez = reverse('campus:clubs:add-prez', kwargs={'pk': "a"})[:-1]
+        if not clubs:
+            messages.info(request, _("Aucun club ne correspond à votre recherche"))
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+        hardLinkAdd, hardLinkDel, hardLinkAddPrez, hardLinkWhoUser = getHardLinks()
 
         context = {
             'clubs': clubs,
@@ -216,6 +218,7 @@ class SearchClub(View):
             'hardLinkAdd': hardLinkAdd,
             'hardLinkDel': hardLinkDel,
             'hardLinkAddPrez': hardLinkAddPrez,
+            'hardLinkWhoUser': hardLinkWhoUser,
         }
 
         return render(request, self.template_name, context)
@@ -343,9 +346,17 @@ class RequestMembers(View):
                 club=StudentOrganisation.get(cn=pk)
             except ObjectDoesNotExist:
                 raise Http404
-            members = []
-            for member in club.members:
-                uid = re.search('uid=([a-z0-9]+),', member).group(1)
+
+            #We check if the request is for memebers or prezs
+            if request.path == reverse("campus:clubs:request_members"):
+                entries = club.members
+            elif request.path == reverse("campus:clubs:request_prezs"):
+                entries = club.prezs
+            else:
+                raise Http404 #U never know
+            results = []
+            for entry in entries:
+                uid = re.search('uid=([a-z0-9]+),', entry).group(1)
                 user = LdapUser.filter(pk=uid)[0]
                 user_json = {}
                 user_json['uid'] = user.uid
@@ -353,9 +364,21 @@ class RequestMembers(View):
                     'first_name': user.first_name,
                     'last_name': user.last_name,
                 }
-                members.append(user_json)
-            data = json.dumps(members)
+                results.append(user_json)
+            data = json.dumps(results)
             mimetype = 'application/json'
             return HttpResponse(data, mimetype)
         else:
             raise Http404
+
+def getHardLinks():
+    """
+    View used to retrieve various hard links
+    """
+
+    hardLinkAdd = reverse('campus:clubs:add-person', kwargs={'pk': "a"})[:-1]
+    hardLinkDel = reverse('campus:clubs:remove-person', kwargs={'pk': "a"})[:-1]
+    hardLinkAddPrez = reverse('campus:clubs:add-prez', kwargs={'pk': "a"})[:-1]
+    hardLinkWhoUser = reverse('campus:who:user-details', kwargs={'uid': "a"})[:-1]
+
+    return(hardLinkAdd, hardLinkDel, hardLinkAddPrez, hardLinkWhoUser)

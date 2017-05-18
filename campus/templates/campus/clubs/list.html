@@ -57,9 +57,18 @@
                     {% if club.website %}
                     <p><a href="http://{{ club.website }}">En savoir plus</a></p>
                     {% endif %}
-                    <a data-toggle="collapse" data-target="#membres_{{club.cn}}" id="membres_{{club.cn}}_btn"><span class="fa fa-angle-double-down"></span> Membres <span class="fa fa-angle-double-down"></span></a>
-                    <ul class="collapse" id="membres_{{club.cn}}">
-                    </ul>
+                    {% if user.is_authenticated%}
+                    <p>
+                        <a data-toggle="collapse" data-target="#prezs_{{club.cn}}" id="prezs_{{club.cn}}_btn"><span class="fa fa-angle-double-down"></span> Présidents <span class="fa fa-angle-double-down"></span></a>
+                        <ul class="collapse" id="prezs_{{club.cn}}">
+                        </ul>
+                    </p>
+                    <p>
+                        <a data-toggle="collapse" data-target="#membres_{{club.cn}}" id="membres_{{club.cn}}_btn"><span class="fa fa-angle-double-down"></span> Membres <span class="fa fa-angle-double-down"></span></a>
+                        <ul class="collapse" id="membres_{{club.cn}}">
+                        </ul>
+                    </p>
+                    {% endif %}
                 </div>
                 <div class="col-md-3">
                     {% if request.user.is_authenticated %}
@@ -253,21 +262,33 @@
       });
     })
 
-    function fetchMembers(pk) {
+    {% if user.is_authenticated%}
+    function fetchMembers(pk, type) {
       var get_data = {'pk':pk};
+      var correct_url;
+      if(type=="members"){
+          correct_url = "{% url 'campus:clubs:request_members'%}";
+      }else {
+          correct_url = "{% url 'campus:clubs:request_prezs'%}";
+      }
       $.ajax({
-        url:"{% url 'campus:clubs:request_members'%}",
+        url:correct_url,
         data: get_data,
         dataType:"json",
         success:function(data) {
           for(i=0; i<data.length; i++){
+            //WHY DOES JS SUCK ? :'(
             var node = document.createElement("LI");
             var link = document.createElement("A");
             var textlink = document.createTextNode(data[i]['full_name']);
             link.href="{{hardLinkWhoUser}}"+data[i]['uid'];
             link.appendChild(textlink);
             node.appendChild(link);
-            document.getElementById("membres_"+pk).appendChild(node);
+            if(type=="members"){
+                document.getElementById("membres_"+pk).appendChild(node);
+            }else {
+                document.getElementById("prezs_"+pk).appendChild(node);
+            }
           };
         }
       });
@@ -275,7 +296,13 @@
 
     {% for club in clubs %}
         var btn_{{club.cn}} = document.getElementById("membres_{{club.cn}}_btn");
-        $(btn_{{club.cn}}).one("click", function(){fetchMembers("{{club.cn}}"); btn_{{club.cn}}.onclick=null;});
+        $(btn_{{club.cn}}).one("click", function(){fetchMembers("{{club.cn}}", "members"); btn_{{club.cn}}.onclick=null;});
     {% endfor %}
+
+    {% for club in clubs %}
+        var btn_{{club.cn}} = document.getElementById("prezs_{{club.cn}}_btn");
+        $(btn_{{club.cn}}).one("click", function(){fetchMembers("{{club.cn}}", "prezs"); btn_{{club.cn}}.onclick=null;});
+    {% endfor %}
+    {% endif %}
 </script>
 {% endblock %}
