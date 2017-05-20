@@ -1,4 +1,5 @@
 import itertools
+import logging
 
 from django.conf import settings
 from django.template.defaultfilters import slugify
@@ -9,6 +10,7 @@ from fonctions import generic
 from .generic import hash_passwd
 from .network import get_campus, get_mac, update_all
 
+logger = logging.getLogger("default")
 
 def new_connection():
     """
@@ -24,8 +26,8 @@ def new_connection():
 
 
 def search(dn, query, attr=None):
-    """ Fonction pour rechercher dans le ldap une entrée particulière 
-        
+    """ Fonction pour rechercher dans le ldap une entrée particulière
+
         - dn : le DN dans lequel faire la recherche
         - query : la recherche en elle-même (uid, host, ip, mac, etc.)
         - attr : les attributs à extraire de la fiche LDAP
@@ -91,9 +93,35 @@ def get_status(ip):
     # Computer not in the ldap
     return 'unknown'
 
+
+def ip_in_ldap(ip_suff):
+    """Check if an ip suffix is in the ldap"""
+    return search(settings.LDAP_DN_MACHINES, '(&(ipHostNumber=%s))' % ip_suff)
+
+
 def get_free_ip(low, high):
     """ Retreive a free ip from the ldap """
+    import redis
+    try:
+        r = redis.Redis(
+            host=settings.REDIS_HOST,
+            port=settings.REDIS_PORT,
+            password=settings.REDIS_PASSWORD,
+        )
+        while True:
+            ip_suff = r.spop(settings.REDIS_AV_IPS_KEY)
+            if ip_suff is None:
+                logger.warning('No ip available in redis ips buffer, consider increase the buffer size')
+                break
+            ip_suff = ip_suff.decode('utf-8')
+            if not ip_in_ldap(ip_suff):
+                logger.info('IP %s used as free ip' % ip_suff)
+                return ip_suff
 
+    except redis.exceptions.ConnectionError as e:
+        logger.error('Connection the the redis server failed')
+
+    logger.info('Fallback to default ip fetching')
     return next(
         "%i.%i" % ip
         for ip in itertools.product(range(low, high+1), range(1, 255))
@@ -133,9 +161,9 @@ def get_free_alias(name, prefix='pc'):
 def create_admin(uid='lcarr', pwd="blahblah"):
     """
     Create a new administrator, should be used for tests only
-    :param uid: 
-    :param pwd: 
-    :return: 
+    :param uid:
+    :param pwd:
+    :return:
     """
     if not settings.DEBUG and not settings.TESTING:
         raise Exception("MUST NOT BE CALLED IN PRODUCTION")

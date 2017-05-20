@@ -59,7 +59,7 @@ class NewsCase(TestCase):
 
     def test_simple_load(self):
         r = self.client.get(reverse("news"),
-                                   HTTP_HOST="10.0.3.99", follow=True)
+                                   HTTP_HOST="10.0.3.94", follow=True)
 
         # news list page
         self.assertEqual(200, r.status_code)
@@ -69,7 +69,7 @@ class NewsCase(TestCase):
 
         # News detail page
         r = self.client.get(reverse("piece-of-news", args=[self.news[0].pk]),
-                            HTTP_HOST="10.0.3.99", follow=True)
+                            HTTP_HOST="10.0.3.94", follow=True)
 
         self.assertEqual(200, r.status_code)
         self.assertTemplateUsed(r, "pages/piece_of_news.html")
@@ -93,7 +93,7 @@ class HomeViewCase(TestCase):
 
     def test_simple_load(self):
         r = self.client.get(reverse("home"),
-                                   HTTP_HOST="10.0.3.99", follow=True)
+                                   HTTP_HOST="10.0.3.94", follow=True)
 
         self.assertEqual(200, r.status_code)
         self.assertTemplateUsed(r, "pages/home/home.html")
@@ -118,7 +118,7 @@ class ServiceViewCase(TestCase):
 
     def test_simple_load(self):
         r = self.client.get(reverse("services"),
-                                   HTTP_HOST="10.0.3.99", follow=True)
+                                   HTTP_HOST="10.0.3.94", follow=True)
 
         self.assertEqual(200, r.status_code)
         self.assertTemplateUsed(r, "pages/service.html")

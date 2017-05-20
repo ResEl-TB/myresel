@@ -81,6 +81,7 @@ DB_QOS_PASSWORD = "blah"
 
 REDIS_HOST = 'localhost'
 REDIS_PORT = 6379
+REDIS_PASSWORD = None
 REDIS_DB = 0
 
 

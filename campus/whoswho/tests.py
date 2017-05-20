@@ -20,7 +20,7 @@ class HomeTestCase(TestCase):
 
     def testSimpleLoad(self):
         r = self.client.get(reverse("campus:who:user-home"),
-                                   HTTP_HOST="10.0.3.99")
+                                   HTTP_HOST="10.0.3.94")
         self.assertEqual(200, r.status_code)
 
     def testEditUserInfo(self):
@@ -36,7 +36,7 @@ class HomeTestCase(TestCase):
                 'birth_date' : user.birth_date,
                 'is_public' : user.is_public,
             },
-            HTTP_HOST="10.0.3.99",
+            HTTP_HOST="10.0.3.94",
             follow = True
         )
 
@@ -77,7 +77,7 @@ class SearchTestCase(TestCase):
                 'what': "Alexandre",
                 'is_approx': False
             },
-            HTTP_HOST="10.0.3.99",
+            HTTP_HOST="10.0.3.94",
             follow = True
         )
         self.assertEqual(200, r.status_code)
@@ -95,7 +95,7 @@ class UserDetailTestCase(TestCase):
         user = LdapUser.get(pk="jbvallad")
         r = self.client.get(
             reverse("campus:who:user-details", kwargs={'uid': user.uid} ),
-            HTTP_HOST="10.0.3.99",
+            HTTP_HOST="10.0.3.94",
             follow = True
         )
         self.assertEqual(200, r.status_code)
@@ -103,7 +103,7 @@ class UserDetailTestCase(TestCase):
     def TestUserDoesNotExists(self):
         r2 = self.client.get(
             reverse("campus:who:user-details", kwargs={'uid': "tfwIDoNotExist"} ),
-            HTTP_HOST="10.0.3.99",
+            HTTP_HOST="10.0.3.94",
             follow = True
         )
         self.assertEqual(404, r2.status_code)
