@@ -73,7 +73,6 @@ class Command(BaseCommand):
                             "Ce mail a été envoyé automatiquement suite au lancement de la commande" +
                             " '/srv/www/resel.fr/manage.py check-payments'",
                         from_email='treso-bot@resel.fr',
-                        reply_to=['noreply@resel.fr'],
                         to=['tresorier@resel.fr'],
                     )
                     mail.send()
@@ -97,7 +96,7 @@ class Command(BaseCommand):
                         to=[user.mail[0]],
                     )
                     mail.send()
-                        
+
                 except stripe.error.RateLimitError as e:
                     pass
 

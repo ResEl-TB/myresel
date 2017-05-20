@@ -217,14 +217,6 @@ DATABASES = {
 DATABASE_ROUTERS = ['devices.models.QoSRouter']
 
 
-class DisableMigrations(object):
-    def __contains__(self, item):
-        return True
-
-    def __getitem__(self, item):
-        return "notmigrations"
-
-
 ####
 # DIRTY HACK FOR QoS DATABASE
 ####
@@ -257,10 +249,6 @@ class UnManagedModelTestRunner(DiscoverRunner):
         # reset unmanaged models
         for m in self.unmanaged_models:
             m._meta.managed = False
-
-if 'test' in sys.argv or 'test_coverage' in sys.argv:  # Covers regular testing and django-coverage
-    MIGRATION_MODULES = DisableMigrations()
-    TEST_RUNNER = 'myresel.settings.UnManagedModelTestRunner'
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators

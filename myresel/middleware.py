@@ -165,7 +165,8 @@ class InscriptionNetworkHandler(object):
         # Vlan inscription
         if vlan == '995':
             # Preliminary check
-            if zone != 'Brest-inscription':
+
+            if 'inscription' not in zone:
                 logger.warning("IP et VLAN non concordants"
                              "\n IP : %s"
                              "\n HOST : %s"
