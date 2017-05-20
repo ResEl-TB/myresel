@@ -1,0 +1,1 @@
+7 14 * * * www-data /srv/www/resel.fr/env/bin/python /srv/www/resel.fr/manage.py calculate_free_ip >/dev/null 2>&1
