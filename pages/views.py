@@ -218,10 +218,6 @@ def inscription_zone_info(request):
                     extra={"device_mac": mac}
             )
 
-    if "inscription" not in zone:
-        return HttpResponseRedirect(reverse("home"))
-
-
     vlan = request.network_data['vlan']
     is_logged_in = request.user.is_authenticated()
     return render(

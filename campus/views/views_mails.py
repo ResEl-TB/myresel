@@ -37,7 +37,7 @@ def send_email_view(request):
                      "Cordialement,\n" +
                      "~ le gentil bot ResEl ~\n\n"
                      "Ce mail a été envoyé automatiquement, merci de ne pas y répondre.\n",
-                from_email="noreply@resel.fr",
+                from_email="secretaire@resel.fr",
                 to=[m.sender]
             )
             mail.send()
@@ -133,7 +133,8 @@ def rejectView(request, mail):
                      explanation + "\n\n" +
                      "Cordialement,\n" +
                      "~ le gentil bot ResEl ~",
-                from_email="noreply@resel.fr",
+                from_email="secretaire@resel.fr",
+                reply_to="support@resel.fr",
                 to=[m.sender]
             )
             notify.send()

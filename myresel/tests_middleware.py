@@ -56,15 +56,16 @@ class AdminMiddlewareTestCase(TestCase):
     def test_full_request_admin(self):
         self.client.login(username="lcarr", password="blahblah")
         self.client.get(reverse("home"),
-                        HTTP_HOST="10.0.3.99", follow=True)
+                        HTTP_HOST="10.0.3.94", follow=True)
         # Double request because it is not instant
         r = self.client.get(reverse("home"),
-                            HTTP_HOST="10.0.3.99", follow=True)
+                            HTTP_HOST="10.0.3.94", follow=True)
         self.assertContains(r, 'href="/gestion"')
 
 
     def test_full_request_not_admin(self):
         self.client.login(username="amanoury", password="blahblah")
         r = self.client.get(reverse("home"),
-                            HTTP_HOST="10.0.3.99", follow=True)
+                            HTTP_HOST="10.0.3.94", follow=True)
+        self.assertEquals(200, r.status_code)
         self.assertNotContains(r, 'href="/gestion"')

@@ -43,6 +43,12 @@ NET_RENNES_GUEST = ip_network("172.23.228.0/23")  # Not used 2017-02-06
 NET_RENNES_ADM = ip_network("172.23.2.0/23")
 NET_RENNES_SW = ip_network("172.23.0.0/23")
 
+# Number of available ip to insert into the Redis buffer
+# The bigger the better but it may be slower
+BUFFERED_AV_IPS = 100
+
+# Redis key in which the potential available ips are
+REDIS_AV_IPS_KEY = 'av_ips'
 
 # Mails
 ADMINS = [
@@ -211,14 +217,6 @@ DATABASES = {
 DATABASE_ROUTERS = ['devices.models.QoSRouter']
 
 
-class DisableMigrations(object):
-    def __contains__(self, item):
-        return True
-
-    def __getitem__(self, item):
-        return "notmigrations"
-
-
 ####
 # DIRTY HACK FOR QoS DATABASE
 ####
@@ -251,10 +249,6 @@ class UnManagedModelTestRunner(DiscoverRunner):
         # reset unmanaged models
         for m in self.unmanaged_models:
             m._meta.managed = False
-
-if 'test' in sys.argv or 'test_coverage' in sys.argv:  # Covers regular testing and django-coverage
-    MIGRATION_MODULES = DisableMigrations()
-    TEST_RUNNER = 'myresel.settings.UnManagedModelTestRunner'
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
@@ -327,6 +321,7 @@ RQ_QUEUES = {
        'HOST': REDIS_HOST,
        'PORT': REDIS_PORT,
        'DB': REDIS_DB,
+
    },
 }
 RQ_SHOW_ADMIN_LINK = True
