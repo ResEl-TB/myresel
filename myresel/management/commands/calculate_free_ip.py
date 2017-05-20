@@ -1,5 +1,6 @@
 import redis
 import ipaddress
+import re
 from django.core.management.base import BaseCommand, CommandError
 from myresel import settings
 from fonctions import ldap
@@ -17,6 +18,10 @@ class Command(BaseCommand):
             )
             available_suffixes = set()
             ip_range = list(settings.NET_BREST_USERS.hosts())
+
+            # La ligne qui suit est un putain hack de merde parce que le ResEl c'est de la merde
+            # Apprennez à faire du réseau avant de faire des subnet.
+            ip_range = [ip for ip in ip_range if re.match(r'^172\.22\.((2[01][0-9])|(22[0-3]))\.*', str(ip))]
             shuffle(ip_range)
             for ip in ip_range:
                 ip_suffix = '.'.join(str(ip).split('.')[2:])
