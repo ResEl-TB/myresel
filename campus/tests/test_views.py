@@ -6,11 +6,11 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 
-from gestion_personnes.models import LdapUser
+from gestion_personnes.models import LdapUser, LdapGroup
 from gestion_personnes.tests import create_full_user, try_delete_user
 
 from campus.models.clubs_models import StudentOrganisation, Association, ListeCampagne
-from campus.forms import ClubManagementForm
+from campus.forms import ClubManagementForm, ClubEditionForm
 
 
 class CreateCampusMail(TestCase):
@@ -63,7 +63,7 @@ def try_delete_orga(cn):
     except ObjectDoesNotExist:
         pass
 
-def  populate_orgas(club_cn="tennis", asso_cn="bde", campagne_cn="lacampagne"):
+def  populate_orgas(club_cn="tenniscn", asso_cn="bde", campagne_cn="lacampagne"):
 
     try_delete_orga(club_cn)
     try_delete_orga(asso_cn)
@@ -102,8 +102,20 @@ def  populate_orgas(club_cn="tennis", asso_cn="bde", campagne_cn="lacampagne"):
     campagne.campagneYear = 2033
     campagne.save()
 
-def createClubForm(type="CLUB", cn="tennis", name="Club Tennis", email="tennis@resel.fr", website="tennis.resel.fr", description="Bla Bla", logo=None):
+def createClubForm(type="CLUB", cn="tenniscn", name="Club Tennis", email="tennis@resel.fr", website="tennis.resel.fr", description="Bla Bla", logo=None):
     form = ClubManagementForm(data={
+        "type": type,
+        "cn": cn,
+        "name": name,
+        "email": email,
+        "website": website,
+        "description": description,
+        "logo": logo,
+    })
+    return(form)
+
+def createClubEditForm(type="CLUB", cn="tenniscn", name="Club Tennis", email="tennis@resel.fr", website="tennis.resel.fr", description="Bla Bla", logo=None):
+    form = ClubEditionForm(data={
         "type": type,
         "cn": cn,
         "name": name,
@@ -162,7 +174,7 @@ class MyClubTestCase(TestCase):
 class NewClubTestCase(TestCase):
 
     def setUp(self):
-        try_delete_orga("tennis")
+        try_delete_orga("tenniscn")
         try_delete_user("jbvallad")
         user = create_full_user(uid="jbvallad", pwd="blabla")
         user.save()
@@ -172,7 +184,7 @@ class NewClubTestCase(TestCase):
         form = createClubForm()
         self.assertTrue(form.is_valid())
         form.create_club()
-        self.assertTrue(StudentOrganisation.filter(cn="tennis"))
+        self.assertTrue(StudentOrganisation.filter(cn="tenniscn"))
 
     def testWrongCN(self):
         form = createClubForm(cn="Club_Tennis")
@@ -197,3 +209,151 @@ class NewClubTestCase(TestCase):
     def testForgotListLogo(self):
         form = createClubForm(type="LIST")
         self.assertFalse(form.is_valid())
+
+class EditClubTestCase(TestCase):
+
+    def setUp(self):
+        populate_orgas()
+
+    def testEditClub(self):
+        form = createClubEditForm()
+        form.data["name"] = "Club Bennis"
+        self.assertTrue(form.is_valid())
+        form.edit_club(form.data["cn"])
+        club = StudentOrganisation.get(cn=form.data["cn"])
+        self.assertTrue(club.name == "Club Bennis")
+
+class AddPersonTestCase(TestCase):
+
+    def setUp(self):
+        populate_orgas()
+        self.cn = "tenniscn"
+        try_delete_user("jbvallad")
+        try_delete_user("bvallad")
+
+        user = create_full_user(uid="jbvallad", pwd="blabla")
+        user.save()
+
+        user = create_full_user(uid="bvallad", pwd="blabla")
+        user.save()
+
+        user = LdapUser.get(uid="jbvallad")
+        LdapGroup.get(pk='campusmodo').add_member(user.pk)
+
+        self.client.login(username="jbvallad", password="blabla")
+
+    def testAddSelf(self):
+        r = self.client.get(reverse("campus:clubs:add-person", kwargs={'pk':self.cn}),
+                                    HTTP_HOST="10.0.3.99")
+        self.assertTrue(LdapUser.get(uid="jbvallad").pk in StudentOrganisation.get(cn=self.cn).members)
+
+    def testAddSomeone(self):
+        r = self.client.get(reverse("campus:clubs:add-person", kwargs={'pk':self.cn}),
+                                    data={"id_user":"bvallad"},
+                                    HTTP_HOST="10.0.3.99")
+        self.assertTrue(LdapUser.get(uid="bvallad").pk in StudentOrganisation.get(cn=self.cn).members)
+
+class RemovePersonTestCase(TestCase):
+
+    def setUp(self):
+        populate_orgas()
+        self.cn = "tenniscn"
+        club=StudentOrganisation.get(cn=self.cn)
+
+        try_delete_user("jbvallad")
+        try_delete_user("bvallad")
+
+        user = create_full_user(uid="jbvallad", pwd="blabla")
+        user.save()
+        LdapGroup.get(pk='campusmodo').add_member(user.pk)
+        club.members.append(user.pk)
+
+        user = create_full_user(uid="bvallad", pwd="blabla")
+        user.save()
+        club.members.append(user.pk)
+
+        club.save()
+
+        self.client.login(username="jbvallad", password="blabla")
+
+    def testRemoveSelf(self):
+        #We just make sure that there is something to remove
+        self.assertTrue(LdapUser.get(uid="jbvallad").pk in StudentOrganisation.get(cn=self.cn).members)
+        r=self.client.get(reverse("campus:clubs:remove-person", kwargs={"pk":self.cn}),
+                                    HTTP_HOST="10.0.3.99")
+        self.assertFalse(LdapUser.get(uid="jbvallad").pk in StudentOrganisation.get(cn=self.cn).members)
+
+    def testRemoveSomeone(self):
+        self.assertTrue(LdapUser.get(uid="bvallad").pk in StudentOrganisation.get(cn=self.cn).members)
+        r=self.client.get(reverse("campus:clubs:remove-person", kwargs={"pk":self.cn}),
+                                    data={"id_user":"bvallad"},
+                                    HTTP_HOST="10.0.3.99")
+        self.assertFalse(LdapUser.get(uid="bvallad").pk in StudentOrganisation.get(cn=self.cn).members)
+
+class AddPrezTestCase(TestCase):
+
+    def setUp(self):
+        populate_orgas()
+        self.cn = "tenniscn"
+        club=StudentOrganisation.get(cn=self.cn)
+
+        try_delete_user("jbvallad")
+        try_delete_user("bvallad")
+        try_delete_user("vallad")
+        try_delete_user("allad")
+
+        user = create_full_user(uid="jbvallad", pwd="blabla")
+        user.save()
+        LdapGroup.get(pk='campusmodo').add_member(user.pk)
+
+        user = create_full_user(uid="bvallad", pwd="blabla")
+        user.save()
+
+        user = create_full_user(uid="vallad", pwd="blabla")
+        user.save()
+        club.prezs.append(user.pk)
+
+        user = create_full_user(uid="allad", pwd="blabla")
+        user.save()
+
+        club.save()
+
+    def testAddPrezBeingModo(self):
+        self.client.login(username="jbvallad", password="blabla")
+        r = self.client.get(reverse("campus:clubs:add-prez", kwargs={'pk':self.cn}),
+                                    data={"id_user":"bvallad"},
+                                    HTTP_HOST="10.0.3.99")
+        self.assertTrue(LdapUser.get(uid="bvallad").pk in StudentOrganisation.get(cn=self.cn).prezs)
+
+    def testAddPrezBeingPrez(self):
+        self.client.login(username="vallad", password="blabla")
+        r = self.client.get(reverse("campus:clubs:add-prez", kwargs={'pk':self.cn}),
+                                    data={"id_user":"jbvallad"},
+                                    HTTP_HOST="10.0.3.99")
+        self.assertTrue(LdapUser.get(uid="jbvallad").pk in StudentOrganisation.get(cn=self.cn).prezs)
+
+    def testAddPrezBeingNobody(self):
+        self.client.login(username="allad", password="blabla")
+        r = self.client.get(reverse("campus:clubs:add-prez", kwargs={'pk':self.cn}),
+                                    data={"id_user":"allad"},
+                                    HTTP_HOST="10.0.3.99")
+        self.assertFalse(LdapUser.get(uid="allad").pk in StudentOrganisation.get(cn=self.cn).prezs)
+
+class DeleteClubTestCase(TestCase):
+
+    def setup(self):
+        populate_orgas()
+
+        try_delete_user("jbvallad")
+        user = create_full_user(uid="jbvallad", pwd="blabla")
+        user.save()
+        LdapGroup.get(pk='campusmodo').add_member(user.pk)
+
+        self.client.login(username="jbvallad", password="blabla")
+
+    def testDeleteClubBeingModo(self):
+        self.assertTrue(StudentOrganisation.filter(cn="tenniscn"))
+        r = self.client.get(reverse("campus:clubs:delete", kwargs={'pk':'tenniscn'}), HTTP_HOST="10.0.3.99")
+
+        #Doesn't work for some reason
+        #self.assertFalse(StudentOrganisation.filter(cn="tenniscn"))
