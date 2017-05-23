@@ -210,3 +210,8 @@ class LdapGroup(ldapback.models.LdapModel):
             # pylint: disable=not-an-iterable
             return uid in [member.split(',')[0].split('uid=')[1] for member in self.members]
         return False
+
+    def add_member(self, pk):
+        if pk not in self.members:
+            self.members.append(pk)
+            self.save()
