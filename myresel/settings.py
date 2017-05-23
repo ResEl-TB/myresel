@@ -321,7 +321,7 @@ RQ_QUEUES = {
        'HOST': REDIS_HOST,
        'PORT': REDIS_PORT,
        'DB': REDIS_DB,
-
+       'PASSWORD': REDIS_PASSWORD,
    },
 }
 RQ_SHOW_ADMIN_LINK = True
