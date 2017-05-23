@@ -52,7 +52,6 @@ def list_clubs(request):
         }
     )
 
-# TODO : gestion des droits des prezs
 class NewClub(FormView):
     """
     View used to add a new club, list or asso. It shares the same template used
@@ -103,7 +102,7 @@ class EditClub(FormView):
         try:
             orga = StudentOrganisation.get(cn=pk)
         except ObjectDoesNotExist:
-            raise Http404
+            raise Http404("Aucun club trouvé")
         if not (request.ldap_user.is_campus_moderator() or request.ldap_user.pk in orga.prezs):
             messages.error(request, _("Vous n'êtes pas modérateur campus ou président(e) de ce club"))
             return HttpResponseRedirect(reverse('campus:clubs:list'))
@@ -131,7 +130,7 @@ class EditClub(FormView):
         try:
             orga = StudentOrganisation.get(cn=pk)
         except ObjectDoesNotExist:
-            raise Http404
+            raise Http404("Aucun club trouvé")
 
         if not (self.request.ldap_user.is_campus_moderator() or self.request.ldap_user.pk in orga.prezs):
             messages.error(self.request, _("Vous n'êtes pas modérateur campus ou président(e) de ce club"))
@@ -157,15 +156,19 @@ class DeleteClub(View):
     View used to remove a club/asso/list
     """
 
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(MyClubs, self).dispatch(*args, **kwargs)
+
     def get(self, request, pk):
         if not request.ldap_user.is_campus_moderator():
             messages.error(request, _("Vous n'êtes pas modérateur campus"))
-            return HttpResponseRedirect(reverse('campus:clubs:list'))
+            return HttpResponseRedirect(reverse('campus:who:home'))
         try:
             StudentOrganisation.get(cn=pk).delete()
             return redirect('campus:clubs:list')
         except ObjectDoesNotExist:
-            raise Http404
+            raise Http404("Aucun club trouvé")
 
 class MyClubs(View):
     """
@@ -238,7 +241,7 @@ class AddPersonToClub(View):
         try:
             club=StudentOrganisation.get(cn=pk)
         except ObjectDoesNotExist:
-            raise Http404
+            raise Http404("Aucun club trouvé")
 
         if uid == None:
             user = request.ldap_user
@@ -250,7 +253,7 @@ class AddPersonToClub(View):
                 try:
                     user = LdapUser.get(uid=uid)
                 except ObjectDoesNotExist:
-                    raise Http404
+                    raise Http404("L'utilisateur n'éxiste pas")
 
         if "tbClub" in club.object_classes and not user.pk in club.members:
             messages.success(request, _("Le membre viens d'être ajouté"))
@@ -271,24 +274,24 @@ class AddPrezToClub(View):
 
     def get(self, request, pk):
         uid=request.GET.get('id_user', None)
-        if not request.ldap_user.is_campus_moderator():
-            messages.error(request, _("Vous n'êtes pas modérateur campus"))
-            return HttpResponseRedirect(reverse('campus:clubs:list'))
 
         try:
             club=StudentOrganisation.get(cn=pk)
         except ObjectDoesNotExist:
-            raise Http404
+            raise Http404("Aucun club trouvé")
 
+        if not (request.ldap_user.is_campus_moderator() or request.ldap_user.pk in club.prezs):
+            messages.error(request, _("Vous n'êtes pas modérateur campus"))
+            return HttpResponseRedirect(reverse('campus:clubs:list'))
         try:
             user = LdapUser.get(uid=uid)
         except ObjectDoesNotExist:
-            raise Http404
+            raise Http404("L'utilisateur n'éxiste pas")
 
         if "tbClub" in club.object_classes and not user.pk in club.prezs:
-            messages.success(request, _("Le président viens d'être ajouté"))
             club.prezs.append(user.pk)
             club.save()
+            messages.success(request, _("Le président viens d'être ajouté"))
         else:
             messages.info(request, _("Cette personne est déjà président(e)"))
 
@@ -309,7 +312,7 @@ class RemovePersonFromClub(View):
         try:
             club=StudentOrganisation.get(cn=pk)
         except ObjectDoesNotExist:
-            raise Http404
+            raise Http404("Aucun club trouvé")
         if uid == None:
             user = request.ldap_user
         else:
@@ -320,7 +323,7 @@ class RemovePersonFromClub(View):
                 try:
                     user = LdapUser.get(uid=uid)
                 except ObjectDoesNotExist:
-                    raise Http404
+                    raise Http404("L'utilisateur n'éxiste pas")
         if "tbAsso" not in club.object_classes and user.pk in club.members:
             club.members.remove(user.pk)
             club.save()
@@ -331,7 +334,7 @@ class RemovePersonFromClub(View):
 
 class RequestMembers(View):
     """
-    View used to request (using ajax or ajaJ :D) the list of users from a club
+    View used to request (using ajax) the list of users from a club
     """
 
     @method_decorator(login_required)
@@ -342,11 +345,11 @@ class RequestMembers(View):
         if request.is_ajax():
             pk = request.GET.get('pk', None)
             if pk == None:
-                raise Http404
+                raise Http404("")
             try:
                 club=StudentOrganisation.get(cn=pk)
             except ObjectDoesNotExist:
-                raise Http404
+                raise Http404("")
 
             #We check if the request is for memebers or prezs
             if request.path == reverse("campus:clubs:request_members"):
@@ -354,7 +357,7 @@ class RequestMembers(View):
             elif request.path == reverse("campus:clubs:request_prezs"):
                 entries = club.prezs
             else:
-                raise Http404 #U never know
+                raise Http404("") #U never know
             results = []
             for entry in entries:
                 uid = re.search('uid=([a-z0-9]+),', entry).group(1)
@@ -370,7 +373,7 @@ class RequestMembers(View):
             mimetype = 'application/json'
             return HttpResponse(data, mimetype)
         else:
-            raise Http404
+            raise Http404("")
 
 def getHardLinks():
     """

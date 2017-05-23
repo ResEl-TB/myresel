@@ -285,12 +285,12 @@ class ClubEditionForm(ClubManagementForm):
         logo = self.cleaned_data['logo']
         return(logo)
     def edit_club(self, pk):
-        club = StudentOrganisation.filter(cn=pk)[0]
+        club = StudentOrganisation.get(cn=pk)
         club.name = self.cleaned_data['name']
         club.description = self.cleaned_data['description']
         club.email = self.cleaned_data['email']
         club.website = self.cleaned_data['website']
-        club.logo = self.cleaned_data[""]
+        club.logo = self.cleaned_data["logo"]
         club.save()
 
 

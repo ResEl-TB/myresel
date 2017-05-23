@@ -41,9 +41,6 @@ class Association(StudentOrganisation):
     description = LdapCharField(db_column='description', object_classes=['studentOrganisation', 'tbAsso'])
     logo = LdapCharField(db_column='logo', object_classes=['studentOrganisation', 'tbAsso'])
 
-    def __str__(self):
-        return self.name
-
 class ListeCampagne(StudentOrganisation):
     """
     The class having all the element for a liste
