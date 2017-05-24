@@ -406,8 +406,13 @@ DEBUG_LOGGING_CONF = {
     },
 }
 
+HTMLVALIDATOR_VNU_URL = 'http://localhost:8888/'
 
 if DEBUG or TESTING:
     LOGGING = DEBUG_LOGGING_CONF
+    HTMLVALIDATOR_ENABLED = True
+    HTMLVALIDATOR_OUTPUT = 'stdout'
+    if HTMLVALIDATOR_ENABLED:
+       MIDDLEWARE += ("myresel.middleware.HTMLValidator",)
 else:
     LOGGING = PROD_LOGGING_CONF

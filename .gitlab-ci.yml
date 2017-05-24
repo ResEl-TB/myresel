@@ -60,6 +60,7 @@ test_django:
   artifacts:
     paths:
       - htmlcov/
+      - htmlvalidation/
   stage: test
   before_script:
     - source .install/scripts/install_essentials.sh
@@ -70,6 +71,7 @@ test_django:
     - pip3 install -qUr requirements.txt
     - python3 manage.py populate_redis
     - python3 manage.py calculate_free_ip
+    - java -cp .install/bin/vnu.jar nu.validator.servlet.Main 8888 &
   script:
     - coverage run --rcfile=.coveragerc manage.py test --noinput
     - coverage report

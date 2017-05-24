@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 import logging
 
+from htmlvalidator.middleware import HTMLValidator as HTMLValidatorParent
+from django.utils.deprecation import MiddlewareMixin
+
 from django.conf import settings
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
@@ -242,3 +245,7 @@ class SimulateProductionNetwork(object):
 
         response = self.get_response(request)
         return response
+
+
+class HTMLValidator(HTMLValidatorParent, MiddlewareMixin):
+    pass
