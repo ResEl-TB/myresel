@@ -72,8 +72,17 @@ directory=/srv/www/resel.fr
 user=www-data
 ```
 
+### Ajout des cron jobs nécessaires
+Nous avons actuellement un job qui tourne régulièrement pour repopuler la base
+de donnée REDIS pour choisir une adresse ip.
+
+Il suffit de simplement copier le fichier de cron :
+```
+cp .install/etc/cronfile /etc/cron.d/myresel
+```
+
 ### Configuration du site
-Si il n'existe pas déjà creez un utilisateur `www-data` il sera le owner du programme.
+Si il n'existe pas déjà créez un utilisateur `www-data` il sera le owner du programme.
 Créez également le dossier `/srv/www/` et déplacez-vous y dedans.
 
 Puis téléchargez le site :
@@ -92,6 +101,7 @@ Lancer les services en tache de fond :
 ```
 supervisorctl
 start rqworker
+systemctl restart cron
 ```
 
 Démarrez nginx :

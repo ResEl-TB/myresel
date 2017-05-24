@@ -415,7 +415,7 @@ class MailResEl(View):
                     body='Bonjour, \n' +
                         'Votre nouvelle boîte mail vient d\'être créée.\n' +
                         'Cordialement, \n L\'équipe ResEl',
-                    from_email='noreply@resel.fr',
+                    from_email='secretaire@resel.fr',
                     reply_to=('support@resel.fr',),
                     to=mail_address)
 

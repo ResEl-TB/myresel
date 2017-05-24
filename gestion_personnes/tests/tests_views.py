@@ -257,7 +257,7 @@ class TestResetPasswd(TestCase):
     def test_simple_init(self):
         new_pwd = "blahblahcar"
         r = self.client.get(reverse("gestion-personnes:reset-pwd-send"),
-                            HTTP_HOST="10.0.3.99", follow=True)
+                            HTTP_HOST="10.0.3.94", follow=True)
         self.assertEqual(200, r.status_code)
         self.assertTemplateUsed("gestion_personnes/reset_pwd_send.html")
 
@@ -266,7 +266,7 @@ class TestResetPasswd(TestCase):
             data={
                 'uid': self.user.uid
             },
-            HTTP_HOST="10.0.3.99",
+            HTTP_HOST="10.0.3.94",
             follow=True
         )
 
@@ -278,7 +278,7 @@ class TestResetPasswd(TestCase):
 
         m = mail.outbox[0]
         link = m.body.split('\n')[3]
-        r = self.client.get(link, HTTP_HOST="10.0.3.99", follow=True)
+        r = self.client.get(link, HTTP_HOST="10.0.3.94", follow=True)
 
         self.assertEqual(200, r.status_code)
 
@@ -288,7 +288,7 @@ class TestResetPasswd(TestCase):
                 'password': new_pwd,
                 'password_verification': new_pwd,
             },
-            HTTP_HOST="10.0.3.99", follow=True)
+            HTTP_HOST="10.0.3.94", follow=True)
 
         self.assertEqual(200, r.status_code)
         self.assertTemplateUsed(r, "pages/home/home.html")
@@ -306,7 +306,7 @@ class TestSendUid(TestCase):
 
     def test_simple_send(self):
         r = self.client.get(reverse("gestion-personnes:send-uid"),
-                            HTTP_HOST="10.0.3.99", follow=True)
+                            HTTP_HOST="10.0.3.94", follow=True)
         self.assertEqual(200, r.status_code)
         self.assertTemplateUsed(r, "gestion_personnes/get_uid_from_email.html")
 
@@ -315,7 +315,7 @@ class TestSendUid(TestCase):
             data={
                 'email': self.user.mail
             },
-            HTTP_HOST="10.0.3.99",
+            HTTP_HOST="10.0.3.94",
             follow=True
         )
 
@@ -334,7 +334,7 @@ class TestSendUid(TestCase):
             data={
                 'email': "blahbloh" + self.user.mail
             },
-            HTTP_HOST="10.0.3.99",
+            HTTP_HOST="10.0.3.94",
             follow=True
         )
 
@@ -353,7 +353,7 @@ class TestCheckEmail(TestCase):
 
     def test_simple_check(self):
         r = self.client.get(reverse("gestion-personnes:check-email"),
-                            HTTP_HOST="10.0.3.99", follow=True)
+                            HTTP_HOST="10.0.3.94", follow=True)
         self.assertEqual(200, r.status_code)
         self.assertTemplateUsed(r, "pages/home/home.html")
         self.assertContains(r, "Nous venons de vous envoyer un e-mail")
@@ -361,7 +361,7 @@ class TestCheckEmail(TestCase):
         self.assertEqual(1, len(mail.outbox))
         m = mail.outbox[0]
         link = m.body.split('\n')[3]
-        r = self.client.get(link, HTTP_HOST="10.0.3.99", follow=True)
+        r = self.client.get(link, HTTP_HOST="10.0.3.94", follow=True)
 
         self.assertEqual(200, r.status_code)
         self.assertTemplateUsed(r, "pages/home/home.html")
@@ -379,7 +379,7 @@ class MailResElViewCase(TestCase):
 
     def test_simple_mail_creation(self):
         r = self.client.get(reverse("gestion-personnes:mail"),
-                            HTTP_HOST="10.0.3.99", follow=True)
+                            HTTP_HOST="10.0.3.94", follow=True)
         self.assertEqual(200, r.status_code)
         self.assertTemplateUsed(r, "gestion_personnes/mail_resel_new.html")
         self.assertContains(r, "alexandre.manoury@resel.fr")
@@ -409,7 +409,7 @@ class MailResElViewCase(TestCase):
         self.user.save()
 
         r = self.client.get(reverse("gestion-personnes:mail"),
-                            HTTP_HOST="10.0.3.99", follow=True)
+                            HTTP_HOST="10.0.3.94", follow=True)
         self.assertEqual(200, r.status_code)
 
         # Better way to detect an error ?

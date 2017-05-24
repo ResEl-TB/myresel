@@ -6,7 +6,7 @@ Le site resel.fr
 
 
 Ceci est le code pour le nouveau site ResEl [resel.fr](resel.fr) il est développé 
-en [Python](https://python.org) avec le framework [Django](https://www.djangoproject.com/).
+en [Python](https://python.org) avec le [framework Django](https://www.djangoproject.com/).
 Ce document a pour objectif de vous présenter rapidement le projet et son 
 fonctionnement. Il sert également de guide pour les nouveaux développeurs qui 
 veulent contribuer au projet et de guide pour les administrateurs systèmes qui 
@@ -17,17 +17,6 @@ Dans la suite du document nous supposons que le lecteur est famillier avec
 (et toutes les technologies associées HTTP, MYSQL, HTML, CSS, Javascript).
 
 ![](.gitlab/screen1.png)
-
-# Sommaire
- - [Démarrage en 2 minutes](#démarrage-en-2-minutes)
- - [Liste des modules](#liste-des-modules)
-   - [Modules](#modules)
-   - [Autres dossiers](#autres-dossiers)
- - [Documentation](#documentation)
- - [Notes](#notes)
- - [Astuces](#astuces)
- - [Crédits](#crédits)
-
 
 # Démarrage en 2 minutes
 Cette démarche vous permettra d'avoir un serveur de développement prêt à être 
@@ -65,15 +54,15 @@ Votre adresse MAC sera par défaut : "0a:00:27:00:00:10", Vous pouvez la changer
 dans le fichier `myresel/settings_local.py`.
 
 # Documentation
-## -> Voir [/doc](doc/README.md)
+# -> Voir [/doc](doc/README.md)
 
-N'hésitez pas à la lire avant de contribuer au projet, j'ai mis en gros, c'est pas
-pour rien ;-).
+**j'ai mis en gros, c'est pas pour rien ;-).**
+
+-------------------------------------------------------------------------------
 
 # Faire un hotfix/modification sur les serveurs de prod
 
-#### :warning: Contrairement à 99% des autres services ResEl vous ne devez quasiment
- en **aucun cas toucher aux serveurs de production**. Voici la procédure :
+#### :warning: Contrairement à 99% des autres services ResEl vous ne devez quasiment en **aucun cas toucher aux serveurs de production**. Voici la procédure :
  
 Clonez le repo sur votre ordinateur :
 ```bash
@@ -135,6 +124,14 @@ de renommer le fichier `maintenance_off.html` en `maintenance_on.html`. Si la
 configuration de nginx est correcte, le site devrait retourner une erreur `503`
 le temps de faire la migration. 
 
+```bash
+# Activer la maintenance
+mv maintenance_off.html maintenance_on.html
+
+# Désactiver la maintenance
+mv mv maintenance_on.html maintenance_off.html
+```
+
 ## Passer superutilisateur sur l'environement de dev
 Pour pouvoir administrer le site il faut avoir un compte avec les droits admins.
 Malheureusement en local (comme la population de la base de données n'est pas
@@ -179,3 +176,5 @@ Pour ce magnifique site, on peut remercier :
  - Morgan Robin @tharkunn : morgan.robin@telecom-bretagne.eu
 
 Code sous license "ne faites pas de bêtises".
+
+Allez lire la [documentation](doc/README.md) !

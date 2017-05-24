@@ -3,6 +3,7 @@ import logging
 import os
 import re
 import subprocess
+import redis
 from ipaddress import ip_address
 
 from rq.decorators import job
@@ -18,12 +19,39 @@ class NetworkError(Exception):
     """
     pass
 
+def is_mac(mac):
+    """
+    :param mac: string to test
+    :return:  :bool: True if it is a mac, False otherwise
+    """
+    return re.match(r'^([0-9A-Fa-f]{2}:){5}([0-9A-Fa-f]{2})$', mac)
 
 def get_mac(ip):
     """
     This function retrieve the mac address of a user based on his ip
     Should be called only if the ip is in the same network.
     """
+
+    redis_pref = 'mac__'
+    # First check if the ip is referenced in the redis server
+    try:
+        r = redis.Redis(
+            host=settings.REDIS_HOST,
+            port=settings.REDIS_PORT,
+            password=settings.REDIS_PASSWORD,
+            db=settings.REDIS_DB
+        )
+
+        mac = r.get('%s%s' % (redis_pref, ip))
+        if mac is not None:
+            return mac.decode('utf-8')
+        else:
+            logger.warning(
+                'ip address not find in redis server, is the network watcher ok?',
+                extra={'ip_address': ip}
+            )
+    except redis.exceptions.ConnectionError as e:
+        logger.error('Redis Server Unavailable : %s', str(e))
 
     # FIXME: I don't know how to test that very well, and indeed during
     # local tests, a fake mac is sent. One day we will have a good enough
@@ -42,8 +70,7 @@ def get_mac(ip):
                                stdout=subprocess.PIPE,
                                shell=True).communicate()[0]).split('\'')[1].split('\\n')[0]
 
-    m = re.match(r'^([0-9A-Fa-f]{2}:){5}([0-9A-Fa-f]{2})$', mac)
-    if not m:
+    if not is_mac(mac):
         raise NetworkError("The string %s is not a valid mac address" % mac)
     return mac
 
