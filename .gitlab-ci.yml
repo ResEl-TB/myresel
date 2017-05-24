@@ -68,6 +68,7 @@ test_django:
     - echo "CREATE DATABASE qos" | mysql -uroot -pblah -h mysql
     - source .install/scripts/install_openldap.sh
     - source .install/scripts/install_latex.sh
+      source .install/scripts/install_java8.sh
     - pip3 install -qUr requirements.txt
     - python3 manage.py populate_redis
     - python3 manage.py calculate_free_ip
