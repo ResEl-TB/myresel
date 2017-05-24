@@ -42,9 +42,6 @@ source ${ROOTDIR}.install/scripts/install_openldap.sh
 echo ">>> Installing redis <<<"
 apt-get -qq install redis-server
 
-#echo ">>> Installing LateX <<<"
-#source ${ROOTDIR}.install/scripts/install_latex.sh
-
 echo ">>> Installing Python requirements <<<"
 pip3 install -qUr ${ROOTDIR}requirements.txt
 

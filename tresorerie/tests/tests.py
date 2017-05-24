@@ -1,7 +1,7 @@
 import os
 import time
 
-from uuid import UUID
+import uuid
 
 import django_rq
 
@@ -49,7 +49,7 @@ class InvoiceCreation(TestCase):
         self.transaction.save()
 
     def test_simple_invoice(self):
-        self.transaction.uuid = UUID("dfa23979-e9f5-4297-93bd-520f00439faa")
+        self.transaction.uuid = uuid.uuid4()
 
         # Gather information and launch tasks for sending invoice
         user_datas = {
