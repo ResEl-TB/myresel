@@ -1,0 +1,8 @@
+deb http://httpredir.debian.org/debian jessie main contrib 
+deb-src http://httpredir.debian.org/debian jessie main contrib 
+
+deb http://httpredir.debian.org/debian jessie-backports main contrib
+
+#deb http://security.debian.org/ jessie/updates main contrib
+#deb-src http://security.debian.org/ jessie/updates main contrib
+

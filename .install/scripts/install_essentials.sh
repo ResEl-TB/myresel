@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+
+cp ${ROOTDIR}.install/etc/sources.list /etc/apt/sources.list
+
 apt-get -qq update
 apt-get -qq upgrade
 

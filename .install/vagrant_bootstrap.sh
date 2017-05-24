@@ -42,6 +42,9 @@ source ${ROOTDIR}.install/scripts/install_openldap.sh
 echo ">>> Installing redis <<<"
 apt-get -qq install redis-server
 
+echo ">>> Installing java8 <<<"
+source ${ROOTDIR}.install/scripts/install_java8.sh
+
 echo ">>> Installing LateX <<<"
 source ${ROOTDIR}.install/scripts/install_latex.sh
 
