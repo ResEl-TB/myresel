@@ -102,7 +102,7 @@ INVOICE_STORE_PATH = 'invoices'
 
 LAPUTEX_HOST = "https://laputex.adm.resel.fr/"
 LAPUTEX_DOC_URL = LAPUTEX_HOST+"beta/documents/"
-LAPUTEX_TOKEN = ""
+LAPUTEX_TOKEN = "your token here"
 LAPUTEX_WAITING_TIME = 60    # In seconds
 LAPUTEX_MAX_ATTEMPTS = 5
 
