@@ -17,5 +17,5 @@ if [ ! -f ${CONFDIR}settings_local.py ]; then
 
     sed -i "/REDIS_HOST *=/s/ *=.*/ = \"${REDIS_HOST}\"/" ${CONFDIR}settings_local.py
 
-    sed -i "/LAPUTEX_TOKEN *=/s/ *=.*/ = \"${LAPUEX_PWD}\"/" ${CONFDIR}settings_local.py
+    sed -i "/LAPUTEX_TOKEN *=/s/ *=.*/ = \"${LAPUTEX_PWD}\"/" ${CONFDIR}settings_local.py
 fi
