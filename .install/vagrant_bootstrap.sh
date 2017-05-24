@@ -42,8 +42,8 @@ source ${ROOTDIR}.install/scripts/install_openldap.sh
 echo ">>> Installing redis <<<"
 apt-get -qq install redis-server
 
-echo ">>> Installing LateX <<<"
-source ${ROOTDIR}.install/scripts/install_latex.sh
+#echo ">>> Installing LateX <<<"
+#source ${ROOTDIR}.install/scripts/install_latex.sh
 
 echo ">>> Installing Python requirements <<<"
 pip3 install -qUr ${ROOTDIR}requirements.txt
@@ -61,6 +61,8 @@ echo "|                                              |"
 echo "| Launch the server:                           |"
 echo "|  \$ vagrant ssh                              |"
 echo "|  \$ cd ${ROOTDIR}                            |"
+echo "|  \$ python3 manage.py rqscheduler &          |"
+echo "|  \$ python3 manage.py rqworker &             |"
 echo "|  \$ python3 manage.py runserver 0.0.0.0:8000 |"
 echo "|                                              |"
 echo "| Browse to: https://10.0.3.94:8000/           |"

@@ -51,6 +51,7 @@ Démarrer le serveur :
 vagrant ssh
 cd /myresel
 python3 manage.py rqworker default &
+python3 manage.py rqscheduler default &
 python3 manage.py runserver 0.0.0.0:8000
 ````
 
@@ -163,12 +164,18 @@ hack que je vous propose :
 Vous pouvez vous connecter à l'administration en cliquant sur les engrenages
 dans la barre de navigation.
 
+# Notes
+
+ La facture générée automatiquement ne peut pas gérer des prix supérieurs à 1 million 70 mille €.
+ 
 -----------------------
 
 # Crédits
 Pour ce magnifique site, on peut remercier : 
- - Théo Jacquin @nimag42 : theo.jacquin@telecom-bretagne.eu
- - Morgan Robin @tharkunn : morgan.robin@telecom-bretagne.eu
  - Loïc Carr @dimtion : loic.carr@telecom-bretagne.eu
+ - Jean-Baptiste Valladeau @jbvalladeau : jean-baptiste.valladeau@telecom-bretagne.eu
+ - Théo Jacquin @nimag42 : theo.jacquin@telecom-bretagne.eu
+ - Guillaume Buret @thebigtouffe : guillaume.buret@telecom-bretagne.eu
+ - Morgan Robin @tharkunn : morgan.robin@telecom-bretagne.eu
 
 Code sous license "ne faites pas de bêtises".

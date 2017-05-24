@@ -146,6 +146,7 @@ INSTALLED_APPS = [
     'wiki',
     'pages',
     'django_rq',
+    'scheduler',
     'campus',
 ]
 
@@ -315,6 +316,7 @@ RQ_QUEUES = {
        'HOST': REDIS_HOST,
        'PORT': REDIS_PORT,
        'DB': REDIS_DB,
+       'PASSWORD': REDIS_PASSWORD,
    },
 }
 RQ_SHOW_ADMIN_LINK = True
@@ -373,6 +375,11 @@ PROD_LOGGING_CONF = {
             'level': 'DEBUG',
             'propagate': True,
         },
+        "rq.worker": {
+            "handlers": ['file', 'logstash'],
+            "level": "DEBUG"
+        },
+
     },
 }
 
@@ -396,6 +403,10 @@ DEBUG_LOGGING_CONF = {
             'level': 'INFO',
             'propagate': True,
         },
+        "rq.worker": {
+            "handlers": ['console'],
+            "level": "DEBUG"
+        },
     },
 }
 
@@ -404,3 +415,7 @@ if DEBUG or TESTING:
     LOGGING = DEBUG_LOGGING_CONF
 else:
     LOGGING = PROD_LOGGING_CONF
+
+if DEBUG or TESTING:
+    for queueConfig in RQ_QUEUES.values():
+        queueConfig['ASYNC'] = False

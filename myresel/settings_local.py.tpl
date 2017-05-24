@@ -28,9 +28,10 @@ FIREWALL_RELOAD_COMMAND = "ping -c 1 127.0.0.1"
 #####
 
 SERVER_EMAIL = 'skynet@resel.fr'
+TREASURER_EMAIL = 'tresorier@resel.fr'
+SUPPORT_EMAIL = 'support@resel.fr'
 
 EMAIL_HOST = 'pegase.adm.resel.fr'
-
 EMAIL_SUBJECT_PREFIX = '[resel.fr]'
 
 
@@ -82,6 +83,7 @@ DB_QOS_PASSWORD = "blah"
 REDIS_HOST = 'localhost'
 REDIS_PORT = 6379
 REDIS_DB = 0
+REDIS_PASSWORD = ""
 
 
 # STRIPE CREDENTIALS
@@ -93,6 +95,15 @@ STRIPE_PUBLIC_KEY = "pk_test_KE9qQquz3hhdRI54CcfBaukl"
 # TRESO
 
 INVOICE_STORE_PATH = 'media/invoices'
+
+
+# LaPuTeX CONF
+
+LAPUTEX_HOST = "https://laputex.adm.resel.fr/"
+LAPUTEX_DOC_URL = LAPUTEX_HOST+"beta/documents/"
+LAPUTEX_TOKEN = ""
+LAPUTEX_WAITING_TIME = 60    # In seconds
+LAPUTEX_MAX_ATTEMPTS = 5
 
 
 ####
