@@ -81,15 +81,16 @@ class InvoiceCreation(TestCase):
             args=(user_datas, transaction_datas, 'fr', 'user-treasurer'),
         )
 
+        # Wait all tasks are done
         time_begin = time.time()
-
         while len(scheduler.get_jobs()) > 0 or len(queue.get_jobs()) > 0:
             if time.time() - time_begin > 120:
                 raise ValueError("Waited too long")
             time.sleep(4)
 
-        # Open the file
-        filename = os.path.join(settings.PROJECT_ROOT, settings.INVOICE_STORE_PATH,
+
+        # Check
+        filename = os.path.join(settings.MEDIA_ROOT, settings.INVOICE_STORE_PATH,
                                 "{}-{}.pdf".format(self.user.uid, str(self.transaction.uuid)))
 
         self.assertTrue(os.path.isfile(filename))

@@ -146,7 +146,7 @@ def send_invoice_mail(user, transaction, send_to, invoice=None, errors=""):
 
         # Save invoice persistently in admin site then attach it to the mail
         if has_invoice:
-            dest = path.join(settings.PROJECT_ROOT, settings.INVOICE_STORE_PATH,
+            dest = path.join(settings.MEDIA_ROOT, settings.INVOICE_STORE_PATH,
                              user['uid'] + '-' + str(transaction['uuid']) + '.pdf')
             with open(dest, 'wb') as pdf_file:
                 pdf_file.write(invoice)
