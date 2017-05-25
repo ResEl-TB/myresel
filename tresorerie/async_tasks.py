@@ -26,11 +26,9 @@ def generate_and_email_invoice(user: object, transaction: object, lang: str='fr'
 
     # Send request to laputex
     try:
-        laputex_req = requests.post(settings.LAPUTEX_DOC_URL, data={
-            'token': settings.LAPUTEX_TOKEN,
-            'type': 'latex',
-            'content': invoice_latex,
-        })
+        laputex_req = requests.post(settings.LAPUTEX_DOC_URL,
+                                    headers={'token': settings.LAPUTEX_TOKEN},
+                                    data={'type': 'latex', 'content': invoice_latex})
         status_code = laputex_req.status_code
         text = laputex_req.text
 
@@ -62,7 +60,7 @@ def invoice_laputex_check(user: object, transaction: object,
     # Check LaPuTeX's document's status
     try:
         laputex_req = requests.get(settings.LAPUTEX_DOC_URL + laputex_invoice_id,
-                                   data={'token': settings.LAPUTEX_TOKEN})
+                                   headers={'token': settings.LAPUTEX_TOKEN})
         no_error = laputex_req.status_code == 200
         status_code = laputex_req.status_code
         text = laputex_req.text
