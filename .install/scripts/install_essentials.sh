@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 apt-get -qq update
 
-if [ $1 = "no-install" ] ; then 
+if [ $1 = "no-upgrade" ] ; then 
     echo "pass upgrade"
 else
     apt-get -qq upgrade
