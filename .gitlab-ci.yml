@@ -39,27 +39,21 @@ before_script:
   - source .install/scripts/install_openldap.sh
   - source .install/scripts/install_latex.sh
   - pip3 install -qUr requirements.txt
+  - rm -f -- ${ROOTDIR}myresel/settings_local.py
+  - export MYSQL_USER=root
+  - source .install/scripts/configure.sh
+  - source .install/scripts/populate_db.sh
   
-create_config:
-  stage: configure
-  script:
-    - rm -f -- ${ROOTDIR}myresel/settings_local.py
-    - export MYSQL_USER=root
-    - source .install/scripts/configure.sh
-    - source .install/scripts/populate_db.sh
+test_django:
   artifacts:
     paths:
+      - htmlcov/
       - myresel/settings_local.py
       - wiki/migrations/
       - tresorerie/migrations/
       - pages/migrations/
       - gestion_personnes/migrations/
       - devices/migrations/
-
-test_django:
-  artifacts:
-    paths:
-      - htmlcov/
   stage: test
   before_script:
     - source .install/scripts/install_essentials.sh
@@ -68,6 +62,10 @@ test_django:
     - source .install/scripts/install_openldap.sh
     - source .install/scripts/install_latex.sh
     - pip3 install -qUr requirements.txt
+    - rm -f -- ${ROOTDIR}myresel/settings_local.py
+    - export MYSQL_USER=root
+    - source .install/scripts/configure.sh
+    - source .install/scripts/populate_db.sh
     - python3 manage.py populate_redis
     - python3 manage.py calculate_free_ip
   script:
