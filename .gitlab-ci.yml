@@ -5,7 +5,7 @@ image: docker.resel.fr/web:latest  # Custom image made for the ResEl
 services:
   - redis:latest
   - mysql:latest
-  - magnetikonline/html5validator
+  - docker.resel.fr/html5validator:latest
 
 stages:
   - configure
