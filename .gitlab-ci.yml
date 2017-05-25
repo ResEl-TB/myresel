@@ -5,6 +5,7 @@ image: docker.resel.fr/web:latest  # Custom image made for the ResEl
 services:
   - redis:latest
   - mysql:latest
+  - magnetikonline/html5validator
 
 stages:
   - configure
@@ -23,6 +24,8 @@ variables:
   MYSQL_QOS_HOST: mysql
   MYSQL_QOS_USER: root
   MYSQL_QOS_PASSWORD: blah
+  
+  HTMLVALIDATOR_VNU_URL: http://magnetikonline-html5validator:8888
 
   ROOTDIR: ./
   CONFDIR: myresel/
@@ -68,11 +71,9 @@ test_django:
     - echo "CREATE DATABASE qos" | mysql -uroot -pblah -h mysql
     - source .install/scripts/install_openldap.sh
     - source .install/scripts/install_latex.sh
-      source .install/scripts/install_java8.sh
     - pip3 install -qUr requirements.txt
     - python3 manage.py populate_redis
     - python3 manage.py calculate_free_ip
-    - java -cp .install/bin/vnu.jar nu.validator.servlet.Main 8888 &
   script:
     - coverage run --rcfile=.coveragerc manage.py test --noinput
     - coverage report

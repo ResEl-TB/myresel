@@ -28,6 +28,9 @@ export MYSQL_QOS_PASSWORD=blah
 # Redis configuration
 export REDIS_HOST=localhost
 
+# HTML Validation stuff
+export HTMLVALIDATOR_VNU_URL=http://localhost:8888
+
 export DEBIAN_FRONTEND=noninteractive
 
 echo '>>> Updating and installing essentials <<<'

@@ -126,6 +126,8 @@ if DEBUG or TESTING:
         'mac': '0a:00:27:00:00:10'
     }
 
+### HTML validation stuff
+HTMLVALIDATOR_VNU_URL = 'http://localhost:8888/'
 
 #####
 # Security settings
