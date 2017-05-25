@@ -33,7 +33,7 @@ variables:
   DEBIAN_FRONTEND: noninteractive
 
 before_script:
-  - source .install/scripts/install_essentials.sh
+  - source .install/scripts/install_essentials.sh no-upgrade
   - apt-get install -qq mysql-client
   - echo "CREATE DATABASE qos" | mysql -uroot -pblah -h mysql
   - source .install/scripts/install_openldap.sh
@@ -43,7 +43,9 @@ before_script:
   - export MYSQL_USER=root
   - source .install/scripts/configure.sh
   - source .install/scripts/populate_db.sh
-  
+  - python3 manage.py populate_redis
+  - python3 manage.py calculate_free_ip
+
 test_django:
   artifacts:
     paths:
@@ -55,19 +57,6 @@ test_django:
       - gestion_personnes/migrations/
       - devices/migrations/
   stage: test
-  before_script:
-    - source .install/scripts/install_essentials.sh
-    - apt-get install -qq mysql-client
-    - echo "CREATE DATABASE qos" | mysql -uroot -pblah -h mysql
-    - source .install/scripts/install_openldap.sh
-    - source .install/scripts/install_latex.sh
-    - pip3 install -qUr requirements.txt
-    - rm -f -- ${ROOTDIR}myresel/settings_local.py
-    - export MYSQL_USER=root
-    - source .install/scripts/configure.sh
-    - source .install/scripts/populate_db.sh
-    - python3 manage.py populate_redis
-    - python3 manage.py calculate_free_ip
   script:
     - coverage run --rcfile=.coveragerc manage.py test --noinput
     - coverage report
