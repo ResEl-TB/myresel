@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import logging
 
+from ldap3 import LDAPSocketOpenError
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist, MiddlewareNotUsed
@@ -91,7 +93,12 @@ class NetworkConfiguration(object):
             elif network.get_campus(ip) == "Brest" and settings.CURRENT_CAMPUS == "Rennes":
                 return HttpResponseRedirect("https://" + settings.MAIN_HOST_BREST + request.get_full_path())
 
-            request.network_data['is_registered'] = ldap.get_status(ip)  # TODO: possible bug
+            try:
+                 request.network_data['is_registered'] = ldap.get_status(ip)  # TODO: possible bug
+            except LDAPSocketOpenError:
+                request.network_data['is_registered'] = True
+                messages.error(request, 'Base de données non joignable. Certaines fonctionnalités ne fonctionneront pas')
+                logger.error("LDAP Unavailable")
 
         response = self.get_response(request)
         return response
