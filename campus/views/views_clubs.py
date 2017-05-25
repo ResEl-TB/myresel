@@ -158,7 +158,7 @@ class DeleteClub(View):
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
-        return super(MyClubs, self).dispatch(*args, **kwargs)
+        return super(DeleteClub, self).dispatch(*args, **kwargs)
 
     def get(self, request, pk):
         if not request.ldap_user.is_campus_moderator():
