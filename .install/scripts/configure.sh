@@ -16,6 +16,7 @@ if [ ! -f ${CONFDIR}settings_local.py ]; then
     sed -i "/DB_QOS_PASSWORD *=/s/ *=.*/ = \"${MYSQL_QOS_PASSWORD}\"/" ${CONFDIR}settings_local.py
 
     sed -i "/REDIS_HOST *=/s/ *=.*/ = \"${REDIS_HOST}\"/" ${CONFDIR}settings_local.py
-
-    sed -i "/HTMLVALIDATOR_VNU_URL *=/s/ *=.*/ = \"${HTMLVALIDATOR_VNU_URL}\"/" ${CONFDIR}settings_local.py
+    
+    HTML_ESC=$(echo "${HTMLVALIDATOR_VNU_URL}" | sed -e 's/[]\/$*.^|[]/\\&/g')
+    sed -i "/HTMLVALIDATOR_VNU_URL *=/s/ *=.*/ = \"${HTML_ESC}\"/" ${CONFDIR}settings_local.py
 fi
