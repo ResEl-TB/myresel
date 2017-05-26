@@ -121,8 +121,13 @@ def send_invoice_mail(user, transaction, send_to, invoice=None, errors=""):
             reply_to=[settings.SUPPORT_EMAIL],
         )
 
-        # Attach the invoice if there is one before sending
+        # Save invoice persistently in admin site then attach it to the mail
         if has_invoice:
+            dest = path.join(settings.MEDIA_ROOT, settings.INVOICE_STORE_PATH,
+                             user['uid'] + '-' + str(transaction['uuid']) + '.pdf')
+            with open(dest, 'wb') as pdf_file:
+                pdf_file.write(invoice)
+
             mail_for_user.attach(user['uid']+'.pdf', invoice, 'application/pdf')
 
         mail_for_user.send()
@@ -142,13 +147,8 @@ def send_invoice_mail(user, transaction, send_to, invoice=None, errors=""):
             to=[settings.TREASURER_EMAIL]
         )
 
-        # Save invoice persistently in admin site then attach it to the mail
+        # Attach the invoice if there is one before sending
         if has_invoice:
-            dest = path.join(settings.MEDIA_ROOT, settings.INVOICE_STORE_PATH,
-                             user['uid'] + '-' + str(transaction['uuid']) + '.pdf')
-            with open(dest, 'wb') as pdf_file:
-                pdf_file.write(invoice)
-
             mail_for_treasurer.attach(user['uid']+'.pdf', invoice, 'application/pdf')
 
         mail_for_treasurer.send()
