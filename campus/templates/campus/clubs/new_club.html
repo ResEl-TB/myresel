@@ -62,7 +62,7 @@
                     {{ form.campagneYear }}
                 </div>
                 <button class="btn btn-success">{% trans 'Confirmer' %}</button>
-                {% if pk and request.ldap_user.is_campus_moderator %}
+                {% if pk and request.ldap_user.is_campus_moderator or request.user.is_staff%}
                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete" style="float: right">Supprimer</button>
                 {% endif%}
             </form>
