@@ -44,7 +44,7 @@ class CreateCampusMail(TestCase):
 
         r = self.client.post(
             reverse("campus:mails:send"),
-            HTTP_HOST="10.0.3.99", follow=True,
+            HTTP_HOST="10.0.3.94", follow=True,
             data={
                 "sender": "loic.carr@resel.fr",
                 "subject": "fuu",
@@ -137,14 +137,14 @@ class HomeTestCase(TestCase):
 
     def testLoadWithoutUser(self):
         r = self.client.get(reverse("campus:clubs:list"),
-                                   HTTP_HOST="10.0.3.99")
+                                   HTTP_HOST="10.0.3.94")
         self.assertEqual(200, r.status_code)
         self.assertTemplateUsed(r, "campus/clubs/list.html")
 
     def testLoadWithUser(self):
         self.client.login(username="jbvallad", password="blabla")
         r = self.client.get(reverse("campus:clubs:list"),
-                                    HTTP_HOST="10.0.3.99")
+                                    HTTP_HOST="10.0.3.94")
         self.assertEqual(200, r.status_code)
 
 class MyClubTestCase(TestCase):
@@ -161,13 +161,13 @@ class MyClubTestCase(TestCase):
             data={
                 'what': "Tennis",
             },
-            HTTP_HOST="10.0.3.99",
+            HTTP_HOST="10.0.3.94",
             follow = True
         )
 
     def testSimpleLoad(self):
         self.client.login(username="jbvallad", password="blabla")
-        r = self.client.get(reverse("campus:clubs:my-clubs"), HTTP_HOST="10.0.3.99")
+        r = self.client.get(reverse("campus:clubs:my-clubs"), HTTP_HOST="10.0.3.94")
         self.assertTemplateUsed("campus/clubs/list.html")
 
 class NewClubTestCase(TestCase):
@@ -243,13 +243,13 @@ class AddPersonTestCase(TestCase):
 
     def testAddSelf(self):
         r = self.client.get(reverse("campus:clubs:add-person", kwargs={'pk':self.cn}),
-                                    HTTP_HOST="10.0.3.99")
+                                    HTTP_HOST="10.0.3.94")
         self.assertTrue(LdapUser.get(uid="jbvallad").pk in StudentOrganisation.get(cn=self.cn).members)
 
     def testAddSomeone(self):
         r = self.client.get(reverse("campus:clubs:add-person", kwargs={'pk':self.cn}),
                                     data={"id_user":"bvallad"},
-                                    HTTP_HOST="10.0.3.99")
+                                    HTTP_HOST="10.0.3.94")
         self.assertTrue(LdapUser.get(uid="bvallad").pk in StudentOrganisation.get(cn=self.cn).members)
 
 class RemovePersonTestCase(TestCase):
@@ -279,14 +279,14 @@ class RemovePersonTestCase(TestCase):
         #We just make sure that there is something to remove
         self.assertTrue(LdapUser.get(uid="jbvallad").pk in StudentOrganisation.get(cn=self.cn).members)
         r=self.client.get(reverse("campus:clubs:remove-person", kwargs={"pk":self.cn}),
-                                    HTTP_HOST="10.0.3.99")
+                                    HTTP_HOST="10.0.3.94")
         self.assertFalse(LdapUser.get(uid="jbvallad").pk in StudentOrganisation.get(cn=self.cn).members)
 
     def testRemoveSomeone(self):
         self.assertTrue(LdapUser.get(uid="bvallad").pk in StudentOrganisation.get(cn=self.cn).members)
         r=self.client.get(reverse("campus:clubs:remove-person", kwargs={"pk":self.cn}),
                                     data={"id_user":"bvallad"},
-                                    HTTP_HOST="10.0.3.99")
+                                    HTTP_HOST="10.0.3.94")
         self.assertFalse(LdapUser.get(uid="bvallad").pk in StudentOrganisation.get(cn=self.cn).members)
 
 class AddPrezTestCase(TestCase):
@@ -321,21 +321,21 @@ class AddPrezTestCase(TestCase):
         self.client.login(username="jbvallad", password="blabla")
         r = self.client.get(reverse("campus:clubs:add-prez", kwargs={'pk':self.cn}),
                                     data={"id_user":"bvallad"},
-                                    HTTP_HOST="10.0.3.99")
+                                    HTTP_HOST="10.0.3.94")
         self.assertTrue(LdapUser.get(uid="bvallad").pk in StudentOrganisation.get(cn=self.cn).prezs)
 
     def testAddPrezBeingPrez(self):
         self.client.login(username="vallad", password="blabla")
         r = self.client.get(reverse("campus:clubs:add-prez", kwargs={'pk':self.cn}),
                                     data={"id_user":"jbvallad"},
-                                    HTTP_HOST="10.0.3.99")
+                                    HTTP_HOST="10.0.3.94")
         self.assertTrue(LdapUser.get(uid="jbvallad").pk in StudentOrganisation.get(cn=self.cn).prezs)
 
     def testAddPrezBeingNobody(self):
         self.client.login(username="allad", password="blabla")
         r = self.client.get(reverse("campus:clubs:add-prez", kwargs={'pk':self.cn}),
                                     data={"id_user":"allad"},
-                                    HTTP_HOST="10.0.3.99")
+                                    HTTP_HOST="10.0.3.94")
         self.assertFalse(LdapUser.get(uid="allad").pk in StudentOrganisation.get(cn=self.cn).prezs)
 
 class DeleteClubTestCase(TestCase):
@@ -352,7 +352,7 @@ class DeleteClubTestCase(TestCase):
 
     def testDeleteClubBeingModo(self):
         self.assertTrue(StudentOrganisation.filter(cn="tenniscn"))
-        r = self.client.get(reverse("campus:clubs:delete", kwargs={'pk':'tenniscn'}), HTTP_HOST="10.0.3.99")
+        r = self.client.get(reverse("campus:clubs:delete", kwargs={'pk':'tenniscn'}), HTTP_HOST="10.0.3.94")
 
         #Doesn't work for some reason
         #self.assertFalse(StudentOrganisation.filter(cn="tenniscn"))
