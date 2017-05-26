@@ -13,10 +13,10 @@ class HomeTestCase(TestCase):
 
     def setUp(self):
         try_delete_user("jbvallad")
-        user = create_full_user(uid="jbvallad", pwd="penis")
+        user = create_full_user(uid="jbvallad", pwd="blabla")
         user.save()
 
-        self.client.login(username="jbvallad", password="penis")
+        self.client.login(username="jbvallad", password="blabla")
 
     def testSimpleLoad(self):
         r = self.client.get(reverse("campus:who:user-home"),
@@ -65,10 +65,10 @@ class SearchTestCase(TestCase):
 
     def setUp(self):
         try_delete_user("jbvallad")
-        user = create_full_user(uid="jbvallad", pwd="penis")
+        user = create_full_user(uid="jbvallad", pwd="blabla")
         user.save()
 
-        self.client.login(username="jbvallad", password="penis")
+        self.client.login(username="jbvallad", password="blabla")
 
     def testSimpleLoad(self):
         r = self.client.get(
