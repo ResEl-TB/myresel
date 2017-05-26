@@ -145,6 +145,33 @@
         </div>
     </div>
     <div class="home-fragment">
+        <div id="graph"  class="container article">
+            <h1>Bande passante générale <a href="https://graph.resel.fr/dashboard/db/tete-de-reseau-brest"><small>plus de statistiques</small></a></h1>
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="graph-brest">
+                    <div class="embed-responsive graph">
+                        <iframe src="https://graph.resel.fr/dashboard-solo/db/public-stats?panelId=1&from=now-13h&to=now" width="450" height="200" frameborder="0"></iframe>
+                    </div>
+                </div>
+
+                <div role="tabpanel" class="tab-pane fade" id="graph-rennes">
+                    <div class="embed-responsive graph" >
+                        <iframe id="iframe-rennes" src="https://graph.resel.fr/dashboard-solo/db/public-stats?refresh=1m&orgId=1&panelId=2&from=now-13h&to=now" width="450" height="200" frameborder="0"></iframe>
+                    </div>
+                </div>
+
+                <div role="tabpanel" class="tab-pane fade" id="graph-nantes" style="height: 218px">
+                    <h2 style="margin-top: 70px" ><small>Un jour peut être !</small><h2>
+                </div>
+            </div>
+            <ul class="nav nav-pills" role="tablist" style="margin-top: 20px; display: flex; justify-content: center;">
+                <li role="presentation" class="active"><a href="#graph-brest" aria-controls="brest" role="tab" data-toggle="tab">Brest</a></li>
+                <li role="presentation" ><a href="#graph-rennes" aria-controls="rennes" role="tab" data-toggle="tab">Rennes</a></li>
+                <li role="presentation" ><a href="#graph-nantes" aria-controls="nantes" role="tab" data-toggle="tab">Nantes</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="home-fragment">
         <div class="container centered article">
             <h4>
                 Vous souhaitez contribuer au réseau des élèves et monter en compétences techniques ? <br />
@@ -153,13 +180,16 @@
             </h4>
         </div>
     </div>
+{% endblock %}
 
-    <div class="home-fragment">
-        <div class="container article">
-            <h1><a href="https://graph.resel.fr/dashboard/db/tete-de-reseau">Bande passante générale</a></h1>
-            <div class="embed-responsive graph">
-                <iframe src="https://graph.resel.fr/dashboard-solo/db/public-stats?panelId=1&from=now-13h&to=now" width="450" height="200" frameborder="0"></iframe>
-            </div>
-        </div>
-    </div>
+{% block javascript %}
+    <script>
+        var rennes_loaded = false;
+        $('a[href="#graph-rennes"]').click(function (e) {
+            if (!rennes_loaded) {
+                $( '#iframe-rennes' ).attr( 'src', function ( i, val ) { return val; });
+                rennes_loaded = true;
+            }
+        });
+    </script>
 {% endblock %}

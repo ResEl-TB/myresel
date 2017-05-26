@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import logging
 
+from ldap3 import LDAPSocketOpenError
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist, MiddlewareNotUsed
@@ -18,8 +20,8 @@ class IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAResElAdmi
     def make_user_staff(username):
         """
         Save in Django database if a user is part of the staff
-        :param username: 
-        :return: 
+        :param username:
+        :return:
         """
         user = User.objects.get(username=username)
         user.is_staff = 1
@@ -91,18 +93,51 @@ class NetworkConfiguration(object):
             elif network.get_campus(ip) == "Brest" and settings.CURRENT_CAMPUS == "Rennes":
                 return HttpResponseRedirect("https://" + settings.MAIN_HOST_BREST + request.get_full_path())
 
-            request.network_data['is_registered'] = ldap.get_status(ip)  # TODO: possible bug
+            try:
+                 request.network_data['is_registered'] = ldap.get_status(ip)  # TODO: possible bug
+            except LDAPSocketOpenError:
+                request.network_data['is_registered'] = True
+                messages.error(request, 'Base de données non joignable. Certaines fonctionnalités ne fonctionneront pas')
+                logger.error("LDAP Unavailable")
 
         response = self.get_response(request)
         return response
 
 class InscriptionNetworkHandler(object):
     """
-    Before the request is sent to the website, we need to handle if the user 
+    Before the request is sent to the website, we need to handle if the user
     is in an inscription network
     """
     def __init__(self, get_response):
         self.get_response = get_response
+
+    def deport(self):
+        """
+        Force the user into the inscription zone
+        Only the urls set in `settings.INSCRIPTION_ZONE_ALLOWED_URLNAME` and
+        `settings.INSCRIPTION_ZONE_ALLOWED_URLNAMESPACE`
+        And deport him into : `settings.INSCRIPTION_ZONE_FALLBACK_URLNAME`
+
+        :return HttpResponseRedirect if necessary, None if nothing to do
+        """
+        # Check if logged in & registered
+        # We check that he only browses intended part of the website
+        try:
+            path_url = resolve(self.request.path).url_name
+            path_namespaces = resolve(self.request.path).namespaces
+
+            test_urlname = [m == path_url for m in settings.INSCRIPTION_ZONE_ALLOWED_URLNAME]
+            test_urlnamespace = [m in path_namespaces for m in settings.INSCRIPTION_ZONE_ALLOWED_URLNAMESPACE]
+
+            if not (any(test_urlname) or any(test_urlnamespace)):
+                return HttpResponseRedirect(reverse(settings.INSCRIPTION_ZONE_FALLBACK_URLNAME))
+
+        # If it is a 404, it is very likely that it is because the browser
+        # tried to open a tab in order to test the  connection. The best
+        # solution is to redirect the user to the landing page.
+        except Resolver404:  # It's a 404
+            return HttpResponseRedirect(reverse(settings.INSCRIPTION_ZONE_FALLBACK_URLNAME))
+        return None
 
     def __call__(self, request):
         """
@@ -124,6 +159,8 @@ class InscriptionNetworkHandler(object):
             -> Same as 1 except if his device is registered, we tell him to plug/unplug ethernet jack or
                disconnect/reconnect to Wifi
         """
+        self.request = request
+
         # First get device datas
         ip = request.network_data['ip']
         vlan = request.network_data['vlan']
@@ -134,10 +171,9 @@ class InscriptionNetworkHandler(object):
 
         # Vlan inscription
         if vlan == '995':
-
             # Preliminary check
 
-            if zone != 'Brest-inscription':
+            if 'inscription' not in zone:
                 logger.warning("IP et VLAN non concordants"
                              "\n IP : %s"
                              "\n HOST : %s"
@@ -145,62 +181,41 @@ class InscriptionNetworkHandler(object):
                              "\n VLAN : %s"
                              "\n Utilisateur : %s"
                              "\n Machine : %s"
-                             % (ip, host, zone, vlan, is_logged_in, is_registered))
+                             % (ip, host, zone, vlan, is_logged_in, is_registered),
+                             extra={
+                                 "device_ip": ip,
+                                 "device_hostname": host,
+                                 "device_zone": zone,
+                                 "device_vlan": vlan,
+                                 "user": is_logged_in
+                             })
 
                 # Error ! In vlan 995 without inscription IP address
                 return HttpResponseBadRequest(_("Vous vous trouvez sur un réseau d'inscription mais ne possédez pas d'IP dans ce réseau. Veuillez contacter un administrateur."))
 
             else:
-                # We check that he only browses intended part of the website
-                # And redirect him otherwise
-                try:
-                    path_url = resolve(request.path).url_name
-                    path_namespaces = resolve(request.path).namespaces
-
-                    test_urlname = [m == path_url for m in settings.INSCRIPTION_ZONE_ALLOWED_URLNAME]
-                    test_urlnamespace = [m in path_namespaces for m in settings.INSCRIPTION_ZONE_ALLOWED_URLNAMESPACE]
-
-                    if not (any(test_urlname) or any(test_urlnamespace)):
-                        return HttpResponseRedirect(reverse(settings.INSCRIPTION_ZONE_FALLBACK_URLNAME))
-
-                # If it is a 404, it is very likely that it is because the
-                # browser tried to open a tab in order to test the
-                # connection. The best solution is to redirect the user to
-                # the landing page.
-                except Resolver404:  # It's a 404
-                    return HttpResponseRedirect(reverse(settings.INSCRIPTION_ZONE_FALLBACK_URLNAME))
+                redirect = self.deport()
+                if redirect:
+                    return redirect
 
         elif vlan == '999':
-
             if zone == 'internet':
                 # Error ! Zone internet shouldn't be on vlan 999 !
                 return HttpResponseBadRequest(_("Une erreur s'est glissée dans le traitement de votre requête. Si le problème persiste, contactez un administrateur."))
 
-            elif zone == 'Brest-user' or zone == 'Rennes-user':
-                # He can browse normally
-                # pass here, so the else block don't stuck normal user.
-                pass
+            elif (zone == 'Brest-user' or zone == 'Rennes-user') and is_registered == 'unknown':
+                # Check if the device is in the LDAP, if no put him in the
+                # inscription zone.
+                # This is new from 2017-05-04, see : https://git.resel.fr/resel/general/issues/1
+                redirect = self.deport()
+                if redirect:
+                    return redirect
 
             elif zone == 'Brest-inscription-999' or zone == 'Rennes-inscription-999':
-                # Check origin:
-                # Check if logged in & registered:
-                # We check that he only browses intended part of the website
-                try:
-                    path_url = resolve(request.path).url_name
-                    path_namespaces = resolve(request.path).namespaces
+                redirect = self.deport()
+                if redirect:
+                    return redirect
 
-                    test_urlname = [m == path_url for m in settings.INSCRIPTION_ZONE_ALLOWED_URLNAME]
-                    test_urlnamespace = [m in path_namespaces for m in settings.INSCRIPTION_ZONE_ALLOWED_URLNAMESPACE]
-
-                    if not (any(test_urlname) or any(test_urlnamespace)):
-                        return HttpResponseRedirect(reverse(settings.INSCRIPTION_ZONE_FALLBACK_URLNAME))
-
-                # If it is a 404, it is very likely that it is because the
-                # browser tried to open a tab in order to test the
-                # connection. The best solution is to redirect the user to
-                # the landing page.
-                except Resolver404:  # It's a 404
-                    return HttpResponseRedirect(reverse(settings.INSCRIPTION_ZONE_FALLBACK_URLNAME))
             else:
                 # Other possiblities: Brest-inscription, Brest-other.
                 # Should never happen... but ?

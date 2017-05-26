@@ -129,10 +129,15 @@
                 <li>{% trans "Vous profiterez des nombreux services du ResEl" %} </li>
                 <li>{% trans "Vous pourrez participer aux évènements et aux activitées ResEl" %} </li>
             </ul>
+                <h3>{% trans "Téléchargez :" %}</h3>
+                <ul>
+                    <li><a href="{% static "files/guide_connexion_BREST_2016.pdf" %}">{% trans "Guide connexion campus de Brest" %}</a></li>
+                    <li><a href="{% static "files/guide_connexion_RENNES_2016.pdf" %}">{% trans "Guide connexion campus de Rennes" %}</a></li>
+                </ul>
             <hr />
             <h3>{% trans "Un problème pour s'inscrire ?" %}</h3>
             <div><a href="{% url "contact" %}">{% trans "Contactez nous !" %}</a></div>
-            <div><a href="#">{% trans "Consulter la FAQ" %}</a></div>
+            <div><a href="{% url "faq" %}">{% trans "Consulter la FAQ" %}</a></div>
         </div>
     </div>
 {% endblock %}

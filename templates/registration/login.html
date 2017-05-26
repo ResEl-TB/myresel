@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% load staticfiles %}
 
 {% block titre %}{% trans "Connexion" %}{% endblock %}
 
@@ -57,6 +58,11 @@
                     <li>{% trans "Accéder aux e-mails de clubs et leurs sites" %}</li>
                     <li>{% trans "Consulter vos statistiques d'utilisation" %}</li>
                     <li>{% trans "Et plus encore !" %}</li>
+                </ul>
+                <h3>{% trans "Vous désirez vous connecter ?" %}</h3>
+                <ul>
+                    <li><a href="{% static "files/guide_connexion_BREST_2016.pdf" %}">{% trans "Guide connexion campus de Brest" %}</a></li>
+                    <li><a href="{% static "files/guide_connexion_RENNES_2016.pdf" %}">{% trans "Guide connexion campus de Rennes" %}</a></li>
                 </ul>
             </div>
         </div>

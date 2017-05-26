@@ -23,7 +23,7 @@ class HistoryViewCase(TestCase):
 
     def test_no_transactions(self):
         r = self.client.get(reverse("tresorerie:historique"),
-                                   HTTP_HOST="10.0.3.199", follow=True)
+                                   HTTP_HOST="10.0.3.94", follow=True)
         self.assertContains(r, "Pas de paiements trouvés dans la base de données.")
         self.assertTemplateUsed(r, "tresorerie/history.html")
 
@@ -37,7 +37,7 @@ class HistoryViewCase(TestCase):
             t.save()
 
         r = self.client.get(reverse("tresorerie:historique"),
-                            HTTP_HOST="10.0.3.199", follow=True)
+                            HTTP_HOST="10.0.3.94", follow=True)
         self.assertNotContains(r, "Pas de paiements trouvés dans la base de données.")
         self.assertTemplateUsed(r, "tresorerie/history.html")
         for p in transactions_values:
@@ -61,7 +61,7 @@ class HomeViewCaseMeta(type):
             self.user.formation = formation
             self.user.save()
             r = self.client.get(reverse("tresorerie:home"),
-                                HTTP_HOST="10.0.3.99", follow=True)
+                                HTTP_HOST="10.0.3.94", follow=True)
             self.assertEqual(200, r.status_code)
 
             for p in (
@@ -90,7 +90,7 @@ class HomeViewCaseMeta(type):
                     'price': price,
                     'stripeToken': tok.id,
                 },
-                HTTP_HOST="10.0.3.99",
+                HTTP_HOST="10.0.3.94",
                 follow=True,
             )
 
@@ -182,7 +182,7 @@ class HomeViewCase(TestCase, metaclass=HomeViewCaseMeta):
 
         # Choose product
         r = self.client.get(reverse("tresorerie:pay", args=(product.id,)),
-                            HTTP_HOST="10.0.3.99", follow=True)
+                            HTTP_HOST="10.0.3.94", follow=True)
 
         if do_test:
             self.assertEqual(200, r.status_code)
@@ -199,7 +199,7 @@ class HomeViewCase(TestCase, metaclass=HomeViewCaseMeta):
                 'room': "14",
                 'certify_truth': "certify_truth"
             },
-            HTTP_HOST="10.0.3.99",
+            HTTP_HOST="10.0.3.94",
             follow=True,
         )
         if do_test:
@@ -243,7 +243,7 @@ class HomeViewCase(TestCase, metaclass=HomeViewCaseMeta):
         self.user.save()
 
         r = self.client.get(reverse("tresorerie:home"),
-                            HTTP_HOST="10.0.3.99", follow=True)
+                            HTTP_HOST="10.0.3.94", follow=True)
         self.assertEqual(200, r.status_code)
         self.assertTemplateUsed(r, 'pages/home/home.html')
 
@@ -262,7 +262,7 @@ class HomeViewCase(TestCase, metaclass=HomeViewCaseMeta):
                 'price': price,
                 'stripeToken': tok.id,
             },
-            HTTP_HOST="10.0.3.99",
+            HTTP_HOST="10.0.3.94",
             follow=True,
         )
 
@@ -281,7 +281,7 @@ class HomeViewCase(TestCase, metaclass=HomeViewCaseMeta):
                 'uuid': transaction_uuid,
                 'price': price,
             },
-            HTTP_HOST="10.0.3.99",
+            HTTP_HOST="10.0.3.94",
             follow=True,
         )
 
@@ -300,7 +300,7 @@ class HomeViewCase(TestCase, metaclass=HomeViewCaseMeta):
                 'price': price,
                 'stripeToken': tok.id,
             },
-            HTTP_HOST="10.0.3.99",
+            HTTP_HOST="10.0.3.94",
             follow=True,
         )
 
@@ -324,7 +324,7 @@ class HomeViewCase(TestCase, metaclass=HomeViewCaseMeta):
                 'price': price,
                 'stripeToken': tok.id,
             },
-            HTTP_HOST="10.0.3.99",
+            HTTP_HOST="10.0.3.94",
             follow=True,
         )
 
@@ -394,7 +394,7 @@ class ListProductCase(TestCase):
     def test_simple_display(self):
         # Test if the user is not logged in
         r = self.client.get(reverse("tresorerie:prices"),
-                            HTTP_HOST="10.0.3.99", follow=True)
+                            HTTP_HOST="10.0.3.94", follow=True)
 
         self.assertEqual(200, r.status_code)
         self.assertTemplateUsed(r, 'tresorerie/list_product.html')
@@ -469,7 +469,7 @@ class TransactionDetailViewTest(TestCase):
         t.save()
 
         r = self.client.get(reverse("tresorerie:transaction-detail",args=(t.uuid,)),
-                            HTTP_HOST="10.0.3.99", follow=True)
+                            HTTP_HOST="10.0.3.94", follow=True)
 
         self.assertEqual(r.status_code, 200)
         self.assertTemplateUsed(r, "tresorerie/transaction_detail.html")
