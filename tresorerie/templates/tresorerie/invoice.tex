@@ -147,11 +147,10 @@ Association ResEl - Télécom Bretagne \hfill (33) 2 29 00 15 76 \\
 29280 Plouzané
 France
 \\ \\
-{\bf {% trans "Délivrée à" %} :} {{user.first_name}} {{user.last_name}} }\\
-\tab {{ user.address_first }} \\
-\tab {{ user.address_second }}
+{\bf {% trans "Délivrée à" %} :} {{user.first_name}} {{user.last_name}}\\
+{% for addr in user.address_formated %}\tab {{ addr }} \\{% endfor %}
 
-{\bf Date :}  {{ transaction.date_creation }}
+{\bf {% trans "Date" :}  {{ transaction.date_creation }}
 
 {\bf {% trans "Identifiant de facture" %} :} {{ transaction.uuid}}
 
@@ -161,12 +160,13 @@ France
 
 \begin{invoiceTable}
 
-{% for category, products in transaction.get_products_by_cat %}
-\feetype{ {{category|safe}} }
-    {% for product in products %}
-    \unitrow{% templatetag openbrace %}{{ product.nom|safe }}{% templatetag closebrace %}{% templatetag openbrace %}1{% templatetag closebrace %}{% templatetag openbrace %}{{ product.display_price|floatformat }}{% templatetag closebrace %}{}
+{% for category in transaction.categories %}
+\feetype{ {{category.name|safe}} }
+    {% for product in category.products %}
+    \unitrow{% templatetag openbrace %}{{ product.nom|safe }}{% templatetag closebrace %}{% templatetag openbrace %}1{% templatetag closebrace %}{% templatetag openbrace %}{{ product.display_price|stringformat:"f" }}{% templatetag closebrace %}{}
     {% endfor %}
 {% endfor %}
+    
 %------------------------------------------------
 
 \end{invoiceTable}

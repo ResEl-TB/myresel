@@ -36,7 +36,6 @@ Installez une machine proprement comme on le fait au ResEl, avec Debian, Munin, 
 Installez les paquets nécessaires :
 ```
 apt install build-essential python-software-properties python3 python3-dev python3-pip nginx libmysqlclient-dev ldap-utils libldap2-dev libsasl2-dev libssl-dev redis-server libjpeg-dev libssl-dev gettext supervisor
-apt install texlive-latex-extra  # Ne pas executer si vous voulez économiser un café
 ```
 
 ### Configuration de nginx

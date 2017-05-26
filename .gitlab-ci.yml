@@ -39,7 +39,7 @@ before_script:
   - apt-get install -qq mysql-client
   - echo "CREATE DATABASE ${MYSQL_QOS_DATABASE}" | mysql -u${MYSQL_QOS_USER} -p${MYSQL_QOS_PASSWORD} -h ${MYSQL_QOS_HOST}
   - source .install/scripts/install_openldap.sh
-  - source .install/scripts/install_latex.sh
+#  - source .install/scripts/install_latex.sh
   - pip3 install -qUr requirements.txt
   - rm -f -- ${ROOTDIR}myresel/settings_local.py
   - export MYSQL_USER=root
@@ -47,6 +47,8 @@ before_script:
   - source .install/scripts/populate_db.sh
   - python3 manage.py populate_redis
   - python3 manage.py calculate_free_ip
+  - python3 manage.py rqworker &
+  - python3 manage.py rqscheduler &
 
 test_django:
   artifacts:

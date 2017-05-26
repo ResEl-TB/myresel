@@ -13,7 +13,9 @@ django-python3-ldap==0.9.14
 uWSGI==2.0.15
 redis
 rq
+rq-scheduler
 django-rq
+django-rq-scheduler
 python-logstash>=0.4.6
 python-dateutil==2.6.0
 coverage>=4.3.4
