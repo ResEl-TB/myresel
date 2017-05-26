@@ -67,7 +67,7 @@ class NewClub(FormView):
         return super(NewClub, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form):
-        if not (self.request.ldap_user.is_campus_moderator() or request.user.is_staff):
+        if not (self.request.ldap_user.is_campus_moderator() or self.request.user.is_staff):
             messages.error(self.request, _("Vous n'êtes pas modérateur campus"))
             return HttpResponseRedirect(reverse('campus:clubs:list'))
         if form.cleaned_data['logo'] != None:
@@ -132,7 +132,7 @@ class EditClub(FormView):
         except ObjectDoesNotExist:
             raise Http404("Aucun club trouvé")
 
-        if not (self.request.ldap_user.is_campus_moderator() or self.request.ldap_user.pk in orga.prezs or request.user.is_staff):
+        if not (self.request.ldap_user.is_campus_moderator() or self.request.ldap_user.pk in orga.prezs or self.request.user.is_staff):
             messages.error(self.request, _("Vous n'êtes pas modérateur campus ou président(e) de ce club"))
             return HttpResponseRedirect(reverse('campus:clubs:list'))
 
