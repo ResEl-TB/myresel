@@ -1,0 +1,10 @@
+Bonjour {{ user.first_name }},
+
+Nous vous confirmons que nous avons bien reçu le paiement de {{ transaction.total }} € que vous venez d'effectuer avec notre site.
+
+Nous vous remercions de votre confiance, {% if has_invoice %}vous pouvez trouver en pièce jointe la facture de votre paiement. Vous pouvez aussi{% else %}nous ne pouvons pas vous envoyer votre facture mais vous pouvez dès à present{% endif %} la retrouver en ligne sur votre compte sur notre site : https://resel.fr/paiement/transaction/{{ transaction.uuid }}.
+
+En cas de problème de toute nature, n'hésitez à nous contacter par mail : support@resel.fr / support-rennes@resel.fr, ou à venir directement nous voir lors de nos permanences au foyer à Brest, de 18h à 19h30 en semaine.
+
+Cordialement,
+L'équipe ResEl.

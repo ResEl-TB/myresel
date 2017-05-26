@@ -33,15 +33,16 @@ Installer l'environement de développement :
 git clone https://git.resel.fr/resel/myresel
 cd myresel/
 vagrant up  # It might take a while, thanks to the LaTeX environment :p
-````
+```
 
 Démarrer le serveur :
-````
+```
 vagrant ssh
 cd /myresel
 python3 manage.py rqworker default &
+python3 manage.py rqscheduler default &
 python3 manage.py runserver 0.0.0.0:8000
-````
+```
 
 Sur votre navigateur web rendez-vous sur :
  - `http://10.0.3.94:8000` Simule le VLAN 994 (extérieur)
@@ -160,13 +161,27 @@ hack que je vous propose :
 Vous pouvez vous connecter à l'administration en cliquant sur les engrenages
 dans la barre de navigation.
 
+# Notes
+
+Deux modules : la génération automatique de facture et l'affichage des documents de l'association, reposent sur un service [LaPuTeX](https://git.resel.fr/resel/laputex/).
+Pour mettre le mettre en place, suivez les détails du [README](https://git.resel.fr/resel/laputex/) puis configurer le `settings_local.py` :
+```python
+LAPUTEX_HOST = "http://10.0.3.253:8000/"
+LAPUTEX_DOC_URL = LAPUTEX_HOST+"beta/documents/"
+LAPUTEX_TOKEN = "test"
+```
+
+La facture générée automatiquement ne peut pas gérer des prix supérieurs à 1 million 70 mille €.
+ 
 -----------------------
 
 # Crédits
 Pour ce magnifique site, on peut remercier : 
- - Théo Jacquin @nimag42 : theo.jacquin@telecom-bretagne.eu
- - Morgan Robin @tharkunn : morgan.robin@telecom-bretagne.eu
  - Loïc Carr @dimtion : loic.carr@telecom-bretagne.eu
+ - Jean-Baptiste Valladeau @jbvalladeau : jean-baptiste.valladeau@telecom-bretagne.eu
+ - Théo Jacquin @nimag42 : theo.jacquin@telecom-bretagne.eu
+ - Guillaume Buret @thebigtouffe : guillaume.buret@telecom-bretagne.eu
+ - Morgan Robin @tharkunn : morgan.robin@telecom-bretagne.eu
 
 Code sous license "ne faites pas de bêtises".
 
