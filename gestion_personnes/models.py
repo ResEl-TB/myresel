@@ -212,6 +212,7 @@ class LdapGroup(ldapback.models.LdapModel):
         return False
 
     def add_member(self, pk):
+        # pylint: disable=unsupported-membership-test
         if pk not in self.members:
             # pylint: disable=unsupported-membership-test,no-member
             self.members.append(pk)
