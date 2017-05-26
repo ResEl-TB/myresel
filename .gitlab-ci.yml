@@ -47,6 +47,8 @@ before_script:
   - source .install/scripts/populate_db.sh
   - python3 manage.py populate_redis
   - python3 manage.py calculate_free_ip
+  - python3 manage.py rqworker &
+  - python3 manage.py rqscheduler &
 
 test_django:
   artifacts:
