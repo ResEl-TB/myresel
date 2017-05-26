@@ -2,42 +2,14 @@
 {% load staticfiles %}
 {% load i18n %}
 
-{% block title %}Associations et clubs{% endblock %}
+{% block title %}Mes clubs{% endblock %}
 {% block css %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/campus/clubs.css' %}">
     <link href="{% static 'jquery/jquery-ui.min.css' %}" rel="Stylesheet"></link>
 {% endblock %}
 {% block content %}
-
 <div class="container">
-    <div class="row">
-        <div class="col-md-12 well">
-          <h2>{% trans 'Assos' %}</h2>
-            {% for asso in assos %}
-            <div class="row assos-card">
-                <div class="col-md-3 col-md-offset-1">
-                  {% if asso.logo %}
-                  <img class="assos-img" src="/media/image/ASSOS/{{ asso.logo }}">
-                  {% endif %}
-                </div>
-                <div class="col-md-5">
-                    <h2>{{ asso.name }}</h2>
-                    <p>{{ asso.description }}</p>
-                    {% if asso.email %}
-                    <p>Mailing list: <a href="mailto:{{ asso.email }}">{{ asso.email}}</a></p>
-                    {% endif %}
-                    {% if asso.website %}
-                    <p><a href="http://{{ asso.website }}">En savoir plus</a></p>
-                    {% endif %}
-                </div>
-                <div class="col-md-3">
-                </div>
-            </div>
-            {% empty%}
-            {% trans "Une erreur est servenue pendant la récupération des assos" %}
-            {% endfor %}
-        </div>
-    </div>
+  <div class="row">
     <div class="row">
         <div class="col-md-12 well">
             <h2>{% trans 'Clubs' %}</h2>
@@ -57,7 +29,6 @@
                     {% if club.website %}
                     <p><a href="http://{{ club.website }}">En savoir plus</a></p>
                     {% endif %}
-                    {% if user.is_authenticated%}
                     <p>
                         <a data-toggle="collapse" data-target="#prezs_{{club.cn}}" id="prezs_{{club.cn}}_btn"><span class="fa fa-angle-double-down"></span> Présidents <span class="fa fa-angle-double-down"></span></a>
                         <ul class="collapse" id="prezs_{{club.cn}}">
@@ -68,7 +39,6 @@
                         <ul class="collapse" id="membres_{{club.cn}}">
                         </ul>
                     </p>
-                    {% endif %}
                 </div>
                 <div class="col-md-3">
                     {% if request.user.is_authenticated %}
@@ -94,35 +64,7 @@
             {% endfor %}
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-12 well">
-            <h2>{% trans 'Listes' %}</h2>
-            {% for list in lists %}
-            <div class="row assos-card">
-                <div class="col-md-3 col-md-offset-1">
-                    {% if list.logo %}
-                    <img class="assos-img" src="/media/image/LIST/{{ list.logo }}">
-                    {% endif %}
-                </div>
-                <div class="col-md-5">
-                    <h2>{{ list.name }}</h2>
-                    <p>{{ list.description }}</p>
-                    <p>Année de campagne: {{ list.campagneYear }}</p>
-                    {% if list.website %}
-                    <p>Mailing list: <a href="mailto:{{ list.email }}">{{ list.email}}</a></p>
-                    {% endif %}
-                    {% if list.website %}
-                    <p><a href="http://{{ list.website }}">En savoir plus</a></p>
-                    {% endif %}
-                </div>
-                <div class="col-md-3">
-                </div>
-            </div>
-            {% empty %}
-            {% trans "Une erreur est servenue pendant la récupération des listes" %}
-            {% endfor %}
-        </div>
-    </div>
+  </div>
 </div>
 <div class="modal fade" id="addPrez" role="dialog">
     <div class="modal-dialog">
@@ -262,7 +204,6 @@
       });
     })
 
-    {% if user.is_authenticated%}
     function fetchMembers(pk, type) {
       var get_data = {'pk':pk};
       var correct_url;
@@ -277,7 +218,7 @@
         dataType:"json",
         success:function(data) {
           for(i=0; i<data.length; i++){
-            //WHY DOES JS SUCK ? :'(
+            //WHY DOES JS SUCK :'(
             var node = document.createElement("LI");
             var link = document.createElement("A");
             var textlink = document.createTextNode(data[i]['full_name']);
@@ -303,6 +244,5 @@
         var btn_{{club.cn}} = document.getElementById("prezs_{{club.cn}}_btn");
         $(btn_{{club.cn}}).one("click", function(){fetchMembers("{{club.cn}}", "prezs"); btn_{{club.cn}}.onclick=null;});
     {% endfor %}
-    {% endif %}
 </script>
 {% endblock %}

@@ -20,29 +20,34 @@
 </div>
 
 <div class="container">
+  {% for user in users%}
+  {%if forloop.counter|add:-1|divisibleby:4 %}
   <div class="row">
-    {% for user in users%}
-      <div class="col-md-2 col-sm-6 col-xs-12 text-center">
-        <div class="col-xs-12 well">
-          {% if user.photo_file == "" %}
-          <div class="user-photo">
-            <img src="{% static "images/campus/photo-placeholder.jpg" %}" />
-          </div>
-          {% else %}
-          <div class="user-photo">
-            <img src="/media/image/users_photo/{{user.photo_file}}" />
-          </div>
-          {% endif %}
-          {{user.first_name}}<br>
-          {{user.last_name}}<br>
-          Promo {{user.promo}}
+  {% endif %}
+    <div class="col-md-3 text-center">
+      <div class="col-xs-12 well">
+        {% if user.photo_file == "" %}
+        <div class="user-photo">
+          <img src="{% static "images/campus/photo-placeholder.jpg" %}" />
         </div>
+        {% else %}
+        <div class="user-photo">
+          <img src="/media/image/users_photo/{{user.photo_file}}" />
+        </div>
+        {% endif %}
+        {{user.first_name}}<br>
+        {{user.last_name}}<br>
+        Promo {{user.promo}}
       </div>
-    {% empty %}
-      <div class="col-md-offset-4 col-md-4 text-center" style="color:white; min-height: 50px;">
-        Personne :(
-      </div>
-    {% endfor %}
+    </div>
+  {% if forloop.counter|divisibleby:4 or forloop.first %}
   </div>
+  {% endif %}
+  {% empty %}
+    <div class="col-md-offset-4 col-md-4 text-center" style="color:white; min-height: 50px;">
+      Personne :(
+    </div>
+  </div>
+  {% endfor %}
 </div>
 {% endblock %}

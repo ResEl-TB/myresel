@@ -2,7 +2,7 @@ from django import forms
 from django.conf import settings
 from django.core.validators import MaxLengthValidator
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm, CharField, TextInput, Form
+from django.forms import ModelForm, CharField, TextInput, Form, Textarea, ChoiceField, EmailField, IntegerField
 from django.forms.models import ModelMultipleChoiceField
 from django.utils.translation import ugettext_lazy as _
 from django.db.models import Q
@@ -10,6 +10,7 @@ from django.db.models import Q
 from campus.models import RoomBooking, Room, RoomAdmin, StudentOrganisation, Mail
 from gestion_personnes.models import LdapUser
 from gestion_personnes.forms import PersonnalInfoForm
+
 
 from ldap3 import LDAPException
 from fonctions import ldap
@@ -137,53 +138,162 @@ class ClubManagementForm(Form):
         ("LIST", "Liste de campagne"),
     ]
 
+    type = ChoiceField(
+        widget=forms.Select(attrs={
+            'class':'form-control',
+            'id':'type',
+        }),
+        choices=ORGA_TYPE,
+        label=_("Sélectionner ce que vous souhaitez créer"),
+    )
+
     name = CharField(  # orgaName
         widget=TextInput(attrs={
             'class': 'form-control',
-            'placeholder': _("Nom du club"),
+            'placeholder': _("Nom"),
         }),
         validators=[MaxLengthValidator(50)],
+        label=_("Nom"),
     )
 
     cn = CharField(  # cn
         widget=TextInput(attrs={
             'class': 'form-control',
-            'placeholder': _("Nom court"),
+            'placeholder': _("Nom court; ex: tennis pour les Club tennis"),
         }),
         validators=[MaxLengthValidator(50)],
+        label=_("Nom court"),
     )
 
     description = CharField(  # description
-        widget=TextInput(attrs={
+        widget=Textarea(attrs={
             'class': 'form-control',
-            'placeholder': _("Présentation "),
+            'placeholder': _("Présentation du l'organisation"),
+            'rows': 5
         }),
         validators=[MaxLengthValidator(50)],
+        label=_("Description"),
     )
 
-    logo = CharField(  # deduced from the cn
-        widget=TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': _("lien vers le logo"),
-        }),
-        validators=[MaxLengthValidator(50)],
+    logo = forms.ImageField( #logo
+        widget = forms.ClearableFileInput(),
+        label = 'Logo',
+        required = False,
+
     )
 
-    email = CharField(   # mlist
-        widget=TextInput(attrs={
+    email = EmailField(   # mlist
+        widget=forms.EmailInput(attrs={
             'class': 'form-control',
-            'placeholder': _("Mailing liste "),
+            'placeholder': _("Adresse de la mailing liste "),
         }),
         validators=[MaxLengthValidator(50)],
+        label=_('Mailing liste'),
+        required=False,
     )
 
     website = CharField(  # Website (if not a ResEl website)
         widget=TextInput(attrs={
             'class': 'form-control',
-            'placeholder': _("Site web de contact"),
+            'placeholder': _("Site web"),
         }),
         validators=[MaxLengthValidator(50)],
+        required=False,
     )
+
+    campagneYear = forms.IntegerField( # Année de campagne
+        min_value=1997,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': _("Année de campagne"),
+        }),
+        label=_('Année de Campagne'),
+        required=False,
+    )
+
+    def clean_type(self):
+        type = self.cleaned_data['type']
+        if type not in [o[0] for o in self.ORGA_TYPE]:
+            raise ValidationError(message=_("Merci de sélectionner un choix valide"), code="BAD TYPE")
+        return (type)
+
+    def clean_cn(self):
+        cn = self.cleaned_data['cn'].lower()
+        if StudentOrganisation.filter(cn=cn):
+            raise ValidationError(_("Ce nom existe déjà, assurez vous de créer un club/asso qui n'existe pas déjà"), code="CN EXISTS")
+        elif not re.match('[a-z0-9]+$', cn):
+            raise ValidationError(message=_("Le nom court ne doit pas contenir d'espace est n'est contitué que de lettres et de chiffres"))
+        return(cn)
+
+    def clean_logo(self):
+        logo = self.cleaned_data['logo']
+        if self.cleaned_data['type'] != 'CLUB' and logo == None:
+            raise ValidationError(message=_("Merci de renseigner un logo pour votre association/liste"), code="NO LOGO")
+        return(logo)
+
+    def clean_website(self):
+        website = self.cleaned_data['website'].lower()
+        if not re.match(r'[a-z0-9.-]+\.[a-z0-9]{1,3}$', website) and website != "":
+            raise ValidationError(message=_("Veuillez rentrer une adresse web valide"), code="BAD WEBSITE")
+        return(website)
+
+    def clean_email(self):
+        email = self.cleaned_data['email'].lower()
+        if not re.match(r'^[a-z1-9-_.+]+\@[a-z1-9-]+\.[a-z0-9-]+$', email) and email != "":
+            raise ValidationError(message=_("Veuillez rentrer une adresse mail valide"), code="BAD MAIL")
+        return(email)
+
+    def clean_campagneYear(self):
+        year = self.cleaned_data['campagneYear']
+        if self.cleaned_data['type'] == "LIST" and year == None:
+            raise ValidationError(_("Veuillez entrer une année de campagne valide"), code="WRONG YEAR")
+        return(year)
+
+    def clean(self):
+        cleaned_data = super(ClubManagementForm, self).clean()
+
+    def create_club(self):
+        new_club = StudentOrganisation()
+        new_club.name = self.cleaned_data['name']
+        new_club.cn = self.cleaned_data['cn']
+        new_club.email = self.cleaned_data['email']
+        new_club.website = self.cleaned_data['website']
+        new_club.logo = self.cleaned_data['logo']
+        new_club.memebers = []
+        new_club.prezs = []
+        if new_club.email != '':
+            new_club.ml_infos = True
+        else:
+            new_club.ml_infos = False
+        new_club.description = self.cleaned_data['description']
+        new_club.object_classes = ["studentOrganisation"]
+        if self.cleaned_data['type'] == "CLUB":
+            new_club.object_classes += ["tbClub"]
+        elif self.cleaned_data['type'] == "ASSOS":
+            new_club.object_classes += ["tbAsso"]
+        elif self.cleaned_data['type'] == "LIST":
+            new_club.object_classes += ["tbCampagne"]
+            new_club.campagneYear = self.cleaned_data['campagneYear']
+        new_club.save()
+
+class ClubEditionForm(ClubManagementForm):
+
+    def clean_cn(self):
+        return(self.cleaned_data['cn'].lower())
+
+    def clean_logo(self):
+        logo = self.cleaned_data['logo']
+        return(logo)
+    def edit_club(self, pk):
+        club = StudentOrganisation.get(cn=pk)
+        club.name = self.cleaned_data['name']
+        club.description = self.cleaned_data['description']
+        club.email = self.cleaned_data['email']
+        club.website = self.cleaned_data['website']
+        club.logo = self.cleaned_data["logo"]
+        club.save()
+
+
 
 class MajPersonnalInfo(PersonnalInfoForm):
     CAMPUS = [('Brest', "Brest"), ('Rennes', 'Rennes'), ('None', _('Je n\'habite pas à la Maisel'))]

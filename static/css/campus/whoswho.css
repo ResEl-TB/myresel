@@ -6,12 +6,6 @@
   margin-top: 5%;
 }
 
-.modal-header {
-  color: white;
-  text-align: center;
-  background: url(/static/images/campus/bgimg.jpg) no-repeat center center fixed;
-}
-
 .who_logo {
    max-width: 100%;
 }
@@ -54,6 +48,7 @@ label input {
 }
 
 .user-photo img{
-  max-width: 100px;
+  height: 150px;
+  max-width: 150px;
   box-shadow: -1px 0px 15px rgba(0,0,0,0.5);
 }
