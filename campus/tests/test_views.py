@@ -159,8 +159,7 @@ class MyClubTestCase(TestCase):
         r = self.client.get(
             reverse("campus:clubs:search"),
             data={
-                'what': "Alexandre",
-                'is_approx': False
+                'what': "Tennis",
             },
             HTTP_HOST="10.0.3.99",
             follow = True
