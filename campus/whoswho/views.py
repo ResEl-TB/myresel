@@ -184,9 +184,8 @@ class SearchUsers(View):
     def get(self, request, *args, **kwargs):
         form = SearchSomeone(request.GET)
         if form.is_valid():
-            res = form.getResult(form.cleaned_data["what"], form.cleaned_data["is_approx"])
-            if res != False and len(res) != 0:
-                form = SearchSomeone()
+            res = form.get_results(form.cleaned_data["what"], form.cleaned_data["strict"])
+            if res:
                 return render(request, self.template_name, {'users': res, 'form': form})
             else:
                 messages.info(request, _("La recherche n'a rien retourné"))
