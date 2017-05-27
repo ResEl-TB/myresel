@@ -21,6 +21,7 @@ from campus.forms import MajPersonnalInfo, SearchSomeone
 
 from gestion_personnes.async_tasks import send_mails
 from gestion_personnes.models import LdapUser, UserMetaData
+from campus.models.clubs_models import StudentOrganisation
 
 from myresel.settings import MEDIA_ROOT
 
@@ -44,7 +45,13 @@ class UserDetails(View):
             raise Http404
 
         user.godchildren, user.godparents = self.getGods(user)
-        return render(request, self.template_name, {'display_user' : user})
+        clubs = StudentOrganisation.all()
+        clubs = [o for o in clubs if "tbClub" in o.object_classes or "tbClubSport" in o.object_classes]
+        #legacy feature; because some prezs aren't members in the ldap for some reason
+        myclubs = [c for c in clubs if request.ldap_user.pk in c.members]
+        myclubs += [c for c in clubs if request.ldap_user.pk in c.prezs and c not in myclubs]
+        myclubs.sort(key=lambda x: x.name)
+        return render(request, self.template_name, {'display_user' : user, 'clubs':myclubs})
 
     def getGods(self, user):
         """
@@ -177,9 +184,8 @@ class SearchUsers(View):
     def get(self, request, *args, **kwargs):
         form = SearchSomeone(request.GET)
         if form.is_valid():
-            res = form.getResult(form.cleaned_data["what"], form.cleaned_data["is_approx"])
-            if res != False and len(res) != 0:
-                form = SearchSomeone()
+            res = form.get_results(form.cleaned_data["what"], form.cleaned_data["strict"])
+            if res:
                 return render(request, self.template_name, {'users': res, 'form': form})
             else:
                 messages.info(request, _("La recherche n'a rien retourné"))
