@@ -64,7 +64,7 @@
                   {% endif %}
                 </li>
                 {% empty %}
-                {% trans "Aucun parrain trouvé pour " %}{{display_user.first_name}} {{display_user.last_name|upper}}
+                {{display_user.first_name}} {{display_user.last_name|upper}} {% trans " n'a pas de parrain" %}
                 {% endfor %}
                 </ul>
             </div>
@@ -82,7 +82,7 @@
                   {% endif %}
                 </li>
                 {% empty %}
-                {% trans "Aucun Filleul trouvé pour " %}{{display_user.first_name}} {{display_user.last_name|upper}}
+                {{display_user.first_name}} {{display_user.last_name|upper}} {% trans " n'a pas de filleul" %}
                 {% endfor %}
                 </ul>
             </div>
