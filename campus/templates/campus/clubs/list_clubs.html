@@ -204,6 +204,7 @@
       });
     })
 
+    {% if user.is_authenticated%}
     function fetchMembers(pk, type) {
       var get_data = {'pk':pk};
       var correct_url;
@@ -218,7 +219,6 @@
         dataType:"json",
         success:function(data) {
           for(i=0; i<data.length; i++){
-            //WHY DOES JS SUCK :'(
             var node = document.createElement("LI");
             var link = document.createElement("A");
             var textlink = document.createTextNode(data[i]['full_name']);
@@ -236,13 +236,14 @@
     }
 
     {% for club in clubs %}
-        var btn_{{club.cn}} = document.getElementById("membres_{{club.cn}}_btn");
-        $(btn_{{club.cn}}).one("click", function(){fetchMembers("{{club.cn}}", "members"); btn_{{club.cn}}.onclick=null;});
+        var btn_{{club.cn|remove_unwanted_strings}} = document.getElementById("membres_{{club.cn}}_btn");
+        $(btn_{{club.cn|remove_unwanted_strings}}).one("click", function(){fetchMembers("{{club.cn}}", "members"); btn_{{club.cn|remove_unwanted_strings}}.onclick=null;});
     {% endfor %}
 
     {% for club in clubs %}
-        var btn_{{club.cn}} = document.getElementById("prezs_{{club.cn}}_btn");
-        $(btn_{{club.cn}}).one("click", function(){fetchMembers("{{club.cn}}", "prezs"); btn_{{club.cn}}.onclick=null;});
+        var btn_{{club.cn|remove_unwanted_strings}} = document.getElementById("prezs_{{club.cn}}_btn");
+        $(btn_{{club.cn|remove_unwanted_strings}}).one("click", function(){fetchMembers("{{club.cn}}", "prezs"); btn_{{club.cn|remove_unwanted_strings}}.onclick=null;});
     {% endfor %}
+    {% endif %}
 </script>
 {% endblock %}
