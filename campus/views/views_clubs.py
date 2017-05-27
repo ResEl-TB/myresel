@@ -35,6 +35,10 @@ def list_clubs(request):
     assos = [o for o in organisations if "tbAsso" in o.object_classes]
     lists = [o for o in organisations if "tbCampagne" in o.object_classes]
 
+    clubs.sort(key=lambda x: x.name)
+    assos.sort(key=lambda x: x.name)
+    lists.sort(key=lambda x: x.name)
+
     hardLinkAdd, hardLinkDel, hardLinkAddPrez, hardLinkWhoUser = getHardLinks()
 
     return render(
@@ -183,12 +187,16 @@ class MyClubs(View):
 
     def get(self, request):
         clubs = StudentOrganisation.all()
-        clubs = [c for c in clubs if request.ldap_user.pk in c.members]
+        clubs = [o for o in clubs if "tbClub" in o.object_classes or "tbClubSport" in o.object_classes]
+        #legacy feature; because some prezs aren't members in the ldap for some reason
+        myclubs = [c for c in clubs if request.ldap_user.pk in c.members]
+        myclubs += [c for c in clubs if request.ldap_user.pk in c.prezs]
+        myclubs.sort(key=lambda x: x.name)
 
         hardLinkAdd, hardLinkDel, hardLinkAddPrez, hardLinkWhoUser = getHardLinks()
 
         context = {
-            'clubs': clubs,
+            'clubs': myclubs,
             'ldapOuPeople': LDAP_DN_PEOPLE,
             'hardLinkAdd': hardLinkAdd,
             'hardLinkDel': hardLinkDel,
@@ -209,6 +217,7 @@ class SearchClub(View):
         print(what)
         organisations = StudentOrganisation.filter(name__contains=what)
         clubs = [o for o in organisations if "tbClub" in o.object_classes or "tbClubSport" in o.object_classes]
+        clubs.sort(key=lambda x: x.name)
 
         if not clubs:
             messages.info(request, _("Aucun club ne correspond à votre recherche"))
@@ -292,6 +301,9 @@ class AddPrezToClub(View):
             club.prezs.append(user.pk)
             club.save()
             messages.success(request, _("Le président viens d'être ajouté"))
+        if "tbClub" in club.object_classes and not user.pk in club.members:
+            club.members.append(user.pk)
+            club.save()
         else:
             messages.info(request, _("Cette personne est déjà président(e)"))
 
