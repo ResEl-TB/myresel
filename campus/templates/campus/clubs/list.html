@@ -1,6 +1,7 @@
 {% extends "base_campus.html" %}
 {% load staticfiles %}
 {% load i18n %}
+{% load clubs_extras %}
 
 {% block title %}Associations et clubs{% endblock %}
 {% block css %}
@@ -18,6 +19,8 @@
                 <div class="col-md-3 col-md-offset-1">
                   {% if asso.logo %}
                   <img class="assos-img" src="/media/image/ASSOS/{{ asso.logo }}">
+                  {% else %}
+                  <img class="assos-img" src="{% static 'images/campus/elephant-polygon.png' %}"
                   {% endif %}
                 </div>
                 <div class="col-md-5">
@@ -34,7 +37,7 @@
                 </div>
             </div>
             {% empty%}
-            {% trans "Une erreur est servenue pendant la récupération des assos" %}
+            {% trans "Vous ne faites partis d'aucun club" %}
             {% endfor %}
         </div>
     </div>
@@ -44,8 +47,10 @@
             {% for club in clubs %}
             <div class="row assos-card">
                 <div class="col-md-3 col-md-offset-1">
-                  {% if club.logo != "None" %}
+                  {% if club.logo %}
                   <img class="assos-img" src="/media/image/CLUB/{{ club.logo }}">
+                  {% else %}
+                  <img class="assos-img" src="{% static 'images/campus/elephant-polygon.png' %}"
                   {% endif %}
                 </div>
                 <div class="col-md-5">
@@ -102,6 +107,8 @@
                 <div class="col-md-3 col-md-offset-1">
                     {% if list.logo %}
                     <img class="assos-img" src="/media/image/LIST/{{ list.logo }}">
+                    {% else %}
+                    <img class="assos-img" src="{% static 'images/campus/elephant-polygon.png' %}"
                     {% endif %}
                 </div>
                 <div class="col-md-5">
@@ -276,8 +283,19 @@
         data: get_data,
         dataType:"json",
         success:function(data) {
+          var node = document.createElement("LI");
+          if(data.length == 0){
+            if(type=="members"){
+                var text = document.createTextNode("Il n'y a aucun membre");
+                node.appendChild(text);
+                document.getElementById("membres_"+pk).appendChild(node);
+            }else {
+                var text = document.createTextNode("Il n'y a aucun président");
+                node.appendChild(text);
+                document.getElementById("prezs_"+pk).appendChild(node)
+            }
+          }
           for(i=0; i<data.length; i++){
-            //WHY DOES JS SUCK ? :'(
             var node = document.createElement("LI");
             var link = document.createElement("A");
             var textlink = document.createTextNode(data[i]['full_name']);
@@ -295,13 +313,13 @@
     }
 
     {% for club in clubs %}
-        var btn_{{club.cn}} = document.getElementById("membres_{{club.cn}}_btn");
-        $(btn_{{club.cn}}).one("click", function(){fetchMembers("{{club.cn}}", "members"); btn_{{club.cn}}.onclick=null;});
+        var btn_{{club.cn|remove_unwanted_strings}} = document.getElementById("membres_{{club.cn}}_btn");
+        $(btn_{{club.cn|remove_unwanted_strings}}).one("click", function(){fetchMembers("{{club.cn}}", "members"); btn_{{club.cn|remove_unwanted_strings}}.onclick=null;});
     {% endfor %}
 
     {% for club in clubs %}
-        var btn_{{club.cn}} = document.getElementById("prezs_{{club.cn}}_btn");
-        $(btn_{{club.cn}}).one("click", function(){fetchMembers("{{club.cn}}", "prezs"); btn_{{club.cn}}.onclick=null;});
+        var btn_{{club.cn|remove_unwanted_strings}} = document.getElementById("prezs_{{club.cn}}_btn");
+        $(btn_{{club.cn|remove_unwanted_strings}}).one("click", function(){fetchMembers("{{club.cn}}", "prezs"); btn_{{club.cn|remove_unwanted_strings}}.onclick=null;});
     {% endfor %}
     {% endif %}
 </script>
