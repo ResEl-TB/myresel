@@ -19,6 +19,8 @@
                 <div class="col-md-3 col-md-offset-1">
                   {% if asso.logo %}
                   <img class="assos-img" src="/media/image/ASSOS/{{ asso.logo }}">
+                  {% else %}
+                  <img class="assos-img" src="{% static 'images/campus/elephant-polygon.png' %}"
                   {% endif %}
                 </div>
                 <div class="col-md-5">
@@ -47,6 +49,8 @@
                 <div class="col-md-3 col-md-offset-1">
                   {% if club.logo %}
                   <img class="assos-img" src="/media/image/CLUB/{{ club.logo }}">
+                  {% else %}
+                  <img class="assos-img" src="{% static 'images/campus/elephant-polygon.png' %}"
                   {% endif %}
                 </div>
                 <div class="col-md-5">
@@ -103,6 +107,8 @@
                 <div class="col-md-3 col-md-offset-1">
                     {% if list.logo %}
                     <img class="assos-img" src="/media/image/LIST/{{ list.logo }}">
+                    {% else %}
+                    <img class="assos-img" src="{% static 'images/campus/elephant-polygon.png' %}"
                     {% endif %}
                 </div>
                 <div class="col-md-5">
