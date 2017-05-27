@@ -20,7 +20,7 @@
                   {% if asso.logo %}
                   <img class="assos-img" src="/media/image/ASSOS/{{ asso.logo }}">
                   {% else %}
-                  <img class="assos-img" src="{% static 'images/campus/club.png' %}">
+                  <img class="assos-img" src="{% static 'images/campus/orga.png' %}">
                   {% endif %}
                 </div>
                 <div class="col-md-5">
@@ -37,7 +37,7 @@
                 </div>
             </div>
             {% empty%}
-            {% trans "Vous ne faites partis d'aucun club" %}
+            {% trans "Une erreur est servenue pendant la récupération des assos" %}
             {% endfor %}
         </div>
     </div>
@@ -50,7 +50,7 @@
                   {% if club.logo %}
                   <img class="assos-img" src="/media/image/CLUB/{{ club.logo }}">
                   {% else %}
-                  <img class="assos-img" src="{% static 'images/campus/club.png' %}">
+                  <img class="assos-img" src="{% static 'images/campus/orga.png' %}">
                   {% endif %}
                 </div>
                 <div class="col-md-5">
@@ -108,7 +108,7 @@
                     {% if list.logo %}
                     <img class="assos-img" src="/media/image/LIST/{{ list.logo }}">
                     {% else %}
-                    <img class="assos-img" src="{% static 'images/campus/club.png' %}">
+                    <img class="assos-img" src="{% static 'images/campus/orga.png' %}">
                     {% endif %}
                 </div>
                 <div class="col-md-5">
