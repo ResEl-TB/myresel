@@ -346,6 +346,8 @@ class MajPersonnalInfo(PersonnalInfoForm):
 
 class SearchSomeone(forms.Form):
 
+    search_keys = ['first_name', 'last_name', 'mail', 'promo']
+
     what = forms.CharField(
         widget = forms.TextInput(attrs={
             'class': 'form-control',
@@ -353,60 +355,51 @@ class SearchSomeone(forms.Form):
         }),
     )
 
-    is_approx = forms.BooleanField(
+    strict = forms.BooleanField(
         widget = forms.CheckboxInput(),
-        label = _('Recherche approximative'),
+        label = _('Recherche stricte'),
         label_suffix = _(''),
         required = False,
     )
 
-    def getResult(self, what, is_approx):
-        what = what.strip()
+    def clean_what(self):
+        what = self.cleaned_data['what']
+        return what.lower().strip()
 
-        if re.match(r'^[a-z1-9-_.+]+\@[a-z1-9-]+\.[a-z0-9-]+$', what.lower()):
-            return LdapUser.filter(mail=what)
+    def _search_single_word(self, word, strict=False):
+        """ Search in the ldap for users according to the key `search_keys`"""
+        search_keys = self.search_keys
+        if not strict:
+            search_keys = map(lambda k: k + '__contains', search_keys)
 
-        elif "@" in what and is_approx == True:
-            return LdapUser.filter(mail__contains=what)
+        results = []
+        for key in search_keys:
+            results += LdapUser.filter(**{key: word})
+        return results
 
-        elif re.match(r'^[a-z- ]+ ([a-z-]+)', what.lower()):
+    @staticmethod
+    def int_safe(u):
+        try:
+            return int(u)
+        except ValueError:
+            return 0
 
-            try:
-                elList = what.split(' ')
-                name1, name2 = elList[0], elList[-1]
-                if is_approx == True:
-                    res = LdapUser.filter(first_name__contains=name1)
-                    res += LdapUser.filter(first_name__contains=name2)
-                    res += LdapUser.filter(last_name__contains=name1)
-                    res += LdapUser.filter(last_name__contains=name2)
-                else:
-                    res = LdapUser.filter(first_name=name1)
-                    res += LdapUser.filter(first_name=name2)
-                    res += LdapUser.filter(last_name=name1)
-                    res += LdapUser.filter(last_name=name2)
-                return list(dict((obj.first_name, obj) for obj in res).values()) #exludes duplicates
+    def _sort_results(self, unsorted):
+        """ Sort results by promotion and by relevance """
+        # Delete duplicates
+        results = []
+        for r in unsorted:
+           if r not in [u.uid for u in results]:
+               results.append(r)
+        for result in results:
+            result.promo = self.int_safe(result.promo)
+        results.sort(key=lambda u: u.promo, reverse=True)
+        return results
 
-            except LDAPException as e:
-                return False
-            except Exception as e:
-                return False
+    def get_results(self, what, strict):
+        results = []
+        names = what.split()
+        for name in names:
+            results += self._search_single_word(name, strict)
+        return self._sort_results(results)
 
-        elif re.match(r'^[a-z-]+', what.lower()):
-            try:
-                if is_approx == True:
-                    res = LdapUser.filter(first_name__contains=what)
-                    res += LdapUser.filter(last_name__contains=what)
-                else:
-                    res = LdapUser.filter(first_name=what)
-                    res += LdapUser.filter(last_name=what)
-                return(res)
-
-            except LDAPException as e:
-                return False
-            except Exception as e:
-                return False
-
-        return False
-
-    def clean(self):
-        cleaned_data = super(SearchSomeone, self).clean()
