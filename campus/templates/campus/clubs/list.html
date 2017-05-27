@@ -35,7 +35,7 @@
                 </div>
             </div>
             {% empty%}
-            {% trans "Une erreur est servenue pendant la récupération des assos" %}
+            {% trans "Vous ne faites partis d'aucun club" %}
             {% endfor %}
         </div>
     </div>
@@ -277,6 +277,18 @@
         data: get_data,
         dataType:"json",
         success:function(data) {
+          var node = document.createElement("LI");
+          if(data.length == 0){
+            if(type=="members"){
+                var text = document.createTextNode("Il n'y a aucun membre");
+                node.appendChild(text);
+                document.getElementById("membres_"+pk).appendChild(node);
+            }else {
+                var text = document.createTextNode("Il n'y a aucun président");
+                node.appendChild(text);
+                document.getElementById("prezs_"+pk).appendChild(node)
+            }
+          }
           for(i=0; i<data.length; i++){
             var node = document.createElement("LI");
             var link = document.createElement("A");

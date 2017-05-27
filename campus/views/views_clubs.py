@@ -256,11 +256,11 @@ class AddPersonToClub(View):
                     raise Http404("L'utilisateur n'éxiste pas")
 
         if "tbClub" in club.object_classes and not user.pk in club.members:
-            messages.success(request, _("Le membre viens d'être ajouté"))
+            messages.success(request, _("Inscription terminée avec succès"))
             club.members.append(user.pk)
             club.save()
         else:
-            messages.info(request, _("Cette personne est déjà inscrite"))
+            messages.info(request, _("Le système a déjà trouvé le membre correspondant comme étant inscrit, inscription impossible."))
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 class AddPrezToClub(View):
@@ -327,9 +327,9 @@ class RemovePersonFromClub(View):
         if "tbAsso" not in club.object_classes and user.pk in club.members:
             club.members.remove(user.pk)
             club.save()
-            messages.success(request, _("Le membre viens d'être supprimé"))
+            messages.success(request, _("Désinscription terminée avec succès"))
         else:
-            messages.info(request, _("Cette personne ne fait pas partie de ce club"))
+            messages.info(request, _("Le système n'a pas trouvé de personne à désinscrire dans la liste des membres"))
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 class RequestMembers(View):
