@@ -48,8 +48,8 @@ class UserDetails(View):
         clubs = StudentOrganisation.all()
         clubs = [o for o in clubs if "tbClub" in o.object_classes or "tbClubSport" in o.object_classes]
         #legacy feature; because some prezs aren't members in the ldap for some reason
-        myclubs = [c for c in clubs if request.ldap_user.pk in c.members]
-        myclubs += [c for c in clubs if request.ldap_user.pk in c.prezs and c not in myclubs]
+        myclubs = [c for c in clubs if user in c.members]
+        myclubs += [c for c in clubs if user in c.prezs and c not in myclubs]
         myclubs.sort(key=lambda x: x.name)
         return render(request, self.template_name, {'display_user' : user, 'clubs':myclubs})
 
