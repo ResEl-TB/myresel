@@ -221,7 +221,7 @@ class ClubManagementForm(Form):
         cn = self.cleaned_data['cn'].lower()
         if StudentOrganisation.filter(cn=cn):
             raise ValidationError(_("Ce nom existe déjà, assurez vous de créer un club/asso qui n'existe pas déjà"), code="CN EXISTS")
-        elif not re.match('[a-z0-9]+$', cn):
+        elif not re.match(r'^[a-z0-9-]+$', cn):
             raise ValidationError(message=_("Le nom court ne doit pas contenir d'espace est n'est contitué que de lettres et de chiffres"))
         return(cn)
 
@@ -233,7 +233,7 @@ class ClubManagementForm(Form):
 
     def clean_website(self):
         website = self.cleaned_data['website'].lower()
-        if not re.match(r'[a-z0-9.-]+\.[a-z0-9]{1,3}$', website) and website != "":
+        if not re.match(r'^(http(s)*:\/\/)*[a-z0-9.-]+\.[a-z0-9]{1,3}$', website) and website != "":
             raise ValidationError(message=_("Veuillez rentrer une adresse web valide"), code="BAD WEBSITE")
         return(website)
 
