@@ -88,7 +88,7 @@
                         <p><a href="{% url 'campus:clubs:edit' club.cn%}"><span class="fa fa-edit"></span> éditer</a></p>
                         <p><a class="addPersonLink" data-toggle="modal" data-target="#addPerson" data="{{club.cn}}"><span class="fa fa-user-plus"></span> inscrire un membre</a></p>
                         <p><a class="delPersonLink" data-toggle="modal" data-target="#delPerson" data="{{club.cn}}"><span class="fa fa-user-times"></span> désinscrire un membre</a></p>
-                        <p><a class="addPrezLink" data-toggle="modal" data-target="#addPrez" data="{{club.cn}}"><span class="fa fa-street-view"></span> ajouter un président</a></p>
+                        <p><a class="addPrezLink" data-toggle="modal" data-target="#addPrez" data="{{club.cn}}"><span class="fa fa-street-view"></span> effectuer une passation</a></p>
                         {% endif%}
                     </div>
                     {% endif %}
@@ -141,7 +141,12 @@
                 </div>
                 <div class="alert alert-danger text-center remove-radius">
                     <span class="fa fa-spin fa-warning"></span>
-                    <p>Attention, cette action n'est pas sans conséquences. <br />Assurez-vous de renseigner la bonne personne.</p>
+                    <p>
+                        Attention, cette action n'est pas sans conséquences. <br />
+                        Le président actuel sera destitué <br />
+                        Assurez-vous de renseigner la bonne personne. <br />
+                        En cas d'erreur <a href="{% url 'contact'%}"> contactez un administrateur ResEl </a>
+                    </p>
                 </div>
                 <div class="modal-body">
                     <p>{% trans "Entrer la personne à ajouter en tant que président à ce club:" %}</p>

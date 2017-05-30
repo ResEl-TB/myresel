@@ -310,14 +310,15 @@ class AddPrezToClub(View):
             raise Http404("L'utilisateur n'éxiste pas")
 
         if "tbClub" in club.object_classes and not user.pk in club.prezs:
-            club.prezs.append(user.pk)
+            club.prezs=[user.pk]
             club.save()
             messages.success(request, _("Le président viens d'être ajouté"))
+        else:
+            messages.info(request, _("Cette personne est déjà président(e)"))
+
         if "tbClub" in club.object_classes and not user.pk in club.members:
             club.members.append(user.pk)
             club.save()
-        else:
-            messages.info(request, _("Cette personne est déjà président(e)"))
 
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
