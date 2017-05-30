@@ -20,7 +20,7 @@
                   {% if club.logo %}
                   <img class="assos-img" src="/media/image/CLUB/{{ club.logo }}">
                   {% else %}
-                  <img class="assos-img" src="{% static 'images/campus/elephant-polygon.png' %}"
+                  <img class="assos-img" src="{% static 'images/campus/orga.png' %}">
                   {% endif %}
                 </div>
                 <div class="col-md-5">
@@ -63,7 +63,7 @@
                 </div>
             </div>
             {% empty %}
-            {% trans "Une erreur est servenue pendant la récupération des clubs" %}
+            {% trans "Vous êtes memebre d'aucun club" %}
             {% endfor %}
         </div>
     </div>
