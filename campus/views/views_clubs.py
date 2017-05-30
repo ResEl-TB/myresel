@@ -268,6 +268,18 @@ class AddPersonToClub(View):
             messages.success(request, _("Inscription terminée avec succès"))
             club.members.append(user.pk)
             club.save()
+            if club.email:
+                mail_search = re.search('^([a-z1-9-_.+]+)\@.+$', club.email)
+                mail = mail_search.group(1)
+                subscription_email = EmailMessage(
+                    subject="SUBSCRIBE {} {} {}".format(mail, user.first_name,
+                                                            user.last_name),
+                    body="Inscription automatique de {} a {}".format(user.uid, club.name),
+                    from_email=user.mail,
+                    reply_to=["listmaster@resel.fr"],
+                    to=["sympa@resel.fr"],
+                )
+                subscription_email.send()
         else:
             messages.info(request, _("Le système a déjà trouvé le membre correspondant comme étant inscrit, inscription impossible."))
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
@@ -339,6 +351,18 @@ class RemovePersonFromClub(View):
         if "tbAsso" not in club.object_classes and user.pk in club.members:
             club.members.remove(user.pk)
             club.save()
+            if club.email:
+                mail_search = re.search('^([a-z1-9-_.+]+)\@.+$', club.email)
+                mail = mail_search.group(1)
+                subscription_email = EmailMessage(
+                    subject="SIGNOFF {} {} {}".format(mail, user.first_name,
+                                                            user.last_name),
+                    body="Inscription automatique de {} a {}".format(user.uid, club.name),
+                    from_email=user.mail,
+                    reply_to=["listmaster@resel.fr"],
+                    to=["sympa@resel.fr"],
+                )
+                subscription_email.send()
             messages.success(request, _("Désinscription terminée avec succès"))
         else:
             messages.info(request, _("Le système n'a pas trouvé de personne à désinscrire dans la liste des membres"))

@@ -233,7 +233,7 @@ class ClubManagementForm(Form):
 
     def clean_website(self):
         website = self.cleaned_data['website'].lower()
-        if not re.match(r'^(http(s)*:\/\/)*[a-z0-9.-]+\.[a-z0-9]{1,3}$', website) and website != "":
+        if not re.match(r'^(http(s)*:\/\/)*[a-z0-9.-]+\.[a-z0-9]+$', website) and website != "":
             raise ValidationError(message=_("Veuillez rentrer une adresse web valide"), code="BAD WEBSITE")
         return(website)
 
