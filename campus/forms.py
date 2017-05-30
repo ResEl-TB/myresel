@@ -258,7 +258,8 @@ class ClubManagementForm(Form):
         new_club.cn = self.cleaned_data['cn']
         new_club.email = self.cleaned_data['email']
         new_club.website = self.cleaned_data['website']
-        new_club.logo = self.cleaned_data['logo']
+        if self.cleaned_data["logo"] != None:
+            club.logo = self.cleaned_data["logo"]
         new_club.memebers = []
         new_club.prezs = []
         if new_club.email != '':
@@ -290,7 +291,8 @@ class ClubEditionForm(ClubManagementForm):
         club.description = self.cleaned_data['description']
         club.email = self.cleaned_data['email']
         club.website = self.cleaned_data['website']
-        club.logo = self.cleaned_data["logo"]
+        if self.cleaned_data["logo"] != None:
+            club.logo = self.cleaned_data["logo"]
         club.save()
 
 
@@ -402,4 +404,3 @@ class SearchSomeone(forms.Form):
         for name in names:
             results += self._search_single_word(name, strict)
         return self._sort_results(results)
-
