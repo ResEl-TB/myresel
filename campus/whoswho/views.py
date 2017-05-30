@@ -269,11 +269,11 @@ class AddPerson(View):
             messages.success(request, _("Vous ne pouvez pas vous ajouter vous même."))
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-        if not godchild.pk in godparent.uid_godchildren :
+        if (not godchild.pk in godparent.uid_godchildren) or (not godchild.pk in godparent.uid_godparents):
             godparent.uid_godchildren.append(godchild.pk)
             godparent.save()
 
-        if not godparent.pk in godchild.uid_godparents :
+        if (not godparent.pk in godchild.uid_godparents) or (not godparent.pk in godchild.uid_godchildren):
             godchild.uid_godparents.append(godparent.pk)
             godchild.save()
 
