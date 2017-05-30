@@ -259,7 +259,7 @@ class ClubManagementForm(Form):
         new_club.email = self.cleaned_data['email']
         new_club.website = self.cleaned_data['website']
         if self.cleaned_data["logo"] != None:
-            club.logo = self.cleaned_data["logo"]
+            new_club.logo = self.cleaned_data["logo"]
         new_club.memebers = []
         new_club.prezs = []
         if new_club.email != '':
