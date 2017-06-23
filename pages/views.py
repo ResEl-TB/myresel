@@ -46,6 +46,9 @@ class Home(View):
 
     @method_decorator(decorators.correct_vlan)
     def dispatch(self, *args, **kwargs):
+        from debug_toolbar import settings as dt_settings
+
+        print(dt_settings.get_config()['SHOW_TOOLBAR_CALLBACK'])
         return super(Home, self).dispatch(*args, **kwargs)
 
 
