@@ -32,7 +32,7 @@ variables:
   LIBDIR: .install/lib/
   LDAP_PASSWORD: blah
 
-  LAPUTEX_HOST: "http:\/\/laputex.adm.resel.fr\/"
+  LAPUTEX_HOST: http:\/\/laputex.adm.resel.fr\/
 # LAPUTEX_PWD in gitlab secrets 
 
   DEBIAN_FRONTEND: noninteractive
