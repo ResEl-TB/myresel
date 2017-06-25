@@ -214,7 +214,6 @@ class SearchClub(View):
 
     def get(self, request):
         what = request.GET.get('what', '').strip()
-        print(what)
         organisations = StudentOrganisation.filter(name__contains=what)
         clubs = [o for o in organisations if "tbClub" in o.object_classes or "tbClubSport" in o.object_classes]
         clubs.sort(key=lambda x: x.name)
