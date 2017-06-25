@@ -14,6 +14,7 @@ from django_rq import job
 
 @job
 def generate_and_email_invoice(user: object, transaction: object, lang: str='fr', send_to:str='user-treasurer') -> None:
+    print("GENERATE AND EMAL LAUNCHED")
 
     # Get latex invoice
     user['address_formated'] = user['address'].split('\n')
@@ -26,6 +27,7 @@ def generate_and_email_invoice(user: object, transaction: object, lang: str='fr'
 
     # Send request to laputex
     try:
+        print("execute requete to %s" % settings.LAPUTEX_DOC_URL)
         laputex_req = requests.post(settings.LAPUTEX_DOC_URL,
                                     headers={'token': settings.LAPUTEX_TOKEN},
                                     data={'type': 'latex', 'content': invoice_latex})
@@ -33,11 +35,14 @@ def generate_and_email_invoice(user: object, transaction: object, lang: str='fr'
         text = laputex_req.text
 
     except requests.exceptions.RequestException as err:
+        print("ERROR while calling to LaPuTeX API")
+        print(err)
         status_code = "'Error handled'"
         text = str(err)
 
     # Handle response, status_code 201 or 409 means the document is being processed
     if status_code in (201, 409):
+        print("good status code LAPUTEX")
         scheduler = django_rq.get_scheduler()
 
         scheduler.enqueue_in(
@@ -47,6 +52,7 @@ def generate_and_email_invoice(user: object, transaction: object, lang: str='fr'
 
     # There is an error, fallback and send error
     else:
+        print("ERROR LAPUTEX, sending email")
         error_display = "New LaPuTeX document request returned {} :\n{}".format(status_code, text)
 
         queue = django_rq.get_queue()
