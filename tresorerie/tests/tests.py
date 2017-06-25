@@ -72,7 +72,6 @@ class InvoiceCreation(TestCase):
             ],
         }
 
-        django_rq.get_worker().work(burst=True)
         queue = django_rq.get_queue()
         scheduler = django_rq.get_scheduler()
 
@@ -81,12 +80,17 @@ class InvoiceCreation(TestCase):
             args=(user_datas, transaction_datas, 'fr', 'user-treasurer'),
         )
 
+        django_rq.get_worker().work(burst=True)
         # Wait all tasks are done
+        time_beep = 4
+        time_out = 120
         time_begin = time.time()
         while len(scheduler.get_jobs()) > 0 or len(queue.get_jobs()) > 0:
-            if time.time() - time_begin > 120:
+            remaining_jobs = max(len(scheduler.get_jobs()), len(queue.get_jobs()))
+            if time.time() - time_begin > time_out:
                 raise ValueError("Waited too long")
-            time.sleep(4)
+            print("Waiting the workers to finish their %i jobs ... %i sec" % (remaining_jobs, int(time_out - time.time() + time_begin )))
+            time.sleep(time_beep)
 
 
         # Check

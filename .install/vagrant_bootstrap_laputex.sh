@@ -6,7 +6,6 @@ apt-get -qq upgrade
 
 echo '>>> downloading last version of laputex <<<'
 apt-get -qq install git
-# export GIT_SSH_COMMAND='ssh -i /myresel/.install/lib/id_rsa_local_dev_env -o StrictHostKeyChecking=no'
 
 export GIT_SSH=/tmp/git_ssh
 cat >/tmp/git_ssh <<EOF
@@ -27,4 +26,11 @@ cd /laputex
 chmod -R +x /laputex/.install/
 /laputex/.install/bootstrap.sh
 
-#echo ">>> Create a configuration file <<<"
+echo ">>> Create a configuration file <<<"
+cp /laputex/config.py.tpl /laputex/config.py
+chmod -R 777 /laputex
+
+# echo ">>> Launche the service <<<"
+# cd /laputex
+# celery worker -A laputex.celery --loglevel=debug &
+

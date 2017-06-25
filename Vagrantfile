@@ -17,6 +17,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define "laputex", autostart: false do |laputex|
+      config.vm.box = "fujimakishouten/debian-stretch64"
       # config.vm.hostname = "laputex.adm.resel.fr"
       config.vm.hostname = "laputex-dev"
       config.vm.network "private_network", ip: "10.0.3.253"
