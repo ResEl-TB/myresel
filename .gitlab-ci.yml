@@ -78,6 +78,19 @@ pylint:
     - pylint --rcfile=.pylintrc campus devices fonctions gestion_personnes ldapback myresel pages tresorerie wiki || exit $((35 & $?))
   allow_failure: false
 
+deploy staging:
+  services: []
+  before_script:
+    - apt-get -qq install curl
+  stage: deploy
+  script:
+    - curl http://flea.adm.resel.fr/deploy-resel
+  only:
+    - master
+  environment:
+    name: staging flea
+    url: https://dev.resel.fr/
+
 deploy to brest:
   services: []
   before_script:

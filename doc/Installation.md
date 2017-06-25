@@ -1,49 +1,114 @@
 Installation d'un environement de production
 ============================================
 
-ce guide détaille comment installer un environement de production complet sur
+Ce guide détaille comment installer un environement de production complet sur
 une machine vierge.
 
-Actuellement le site est fonctionnel sur les serveurs skynet à Brest et doubidou à Rennes. Le déploiement sur les machines se fait automatiquement par le biais de la branche `deploy` et des runners Gitlab.
+Actuellement le site est fonctionnel sur les serveurs `skynet` à Brest et
+`doubidou` à Rennes. Le déploiement sur les machines se fait automatiquement
+par le biais de la branche `deploy` et des runners Gitlab.
 
 
-### Configuration matérielle
+## Configuration matérielle
 
-Pour que le site puisse facilement détecter les addresses MAC des machines lors de l'inscription, celui-ci a besoin de plusieurs interfaces réseau :
+Pour que le site puisse facilement détecter les addresses MAC des machines lors
+de l'inscription, celui-ci a besoin de plusieurs interfaces réseau :
  - **eth0** : VLAN 997 Administration
  - **eth1** : VLAN 994 Vue publique (également passerelle par défaut)
- - **eth2** : VLAN 999 Vue depuis l'interieur du ResEl machines inscrites (bien choisir l'ip)
- - **eth3** : VLAN 999 Vue depuis les machines non inscrites (bien choisir l'ip)
+ - **eth2** : VLAN 999 Vue depuis l'interieur du ResEl machines inscrites (bien
+   choisir l'ip)
+ - **eth3** : VLAN 999 Vue depuis les machines non inscrites (bien choisir
+   l'ip)
  - **eth4** : VLAN 995 Vue depuis les machines non inscrites
 
-**Le nom des interfaces est important** pour le lookup dans la table arp, pour le moment ceci n'est pas configurable.
+**Le nom des interfaces est important** pour le lookup dans la table arp, pour
+le moment ceci n'est pas configurable. Regardez la configuration de `skynet`
+pour vous inspirer 1 à 2 Go de RAM est suffisant dépendant du nombre
+d'utilisateurs qui s'inscrivent.
 
-1 à 2 Go de RAM est suffisant dépendant du nombre d'utilisateurs qui s'inscrivent.
+* Voir [wiki/Routage](https://wiki.resel.fr/R%C3%A9seau/Routage) pour le bon
+  adressage
+* Voir [wiki/Installation Serveur](https://wiki.resel.fr/Guides/Installation-serveur)
+  pour savoir comment configurer le réseau
 
-10 Go de disque est confortable (même avec latex, oui difficile de me croire !)
+5 Go de disque est confortable
 
-### Configuration du DNS et du DHCP
-TODO
+## Exceptions au Firewall
 
-### Exceptions au Firewall
+Pour que le site fonctionne parfaitement il faut que les utilisateurs puissent
+payer en ligne et puissent se connecter depuis le CAS école. Il faut donc
+ouvrir les 2 ip dans firewall pour que l'on puisse accéder à ces sites depuis
+le VLAN d'inscription.
 
-Pour que le site fonctionne parfaitement il faut que les utilisateurs puissent payer en ligne et puissent se connecter depuis le CAS école. Il faut donc ouvrir les 2 ip dans firewall pour que l'on puisse accéder à ces sites depuis le VLAN d'inscription.
+Pour que les personnes dans la zone d'inscription puissent payer même si elles
+n'ont pas internet, il faut rajouter des exeptions au Firewall. Cela est fait
+actuellement au moyen d'un script sur `Zahia`. Il est disponible à :
+`zahia:/srv/scripts/stripe_ips.py`
 
-### Installation de base
+## Installation de base
 
-Installez une machine proprement comme on le fait au ResEl, avec Debian, Munin, Icinga, Backuppc, le proxy http bien configuré. Avec un peu de change vous ferez ça avec Ansible, mais je ne me fais pas trop d'illusions non plus...
+Installez une machine proprement comme on le fait au ResEl, avec Debian, Munin,
+Icinga, Backuppc, le proxy http bien configuré. Avec un peu de change vous
+ferez ça avec Ansible, mais je ne me fais pas trop d'illusions non plus...
 
 Installez les paquets nécessaires :
+```bash
+apt install build-essential nginx
+apt install python-software-properties python3 python3-dev python3-pip
+apt install libmysqlclient-dev ldap-utils libldap2-dev libsasl2-dev libssl-dev libjpeg-dev libssl-dev gettext
 ```
-apt install build-essential python-software-properties python3 python3-dev python3-pip nginx libmysqlclient-dev ldap-utils libldap2-dev libsasl2-dev libssl-dev redis-server libjpeg-dev libssl-dev gettext supervisor
+
+### Installation du site
+
+#### Configurer l'utilisateur www-data
+
+Afin de pouvoir télécharger les dernières versions sur site ResEl, il faut que
+l'utilisateur `www-data` ait les bons droits. Modifier `/etc/passwd` :
+```
+www-data:x:33:33:www-data:/var/www:/bin/zsh
+```
+
+Lui créer une clé SSH sans mot de passe:
+```bash
+chown www-data:www-data /var/www
+su -- www-data
+ssh-keygen -t rsa -b 4096
+cat /var/www/.ssh/id_rsa.pub
+exit
+```
+
+Ajoutez cette clé aux clés autorisées sur gitlab en l'ajoutant dans l'onglet:
+`Settings > Repository > Deploys Keys`
+
+Créez un dossier `/srv/www/resel.fr/`, donnez-le à l'utilisateur `www-data`:
+```bash
+mkdir -p /srv/www/resel.fr/
+chown www-data:www-data /srv/www/resel.fr/
+```
+
+Téléchargez le site:
+```bash
+su -- www-data
+cd /srv/www/resel.fr/
+git clone ssh://git@git.resel.fr:43000/resel/myresel.git .
+git checkout deploy
+exit
 ```
 
 ### Configuration de nginx
-Créez un site resel.fr
 
-#### Configuration du site
-Exemple de `/etc/nginx/sites-available/resel.fr` dans le fichier `.install/etc/nginx.conf`  
+#### Configuration nginx du site
+Vous trouverez dans le fichier  `.install/etc/nginx.conf` un exemple de la
+configuration nginx à placer dans : `/etc/nginx/sites-available/resel.fr`.
 
+N'oubliez pas de changer les interfaces d'évoute pour correspondre à ceux de
+votre VM.
+```bash
+cp /srv/www/resel.fr/.install/etc/nginx.conf /etc/nginx/sites-available/resel.fr
+vim /etc/nginx/sites-available/resel.fr
+ln -s /etc/nginx/sites-available/resel.fr /etc/nginx/sites-enabled/resel.fr
+```
+On redémarrera nginx plus tard
 
 #### Configuration des hooks (optionnel)
 Les hooks permettent de mettre automatiquement à jour le code lorsque celui-ci est déployé.
@@ -53,24 +118,41 @@ Les hooks utilisent la syntaxe lua pour nginx, pour les faire fonctionner vous d
 apt install nginx-extras
 ```
 
-Exemple de hook dans le fichier `.install/etc/nginx-hook.conf` à mettre dans le fichier `/etc/nginx/sites-available/hook`
+Exemple de hook dans le fichier `.install/etc/nginx-hook.conf` à mettre dans le fichier `/etc/nginx/sites-available/hook`:
+```bash
+cp /srv/www/resel.fr/.install/etc/nginx-hook.conf /etc/nginx/sites-available/hook
+vim /etc/nginx/sites-available/hook
+ln -s /etc/nginx/sites-available/hook /etc/nginx/sites-enabled/hook
+```
 
 ### Configuration de uwsgi
-Todo
-
-### Configuration de Supervisor
-Supervisor nous permet de s'assurer que les taches de fond soient bien tout le temps en marche et qu'il ne faille pas les relancer à la main à chaque fois.
-
-Créer le fichier `/etc/supervisor/conf.d/resel.fr.conf` :
-TODO: centraliser les logs... 
-
-```
-[program:rqworker]
-command=/srv/www/resel.fr/env/bin/python manage.py rqworker
-directory=/srv/www/resel.fr
-user=www-data
+Installer uwsgi:
+```bash
+pip3 install uwsgi
 ```
 
+Configurer le service
+```bash
+rm /etc/init.d/uwsgi  # On est plus en 2016 putain
+cp /srv/www/resel.fr/.install/etc/uwsgi.service /etc/systemd/system/uwsgi.service
+chmod +r /etc/systemd/system/uwsgi.service
+mkdir touch /var/log/uwsgi/
+touch /var/log/uwsgi/emperor.log
+chown -R www-data:www-data /var/log/uwsgi
+```
+
+Le configurer en copiant les fichiers proposés:
+```bash
+mkdir /etc/uwsgi/vassals
+cp /srv/www/resel.fr/.install/etc/uwsgi-emperor.ini /etc/uwsgi/emperor.ini
+cp /srv/www/resel.fr/.install/etc/uwsgi-vassal.ini /srv/www/resel.fr/uwsgi.ini
+ln -s /srv/www/resel.fr/uwsgi.ini /etc/uwsgi/vassals/resel.fr.ini
+```
+
+Configurer nginx pour utiliser uwsgi:
+```bash
+cp /srv/www/resel.fr/.install/etc/nginx-uwsgi.conf /etc/nginx/conf.d/uwsgi_params.conf
+```
 ### Ajout des cron jobs nécessaires
 Nous avons actuellement un job qui tourne régulièrement pour repopuler la base
 de donnée REDIS pour choisir une adresse ip.
@@ -81,18 +163,33 @@ cp .install/etc/cronfile /etc/cron.d/myresel
 ```
 
 ### Configuration du site
-Si il n'existe pas déjà créez un utilisateur `www-data` il sera le owner du programme.
-Créez également le dossier `/srv/www/` et déplacez-vous y dedans.
-
-Puis téléchargez le site :
-```
-git clone https://git.resel.fr/resel/myresel resel.fr
-cd resel.fr
-```
 
 Créez le fichier `myresel/settings_local.py` et remplissez-le convenablement en vous inspirant du fichier `myresel/settings_local.py.tpl`.
+```bash
+su -- www-data 
+cp myresel/settings_local.py.tpl myresel/settings_local.py
+vim myresel/settings_local.py
+```
 
-TODO
+Ne pas oublier en créant la configuration :
+* De changer la clé secrête
+* De passer DEBUG à False
+* De bien choisir le campus sur lequel est le site
+* D'ajouter les commandes de rechargement du firewall et du DNS
+* De configurer les bases de données (ldap, MySQL, QOS, REDIS)
+* D'ajouter les clés Stripe (de prod pour la prod)
+* De configurer LAPUTEX
+
+### Création du virtual env python
+
+```bash
+pip3 install virtualenv
+cd /srv/www/resel.fr/
+su -- www-data
+virtualenv env -p /usr/bin/python3
+source env/bin/activate
+pip3 install -Ur requirements.txt
+```
 
 ### Lancement du service
 
@@ -122,3 +219,84 @@ Supervisor : https://github.com/nationbuilder/supervisord-nagios
 TODO: nginx, veronica, mails...
 
 En cas de bug détecté, le site envoie automatiquement un mail à botanik, si vous êtes listmaster vous devriez recevoir ces mails.
+
+
+-------
+
+Spécificités d'un environement de staging
+=========================================
+
+Au ResEl pour tester le code dans un environement proche de la prod (mais pas
+non plus totalement sans limite, nous avons mis en place un environment de
+staging. Celui-ci est disponible sur la machine `flea`. Il possède une base de
+données séparée pour éviter les conflits avec la principale.
+
+Configuration de mysql
+
+## Installation de MySQL
+
+Inspiré par le fichier `.install/script/install_mysql.sh`
+
+```
+apt install mysql-server
+mysql -uroot -p
+> CREATE DATABASE myresel;
+> CREATE USER 'myresel'@'localhost' IDENTIFIED BY 'MOT DE PASSE mysql';
+> GRANT ALL PRIVILEGES ON * . * TO 'myresel'@'localhost';
+
+> CREATE DATABASE qos;
+> CREATE USER 'qos'@'localhost' IDENTIFIED BY 'MOT DE PASSE qos';
+> GRANT ALL PRIVILEGES ON * . * TO 'qos'@'localhost';
+> exit
+
+# Populate qos structure:
+mysql -uroot qos -p < /srv/www/resel.fr/.install/lib/qos_struct.sql
+```
+
+## Installation de OpenLDAP
+
+Inspiré par le fichier `.install/script/install_openldap.sh`
+
+```bash
+apt install slapd ldap-utils libldap2-dev libsasl2-dev libssl-dev ldapvi
+service slapd stop
+cp -rf "/srv/www/resel.fr/.install/etc/ldap/" /etc/
+export PASSWD_HASH=$(slappasswd -h {SSHA} -s /MOT DE PASSE/)
+echo "rootpw          \"${PASSWD_HASH}\"" >> /etc/ldap/rootdn.ldap
+
+rm -rf /etc/ldap/slapd.d
+
+chmod +r /etc/ldap/slapd.conf
+chmod +r /etc/ldap/access.ldap
+chmod -R +r /etc/ldap/schema
+chmod +r /etc/ldap/rootdn.ldap
+mkdir /var/lib/ldap/maisel
+mkdir /var/lib/ldap/resel
+
+cp /srv/www/resel.fr/.install/lib/DB_CONFIG_maisel /var/lib/ldap/maisel/DB_CONFIG
+cp /srv/www/resel.fr/.install/lib/DB_CONFIG_resel /var/lib/ldap/resel/DB_CONFIG
+
+# Ajout de dumps de la bdd je les ais pris de la bdd de prod:
+slapadd -c -l ${LIBDIR}maisel.ldif -b dc=maisel,dc=enst-bretagne,dc=fr
+slapadd -c -l ${LIBDIR}resel.ldif -b dc=resel,dc=enst-bretagne,dc=fr
+
+chown -R openldap:openldap /var/lib/ldap/
+service slapd start
+```
+
+## Install redis server
+
+```bash
+apt install redis-server
+```
+
+
+## Configuration du site
+```bash
+cd /srv/www/resel.fr/
+source env/bin/activate
+python manage.py collectstatic
+python manage.py migrate
+touch uwsgi.ini
+```
+
