@@ -79,14 +79,14 @@
                     <ul class="dropdown-menu">
                         <li><a href="{% url "help-needed" %}"><span class="fa fa-fw fa-calendar-plus-o"></span> Créer un événement <span class="label label-success">bientôt</span></a></li>
                         <li><a href="{% url 'campus:mails:send' %}"><span class="fa fa-fw fa-envelope"></span> Envoyer un mail campus@resel.fr</a></li>
-                        {% if ldapuser.is_campus_moderator or request.user.is_staff%}<li><a href="{% url 'campus:clubs:new'%}"><span class="fa fa-fw fa-users"></span> Nouveau club </a></li>{% endif %}
+                        {% if request.ldap_user.is_campus_moderator or request.user.is_staff%}<li><a href="{% url 'campus:clubs:new'%}"><span class="fa fa-fw fa-users"></span> Nouveau club </a></li>{% endif %}
                     </ul>
                 </li>
                 {% if not request.user.is_authenticated %}
                     <li><a href="{% url 'login' %}"><span class="fa fa-fw fa-sign-in"></span> Connexion</a></li>
                 {% else %}
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user fa-fw" aria-hidden="true"></i> <span class="hidden-sm">{{ ldapuser.first_name }} {{ ldapuser.last_name }}</span><span class="fa fa-fw fa-caret-down"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user fa-fw" aria-hidden="true"></i> <span class="hidden-sm">{{ request.ldap_user.first_name }} {{ request.ldap_user.last_name }}</span><span class="fa fa-fw fa-caret-down"></span></a>
                         <ul class="dropdown-menu">
                             <li>
                                 <a href="{% url 'campus:clubs:my-clubs'%}"><i class="fa fa-users fa-fw"></i> Mes clubs et assocations </a>
@@ -94,7 +94,7 @@
                             <li>
                                 <a href="https://mlistes.resel.fr"><i class="fa fa-rss fa-fw"></i> Listes de diffusion</a>
                             </li>
-                            {% if ldapuser.is_campus_moderator %}
+                            {% if request.ldap_user.is_campus_moderator %}
                                 <li>
                                    <a href="{% url "campus:mails:moderate" %}"><i class="fa fa-eye fa-fw"></i> Modération mails campus</a>
                                 </li>
