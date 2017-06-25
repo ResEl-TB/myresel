@@ -1,5 +1,9 @@
 import os
-from uuid import UUID
+import time
+
+import uuid
+
+import django_rq
 
 from django.core import mail
 from django.test import TestCase
@@ -9,6 +13,7 @@ from myresel import settings
 from tresorerie.async_tasks import generate_and_email_invoice
 from tresorerie.models import Transaction, Product
 
+import logging
 
 class InvoiceCreation(TestCase):
     def setUp(self):
@@ -44,16 +49,60 @@ class InvoiceCreation(TestCase):
         self.transaction.save()
 
     def test_simple_invoice(self):
-        self.transaction.uuid=UUID("dfa23979-e9f5-4297-93bd-520f00439faa")
+        self.transaction.uuid = uuid.uuid4()
 
-        generate_and_email_invoice(self.user, self.transaction)
+        # Gather information and launch tasks for sending invoice
+        user_datas = {
+            'first_name': self.user.first_name,
+            'last_name' : self.user.last_name,
+            'uid': self.user.uid,
+            'email' : self.user.mail,
+            'address' : self.user.postal_address,
+        }
+        transaction_datas = {
+            'uuid': self.transaction.uuid,
+            'date_creation': self.transaction.date_creation,
+            'date_paiement': self.transaction.date_creation,
+            'statut': self.transaction.statut,
+            'moyen': self.transaction.get_moyen_display(),
+            'total': self.transaction.total,
+            'admin': self.transaction.admin,
+            'categories': [
+                {'name': cat, 'products': prods} for cat, prods in self.transaction.get_products_by_cat()
+            ],
+        }
 
-        # Open a file
-        with open(os.path.join(settings.PROJECT_ROOT, settings.INVOICE_STORE_PATH,
-                               "facture-{}-{}.pdf".format(self.user.uid, str(self.transaction.uuid)[:8], ))):
-            pass
+        queue = django_rq.get_queue()
+        scheduler = django_rq.get_scheduler()
 
-        self.assertEqual(2, len(mail.outbox))
+        queue.enqueue_call(
+            generate_and_email_invoice,
+            args=(user_datas, transaction_datas, 'fr', 'user-treasurer'),
+        )
+
+        django_rq.get_worker().work(burst=True)
+        # Wait all tasks are done
+        time_beep = 4
+        time_out = 120
+        time_begin = time.time()
+        while len(scheduler.get_jobs()) > 0 or len(queue.get_jobs()) > 0:
+            remaining_jobs = max(len(scheduler.get_jobs()), len(queue.get_jobs()))
+            if time.time() - time_begin > time_out:
+                raise ValueError("Waited too long")
+            print("Waiting the workers to finish their %i jobs ... %i sec" % (remaining_jobs, int(time_out - time.time() + time_begin )))
+            time.sleep(time_beep)
+
+
+        # Check
+        filename = os.path.join(settings.MEDIA_ROOT, settings.INVOICE_STORE_PATH,
+                                "{}-{}.pdf".format(self.user.uid, str(self.transaction.uuid)))
+
+        self.assertTrue(os.path.isfile(filename))
+
+        # This assert doesn't work because mail sending is done in another process
+        # and django's mail.outbox isn't updated;
+        # TODO : Found a solution !
+        #self.assertEqual(2, len(mail.outbox))
 
 
 class test_product(TestCase):

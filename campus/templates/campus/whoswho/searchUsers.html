@@ -28,47 +28,52 @@
 <div class="container results">
   <div class="row">
     <div class="col-md-8">
+      {% for user in users %}
+      {% if forloop.counter|add:-1|divisibleby:2 %}
       <div class="row">
-        {% for user in users %}
+      {% endif %}
         <div class="col-md-6">
           <div class="col-md-12 text-center well">
+            <a href="{% url "campus:who:user-details" uid=user.uid %}">
             {% if user.photo_file == "" %}
             <div class="user-photo">
               <img src="{% static "images/campus/photo-placeholder.jpg" %}" />
             </div>
             {% else %}
             <div class="user-photo">
-              <img src="/media/image/users_photo/{{user.photo_file}}" />
+              <img src="/media/image/users_photo/{{ user.photo_file }}" />
             </div>
             {% endif %}
             <h3>{{ user.first_name }} {{user.last_name}}</h3>
-            <p>Campus de {{ user.campus }}<br>Promo {{user.promo}}</p>
-            <a href="{% url "campus:who:user-details" uid=user.uid %}">Details</a>
+          </a>
+            {% if user.campus %}<p>Campus de {{ user.campus }}</p>{% endif %}
+            {% if user.promo > 1977 %}<p>Promo {{user.promo}}</p>{% endif %}
+            <a href="{% url "campus:who:user-details" uid=user.uid %}">Détails</a>
           </div>
         </div>
-        {% if users|length == 1 %}
-        <div class="col-md-4"></div>
-        {% endif %}
-        {% endfor %}
+      {% if forloop.counter|divisibleby:2 or forloop.last %}
       </div>
+      {% endif %}
+      {% endfor %}
     </div>
     <div class="col-md-4">
       <div class="col-md-12 well">
-        <h3 class="text-center" >Éffectuer une autre recherche</h3>
+        <h3 class="text-center" >Effectuer une autre recherche</h3>
         <form class="form-horizontal" action="{% url 'campus:who:search-user' %}" method="GET">
           <div class="input-group" style="width:100%">
             <span class="input-group-addon" id="basic-addon1"><span class="fa fa-user"></span></span>
             {{ form.what.errors }}
             {{ form.what }}
           </div>
-          {{ form.is_approx.errors }}
-          {{ form.is_approx }} {{ form.is_approx.label_tag }}
+          {{ form.strict.errors }}
+          {{ form.strict }} {{ form.strict.label_tag }}
           <div>
             Vous pouvez rechercher:
             <ul>
               <li>Un nom</li>
-              <li>Un prenom</li>
+              <li>Un prénom</li>
               <li>Une adresse email</li>
+              <li>Une promo</li>
             </ul>
           </div>
           <div class="form-group text-center">

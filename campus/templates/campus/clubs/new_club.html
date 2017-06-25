@@ -1,5 +1,6 @@
 {% extends "base_campus.html" %}
 {% load staticfiles %}
+{% load i18n %}
 
 {% block title %}Associations et clubs{% endblock %}
 {% block css %}
@@ -9,50 +10,105 @@
 {% block content %}
     <div class="container" id="content">
         <div class="row">
-
-            <div class="col-md-12">
+            <div class="col-md-6 col-md-offset-3">
                 <h1 class="page-header text-center" style="color: white;">
-                    Nouveau club ou association
+                    {% if pk %}{% trans "Editer un club ou une association" %}
+                    {% else %}{% trans "Nouveau club ou association" %}
+                    {% endif %}
                 </h1>
             </div>
-
+        </div>
+        <div class="col-md-8 col-md-offset-2">
+            <form class="form well" action="{% if not pk%}{% url 'campus:clubs:new' %}{% else %}{% url 'campus:clubs:edit' pk %}{% endif %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group" {% if pk %} style="display: none"{% endif %}>
+                    {{ form.type.errors }}
+                    <label for="name">{{ form.type.label }}:</label>
+                    {{ form.type }}
+                </div>
+                <div class="form-group">
+                    {{ form.name.errors }}
+                    <label for="name">{{ form.name.label }}:</label>
+                    {{ form.name }}
+                </div>
+                <div class="form-group" {% if pk %} style="display: none" {% endif %}>
+                    {{ form.cn.errors }}
+                    <label for="name">{{ form.cn.label }}:</label>
+                    {{ form.cn }}
+                </div>
+                <div class="form-group">
+                    {{ form.description.errors }}
+                    <label for="name">{{ form.description.label }}:</label>
+                    {{ form.description }}
+                </div>
+                <div class="form-group">
+                    {{ form.logo.errors }}
+                    <label for="name">{{ form.logo.label }}:</label>
+                    {{ form.logo }}
+                </div>
+                <div class="form-group">
+                    {{ form.email.errors }}
+                    <label for="name">{{ form.email.label }}:</label>
+                    {{ form.email }}
+                </div>
+                <div class="form-group">
+                    {{ form.website.errors }}
+                    <label for="name">{{ form.website.label }}:</label>
+                    {{ form.website }}
+                </div>
+                <div class="form-group" id="campagneYear" {% if pk %} style="display: none;"{% endif %}>
+                    {{ form.campagneYear.errors }}
+                    <label for="name">{{ form.campagneYear.label }}:</label>
+                    {{ form.campagneYear }}
+                </div>
+                <button class="btn btn-success">{% trans 'Confirmer' %}</button>
+                {% if pk and request.ldap_user.is_campus_moderator or request.user.is_staff%}
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete" style="float: right">Supprimer</button>
+                {% endif%}
+            </form>
         </div>
     </div>
-
-    <div class="hard-content">
-        <div class="container">
-            <div class="nav navbar">
-                <ul class="nav navbar-nav navbar-right">
-                    <form class="navbar-form navbar-left">
-                        <div class="form-group">
-                            <input type="text" class="form-control" placeholder="Rechercher un club">
-                        </div>
-                        <button type="submit" class="btn btn-default"><span class="fa fa-fw fa-search"></span></button>
-                    </form>
-                    {% if request.user.is_authenticated %}<li><a href="#">Mes clubs</a></li>{% endif %}
-                    <li><a href="#"><span class="fa fa-plus"></span> Nouveau club ou association</a></li>
-                </ul>
-            </div>
-            <h2>Associations</h2>
-            <div class="row assos-card">
-                <div class="col-md-3 col-md-offset-1">
-                    <img class="assos-img" src="{% static 'images/logo_resel.png' %}" height="100" >
-                </div>
-                <div class="col-md-6 col-md-offset-1">
-                    <h2>Le ResEl</h2>
-                    <p>Association gérant le réseau sur le campus de télécom-bretagne</p>
-                    <a href="https://resel.fr">En savoir plus</a>
-                </div>
-            </div>
-            {% for asso in assos %}
-                {{ asso.orgaName }}
-            {% endfor %}
-
-            <h2>Clubs</h2>
-            {% for club in clubs %}
-                {{ club.orgaName }}
-            {% endfor %}
+    {% if pk%}
+    <div id="delete" class="modal fade" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Supprimer ?</h4>
+          </div>
+          <div class="modal-body">
+            <p>Êtes vous certain de vouloir faire ça ?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-success" data-dismiss="modal">Annuler</button>
+            <a href="{% url 'campus:clubs:delete' pk %}" class="btn btn-danger" >Confirmer</a>
+          </div>
         </div>
+      </div>
     </div>
-    </div>
+    {% endif %}
+{% endblock %}
+
+{% block javascript %}
+    <script src="{% static 'jquery/jquery-ui.min.js' %}"></script>
+    <script>
+        function update_required_info() {
+            var selected_type = $("#type").find("option:selected").text();
+            if (selected_type === "Club"){
+              $("#campagneYear").hide();
+          } else if (selected_type === "Association") {
+              $("#campagneYear").hide();
+            } else {
+              $("#campagneYear").show();
+            }
+        }
+
+        $("#type").on("change", function (event) {
+            update_required_info();
+        });
+
+        $( document ).on("ready", function( event ){
+            update_required_info();
+        });
+    </script>
 {% endblock %}

@@ -309,6 +309,21 @@ attributeType ( 1.3.6.1.4.1.14628.17.2 NAME 'mlist'
         SUBSTR caseIgnoreSubstringsMatch
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
 	SINGLE-VALUE )
+attributeType ( 1.3.6.1.4.1.14628.17.3 NAME 'website'
+         DESC 'Site web de lorga'
+	 EQUALITY caseIgnoreMatch
+         ORDERING caseIgnoreOrderingMatch
+         SUBSTR caseIgnoreSubstringsMatch
+         SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+         SINGLE-VALUE )
+attributeType ( 1.3.6.1.4.1.14628.17.4 NAME 'logo'
+         DESC 'Logo de lorga'
+         EQUALITY caseIgnoreMatch
+         ORDERING caseIgnoreOrderingMatch
+         SUBSTR caseIgnoreSubstringsMatch
+         SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+         SINGLE-VALUE )
+
 
 #
 # Attributs pour reselSite
@@ -854,7 +869,7 @@ objectClass ( 1.3.6.1.4.1.14628.1.16 NAME 'reselSite' SUP posixGroup STRUCTURAL
 objectClass ( 1.3.6.1.4.1.14628.1.17 NAME 'studentOrganisation' STRUCTURAL
 	DESC 'Organisation d étudiants de TELECOM Bretagne'
 	MUST ( cn $ orgaName $ mlInfos )
-	MAY ( uidPrezs $ uidMembres $ description $ mlist ) )
+	MAY ( uidPrezs $ uidMembres $ description $ mlist $ logo $ website) )
 
 objectClass ( 1.3.6.1.4.1.14628.1.15 NAME 'tbClub' SUP studentOrganisation STRUCTURAL
         DESC 'StudentOrganisation de TELECOM Bretagne' )

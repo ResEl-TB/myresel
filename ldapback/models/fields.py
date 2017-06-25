@@ -8,7 +8,6 @@ from fonctions.generic import hash_passwd, hash_to_ntpass
 
 # TODO : Fields to implement
 # Numeric fields
-# Bool field
 
 
 class LdapField(object):

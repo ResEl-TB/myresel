@@ -4,8 +4,8 @@
 image: docker.resel.fr/web:latest  # Custom image made for the ResEl
 services:
   - redis:latest
-  - mysql:latest
   - docker.resel.fr/html5validator:latest
+  - mysql/mysql-server:5.5
 
 stages:
   - configure
@@ -13,15 +13,17 @@ stages:
   - deploy
 
 variables:
-  MYSQL_HOST: mysql
+  MYSQL_HOST: mysql-mysql-server
   MYSQL_USER: resel
   MYSQL_PASSWORD: blah
   MYSQL_DATABASE: resel
   MYSQL_ROOT_PASSWORD: blah
+  MYSQL_ROOT_HOST: '%'
+
   REDIS_HOST: redis
 
   MYSQL_QOS_DATABASE: qos
-  MYSQL_QOS_HOST: mysql
+  MYSQL_QOS_HOST: mysql-mysql-server
   MYSQL_QOS_USER: root
   MYSQL_QOS_PASSWORD: blah
   
@@ -33,47 +35,39 @@ variables:
   LIBDIR: .install/lib/
   LDAP_PASSWORD: blah
 
+  LAPUTEX_HOST: http:\/\/laputex.adm.resel.fr\/
+# LAPUTEX_PWD in gitlab secrets 
+
   DEBIAN_FRONTEND: noninteractive
 
 before_script:
-  - source .install/scripts/install_essentials.sh
+  - source .install/scripts/install_essentials.sh no-upgrade
   - apt-get install -qq mysql-client
-  - echo "CREATE DATABASE qos" | mysql -uroot -pblah -h mysql
+  - echo "CREATE DATABASE ${MYSQL_QOS_DATABASE}" | mysql -u${MYSQL_QOS_USER} -p${MYSQL_QOS_PASSWORD} -h ${MYSQL_QOS_HOST}
   - source .install/scripts/install_openldap.sh
-  - source .install/scripts/install_latex.sh
+#  - source .install/scripts/install_latex.sh
   - pip3 install -qUr requirements.txt
-  
-create_config:
-  stage: configure
-  script:
-    - rm -f -- ${ROOTDIR}myresel/settings_local.py
-    - export MYSQL_USER=root
-    - source .install/scripts/configure.sh
-    - source .install/scripts/populate_db.sh
+  - rm -f -- ${ROOTDIR}myresel/settings_local.py
+  - export MYSQL_USER=root
+  - source .install/scripts/configure.sh
+  - source .install/scripts/populate_db.sh
+  - python3 manage.py populate_redis
+  - python3 manage.py calculate_free_ip
+  - python3 manage.py rqworker &
+  - python3 manage.py rqscheduler &
+
+test_django:
   artifacts:
     paths:
+      - htmlcov/
       - myresel/settings_local.py
       - wiki/migrations/
       - tresorerie/migrations/
       - pages/migrations/
       - gestion_personnes/migrations/
       - devices/migrations/
-
-test_django:
-  artifacts:
-    paths:
-      - htmlcov/
       - htmlvalidation/
   stage: test
-  before_script:
-    - source .install/scripts/install_essentials.sh
-    - apt-get install -qq mysql-client
-    - echo "CREATE DATABASE qos" | mysql -uroot -pblah -h mysql
-    - source .install/scripts/install_openldap.sh
-    - source .install/scripts/install_latex.sh
-    - pip3 install -qUr requirements.txt
-    - python3 manage.py populate_redis
-    - python3 manage.py calculate_free_ip
   script:
     - coverage run --rcfile=.coveragerc manage.py test --noinput
     - coverage report

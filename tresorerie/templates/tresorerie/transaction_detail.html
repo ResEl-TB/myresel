@@ -39,7 +39,7 @@
 
             <div class="col-md-3 col-md-offset-1">
                 <div class="back"><a href="{% url 'tresorerie:historique' %}"><span class="fa fa-fw fa-long-arrow-left"></span> {% trans "Retour " %}</a></div>
-                <div class="back"><a href="{% get_media_prefix %}{{ transaction.facture }}">{% trans "Télécharger la facture " %} <span class="fa fa-fw fa-download"></span> </a></div>
+                <div class="back">{% if invoice_path %}<a href="{% get_media_prefix %}{{ invoice_path }}">{% trans "Télécharger la facture " %} <span class="fa fa-fw fa-download"></span> </a>{% else %}{% trans "Facture en génération" %} <span class="fa fa-fw fa-hourglass"></span>{% endif %}</div>
             </div> <!-- /.row -->
         </div> <!-- /.container -->
 {% endblock %}

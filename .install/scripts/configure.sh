@@ -19,4 +19,7 @@ if [ ! -f ${CONFDIR}settings_local.py ]; then
     
     HTML_ESC=$(echo "${HTMLVALIDATOR_VNU_URL}" | sed -e 's/[]\/$*.^|[]/\\&/g')
     sed -i "/HTMLVALIDATOR_VNU_URL *=/s/ *=.*/ = \"${HTML_ESC}\"/" ${CONFDIR}settings_local.py
+
+    sed -i "/LAPUTEX_TOKEN *=/s/ *=.*/ = \"${LAPUTEX_PWD}\"/" ${CONFDIR}settings_local.py
+    sed -i "/LAPUTEX_HOST *=/s/ *=.*/ = \"${LAPUTEX_HOST}\"/" ${CONFDIR}settings_local.py
 fi

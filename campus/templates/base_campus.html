@@ -23,6 +23,15 @@
     <link href='http://fonts.googleapis.com/css?family=Droid+Serif' rel='stylesheet' type='text/css'>
 </head>
 <body>
+  <div class="floatin_hugo_1 floating_meme"></div>
+  <div class="floatin_hugo_2 floating_meme"></div>
+  <div class="floatin_hugo_3 floating_meme"></div>
+  <div class="floatin_hugo_4 floating_meme"></div>
+  <div class="floatin_hugo_5 floating_meme"></div>
+  <div class="floatin_hugo_6 floating_meme"></div>
+  <div class="floatin_hugo_7 floating_meme"></div>
+  <div class="floatin_hugo_8 floating_meme"></div>
+  <div class="floatin_hugo_9 floating_meme"></div>
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -42,42 +51,50 @@
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav navbar-left">
-                <li><a href="{% url 'home' %}"><span class="fa fa-chevron-left"></span> Retour au site ResEl</a></li>
-                <li><a class="navbar-brand hidden-xs hidden-sm" href="{% url 'campus:home' %}">
+                <li><a href="{% url 'home' %}"><span class="fa fa-chevron-left"></span> Retour site ResEl</a></li>
+                <li><a class="navbar-brand hidden-xs hidden-sm" style="margin-left: 10px" href="{% url 'campus:home' %}">
                     <img src="{% static 'images/campus/elephant-polygon.png' %}" alt="logo-elephant"/>
                 </a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="{% url "help-needed" %}"><span class="fa fa-users"></span> Vie associative <span class="label label-success">bientôt</span></a></li>
-                <li><a href="https://campus.resel.fr"><span class="fa fa-fw fa-calendar"></span> Calendrier </a></li>
+                {% if "/clubs/" in request.path %}
+                <form class="navbar-form navbar-left" action="{% url 'campus:clubs:search'%}" method="get">
+                    <div class="form-group">
+                        <input name="what" id="id_what" type="text" class="form-control" placeholder="Rechercher un club">
+                    </div>
+                    <button type="submit" class="btn btn-default"><span class="fa fa-fw fa-search"></span></button>
+                </form>
+                {% endif %}
+                <li><a href="{% url "campus:clubs:list" %}"><span class="fa fa-users"></span><span class="hidden-sm"> Vie associative</span></a></li>
+                <li><a href="https://campus.resel.fr"><span class="fa fa-fw fa-calendar"></span> <span class="hidden-sm">Calendrier</span></a></li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-address-book"></span> Annuaire <span class="fa fa-fw fa-caret-down"></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-address-book"></span> <span class="hidden-sm">Annuaire</span> <span class="fa fa-fw fa-caret-down"></a>
                     <ul class="dropdown-menu">
                         <li><a href="{% url "campus:who:user-home" %}"><span class="fa fa-users"></span> Who's Who </a></li>
                         <li><a href="{% url "campus:who:list-birthdays" %}"><span class="fa fa-birthday-cake"></span> Anniversaires </a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-fw fa-plus"></span> Mail campus<span class="fa fa-fw fa-caret-down"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-fw fa-plus"></span><span class="hidden-sm"> Mail campus</span><span class="fa fa-fw fa-caret-down"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="{% url "help-needed" %}"><span class="fa fa-fw fa-calendar-plus-o"></span> Créer un événement <span class="label label-success">bientôt</span></a></li>
                         <li><a href="{% url 'campus:mails:send' %}"><span class="fa fa-fw fa-envelope"></span> Envoyer un mail campus@resel.fr</a></li>
-                        <li><a href="{% url "help-needed" %}"><span class="fa fa-fw fa-users"></span> Nouveau club <span class="label label-success">bientôt</span></a></li>
+                        {% if request.ldap_user.is_campus_moderator or request.user.is_staff%}<li><a href="{% url 'campus:clubs:new'%}"><span class="fa fa-fw fa-users"></span> Nouveau club </a></li>{% endif %}
                     </ul>
                 </li>
                 {% if not request.user.is_authenticated %}
                     <li><a href="{% url 'login' %}"><span class="fa fa-fw fa-sign-in"></span> Connexion</a></li>
                 {% else %}
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user fa-fw" aria-hidden="true"></i> {{ ldapuser.first_name }} <span class="hidden-sm">{{ ldapuser.last_name }} <span class="fa fa-fw fa-caret-down"></span></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user fa-fw" aria-hidden="true"></i> <span class="hidden-sm">{{ request.ldap_user.first_name }} {{ request.ldap_user.last_name }}</span><span class="fa fa-fw fa-caret-down"></span></a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="{% url "help-needed" %}"><i class="fa fa-users fa-fw"></i> Mes clubs et assocations <span class="label label-success">bientôt</span></a>
+                                <a href="{% url 'campus:clubs:my-clubs'%}"><i class="fa fa-users fa-fw"></i> Mes clubs et assocations </a>
                             </li>
                             <li>
                                 <a href="https://mlistes.resel.fr"><i class="fa fa-rss fa-fw"></i> Listes de diffusion</a>
                             </li>
-                            {% if ldapuser.is_campus_moderator %}
+                            {% if request.ldap_user.is_campus_moderator %}
                                 <li>
                                    <a href="{% url "campus:mails:moderate" %}"><i class="fa fa-eye fa-fw"></i> Modération mails campus</a>
                                 </li>
@@ -100,6 +117,7 @@
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
+
 
 {% if messages %}
     <div class="container">
@@ -129,7 +147,7 @@
                         <div class="panel-body">{{ message }}</div>
                     </div>
                 {% endif %}
-            {% endfor %}
+             {% endfor %}
 
         </div>
     </div>
@@ -185,6 +203,73 @@
 {# javascript #}
 <script type="text/javascript" src="{% static 'jquery/jquery.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'boostrap/js/bootstrap.min.js' %}"></script>
+<script>
+var k = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65],
+n = 0;
+$(document).keydown(function (e) {
+    if (e.keyCode === k[n++]) {
+        if (n === k.length) {
+            animateDiv($('.floatin_hugo_1'));
+            animateDiv($('.floatin_hugo_2'));
+            animateDiv($('.floatin_hugo_3'));
+            animateDiv($('.floatin_hugo_4'));
+            animateDiv($('.floatin_hugo_5'));
+            animateDiv($('.floatin_hugo_6'));
+            animateDiv($('.floatin_hugo_7'));
+            animateDiv($('.floatin_hugo_8'));
+            animateDiv($('.floatin_hugo_9'));
+            n = 0;
+            return false;
+        }
+    }
+    else {
+        n = 0;
+    }
+});
+
+function makeNewPosition($container) {
+
+    // Get viewport dimensions (remove the dimension of the div)
+    var h = $(window).height();
+    var w = $(window).width();
+
+    var nh = Math.floor(Math.random() * h);
+    var nw = Math.floor(Math.random() * w);
+
+    return [nh, nw];
+
+}
+
+function animateDiv($target) {
+    $target.css('display','block');
+    var newq = makeNewPosition($target.parent());
+    var oldq = $target.offset();
+    var speed = calcSpeed([oldq.top, oldq.left], newq);
+
+    $target.animate({
+        top: newq[0],
+        left: newq[1]
+    }, speed, function() {
+        animateDiv($target);
+    });
+
+};
+
+function calcSpeed(prev, next) {
+
+    var x = Math.abs(prev[1] - next[1]);
+    var y = Math.abs(prev[0] - next[0]);
+
+    var greatest = x > y ? x : y;
+
+    var speedModifier = 0.1;
+
+    var speed = Math.ceil(greatest / speedModifier);
+
+    return speed;
+
+}
+</script>
 
 <!-- Piwik -->
 <script type="text/javascript">

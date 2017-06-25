@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import uuid
+import os
 from datetime import datetime, timedelta
 from urllib.parse import quote_plus
 
@@ -236,11 +237,31 @@ class Pay(View):
 
             transaction.save()
 
+
+            # Gather information and launch tasks for sending invoice
+            user_datas = {
+                'first_name': request.ldap_user.first_name,
+                'last_name' : request.ldap_user.last_name,
+                'uid': request.ldap_user.uid,
+                'email' : request.ldap_user.mail,
+                'address' : request.ldap_user.postal_address,
+            }
+            transaction_datas = {
+                'uuid': transaction.uuid,
+                'date_creation': transaction.date_creation,
+                'date_paiement': transaction.date_creation,
+                'statut': transaction.statut,
+                'moyen': transaction.get_moyen_display(),
+                'total': transaction.total,
+                'admin': transaction.admin,
+                'categories': [
+                    {'name': cat, 'products': prods} for cat, prods in transaction.get_products_by_cat()
+                ],
+            }
+            user_lang = get_language().split('-')[0]
+
             queue = django_rq.get_queue()
-            queue.enqueue_call(
-                async_tasks.generate_and_email_invoice,
-                args=(request.ldap_user, transaction, get_language()),
-            )
+
             logger.info("Paiement validé par le système, uid: %s, uuid: %s, stripe id : %s" %(request.ldap_user.uid, transaction.uuid, transaction.stripe_id),
                     extra={
                         "uid": request.ldap_user.uid,
@@ -248,6 +269,23 @@ class Pay(View):
                         "transaction_stripe_id": transaction.stripe_id
                     })
             messages.success(request, _("Vous venez de payer votre accès au ResEl, vous devriez recevoir sous peu un email avec votre facture."))
+
+            # Send a french version for treasurer and one in the user's language
+            if user_lang == 'fr':
+                queue.enqueue_call(
+                    async_tasks.generate_and_email_invoice,
+                    args=(user_datas, transaction_datas, 'fr', 'user-treasurer'),
+                )
+            else:
+                queue.enqueue_call(
+                    async_tasks.generate_and_email_invoice,
+                    args=(user_datas, transaction_datas, 'fr', 'treasurer'),
+                )
+                queue.enqueue_call(
+                    async_tasks.generate_and_email_invoice,
+                    args=(user_datas, transaction_datas, user_lang, 'user'),
+                )
+
             return HttpResponseRedirect(reverse('tresorerie:historique'))
 
         except stripe.error.CardError as e:
@@ -309,6 +347,46 @@ class TransactionDetailView(DetailView):
         context['user'] = self.request.ldap_user
         context['main_product'] = context['transaction'].produit.all()[0]
         context['products'] = context['transaction'].produit.all()
+
+        # Get invoice
+        filename = os.path.join(settings.MEDIA_ROOT, settings.INVOICE_STORE_PATH,
+                                "{}-{}.pdf".format(
+                                    self.request.ldap_user.uid,
+                                    str(context['transaction'].uuid)
+                                ))
+
+        if os.path.isfile(filename):
+            context['invoice_path'] = filename
+
+        else:
+            context['invoice_path'] = None
+
+            # Trigger invoice regeneration
+            user_datas = {
+                'first_name': self.request.ldap_user.first_name,
+                'last_name' : self.request.ldap_user.last_name,
+                'uid': self.request.ldap_user.uid,
+                'email' : self.request.ldap_user.mail,
+                'address' : self.request.ldap_user.postal_address,
+            }
+            transaction_datas = {
+                'uuid': context['transaction'].uuid,
+                'date_creation': context['transaction'].date_creation,
+                'date_paiement': context['transaction'].date_creation,
+                'statut': context['transaction'].statut,
+                'moyen': context['transaction'].get_moyen_display(),
+                'total': context['transaction'].total,
+                'admin': context['transaction'].admin,
+                'categories': [
+                    {'name': cat, 'products': prods} for cat, prods in context['transaction'].get_products_by_cat()
+                ],
+            }
+            user_lang = get_language().split('-')[0]
+            queue = django_rq.get_queue()
+            queue.enqueue_call(
+                async_tasks.generate_and_email_invoice,
+                args=(user_datas, transaction_datas, user_lang, 'user'),
+            )
 
         return context
 
