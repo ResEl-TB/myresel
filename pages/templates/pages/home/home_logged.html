@@ -38,53 +38,54 @@
                     </div>
                 </div>
 
-                {% if not is_registered  and is_resel %}
-                    {# In the netwok but not saved #}
-                    <div class="col-md-6 col-md-offset-2">
-                        <div class="row">
-                            <div class="col-sm-4 computer-icon hidden-xs"><span class="fa fa-fw fa-laptop"></span></div>
-                            <div class="col-sm-7">
-                                <h3>{% trans "Machine non enregistrée" %}</h3>
-                                <div>{% trans "Afin de pouvoir bénéficier des services du Resel, vous devez enregistrer votre machine sur le réseau." %}</div>
-                                <a href="{% url 'gestion-machines:ajout' %}" class="btn btn-default btn-lg">{%  trans "Enregistrer" %} <span class="hidden-xs"> {% trans "mon ordinateur"%}</span> </a>
+                {% if is_resel %}
+                    {% if not is_registered %}
+                        {# In the netwok but not saved #}
+                        <div class="col-md-6 col-md-offset-2">
+                            <div class="row">
+                                <div class="col-sm-4 computer-icon hidden-xs"><span class="fa fa-fw fa-laptop"></span></div>
+                                <div class="col-sm-7">
+                                    <h3>{% trans "Machine non enregistrée" %}</h3>
+                                    <div>{% trans "Afin de pouvoir bénéficier des services du Resel, vous devez enregistrer votre machine sur le réseau." %}</div>
+                                    <a href="{% url 'gestion-machines:ajout' %}" class="btn btn-default btn-lg">{%  trans "Enregistrer" %} <span class="hidden-xs"> {% trans "mon ordinateur"%}</span> </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                {% elif not_user_device %}
-                    {# The current device is not associated with the account #}
-                    <div class="col-md-6 col-md-offset-2">
-                        <div class="row">
-                            <div class="col-sm-4 computer-icon hidden-xs"><span class="fa fa-fw fa-laptop"></span></div>
-                            <div class="col-sm-7">
-                                <div><h3>{% trans "Mauvais appareil" %}</div>
-                                <div>{% blocktrans %}
-                                    Vous êtes connecté sur un appareil qui ne vous appartient pas.
-                                    Vous ne pouvez donc pas l'administrer.
-                                {% endblocktrans %}</div>
-                                <small>{% trans "Nous vous rappellons votre compte ResEl est strictement personnel et ne doit en aucun cas être partagé." %}</small>
+                    {% elif not_user_device %}
+                        {# The current device is not associated with the account #}
+                        <div class="col-md-6 col-md-offset-2">
+                            <div class="row">
+                                <div class="col-sm-4 computer-icon hidden-xs"><span class="fa fa-fw fa-laptop"></span></div>
+                                <div class="col-sm-7">
+                                    <div><h3>{% trans "Mauvais appareil" %}</div>
+                                    <div>{% blocktrans %}
+                                        Vous êtes connecté sur un appareil qui ne vous appartient pas.
+                                        Vous ne pouvez donc pas l'administrer.
+                                        {% endblocktrans %}</div>
+                                    <small>{% trans "Nous vous rappellons votre compte ResEl est strictement personnel et ne doit en aucun cas être partagé." %}</small>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                {% elif is_resel %}
-                    {# In the netwok and saved #}
-                    <div class="col-md-6 col-md-offset-2">
-                        <div class="row">
-                            <div class="col-sm-4 computer-icon hidden-xs"><span class="fa fa-fw fa-laptop"></span></div>
-                            <div class="col-sm-7">
-                                <div><h3>{% if device.aliases %}
-                                    {{ device.aliases|first|capfirst }}
-                                    {% else %}
-                                    {{ device.hostname|capfirst }}
-                                    {% endif %}
+                    {% else %}
+                        {# In the netwok and saved #}
+                        <div class="col-md-6 col-md-offset-2">
+                            <div class="row">
+                                <div class="col-sm-4 computer-icon hidden-xs"><span class="fa fa-fw fa-laptop"></span></div>
+                                <div class="col-sm-7">
+                                    <div><h3>{% if device.aliases %}
+                                            {{ device.aliases|first|capfirst }}
+                                            {% else %}
+                                            {{ device.hostname|capfirst }}
+                                            {% endif %}
 
-                                    <small><a href="{% url 'gestion-machines:modifier' device.hostname %}" class="fa fa-pencil fa-fw"></a></small></h3></div>
-                                <div><span class="label label-success">{% trans "Connecté au ResEl" %}</span></div>
-                                <br />
-                                <div><a href="{% url 'gestion-machines:liste' %}#bandwidth"><span class="fa fa-fw fa-upload"></span> {{ data_up }} <span class="fa fa-fw fa-download"></span> {{ data_down }}</a></div>
+                                            <small><a href="{% url 'gestion-machines:modifier' device.hostname %}" class="fa fa-pencil fa-fw"></a></small></h3></div>
+                                    <div><span class="label label-success">{% trans "Connecté au ResEl" %}</span></div>
+                                    <br />
+                                    <div><a href="{% url 'gestion-machines:liste' %}#bandwidth"><span class="fa fa-fw fa-upload"></span> {{ data_up }} <span class="fa fa-fw fa-download"></span> {{ data_down }}</a></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
+                    {% endif %} 
                 {% else %}
                     {# Not in the network #}
                     <div class="col-md-6 col-md-offset-2">

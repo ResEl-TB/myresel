@@ -28,6 +28,10 @@ export MYSQL_QOS_PASSWORD=blah
 # Redis configuration
 export REDIS_HOST=localhost
 
+# Laputex configuration
+export LAPUTEX_HOST='http:\/\/10.0.3.253:8000\/'
+export LAPUTEX_PWD='lololol' 
+
 export DEBIAN_FRONTEND=noninteractive
 
 echo '>>> Updating and installing essentials <<<'

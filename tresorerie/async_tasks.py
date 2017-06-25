@@ -14,7 +14,6 @@ from django_rq import job
 
 @job
 def generate_and_email_invoice(user: object, transaction: object, lang: str='fr', send_to:str='user-treasurer') -> None:
-
     # Get latex invoice
     user['address_formated'] = user['address'].split('\n')
 
@@ -33,6 +32,7 @@ def generate_and_email_invoice(user: object, transaction: object, lang: str='fr'
         text = laputex_req.text
 
     except requests.exceptions.RequestException as err:
+        print(err)
         status_code = "'Error handled'"
         text = str(err)
 
