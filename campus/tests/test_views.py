@@ -133,6 +133,7 @@ class HomeTestCase(TestCase):
         user = create_full_user(uid="jbvallad", pwd="blabla")
         user.save()
         populate_orgas()
+        self.client.login(username=user.uid, password="blabla")
 
 
     def testLoadWithoutUser(self):
@@ -154,6 +155,7 @@ class MyClubTestCase(TestCase):
         try_delete_user("jbvallad")
         user = create_full_user(uid="jbvallad", pwd="blabla")
         user.save()
+        self.client.login(username=user.uid, password="blabla")
 
     def testSimpleSearch(self):
         r = self.client.get(

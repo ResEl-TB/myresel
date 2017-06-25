@@ -47,7 +47,7 @@ def get_mac(ip):
             return mac.decode('utf-8')
         else:
             logger.warning(
-                'ip address not find in redis server, is the network watcher ok?',
+                'ip address %s not find in redis server, is the network watcher ok?' % ip,
                 extra={'ip_address': ip}
             )
     except redis.exceptions.ConnectionError as e:
