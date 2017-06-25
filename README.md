@@ -32,7 +32,7 @@ Installer l'environement de développement :
 ````
 git clone https://git.resel.fr/resel/myresel
 cd myresel/
-vagrant up  # It might take a while, thanks to the LaTeX environment :p
+vagrant up  # It might take a while the first time
 ```
 
 Démarrer le serveur :
@@ -162,16 +162,25 @@ Vous pouvez vous connecter à l'administration en cliquant sur les engrenages
 dans la barre de navigation.
 
 # Notes
-
 Deux modules : la génération automatique de facture et l'affichage des documents de l'association, reposent sur un service [LaPuTeX](https://git.resel.fr/resel/laputex/).
-Pour mettre le mettre en place, suivez les détails du [README](https://git.resel.fr/resel/laputex/) puis configurer le `settings_local.py` :
+Pour mettre le mettre en place, suivez les détails du [README](https://git.resel.fr/resel/laputex/) puis configurer le `settings_local.py` ou bien utilisez l'installateur automatique :
 ```python
 LAPUTEX_HOST = "http://10.0.3.253:8000/"
 LAPUTEX_DOC_URL = LAPUTEX_HOST+"beta/documents/"
 LAPUTEX_TOKEN = "test"
 ```
 
-La facture générée automatiquement ne peut pas gérer des prix supérieurs à 1 million 70 mille €.
+Ceci peut être fait automatiquement en lancant la deuxième VM :
+```bash
+vagrant up laputex
+vagrant ssh laputex
+
+celery worker -A laputex.celery --loglevel=debug &
+python3 -m laputex
+```
+
+Bugs connu : 
+ * La facture générée automatiquement ne peut pas gérer des prix supérieurs à 1 million 70 mille €.
  
 -----------------------
 
