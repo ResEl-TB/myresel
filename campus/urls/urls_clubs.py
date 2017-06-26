@@ -16,5 +16,5 @@ urlpatterns = [
     url(r'^myclubs$', MyClubs.as_view(), name="my-clubs"),
     url(r'^request_members', RequestMembers.as_view(), name="request_members"),
     url(r'^request_prezs', RequestMembers.as_view(), name="request_prezs"),
-    url(r'^(?P<pk>[a-z0-9]+)$', ClubDetail.as_view(), name="club_detail")
+    url(r'^(?P<pk>[a-z0-9-]+)$', ClubDetail.as_view(), name="club_detail")
 ]

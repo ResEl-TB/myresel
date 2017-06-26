@@ -62,6 +62,8 @@
   {% if forloop.counter|divisibleby:3 or forloop.last %}
   </div>
   {% endif %}
+  {% empty %}
+    Aucun membre trouvé
   {% endfor %}
   {% endif %}
 </div>

@@ -3,11 +3,6 @@
     margin-bottom: 20px;
 }
 
-.assos-img {
-    max-width: 100%;
-    max-height: 100%;
-}
-
 .navbar-clubs {
     margin-top: -20px;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2) inset;
@@ -18,9 +13,7 @@
 }
 
 .logo {
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-    max-width: 100%;
-    max-height: 100%;
+    max-width:85%;
 }
 
 strong {
@@ -31,6 +24,7 @@ strong {
 a, a:hover, a:active, a:visited {
     color: #8BBF82;
     text-decoration: none;
+    cursor: pointer;
 }
 
 .margin-bottom {
