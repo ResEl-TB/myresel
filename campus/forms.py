@@ -171,7 +171,7 @@ class ClubManagementForm(Form):
             'placeholder': _("Présentation du l'organisation"),
             'rows': 5
         }),
-        validators=[MaxLengthValidator(50)],
+        validators=[MaxLengthValidator(1200)],
         label=_("Description"),
     )
 

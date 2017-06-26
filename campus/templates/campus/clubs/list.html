@@ -25,7 +25,7 @@
                 </div>
                 <div class="col-md-5">
                     <h2>{{ asso.name }}</h2>
-                    <p>{{ asso.description }}</p>
+                    <p>{{ asso.description|truncatewords:30 }}</p>
                     {% if asso.email %}
                     <p>Mailing list: <a href="mailto:{{ asso.email }}">{{ asso.email}}</a></p>
                     {% endif %}
@@ -54,8 +54,7 @@
                   {% endif %}
                 </div>
                 <div class="col-md-5">
-                    <h2>{{ club.name }}</h2>
-                    <p>{{ club.description }}</p>
+                    <p>{{ club.description|truncatewords:30 }}</p>
                     {% if club.website %}
                     <p>Mailing list: <a href="mailto:{{ club.email }}">{{ club.email}}</a></p>
                     {% endif %}
@@ -113,7 +112,7 @@
                 </div>
                 <div class="col-md-5">
                     <h2>{{ list.name }}</h2>
-                    <p>{{ list.description }}</p>
+                    <p>{{ list.description|truncatewords:30 }}</p>
                     <p>Année de campagne: {{ list.campagneYear }}</p>
                     {% if list.website %}
                     <p>Mailing list: <a href="mailto:{{ list.email }}">{{ list.email}}</a></p>
