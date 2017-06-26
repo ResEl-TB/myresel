@@ -45,6 +45,11 @@
         <div class="col-md-12 well">
             <h2>{% trans 'Clubs' %}</h2>
             {% for club in clubs %}
+            <div class="row">
+              <div class="col-lg-8 col-lg-offset-4">
+                <h2>{{ club.name }}</h2>
+              </div>
+            </div>
             <div class="row assos-card">
                 <div class="col-md-3 col-md-offset-1">
                   {% if club.logo and club.logo != "None" %}
