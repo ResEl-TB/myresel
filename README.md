@@ -29,7 +29,7 @@ sudo apt install vagrant  # On a Debian-based distribution
 ```
 
 Installer l'environement de développement :
-````
+```
 git clone https://git.resel.fr/resel/myresel
 cd myresel/
 vagrant up  # It might take a while the first time
