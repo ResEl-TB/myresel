@@ -56,6 +56,25 @@ def list_clubs(request):
         }
     )
 
+class ClubDetail(View):
+
+    template_name = "campus/clubs/detail.html"
+
+    def get(self, request, pk):
+        club = StudentOrganisation.get(pk=pk)
+        members = club.members
+        prez=[]
+        if club.prezs:
+            prez = club.prezs[0]
+            uid = re.search('uid=([a-z0-9]+),', prez).group(1)
+            prez = LdapUser.get(pk=uid)
+        users = []
+        for member in members:
+            uid = re.search('uid=([a-z0-9]+),', member).group(1)
+            users += [LdapUser.get(pk=uid)]
+        return render(request, self.template_name, {"club":club, "members":users, "prez":prez})
+
+
 class NewClub(FormView):
     """
     View used to add a new club, list or asso. It shares the same template used

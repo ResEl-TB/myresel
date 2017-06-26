@@ -2,7 +2,7 @@ from django.conf.urls import url
 
 from campus.views.views_clubs import list_clubs, NewClub, SearchClub, EditClub, \
                                      DeleteClub, AddPersonToClub, RemovePersonFromClub, \
-                                     AddPrezToClub, MyClubs, RequestMembers
+                                     AddPrezToClub, MyClubs, RequestMembers, ClubDetail
 
 urlpatterns = [
     url(r'^$', list_clubs, name='list'),
@@ -16,4 +16,5 @@ urlpatterns = [
     url(r'^myclubs$', MyClubs.as_view(), name="my-clubs"),
     url(r'^request_members', RequestMembers.as_view(), name="request_members"),
     url(r'^request_prezs', RequestMembers.as_view(), name="request_prezs"),
+    url(r'^(?P<pk>[a-z0-9]+)$', ClubDetail.as_view(), name="club_detail")
 ]

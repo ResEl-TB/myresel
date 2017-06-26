@@ -16,3 +16,23 @@
 .green {
     color: #8BBF82 !important;
 }
+
+.logo {
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    max-width: 100%;
+    max-height: 100%;
+}
+
+strong {
+    font-weight: bold;
+    font-size: 1.05em;
+}
+
+a, a:hover, a:active, a:visited {
+    color: #8BBF82;
+    text-decoration: none;
+}
+
+.margin-bottom {
+    margin-bottom: 10px;
+}
