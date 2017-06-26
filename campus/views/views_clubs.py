@@ -16,7 +16,7 @@ from io import BytesIO
 from PIL import Image
 
 from campus.forms import SendMailForm, ClubManagementForm, ClubEditionForm
-from campus.models.clubs_models import StudentOrganisation
+from campus.models.clubs_models import StudentOrganisation, Association, ListeCampagne
 from gestion_personnes.models import LdapUser, LdapGroup
 from fonctions.decorators import ae_required
 
@@ -198,24 +198,28 @@ class MyClubs(View):
     View used to list the current user's clubs
     """
 
-    template_name = 'campus/clubs/list_clubs.html'
+    template_name = 'campus/clubs/list.html'
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(MyClubs, self).dispatch(*args, **kwargs)
 
     def get(self, request):
-        clubs = StudentOrganisation.all()
-        clubs = [o for o in clubs if "tbClub" in o.object_classes or "tbClubSport" in o.object_classes]
+        orgas = StudentOrganisation.all()
         #legacy feature; because some prezs aren't members in the ldap for some reason
-        myclubs = [c for c in clubs if request.ldap_user.pk in c.members]
-        myclubs += [c for c in clubs if request.ldap_user.pk in c.prezs and c not in myclubs]
-        myclubs.sort(key=lambda x: x.name)
+        my_orgas = [c for c in orgas if request.ldap_user.pk in c.members]
+        my_orgas += [c for c in orgas if request.ldap_user.pk in c.prezs and c not in my_orgas]
+        my_orgas.sort(key=lambda x: x.name)
 
+        clubs = [o for o in my_orgas if "tbClub" in o.object_classes or "tbClubSport" in o.object_classes]
+        lists = [o for o in my_orgas if "tbCampagne" in o.object_classes]
+        assos = [o for o in my_orgas if "tbAsso" in o.object_classes]
         hardLinkAdd, hardLinkDel, hardLinkAddPrez, hardLinkWhoUser = getHardLinks()
 
         context = {
-            'clubs': myclubs,
+            'clubs': clubs,
+            'assos': assos,
+            'lists': lists,
             'ldapOuPeople': LDAP_DN_PEOPLE,
             'hardLinkAdd': hardLinkAdd,
             'hardLinkDel': hardLinkDel,
@@ -256,7 +260,7 @@ class SearchClub(View):
 
 class AddPersonToClub(View):
     """
-    View used to add a person to a specific club
+    View used to add a person to a specific club/list or asso if he's got the right to do so
     """
 
     @method_decorator(login_required)
@@ -267,6 +271,12 @@ class AddPersonToClub(View):
         uid=request.GET.get('id_user', None)
         try:
             club=StudentOrganisation.get(cn=pk)
+            #If we don't do this we get an error cuz our LDAP scheme does not allow
+            # a single model for each type of organisation
+            if "tbCampagne" in club.object_classes:
+                club=ListeCampagne.get(cn=pk)
+            elif "tbAsso" in club.object_classes:
+                club=Association.get(cn=pk)
         except ObjectDoesNotExist:
             raise Http404("Aucun club trouvé")
 
@@ -282,7 +292,10 @@ class AddPersonToClub(View):
                 except ObjectDoesNotExist:
                     raise Http404("L'utilisateur n'éxiste pas")
 
-        if "tbClub" in club.object_classes and not user.pk in club.members:
+        if not user.pk in club.members and (("tbClub" in club.object_classes or \
+        "tbCampagne" in club.object_classes or "tbClubSport in club.object_classes") or \
+        (self.request.ldap_user.is_campus_moderator() or self.request.ldap_user.pk in club.prezs or\
+        request.user.is_staff)): #Our ldap is crap
             messages.success(request, _("Inscription terminée avec succès"))
             club.members.append(user.pk)
             club.save()
