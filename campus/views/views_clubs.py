@@ -233,15 +233,18 @@ class SearchClub(View):
     View used to list clubs matching the user request
     """
 
-    template_name='campus/clubs/list_clubs.html'
+    template_name='campus/clubs/list.html'
 
     def get(self, request):
         what = request.GET.get('what', '').strip()
         organisations = StudentOrganisation.filter(name__contains=what)
-        clubs = [o for o in organisations if "tbClub" in o.object_classes or "tbClubSport" in o.object_classes]
-        clubs.sort(key=lambda x: x.name)
+        organisations.sort(key=lambda x: x.name)
 
-        if not clubs:
+        clubs = [o for o in organisations if "tbClub" in o.object_classes or "tbClubSport" in o.object_classes]
+        lists = [o for o in organisations if "tbCampagne" in o.object_classes]
+        assos = [o for o in organisations if "tbAsso" in o.object_classes]
+
+        if not (clubs or lists or assos):
             messages.info(request, _("Aucun club ne correspond à votre recherche"))
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
@@ -249,6 +252,8 @@ class SearchClub(View):
 
         context = {
             'clubs': clubs,
+            'assos': assos,
+            'lists': lists,
             'ldapOuPeople': LDAP_DN_PEOPLE,
             'hardLinkAdd': hardLinkAdd,
             'hardLinkDel': hardLinkDel,
@@ -329,6 +334,12 @@ class AddPrezToClub(View):
 
         try:
             club=StudentOrganisation.get(cn=pk)
+            #If we don't do this we get an error cuz our LDAP scheme does not allow
+            # a single model for each type of organisation
+            if "tbCampagne" in club.object_classes:
+                club=ListeCampagne.get(cn=pk)
+            elif "tbAsso" in club.object_classes:
+                club=Association.get(cn=pk)
         except ObjectDoesNotExist:
             raise Http404("Aucun club trouvé")
 
@@ -367,6 +378,12 @@ class RemovePersonFromClub(View):
         uid=request.GET.get('id_user', None)
         try:
             club=StudentOrganisation.get(cn=pk)
+            #If we don't do this we get an error cuz our LDAP scheme does not allow
+            # a single model for each type of organisation
+            if "tbCampagne" in club.object_classes:
+                club=ListeCampagne.get(cn=pk)
+            elif "tbAsso" in club.object_classes:
+                club=Association.get(cn=pk)
         except ObjectDoesNotExist:
             raise Http404("Aucun club trouvé")
         if uid == None:
