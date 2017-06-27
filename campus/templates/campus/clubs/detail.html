@@ -29,7 +29,7 @@
         <img class="assos-img" src="{% static 'images/campus/orga.png' %}">
       {% endif %}
     </div>
-    <div class="col-md-9">
+    <div class="col-md-9 mobile-centered mobile-margin-top">
       <p><strong><span class="fa fa-user-circle-o"></span> Président :</strong>
         {% if prez %}
         <a href="{% url 'campus:who:user-details' uid=prez.uid %}">
@@ -45,16 +45,16 @@
     </div>
   </div>
   {% if user.is_authenticated%}
-  <div class="row">
+  <div class="row mobile-centered mobile-margin-top">
     <div class="col-lg-12 margin-bottom">
-      <br /><strong><span class="fa fa-id-badge"></span> {% trans "Membres" %} : </strong>
+      <br /><strong><span class="fa fa-id-badge"></span> {% trans "Membres" %} </strong>
     </div>
   </div>
   {% for member in members%}
   {% if forloop.counter|add:-1|divisibleby:3%}
-  <div class="row">
+  <div class="row mobile-margin-top">
   {% endif %}
-    <div class="col-md-4">
+    <div class="col-md-4 mobile-centered">
       <a href="{% url 'campus:who:user-details' uid=member.uid %}">
         <span class="fa fa-user-o"></span> {{member.first_name}} {{member.last_name|upper}}
       </a>

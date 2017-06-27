@@ -1,3 +1,14 @@
+strong {
+    font-weight: bold;
+    font-size: 1.05em;
+}
+
+a, a:hover, a:active, a:visited {
+    color: #8BBF82;
+    text-decoration: none;
+    cursor: pointer;
+}
+
 .assos-card {
     margin-top: 20px;
     margin-bottom: 20px;
@@ -16,17 +27,27 @@
     max-width:85%;
 }
 
-strong {
-    font-weight: bold;
-    font-size: 1.05em;
-}
-
-a, a:hover, a:active, a:visited {
-    color: #8BBF82;
-    text-decoration: none;
-    cursor: pointer;
-}
-
 .margin-bottom {
     margin-bottom: 10px;
+}
+
+/* Mobile CSS */
+
+@media (max-width: 768px) {
+
+    .row {
+      margin: 2% !important;
+    }
+
+    .mobile-centered {
+      text-align: center;
+    }
+
+    .logo {
+      max-width: 45%;
+    }
+
+    .mobile-margin-top {
+      margin-top: 20px;
+    }
 }

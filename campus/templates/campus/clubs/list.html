@@ -13,22 +13,22 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12 well">
-          <h2>{% trans 'Assos' %}</h2>
+          <h1 class="mobile-centered">{% trans 'Assos' %}</h1>
             {% for asso in assos %}
             <div class="row">
-              <div class="col-lg-8 col-lg-offset-3">
+              <div class="col-lg-8 col-lg-offset-3 mobile-centered">
                 <h2>{{ asso.name }}</h2>
               </div>
             </div>
-            <div class="row assos-card">
-                <div class="col-md-2 col-md-offset-1 text-center">
+            <div class="row assos-card mobile-centered">
+                <div class="col-sm-2 col-sm-offset-1 text-center">
                   {% if asso.logo and asso.logo != "None" %}
                   <img class="logo" src="/media/image/ASSOS/{{ asso.logo }}">
                   {% else %}
                   <img class="logo" src="{% static 'images/campus/orga.png' %}">
                   {% endif %}
                 </div>
-                <div class="col-md-6">
+                <div class="col-sm-6 mobile-margin-top">
                     <p>{{ asso.description|truncatewords:30 }}</p>
                     {% if asso.email %}
                     <p><a href="mailto:{{ asso.email }}"><p><span class="fa fa-envelope"><span> <a href="mailto:{{ asso.email }}"> {{ asso.email}}</a></p>
@@ -38,7 +38,7 @@
                     {% endif %}
                     <a href="{% url 'campus:clubs:club_detail' asso.cn %}"><span class="fa fa-info-circle"></span> En savoir plus</a>
                 </div>
-                <div class="col-md-3">
+                <div class="col-sm-3 mobile-margin-top">
                     {% if request.user.is_authenticated %}
                     <p><button class="btn btn-success" data-toggle="collapse" data-target="#{{asso.cn}}"><span class="fa fa-angle-double-down"></span> Actions <span class="fa fa-angle-double-down"></span></button></p>
                     <div class="collapse" id="{{asso.cn}}">
@@ -63,22 +63,22 @@
     </div>
     <div class="row">
         <div class="col-md-12 well">
-            <h2>{% trans 'Clubs' %}</h2>
+            <h1 class="mobile-centered">{% trans 'Clubs' %}</h1>
             {% for club in clubs %}
             <div class="row">
-              <div class="col-lg-8 col-lg-offset-3">
+              <div class="col-lg-8 col-lg-offset-3 mobile-centered">
                 <h2>{{ club.name }}</h2>
               </div>
             </div>
-            <div class="row assos-card">
-                <div class="col-md-2 col-md-offset-1 text-center">
+            <div class="row assos-card mobile-centered">
+                <div class="col-sm-2 col-sm-offset-1 text-center">
                   {% if club.logo and club.logo != "None" %}
                   <img class="logo" src="/media/image/CLUB/{{ club.logo }}">
                   {% else %}
                   <img class="logo" src="{% static 'images/campus/orga.png' %}">
                   {% endif %}
                 </div>
-                <div class="col-md-6">
+                <div class="col-sm-6 mobile-margin-top">
                     <p>{{ club.description|truncatewords:30 }}</p>
                     {% if club.email %}
                     <p><a href="mailto:{{ club.email }}"><p><span class="fa fa-envelope"><span> <a href="mailto:{{ club.email }}"> {{ club.email}}</a></p>
@@ -88,7 +88,7 @@
                     {% endif %}
                     <a href="{% url 'campus:clubs:club_detail' club.cn %}"><span class="fa fa-info-circle"></span> En savoir plus</a>
                 </div>
-                <div class="col-md-3">
+                <div class="col-sm-3 mobile-margin-top">
                     {% if request.user.is_authenticated %}
                     <p><button class="btn btn-success" data-toggle="collapse" data-target="#{{club.cn}}"><span class="fa fa-angle-double-down"></span> Actions <span class="fa fa-angle-double-down"></span></button></p>
                     <div class="collapse" id="{{club.cn}}">
@@ -114,22 +114,22 @@
     </div>
     <div class="row">
         <div class="col-md-12 well">
-            <h2>{% trans 'Listes' %}</h2>
+            <h1 class="mobile-centered">{% trans 'Listes' %}</h1>
             {% for list in lists %}
             <div class="row">
-              <div class="col-lg-8 col-lg-offset-3">
+              <div class="col-lg-8 col-lg-offset-3 mobile-centered">
                 <h2>{{ list.name }}</h2>
               </div>
             </div>
-            <div class="row lists-card">
-                <div class="col-md-2 col-md-offset-1 text-center">
+            <div class="row lists-card mobile-centered">
+                <div class="col-sm-2 col-sm-offset-1 text-center">
                   {% if list.logo and list.logo != "None" %}
                   <img class="logo" src="/media/image/LIST/{{ list.logo }}">
                   {% else %}
                   <img class="logo" src="{% static 'images/campus/orga.png' %}">
                   {% endif %}
                 </div>
-                <div class="col-md-6">
+                <div class="col-sm-6 mobile-margin-top">
                     <p>{{ list.description|truncatewords:30 }}</p>
                     {% if list.email %}
                     <p><a href="mailto:{{ list.email }}"><span class="fa fa-envelope"><span> <a href="mailto:{{ list.email }}"> {{ list.email}}</a></p>
@@ -139,7 +139,7 @@
                     {% endif %}
                     <a href="{% url 'campus:clubs:club_detail' list.cn %}"><span class="fa fa-info-circle"></span> En savoir plus</a>
                 </div>
-                <div class="col-md-3">
+                <div class="col-sm-3 mobile-margin-top">
                     {% if request.user.is_authenticated %}
                     <p><button class="btn btn-success" data-toggle="collapse" data-target="#{{list.cn}}"><span class="fa fa-angle-double-down"></span> Actions <span class="fa fa-angle-double-down"></span></button></p>
                     <div class="collapse" id="{{list.cn}}">
