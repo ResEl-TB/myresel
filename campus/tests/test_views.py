@@ -133,8 +133,6 @@ class HomeTestCase(TestCase):
         user = create_full_user(uid="jbvallad", pwd="blabla")
         user.save()
         populate_orgas()
-        self.client.login(username=user.uid, password="blabla")
-
 
     def testLoadWithoutUser(self):
         r = self.client.get(reverse("campus:clubs:list"),
@@ -145,6 +143,26 @@ class HomeTestCase(TestCase):
     def testLoadWithUser(self):
         self.client.login(username="jbvallad", password="blabla")
         r = self.client.get(reverse("campus:clubs:list"),
+                                    HTTP_HOST="10.0.3.94")
+        self.assertEqual(200, r.status_code)
+
+class DetailTestCase(TestCase):
+
+    def setUp(self):
+        try_delete_user("jbvallad")
+        user = create_full_user(uid="jbvallad", pwd="blabla")
+        user.save()
+        populate_orgas()
+
+    def testLoadWithoutUser(self):
+        r = self.client.get(reverse("campus:clubs:club_detail", kwargs={"pk":"tenniscn"}),
+                                   HTTP_HOST="10.0.3.94")
+        self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed(r, "campus/clubs/detail.html")
+
+    def testLoadWithUser(self):
+        self.client.login(username="jbvallad", password="blabla")
+        r = self.client.get(reverse("campus:clubs:club_detail", kwargs={"pk":"tenniscn"}),
                                     HTTP_HOST="10.0.3.94")
         self.assertEqual(200, r.status_code)
 

@@ -48,10 +48,10 @@ class UserDetails(View):
         clubs = StudentOrganisation.all()
         clubs = [o for o in clubs if "tbClub" in o.object_classes or "tbClubSport" in o.object_classes]
         #legacy feature; because some prezs aren't members in the ldap for some reason
-        myclubs = [c for c in clubs if request.ldap_user.pk in c.members]
-        myclubs += [c for c in clubs if request.ldap_user.pk in c.prezs and c not in myclubs]
-        myclubs.sort(key=lambda x: x.name)
-        return render(request, self.template_name, {'display_user' : user, 'clubs':myclubs})
+        userClubs = [c for c in clubs if user in c.members]
+        userClubs += [c for c in clubs if user in c.prezs and c not in userClubs]
+        userClubs.sort(key=lambda x: x.name)
+        return render(request, self.template_name, {'display_user' : user, 'clubs':userClubs})
 
     def getGods(self, user):
         """
@@ -269,11 +269,11 @@ class AddPerson(View):
             messages.success(request, _("Vous ne pouvez pas vous ajouter vous même."))
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-        if not godchild.pk in godparent.uid_godchildren :
+        if (not godchild.pk in godparent.uid_godchildren) or (not godchild.pk in godparent.uid_godparents):
             godparent.uid_godchildren.append(godchild.pk)
             godparent.save()
 
-        if not godparent.pk in godchild.uid_godparents :
+        if (not godparent.pk in godchild.uid_godparents) or (not godparent.pk in godchild.uid_godchildren):
             godchild.uid_godparents.append(godparent.pk)
             godchild.save()
 

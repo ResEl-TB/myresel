@@ -57,14 +57,12 @@
                 </a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                {% if "/clubs/" in request.path %}
                 <form class="navbar-form navbar-left" action="{% url 'campus:clubs:search'%}" method="get">
                     <div class="form-group">
-                        <input name="what" id="id_what" type="text" class="form-control" placeholder="Rechercher un club">
+                        <input name="what" id="id_what" type="text" class="form-control" placeholder="Rechercher un club" style="width: 80%; display:inline">
+                        <button type="submit" class="btn btn-default"><span class="fa fa-fw fa-search"></span></button>
                     </div>
-                    <button type="submit" class="btn btn-default"><span class="fa fa-fw fa-search"></span></button>
                 </form>
-                {% endif %}
                 <li><a href="{% url "campus:clubs:list" %}"><span class="fa fa-users"></span><span class="hidden-sm"> Vie associative</span></a></li>
                 <li><a href="https://campus.resel.fr"><span class="fa fa-fw fa-calendar"></span> <span class="hidden-sm">Calendrier</span></a></li>
                 <li class="dropdown">

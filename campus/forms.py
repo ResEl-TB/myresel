@@ -7,7 +7,7 @@ from django.forms.models import ModelMultipleChoiceField
 from django.utils.translation import ugettext_lazy as _
 from django.db.models import Q
 
-from campus.models import RoomBooking, Room, RoomAdmin, StudentOrganisation, Mail
+from campus.models import RoomBooking, Room, RoomAdmin, StudentOrganisation, Mail, Association, ListeCampagne
 from gestion_personnes.models import LdapUser
 from gestion_personnes.forms import PersonnalInfoForm
 
@@ -171,7 +171,7 @@ class ClubManagementForm(Form):
             'placeholder': _("Présentation du l'organisation"),
             'rows': 5
         }),
-        validators=[MaxLengthValidator(50)],
+        validators=[MaxLengthValidator(1200)],
         label=_("Description"),
     )
 
@@ -233,7 +233,7 @@ class ClubManagementForm(Form):
 
     def clean_website(self):
         website = self.cleaned_data['website'].lower()
-        if not re.match(r'^(http(s)*:\/\/)*[a-z0-9.-]+\.[a-z0-9]{1,3}$', website) and website != "":
+        if not re.match(r'^(http(s)*:\/\/)*[a-z0-9.-]+\.[a-z0-9]+$', website) and website != "":
             raise ValidationError(message=_("Veuillez rentrer une adresse web valide"), code="BAD WEBSITE")
         return(website)
 
@@ -253,27 +253,37 @@ class ClubManagementForm(Form):
         cleaned_data = super(ClubManagementForm, self).clean()
 
     def create_club(self):
-        new_club = StudentOrganisation()
+
+        #If we don't do this we get an error cuz our LDAP scheme does not allow
+        # a single model for each type of organisation
+        if self.cleaned_data['type'] == "CLUB":
+            new_club = StudentOrganisation()
+            new_club.object_classes = ["tbClub"]
+        elif self.cleaned_data['type'] == "ASSOS":
+            new_club = Association()
+            new_club.object_classes = ["tbAsso"]
+        elif self.cleaned_data['type'] == "LIST":
+            new_club = ListeCampagne()
+            new_club.object_classes = ["tbCampagne"]
+            new_club.campagneYear = self.cleaned_data['campagneYear']
+
         new_club.name = self.cleaned_data['name']
         new_club.cn = self.cleaned_data['cn']
-        new_club.email = self.cleaned_data['email']
         new_club.website = self.cleaned_data['website']
-        new_club.logo = self.cleaned_data['logo']
+        new_club.description = self.cleaned_data['description']
+        new_club.object_classes = ["studentOrganisation"]
         new_club.memebers = []
         new_club.prezs = []
+
+        if self.cleaned_data["logo"] != None:
+            new_club.logo = self.cleaned_data["logo"]
+
+        new_club.email = self.cleaned_data['email']
         if new_club.email != '':
             new_club.ml_infos = True
         else:
             new_club.ml_infos = False
-        new_club.description = self.cleaned_data['description']
-        new_club.object_classes = ["studentOrganisation"]
-        if self.cleaned_data['type'] == "CLUB":
-            new_club.object_classes += ["tbClub"]
-        elif self.cleaned_data['type'] == "ASSOS":
-            new_club.object_classes += ["tbAsso"]
-        elif self.cleaned_data['type'] == "LIST":
-            new_club.object_classes += ["tbCampagne"]
-            new_club.campagneYear = self.cleaned_data['campagneYear']
+
         new_club.save()
 
 class ClubEditionForm(ClubManagementForm):
@@ -286,11 +296,26 @@ class ClubEditionForm(ClubManagementForm):
         return(logo)
     def edit_club(self, pk):
         club = StudentOrganisation.get(cn=pk)
+
+        #If we don't do this we get an error cuz our LDAP scheme does not allow
+        # a single model for each type of organisation
+        if "tbCampagne" in club.object_classes:
+            club=ListeCampagne.get(cn=pk)
+        elif "tbAsso" in club.object_classes:
+            club=Association.get(cn=pk)
+
         club.name = self.cleaned_data['name']
         club.description = self.cleaned_data['description']
-        club.email = self.cleaned_data['email']
         club.website = self.cleaned_data['website']
-        club.logo = self.cleaned_data["logo"]
+
+        club.email = self.cleaned_data['email']
+        if club.email != '':
+            club.ml_infos = True
+        else:
+            club.ml_infos = False
+
+        if self.cleaned_data["logo"] != None:
+            club.logo = self.cleaned_data["logo"]
         club.save()
 
 
@@ -402,4 +427,3 @@ class SearchSomeone(forms.Form):
         for name in names:
             results += self._search_single_word(name, strict)
         return self._sort_results(results)
-

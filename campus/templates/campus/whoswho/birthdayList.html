@@ -40,7 +40,7 @@
         Promo {{user.promo}}
       </div>
     </div>
-  {% if forloop.counter|divisibleby:4 or forloop.first %}
+  {% if forloop.counter|divisibleby:4 or forloop.last %}
   </div>
   {% endif %}
   {% empty %}
