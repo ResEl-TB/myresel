@@ -20,7 +20,7 @@ from django.contrib.auth import views as auth_views
 from django.views.generic import RedirectView
 from django.views.generic import TemplateView
 from django.views.i18n import javascript_catalog
-from pages.views import Home, Contact, NewsListe, inscription_zone_info, FaqList, faqUpvote, NewsDetail, Services
+from pages.views import Home, Contact, NewsListe, inscription_zone_info, FaqList, faqUpvote, NewsDetail, Services, unsecure_set_language
 from myresel import settings
 
 
@@ -31,6 +31,8 @@ js_info_dict = {
 urlpatterns = [
     url(r'^jsi18n/$', javascript_catalog, js_info_dict, name='javascript-catalog'),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
+
+    url(r'^lang/setlang/$', unsecure_set_language, name='set_language'),
     url(r'^lang/', include('django.conf.urls.i18n')),
 
     url(r'^login', auth_views.login, name='login'),
