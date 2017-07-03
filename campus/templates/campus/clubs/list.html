@@ -39,7 +39,8 @@
                     <a href="{% url 'campus:clubs:club_detail' asso.cn %}"><span class="fa fa-info-circle"></span> En savoir plus</a>
                 </div>
                 <div class="col-sm-3 mobile-margin-top">
-                    {% if request.user.is_authenticated %}
+                    {% if request.user.is_authenticated%}
+                    {% if request.ldap_user.is_campus_moderator or 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in asso.prezs or request.user.is_staff%}
                     <p><button class="btn btn-success" data-toggle="collapse" data-target="#{{asso.cn}}"><span class="fa fa-angle-double-down"></span> Actions <span class="fa fa-angle-double-down"></span></button></p>
                     <div class="collapse" id="{{asso.cn}}">
                         {% if not 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in asso.members%}
@@ -51,7 +52,8 @@
                         <p><a class="addPersonLink" data-toggle="modal" data-target="#addPerson" data="{{asso.cn}}"><span class="fa fa-user-plus"></span> inscrire un membre</a></p>
                         <p><a class="delPersonLink" data-toggle="modal" data-target="#delPerson" data="{{asso.cn}}"><span class="fa fa-user-times"></span> désinscrire un membre</a></p>
                         <p><a class="addPrezLink" data-toggle="modal" data-target="#addPrez" data="{{asso.cn}}"><span class="fa fa-street-view"></span> effectuer une passation</a></p>
-                        {% endif%}
+                        {% endif %}
+                        {% endif %}
                     </div>
                     {% endif %}
                 </div>
