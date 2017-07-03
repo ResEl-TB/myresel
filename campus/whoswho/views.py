@@ -48,8 +48,8 @@ class UserDetails(View):
         clubs = StudentOrganisation.all()
         clubs = [o for o in clubs if "tbClub" in o.object_classes or "tbClubSport" in o.object_classes]
         #legacy feature; because some prezs aren't members in the ldap for some reason
-        userClubs = [c for c in clubs if user in c.members]
-        userClubs += [c for c in clubs if user in c.prezs and c not in userClubs]
+        userClubs = [c for c in clubs if user.pk in c.members]
+        userClubs += [c for c in clubs if user.pk in c.prezs and c not in userClubs]
         userClubs.sort(key=lambda x: x.name)
         return render(request, self.template_name, {'display_user' : user, 'clubs':userClubs})
 
@@ -144,7 +144,7 @@ class UserHome(View):
             #TODO: something better and re-usable
             photo_file = request.FILES.get('photo', False)
             remove_photo = form.cleaned_data["remove_photo"]
-            if photo_file and remove_photo == False:
+            if photo_file: #If the user uploads a photo and at the same time wants to remove it, we assule he just wants a new one
                 photo = Image.open(BytesIO(photo_file.read()))
                 try:
                     path = MEDIA_ROOT+"/image/users_photo/PROMO_"+user.promo+"/"
