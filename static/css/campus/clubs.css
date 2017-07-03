@@ -30,24 +30,3 @@ a, a:hover, a:active, a:visited {
 .margin-bottom {
     margin-bottom: 10px;
 }
-
-/* Mobile CSS */
-
-@media (max-width: 768px) {
-
-    .row {
-      margin: 2% !important;
-    }
-
-    .mobile-centered {
-      text-align: center;
-    }
-
-    .logo {
-      max-width: 45%;
-    }
-
-    .mobile-margin-top {
-      margin-top: 20px;
-    }
-}

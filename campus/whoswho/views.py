@@ -155,7 +155,6 @@ class UserHome(View):
                 user.photo_file = "PROMO_"+user.promo+"/"+user.uid
             elif remove_photo:
                 user.photo_file = ""
-                form.data["remove_photo"] = False
 
             user.mail = mail
             user.campus = form.cleaned_data["campus"]
