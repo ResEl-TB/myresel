@@ -48,6 +48,18 @@ a, a:hover, a:active, a:visited {
 /* Mobile CSS */
 @media (max-width: 991px) {
 
+  .assos-card {
+    background-color: #f5f5f5 !important;
+    margin-bottom: 4%;
+    border: 1px solid #e3e3e3;
+    border-radius: 5px;
+  }
+
+  .entries-container {
+    background-color: transparent;
+    border: none;
+  }
+
   .mobile-centered {
     text-align: center;
   }
@@ -63,5 +75,17 @@ a, a:hover, a:active, a:visited {
   .alternative-color {
     background-color: inherit;
     box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  }
+
+  .name {
+    color: white;
+    margin-bottom: 2%;
+    font-weight: bold;
+    text-decoration: underline;
+  }
+
+  .club-name {
+    text-decoration: underline;
+    font-size: 1.5em;
   }
 }

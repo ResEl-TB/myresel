@@ -13,7 +13,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12 well entries-container">
-          <h1 class="mobile-centered">{% trans 'Assos' %}</h1>
+          <h1 class="mobile-centered name">{% trans 'Assos' %}</h1>
             {% for asso in assos %}
             <div class="row assos-card mobile-centered {% if forloop.counter|divisibleby:2 %} alternative-color {% endif %}">
                 <div class="col-sm-2 col-sm-offset-1 text-center">
@@ -60,7 +60,7 @@
     </div>
     <div class="row">
         <div class="col-md-12 well entries-container">
-            <h1 class="mobile-centered">{% trans 'Clubs' %}</h1>
+            <h1 class="mobile-centered name">{% trans 'Clubs' %}</h1>
             {% for club in clubs %}
             <div class="row assos-card mobile-centered {% if forloop.counter|divisibleby:2 %} alternative-color {% endif %}">
                 <div class="col-sm-2 col-sm-offset-1 text-center">
@@ -107,9 +107,9 @@
     </div>
     <div class="row">
         <div class="col-md-12 well entries-container">
-            <h1 class="mobile-centered">{% trans 'Listes' %}</h1>
+            <h1 class="mobile-centered name">{% trans 'Listes' %}</h1>
             {% for list in lists %}
-            <div class="row lists-card mobile-centered {% if forloop.counter|divisibleby:2 %} alternative-color {% endif %}">
+            <div class="row assos-card mobile-centered {% if forloop.counter|divisibleby:2 %} alternative-color {% endif %}">
                 <div class="col-sm-2 col-sm-offset-1 text-center">
                   {% if list.logo and list.logo != "None" %}
                   <img class="logo" src="/media/image/LIST/{{ list.logo }}">
