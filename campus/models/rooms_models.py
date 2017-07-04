@@ -47,7 +47,7 @@ class Room(models.Model):
     )
 
     clubs = models.TextField(
-        verbose_name='club(s)',
+        verbose_name='club(s), un par ligne',
         help_text=_('indique à quel(s) club(s) appartient la salle, un par ligne'),
         blank=True,
     )

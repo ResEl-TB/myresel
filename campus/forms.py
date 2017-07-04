@@ -2,7 +2,7 @@ from django import forms
 from django.conf import settings
 from django.core.validators import MaxLengthValidator
 from django.core.exceptions import ValidationError
-from django.forms import ModelForm, CharField, TextInput, Form, Textarea, ChoiceField, EmailField, IntegerField
+from django.forms import ModelForm, CharField, TextInput, Form, Textarea, ChoiceField, EmailField, IntegerField, Select, CheckboxInput
 from django.forms.models import ModelMultipleChoiceField
 from django.utils.translation import ugettext_lazy as _
 from django.db.models import Q
@@ -117,6 +117,31 @@ class RoomBookingForm(ModelForm):
                     self.add_error('room', _("La salle %s n'est pas disponible") % room)
             elif not room.is_free(start_time, end_time):
                 self.add_error('room', _("La salle %s n'est pas disponible") % room)
+
+class AddRoomForm(ModelForm):
+    class Meta:
+        model = Room
+        fields = ("location", "name", "mailing_list", "private", "clubs")
+        widgets = {
+            'location': Select(attrs={'class': 'form-control'}),
+            'name': TextInput(attrs={'class': 'form-control'}),
+            'mailing_list': TextInput(attrs={'class': 'form-control'}),
+            'private': CheckboxInput(attrs={'class': 'form-check-input'}),
+            'clubs': Textarea(attrs={'class': 'form-control', 'id': 'clubs_area'}),
+        }
+
+    def clean_mailing_list(self):
+        email=self.cleaned_data["mailing_list"]
+        if not re.match(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+', email):
+            raise ValidationError(message=_("L'adresse email semble être invalide"), code="Bad MAIL")
+        return(email)
+
+    def clean_clubs(self):
+        for club in str.splitlines(self.cleaned_data["clubs"]):
+            #TODO Check if the club exists
+            if not re.match(r'^[a-z0-9-]+', club):
+                raise ValidationError(message=_("Le club suivant n'est pas un nom valide: %s"%(club,)), code="BAD CLUB")
+        return cleaned_data["clubs"]
 
 
 class DisabledCharField(CharField):

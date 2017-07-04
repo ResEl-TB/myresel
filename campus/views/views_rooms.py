@@ -16,7 +16,7 @@ import calendar, datetime, json
 from django.views.generic import DetailView
 from django.views.generic import FormView
 
-from campus.forms import RoomBookingForm
+from campus.forms import RoomBookingForm, AddRoomForm
 from campus.models import RoomBooking, Room, StudentOrganisation
 from fonctions.decorators import ae_required
 
@@ -156,10 +156,30 @@ def calendar_view(request, room='all', year=timezone.now().year, month=timezone.
     }
 
     return render(
-        request, 
-        'campus/rooms/calendar.html', 
+        request,
+        'campus/rooms/calendar.html',
         context,
     )
+
+class AddRoom(FormView):
+    """
+    View to create a room
+    """
+
+    template_name = 'campus/rooms/room_form.html'
+    success_url = reverse_lazy('campus:rooms:calendar')
+    form_class = AddRoomForm
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(AddRoom, self).dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        form.save()
+        messages.success(self.request, _('Opération réussie'))
+        return super(AddRoom, self).form_valid(form)
+
+
 
 class BookingView(FormView):
     """
