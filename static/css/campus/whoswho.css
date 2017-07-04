@@ -42,10 +42,6 @@ label input {
    font-size: 1.1em;
 }
 
-.dell-user, .dell-user:hover, .dell-user:visited {
-  color: red;
-}
-
 .user-photo {
   text-align: center;
   margin-bottom: 20px;

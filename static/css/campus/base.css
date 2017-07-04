@@ -193,6 +193,10 @@ body {
   background: url(/static/images/campus/bgimg.jpg) no-repeat center center fixed;
 }
 
+.dell-user, .dell-user:hover, .dell-user:visited {
+  color: red;
+}
+
 /* removes bootsrap component's radius */
 .remove-radius {
     border-radius: 0px !important;
