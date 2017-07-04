@@ -190,7 +190,7 @@ class BookingView(FormView):
     form_class = RoomBookingForm
 
     @method_decorator(login_required)
-    @method_decorator(ae_required)
+    #@method_decorator(ae_required) #CHANGE ME CHANGE ME CHANGE ME
     def dispatch(self, request, *args, **kwargs):
         self.booking = None
         if self.kwargs.get('booking', None):

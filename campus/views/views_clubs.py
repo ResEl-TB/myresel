@@ -397,7 +397,7 @@ class RemovePersonFromClub(View):
                     user = LdapUser.get(uid=uid)
                 except ObjectDoesNotExist:
                     raise Http404("L'utilisateur n'éxiste pas")
-        if "tbAsso" not in club.object_classes and user.pk in club.members:
+        if user.pk in club.members:
             club.members.remove(user.pk)
             club.save()
             if club.email:
