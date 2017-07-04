@@ -12,15 +12,10 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-12 well">
+        <div class="col-md-12 well entries-container">
           <h1 class="mobile-centered">{% trans 'Assos' %}</h1>
             {% for asso in assos %}
-            <div class="row">
-              <div class="col-lg-8 col-lg-offset-3 mobile-centered">
-                <h2>{{ asso.name }}</h2>
-              </div>
-            </div>
-            <div class="row assos-card mobile-centered">
+            <div class="row assos-card mobile-centered {% if forloop.counter|divisibleby:2 %} alternative-color {% endif %}">
                 <div class="col-sm-2 col-sm-offset-1 text-center">
                   {% if asso.logo and asso.logo != "None" %}
                   <img class="logo" src="/media/image/ASSOS/{{ asso.logo }}">
@@ -29,6 +24,7 @@
                   {% endif %}
                 </div>
                 <div class="col-sm-6 mobile-margin-top">
+                    <p class="club-name">{{ asso.name }}</p>
                     <p>{{ asso.description|truncatewords:30 }}</p>
                     {% if asso.email %}
                     <p><a href="mailto:{{ asso.email }}"><p><span class="fa fa-envelope"><span> <a href="mailto:{{ asso.email }}"> {{ asso.email}}</a></p>
@@ -63,15 +59,10 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12 well">
+        <div class="col-md-12 well entries-container">
             <h1 class="mobile-centered">{% trans 'Clubs' %}</h1>
             {% for club in clubs %}
-            <div class="row">
-              <div class="col-lg-8 col-lg-offset-3 mobile-centered">
-                <h2>{{ club.name }}</h2>
-              </div>
-            </div>
-            <div class="row assos-card mobile-centered">
+            <div class="row assos-card mobile-centered {% if forloop.counter|divisibleby:2 %} alternative-color {% endif %}">
                 <div class="col-sm-2 col-sm-offset-1 text-center">
                   {% if club.logo and club.logo != "None" %}
                   <img class="logo" src="/media/image/CLUB/{{ club.logo }}">
@@ -80,6 +71,7 @@
                   {% endif %}
                 </div>
                 <div class="col-sm-6 mobile-margin-top">
+                    <p class="club-name">{{ club.name }}</p>
                     <p>{{ club.description|truncatewords:30 }}</p>
                     {% if club.email %}
                     <p><a href="mailto:{{ club.email }}"><p><span class="fa fa-envelope"><span> <a href="mailto:{{ club.email }}"> {{ club.email}}</a></p>
@@ -114,15 +106,10 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12 well">
+        <div class="col-md-12 well entries-container">
             <h1 class="mobile-centered">{% trans 'Listes' %}</h1>
             {% for list in lists %}
-            <div class="row">
-              <div class="col-lg-8 col-lg-offset-3 mobile-centered">
-                <h2>{{ list.name }}</h2>
-              </div>
-            </div>
-            <div class="row lists-card mobile-centered">
+            <div class="row lists-card mobile-centered {% if forloop.counter|divisibleby:2 %} alternative-color {% endif %}">
                 <div class="col-sm-2 col-sm-offset-1 text-center">
                   {% if list.logo and list.logo != "None" %}
                   <img class="logo" src="/media/image/LIST/{{ list.logo }}">
@@ -131,6 +118,7 @@
                   {% endif %}
                 </div>
                 <div class="col-sm-6 mobile-margin-top">
+                    <p class="club-name">{{ list.name }}</p>
                     <p>{{ list.description|truncatewords:30 }}</p>
                     {% if list.email %}
                     <p><a href="mailto:{{ list.email }}"><span class="fa fa-envelope"><span> <a href="mailto:{{ list.email }}"> {{ list.email}}</a></p>
