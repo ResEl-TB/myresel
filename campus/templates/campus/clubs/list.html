@@ -295,59 +295,5 @@
           minLength: 3,
       });
     })
-
-    {% if user.is_authenticated%}
-    function fetchMembers(pk, type) {
-      var get_data = {'pk':pk};
-      var correct_url;
-      if(type=="members"){
-          correct_url = "{% url 'campus:clubs:request_members'%}";
-      }else {
-          correct_url = "{% url 'campus:clubs:request_prezs'%}";
-      }
-      $.ajax({
-        url:correct_url,
-        data: get_data,
-        dataType:"json",
-        success:function(data) {
-          var node = document.createElement("LI");
-          if(data.length == 0){
-            if(type=="members"){
-                var text = document.createTextNode("Il n'y a aucun membre");
-                node.appendChild(text);
-                document.getElementById("membres_"+pk).appendChild(node);
-            }else {
-                var text = document.createTextNode("Il n'y a aucun président");
-                node.appendChild(text);
-                document.getElementById("prezs_"+pk).appendChild(node)
-            }
-          }
-          for(i=0; i<data.length; i++){
-            var node = document.createElement("LI");
-            var link = document.createElement("A");
-            var textlink = document.createTextNode(data[i]['full_name']);
-            link.href="{{hardLinkWhoUser}}"+data[i]['uid'];
-            link.appendChild(textlink);
-            node.appendChild(link);
-            if(type=="members"){
-                document.getElementById("membres_"+pk).appendChild(node);
-            }else {
-                document.getElementById("prezs_"+pk).appendChild(node);
-            }
-          };
-        }
-      });
-    }
-
-    {% for club in clubs %}
-        var btn_{{club.cn|remove_unwanted_strings}} = document.getElementById("membres_{{club.cn}}_btn");
-        $(btn_{{club.cn|remove_unwanted_strings}}).one("click", function(){fetchMembers("{{club.cn}}", "members"); btn_{{club.cn|remove_unwanted_strings}}.onclick=null;});
-    {% endfor %}
-
-    {% for club in clubs %}
-        var btn_{{club.cn|remove_unwanted_strings}} = document.getElementById("prezs_{{club.cn}}_btn");
-        $(btn_{{club.cn|remove_unwanted_strings}}).one("click", function(){fetchMembers("{{club.cn}}", "prezs"); btn_{{club.cn|remove_unwanted_strings}}.onclick=null;});
-    {% endfor %}
-    {% endif %}
 </script>
 {% endblock %}
