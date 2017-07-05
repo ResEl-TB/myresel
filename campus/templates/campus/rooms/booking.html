@@ -1,5 +1,6 @@
 {% extends "base_campus.html" %}
 {% load staticfiles %}
+{% load i18n %}
 
 {% block titre %}Réserver une salle{% endblock %}
 
@@ -9,20 +10,19 @@
 {% endblock %}
 
 {% block content %}
+    <div class="btn-home">
+      <a href="{% url 'campus:rooms:calendar' %}" class="noncolored-a"><span class="fa fa-home"></span> {% trans "" %} </a>
+    </div>
     <div class="container well" id="content">
         <div class="row">
             <div class="col-md-12">
                 <h1 style="margin-top: -10px;" class="text-center">
                     Réserver une salle
-                    <span class="small">
-                    <a href="{% url 'campus:rooms:calendar' %}">retour au planning</a>
-                </span>
                 </h1>
                 <hr style="padding-bottom: 20px;">
 
                 <form method="POST" class="form-horizontal">
                     {% csrf_token %}
-                    <h1>{{ form.errors }}</h1>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group {% if form.description.errors %}has-error{% endif %}">
@@ -41,6 +41,7 @@
                                             <option {% if choice_id in form.room.value %}selected{% endif %} value="{{ choice_id }}">{{ choice_label }}</option>
                                         {% endfor %}
                                     </select>
+                                    <p class="small">{% trans 'Maintenez la touche controle pour sélectionner plusieurs salles'%}</p>
                                     {% if form.room.errors %}<span class="help-block">{{ form.room.errors }}</span>{% endif %}
                                 </div>
                             </div>

@@ -127,7 +127,7 @@ class AddRoomForm(ModelForm):
             'name': TextInput(attrs={'class': 'form-control'}),
             'mailing_list': TextInput(attrs={'class': 'form-control'}),
             'private': CheckboxInput(attrs={'class': 'form-check-input'}),
-            'clubs': TextInput(attrs={'class': 'form-control', 'id': 'clubs_area'}),
+            'clubs': TextInput(attrs={'class': 'form-control form-control-warning', 'id': 'clubs_area inputWarning1'}),
         }
 
     def clean_mailing_list(self):

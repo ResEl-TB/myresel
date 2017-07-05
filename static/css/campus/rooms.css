@@ -64,7 +64,7 @@
 }
 
 .alert-club {
-    background-color: #F9BDFD;
+    background-color: #FBDB93;
 }
 
 .alert-meeting {
@@ -76,11 +76,11 @@
 }
 
 .alert-event {
-    background-color: #FBDB93;
+    background-color: #94D6E4;
 }
 
 .alert-sport {
-    background-color: #FA5E56;
+    background-color: #F0B0AD;
 }
 
 .alert-arts {
@@ -92,8 +92,12 @@
 }
 
 .time {
-    color: #F3FFE2;
+    color: rgb(64, 64, 64);
     display: block;
+}
+
+.description {
+    color: rgb(208, 63, 63);
 }
 
 .event {
@@ -111,4 +115,9 @@
 }
 .current-day {
     background-color: #cfdfff !important;
+}
+
+.small {
+    font-size: 0.8em;
+    font-style: oblique;
 }

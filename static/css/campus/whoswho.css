@@ -28,12 +28,6 @@ label input {
    width: 100%;
 }
 
-.noncolored-a, .noncolored-a:hover, .noncolored-a:visited, .noncolored-a:focus{
-   color: inherit;
-   cursor: pointer;
-   text-decoration: none;
-}
-
 .form-category label{
    font-weight: normal;
 }
@@ -55,18 +49,6 @@ label input {
 
 .margin-bottom-20{
   margin-bottom: 20px;
-}
-
-.who-home{
-  z-index: 10;
-  padding: 10px;
-  border: 1px solid #e3e3e3;
-  border-radius: 0px 5px 5px 0px;
-  position: fixed;
-  top: 17%;
-  left: 0;
-  background-color: #f5f5f5;
-  box-shadow: -1px 0px 10px rgba(0,0,0,0.3);
 }
 
 /* Mobile CSS */
