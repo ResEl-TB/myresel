@@ -1,7 +1,7 @@
 from django import forms
 from django.conf import settings
 from django.core.validators import MaxLengthValidator
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.forms import ModelForm, CharField, TextInput, Form, Textarea, ChoiceField, EmailField, IntegerField, Select, CheckboxInput
 from django.forms.models import ModelMultipleChoiceField
 from django.utils.translation import ugettext_lazy as _
@@ -127,7 +127,7 @@ class AddRoomForm(ModelForm):
             'name': TextInput(attrs={'class': 'form-control'}),
             'mailing_list': TextInput(attrs={'class': 'form-control'}),
             'private': CheckboxInput(attrs={'class': 'form-check-input'}),
-            'clubs': Textarea(attrs={'class': 'form-control', 'id': 'clubs_area'}),
+            'clubs': TextInput(attrs={'class': 'form-control', 'id': 'clubs_area'}),
         }
 
     def clean_mailing_list(self):
@@ -137,11 +137,16 @@ class AddRoomForm(ModelForm):
         return(email)
 
     def clean_clubs(self):
-        for club in str.splitlines(self.cleaned_data["clubs"]):
-            #TODO Check if the club exists
+        clubs = list(set(self.cleaned_data["clubs"].split(";"))) #deletes duplicates
+        for club in clubs:
+            try:
+                StudentOrganisation.get(cn=club)
+            except ObjectDoesNotExist:
+                raise ValidationError(message=_("Le club suivant n'existe pas: %s"%(club,)), code="CLUB DOES NOT EXIST")
             if not re.match(r'^[a-z0-9-]+', club):
                 raise ValidationError(message=_("Le club suivant n'est pas un nom valide: %s"%(club,)), code="BAD CLUB")
-        return cleaned_data["clubs"]
+        print(";".join(clubs))
+        return(";".join(clubs))
 
 
 class DisabledCharField(CharField):
