@@ -38,7 +38,7 @@
                                 <div class="col-sm-10">
                                     <select multiple name="room" class="form-control" size="{{ form.room.field.choices|length }}">
                                         {% for choice_id, choice_label in form.room.field.choices %}
-                                            <option {% if choice_id in form.room.value %}selected{% endif %} value="{{ choice_id }}">{{ choice_label }}</option>
+                                            <option {% if choice_id in form.room.value %}selected{% endif %} class="room-choice"value="{{ choice_id }}">{{ choice_label }}</option>
                                         {% endfor %}
                                     </select>
                                     <p class="small">{% trans 'Maintenez la touche controle pour sélectionner plusieurs salles'%}</p>
@@ -63,7 +63,7 @@
                             <div class="form-group {% if form.start_time.errors %}has-error{% endif %}">
                                 <label class="col-sm-2 control-label">Début</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control datetimepicker" name="start_time" value="{{ form.start_time.value|date:'Y-m-d H:i:00' }}">
+                                    <input type="text" class="form-control datetimepicker" id="starttime" name="start_time" value="{{ form.start_time.value|date:'Y-m-d H:i:00' }}">
                                     {% if form.start_time.errors %}<span class="help-block">{{ form.start_time.errors }}</span>{% endif %}
                                 </div>
                             </div>
@@ -72,7 +72,7 @@
                             <div class="form-group {% if form.end_time.errors %}has-error{% endif %}">
                                 <label class="col-sm-2 control-label">Fin</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control datetimepicker" name="end_time" value="{{ form.end_time.value|date:'Y-m-d H:i:00' }}">
+                                    <input type="text" class="form-control datetimepicker" id="endtime" name="end_time" value="{{ form.end_time.value|date:'Y-m-d H:i:00' }}">
                                     {% if form.end_time.errors %}<span class="help-block">{{ form.end_time.errors }}</span>{% endif %}
                                 </div>
                             </div>
@@ -120,18 +120,42 @@
 
                             <div class="form-group">
                                 <div class="col-sm-offset-2 col-sm-10">
-                                    <button type="submit" class="btn btn-default">Réserver</button>
+                                    <button type="submit" class="btn btn-default" onclick="checkAvailability()">Réserver</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </form>
+                <button type="submit" class="btn btn-default" onclick="checkAvailability()">Réserver</button>
             </div>
         </div>
     </div>
 {% endblock %}
 
 {% block javascript %}
+    <script type="text/javascript">
+
+        var roomChoices = document.getElementsByClassName("room-choice");
+
+        function checkAvailability(value){
+            var start = document.getElementById("starttime").value
+            var end = document.getElementById("endtime").value
+            for(var i=0; i<roomChoices.length; i++){
+                if(roomChoices[i].selected){
+                    $.ajax({
+                        url : "{% url 'campus:rooms:check-availability'%}",
+                        type : "GET",
+                        data : {"value": roomChoices[i].value, "start": start, "end": end},
+                        success : function(data){
+                            if(data != "0"){
+                                alert(data);
+                            }
+                        },
+                    })
+                };
+            };
+        }
+    </script>
     <script src="{% static 'js/jquery.datetimepicker.full.min.js' %}"></script>
     <script type="text/javascript">
         jQuery.datetimepicker.setLocale( "{{ request.LANGUAGE_CODE }}" );

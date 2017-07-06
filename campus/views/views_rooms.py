@@ -10,11 +10,11 @@ from django.contrib.auth.decorators import permission_required, login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.db.models import Q
+from django.http import Http404
 
 import calendar, datetime, json
 
-from django.views.generic import DetailView
-from django.views.generic import FormView
+from django.views.generic import DetailView, FormView, View
 
 from campus.forms import RoomBookingForm, AddRoomForm
 from campus.models import RoomBooking, Room, StudentOrganisation
@@ -194,7 +194,7 @@ class BookingView(FormView):
     def dispatch(self, request, *args, **kwargs):
         self.booking = None
         if self.kwargs.get('booking', None):
-            self.booking = RoomBooking.objects.get(id=self.kwargs['booking'])
+            self.booking = get_object_or_404(RoomBooking, id=self.kwargs['booking'])
             if not self.booking.user_can_manage(self.request.ldap_user):
                 messages.error(self.request, _('Vous ne pouvez pas modifier cette réservation'))
                 return HttpResponseRedirect(reverse('campus:rooms:calendar'))
@@ -209,6 +209,31 @@ class BookingView(FormView):
         form.save()
         messages.success(self.request, _('Opération réussie'))
         return super(BookingView, self).form_valid(form)
+
+class RequestAvailability(View):
+    """
+    View that returns avaibility of a room to ajax requests
+    """
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(RequestAvailability, self).dispatch(request, *args, **kwargs)
+
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax:
+            room_pk = request.GET.get('value', None)
+            start = request.GET.get('start', None)
+            end = request.GET.get('end', None)
+            print(room_pk, start, end)
+            if room_pk == None or start == None or end == None:
+                raise Http404
+            room = get_object_or_404(Room, pk=room_pk)
+            answer = 0
+            if not room.is_free(start, end):
+                answer = room.name
+            return HttpResponse(answer)
+        else:
+            raise Http404
 
 class BookingDetailView(DetailView):
     model = RoomBooking

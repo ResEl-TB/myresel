@@ -62,23 +62,23 @@ class RoomBookingForm(ModelForm):
             defaults={'location': 'F', 'private': False},
         )
 
-        pr = False    # Detects is the piano or réunion room is selected
-        rooms = []
-        for room in self.cleaned_data['room']:
-            if 'piano' in room.name.lower() or 'réunion' in room.name.lower():
-                pr = True
-            else:
-                rooms.append(room)
-
-        if m.pk:
-            m.room.clear()
-
-        if pr:
-            m.room.add(piano)
-            m.room.add(meeting)
-        for room in rooms:
-            m.room.add(room)
-        m.notify_mailing_list()
+        #pr = False    # Detects is the piano or réunion room is selected
+        #rooms = []
+        #for room in self.cleaned_data['room']:
+        #    if 'piano' in room.name.lower() or 'réunion' in room.name.lower():
+        #        pr = True
+        #    else:
+        #        rooms.append(room)
+        #
+        #if m.pk:
+        #    m.room.clear()
+        #
+        #if pr:
+        #    m.room.add(piano)
+        #    m.room.add(meeting)
+        #for room in rooms:
+        #    m.room.add(room)
+        #m.notify_mailing_list()
         return m
 
 
@@ -88,14 +88,14 @@ class RoomBookingForm(ModelForm):
         end_time = cleaned_data['end_time']
 
         # DAT HACK
-        piano, created = Room.objects.get_or_create(
-            name='Salle piano',
-            defaults={'location': 'F', 'private': True},
-        )
-        meeting, created = Room.objects.get_or_create(
-            name='Salle réunion',
-            defaults={'location': 'F', 'private': False},
-        )
+        #piano, created = Room.objects.get_or_create(
+        #    name='Salle piano',
+        #    defaults={'location': 'F', 'private': True},
+        #)
+        #meeting, created = Room.objects.get_or_create(
+        #    name='Salle réunion',
+        #    defaults={'location': 'F', 'private': False},
+        #)
 
         # Deactivated because it is possible to add past events for record
         # if start_time < datetime.datetime.now():
@@ -109,14 +109,14 @@ class RoomBookingForm(ModelForm):
         #     self.add_error('end_time', _('Vous ne pouvez réserver sur plusieurs jours'))
 
         # Check if room are available
-        for room in cleaned_data['room']:
-            # DAT HACK BIS
-            if 'piano' in room.name.lower() or 'réunion' in room.name.lower():
-                if not piano.is_free(start_time, end_time) or \
-                        not meeting.is_free(start_time, end_time):
-                    self.add_error('room', _("La salle %s n'est pas disponible") % room)
-            elif not room.is_free(start_time, end_time):
-                self.add_error('room', _("La salle %s n'est pas disponible") % room)
+        #for room in cleaned_data['room']:
+        #    # DAT HACK BIS
+        #    if 'piano' in room.name.lower() or 'réunion' in room.name.lower():
+        #        if not piano.is_free(start_time, end_time) or \
+        #                not meeting.is_free(start_time, end_time):
+        #            self.add_error('room', _("La salle %s n'est pas disponible") % room)
+        #    elif not room.is_free(start_time, end_time):
+        #        self.add_error('room', _("La salle %s n'est pas disponible") % room)
 
 class AddRoomForm(ModelForm):
     class Meta:
@@ -127,7 +127,7 @@ class AddRoomForm(ModelForm):
             'name': TextInput(attrs={'class': 'form-control'}),
             'mailing_list': TextInput(attrs={'class': 'form-control'}),
             'private': CheckboxInput(attrs={'class': 'form-check-input'}),
-            'clubs': TextInput(attrs={'class': 'form-control form-control-warning', 'id': 'clubs_area inputWarning1'}),
+            'clubs': TextInput(attrs={'class': 'form-control form-control-warning', 'id': 'clubs_area'}),
         }
 
     def clean_mailing_list(self):

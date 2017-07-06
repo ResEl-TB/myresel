@@ -61,7 +61,7 @@ class Room(models.Model):
                 if (user.uid in '\t'.join(club.members)) or (user.uid in '\t'.join(club.prezs)):
                     granted = True
                     break
-        else:
+        else:# TODO RIGHTS
             granted = True
         return granted
 

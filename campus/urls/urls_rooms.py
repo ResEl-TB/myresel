@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from campus.views import BookingView, calendar_view, BookingDetailView, AddRoom
+from campus.views import BookingView, calendar_view, BookingDetailView, AddRoom, RequestAvailability
 
 urlpatterns = [
     url(r'^$', calendar_view, name='calendar'),
@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^réservation$', BookingView.as_view(), name='booking'),
     url(r'^modification/(?P<booking>[0-9]+)/$', BookingView.as_view(), name='mod-booking'),
     url(r'^event/(?P<slug>[0-9]+)/$', BookingDetailView.as_view(), name='booking-detail'),
+    url(r'^check', RequestAvailability.as_view(), name="check-availability"),
 
     url(r'^add-room$', AddRoom.as_view(), name="add-room"),
 ]
