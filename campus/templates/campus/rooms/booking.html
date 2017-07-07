@@ -21,7 +21,7 @@
                 </h1>
                 <hr style="padding-bottom: 20px;">
 
-                <form method="POST" class="form-horizontal">
+                <form method="POST" class="form-horizontal" onsubmit="event.preventDefault(); return checkAvailability(this);">
                     {% csrf_token %}
                     <div class="row">
                         <div class="col-md-6">
@@ -120,13 +120,12 @@
 
                             <div class="form-group">
                                 <div class="col-sm-offset-2 col-sm-10">
-                                    <button type="submit" class="btn btn-default" onclick="checkAvailability()">Réserver</button>
+                                    <button type="submit" class="btn btn-default">Réserver</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </form>
-                <button type="submit" class="btn btn-default" onclick="checkAvailability()">Réserver</button>
             </div>
         </div>
     </div>
@@ -137,7 +136,7 @@
 
         var roomChoices = document.getElementsByClassName("room-choice");
 
-        function checkAvailability(value){
+        function checkAvailability(form){
             var start = document.getElementById("starttime").value
             var end = document.getElementById("endtime").value
             for(var i=0; i<roomChoices.length; i++){
@@ -148,7 +147,14 @@
                         data : {"value": roomChoices[i].value, "start": start, "end": end},
                         success : function(data){
                             if(data != "0"){
-                                alert(data);
+                                var send = confirm(
+                                    "ATTENTION:\n"+
+                                    "La salle \"" + data +
+                                    "\" est déjà réservée sur ce créneau.\n"+
+                                    "Assurez-vous que les activités sont compatibles.\n\n"+
+                                    "Pour confirmer, cliquez sur OK"
+                                );
+                                if(send){form.submit();}
                             }
                         },
                     })
