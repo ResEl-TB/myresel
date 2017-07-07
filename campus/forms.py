@@ -76,8 +76,9 @@ class RoomBookingForm(ModelForm):
         #if pr:
         #    m.room.add(piano)
         #    m.room.add(meeting)
-        for room in rooms:
-            m.room.add(room)
+        #for room in rooms:
+        #    m.room.add(room)
+        m.room = self.cleaned_data['room']
         m.notify_mailing_list()
         return m
 

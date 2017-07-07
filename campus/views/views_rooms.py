@@ -53,22 +53,17 @@ def construct_query(request, start_date, end_date, room='all'):
 
         q_rooms &= Q(room__id=room.pk)
 
-    q_dates_start_in = Q(
-        start_time__gte=start_date,
-        start_time__lt=end_date
-    )
-
-    q_dates_end_in = Q(
+    q_dates_in = Q(
+        start_time__lt=end_date,
         end_time__gte=start_date,
-        end_time__lt=end_date
     )
 
-    q_recc_end = Q(
-        start_time__gte=start_date,
-        end_recurring_period__gte=end_date,
+    q_recc = Q(
+        start_time__lt=end_date,
+        end_recurring_period__gte=start_date,
     ) & (Q(recurring_rule='DAILY') | Q(recurring_rule='WEEKLY') | Q(recurring_rule='MONTHLY'))
 
-    return q_rooms & (q_dates_start_in | q_dates_end_in | q_recc_end)
+    return q_rooms & (q_dates_in | q_recc)
 
 def calendar_view(request, room='all', year=timezone.now().year, month=timezone.now().month, day='all'):
     """ View to display the month calendar of all events """
@@ -106,15 +101,16 @@ def calendar_view(request, room='all', year=timezone.now().year, month=timezone.
     for event in events:
         for occ in event.get_occurences():
             single_events.append((occ, event))
+    #We only need event that are from this month
+    single_events = [e for e in single_events if (e[0][0].month == month and e[0][0].year == year) or (e[0][1].month == month and e[0][1].year == year)]
 
     # calendar date limits
-    # TODO: show events that last multiple days
     if day > 0:  # Show a single day
         day = int(day)
         current_date = datetime.date(year=year, month=month, day=day)
-
         cal.append(
-            [(datetime.date(year=year, month=month, day=day), events)]
+            # Shows the day's event and also those that last multiple days
+            [(datetime.date(year=year, month=month, day=day), [e[1] for e in single_events if e[0][0].day == day or (e[0][0].day < day and e[0][1].day >= day) ])]
         )
     else:
         current_date = datetime.date(year=year, month=month, day=15)
@@ -128,7 +124,7 @@ def calendar_view(request, room='all', year=timezone.now().year, month=timezone.
                     )
                 else:
                     week_events.append(
-                        (datetime.date(year=year, month=month, day=day), [e[1] for e in single_events if e[0].day == day])
+                        (datetime.date(year=year, month=month, day=day), [e[1] for e in single_events if e[0][0].day == day or (e[0][0].day < day and e[0][1].day >= day)])
                     )
             cal.append(week_events)
 
