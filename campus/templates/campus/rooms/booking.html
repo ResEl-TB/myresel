@@ -21,7 +21,7 @@
                 </h1>
                 <hr style="padding-bottom: 20px;">
 
-                <form method="POST" class="form-horizontal" onsubmit="event.preventDefault(); return checkAvailability(this);">
+                <form method="POST" class="form-horizontal" onsubmit="event.preventDefault(); checkAvailability(this);">
                     {% csrf_token %}
                     <div class="row">
                         <div class="col-md-6">
@@ -137,29 +137,32 @@
         var roomChoices = document.getElementsByClassName("room-choice");
 
         function checkAvailability(form){
-            var start = document.getElementById("starttime").value
-            var end = document.getElementById("endtime").value
+            var start = document.getElementById("starttime").value;
+            var end = document.getElementById("endtime").value;
+            var send = true;
             for(var i=0; i<roomChoices.length; i++){
                 if(roomChoices[i].selected){
                     $.ajax({
                         url : "{% url 'campus:rooms:check-availability'%}",
                         type : "GET",
+                        async: false,
                         data : {"value": roomChoices[i].value, "start": start, "end": end},
                         success : function(data){
                             if(data != "0"){
-                                var send = confirm(
+                                answer = confirm(
                                     "ATTENTION:\n"+
                                     "La salle \"" + data +
                                     "\" est déjà réservée sur ce créneau.\n"+
                                     "Assurez-vous que les activités sont compatibles.\n\n"+
                                     "Pour confirmer, cliquez sur OK"
                                 );
-                                if(send){form.submit();}
+                                if(!answer){send=false;};
                             }
                         },
-                    })
+                    });
                 };
             };
+            if (send){form.submit();}
         }
     </script>
     <script src="{% static 'js/jquery.datetimepicker.full.min.js' %}"></script>
