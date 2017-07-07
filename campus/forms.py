@@ -53,14 +53,14 @@ class RoomBookingForm(ModelForm):
 
         m.save()
 
-        piano, created = Room.objects.get_or_create(
-            name='Salle piano',
-            defaults={'location': 'F', 'private': True},
-        )
-        meeting, created = Room.objects.get_or_create(
-            name='Salle réunion',
-            defaults={'location': 'F', 'private': False},
-        )
+        #piano, created = Room.objects.get_or_create(
+        #    name='Salle piano',
+        #    defaults={'location': 'F', 'private': True},
+        #)
+        #meeting, created = Room.objects.get_or_create(
+        #    name='Salle réunion',
+        #    defaults={'location': 'F', 'private': False},
+        #)
 
         #pr = False    # Detects is the piano or réunion room is selected
         #rooms = []
@@ -76,9 +76,9 @@ class RoomBookingForm(ModelForm):
         #if pr:
         #    m.room.add(piano)
         #    m.room.add(meeting)
-        #for room in rooms:
-        #    m.room.add(room)
-        #m.notify_mailing_list()
+        for room in rooms:
+            m.room.add(room)
+        m.notify_mailing_list()
         return m
 
 
