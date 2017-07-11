@@ -14,7 +14,7 @@ from django.http import Http404
 
 import calendar, datetime, json
 
-from django.views.generic import DetailView, FormView, View
+from django.views.generic import DetailView, FormView, View, ListView
 
 from campus.forms import RoomBookingForm, AddRoomForm
 from campus.models import RoomBooking, Room, StudentOrganisation
@@ -174,6 +174,18 @@ class AddRoom(FormView):
         form.save()
         messages.success(self.request, _('Opération réussie'))
         return super(AddRoom, self).form_valid(form)
+
+class ManageRooms(ListView):
+    """
+    View used to manage rooms
+    """
+
+    template_name = 'campus/rooms/room_management.html'
+    model = Room
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(ManageRooms, self).dispatch(request, *args, **kwargs)
 
 
 

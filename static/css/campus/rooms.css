@@ -121,3 +121,8 @@
     font-size: 0.8em;
     font-style: oblique;
 }
+
+.bigger-bold {
+    font-size: 1.1em;
+    font-weight: bold;
+}
