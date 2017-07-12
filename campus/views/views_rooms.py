@@ -163,12 +163,24 @@ class AddRoom(FormView):
     """
 
     template_name = 'campus/rooms/room_form.html'
-    success_url = reverse_lazy('campus:rooms:calendar')
+    success_url = reverse_lazy('campus:rooms:manage-rooms')
     form_class = AddRoomForm
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            messages.error(self.request, _("Vous n'avez pas accès à cette page"))
+            return HttpResponseRedirect(reverse('campus:rooms:calendar'))
+        return super(ManageRooms, self).dispatch(request, *args, **kwargs)
+        self.room = None
+        if self.kwargs.get('room', None):
+            self.room = get_object_or_404(Room, id=self.kwargs["room"])
         return super(AddRoom, self).dispatch(request, *args, **kwargs)
+
+    def get_form(self, form_class=None):
+        if form_class == None:
+            form_class = self.get_form_class()
+        return form_class(self.request.POST or None, instance=self.room)
 
     def form_valid(self, form):
         form.save()
@@ -185,9 +197,24 @@ class ManageRooms(ListView):
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            messages.error(self.request, _("Vous n'avez pas accès à cette page"))
+            return HttpResponseRedirect(reverse('campus:rooms:calendar'))
         return super(ManageRooms, self).dispatch(request, *args, **kwargs)
 
+class DeleteRoom(DeleteView):
+    """
+    View used to remove a rooms
+    """
+    model = Room
+    success_url = reverse_lazy('campus:rooms:manage-rooms')
 
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_staff:
+            messages.error(self.request, _("Vous n'avez pas accès à cette page"))
+            return HttpResponseRedirect(reverse('campus:rooms:calendar'))
+        return super(DeleteRoom, self).dispatch(request, *args, **kwargs)
 
 class BookingView(FormView):
     """
@@ -198,7 +225,7 @@ class BookingView(FormView):
     form_class = RoomBookingForm
 
     @method_decorator(login_required)
-    #@method_decorator(ae_required) #CHANGE ME CHANGE ME CHANGE ME
+    #@method_decorator(ae_required) #TODO: CHANGE ME CHANGE ME CHANGE ME
     def dispatch(self, request, *args, **kwargs):
         self.booking = None
         if self.kwargs.get('booking', None):
@@ -217,6 +244,23 @@ class BookingView(FormView):
         form.save()
         messages.success(self.request, _('Opération réussie'))
         return super(BookingView, self).form_valid(form)
+
+class DeleteBooking(DeleteView):
+    """
+    View used to delete a registered booking
+    """
+    model = RoomBooking
+    success_url = reverse_lazy('campus:rooms:calendar')
+
+    #TODO: RIGHTS
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super(DeleteBooking, self).dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        #TODO: Rights rights rights !!!
+        return super(DeleteBooking, self).post(self, request, *args, **kwargs)
+
 
 class RequestAvailability(View):
     """

@@ -133,20 +133,22 @@ class AddRoomForm(ModelForm):
 
     def clean_mailing_list(self):
         email=self.cleaned_data["mailing_list"]
-        if not re.match(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+', email):
+        if not (re.match(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+', email) or email == ""):
             raise ValidationError(message=_("L'adresse email semble être invalide"), code="Bad MAIL")
         return(email)
 
     def clean_clubs(self):
-        clubs = list(set(self.cleaned_data["clubs"].split(";"))) #deletes duplicates
-        for club in clubs:
-            try:
-                StudentOrganisation.get(cn=club)
-            except ObjectDoesNotExist:
-                raise ValidationError(message=_("Le club suivant n'existe pas: %s"%(club,)), code="CLUB DOES NOT EXIST")
-            if not re.match(r'^[a-z0-9-]+', club):
-                raise ValidationError(message=_("Le club suivant n'est pas un nom valide: %s"%(club,)), code="BAD CLUB")
-        print(";".join(clubs))
+        clubs = ""
+        if self.cleaned_data["clubs"] != '':
+            clubs = list(set(self.cleaned_data["clubs"].split(";"))) #deletes duplicates
+            for club in clubs:
+                try:
+                    StudentOrganisation.get(cn=club)
+                except ObjectDoesNotExist:
+                    raise ValidationError(message=_("Le club suivant n'existe pas: %s"%(club,)), code="CLUB DOES NOT EXIST")
+                if not re.match(r'^[a-z0-9-]+', club):
+                    raise ValidationError(message=_("Le club suivant n'est pas un nom valide: %s"%(club,)), code="BAD CLUB")
+            print(";".join(clubs))
         return(";".join(clubs))
 
 
