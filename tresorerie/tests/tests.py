@@ -15,6 +15,7 @@ from tresorerie.models import Transaction, Product
 
 import logging
 
+@skip("Problem with LaPuTeX, and not the website")
 class InvoiceCreation(TestCase):
     def setUp(self):
         self.user = create_full_user()
