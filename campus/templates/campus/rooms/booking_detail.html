@@ -23,6 +23,10 @@
                 - <i>{{ room.name }}</i><br>
             {% endfor %}
         </p>
+        <form action="{% url "campus:rooms:delete-booking" object.pk %}" method="post">
+            {% csrf_token %}
+            <button class="btn btn-danger">Supprimer</button>
+        </form>
     </div>
 
 {% endblock %}

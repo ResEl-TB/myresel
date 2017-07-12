@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from dateutil.relativedelta import relativedelta
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
@@ -14,7 +14,7 @@ from django.http import Http404
 
 import calendar, datetime, json
 
-from django.views.generic import DetailView, FormView, View, ListView
+from django.views.generic import DetailView, FormView, View, ListView, DeleteView, UpdateView
 
 from campus.forms import RoomBookingForm, AddRoomForm
 from campus.models import RoomBooking, Room, StudentOrganisation

@@ -47,6 +47,7 @@
                         <a href="{% url 'campus:rooms:booking' %}" class="btn btn-default">Créer un événement</a>
                         <!-- TODO RIGHTS RIGHTS RIGHTS RIGHTS -->
                         <a href="{% url 'campus:rooms:add-room' %}" class="btn btn-default">Ajouter une salle</a>
+                        <a href="{% url 'campus:rooms:manage-rooms' %}" class="btn btn-default">Gérer les salles</a>
                     {% else %}
                         {{ current_room.name }} (<a href="{% url 'campus:rooms:calendar' %}">voir toutes les salles</a>) <a href="{% url 'campus:rooms:booking' %}" class="btn btn-default">Réserver la salle</a>
                     {% endif %}
