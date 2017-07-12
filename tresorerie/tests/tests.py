@@ -7,6 +7,7 @@ import django_rq
 
 from django.core import mail
 from django.test import TestCase
+from unittest import skip
 
 from gestion_personnes.tests import try_delete_user, create_full_user
 from myresel import settings
