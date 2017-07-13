@@ -80,14 +80,14 @@
                                             <div class='text-right small'></div>
                                         </td>
                                     {% else %}
-                                        <td {% if day|date:'j' == current_day_nbr %}class="current-day"{% endif %} >
+                                        <td {% if day|date:'j' == current_day.0 and day|date:'n' == current_day.1 and day|date:'Y' == current_day.2 %}class="current-day"{% endif %} >
                                             <div class='text-right small'>
                                                 {% if current_room == 'all' %}
                                                     <a href="{% url 'campus:rooms:calendar-day' day|date:'Y' day|date:'n' day|date:'j' %}">
                                                         {{ day|date:'j' }}
                                                     </a>
                                                 {% else %}
-                                                    <span {% if current_day_nbr == day|date:'j' %}class="label label-info"{% endif %}>
+                                                    <span {% if current_day.0 == day|date:'j' %}class="label label-info"{% endif %}>
                                                     <a href="{% url 'campus:rooms:calendar-room-day' current_room.pk day|date:'Y' day|date:'n' day|date:'j' %}">
                                                         {{ day|date:'j' }}
                                                     </a>
