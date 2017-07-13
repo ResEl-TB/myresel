@@ -12,7 +12,7 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from django.db.models import Q
 from django.http import Http404
 
-import calendar, datetime, json
+import calendar, datetime, json, copy
 
 from django.views.generic import DetailView, FormView, View, ListView, DeleteView, UpdateView
 
@@ -100,6 +100,10 @@ def calendar_view(request, room='all', year=timezone.now().year, month=timezone.
 
     for event in events:
         for occ in event.get_occurences():
+            #Temporarily changes the start_date and end_date for each event
+            #This is needed in order to properly display dates for recurrent event that last multiple days
+            event = copy.deepcopy(event)
+            event.start_time, event.end_time = occ[0], occ[1]
             single_events.append((occ, event))
     #We only need event that are from this month
     single_events = [e for e in single_events if (e[0][0].month == month and e[0][0].year == year) or (e[0][1].month == month and e[0][1].year == year)]

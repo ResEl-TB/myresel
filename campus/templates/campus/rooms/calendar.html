@@ -97,7 +97,19 @@
                                             {% for event in events %}
                                                 <a class="event" href="{% url "campus:rooms:booking-detail"  event.pk %}">
                                                     <div class="alert-{{ event.booking_type }} {% if calendar|length_is:'1' %} col-md-3 {% endif %}">
-                                                        <span class="time">{{ event.start_time|time:'H:i' }} - {{ event.end_time|time:'H:i' }}</span>
+                                                        <span class="time">
+                                                            {% if event.start_time|date:'j' == day|date:'j' and event.start_time|date:'n' == current_day.1 and event.start_time|date:'Y' == current_day.2 %}
+                                                                {{ event.start_time|time:'H:i' }}
+                                                            {% else %}
+                                                                00:00
+                                                            {% endif %}
+                                                            -
+                                                            {% if event.end_time|date:'j' == day|date:'j' and event.end_time|date:'n' == current_day.1 and event.end_time|date:'Y' == current_day.2 %}
+                                                                {{ event.end_time|time:'H:i' }}
+                                                            {% else %}
+                                                                23:59
+                                                            {% endif %}
+                                                        </span>
                                                         <span class="description">{{ event.description|truncatewords:7 }}</span>
                                                     </div>
                                                 </a>
