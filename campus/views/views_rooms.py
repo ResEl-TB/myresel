@@ -256,14 +256,13 @@ class DeleteBooking(DeleteView):
     model = RoomBooking
     success_url = reverse_lazy('campus:rooms:calendar')
 
-    #TODO: RIGHTS
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
+        booking = get_object_or_404(RoomBooking, id=self.kwargs['pk'])
+        if not (booking.user_can_manage(request.ldap_user) or request.user.is_staff or request.ldap_user.is_campus_moderator()):
+            messages.error(self.request, _("Vous ne pouvez pas supprimer cette réservation"))
+            return HttpResponseRedirect(reverse('campus:rooms:calendar'))
         return super(DeleteBooking, self).dispatch(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        #TODO: Rights rights rights !!!
-        return super(DeleteBooking, self).post(self, request, *args, **kwargs)
 
 
 class RequestAvailability(View):
