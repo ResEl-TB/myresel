@@ -17,8 +17,13 @@ echo 'Désactivé car risqué'
 echo 'Collection des fichiers statiques'
 ${PYTHON} manage.py collectstatic --noinput
 
+echo 'Vérification des droits'
+sudo chown www-data:www-data -R ${ROOT}
+
 echo 'Relance du daemon UWSGI'
 touch ${ROOT}/uwsgi.ini
 
-echo 'Relance de supervisorctl'
-sudo supervisorctl reload
+echo 'relance des tâches de fond : rq-scheduler & rq-worker'
+sudo systemctl restart rq-scheduler.service
+sudo systemctl restart rq-worker.service
+
