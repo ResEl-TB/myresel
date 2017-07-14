@@ -74,17 +74,17 @@ pylint:
   stage: test
   script:
     - pip3 install pylint --quiet
-    - pip3 install pylint-django --quiet  --upgrade
+    - pip3 install pylint-django --quiet --upgrade
     - pylint --rcfile=.pylintrc campus devices fonctions gestion_personnes ldapback myresel pages tresorerie wiki || exit $((35 & $?))
   allow_failure: false
 
 deploy staging:
   services: []
   before_script:
-    - apt-get -qq install curl
+    - echo ${STAGING_DEPLOY_KEY} > id_rsa
   stage: deploy
   script:
-    - curl http://flea.adm.resel.fr/deploy-resel
+    - ssh -o StrictHostKeyChecking=no -i id_rsa -T deploy@flea.adm
   only:
     - master
   environment:

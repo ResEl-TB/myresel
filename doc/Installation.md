@@ -60,25 +60,6 @@ apt install libmysqlclient-dev ldap-utils libldap2-dev libsasl2-dev libssl-dev l
 
 ### Installation du site
 
-#### Configurer l'utilisateur www-data
-
-Afin de pouvoir télécharger les dernières versions sur site ResEl, il faut que
-l'utilisateur `www-data` ait les bons droits. Modifier `/etc/passwd` :
-```
-www-data:x:33:33:www-data:/var/www:/bin/zsh
-```
-
-Lui créer une clé SSH sans mot de passe:
-```bash
-chown www-data:www-data /var/www
-su -- www-data
-ssh-keygen -t rsa -b 4096
-cat /var/www/.ssh/id_rsa.pub
-exit
-```
-
-Ajoutez cette clé aux clés autorisées sur gitlab en l'ajoutant dans l'onglet:
-`Settings > Repository > Deploys Keys`
 
 Créez un dossier `/srv/www/resel.fr/`, donnez-le à l'utilisateur `www-data`:
 ```bash
@@ -110,7 +91,12 @@ ln -s /etc/nginx/sites-available/resel.fr /etc/nginx/sites-enabled/resel.fr
 ```
 On redémarrera nginx plus tard
 
-#### Configuration des hooks (optionnel)
+#### Configuration des hooks nginx (optionnel) (obsolète)
+
+:warning: OBSOLÈTE :warning:, veuillez utiliser les hook ssh (décrit par la
+suite). Si ceci est laissé c'est parce que ceci est toujours en prod sur 
+skynet et doubidou.
+
 Les hooks permettent de mettre automatiquement à jour le code lorsque celui-ci est déployé.
 
 Les hooks utilisent la syntaxe lua pour nginx, pour les faire fonctionner vous devez ajouter le packet :
@@ -124,6 +110,48 @@ cp /srv/www/resel.fr/.install/etc/nginx-hook.conf /etc/nginx/sites-available/hoo
 vim /etc/nginx/sites-available/hook
 ln -s /etc/nginx/sites-available/hook /etc/nginx/sites-enabled/hook
 ```
+
+#### Configuration des hooks ssh (optionnel)
+
+Les hooks permettent de  mettre à jour automatique l'installation sans avoir
+à puller le code à la main.
+
+Créez un utilisateur `deploy` :
+```bash
+adduser deploy
+adduser deploy sshusers
+adduser deploy www-data
+```
+
+
+Afin de pouvoir télécharger les dernières versions sur site ResEl, il faut que
+l'utilisateur `deploy` ait les bons droits. Modifier `/etc/passwd` :
+```
+deploy:x:1004:1005::/home/deploy:/srv/www/resel.fr/.install/deploy.sh
+```
+
+Lui créer une clé SSH sans mot de passe:
+```bash
+ssh-keygen -t rsa -b 4096 -f /home/deploy/.ssh/id_rsa
+cat /home/deploy/.ssh/id_rsa.pub
+exit
+```
+
+Ajoutez cette clé aux clés autorisées sur gitlab en l'ajoutant dans l'onglet:
+`Settings > Repository > Deploys Keys`
+
+Modifiez `visudo` et ajoutez la ligne suivante : 
+```
+deploy          ALL=NOPASSWD: /bin/chown, /bin/systemctl
+```
+
+Enfin on va ajoute sa clé privée au secrets de gitlab:
+
+Copiez la clé : `cat /home/deploy/.ssh/id_rsa`
+
+Dans le repo myresel : `Settings > Pipelines > Secret variables`
+Ajoutez une clé par exemple `STAGING_DEPLOY_KEY`
+
 
 ### Configuration de uwsgi
 Installer uwsgi:
