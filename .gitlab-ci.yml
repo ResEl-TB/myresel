@@ -83,6 +83,7 @@ deploy to staging:
   before_script:
     - apt-get install -qq openssh-client
     - echo ${STAGING_DEPLOY_KEY} > id_rsa
+    - chmod 600 id_rsa
   stage: deploy
   script:
     - ssh -o StrictHostKeyChecking=no -i id_rsa -T deploy@flea.adm
