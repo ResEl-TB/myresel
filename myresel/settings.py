@@ -392,7 +392,7 @@ PROD_LOGGING_CONF = {
             'host': 'orion.adm.resel.fr',
             'port': 5959,  # Default value: 5959
             'version': 1,
-            'message_type': 'logstash',
+            'message_type': 'django',
             'fqdn': False,  # Fully qualified domain name. Default value: false.
             'tags': None,  # list of tags. Default: None.
         },
