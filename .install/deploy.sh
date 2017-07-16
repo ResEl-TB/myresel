@@ -5,7 +5,7 @@ PYTHON=/srv/www/resel.fr/env/bin/python
 PIP=/srv/www/resel.fr/env/bin/pip
 
 echo ''
-echo '++ script de déployement v2.2'
+echo '++ script de déployement v2.3'
 echo ''
 
 echo ''
@@ -34,7 +34,7 @@ echo ''
 echo '======================================================================'
 echo '> Vérification des droits'
 sudo chown www-data:www-data -R ${ROOT}
-sudo chmod -R g+w .
+sudo chmod -R g+rw .
 
 echo ''
 echo '======================================================================'
