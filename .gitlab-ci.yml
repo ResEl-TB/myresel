@@ -82,11 +82,11 @@ deploy to staging:
   services: []
   before_script:
     - apt-get install -qq openssh-client
-    - echo ${STAGING_DEPLOY_KEY} > id_rsa
-    - chmod 600 id_rsa
+    - eval $(ssh-agent -s)
+    - bash -c 'ssh-add <(echo "${STAGING_DEPLOY_KEY}")'
   stage: deploy
   script:
-    - ssh -o "StrictHostKeyChecking=no" -o "IdentitiesOnly=yes" -i id_rsa -T deploy@flea.adm
+    - ssh -o "StrictHostKeyChecking=no" -o "IdentitiesOnly=yes" -T deploy@flea.adm
   only:
     - master
   environment:
