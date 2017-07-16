@@ -13,7 +13,7 @@
 <div class="container">
    <div class="row">
       <div class="col-md-12">
-         <div class="page-header text-center">
+         <div class="margin-bottom-20 text-center">
             <img class="who_logo" src="{% static 'images/campus/whoswho_logo.png'%}">
          </div>
       </div>
@@ -148,23 +148,23 @@
                {% endif %}
             </p>
             <h3 class="text-center">Mes filleuls <a style="padding:0 0 0 0;" class="btn" data-toggle="modal" data-target="#addBizu"><span class="fa fa-plus-circle" style="color:#8BBF82"></span></a></h3>
+            {% for godchild in user.godchildren %}
             <p class="text-center">
-               {% for godchild in user.godchildren %}
                   <a href="{% url 'campus:who:user-details' uid=godchild.uid %}">{{ godchild.first_name }} {{godchild.last_name}}</a> (Promo {{godchild.promo}})
                   <a class="fa fa-trash-o dell-user" href="{% url 'campus:who:remove-person' godchild.uid False %}" title="{% trans 'Supprimer' %}"></a>
-               {% empty %}
-                  Vous n'avez pas de filleuls
-               {% endfor %}
+            {% empty %}
+                  <p class="text-center">Vous n'avez pas de filleuls</p>
+            {% endfor %}
             </p>
             <h3 class="text-center">Mes parains <a style="padding:0 0 0 0;" class="btn" data-toggle="modal" data-target="#addParain"><span class="fa fa-plus-circle" style="color:#8BBF82"></span></a></h3>
+            {% for godparent in user.godparents %}
             <p class="text-center">
-               {% for godparent in user.godparents %}
-                  <a href="{% url 'campus:who:user-details' uid=godparent.uid %}">{{ godparent.first_name }} {{godparent.last_name}}</a> (Promo {{godparent.promo}})
-                  <a class="fa fa-trash-o dell-user" href="{% url 'campus:who:remove-person' godparent.uid True %}" title="{% trans 'Supprimer' %}"></a>
-               {% empty %}
-                  Vous n'avez pas de parains
-               {% endfor %}
+                <a href="{% url 'campus:who:user-details' uid=godparent.uid %}">{{ godparent.first_name }} {{godparent.last_name}}</a> (Promo {{godparent.promo}})
+                <a class="fa fa-trash-o dell-user" href="{% url 'campus:who:remove-person' godparent.uid True %}" title="{% trans 'Supprimer' %}"></a>
             </p>
+            {% empty %}
+                <p class="text-center">Vous n'avez pas de parains</p>
+            {% endfor %}
          </div>
       </div>
       <div class="col-md-5 col-md-offset-1">

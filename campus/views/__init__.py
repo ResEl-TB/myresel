@@ -5,4 +5,4 @@ from campus.views.views_mails import *
 
 
 def home_view(request):
-    return HttpResponseRedirect(reverse("campus:who:user-home"))
+    return HttpResponseRedirect(reverse("campus:clubs:list"))

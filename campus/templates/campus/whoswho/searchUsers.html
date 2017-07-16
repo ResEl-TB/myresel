@@ -10,12 +10,12 @@
 {% endblock %}
 
 {% block content %}
+
+<div class="who-home">
+  <a href="{% url 'campus:who:user-home' %}" class="noncolored-a"><span class="fa fa-home"></span> {% trans "" %} </a>
+</div>
+
 <div class="container">
-  <div class="row">
-    <div class="col-md-2" style="color: white">
-      <a href="{% url 'campus:who:user-home' %}" class="noncolored-a"><span class="fa fa-arrow-circle-o-left"> {% trans "Retour à l'accueil" %} </span></a>
-    </div>
-  </div>
   <div class="row">
     <div class="col-md-12">
       <div class="page-header text-center" style="color: white;">
@@ -27,35 +27,6 @@
 
 <div class="container results">
   <div class="row">
-    <div class="col-md-8">
-      {% for user in users %}
-      {% if forloop.counter|add:-1|divisibleby:2 %}
-      <div class="row">
-      {% endif %}
-        <div class="col-md-6">
-          <div class="col-md-12 text-center well">
-            <a href="{% url "campus:who:user-details" uid=user.uid %}">
-            {% if user.photo_file == "" %}
-            <div class="user-photo">
-              <img src="{% static "images/campus/photo-placeholder.jpg" %}" />
-            </div>
-            {% else %}
-            <div class="user-photo">
-              <img src="/media/image/users_photo/{{ user.photo_file }}" />
-            </div>
-            {% endif %}
-            <h3>{{ user.first_name }} {{user.last_name}}</h3>
-          </a>
-            {% if user.campus %}<p>Campus de {{ user.campus }}</p>{% endif %}
-            {% if user.promo > 1977 %}<p>Promo {{user.promo}}</p>{% endif %}
-            <a href="{% url "campus:who:user-details" uid=user.uid %}">Détails</a>
-          </div>
-        </div>
-      {% if forloop.counter|divisibleby:2 or forloop.last %}
-      </div>
-      {% endif %}
-      {% endfor %}
-    </div>
     <div class="col-md-4">
       <div class="col-md-12 well">
         <h3 class="text-center" >Effectuer une autre recherche</h3>
@@ -83,6 +54,35 @@
           </div>
         </form>
       </div>
+    </div>
+    <div class="col-md-8">
+      {% for user in users %}
+      {% if forloop.counter|add:-1|divisibleby:2 %}
+      <div class="row" >
+      {% endif %}
+        <div class="col-md-6">
+          <div class="col-md-12 text-center well">
+            <a href="{% url "campus:who:user-details" uid=user.uid %}">
+            {% if user.photo_file == "" %}
+            <div class="user-photo">
+              <img src="{% static "images/campus/photo-placeholder.jpg" %}" />
+            </div>
+            {% else %}
+            <div class="user-photo">
+              <img src="/media/image/users_photo/{{ user.photo_file }}" />
+            </div>
+            {% endif %}
+            <h3>{{ user.first_name }} {{user.last_name}}</h3>
+            </a>
+            {% if user.campus %}<p>Campus de {{ user.campus }}</p>{% endif %}
+            {% if user.promo > 1977 %}<p>Promo {{user.promo}}</p>{% endif %}
+            <a href="{% url "campus:who:user-details" uid=user.uid %}">Détails</a>
+          </div>
+        </div>
+      {% if forloop.counter|divisibleby:2 or forloop.last %}
+      </div>
+      {% endif %}
+      {% endfor %}
     </div>
   </div>
 </div>

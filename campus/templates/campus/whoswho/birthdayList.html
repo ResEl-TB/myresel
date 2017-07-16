@@ -9,6 +9,11 @@
 {% endblock %}
 
 {% block content %}
+
+<div class="who-home">
+  <a href="{% url 'campus:who:user-home' %}" class="noncolored-a"><span class="fa fa-home"></span> {% trans "" %} </a>
+</div>
+
 <div class="container">
   <div class="row">
     <div class="col-md-12">
@@ -26,26 +31,28 @@
   {% endif %}
     <div class="col-md-3 text-center">
       <div class="col-xs-12 well">
-        {% if user.photo_file == "" %}
-        <div class="user-photo">
-          <img src="{% static "images/campus/photo-placeholder.jpg" %}" />
-        </div>
-        {% else %}
-        <div class="user-photo">
-          <img src="/media/image/users_photo/{{user.photo_file}}" />
-        </div>
-        {% endif %}
-        {{user.first_name}}<br>
-        {{user.last_name}}<br>
+        <a href="{% url 'campus:who:user-details' user.uid %}">
+          {% if user.photo_file == "" %}
+          <div class="user-photo">
+            <img src="{% static "images/campus/photo-placeholder.jpg" %}" />
+          </div>
+          {% else %}
+          <div class="user-photo">
+            <img src="/media/image/users_photo/{{user.photo_file}}" />
+          </div>
+          {% endif %}
+          {{user.first_name}}<br>
+          {{user.last_name}}<br>
+        </a>
         Promo {{user.promo}}
       </div>
     </div>
-  {% if forloop.counter|divisibleby:4 or forloop.first %}
+  {% if forloop.counter|divisibleby:4 or forloop.last %}
   </div>
   {% endif %}
   {% empty %}
     <div class="col-md-offset-4 col-md-4 text-center" style="color:white; min-height: 50px;">
-      Personne :(
+      Personne
     </div>
   </div>
   {% endfor %}

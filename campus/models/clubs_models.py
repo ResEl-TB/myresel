@@ -4,6 +4,9 @@ import ldapback
 from ldapback.models.fields import LdapCharField, LdapListField, LdapCharField, LdapBooleanField
 from myresel.settings import LDAP_OU_CLUBS
 
+
+#If we don't do this we get an error cuz our LDAP scheme does not allow
+# a single model for each type of organisation
 class StudentOrganisation(ldapback.models.LdapModel):
     """
     The class having all the element for a club

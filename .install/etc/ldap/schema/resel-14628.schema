@@ -263,6 +263,13 @@ attributeType ( 1.3.6.1.4.1.14628.5.4 NAME 'mlCampus'
 # Attributs pour reselClub (deprecated - geekou 17/09/08) 
 #########################################################
 
+attributetype ( 1.3.6.1.4.1.14628.14.0 NAME 'visibility'
+        DESC 'Attribut permettant de définir une visibilité pour une OC'
+        EQUALITY caseIgnoreMatch
+        ORDERING caseIgnoreOrderingMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 
+        SINGLE-VALUE )
 
 #
 # Attributs pour studentOrganisation/tbAsso/tbClub/tbCampagne
@@ -309,6 +316,7 @@ attributeType ( 1.3.6.1.4.1.14628.17.2 NAME 'mlist'
         SUBSTR caseIgnoreSubstringsMatch
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
 	SINGLE-VALUE )
+
 attributeType ( 1.3.6.1.4.1.14628.17.3 NAME 'website'
          DESC 'Site web de lorga'
 	 EQUALITY caseIgnoreMatch
@@ -323,8 +331,6 @@ attributeType ( 1.3.6.1.4.1.14628.17.4 NAME 'logo'
          SUBSTR caseIgnoreSubstringsMatch
          SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
          SINGLE-VALUE )
-
-
 #
 # Attributs pour reselSite
 #
@@ -596,6 +602,12 @@ attributetype ( 1.3.6.1.4.1.14628.8.6 NAME 'ipv6HostPrefix'
         SUBSTR caseIgnoreSubstringsMatch
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
 
+attributetype ( 1.3.6.1.4.1.14628.8.7 NAME 'group'
+        DESC 'Groupe de la machine'
+        EQUALITY caseIgnoreMatch
+        ORDERING caseIgnoreOrderingMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
 
 
 # Attributs d'un Admin
@@ -606,6 +618,12 @@ attributetype ( 1.3.6.1.4.1.14628.9.0 NAME 'droit'
         ORDERING caseIgnoreOrderingMatch
         SUBSTR caseIgnoreSubstringsMatch
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
+
+# https://blog.shichao.io/2015/04/17/setup_openldap_server_with_openssh_lpk_on_ubuntu.html
+attributetype ( 1.3.6.1.4.1.14628.9.1 NAME 'sshPublicKey'
+	DESC 'OpenSSH Public key'
+	EQUALITY octetStringMatch
+  	SYNTAX 1.3.6.1.4.1.1466.115.121.1.40 )
 
 # Attributs d'un switch
 ########################
@@ -652,6 +670,24 @@ attributetype ( 1.3.6.1.4.1.14628.21.4 NAME 'channel'
         DESC 'Numéro de canal'
         EQUALITY numericStringMatch
 	ORDERING numericStringOrderingMatch
+        SUBSTR numericStringSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.36
+        SINGLE-VALUE )
+
+# Attributs d'une Set Top Box (lboue - 27-08-10)
+########################
+attributetype ( 1.3.6.1.4.1.14628.22.1 NAME 'stbBrand'
+        DESC 'Marque de la STB'
+        EQUALITY numericStringMatch
+        ORDERING numericStringOrderingMatch
+        SUBSTR numericStringSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.36
+        SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.14628.22.2 NAME 'stbType'
+        DESC 'Modele de STB'
+        EQUALITY numericStringMatch
+        ORDERING numericStringOrderingMatch
         SUBSTR numericStringSubstringsMatch
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.36
         SINGLE-VALUE )
@@ -769,6 +805,12 @@ objectclass ( 1.3.6.1.4.1.14628.1.2 NAME 'maiselPerson' AUXILIARY
         MUST ( uid $ firstName $ lastName $ roomNumber $ batiment )
         MAY ( lastUpdate $ pabxId $ userPassword ) )
 
+##Club (deprecated - geekou 17/09/08)
+objectclass ( 1.3.6.1.4.1.14628.1.3 NAME 'reselClub'  STRUCTURAL
+	OBSOLETE
+        DESC 'Club ou association ENST Bretagne'
+        MUST ( cn )
+        MAY ( description $ batiment $ roomNumber $ telephoneNumber $ fax $ webPage $ mail $ visibility $ photoFile ) )
 
 ##Membres de l'AE
 objectclass ( 1.3.6.1.4.1.14628.1.23 NAME 'aePerson' AUXILIARY
@@ -796,13 +838,13 @@ objectclass ( 1.3.6.1.4.1.14628.1.6 NAME 'mailPerson' AUXILIARY
 objectclass ( 1.3.6.1.4.1.14628.1.7 NAME 'reselMachine'  STRUCTURAL
         DESC 'Machine ayant une IP et une entrée dans le DNS'
         MUST ( host $ uidProprio $ ipHostNumber $ macAddress $ zone )
-        MAY ( hostAlias $ lastDate $ ipv6HostNumber $ paramConn $ duidHostNumber $ ipv6HostPrefix) )
+        MAY ( hostAlias $ lastDate $ ipv6HostNumber $ paramConn $ duidHostNumber $ ipv6HostPrefix $ description $ group ) )
 
 # administrateur du resel dans ou=administrateurs,dc=resel...
 objectclass ( 1.3.6.1.4.1.14628.1.8 NAME 'reselAdmin'  STRUCTURAL
         DESC 'Administrateur du ResEl'
         MUST ( uid $ userPassword )
-        MAY ( droit ) )
+        MAY ( droit $ sshPublicKey ) )
 
 # switch dans ou=In,ou=switchs,dc=resel...
 objectclass ( 1.3.6.1.4.1.14628.1.9 NAME 'reselSwitch'  STRUCTURAL
@@ -872,7 +914,7 @@ objectClass ( 1.3.6.1.4.1.14628.1.17 NAME 'studentOrganisation' STRUCTURAL
 	MAY ( uidPrezs $ uidMembres $ description $ mlist $ logo $ website) )
 
 objectClass ( 1.3.6.1.4.1.14628.1.15 NAME 'tbClub' SUP studentOrganisation STRUCTURAL
-        DESC 'StudentOrganisation de TELECOM Bretagne' )
+        DESC 'Club de TELECOM Bretagne' )
 
 objectClass ( 1.3.6.1.4.1.14628.1.18 NAME 'tbAsso' SUP studentOrganisation STRUCTURAL
 	DESC 'Association de TELECOM Bretagne' )
@@ -885,7 +927,7 @@ objectClass ( 1.3.6.1.4.14628.1.19 NAME 'tbCampagne' SUP studentOrganisation STR
 # tbClubSport dérive de tbClub et représente un club sportif (BdS)
 #
 objectClass ( 1.3.6.1.4.1.14628.1.20 NAME 'tbClubSport' SUP tbClub STRUCTURAL
-        DESC 'StudentOrganisation sportif de TELECOM Bretagne' )
+        DESC 'Club sportif de TELECOM Bretagne' )
 
 # switch dans ou=In,ou=ap,dc=resel...
 objectclass ( 1.3.6.1.4.1.14628.1.21 NAME 'reselAP'  STRUCTURAL
@@ -893,3 +935,8 @@ objectclass ( 1.3.6.1.4.1.14628.1.21 NAME 'reselAP'  STRUCTURAL
         MUST ( cn $ machine $ channel )
         MAY ( switchType ) )
 
+# STB dans ou=stb,dc=resel...
+objectclass ( 1.3.6.1.4.1.14628.1.22 NAME 'reselSTB'  STRUCTURAL
+        DESC 'STB du ResEl'
+        MUST ( cn $ machine $ stbBrand )
+        MAY ( stbType ) )
