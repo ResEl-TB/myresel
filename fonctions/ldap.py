@@ -111,23 +111,40 @@ def get_free_ip(low, high):
         while True:
             ip_suff = r.spop(settings.REDIS_AV_IPS_KEY)
             if ip_suff is None:
-                logger.warning('No ip available in redis ips buffer, consider increase the buffer size')
+                logger.warning(
+                    'No ip available in redis ips buffer, consider increase the buffer size',
+                    extra={'message_code': 'REDIS_IP_BUFFER_EMPTY'}
+                )
                 break
             ip_suff = ip_suff.decode('utf-8')
             if not ip_in_ldap(ip_suff):
-                logger.info('IP %s used as free ip' % ip_suff)
+                logger.info(
+                    'IP %s used as free ip' % ip_suff,
+                    extra={'ip_address': ip_suff, 'message_code': 'CHOOSED_IP'}
+                )
                 return ip_suff
 
     except redis.exceptions.ConnectionError as e:
-        logger.error('Connection the the redis server failed')
+        logger.error(
+            'Redis Server Unavailable : %s' % str(e),
+            extra={'message_code': 'REDIS_CONNECTION_ERROR'},
+        )
 
-    logger.info('Fallback to default ip fetching')
-    return next(
+    logger.info(
+        'Fallback to default ip fetching',
+        extra={'message_code': 'DEFAULT_IP_FETCHING_FALLBACK'},
+    )
+    choosed_ip = next(
         "%i.%i" % ip
         for ip in itertools.product(range(low, high+1), range(1, 255))
         if not search(settings.LDAP_DN_MACHINES, '(&(ipHostNumber=%i.%i))' % ip)
     )
 
+    logger.info(
+        'IP %s used as free ip' % choosed_ip,
+        extra={'ip_address': choosed_ip, 'message_code': 'CHOOSED_IP'}
+    )
+    return choosed_ip
 
 def get_free_alias(name, prefix='pc'):
     """
@@ -155,6 +172,10 @@ def get_free_alias(name, prefix='pc'):
             i += 1
             alias = base_alias + str(i)
 
+    logger.info(
+        'Alias %s used as free alias' % alias,
+        extra={'alias': alias, 'message_code': 'CHOOSED_ALIAS'}
+    )
     return alias
 
 
