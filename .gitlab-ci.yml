@@ -86,7 +86,7 @@ deploy to staging:
     - bash -c 'ssh-add <(echo "${STAGING_DEPLOY_KEY}")'
   stage: deploy
   script:
-    - ssh -o "StrictHostKeyChecking=no" -o "IdentitiesOnly=yes" -T deploy@flea.adm
+    - ssh -o "StrictHostKeyChecking=no" -T deploy@flea.adm
   only:
     - master
   environment:
