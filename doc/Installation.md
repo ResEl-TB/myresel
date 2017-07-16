@@ -122,7 +122,7 @@ Ajoutez cette clé aux clés autorisées sur gitlab en l'ajoutant dans l'onglet:
 
 Modifiez `visudo` et ajoutez la ligne suivante : 
 ```
-deploy          ALL=NOPASSWD: /bin/chown, /bin/systemctl
+deploy          ALL=NOPASSWD: /bin/chown, /bin/systemctl, /bin/chmod
 ```
 
 Enfin on va ajoute sa clé privée au secrets de gitlab:

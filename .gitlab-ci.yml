@@ -53,7 +53,7 @@ before_script:
   - python3 manage.py rqworker &
   - python3 manage.py rqscheduler &
 
-.django test suite:
+django test suite:
   artifacts:
     paths:
       - htmlcov/
@@ -70,7 +70,7 @@ before_script:
     - coverage html
     - grep pc_cov htmlcov/index.html | egrep -o "[0-9]+\%" | awk '{ print "covered " $1;}'
 
-.python linting:
+python linting:
   stage: test
   script:
     - pip3 install pylint --quiet
