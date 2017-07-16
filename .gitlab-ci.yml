@@ -96,10 +96,12 @@ deploy to staging:
 deploy to brest:
   services: []
   before_script:
-    - apt-get -qq install curl
+    - apt-get install -qq openssh-client
+    - eval $(ssh-agent -s)
+    - bash -c 'ssh-add <(echo "${SKYNET_DEPLOY_KEY}")'
   stage: deploy
   script:
-    - curl http://skynet.adm.resel.fr/deploy-resel
+    - ssh -o "StrictHostKeyChecking=no" -T deploy@skynet.adm
   only:
     - deploy
   environment:
@@ -109,10 +111,12 @@ deploy to brest:
 deploy to rennes:
   services: []
   before_script:
-    - apt-get -qq install curl
+    - apt-get install -qq openssh-client
+    - eval $(ssh-agent -s)
+    - bash -c 'ssh-add <(echo "${DOUBIDOU_DEPLOY_KEY}")'
   stage: deploy
   script:
-    - curl http://doubidou.adm.resel.fr/deploy-resel
+    - ssh -o "StrictHostKeyChecking=no" -T deploy@doubidou.adm
   only:
     - deploy
   environment:
