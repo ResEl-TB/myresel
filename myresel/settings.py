@@ -422,11 +422,12 @@ DEBUG_TOOLBAR_CONFIG = {
     'SHOW_COLLAPSED': True,
 }
 
-if DEBUG or TESTING:
+if DEBUG and not TESTING:
     INSTALLED_APPS += ['debug_toolbar',]
     MIDDLEWARE = ['debug_toolbar.middleware.DebugToolbarMiddleware',] + MIDDLEWARE
     # INTERNAL_IPS = ['10.0.3.1']
 
+elif DEBUG or TESTING:
     LOGGING = DEBUG_LOGGING_CONF
     for queueConfig in RQ_QUEUES.values():
         queueConfig['ASYNC'] = False

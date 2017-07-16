@@ -98,7 +98,10 @@ class NetworkConfiguration(object):
             except LDAPSocketOpenError:
                 request.network_data['is_registered'] = True
                 messages.error(request, 'Base de données non joignable. Certaines fonctionnalités ne fonctionneront pas')
-                logger.error("LDAP Unavailable")
+                logger.error(
+                    "LDAP Unavailable",
+                    extra={'message_code': 'LDAP_CONNECTION_ERROR'},
+                )
 
         response = self.get_response(request)
         return response
@@ -187,7 +190,8 @@ class InscriptionNetworkHandler(object):
                                  "device_hostname": host,
                                  "device_zone": zone,
                                  "device_vlan": vlan,
-                                 "user": is_logged_in
+                                 "user": is_logged_in,
+                                 'message_code': 'UNMATCHING_IP_VLAN',
                              })
 
                 # Error ! In vlan 995 without inscription IP address

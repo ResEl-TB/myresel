@@ -175,7 +175,8 @@ class Pay(View):
             logger.error("Un utilisateur n'a pas pu payer car Stripe ne s'est pas chargé,\n pika check le fw ;)",
                     extra={
                         "transaction_uuid": transaction_uuid,
-                        "uid": user.uid
+                        "uid": user.uid,
+                        'message_code': 'STRIPE_FIREWALL_ERROR',
                     })
             messages.error(request, _("Il semblerait que nous n'avons pas réussi à contacter le système de paiement. Si le problème se reproduit vous pouvez le contouner soit en essayant de payer depuis une connexion exterieur (depuis l'école ou en 4G), soit en nous contactant directement."))
             return HttpResponseRedirect(reverse('tresorerie:pay', kwargs={'product_id': main_product_id}))
@@ -188,14 +189,22 @@ class Pay(View):
 
         if given_uuid != transaction_uuid:
             # TODO: show error message
-            logger.warning("L'uuid d'une transaction n'est pas correcte. donnée : %s attendue : %s" % (given_uuid, transaction_uuid),
-                    extra={"given_uuid": given_uuid, "transaction_uuid": transaction_uuid})
+            logger.warning(
+                "L'uuid d'une transaction n'est pas correcte. donné : %s attendue : %s" % (given_uuid, transaction_uuid),
+                extra={
+                    "given_uuid": given_uuid,
+                    "transaction_uuid": transaction_uuid,
+                    'message_code': 'INVALID_TRANSACTION_UUID',
+                }
+            )
             messages.error(request, _("Une erreur s'est produite lors de la commande. Les administrateurs en ont été informés"))
             return HttpResponseRedirect(reverse('tresorerie:pay', kwargs={'product_id': main_product_id}))
 
         if adhere and user.is_member():
-            logger.warning("L'utilisateur %s a tenté de payer à nouveau une cotisation, une magouille s'est produite" % user.uid,
-                    extra={"uid": user.uid})
+            logger.warning(
+                "L'utilisateur %s a tenté de payer à nouveau une cotisation, une magouille s'est produite" % user.uid,
+                extra={"uid": user.uid, 'message_code': 'PAID_TWICE',}
+            )
             messages.error(request, _("Vous êtes déjà membre de l'association, vous n'avez pas besoin de payer à nouveau la cotisation."))
             return HttpResponseRedirect(reverse('tresorerie:pay', kwargs={'product_id': main_product_id}))
 
@@ -262,12 +271,15 @@ class Pay(View):
 
             queue = django_rq.get_queue()
 
-            logger.info("Paiement validé par le système, uid: %s, uuid: %s, stripe id : %s" %(request.ldap_user.uid, transaction.uuid, transaction.stripe_id),
-                    extra={
-                        "uid": request.ldap_user.uid,
-                        "transaction_uuid": transaction.uuid,
-                        "transaction_stripe_id": transaction.stripe_id
-                    })
+            logger.info(
+                "Paiement validé par le système, uid: %s, uuid: %s, stripe id : %s" %(request.ldap_user.uid, transaction.uuid, transaction.stripe_id),
+                extra={
+                    "uid": request.ldap_user.uid,
+                    "transaction_uuid": transaction.uuid,
+                    "transaction_stripe_id": transaction.stripe_id,
+                    'message_code': 'SUCCESFUL_PAYMENT',
+                }
+            )
             messages.success(request, _("Vous venez de payer votre accès au ResEl, vous devriez recevoir sous peu un email avec votre facture."))
 
             # Send a french version for treasurer and one in the user's language
@@ -301,20 +313,32 @@ class Pay(View):
                 'card_declined': _("Votre carte a été refusée"),
                 'processing_error': _("Une erreur est survenue dans le traitement de votre demande")
             }
-            logger.warning("Carte de crédit non valide, erreur : %s, uid : %s" % (ERRORS[code], request.ldap_user.uid),
-                    extra={"error_code": ERRORS[code], "uid": request.ldap_user.uid})
+            logger.error(
+                "Carte de crédit non valide, erreur : %s, uid : %s" % (ERRORS[code], request.ldap_user.uid),
+                extra={
+                    "error_code": ERRORS[code],
+                    "uid": request.ldap_user.uid,
+                    'message_code': 'STRIPE_PAYMENT_ERROR',
+                }
+            )
             messages.error(request, ERRORS[code])
             return HttpResponseRedirect(reverse('tresorerie:pay', kwargs={'product_id': main_product_id}))
 
         except stripe.error.RateLimitError as e:
             # Too many requests made to the API too quickly
-            logger.error("Trop de paiements Stripe simultanés")
+            logger.error(
+                "Trop de paiements Stripe simultanés",
+                extra={'message_code': 'STRIPE_RATE_LIMIT'},
+            )
             messages.error(request, _("Nous recevons actuellement trop de paiements simultanés, veuillez ré-essayer plus tard"))
             return HttpResponseRedirect(reverse('tresorerie:pay', kwargs={'product_id': main_product_id}))
 
         except stripe.error.APIConnectionError as e:
             # Network communication with Stripe failed
-            logger.error("Serveur Stripe non joignable")
+            logger.error(
+                "Serveur Stripe non joignable",
+                extra={'message_code': 'STRIPE_CONNECTION_ERROR'},
+            )
             messages.error(request, _(
                 "Impossible de contacter le serveur de paiement pour le moment, veuillez ré-essayer plus tard"))
             return HttpResponseRedirect(reverse('tresorerie:pay', kwargs={'product_id': main_product_id}))
