@@ -360,6 +360,7 @@ class History(ListView):
         return Transaction.objects.all().filter(utilisateur__exact=self.request.user).order_by('date_creation')
 
 
+@method_decorator(login_required, name="dispatch")
 class TransactionDetailView(DetailView):
 
     model = Transaction

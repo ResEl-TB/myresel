@@ -474,3 +474,14 @@ class TransactionDetailViewTest(TestCase):
         self.assertEqual(r.status_code, 200)
         self.assertTemplateUsed(r, "tresorerie/transaction_detail.html")
 
+    def test_lougout(self):
+        """Test that the view doesn't load if the user is logged out"""
+
+        self.client.logout()
+
+        r = self.client.get(reverse("tresorerie:transaction-detail",args=("123",)),
+                            HTTP_HOST='10.0.3.94', follow=True)
+
+        self.assertEqual(r.status_code, 200)
+        self.assertTemplateUsed(r, 'registration/login.html')
+
