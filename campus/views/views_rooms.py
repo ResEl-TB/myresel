@@ -77,6 +77,8 @@ def calendar_view(request, room='all', year=timezone.now().year, month=timezone.
         day = -1
         start_date = datetime.datetime(year=year, month=month, day=1)
         end_date = start_date + relativedelta(months=+1)
+        start_date = timezone.make_aware(start_date)
+        end_date = timezone.make_aware(end_date)
 
     else:
         day = int(day)
@@ -259,7 +261,7 @@ class DeleteBooking(DeleteView):
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         booking = get_object_or_404(RoomBooking, id=self.kwargs['pk'])
-        if not (booking.user_can_manage(request.ldap_user) or request.user.is_staff or request.ldap_user.is_campus_moderator()):
+        if not (self.booking.user_can_manage(request.ldap_user) or request.user.is_staff or request.ldap_user.is_campus_moderator()):
             messages.error(self.request, _("Vous ne pouvez pas supprimer cette réservation"))
             return HttpResponseRedirect(reverse('campus:rooms:calendar'))
         return super(DeleteBooking, self).dispatch(request, *args, **kwargs)
