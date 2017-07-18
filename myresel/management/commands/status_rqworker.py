@@ -25,6 +25,9 @@ class Command(BaseCommand):
             except FileNotFoundError as e:
                 is_error = True
                 error_output += "Cannot execute systemctl is-active %s\n" % service
+            except subprocess.CalledProcessError as e:
+                is_error = True
+                error_output += "%s is %s\n" % (service, e.output.decode().strip())
 
             if not re.match(regex, out):
                 is_error = True
