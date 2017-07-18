@@ -176,7 +176,7 @@ class AddRoom(FormView):
         if not request.user.is_staff:
             messages.error(self.request, _("Vous n'avez pas accès à cette page"))
             return HttpResponseRedirect(reverse('campus:rooms:calendar'))
-        return super(AddRooms, self).dispatch(request, *args, **kwargs)
+        return super(AddRoom, self).dispatch(request, *args, **kwargs)
         self.room = None
         if self.kwargs.get('room', None):
             self.room = get_object_or_404(Room, id=self.kwargs["room"])
