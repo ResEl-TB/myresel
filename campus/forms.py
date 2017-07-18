@@ -29,16 +29,19 @@ class RoomBookingForm(ModelForm):
         super(RoomBookingForm, self).__init__(*args, **kwargs)
 
         # Display the rooms the user is allowed to book
-        self.user = user.uid
-        if not RoomAdmin.objects.filter(user__username=user.uid):
+        if user: #Otherwise the test crashes
+            self.user = user.uid
+            if not RoomAdmin.objects.filter(user__username=user.uid):
+                del self.fields['user']
+                clubs = StudentOrganisation.filter(members__contains='uid=%s' % user.uid)
+                queryset = Q(private=False)
+                for club in clubs:
+                    queryset |= Q(private=True, clubs__contains=club.cn)
+                self.fields['room'] = ModelMultipleChoiceField(
+                    queryset=Room.objects.filter(queryset)
+                )
+        else:
             del self.fields['user']
-            clubs = StudentOrganisation.filter(members__contains='uid=%s' % user.uid)
-            queryset = Q(private=False)
-            for club in clubs:
-                queryset |= Q(private=True, clubs__contains=club.cn)
-            self.fields['room'] = ModelMultipleChoiceField(
-                queryset=Room.objects.filter(queryset)
-            )
 
     def save(self, commit=True, *args, **kwargs):
         m = super(RoomBookingForm, self).save(commit=False, *args, **kwargs)
@@ -85,8 +88,10 @@ class RoomBookingForm(ModelForm):
 
     def clean(self):
         cleaned_data = super(RoomBookingForm, self).clean()
-        start_time = cleaned_data['start_time']
-        end_time = cleaned_data['end_time']
+        start_time = cleaned_data.get('start_time', None)
+        end_time = cleaned_data.get('end_time', None)
+        recurring_rule = cleaned_data.get('recurring_rule', None)
+        rooms = cleaned_data.get('room', None)
 
         # DAT HACK
         #piano, created = Room.objects.get_or_create(
@@ -102,8 +107,23 @@ class RoomBookingForm(ModelForm):
         # if start_time < datetime.datetime.now():
         #     self.add_error('start_time', _('La date de début est antérieure à aujourd\'hui'))
 
-        if end_time < start_time:
-            self.add_error('end_time', _('La date de fin est avant la date de début de l\'évènement'))
+        #If a user disable JS, he can send empty fields
+        if end_time and start_time:
+            if end_time < start_time:
+                self.add_error('end_time', _('La date de fin est avant la date de début de l\'évènement'))
+
+        if recurring_rule != "NONE" and not cleaned_data.get('end_recurring_period', None):
+            self.add_error('end_recurring_period', _('La date de fin de la récurrence est invalide'))
+
+        if rooms and 'user' in self.fields:
+            for room in rooms:
+                if not room.user_can_manage(self.user):
+                    self.add_error('room', _("Vous ne pouvez pas gérer cette salle"))
+        elif rooms: #Needed for testing purpose, otherwise it crashes
+            for room in rooms:
+                if room.private:
+                    self.add_error('room', _("Vous ne pouvez pas gérer cette salle"))
+
 
         # Deactivated because why hu ??
         # if start_time.date() != end_time.date():
@@ -148,7 +168,6 @@ class AddRoomForm(ModelForm):
                     raise ValidationError(message=_("Le club suivant n'existe pas: %s"%(club,)), code="CLUB DOES NOT EXIST")
                 if not re.match(r'^[a-z0-9-]+', club):
                     raise ValidationError(message=_("Le club suivant n'est pas un nom valide: %s"%(club,)), code="BAD CLUB")
-            print(";".join(clubs))
         return(";".join(clubs))
 
 

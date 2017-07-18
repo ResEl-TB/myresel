@@ -173,10 +173,10 @@ class AddRoom(FormView):
 
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_staff:
+        """if not request.user.is_staff:
             messages.error(self.request, _("Vous n'avez pas accès à cette page"))
             return HttpResponseRedirect(reverse('campus:rooms:calendar'))
-        return super(AddRoom, self).dispatch(request, *args, **kwargs)
+        return super(AddRoom, self).dispatch(request, *args, **kwargs)"""
         self.room = None
         if self.kwargs.get('room', None):
             self.room = get_object_or_404(Room, id=self.kwargs["room"])
@@ -230,7 +230,7 @@ class BookingView(FormView):
     form_class = RoomBookingForm
 
     @method_decorator(login_required)
-    #@method_decorator(ae_required) #TODO: CHANGE ME CHANGE ME CHANGE ME
+    #@method_decorator(ae_required)
     def dispatch(self, request, *args, **kwargs):
         self.booking = None
         if self.kwargs.get('booking', None):
