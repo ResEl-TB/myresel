@@ -51,9 +51,10 @@ urlpatterns = [
     url(r'^services/', Services.as_view(), name='services'),
     url(r'^campus/', include('campus.urls', namespace='campus')),
 
-    # Subcription related urls
+    # Subcription related urls and log spamming workarounds
     url(r'^inscription_zone/', inscription_zone_info, name="inscription-zone"),
     url(r'^generate_204/', RedirectView.as_view(pattern_name="inscription-zone", permanent=False), name="generate_204"),
+    url(r'^favicon.ico', RedirectView.as_view(url='/static/images/icons/favicon-96x96.png', permanent=False), name="favicon"),
 
     url(r'^help-needed/', TemplateView.as_view(template_name='help_needed.html'), name="help-needed"),
 
