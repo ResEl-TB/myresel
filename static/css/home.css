@@ -169,10 +169,6 @@
     margin-bottom: 3px;
 }
 
-.home-blog {
-    box-shadow: inset 0 5px 6px 0 #80817b;
-}
-
 .bigger:hover {
     transform: scale(1.1);
 }
@@ -190,6 +186,7 @@
 
 
 .home-blog {
+    box-shadow: inset 0 5px 6px 0 #80817b;
     padding-bottom: 60px;
     background-color: #F7F7F7;
 }
@@ -349,5 +346,116 @@ iframe {
     animation-iteration-count: infinite;
     animation-timing-function: ease-out;
     background: radial-gradient(ellipse at center, rgba(255,255,255,0) 50%,rgba(255,255,255,1) 100%); /* FF3.6-15 */
+}
+
+.home-campus {
+    background: url(/static/images/campus/bgimg.jpg) no-repeat center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+    color: #FFFFFF;
+    -webkit-clip-path: polygon(0 0%, 100% 0, 100% 90%, 0% 100%);
+    clip-path: polygon(0 0%, 100% 0, 100% 90%, 0% 100%);
+    padding-bottom: 150px;
+}
+
+.home-campus h2 {
+    color: #FFFFFF;
+    margin-bottom: 30px;
+}
+
+.home-campus h2 a {
+    color: #FFFFFF;
+}
+
+.home-campus h2 a:hover {
+    color: #2b669a;
+    text-decoration: none;
+}
+
+
+.event-bloc {
+    margin-top: 15px;
+    border: 1px solid #ddd;
+    padding: 20px 20px 20px 30px;
+    background-color: #F7F7F7;
+    min-height: 60px;
+    border-radius: 7px;
+}
+
+.event-badge-container {
+    padding: 0;
+}
+
+.event-badge {
+    background-color: #008000;
+    color: #FFFFFF;
+    border-radius: 4px;
+    text-align: center;
+    padding: 5px;
+}
+
+.event-badge .date {
+    margin-bottom: 5px;
+}
+
+.event-badge .month {
+    font-weight: 600;
+}
+
+.event-badge .hour {
+    font-size: 1.2em;
+    font-weight: 800;
+}
+
+.home-campus a {
+    color: #000000;
+}
+
+.home-campus a:hover {
+    color: #2b669a;
+    text-decoration: none;
+}
+
+.club-bloc {
+    position: relative;
+    color: #000000;
+    vertical-align: text-bottom;
+    background-color: #F7F7F7;
+}
+
+.club-bloc .club-img {
+}
+
+.club-bloc .club-name {
+    margin-top: 7px;
+    margin-bottom: 2px;
+    width: 100%;
+    color: #000000;
+    font-size: 1.3em;
+}
+
+.birthdays-list {
+    padding: 10px 0 5px 20px;
+    color: #000000;
+}
+
+.club-news {
+    background-color: #F7F7F7;
+    border-radius: 4px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.club-news-bloc {
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    padding: 5px 10px 5px 30px;
+    background-color: #FFFFFF;
+}
+
+.club-news-bloc .title {
+    font-size: 1.4em;
 }
 

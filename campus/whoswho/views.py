@@ -329,7 +329,8 @@ class ListBirthdays(View):
     def dispatch(self, *args, **kwargs):
         return super(ListBirthdays, self).dispatch(*args, **kwargs)
 
-    def get(self, request, *args, **kwarg):
+    @staticmethod
+    def get_today_birthdays():
         #Since the Ldpa don't understand requests without years or something,
         #we have to select people that are between 15 and 30 y/o:
         users = []
@@ -342,4 +343,7 @@ class ListBirthdays(View):
                 pass
             except Exception as e:
                 pass
-        return render(request, self.template_name, {'users' : users})
+        return users
+
+    def get(self, request, *args, **kwarg):
+        return render(request, self.template_name, {'users' : self.get_today_birthdays()})

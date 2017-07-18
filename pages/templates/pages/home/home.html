@@ -120,7 +120,7 @@
 
     <div class="home-fragment home-blog">
         <div class="container">
-            <h2 class="clickable-title"><a href="{% url 'news'%}">{% trans "Les dernières nouvelles" %}</a> {% if user.is_staff %}<small><a href="/gestion/pages/news/add/"><span class="fa fa-plus"></span> Créer une news</a></small>{% endif %}</h2>
+            <h2 class="clickable-title"><a href="{% url 'news'%}">{% trans "Les dernières nouvelles ResEl" %}</a> {% if user.is_staff %}<small><a href="/gestion/pages/news/add/"><span class="fa fa-plus"></span> Créer une news</a></small>{% endif %}</h2>
             <div class="row">
                 <div class="col-md-7">
                     {% for pieceofnews in news %}
@@ -140,6 +140,73 @@
                 <div class="col-md-5 twitter-widget">
                     <a class="twitter-timeline" data-height="600" data-dnt="true" data-link-color="#337ab7" href="https://twitter.com/Resel_fr">Tweets by ResEl</a>
                     <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="home-fragment home-campus">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-5">
+                        <h2 class="title"><a href="{% url 'campus:home'%}">{% trans "En ce moment sur le campus" %}</a></h2>
+                    {% for event in campus_events %}
+                        <div class="event-bloc">
+                            <div class="row" />
+                                <div class="col-xs-2 event-badge-container">
+                                    <div class="event-badge">
+                                        <div class="month">{{ event.start_time|date:"l"|upper }}</div>
+                                        <div class="date">{{ event.start_time|date:"j b"|upper }}</div>
+                                        <div class="hour">{{ event.start_time|date:"H\hi" }}</div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-10">
+                                    <a href="{% url 'campus:rooms:booking-detail' event.pk %}">
+                                        <div>{{ event.description|truncatewords_html:15 }}</div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <div class="news-bloc">{% trans "Pas d'événements à l'horizon" %}</div>
+                    {% endfor %}
+                    <div class="btn-more"><a href="{% url 'campus:rooms:calendar'%}" class="btn btn-link btn-lg">{% trans "Voir tous les événements campus" %}</a></div>
+                </div>
+                <div class="col-md-6 col-md-offset-1">
+                    <div class="row">
+                        <h2 class="title"><a href="{% url 'campus:clubs:list'%}">{% trans "Clubs à l'honneur" %}</a></h2>
+                        {% for club in clubs %}
+                        <div class="col-xs-6 col-md-4 club-list">
+                            <div class="club-bloc thumbnail">
+                                {% if club.logo and club.logo != "None" %}
+                                <img class="logo img-responsive" src="/media/image/ASSOS/{{ club.logo }}">
+                                {% else %}
+                                <img class="logo img-responsive" src="{% static 'images/campus/orga.png' %}">
+                                {% endif %}
+                                <div class="club-name">{{ club.name }}</div>
+                                {# <div class="club-description">{{ club.description }}</div> #}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <h2 class="title"><a href="{% url 'campus:clubs:list'%}">{% trans "Infos clubs" %}</a></h2>
+                    <div class="club-news">
+                        {% for campus_mail in campus_mails %}
+                        <div class="club-news-bloc">
+                            <a href="{% url 'piece-of-news' campus_mail.pk %}">
+                                <span class="title">{{ campus_mail.subject }}</span>
+                            </a>
+                        </div>
+                        {% empty %}
+                        <div class="club-news-bloc"><span class="title">{% trans "Pas de mail campus à l'horizon" %}</span></div>
+                        {% endfor %}
+
+                        {% if birthdays_users|length > 0 %}
+                        <div class="birthdays-list">
+                            <span class="fa fa-fw fa-birthday-cake"></span> 
+                            {% for user_b in birthdays_users %}{{ user_b.first_name }}{%if forloop.last == False %},{% endif %}{% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
