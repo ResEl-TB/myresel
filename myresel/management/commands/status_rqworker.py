@@ -5,18 +5,32 @@ import subprocess
 import re
 
 class Command(BaseCommand):
-    help = 'Check rqworker status on production server using supervisord'
+    help = 'Check website status on production server using systemd -- needs sudo privileges'
 
     def handle(self, *args, **options):
-        try:
-            out = subprocess.check_output(["supervisorctl", "status"]).decode()
-        except FileNotFoundError as e:
-            raise CommandError("RQWORKER CRITICAL: cannot execute supervisorctl")
+        services = [
+            'rq-worker.service',
+            'rq-scheduler.service',
+            'nginx.service',
+            'uwsgi.service',
+            'cron.service',
+        ]
+        regex = re.compile(r"^active")
+        is_error = False
+        error_output = "MYRESEL CRITICAL:\n"
 
+        for service in services:
+            try:
+                out = subprocess.check_output(["systemctl", "is-active", service]).decode()
+            except FileNotFoundError as e:
+                is_error = True
+                error_output += "Cannot execute systemctl is-active %s\n" % service
 
-        regex = re.compile(r"rqworker.*RUNNING")
+            if not re.match(regex, out):
+                is_error = True
+                error_output += "%s is %s\n" % (service, out)
 
-        if re.match(regex, out):
-            self.stdout.write(self.style.SUCCESS('RQWORKER OK: Worker running'))
+        if is_error:
+            raise CommandError(error_output)
         else:
-            raise CommandError("RQWORKER CRITICAL: %s" % out)
+            self.stdout.write(self.style.SUCCESS('MYRESEL OK: All services running'))
