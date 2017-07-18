@@ -424,9 +424,18 @@ def createBooking(start_time, end_time, recurring_rule = "NONE", end_recurring_p
     booking.save()
     return booking
 
-#This test covers many booking cases
-class CalendarTestCase(TestCase):
 
+class CalendarTestCase(TestCase):
+    """
+    This test covers many booking cases
+    Many month, days etc are hardcoded, but unless earth get invaded or this kind of shit,
+    we're pretty safe and can assume that the gregorian calendar and its standards are not
+    going to change anytime soon. These hardcoded are number of days in a specific month and
+    similar things
+    """
+
+    #we setup a var with next year because our booking isn't valid if
+    #it's prior to the current date.
     year = date.today().year+1
 
     def setup(self):
@@ -446,6 +455,7 @@ class CalendarTestCase(TestCase):
         for day in r.context["calendar"][0]:
             if day[0]:
                 if day[0].day == 1:
+                    self.assertTrue(day[1])
                     #J'ai trouvé mieux pour convertir une heure en utc, car python ne gère pas heure été/hiver
                     #ne gère pas heure été/hiver du coup on laisse django faire, mais c'est pas beau
                     self.assertTrue(day[1][0].start_time.hour) == timezone.make_aware(datetime(self.year,9,1,15,0,0)).astimezone(pytz.utc).hour
@@ -464,6 +474,7 @@ class CalendarTestCase(TestCase):
         for week in r.context["calendar"]:
             for day in week:
                 if day[0]:
+                    self.assertTrue(day[1])
                     self.assertTrue(day[1][0].start_time.hour) == timezone.make_aware(datetime(self.year,9,1,13,0,0)).astimezone(pytz.utc).hour
                     self.assertTrue(day[1][0].end_time.hour) == timezone.make_aware(datetime(self.year,9,1,14,0,0)).astimezone(pytz.utc).hour
 
@@ -479,6 +490,7 @@ class CalendarTestCase(TestCase):
             for day in week:
                 if day[0]:
                     if day[0].day in [1, 8, 15, 22, 29]:
+                        self.assertTrue(day[1])
                         self.assertTrue(day[1][0].start_time.hour) == timezone.make_aware(datetime(self.year,9,1,10,0,0)).astimezone(pytz.utc).hour
                         self.assertTrue(day[1][0].end_time.hour) == timezone.make_aware(datetime(self.year,9,1,12,0,0)).astimezone(pytz.utc).hour
                     else:
@@ -498,10 +510,65 @@ class CalendarTestCase(TestCase):
                 for day in week:
                     if day[0]:
                         if day[0].day == 1:
+                            self.assertTrue(day[1])
                             self.assertTrue(day[1][0].start_time.hour) == timezone.make_aware(datetime(self.year,i,1,8,0,0)).astimezone(pytz.utc).hour
                             self.assertTrue(day[1][0].end_time.hour) == timezone.make_aware(datetime(self.year,i,1,9,0,0)).astimezone(pytz.utc).hour
                         else:
                             self.assertFalse(day[1])
+
+    def testDailyRecurringEventBetweenMonth(self):
+
+        #daily, weekly, monthly, they work the same way so we only test for daily,
+        #adjust if necessary
+        createBooking(datetime(self.year,9,29,8,0,0), datetime(self.year,9,29,9,0,0), recurring_rule = "DAILY", end_recurring_period = datetime(self.year,10,2,18,0,0))
+
+        self.client.login(username="jbvallad", password="blabla")
+
+        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": 9}), HTTP_HOST="10.0.3.94")
+        for day in r.context["calendar"][-1:][0]:
+            if day[0]:
+                if day[0].day in [29,30]:
+                    self.assertTrue(day[1])
+                    self.assertTrue(day[1][0].start_time.hour) == timezone.make_aware(datetime(self.year,9,1,8,0,0)).astimezone(pytz.utc).hour
+                    self.assertTrue(day[1][0].end_time.hour) == timezone.make_aware(datetime(self.year,9,1,9,0,0)).astimezone(pytz.utc).hour
+                else:
+                    self.assertFalse(day[1])
+
+        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": 10}), HTTP_HOST="10.0.3.94")
+        for day in r.context["calendar"][-1:][0]:
+            if day[0]:
+                if day[0].day in [1,2]:
+                    self.assertTrue(day[1])
+                    self.assertTrue(day[1][0].start_time.hour) == timezone.make_aware(datetime(self.year,9,1,8,0,0)).astimezone(pytz.utc).hour
+                    self.assertTrue(day[1][0].end_time.hour) == timezone.make_aware(datetime(self.year,9,1,9,0,0)).astimezone(pytz.utc).hour
+                else:
+                    self.assertFalse(day[1])
+
+    def testDailyRecurringEventBetweenYear(self):
+
+        createBooking(datetime(self.year,12,29,8,0,0), datetime(self.year,12,29,9,0,0), recurring_rule = "DAILY", end_recurring_period = datetime(self.year+1,1,2,18,0,0))
+
+        self.client.login(username="jbvallad", password="blabla")
+
+        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": 12}), HTTP_HOST="10.0.3.94")
+        for day in r.context["calendar"][-1:][0]:
+            if day[0]:
+                if day[0].day in [29,30,31]:
+                    self.assertTrue(day[1])
+                    self.assertTrue(day[1][0].start_time.hour) == timezone.make_aware(datetime(self.year,9,1,8,0,0)).astimezone(pytz.utc).hour
+                    self.assertTrue(day[1][0].end_time.hour) == timezone.make_aware(datetime(self.year,9,1,9,0,0)).astimezone(pytz.utc).hour
+                else:
+                    self.assertFalse(day[1])
+
+        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year+1, "month": 1}), HTTP_HOST="10.0.3.94")
+        for day in r.context["calendar"][-1:][0]:
+            if day[0]:
+                if day[0].day in [1,2]:
+                    self.assertTrue(day[1])
+                    self.assertTrue(day[1][0].start_time.hour) == timezone.make_aware(datetime(self.year,9,1,8,0,0)).astimezone(pytz.utc).hour
+                    self.assertTrue(day[1][0].end_time.hour) == timezone.make_aware(datetime(self.year,9,1,9,0,0)).astimezone(pytz.utc).hour
+                else:
+                    self.assertFalse(day[1])
 
     def testMultipleDayEvent(self):
 
@@ -515,24 +582,24 @@ class CalendarTestCase(TestCase):
             for day in week:
                 if day[0]:
                     if day[0].day in range(1,6):
+                        self.assertTrue(day[1])
                         self.assertTrue(day[1][0].start_time.hour) == timezone.make_aware(datetime(self.year,9,1,20,0,0)).astimezone(pytz.utc).hour
                         self.assertTrue(day[1][0].end_time.hour) == timezone.make_aware(datetime(self.year,9,1,21,0,0)).astimezone(pytz.utc).hour
                     else:
                         self.assertFalse(day[1])
 
-    #Hits a bug, need to be fixed
-    #TODO: fix the bug :^)
-    @skip
     def testMultipleDayEventBetweenMonth(self):
 
         createBooking(datetime(self.year,9,29,20,0,0), datetime(self.year,10,2,21,0,0), recurring_rule = "NONE")
 
         self.client.login(username="jbvallad", password="blabla")
+
+        #Checks if our event is here on both month
         r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": "9"}), HTTP_HOST="10.0.3.94")
         for day in r.context["calendar"][-1:][0]:
             if day[0]:
                 if day[0].day in [29,30]:
-                    print(day)
+                    self.assertTrue(day[1])
                     self.assertTrue(day[1][0].start_time.hour) == timezone.make_aware(datetime(self.year,9,1,20,0,0)).astimezone(pytz.utc).hour
                     self.assertTrue(day[1][0].end_time.hour) == timezone.make_aware(datetime(self.year,9,1,21,0,0)).astimezone(pytz.utc).hour
                 else:
@@ -542,6 +609,72 @@ class CalendarTestCase(TestCase):
         for day in r.context["calendar"][:1][0]:
             if day[0]:
                 if day[0].day in [1,2]:
+                    self.assertTrue(day[1])
+                    self.assertTrue(day[1][0].start_time.hour) == timezone.make_aware(datetime(self.year,9,1,20,0,0)).astimezone(pytz.utc).hour
+                    self.assertTrue(day[1][0].end_time.hour) == timezone.make_aware(datetime(self.year,9,1,21,0,0)).astimezone(pytz.utc).hour
+                else:
+                    self.assertFalse(day[1])
+
+    def testMultipleMonthEvent(self):
+
+        createBooking(datetime(self.year,9,10,20,0,0), datetime(self.year,11,15,21,0,0), recurring_rule = "NONE")
+
+        self.client.login(username="jbvallad", password="blabla")
+
+        #Checks if our event is present for the right days, especialy
+        #for the month between the two others
+        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": "9"}), HTTP_HOST="10.0.3.94")
+        for week in r.context["calendar"]:
+            for day in week:
+                if day[0]:
+                    if day[0].day in range(10,31):
+                        self.assertTrue(day[1])
+                        self.assertTrue(day[1][0].start_time.hour) == timezone.make_aware(datetime(self.year,9,1,20,0,0)).astimezone(pytz.utc).hour
+                        self.assertTrue(day[1][0].end_time.hour) == timezone.make_aware(datetime(self.year,9,1,21,0,0)).astimezone(pytz.utc).hour
+                    else:
+                        self.assertFalse(day[1])
+
+        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": "10"}), HTTP_HOST="10.0.3.94")
+        for week in r.context["calendar"]:
+            for day in week:
+                if day[0]:
+                    self.assertTrue(day[1])
+                    self.assertTrue(day[1][0].start_time.hour) == timezone.make_aware(datetime(self.year,9,1,20,0,0)).astimezone(pytz.utc).hour
+                    self.assertTrue(day[1][0].end_time.hour) == timezone.make_aware(datetime(self.year,9,1,21,0,0)).astimezone(pytz.utc).hour
+
+        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": "11"}), HTTP_HOST="11.0.3.94")
+        for week in r.context["calendar"]:
+            for day in week:
+                if day[0]:
+                    if day[0].day in range(1,16):
+                        self.assertTrue(day[1])
+                        self.assertTrue(day[1][0].start_time.hour) == timezone.make_aware(datetime(self.year,9,1,20,0,0)).astimezone(pytz.utc).hour
+                        self.assertTrue(day[1][0].end_time.hour) == timezone.make_aware(datetime(self.year,9,1,21,0,0)).astimezone(pytz.utc).hour
+                    else:
+                        self.assertFalse(day[1])
+
+    def testMultipleDayEventBetweenYear(self):
+
+        createBooking(datetime(self.year,12,29,20,0,0), datetime(self.year+1,1,2,21,0,0), recurring_rule = "NONE")
+
+        self.client.login(username="jbvallad", password="blabla")
+
+        #Checks if our event is here on both month from both years
+        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": "12"}), HTTP_HOST="10.0.3.94")
+        for day in r.context["calendar"][-1:][0]:
+            if day[0]:
+                if day[0].day in [29,30,31]:
+                    self.assertTrue(day[1])
+                    self.assertTrue(day[1][0].start_time.hour) == timezone.make_aware(datetime(self.year,9,1,20,0,0)).astimezone(pytz.utc).hour
+                    self.assertTrue(day[1][0].end_time.hour) == timezone.make_aware(datetime(self.year,9,1,21,0,0)).astimezone(pytz.utc).hour
+                else:
+                    self.assertFalse(day[1])
+
+        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year+1, "month": "1"}), HTTP_HOST="10.0.3.94")
+        for day in r.context["calendar"][:1][0]:
+            if day[0]:
+                if day[0].day in [1,2]:
+                    self.assertTrue(day[1])
                     self.assertTrue(day[1][0].start_time.hour) == timezone.make_aware(datetime(self.year,9,1,20,0,0)).astimezone(pytz.utc).hour
                     self.assertTrue(day[1][0].end_time.hour) == timezone.make_aware(datetime(self.year,9,1,21,0,0)).astimezone(pytz.utc).hour
                 else:
