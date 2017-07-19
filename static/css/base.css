@@ -23,6 +23,30 @@ body {
     font-weight: bold;
 }
 
+.btn-campus-text {
+    background: #337ab7 linear-gradient(135deg, rgba(51,122,183,1) 0%,rgba(51,122,183,1) 40%,rgba(255,255,255,1) 50%,rgba(51,122,183,1) 50%,rgba(51,122,183,1) 100%) 0 0 no-repeat;
+    background-size: 200px;
+
+    color: rgba(255, 255, 255, 0.1);
+    -webkit-background-clip: text;
+
+    -webkit-animation-name: shine;
+    -webkit-animation-duration: 6s;
+    -webkit-animation-iteration-count: infinite;
+}
+
+@-webkit-keyframes shine
+{
+    0%
+    {
+        background-position: top right;
+    }
+    20%
+    {
+        background-position: top left;
+    }
+}
+
 @media(max-width:768px) {
     body {
         font-size: 1.3em;

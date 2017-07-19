@@ -1,5 +1,6 @@
 # coding: utf-8
 import logging
+import random
 
 from django.conf import settings
 from django.contrib import messages
@@ -13,6 +14,7 @@ from django.shortcuts import render, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import View, ListView, DetailView
+from django.utils import timezone
 
 from fonctions import network, decorators
 from fonctions.generic import sizeof_fmt
@@ -21,6 +23,10 @@ from gestion_personnes.models import LdapUser, UserMetaData
 from pages.forms import ContactForm
 from pages.models import News, Faq
 from wiki.models import Category
+from campus.models import RoomBooking
+from campus.models.clubs_models import StudentOrganisation
+from campus.models.mails_models import Mail
+from campus.whoswho.views import ListBirthdays
 
 logger = logging.getLogger("default")
 
@@ -69,6 +75,23 @@ class Home(View):
         # Load some news
         news = News.objects.order_by('-date').all()[:settings.NUMBER_NEWS_IN_HOME]
         args_for_response['news'] = news
+
+        # Load some campus events
+        events = RoomBooking.objects.order_by('start_time').filter(start_time__gt=timezone.now(), displayable=True).all()[:4]
+        args_for_response['campus_events'] = events
+
+        # Load some clubs
+        date = timezone.now()
+        random.seed(a=date.day + 100 * date.month + 10000*date.year)
+        clubs = random.sample(StudentOrganisation.all(), 3)
+        args_for_response['clubs'] = clubs
+
+        # Load some birthdays
+        birthdays_users = ListBirthdays.get_today_birthdays()
+        args_for_response['birthdays_users'] = birthdays_users
+
+        # Load some campus mails
+        args_for_response['campus_mails'] = Mail.objects.order_by('-date').filter(moderated=True).all()[:settings.NUMBER_NEWS_IN_HOME]
 
         # Automatically active the computer if it is known
         # Change campus automatically

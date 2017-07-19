@@ -41,11 +41,18 @@
                     {{ current_date|date:'F Y' }}
                 </div>
 
-                <div class="btn btn-link">
+                <div class="btn btn-link pull-right">
                     {% if current_room == 'all' %}
-                        Toutes les salles - <a href="{% url 'campus:rooms:booking' %}">Créer un événement</a>
+                        Toutes les salles
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'campus:rooms:booking' %}" class="btn btn-default">Créer un événement</a>
+                        {% if user.is_staff %}
+                        <a href="{% url 'campus:rooms:add-room' %}" class="btn btn-default">Ajouter une salle</a>
+                        <a href="{% url 'campus:rooms:manage-rooms' %}" class="btn btn-default">Gérer les salles</a>
+                        {% endif %}
+                        {% endif %}
                     {% else %}
-                        {{ current_room.name }} (<a href="{% url 'campus:rooms:calendar' %}">voir toutes les salles</a>) - <a href="{% url 'campus:rooms:booking' %}">réserver la salle</a>
+                        {{ current_room.name }} (<a href="{% url 'campus:rooms:calendar' %}">voir toutes les salles</a>) {% if user.is_authenticated %}<a href="{% url 'campus:rooms:booking' %}" class="btn btn-default">Réserver la salle</a>{% endif %}
                     {% endif %}
                 </div>
             </div>
@@ -76,14 +83,14 @@
                                             <div class='text-right small'></div>
                                         </td>
                                     {% else %}
-                                        <td {% if day|date:'j' == current_day_nbr %}class="current-day"{% endif %} >
+                                        <td {% if day|date:'j' == current_day.0 and day|date:'n' == current_day.1 and day|date:'Y' == current_day.2 %}class="current-day"{% endif %} >
                                             <div class='text-right small'>
                                                 {% if current_room == 'all' %}
                                                     <a href="{% url 'campus:rooms:calendar-day' day|date:'Y' day|date:'n' day|date:'j' %}">
                                                         {{ day|date:'j' }}
                                                     </a>
                                                 {% else %}
-                                                    <span {% if current_day_nbr == day|date:'j' %}class="label label-info"{% endif %}>
+                                                    <span {% if current_day.0 == day|date:'j' %}class="label label-info"{% endif %}>
                                                     <a href="{% url 'campus:rooms:calendar-room-day' current_room.pk day|date:'Y' day|date:'n' day|date:'j' %}">
                                                         {{ day|date:'j' }}
                                                     </a>
@@ -92,9 +99,21 @@
                                             </div>
                                             {% for event in events %}
                                                 <a class="event" href="{% url "campus:rooms:booking-detail"  event.pk %}">
-                                                    <div class="alert-{{ event.booking_type }}">
-                                                        <span class="time">{{ event.start_time|time:'H:i' }} - {{ event.end_time|time:'H:i' }}</span>
-                                                        <span class="description">{{ event.description }}</span>
+                                                    <div class="alert-{{ event.booking_type }} {% if calendar|length_is:'1' %} col-md-3 {% endif %}">
+                                                        <span class="time">
+                                                            {% if event.start_time|date:'j' == day|date:'j' and event.start_time|date:'n' == current_day.1 and event.start_time|date:'Y' == current_day.2 %}
+                                                                {{ event.start_time|time:'H:i' }}
+                                                            {% else %}
+                                                                00:00
+                                                            {% endif %}
+                                                            -
+                                                            {% if event.end_time|date:'j' == day|date:'j' and event.end_time|date:'n' == current_day.1 and event.end_time|date:'Y' == current_day.2 %}
+                                                                {{ event.end_time|time:'H:i' }}
+                                                            {% else %}
+                                                                23:59
+                                                            {% endif %}
+                                                        </span>
+                                                        <span class="description">{{ event.description|truncatewords:7 }}</span>
                                                     </div>
                                                 </a>
                                             {% endfor %}

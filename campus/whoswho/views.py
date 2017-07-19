@@ -268,11 +268,11 @@ class AddPerson(View):
             messages.success(request, _("Vous ne pouvez pas vous ajouter vous même."))
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-        if (not godchild.pk in godparent.uid_godchildren) or (not godchild.pk in godparent.uid_godparents):
+        if (not godchild.pk in godparent.uid_godchildren) and (not godchild.pk in godparent.uid_godparents):
             godparent.uid_godchildren.append(godchild.pk)
             godparent.save()
 
-        if (not godparent.pk in godchild.uid_godparents) or (not godparent.pk in godchild.uid_godchildren):
+        if (not godparent.pk in godchild.uid_godparents) and (not godparent.pk in godchild.uid_godchildren):
             godchild.uid_godparents.append(godparent.pk)
             godchild.save()
 
@@ -329,7 +329,8 @@ class ListBirthdays(View):
     def dispatch(self, *args, **kwargs):
         return super(ListBirthdays, self).dispatch(*args, **kwargs)
 
-    def get(self, request, *args, **kwarg):
+    @staticmethod
+    def get_today_birthdays():
         #Since the Ldpa don't understand requests without years or something,
         #we have to select people that are between 15 and 30 y/o:
         users = []
@@ -342,4 +343,7 @@ class ListBirthdays(View):
                 pass
             except Exception as e:
                 pass
-        return render(request, self.template_name, {'users' : users})
+        return users
+
+    def get(self, request, *args, **kwarg):
+        return render(request, self.template_name, {'users' : self.get_today_birthdays()})
