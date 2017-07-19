@@ -152,16 +152,17 @@
                     {% for event in campus_events %}
                         <div class="event-bloc">
                             <div class="row" />
-                                <div class="col-xs-2 event-badge-container">
+                                <div class="col-xs-3 event-badge-container">
                                     <div class="event-badge">
-                                        <div class="month">{{ event.start_time|date:"l"|upper }}</div>
+                                        <div class="day">{{ event.start_time|date:"l"|upper }}</div>
                                         <div class="date">{{ event.start_time|date:"j b"|upper }}</div>
                                         <div class="hour">{{ event.start_time|date:"H\hi" }}</div>
                                     </div>
                                 </div>
-                                <div class="col-xs-10">
+                                <div class="col-xs-9">
                                     <a href="{% url 'campus:rooms:booking-detail' event.pk %}">
-                                        <div>{{ event.description|truncatewords_html:15 }}</div>
+                                        <div class="event-description">{{ event.description|truncatewords_html:20|linebreaks }}</div>
+                                        <div><span class="fa fa-fw fa-map-marker"></span> {{ event.room.first.name }}</div>
                                     </a>
                                 </div>
                             </div>
@@ -177,13 +178,15 @@
                         {% for club in clubs %}
                         <div class="col-xs-6 col-md-4 club-list">
                             <div class="club-bloc thumbnail">
-                                {% if club.logo and club.logo != "None" %}
-                                <img class="logo img-responsive" src="/media/image/ASSOS/{{ club.logo }}">
-                                {% else %}
-                                <img class="logo img-responsive" src="{% static 'images/campus/orga.png' %}">
-                                {% endif %}
-                                <div class="club-name">{{ club.name }}</div>
-                                {# <div class="club-description">{{ club.description }}</div> #}
+                                <a href="{% url 'campus:clubs:club_detail' club.cn %}" >
+                                    {% if club.logo and club.logo != "None" %}
+                                    <img class="logo img-responsive" src="/media/image/ASSOS/{{ club.logo }}">
+                                    {% else %}
+                                    <img class="logo img-responsive" src="{% static 'images/campus/orga.png' %}">
+                                    {% endif %}
+                                    <div class="club-name">{{ club.name }}</div>
+                                    {# <div class="club-description">{{ club.description }}</div> #}
+                                </a>
                             </div>
                         </div>
                         {% endfor %}

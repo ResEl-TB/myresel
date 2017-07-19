@@ -378,8 +378,8 @@ iframe {
 .event-bloc {
     margin-top: 15px;
     border: 1px solid #ddd;
-    padding: 20px 20px 20px 30px;
-    background-color: #F7F7F7;
+    padding: 20px 20px 10px 30px;
+    background-color: #F7F7F7CC;
     min-height: 60px;
     border-radius: 7px;
 }
@@ -397,16 +397,26 @@ iframe {
 }
 
 .event-badge .date {
-    margin-bottom: 5px;
+    margin-bottom: 7px;
 }
 
-.event-badge .month {
-    font-weight: 600;
+.event-badge .day {
+    font-weight: 700;
+    margin-bottom: -5px;
 }
 
 .event-badge .hour {
     font-size: 1.2em;
     font-weight: 800;
+}
+
+.event-description {
+    min-height: 60px;
+}
+
+.event-description > p:first-of-type {
+    font-size: 1.3em;
+    font-weight: 400;
 }
 
 .home-campus a {
@@ -422,7 +432,11 @@ iframe {
     position: relative;
     color: #000000;
     vertical-align: text-bottom;
-    background-color: #F7F7F7;
+    background-color: #F7F7F7CC;
+}
+
+.club-bloc a:hover {
+    filter: saturate(70%);
 }
 
 .club-bloc .club-img {
@@ -442,7 +456,7 @@ iframe {
 }
 
 .club-news {
-    background-color: #F7F7F7;
+    background-color: #F7F7F7CC;
     border-radius: 4px;
     padding-top: 5px;
     padding-bottom: 5px;
