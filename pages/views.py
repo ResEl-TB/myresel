@@ -1,5 +1,6 @@
 # coding: utf-8
 import logging
+import random
 
 from django.conf import settings
 from django.contrib import messages
@@ -77,8 +78,9 @@ class Home(View):
         args_for_response['campus_events'] = events
 
         # Load some clubs
-
-        clubs = StudentOrganisation.all()[:3]
+        date = timezone.now()
+        random.seed(a=date.day + 100 * date.month + 10000*date.year)
+        clubs = random.sample(StudentOrganisation.all(), 3)
         args_for_response['clubs'] = clubs
 
         # Load some birthdays
