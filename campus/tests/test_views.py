@@ -876,3 +876,20 @@ class BookingTestCase(TestCase):
         self.client.login(username="jbvallad", password="blabla")
         r = self.client.get(reverse("campus:rooms:booking"), HTTP_HOST="10.0.3.94")
         self.assertTemplateUsed('booking.html')
+
+class EventDetailTestCase(TestCase):
+
+    year = date.today().year+1
+
+    def setUp(self):
+        try_delete_user("jbvallad")
+        user = create_full_user(uid="jbvallad", pwd="blabla")
+        user.save()
+
+    def testSimpleLoad(self):
+
+        booking = createBooking(datetime(self.year,9,1,18,0,0), datetime(self.year,9,1,19,0,0))
+
+        self.client.login(username="jbvallad", password="blabla")
+        r = self.client.get(reverse("campus:rooms:booking-detail", kwargs={'slug': booking.id}), HTTP_HOST="10.0.3.94")
+        self.assertEqual(r.status_code, 200)
