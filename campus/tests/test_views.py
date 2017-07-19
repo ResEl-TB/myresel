@@ -893,3 +893,30 @@ class EventDetailTestCase(TestCase):
         self.client.login(username="jbvallad", password="blabla")
         r = self.client.get(reverse("campus:rooms:booking-detail", kwargs={'slug': booking.id}), HTTP_HOST="10.0.3.94")
         self.assertEqual(r.status_code, 200)
+
+class DeleteEventTestCase(TestCase):
+
+    year = date.today().year+1
+
+    def setUp(self):
+        try_delete_user("jbvallad")
+        try_delete_user("vallad")
+        user = create_full_user(uid="jbvallad", pwd="blabla")
+        user.save()
+        LdapGroup.get(pk='campusmodo').add_member(user.pk)
+        user = create_full_user(uid="vallad", pwd="blabla")
+        user.save()
+
+    def testSimpleDeletion(self):
+        booking = createBooking(datetime(self.year,9,1,18,0,0), datetime(self.year,9,1,19,0,0))
+
+        self.client.login(username="jbvallad", password="blabla")
+        r = self.client.post(reverse("campus:rooms:delete-booking", kwargs={'pk': booking.id}), HTTP_HOST="10.0.3.94")
+        self.assertFalse(RoomBooking.objects.all().filter(id=booking.id))
+
+    def testForbidenDeletion(self):
+        booking = createBooking(datetime(self.year,9,1,18,0,0), datetime(self.year,9,1,19,0,0))
+
+        self.client.login(username="vallad", password="blabla")
+        r = self.client.post(reverse("campus:rooms:delete-booking", kwargs={'pk': booking.id}), HTTP_HOST="10.0.3.94")
+        self.assertTrue(RoomBooking.objects.all().filter(id=booking.id))
