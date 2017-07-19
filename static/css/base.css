@@ -11,8 +11,12 @@ body {
 
 /* Navbar css related */
 .navbar-main {
-    margin-bottom: 15px;
+    margin-bottom: 0;
     background: #ffffff;
+}
+
+.navbar-brand {
+    margin-right: 20%;
 }
 
 .nav li {
