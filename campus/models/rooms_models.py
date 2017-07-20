@@ -71,7 +71,7 @@ class Room(models.Model):
         granted = False
         if self.private:
             for club in self.get_clubs():
-                if user.uid in '\t'.join(club.prezs):
+                if user.uid in '\t'.join(club.prezs) + '\t'.join(club.members):
                     granted = True
                     break
         return granted

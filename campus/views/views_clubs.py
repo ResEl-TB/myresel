@@ -39,7 +39,7 @@ def list_clubs(request):
     assos.sort(key=lambda x: x.name)
     lists.sort(key=lambda x: x.name)
 
-    hardLinkAdd, hardLinkDel, hardLinkAddPrez, hardLinkWhoUser = getHardLinks()
+    hardLinkAdd, hardLinkDel, hardLinkAddPrez, hardLinkWhoUser, hardLinkAddMail = getHardLinks()
 
     return render(
         request,
@@ -53,6 +53,7 @@ def list_clubs(request):
             'hardLinkDel': hardLinkDel,
             'hardLinkAddPrez': hardLinkAddPrez,
             'hardLinkWhoUser': hardLinkWhoUser,
+            'hardLinkAddMail': hardLinkAddMail,
         }
     )
 
@@ -310,7 +311,7 @@ class AddPersonToClub(View):
                 subscription_email = EmailMessage(
                     subject="SUBSCRIBE {} {} {}".format(mail, user.first_name,
                                                             user.last_name),
-                    body="Inscription automatique de {} a {}".format(user.uid, club.name),
+                    body="Inscription automatique de {} à {}".format(user.uid, club.name),
                     from_email=user.mail,
                     reply_to=["listmaster@resel.fr"],
                     to=["sympa@resel.fr"],
@@ -319,6 +320,50 @@ class AddPersonToClub(View):
         else:
             messages.info(request, _("Le système a déjà trouvé le membre correspondant comme étant inscrit, inscription impossible."))
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
+class AddMailToClub(View):
+    """
+    View used to add a person to a specific club/list or asso if he's got the right to do so
+    """
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(AddMailToClub, self).dispatch(*args, **kwargs)
+
+    def get(self, request, pk):
+        try:
+            club=StudentOrganisation.get(cn=pk)
+            if "tbCampagne" in club.object_classes:
+                club=ListeCampagne.get(cn=pk)
+            elif "tbAsso" in club.object_classes:
+                club=Association.get(cn=pk)
+        except ObjectDoesNotExist:
+            raise Http404("Aucun club trouvé")
+
+        if not (self.request.ldap_user.is_campus_moderator() or self.request.ldap_user.pk in club.prezs or request.user.is_staff):
+            messages.error(request, _("Vous n'êtes pas modérateur campus ou président de ce club"))
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        mail = request.GET.get("mail", None)
+
+        if not mail:
+            raise Http404
+        elif not re.match('^[a-z1-9-_.+]+\@.+$', mail):
+            messages.error(request, _("L'email est invalide"))
+            return HttpResponseRedirect(reverse('campus:clubs:list'))
+
+        messages.success(request, _("Inscription terminée avec succès"))
+        subscription_email = EmailMessage(
+            subject="SUBSCRIBE {}".format(club.email),
+            body="Inscription par un modérateur campus ou président de club de l'adresse {} à {}".format(mail, club.name),
+            from_email=mail,
+            reply_to=["listmaster@resel.fr"],
+            to=["sympa@resel.fr"],
+        )
+        subscription_email.send()
+
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
 
 class AddPrezToClub(View):
     """
@@ -406,7 +451,7 @@ class RemovePersonFromClub(View):
                 subscription_email = EmailMessage(
                     subject="SIGNOFF {} {} {}".format(mail, user.first_name,
                                                             user.last_name),
-                    body="Inscription automatique de {} a {}".format(user.uid, club.name),
+                    body="Désinscription automatique de {} a {}".format(user.uid, club.name),
                     from_email=user.mail,
                     reply_to=["listmaster@resel.fr"],
                     to=["sympa@resel.fr"],
@@ -455,5 +500,6 @@ def getHardLinks():
     hardLinkDel = reverse('campus:clubs:remove-person', kwargs={'pk': "a"})[:-1]
     hardLinkAddPrez = reverse('campus:clubs:add-prez', kwargs={'pk': "a"})[:-1]
     hardLinkWhoUser = reverse('campus:who:user-details', kwargs={'uid': "a"})[:-1]
+    hardLinkAddEmail = reverse('campus:clubs:add-mail', kwargs={'pk': "a"})[:-1]
 
-    return(hardLinkAdd, hardLinkDel, hardLinkAddPrez, hardLinkWhoUser)
+    return(hardLinkAdd, hardLinkDel, hardLinkAddPrez, hardLinkWhoUser, hardLinkAddEmail)

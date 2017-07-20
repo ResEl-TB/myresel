@@ -11,7 +11,7 @@
 
 {% block content %}
     <div class="btn-home">
-      <a href="{% url 'campus:rooms:calendar' %}" class="noncolored-a"><span class="fa fa-home"></span> {% trans "" %} </a>
+      <a href="{% url 'campus:rooms:calendar' %}" class="noncolored-a"><span class="fa fa-calendar"></span> {% trans "" %} </a>
     </div>
     <div class="container well" id="content">
         <div class="row">
@@ -146,7 +146,7 @@
                         url : "{% url 'campus:rooms:check-availability'%}",
                         type : "GET",
                         async: false,
-                        data : {"value": roomChoices[i].value, "start": start, "end": end},
+                        data : {"value": roomChoices[i].value, "start": start, "end": end, {% if booking %}"id":  {{booking}} {% endif %}},
                         success : function(data){
                             if(data != "0"){
                                 answer = confirm(

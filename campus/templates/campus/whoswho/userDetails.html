@@ -12,7 +12,7 @@
 {% block content %}
 
 <div class="btn-home">
-  <a href="{% url 'campus:who:user-home' %}" class="noncolored-a"><span class="fa fa-home"></span> {% trans "" %} </a>
+  <a href="{% url 'campus:who:user-home' %}" class="noncolored-a"><span class="fa fa-address-book"></span> {% trans "" %} </a>
 </div>
 
  <div class="container">
@@ -54,7 +54,7 @@
 
      <div class="row margin-top">
          <div class="col-md-12 well ">
-            <div class="col-md-6 right-separator">
+            <div class="col-md-6">
                 <h3 class="text-center category-title">{% trans "Parrains" %}{% if ldapuser.uid == display_user.uid %}  <a style="padding:0 0 0 0;" class="btn" data-toggle="modal" data-target="#addParain"><span class="fa fa-plus-circle" style="color:#8BBF82"></span></a>{% endif %}</h3>
                 {% for godparent in display_user.godparents %}
                 {% if forloop.first %}

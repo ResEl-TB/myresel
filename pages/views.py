@@ -83,7 +83,8 @@ class Home(View):
         # Load some clubs
         date = timezone.now()
         random.seed(a=date.day + 100 * date.month + 10000*date.year)
-        clubs = random.sample(StudentOrganisation.all(), 3)
+        clubs = [c for c in StudentOrganisation.all() if "tbClub" in c.object_classes]
+        clubs = random.sample(clubs, 3)
         args_for_response['clubs'] = clubs
 
         # Load some birthdays

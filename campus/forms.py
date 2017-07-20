@@ -30,7 +30,7 @@ class RoomBookingForm(ModelForm):
 
         # Display the rooms the user is allowed to book
         if user: #Otherwise the test crashes
-            self.user = user.uid
+            self.user = user
             if not RoomAdmin.objects.filter(user__username=user.uid):
                 del self.fields['user']
                 clubs = StudentOrganisation.filter(members__contains='uid=%s' % user.uid)
@@ -42,6 +42,7 @@ class RoomBookingForm(ModelForm):
                 )
         else:
             del self.fields['user']
+            self.user = None
 
     def save(self, commit=True, *args, **kwargs):
         m = super(RoomBookingForm, self).save(commit=False, *args, **kwargs)
@@ -52,7 +53,7 @@ class RoomBookingForm(ModelForm):
         if 'user' in self.fields:
             m.user = self.cleaned_data['user']
         else:
-            m.user = self.user
+            m.user = self.user.uid
 
         m.save()
 
@@ -115,7 +116,7 @@ class RoomBookingForm(ModelForm):
         if recurring_rule != "NONE" and not cleaned_data.get('end_recurring_period', None):
             self.add_error('end_recurring_period', _('La date de fin de la récurrence est invalide'))
 
-        if rooms and 'user' in self.fields:
+        if rooms and self.user:
             for room in rooms:
                 if not room.user_can_manage(self.user):
                     self.add_error('room', _("Vous ne pouvez pas gérer cette salle"))
@@ -138,6 +139,7 @@ class RoomBookingForm(ModelForm):
         #            self.add_error('room', _("La salle %s n'est pas disponible") % room)
         #    elif not room.is_free(start_time, end_time):
         #        self.add_error('room', _("La salle %s n'est pas disponible") % room)
+        return self.cleaned_data
 
 class AddRoomForm(ModelForm):
     class Meta:

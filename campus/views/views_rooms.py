@@ -115,7 +115,7 @@ def calendar_view(request, room='all', year=timezone.now().year, month=timezone.
         current_date = datetime.date(year=year, month=month, day=day)
         cal.append(
             # Shows the day's event and also those that last multiple days
-            [(datetime.date(year=year, month=month, day=day), [e[1] for e in single_events if e[0][0].day == day or (e[0][0].day < day and e[0][1].day >= day) ])]
+            [(datetime.date(year=year, month=month, day=day), [e[1] for e in single_events if (e[0][0].day == day and e[0][0].month == month and e[0][0].year == year) or ((e[0][0].day < day or e[0][0].month < month or e[0][0].year < year) and (e[0][1].day >= day or e[0][1].month > month or e[0][1].year > year))])]
         )
     else:
         current_date = datetime.date(year=year, month=month, day=15)
@@ -235,7 +235,7 @@ class BookingView(FormView):
         self.booking = None
         if self.kwargs.get('booking', None):
             self.booking = get_object_or_404(RoomBooking, id=self.kwargs['booking'])
-            if not self.booking.user_can_manage(self.request.ldap_user):
+            if not (self.booking.user_can_manage(self.request.ldap_user) or request.user.is_staff or request.ldap_user.is_campus_moderator()):
                 messages.error(self.request, _('Vous ne pouvez pas modifier cette réservation'))
                 return HttpResponseRedirect(reverse('campus:rooms:calendar'))
         return super(BookingView, self).dispatch(request, *args, **kwargs)
@@ -243,7 +243,14 @@ class BookingView(FormView):
     def get_form(self, form_class=None):
         if form_class is None:
             form_class = self.get_form_class()
-        return form_class(self.request.POST or None, user=self.request.ldap_user, instance=self.booking)
+        return form_class(self.request.POST or None, user=self.request.ldap_user, instance=self.booking,)
+
+    def get_context_data(self, **kwargs):
+        context = super(BookingView, self).get_context_data(**kwargs)
+        context["booking"] = None
+        if self.booking:
+            context["booking"] = self.booking.id
+        return context
 
     def form_valid(self, form):
         form.save()
@@ -266,6 +273,12 @@ class DeleteBooking(DeleteView):
         return super(DeleteBooking, self).dispatch(request, *args, **kwargs)
 
 
+class BookingDetailView(DetailView):
+    model = RoomBooking
+    template_name = 'campus/rooms/booking_detail.html'
+    slug_field = "pk"
+
+
 class RequestAvailability(View):
     """
     View that returns avaibility of a room to ajax requests
@@ -280,18 +293,20 @@ class RequestAvailability(View):
             room_pk = request.GET.get('value', None)
             start = request.GET.get('start', None)
             end = request.GET.get('end', None)
-            print(room_pk, start, end)
+            booking_id = request.GET.get('id', None)
+            answer = 0
+
             if room_pk == None or start == None or end == None:
                 raise Http404
             room = get_object_or_404(Room, pk=room_pk)
-            answer = 0
+
+            if booking_id:
+                booking = get_object_or_404(RoomBooking, id=booking_id)
+                if room in booking.room.all():
+                    return(answer)
+
             if not room.is_free(start, end):
                 answer = room.name
             return HttpResponse(answer)
         else:
             raise Http404
-
-class BookingDetailView(DetailView):
-    model = RoomBooking
-    template_name = 'campus/rooms/booking_detail.html'
-    slug_field = "pk"

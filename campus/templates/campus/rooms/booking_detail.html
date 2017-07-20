@@ -1,5 +1,6 @@
 {% extends "base_campus.html" %}
 {% load staticfiles %}
+{% load i18n %}
 
 {% block title %}Événement{% endblock %}
 {% block css %}
@@ -8,11 +9,11 @@
 
 {% block content %}
     <div class="btn-home">
-      <a href="{% url 'campus:rooms:calendar' %}" class="noncolored-a"><span class="fa fa-home"></span> </a>
+      <a href="{% url 'campus:rooms:calendar' %}" class="noncolored-a"><span class="fa fa-calendar"></span> </a>
     </div>
     <div class="container title">
         <h1 class="page-header">
-            Événement
+            {% trans "Événement" %}
         </h1>
     </div>
     <div class="container well" id="content">
@@ -22,6 +23,7 @@
         {% endif %}
         {% endif %}
         <h3>{{ object.description }}</h3>
+        <p>{% trans "De" %} {{ object.start_time|date:"j l H:m:s" }} {% trans "à" %} {{ object.end_time|date:"j l H:m:s" }}</p>
         <p>
             {% for room in object.room.all %}
                 - <i>{{ room.name }}</i><br>
