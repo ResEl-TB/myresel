@@ -87,18 +87,15 @@ class NetworkConfiguration(object):
 
         # If the device in `user` or `inscription` zone, we can retrieve its mac address
         if "user" in zone or "inscription" in zone:
-            # Hack to redirect to the good campus
-            if network.get_campus(ip) == "Rennes" and settings.CURRENT_CAMPUS == "Brest":
-                return HttpResponseRedirect("https://" + settings.MAIN_HOST_RENNES + request.get_full_path())
-            elif network.get_campus(ip) == "Brest" and settings.CURRENT_CAMPUS == "Rennes":
-                return HttpResponseRedirect("https://" + settings.MAIN_HOST_BREST + request.get_full_path())
-
             try:
                  request.network_data['is_registered'] = ldap.get_status(ip)  # TODO: possible bug
             except LDAPSocketOpenError:
                 request.network_data['is_registered'] = True
                 messages.error(request, 'Base de données non joignable. Certaines fonctionnalités ne fonctionneront pas')
-                logger.error("LDAP Unavailable")
+                logger.error(
+                    "LDAP Unavailable",
+                    extra={'message_code': 'LDAP_CONNECTION_ERROR'},
+                )
 
         response = self.get_response(request)
         return response
@@ -187,7 +184,8 @@ class InscriptionNetworkHandler(object):
                                  "device_hostname": host,
                                  "device_zone": zone,
                                  "device_vlan": vlan,
-                                 "user": is_logged_in
+                                 "user": is_logged_in,
+                                 'message_code': 'UNMATCHING_IP_VLAN',
                              })
 
                 # Error ! In vlan 995 without inscription IP address

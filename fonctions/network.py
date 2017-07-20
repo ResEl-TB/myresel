@@ -48,10 +48,13 @@ def get_mac(ip):
         else:
             logger.warning(
                 'ip address %s not find in redis server, is the network watcher ok?' % ip,
-                extra={'ip_address': ip}
+                extra={'ip_address': ip, 'message_code': 'IP_NOT_FIND_REDIS'}
             )
     except redis.exceptions.ConnectionError as e:
-        logger.error('Redis Server Unavailable : %s', str(e))
+        logger.error(
+            'Redis Server Unavailable : %s' % str(e),
+            extra={'message_code': 'REDIS_CONNECTION_ERROR'},
+        )
 
     # FIXME: I don't know how to test that very well, and indeed during
     # local tests, a fake mac is sent. One day we will have a good enough

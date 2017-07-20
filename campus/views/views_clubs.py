@@ -16,7 +16,7 @@ from io import BytesIO
 from PIL import Image
 
 from campus.forms import SendMailForm, ClubManagementForm, ClubEditionForm
-from campus.models.clubs_models import StudentOrganisation
+from campus.models.clubs_models import StudentOrganisation, Association, ListeCampagne
 from gestion_personnes.models import LdapUser, LdapGroup
 from fonctions.decorators import ae_required
 
@@ -55,6 +55,25 @@ def list_clubs(request):
             'hardLinkWhoUser': hardLinkWhoUser,
         }
     )
+
+class ClubDetail(View):
+
+    template_name = "campus/clubs/detail.html"
+
+    def get(self, request, pk):
+        club = StudentOrganisation.get(pk=pk)
+        members = club.members
+        prez=[]
+        if club.prezs:
+            prez = club.prezs[0]
+            uid = re.search('uid=([a-z0-9]+),', prez).group(1)
+            prez = LdapUser.get(pk=uid)
+        users = []
+        for member in members:
+            uid = re.search('uid=([a-z0-9]+),', member).group(1)
+            users += [LdapUser.get(pk=uid)]
+        return render(request, self.template_name, {"club":club, "members":users, "prez":prez})
+
 
 class NewClub(FormView):
     """
@@ -179,24 +198,28 @@ class MyClubs(View):
     View used to list the current user's clubs
     """
 
-    template_name = 'campus/clubs/list_clubs.html'
+    template_name = 'campus/clubs/list.html'
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(MyClubs, self).dispatch(*args, **kwargs)
 
     def get(self, request):
-        clubs = StudentOrganisation.all()
-        clubs = [o for o in clubs if "tbClub" in o.object_classes or "tbClubSport" in o.object_classes]
+        orgas = StudentOrganisation.all()
         #legacy feature; because some prezs aren't members in the ldap for some reason
-        myclubs = [c for c in clubs if request.ldap_user.pk in c.members]
-        myclubs += [c for c in clubs if request.ldap_user.pk in c.prezs and c not in myclubs]
-        myclubs.sort(key=lambda x: x.name)
+        my_orgas = [c for c in orgas if request.ldap_user.pk in c.members]
+        my_orgas += [c for c in orgas if request.ldap_user.pk in c.prezs and c not in my_orgas]
+        my_orgas.sort(key=lambda x: x.name)
 
+        clubs = [o for o in my_orgas if "tbClub" in o.object_classes or "tbClubSport" in o.object_classes]
+        lists = [o for o in my_orgas if "tbCampagne" in o.object_classes]
+        assos = [o for o in my_orgas if "tbAsso" in o.object_classes]
         hardLinkAdd, hardLinkDel, hardLinkAddPrez, hardLinkWhoUser = getHardLinks()
 
         context = {
-            'clubs': myclubs,
+            'clubs': clubs,
+            'assos': assos,
+            'lists': lists,
             'ldapOuPeople': LDAP_DN_PEOPLE,
             'hardLinkAdd': hardLinkAdd,
             'hardLinkDel': hardLinkDel,
@@ -210,15 +233,18 @@ class SearchClub(View):
     View used to list clubs matching the user request
     """
 
-    template_name='campus/clubs/list_clubs.html'
+    template_name='campus/clubs/list.html'
 
     def get(self, request):
         what = request.GET.get('what', '').strip()
         organisations = StudentOrganisation.filter(name__contains=what)
-        clubs = [o for o in organisations if "tbClub" in o.object_classes or "tbClubSport" in o.object_classes]
-        clubs.sort(key=lambda x: x.name)
+        organisations.sort(key=lambda x: x.name)
 
-        if not clubs:
+        clubs = [o for o in organisations if "tbClub" in o.object_classes or "tbClubSport" in o.object_classes]
+        lists = [o for o in organisations if "tbCampagne" in o.object_classes]
+        assos = [o for o in organisations if "tbAsso" in o.object_classes]
+
+        if not (clubs or lists or assos):
             messages.info(request, _("Aucun club ne correspond à votre recherche"))
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
@@ -226,6 +252,8 @@ class SearchClub(View):
 
         context = {
             'clubs': clubs,
+            'assos': assos,
+            'lists': lists,
             'ldapOuPeople': LDAP_DN_PEOPLE,
             'hardLinkAdd': hardLinkAdd,
             'hardLinkDel': hardLinkDel,
@@ -237,7 +265,7 @@ class SearchClub(View):
 
 class AddPersonToClub(View):
     """
-    View used to add a person to a specific club
+    View used to add a person to a specific club/list or asso if he's got the right to do so
     """
 
     @method_decorator(login_required)
@@ -248,6 +276,12 @@ class AddPersonToClub(View):
         uid=request.GET.get('id_user', None)
         try:
             club=StudentOrganisation.get(cn=pk)
+            #If we don't do this we get an error cuz our LDAP scheme does not allow
+            # a single model for each type of organisation
+            if "tbCampagne" in club.object_classes:
+                club=ListeCampagne.get(cn=pk)
+            elif "tbAsso" in club.object_classes:
+                club=Association.get(cn=pk)
         except ObjectDoesNotExist:
             raise Http404("Aucun club trouvé")
 
@@ -263,10 +297,25 @@ class AddPersonToClub(View):
                 except ObjectDoesNotExist:
                     raise Http404("L'utilisateur n'éxiste pas")
 
-        if "tbClub" in club.object_classes and not user.pk in club.members:
+        if not user.pk in club.members and (("tbClub" in club.object_classes or \
+        "tbCampagne" in club.object_classes or "tbClubSport in club.object_classes") or \
+        (self.request.ldap_user.is_campus_moderator() or self.request.ldap_user.pk in club.prezs or\
+        request.user.is_staff)): #Our ldap is crap
             messages.success(request, _("Inscription terminée avec succès"))
             club.members.append(user.pk)
             club.save()
+            if club.email:
+                mail_search = re.search('^([a-z1-9-_.+]+)\@.+$', club.email)
+                mail = mail_search.group(1)
+                subscription_email = EmailMessage(
+                    subject="SUBSCRIBE {} {} {}".format(mail, user.first_name,
+                                                            user.last_name),
+                    body="Inscription automatique de {} a {}".format(user.uid, club.name),
+                    from_email=user.mail,
+                    reply_to=["listmaster@resel.fr"],
+                    to=["sympa@resel.fr"],
+                )
+                subscription_email.send()
         else:
             messages.info(request, _("Le système a déjà trouvé le membre correspondant comme étant inscrit, inscription impossible."))
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
@@ -285,6 +334,12 @@ class AddPrezToClub(View):
 
         try:
             club=StudentOrganisation.get(cn=pk)
+            #If we don't do this we get an error cuz our LDAP scheme does not allow
+            # a single model for each type of organisation
+            if "tbCampagne" in club.object_classes:
+                club=ListeCampagne.get(cn=pk)
+            elif "tbAsso" in club.object_classes:
+                club=Association.get(cn=pk)
         except ObjectDoesNotExist:
             raise Http404("Aucun club trouvé")
 
@@ -297,14 +352,15 @@ class AddPrezToClub(View):
             raise Http404("L'utilisateur n'éxiste pas")
 
         if "tbClub" in club.object_classes and not user.pk in club.prezs:
-            club.prezs.append(user.pk)
+            club.prezs=[user.pk]
             club.save()
             messages.success(request, _("Le président viens d'être ajouté"))
+        else:
+            messages.info(request, _("Cette personne est déjà président(e)"))
+
         if "tbClub" in club.object_classes and not user.pk in club.members:
             club.members.append(user.pk)
             club.save()
-        else:
-            messages.info(request, _("Cette personne est déjà président(e)"))
 
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
@@ -322,6 +378,12 @@ class RemovePersonFromClub(View):
         uid=request.GET.get('id_user', None)
         try:
             club=StudentOrganisation.get(cn=pk)
+            #If we don't do this we get an error cuz our LDAP scheme does not allow
+            # a single model for each type of organisation
+            if "tbCampagne" in club.object_classes:
+                club=ListeCampagne.get(cn=pk)
+            elif "tbAsso" in club.object_classes:
+                club=Association.get(cn=pk)
         except ObjectDoesNotExist:
             raise Http404("Aucun club trouvé")
         if uid == None:
@@ -335,51 +397,49 @@ class RemovePersonFromClub(View):
                     user = LdapUser.get(uid=uid)
                 except ObjectDoesNotExist:
                     raise Http404("L'utilisateur n'éxiste pas")
-        if "tbAsso" not in club.object_classes and user.pk in club.members:
+        if user.pk in club.members:
             club.members.remove(user.pk)
             club.save()
+            if club.email:
+                mail_search = re.search('^([a-z1-9-_.+]+)\@.+$', club.email)
+                mail = mail_search.group(1)
+                subscription_email = EmailMessage(
+                    subject="SIGNOFF {} {} {}".format(mail, user.first_name,
+                                                            user.last_name),
+                    body="Inscription automatique de {} a {}".format(user.uid, club.name),
+                    from_email=user.mail,
+                    reply_to=["listmaster@resel.fr"],
+                    to=["sympa@resel.fr"],
+                )
+                subscription_email.send()
             messages.success(request, _("Désinscription terminée avec succès"))
         else:
             messages.info(request, _("Le système n'a pas trouvé de personne à désinscrire dans la liste des membres"))
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-class RequestMembers(View):
+class RequestClubs(View):
     """
-    View used to request (using ajax) the list of users from a club
+    View used to request (using ajax) alist of clubs
     """
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
-        return super(RequestMembers, self).dispatch(*args, **kwargs)
+        return super(RequestClubs, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax():
-            pk = request.GET.get('pk', None)
-            if pk == None:
-                raise Http404("")
-            try:
-                club=StudentOrganisation.get(cn=pk)
-            except ObjectDoesNotExist:
-                raise Http404("")
-
             #We check if the request is for memebers or prezs
-            if request.path == reverse("campus:clubs:request_members"):
-                entries = club.members
-            elif request.path == reverse("campus:clubs:request_prezs"):
-                entries = club.prezs
-            else:
-                raise Http404("") #U never know
-            results = []
-            for entry in entries:
-                uid = re.search('uid=([a-z0-9]+),', entry).group(1)
-                user = LdapUser.get(pk=uid)
-                user_json = {}
-                user_json['uid'] = user.uid
-                user_json['full_name'] = '%(first_name)s %(last_name)s' % {
-                    'first_name': user.first_name,
-                    'last_name': user.last_name,
-                }
-                results.append(user_json)
+            what = request.GET.get("term", None)
+            if what == None or len(what) <3:
+                raise Http404
+            clubs = StudentOrganisation.filter(name__contains=what)
+            results=[]
+            for club in clubs:
+                club_json = {}
+                club_json['id'] = club.cn
+                club_json['label'] = '%s - %s' % (club.name, club.description[:35])
+                club_json['value'] = club.cn
+                results.append(club_json)
             data = json.dumps(results)
             mimetype = 'application/json'
             return HttpResponse(data, mimetype)

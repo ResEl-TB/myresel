@@ -1,11 +1,26 @@
-.assos-card {
-    margin-top: 20px;
-    margin-bottom: 20px;
+strong {
+    font-weight: bold;
+    font-size: 1.05em;
 }
 
-.assos-img {
-    max-width: 100%;
-    max-height: 100%;
+a, a:hover, a:active, a:visited {
+    color: #8BBF82;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.entries-container {
+  padding:15px;
+}
+
+.assos-card {
+    padding-top: 2%;
+    padding-bottom: 2%;
+}
+
+.alternative-color {
+  background-color: #ececec;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
 }
 
 .navbar-clubs {
@@ -15,4 +30,62 @@
 
 .green {
     color: #8BBF82 !important;
+}
+
+.logo {
+    max-width:85%;
+}
+
+.margin-bottom {
+    margin-bottom: 10px;
+}
+
+.club-name {
+  font-weight: bold;
+  font-size: 1.1em;é
+}
+
+/* Mobile CSS */
+@media (max-width: 991px) {
+
+  .assos-card {
+    background-color: #f5f5f5 !important;
+    margin-bottom: 4%;
+    border: 1px solid #e3e3e3;
+    border-radius: 5px;
+  }
+
+  .entries-container {
+    background-color: transparent;
+    border: none;
+  }
+
+  .mobile-centered {
+    text-align: center;
+  }
+
+  .container {
+    margin: 2%;
+  }
+
+  .logo {
+    max-width: 40%;
+  }
+
+  .alternative-color {
+    background-color: inherit;
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0);
+  }
+
+  .name {
+    color: white;
+    margin-bottom: 2%;
+    font-weight: bold;
+    text-decoration: underline;
+  }
+
+  .club-name {
+    text-decoration: underline;
+    font-size: 1.5em;
+  }
 }

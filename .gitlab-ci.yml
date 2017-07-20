@@ -53,7 +53,7 @@ before_script:
   - python3 manage.py rqworker &
   - python3 manage.py rqscheduler &
 
-test_django:
+django test suite:
   artifacts:
     paths:
       - htmlcov/
@@ -70,21 +70,23 @@ test_django:
     - coverage html
     - grep pc_cov htmlcov/index.html | egrep -o "[0-9]+\%" | awk '{ print "covered " $1;}'
 
-pylint:
+python linting:
   stage: test
   script:
     - pip3 install pylint --quiet
-    - pip3 install pylint-django --quiet  --upgrade
+    - pip3 install pylint-django --quiet --upgrade
     - pylint --rcfile=.pylintrc campus devices fonctions gestion_personnes ldapback myresel pages tresorerie wiki || exit $((35 & $?))
   allow_failure: false
 
-deploy staging:
+deploy to staging:
   services: []
   before_script:
-    - apt-get -qq install curl
+    - apt-get install -qq openssh-client
+    - eval $(ssh-agent -s)
+    - bash -c 'ssh-add <(echo "${STAGING_DEPLOY_KEY}")'
   stage: deploy
   script:
-    - curl http://flea.adm.resel.fr/deploy-resel
+    - ssh -o "StrictHostKeyChecking=no" -T deploy@flea.adm
   only:
     - master
   environment:
@@ -94,10 +96,12 @@ deploy staging:
 deploy to brest:
   services: []
   before_script:
-    - apt-get -qq install curl
+    - apt-get install -qq openssh-client
+    - eval $(ssh-agent -s)
+    - bash -c 'ssh-add <(echo "${SKYNET_DEPLOY_KEY}")'
   stage: deploy
   script:
-    - curl http://skynet.adm.resel.fr/deploy-resel
+    - ssh -o "StrictHostKeyChecking=no" -T deploy@skynet.adm
   only:
     - deploy
   environment:
@@ -107,10 +111,12 @@ deploy to brest:
 deploy to rennes:
   services: []
   before_script:
-    - apt-get -qq install curl
+    - apt-get install -qq openssh-client
+    - eval $(ssh-agent -s)
+    - bash -c 'ssh-add <(echo "${DOUBIDOU_DEPLOY_KEY}")'
   stage: deploy
   script:
-    - curl http://doubidou.adm.resel.fr/deploy-resel
+    - ssh -o "StrictHostKeyChecking=no" -T deploy@doubidou.adm
   only:
     - deploy
   environment:

@@ -1,0 +1,80 @@
+{% extends "base_campus.html" %}
+{% load rooms_extras %}
+{% load staticfiles %}
+{% load i18n%}
+
+{% block title %}{% trans "Gérer les salles" %}{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/campus/rooms.css' %}">
+{% endblock css %}
+
+{% block content %}
+    <div class="container">
+        <div class="row well bigger-bold">
+            <div class="col-sm-2">
+                <p>{% trans "Nom" %}</p>
+            </div>
+            <div class="col-sm-2">
+                {% trans "Emplacement" %}
+            </div>
+            <div class="col-sm-2">
+                {% trans "Mailing List" %}
+            </div>
+            <div class="col-sm-1 text-center">
+                {% trans "Privée" %}
+            </div>
+            <div class="col-sm-2 text-center">
+                {% trans "Clubs" %}
+            </div>
+            <div class="col-sm-3 text-center">
+                {% trans "Administration" %}
+            </div>
+        </div>
+        {% for room in object_list %}
+        <div class="row well">
+            <div class="col-sm-2">
+                <p class="bigger-bold">{{ room.name }}</p>
+            </div>
+            <div class="col-sm-2">
+                <p>
+                {% if room.location == "F" %}{% trans "Foyer" %}
+                {% elif room.location == "S"%}{% trans "École" %}
+                {% elif room.location == "O" %}{% trans "Éxtérieur" %}
+                {% elif room.location == "C" %}{% trans "Campus" %}
+                {% endif %}
+                </p>
+            </div>
+            <div class="col-sm-2">
+                {% if room.mailing_list %}
+                <p><a href="mailto:{{room.mailing_list}}">{{room.mailing_list}}</a></p>
+                {% else %}
+                N/A
+                {% endif %}
+            </div>
+            <div class="col-sm-1 text-center" style="color: green">
+                {% if room.private %}<span class="glyphicon glyphicon-ok"></span>{% endif %}
+            </div>
+            <div class="col-sm-2 small text-center">
+                <p>
+                    {% for club in room.clubs|get_clubs %}
+                    {{club}}
+                    {% endfor %}
+                </p>
+            </div>
+            <div class="col-sm-1 text-center">
+                <form class="form-inline"  action="{% url 'campus:rooms:edit-room' room.pk %}" method="get">
+                    {% csrf_token %}
+                    <button class="btn btn-default"><span class="fa fa-edit"></span> Éditer</button>
+                </form>
+            </div>
+            <div class="col-sm-1 text-center">
+                <form class="form-inline"  action="{% url 'campus:rooms:delete-room' room.pk %}" method="post">
+                    {% csrf_token %}
+                    <button class="btn btn-danger" ><span class="fa fa-trash"></span> Supprimer</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

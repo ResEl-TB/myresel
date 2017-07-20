@@ -14,6 +14,10 @@
    margin-top: 3%;
 }
 
+.right-separator {
+  border-right: 1px solid rgb(87, 87, 87);
+}
+
 label input {
     position: relative;
     vertical-align: bottom;;
@@ -24,22 +28,12 @@ label input {
    width: 100%;
 }
 
-.noncolored-a, .noncolored-a:hover, .noncolored-a:visited, .noncolored-a:focus{
-   color: inherit;
-   cursor: pointer;
-   text-decoration: none;
-}
-
 .form-category label{
    font-weight: normal;
 }
 
 .results h3 {
    font-size: 1.1em;
-}
-
-.dell-user, .dell-user:hover, .dell-user:visited {
-  color: red;
 }
 
 .user-photo {
@@ -51,4 +45,27 @@ label input {
   height: 150px;
   max-width: 150px;
   box-shadow: -1px 0px 15px rgba(0,0,0,0.5);
+}
+
+.margin-bottom-20{
+  margin-bottom: 20px;
+}
+
+/* Mobile CSS */
+@media (max-width: 991px) {
+
+  .right-separator {
+    border-right: 0px solid rgb(87, 87, 87);
+  }
+
+  .mobile-centered {
+    text-align: center;
+  }
+
+  .centered-list {
+    text-align: center;
+    padding: 0px;
+    list-style-type: none;
+
+  }
 }

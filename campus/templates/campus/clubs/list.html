@@ -12,72 +12,78 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-12 well">
-          <h2>{% trans 'Assos' %}</h2>
+        <div class="col-md-12 well entries-container">
+          <h1 class="mobile-centered name">{% trans 'Assos' %}</h1>
             {% for asso in assos %}
-            <div class="row assos-card">
-                <div class="col-md-3 col-md-offset-1">
-                  {% if asso.logo %}
-                  <img class="assos-img" src="/media/image/ASSOS/{{ asso.logo }}">
+            <div class="row assos-card mobile-centered {% if forloop.counter|divisibleby:2 %} alternative-color {% endif %}">
+                <div class="col-sm-2 col-sm-offset-1 text-center">
+                  {% if asso.logo and asso.logo != "None" %}
+                  <img class="logo" src="/media/image/ASSOS/{{ asso.logo }}">
                   {% else %}
-                  <img class="assos-img" src="{% static 'images/campus/orga.png' %}">
+                  <img class="logo" src="{% static 'images/campus/orga.png' %}">
                   {% endif %}
                 </div>
-                <div class="col-md-5">
-                    <h2>{{ asso.name }}</h2>
-                    <p>{{ asso.description }}</p>
+                <div class="col-sm-6 mobile-margin-top">
+                    <p class="club-name">{{ asso.name }}</p>
+                    <p>{{ asso.description|truncatewords:30 }}</p>
                     {% if asso.email %}
-                    <p>Mailing list: <a href="mailto:{{ asso.email }}">{{ asso.email}}</a></p>
+                    <p><a href="mailto:{{ asso.email }}"><p><span class="fa fa-envelope"><span> <a href="mailto:{{ asso.email }}"> {{ asso.email}}</a></p>
                     {% endif %}
                     {% if asso.website %}
-                    <p><a href="http://{{ asso.website }}">En savoir plus</a></p>
+                    <p><a href="http://{{ asso.website }}"><span class="fa fa-globe"></span> {{ asso.website }}</a></p>
                     {% endif %}
+                    <a href="{% url 'campus:clubs:club_detail' asso.cn %}"><span class="fa fa-info-circle"></span> En savoir plus</a>
                 </div>
-                <div class="col-md-3">
+                <div class="col-sm-3 mobile-margin-top">
+                    {% if request.user.is_authenticated %}
+                    {% if request.ldap_user.is_campus_moderator or 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in asso.prezs or request.user.is_staff %}
+                    <p><button class="btn btn-success" data-toggle="collapse" data-target="#{{asso.cn}}"><span class="fa fa-angle-double-down"></span> Actions <span class="fa fa-angle-double-down"></span></button></p>
+                    <div class="collapse" id="{{asso.cn}}">
+                        {% if 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in asso.members%}
+                        <p><a href="{% url 'campus:clubs:remove-person' asso.cn%}"><span class="fa fa-sign-out"></span> me désinscrire</a></p>
+                        {% endif %}
+                        {% if request.ldap_user.is_campus_moderator or 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in asso.prezs or request.user.is_staff %}
+                        <p><a href="{% url 'campus:clubs:edit' asso.cn%}"><span class="fa fa-edit"></span> éditer</a></p>
+                        <p><a class="addPersonLink" data-toggle="modal" data-target="#addPerson" data="{{asso.cn}}"><span class="fa fa-user-plus"></span> inscrire un membre</a></p>
+                        <p><a class="delPersonLink" data-toggle="modal" data-target="#delPerson" data="{{asso.cn}}"><span class="fa fa-user-times"></span> désinscrire un membre</a></p>
+                        <p><a class="addPrezLink" data-toggle="modal" data-target="#addPrez" data="{{asso.cn}}"><span class="fa fa-street-view"></span> effectuer une passation</a></p>
+                        {% endif%}
+                    </div>
+                    {% endif %}
+                    {% endif %}
                 </div>
             </div>
             {% empty%}
-            {% trans "Une erreur est servenue pendant la récupération des assos" %}
+            {% trans "Aucune association trouvée" %}
             {% endfor %}
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12 well">
-            <h2>{% trans 'Clubs' %}</h2>
+        <div class="col-md-12 well entries-container">
+            <h1 class="mobile-centered name">{% trans 'Clubs' %}</h1>
             {% for club in clubs %}
-            <div class="row assos-card">
-                <div class="col-md-3 col-md-offset-1">
-                  {% if club.logo %}
-                  <img class="assos-img" src="/media/image/CLUB/{{ club.logo }}">
+            <div class="row assos-card mobile-centered {% if forloop.counter|divisibleby:2 %} alternative-color {% endif %}">
+                <div class="col-sm-2 col-sm-offset-1 text-center">
+                  {% if club.logo and club.logo != "None" %}
+                  <img class="logo" src="/media/image/CLUB/{{ club.logo }}">
                   {% else %}
-                  <img class="assos-img" src="{% static 'images/campus/orga.png' %}">
+                  <img class="logo" src="{% static 'images/campus/orga.png' %}">
                   {% endif %}
                 </div>
-                <div class="col-md-5">
-                    <h2>{{ club.name }}</h2>
-                    <p>{{ club.description }}</p>
-                    {% if club.website %}
-                    <p>Mailing list: <a href="mailto:{{ club.email }}">{{ club.email}}</a></p>
+                <div class="col-sm-6 mobile-margin-top">
+                    <p class="club-name">{{ club.name }}</p>
+                    <p>{{ club.description|truncatewords:30 }}</p>
+                    {% if club.email %}
+                    <p><a href="mailto:{{ club.email }}"><p><span class="fa fa-envelope"><span> <a href="mailto:{{ club.email }}"> {{ club.email}}</a></p>
                     {% endif %}
                     {% if club.website %}
-                    <p><a href="http://{{ club.website }}">En savoir plus</a></p>
+                    <p><a href="http://{{ club.website }}"><span class="fa fa-globe"></span> {{ club.website }}</a></p>
                     {% endif %}
-                    {% if user.is_authenticated%}
-                    <p>
-                        <a data-toggle="collapse" data-target="#prezs_{{club.cn}}" id="prezs_{{club.cn}}_btn"><span class="fa fa-angle-double-down"></span> Présidents <span class="fa fa-angle-double-down"></span></a>
-                        <ul class="collapse" id="prezs_{{club.cn}}">
-                        </ul>
-                    </p>
-                    <p>
-                        <a data-toggle="collapse" data-target="#membres_{{club.cn}}" id="membres_{{club.cn}}_btn"><span class="fa fa-angle-double-down"></span> Membres <span class="fa fa-angle-double-down"></span></a>
-                        <ul class="collapse" id="membres_{{club.cn}}">
-                        </ul>
-                    </p>
-                    {% endif %}
+                    <a href="{% url 'campus:clubs:club_detail' club.cn %}"><span class="fa fa-info-circle"></span> En savoir plus</a>
                 </div>
-                <div class="col-md-3">
+                <div class="col-sm-3 mobile-margin-top">
                     {% if request.user.is_authenticated %}
-                    <p><button class="btn btn-info" data-toggle="collapse" data-target="#{{club.cn}}"><span class="fa fa-angle-double-down"></span> Actions <span class="fa fa-angle-double-down"></span></button></p>
+                    <p><button class="btn btn-success" data-toggle="collapse" data-target="#{{club.cn}}"><span class="fa fa-angle-double-down"></span> Actions <span class="fa fa-angle-double-down"></span></button></p>
                     <div class="collapse" id="{{club.cn}}">
                         {% if not 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in club.members%}
                         <p><a href="{% url 'campus:clubs:add-person' club.cn%}"><span class="fa fa-sign-in"></span> m'inscrire</a></p>
@@ -88,45 +94,61 @@
                         <p><a href="{% url 'campus:clubs:edit' club.cn%}"><span class="fa fa-edit"></span> éditer</a></p>
                         <p><a class="addPersonLink" data-toggle="modal" data-target="#addPerson" data="{{club.cn}}"><span class="fa fa-user-plus"></span> inscrire un membre</a></p>
                         <p><a class="delPersonLink" data-toggle="modal" data-target="#delPerson" data="{{club.cn}}"><span class="fa fa-user-times"></span> désinscrire un membre</a></p>
-                        <p><a class="addPrezLink" data-toggle="modal" data-target="#addPrez" data="{{club.cn}}"><span class="fa fa-street-view"></span> ajouter un président</a></p>
+                        <p><a class="addPrezLink" data-toggle="modal" data-target="#addPrez" data="{{club.cn}}"><span class="fa fa-street-view"></span> effectuer une passation</a></p>
                         {% endif%}
                     </div>
                     {% endif %}
                 </div>
             </div>
             {% empty %}
-            {% trans "Une erreur est servenue pendant la récupération des clubs" %}
+            {% trans "Aucun club trouvé" %}
             {% endfor %}
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12 well">
-            <h2>{% trans 'Listes' %}</h2>
+        <div class="col-md-12 well entries-container">
+            <h1 class="mobile-centered name">{% trans 'Listes' %}</h1>
             {% for list in lists %}
-            <div class="row assos-card">
-                <div class="col-md-3 col-md-offset-1">
-                    {% if list.logo %}
-                    <img class="assos-img" src="/media/image/LIST/{{ list.logo }}">
-                    {% else %}
-                    <img class="assos-img" src="{% static 'images/campus/orga.png' %}">
-                    {% endif %}
+            <div class="row assos-card mobile-centered {% if forloop.counter|divisibleby:2 %} alternative-color {% endif %}">
+                <div class="col-sm-2 col-sm-offset-1 text-center">
+                  {% if list.logo and list.logo != "None" %}
+                  <img class="logo" src="/media/image/LIST/{{ list.logo }}">
+                  {% else %}
+                  <img class="logo" src="{% static 'images/campus/orga.png' %}">
+                  {% endif %}
                 </div>
-                <div class="col-md-5">
-                    <h2>{{ list.name }}</h2>
-                    <p>{{ list.description }}</p>
-                    <p>Année de campagne: {{ list.campagneYear }}</p>
-                    {% if list.website %}
-                    <p>Mailing list: <a href="mailto:{{ list.email }}">{{ list.email}}</a></p>
+                <div class="col-sm-6 mobile-margin-top">
+                    <p class="club-name">{{ list.name }}</p>
+                    <p>{{ list.description|truncatewords:30 }}</p>
+                    {% if list.email %}
+                    <p><a href="mailto:{{ list.email }}"><span class="fa fa-envelope"><span> <a href="mailto:{{ list.email }}"> {{ list.email}}</a></p>
                     {% endif %}
                     {% if list.website %}
-                    <p><a href="http://{{ list.website }}">En savoir plus</a></p>
+                    <p><a href="http://{{ list.website }}"><span class="fa fa-globe"></span> {{ list.website }}</a></p>
                     {% endif %}
+                    <a href="{% url 'campus:clubs:club_detail' list.cn %}"><span class="fa fa-info-circle"></span> En savoir plus</a>
                 </div>
-                <div class="col-md-3">
+                <div class="col-sm-3 mobile-margin-top">
+                    {% if request.user.is_authenticated %}
+                    <p><button class="btn btn-success" data-toggle="collapse" data-target="#{{list.cn}}"><span class="fa fa-angle-double-down"></span> Actions <span class="fa fa-angle-double-down"></span></button></p>
+                    <div class="collapse" id="{{list.cn}}">
+                        {% if not 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in list.members%}
+                        <p><a href="{% url 'campus:clubs:add-person' list.cn%}"><span class="fa fa-sign-in"></span> m'inscrire</a></p>
+                        {% else %}
+                        <p><a href="{% url 'campus:clubs:remove-person' list.cn%}"><span class="fa fa-sign-out"></span> me désinscrire</a></p>
+                        {% endif %}
+                        {% if request.ldap_user.is_campus_moderator or 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in list.prezs or request.user.is_staff%}
+                        <p><a href="{% url 'campus:clubs:edit' list.cn%}"><span class="fa fa-edit"></span> éditer</a></p>
+                        <p><a class="addPersonLink" data-toggle="modal" data-target="#addPerson" data="{{list.cn}}"><span class="fa fa-user-plus"></span> inscrire un membre</a></p>
+                        <p><a class="delPersonLink" data-toggle="modal" data-target="#delPerson" data="{{list.cn}}"><span class="fa fa-user-times"></span> désinscrire un membre</a></p>
+                        <p><a class="addPrezLink" data-toggle="modal" data-target="#addPrez" data="{{list.cn}}"><span class="fa fa-street-view"></span> effectuer une passation</a></p>
+                        {% endif%}
+                    </div>
+                    {% endif %}
                 </div>
             </div>
             {% empty %}
-            {% trans "Une erreur est servenue pendant la récupération des listes" %}
+            {% trans "Aucune liste trouvée" %}
             {% endfor %}
         </div>
     </div>
@@ -141,7 +163,12 @@
                 </div>
                 <div class="alert alert-danger text-center remove-radius">
                     <span class="fa fa-spin fa-warning"></span>
-                    <p>Attention, cette action n'est pas sans conséquences. <br />Assurez-vous de renseigner la bonne personne.</p>
+                    <p>
+                        Attention, cette action n'est pas sans conséquences. <br />
+                        Le président actuel sera destitué <br />
+                        Assurez-vous de renseigner la bonne personne. <br />
+                        En cas d'erreur <a href="{% url 'contact'%}"> contactez un administrateur ResEl </a>
+                    </p>
                 </div>
                 <div class="modal-body">
                     <p>{% trans "Entrer la personne à ajouter en tant que président à ce club:" %}</p>
@@ -268,59 +295,5 @@
           minLength: 3,
       });
     })
-
-    {% if user.is_authenticated%}
-    function fetchMembers(pk, type) {
-      var get_data = {'pk':pk};
-      var correct_url;
-      if(type=="members"){
-          correct_url = "{% url 'campus:clubs:request_members'%}";
-      }else {
-          correct_url = "{% url 'campus:clubs:request_prezs'%}";
-      }
-      $.ajax({
-        url:correct_url,
-        data: get_data,
-        dataType:"json",
-        success:function(data) {
-          var node = document.createElement("LI");
-          if(data.length == 0){
-            if(type=="members"){
-                var text = document.createTextNode("Il n'y a aucun membre");
-                node.appendChild(text);
-                document.getElementById("membres_"+pk).appendChild(node);
-            }else {
-                var text = document.createTextNode("Il n'y a aucun président");
-                node.appendChild(text);
-                document.getElementById("prezs_"+pk).appendChild(node)
-            }
-          }
-          for(i=0; i<data.length; i++){
-            var node = document.createElement("LI");
-            var link = document.createElement("A");
-            var textlink = document.createTextNode(data[i]['full_name']);
-            link.href="{{hardLinkWhoUser}}"+data[i]['uid'];
-            link.appendChild(textlink);
-            node.appendChild(link);
-            if(type=="members"){
-                document.getElementById("membres_"+pk).appendChild(node);
-            }else {
-                document.getElementById("prezs_"+pk).appendChild(node);
-            }
-          };
-        }
-      });
-    }
-
-    {% for club in clubs %}
-        var btn_{{club.cn|remove_unwanted_strings}} = document.getElementById("membres_{{club.cn}}_btn");
-        $(btn_{{club.cn|remove_unwanted_strings}}).one("click", function(){fetchMembers("{{club.cn}}", "members"); btn_{{club.cn|remove_unwanted_strings}}.onclick=null;});
-    {% endfor %}
-
-    {% for club in clubs %}
-        var btn_{{club.cn|remove_unwanted_strings}} = document.getElementById("prezs_{{club.cn}}_btn");
-        $(btn_{{club.cn|remove_unwanted_strings}}).one("click", function(){fetchMembers("{{club.cn}}", "prezs"); btn_{{club.cn|remove_unwanted_strings}}.onclick=null;});
-    {% endfor %}
-    {% endif %}
 </script>
 {% endblock %}

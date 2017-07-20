@@ -10,52 +10,56 @@
 {% endblock %}
 
 {% block content %}
+
+<div class="btn-home">
+  <a href="{% url 'campus:who:user-home' %}" class="noncolored-a"><span class="fa fa-home"></span> {% trans "" %} </a>
+</div>
+
  <div class="container">
     <div class="row">
-        <div class="col-md-2" style="color: white">
-            <a href="{% url 'campus:who:user-home' %}" class="noncolored-a"><span class="fa fa-arrow-circle-o-left"> {% trans "Retour à l'accueil" %} </span></a>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-            <h1 class="page-header text-center" style="color: white;">
-                {{display_user.first_name}} {{display_user.last_name|upper}}
-            </h1>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12">
-           <h3 class="text-center" style="color: white;">
+      <div class="col-md-6 well">
+        <div class="col-md-4 user-photo">
              {% if display_user.photo_file == "" %}
-             <div class="user-photo">
                <img src="{% static "images/campus/photo-placeholder.jpg" %}" />
-             </div>
              {% else %}
-             <div class="user-photo">
                <img src="/media/image/users_photo/{{display_user.photo_file}}" />
-             </div>
              {% endif %}
-             <b>{% trans "Promo" %}</b> : {{display_user.promo}}
-             {% if display_user.formation != "" %}<b>{% trans "Formation" %}</b> : {{display_user.formation}}<br />{% endif %}
-             {% if display_user.is_public == True %}
-               <b>Email:</b> <a href="mailto:{{ display_user.mail}}" style="color: inherit !important;">{{ display_user.mail }}</a><br>
-               {% if display_user.campus != "None"%}
-                  <b>Anniversaire: </b>{{ display_user.birth_date.date }}<br>
-                  <b>Batiment:</b> {{display_user.building}} <b>Chambre:</b> {{display_user.room_number}}<br>
-               {% else %}
-                  <b>Adresse:</b> {{display_user.postal_address}}
-               {% endif %}
-              {% endif %}
-           </h3>
         </div>
+        <div class="col-md-8 mobile-centered">
+            <h3>{{display_user.first_name}} {{display_user.last_name}}</h3>
+            <b>{% trans "Promo" %}</b> : {{display_user.promo}}
+            {% if display_user.formation != "" %}<b>{% trans "Formation" %}</b> : {{display_user.formation}}<br />{% endif %}
+            {% if display_user.is_public == True %}
+              <b>Email:</b> <a href="mailto:{{ display_user.mail}}" style="color: inherit !important;">{{ display_user.mail }}</a><br>
+              {% if display_user.campus != "None"%}
+                <b>Anniversaire: </b>{{ display_user.birth_date.date }}<br>
+                <b>Batiment:</b> {{display_user.building}} <b>Chambre:</b> {{display_user.room_number}}<br>
+              {% else %}
+                <b>Adresse:</b> {{display_user.postal_address}}
+              {% endif %}
+              {% endif %}
+        </div>
+      </div>
+      <div class="col-md-offset-1 col-md-5 well">
+        <h3 class="text-center">{% trans "Clubs" %}</h3>
+        <ul class="centered-list">
+          {% for club in clubs %}
+             <li><a href="{% url 'campus:clubs:club_detail' club.cn %}">{{club.name}}</a></li>
+         {% empty %}
+             <p class="text-center">{{display_user.first_name}} {{display_user.last_name|upper}} {% trans " n'est membre d'aucun club" %}</p>
+         {% endfor %}
+        </ul>
+      </div>
     </div>
 
      <div class="row margin-top">
-         <div class="col-md-offset-1 col-md-5">
-            <div class="col-md-12 well">
+         <div class="col-md-12 well ">
+            <div class="col-md-6 right-separator">
                 <h3 class="text-center category-title">{% trans "Parrains" %}{% if ldapuser.uid == display_user.uid %}  <a style="padding:0 0 0 0;" class="btn" data-toggle="modal" data-target="#addParain"><span class="fa fa-plus-circle" style="color:#8BBF82"></span></a>{% endif %}</h3>
-                <ul>
                 {% for godparent in display_user.godparents %}
+                {% if forloop.first %}
+                <ul class="centered-list">
+                {% endif %}
                 <li>
                   <a href="{% url 'campus:who:user-details' godparent.uid %}">{{godparent.first_name}} {{godparent.last_name|upper}}</a>
                   ({%trans 'Promo' %} {{godparent.promo}})
@@ -63,17 +67,19 @@
                     <a class="fa fa-trash-o dell-user" href="{% url 'campus:who:remove-person' godparent.uid True %}" title="{% trans 'Supprimer' %}"></a>
                   {% endif %}
                 </li>
-                {% empty %}
-                {{display_user.first_name}} {{display_user.last_name|upper}} {% trans " n'a pas de parrain" %}
-                {% endfor %}
+                {% if forloop.last %}
                 </ul>
+                {% endif %}
+                {% empty %}
+                  <p class="text-center">{{display_user.first_name}} {{display_user.last_name|upper}} {% trans " n'a pas de parrain" %}</p>
+                {% endfor %}
             </div>
-         </div>
-         <div class="col-md-5">
-            <div class="col-md-12 well">
+            <div class="col-md-6">
                 <h3 class="text-center">{% trans "Filleuls" %} {% if ldapuser.uid == display_user.uid %}  <a style="padding:0 0 0 0;" class="btn" data-toggle="modal" data-target="#addBizu"><span class="fa fa-plus-circle" style="color:#8BBF82"></span></a>{% endif %}</h3>
-                <ul>
                 {% for godchild in display_user.godchildren %}
+                {% if forloop.first %}
+                <ul class="centered-list">
+                {% endif %}
                 <li>
                   <a href="{% url 'campus:who:user-details' godchild.uid %}">{{godchild.first_name}} {{godchild.last_name|upper}}</a>
                   ({%trans 'Promo' %} {{godchild.promo}})
@@ -81,24 +87,17 @@
                     <a class="fa fa-trash-o dell-user" href="{% url 'campus:who:remove-person' godchild.uid False %}" title="{% trans 'Supprimer' %}"></a>
                   {% endif %}
                 </li>
-                {% empty %}
-                {{display_user.first_name}} {{display_user.last_name|upper}} {% trans " n'a pas de filleul" %}
-                {% endfor %}
+                {% if forloop.last %}
                 </ul>
+                {% endif %}
+                {% empty %}
+                  <p class="text-center">{{display_user.first_name}} {{display_user.last_name|upper}} {% trans " n'a pas de filleul" %}</p>
+                {% endfor %}
             </div>
          </div>
      </div>
      <div class="row">
-         <div class="col-md-offset-1 col-md-5">
-            <div class="col-xs-12 well">
-               <h3 class="text-center">{% trans "Clubs" %}</h3>
-                    {% for club in clubs %}
-                        <p>{{club.name}}</p>
-                    {% empty %}
-                        {{display_user.first_name}} {{display_user.last_name|upper}} {% trans " est membre d'aucun club" %}
-                    {% endfor %}
-            </div>
-         </div>
+
      </div>
 </div>
 

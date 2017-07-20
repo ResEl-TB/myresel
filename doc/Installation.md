@@ -45,10 +45,10 @@ n'ont pas internet, il faut rajouter des exeptions au Firewall. Cela est fait
 actuellement au moyen d'un script sur `Zahia`. Il est disponible à :
 `zahia:/srv/scripts/stripe_ips.py`
 
-## Installation de base
+## Installation des dépendances
 
 Installez une machine proprement comme on le fait au ResEl, avec Debian, Munin,
-Icinga, Backuppc, le proxy http bien configuré. Avec un peu de change vous
+Icinga, Backuppc, le proxy http bien configuré. Avec un peu de chance vous
 ferez ça avec Ansible, mais je ne me fais pas trop d'illusions non plus...
 
 Installez les paquets nécessaires :
@@ -59,26 +59,6 @@ apt install libmysqlclient-dev ldap-utils libldap2-dev libsasl2-dev libssl-dev l
 ```
 
 ### Installation du site
-
-#### Configurer l'utilisateur www-data
-
-Afin de pouvoir télécharger les dernières versions sur site ResEl, il faut que
-l'utilisateur `www-data` ait les bons droits. Modifier `/etc/passwd` :
-```
-www-data:x:33:33:www-data:/var/www:/bin/zsh
-```
-
-Lui créer une clé SSH sans mot de passe:
-```bash
-chown www-data:www-data /var/www
-su -- www-data
-ssh-keygen -t rsa -b 4096
-cat /var/www/.ssh/id_rsa.pub
-exit
-```
-
-Ajoutez cette clé aux clés autorisées sur gitlab en l'ajoutant dans l'onglet:
-`Settings > Repository > Deploys Keys`
 
 Créez un dossier `/srv/www/resel.fr/`, donnez-le à l'utilisateur `www-data`:
 ```bash
@@ -110,7 +90,55 @@ ln -s /etc/nginx/sites-available/resel.fr /etc/nginx/sites-enabled/resel.fr
 ```
 On redémarrera nginx plus tard
 
-#### Configuration des hooks (optionnel)
+
+#### Configuration des hooks ssh
+
+Les hooks permettent de  mettre à jour automatique l'installation sans avoir
+à puller le code à la main.
+
+Créez un utilisateur `deploy` :
+```bash
+adduser deploy
+adduser deploy sshusers
+adduser deploy www-data
+```
+
+
+Afin de pouvoir télécharger les dernières versions sur site ResEl, il faut que
+l'utilisateur `deploy` ait les bons droits. Modifier `/etc/passwd` :
+```
+deploy:x:1004:1005::/home/deploy:/srv/www/resel.fr/.install/deploy.sh
+```
+
+Lui créer une clé SSH sans mot de passe:
+```bash
+ssh-keygen -t rsa -b 4096 -f /home/deploy/.ssh/id_rsa
+cat /home/deploy/.ssh/id_rsa.pub
+exit
+```
+
+Ajoutez cette clé aux clés autorisées sur gitlab en l'ajoutant dans l'onglet:
+`Settings > Repository > Deploys Keys`
+
+Modifiez `visudo` et ajoutez la ligne suivante : 
+```
+deploy          ALL=NOPASSWD: /bin/chown, /bin/systemctl, /bin/chmod
+```
+
+Enfin on va ajoute sa clé privée au secrets de gitlab:
+
+Copiez la clé : `cat /home/deploy/.ssh/id_rsa`
+
+Dans le repo myresel : `Settings > Pipelines > Secret variables`
+Ajoutez une clé par exemple `STAGING_DEPLOY_KEY`
+
+
+#### Configuration des hooks nginx [obsolète]
+
+:warning: OBSOLÈTE :warning:, veuillez utiliser les hook ssh (décrit par la
+suite). Si ceci est laissé c'est parce que ceci est toujours en prod sur 
+skynet et doubidou.
+
 Les hooks permettent de mettre automatiquement à jour le code lorsque celui-ci est déployé.
 
 Les hooks utilisent la syntaxe lua pour nginx, pour les faire fonctionner vous devez ajouter le packet :
@@ -124,7 +152,6 @@ cp /srv/www/resel.fr/.install/etc/nginx-hook.conf /etc/nginx/sites-available/hoo
 vim /etc/nginx/sites-available/hook
 ln -s /etc/nginx/sites-available/hook /etc/nginx/sites-enabled/hook
 ```
-
 ### Configuration de uwsgi
 Installer uwsgi:
 ```bash
@@ -153,32 +180,41 @@ Configurer nginx pour utiliser uwsgi:
 ```bash
 cp /srv/www/resel.fr/.install/etc/nginx-uwsgi.conf /etc/nginx/conf.d/uwsgi_params.conf
 ```
-### Ajout des cron jobs nécessaires
+### Ajout des cron jobs nécessaires et des services
+
 Nous avons actuellement un job qui tourne régulièrement pour repopuler la base
 de donnée REDIS pour choisir une adresse ip.
 
 Il suffit de simplement copier le fichier de cron :
-```
+```bash
 cp .install/etc/cronfile /etc/cron.d/myresel
 ```
+
+Pour les services de tâche de fond, comme la création de factures, créez les
+services systemd en copiant les fichiers suivants :
+```bash
+cp .install/etc/rq-worker.service /etc/systemd/system/rq-worker.service
+cp .install/etc/rq-scheduler.service /etc/systemd/system/rq-scheduler.service
+```
+
 
 ### Configuration du site
 
 Créez le fichier `myresel/settings_local.py` et remplissez-le convenablement en vous inspirant du fichier `myresel/settings_local.py.tpl`.
 ```bash
-su -- www-data 
 cp myresel/settings_local.py.tpl myresel/settings_local.py
 vim myresel/settings_local.py
+chmod -R www-data .
 ```
 
 Ne pas oublier en créant la configuration :
 * De changer la clé secrête
-* De passer DEBUG à False
-* De bien choisir le campus sur lequel est le site
+* De passer `DEBUG` à False
+* De bien choisir le campus sur lequel est le site `Brest` ou `Rennes`
 * D'ajouter les commandes de rechargement du firewall et du DNS
 * De configurer les bases de données (ldap, MySQL, QOS, REDIS)
 * D'ajouter les clés Stripe (de prod pour la prod)
-* De configurer LAPUTEX
+* De configurer LaPuTeX
 
 ### Création du virtual env python
 
@@ -193,11 +229,17 @@ pip3 install -Ur requirements.txt
 
 ### Lancement du service
 
-Lancer les services en tache de fond :
+[obsolète] Lancer les services en tache de fond :
 ```
 supervisorctl
 start rqworker
 systemctl restart cron
+```
+
+Lancer les services en tâche de fond :
+```
+systemctl start rq-worker.service
+systemctl start rq-scheduler.service
 ```
 
 Démarrez nginx :
@@ -210,11 +252,6 @@ systemctl start nginx
 Le monitoring sur l'application est multiple, cela permet d'avoir le plus de métriques possible en fonction des problèmes rencontrés. Ceux-là vont des métriques "normales" du ResEl à d'autres plus poussées
 
 Installez le service sur une machine du ResEl bien configurée avec [Munin](https://munin.resel.fr) et [Icinga](https://icinga.resel.fr).
-
-Il existe un plugin pour icinga de supervisor : 
-
-Supervisor : https://github.com/nationbuilder/supervisord-nagios
-
 
 TODO: nginx, veronica, mails...
 

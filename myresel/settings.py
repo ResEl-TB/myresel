@@ -365,7 +365,7 @@ PROD_LOGGING_CONF = {
             'host': 'orion.adm.resel.fr',
             'port': 5959,  # Default value: 5959
             'version': 1,
-            'message_type': 'logstash',
+            'message_type': 'django',
             'fqdn': False,  # Fully qualified domain name. Default value: false.
             'tags': None,  # list of tags. Default: None.
         },
@@ -416,12 +416,21 @@ DEBUG_LOGGING_CONF = {
     },
 }
 
+# Profiling configuration
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': lambda request: True,
+    'SHOW_COLLAPSED': True,
+}
 
-if DEBUG or TESTING:
+if DEBUG and not TESTING:
+    INSTALLED_APPS += ['debug_toolbar',]
+    MIDDLEWARE = ['debug_toolbar.middleware.DebugToolbarMiddleware',] + MIDDLEWARE
+    # INTERNAL_IPS = ['10.0.3.1']
+
+elif DEBUG or TESTING:
     LOGGING = DEBUG_LOGGING_CONF
+    for queueConfig in RQ_QUEUES.values():
+        queueConfig['ASYNC'] = False
 else:
     LOGGING = PROD_LOGGING_CONF
 
-if DEBUG or TESTING:
-    for queueConfig in RQ_QUEUES.values():
-        queueConfig['ASYNC'] = False

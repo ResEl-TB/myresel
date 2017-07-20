@@ -48,10 +48,10 @@ class UserDetails(View):
         clubs = StudentOrganisation.all()
         clubs = [o for o in clubs if "tbClub" in o.object_classes or "tbClubSport" in o.object_classes]
         #legacy feature; because some prezs aren't members in the ldap for some reason
-        myclubs = [c for c in clubs if request.ldap_user.pk in c.members]
-        myclubs += [c for c in clubs if request.ldap_user.pk in c.prezs and c not in myclubs]
-        myclubs.sort(key=lambda x: x.name)
-        return render(request, self.template_name, {'display_user' : user, 'clubs':myclubs})
+        userClubs = [c for c in clubs if user.pk in c.members]
+        userClubs += [c for c in clubs if user.pk in c.prezs and c not in userClubs]
+        userClubs.sort(key=lambda x: x.name)
+        return render(request, self.template_name, {'display_user' : user, 'clubs':userClubs})
 
     def getGods(self, user):
         """
@@ -144,7 +144,7 @@ class UserHome(View):
             #TODO: something better and re-usable
             photo_file = request.FILES.get('photo', False)
             remove_photo = form.cleaned_data["remove_photo"]
-            if photo_file and remove_photo == False:
+            if photo_file: #If the user uploads a photo and at the same time wants to remove it, we assule he just wants a new one
                 photo = Image.open(BytesIO(photo_file.read()))
                 try:
                     path = MEDIA_ROOT+"/image/users_photo/PROMO_"+user.promo+"/"
@@ -155,7 +155,6 @@ class UserHome(View):
                 user.photo_file = "PROMO_"+user.promo+"/"+user.uid
             elif remove_photo:
                 user.photo_file = ""
-                form.data["remove_photo"] = False
 
             user.mail = mail
             user.campus = form.cleaned_data["campus"]
@@ -269,11 +268,11 @@ class AddPerson(View):
             messages.success(request, _("Vous ne pouvez pas vous ajouter vous même."))
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-        if not godchild.pk in godparent.uid_godchildren :
+        if (not godchild.pk in godparent.uid_godchildren) and (not godchild.pk in godparent.uid_godparents):
             godparent.uid_godchildren.append(godchild.pk)
             godparent.save()
 
-        if not godparent.pk in godchild.uid_godparents :
+        if (not godparent.pk in godchild.uid_godparents) and (not godparent.pk in godchild.uid_godchildren):
             godchild.uid_godparents.append(godparent.pk)
             godchild.save()
 
@@ -330,7 +329,8 @@ class ListBirthdays(View):
     def dispatch(self, *args, **kwargs):
         return super(ListBirthdays, self).dispatch(*args, **kwargs)
 
-    def get(self, request, *args, **kwarg):
+    @staticmethod
+    def get_today_birthdays():
         #Since the Ldpa don't understand requests without years or something,
         #we have to select people that are between 15 and 30 y/o:
         users = []
@@ -343,4 +343,7 @@ class ListBirthdays(View):
                 pass
             except Exception as e:
                 pass
-        return render(request, self.template_name, {'users' : users})
+        return users
+
+    def get(self, request, *args, **kwarg):
+        return render(request, self.template_name, {'users' : self.get_today_birthdays()})

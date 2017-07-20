@@ -7,24 +7,34 @@
 {% endblock %}
 
 {% block content %}
+    <div class="btn-home">
+      <a href="{% url 'campus:rooms:calendar' %}" class="noncolored-a"><span class="fa fa-home"></span> </a>
+    </div>
     <div class="container title">
-        <div class="nav"><a href="{% url "campus:rooms:calendar" %}"><span class="fa fa-caret-left"></span> Retour au calendrier</a></div>
         <h1 class="page-header">
             Événement
         </h1>
     </div>
     <div class="container well" id="content">
-        <h2>{{ object.description }}</h2>
-        <h2>
-            <a href="{% url "campus:rooms:mod-booking" object.pk %}">Modifier l'événement</a>
-        </h2>
-
-
+        {% if user.is_authenticated %}
+        {% if object.user_can_manage or request.user.is_staff or request.ldap_user.is_campus_moderator %}
+        <a class="btn btn-default pull-right" href="{% url "campus:rooms:mod-booking" object.pk %}">Modifier l'événement</a>
+        {% endif %}
+        {% endif %}
+        <h3>{{ object.description }}</h3>
         <p>
             {% for room in object.room.all %}
                 - <i>{{ room.name }}</i><br>
             {% endfor %}
         </p>
+        {% if user.is_authenticated %}
+        {% if object.user_can_manage or request.user.is_staff or request.ldap_user.is_campus_moderator %}
+        <form action="{% url "campus:rooms:delete-booking" object.pk %}" method="post">
+            {% csrf_token %}
+            <button class="btn btn-danger">Supprimer</button>
+        </form>
+        {% endif %}
+        {% endif %}
     </div>
 
 {% endblock %}

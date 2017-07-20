@@ -48,7 +48,7 @@ class Room(models.Model):
 
     clubs = models.TextField(
         verbose_name='club(s)',
-        help_text=_('indique à quel(s) club(s) appartient la salle, un par ligne'),
+        help_text=_('indique à quel(s) club(s) appartient la salle, séparés par un point virgule ;'),
         blank=True,
     )
 
@@ -61,7 +61,7 @@ class Room(models.Model):
                 if (user.uid in '\t'.join(club.members)) or (user.uid in '\t'.join(club.prezs)):
                     granted = True
                     break
-        else:
+        else:# TODO RIGHTS
             granted = True
         return granted
 
@@ -220,7 +220,7 @@ class RoomBooking(models.Model):
 
     def get_occurences(self):
         if self.recurring_rule == 'NONE':
-            return [self.start_time]
+            return [(self.start_time, self.end_time)]
         else:
             delta = {
                 'DAILY': relativedelta(days=1),
@@ -230,13 +230,13 @@ class RoomBooking(models.Model):
             }
             # TODO: make a test to check if this condition is executed
             if self.end_recurring_period is None:
-                return [self.start_time]
+                return [(self.start_time, self.end_time)]
 
             occurrences = []
-            current_occ = self.start_time
-            while current_occ <= self.end_recurring_period:
+            current_occ = (self.start_time, self.end_time)
+            while current_occ[0] <= self.end_recurring_period:
                 occurrences.append(current_occ)
-                current_occ = current_occ + delta[self.recurring_rule]
+                current_occ = (current_occ[0] + delta[self.recurring_rule], current_occ[1] + delta[self.recurring_rule])
             return occurrences
 
     def __str__(self):

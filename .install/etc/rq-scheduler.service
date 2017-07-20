@@ -1,0 +1,12 @@
+[Unit]
+Description=rq-scheduler of resel.fr
+After=syslog.restart
+
+[Service]
+ExecStart=/srv/www/resel.fr/env/bin/python3 manage.py rqscheduler -v3
+WorkingDirectory=/srv/www/resel.fr
+User=www-data
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
