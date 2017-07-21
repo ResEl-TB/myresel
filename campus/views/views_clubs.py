@@ -215,7 +215,8 @@ class MyClubs(View):
         clubs = [o for o in my_orgas if "tbClub" in o.object_classes or "tbClubSport" in o.object_classes]
         lists = [o for o in my_orgas if "tbCampagne" in o.object_classes]
         assos = [o for o in my_orgas if "tbAsso" in o.object_classes]
-        hardLinkAdd, hardLinkDel, hardLinkAddPrez, hardLinkWhoUser = getHardLinks()
+
+        hardLinkAdd, hardLinkDel, hardLinkAddPrez, hardLinkWhoUser, hardLinkAddMail = getHardLinks()
 
         context = {
             'clubs': clubs,
@@ -249,7 +250,7 @@ class SearchClub(View):
             messages.info(request, _("Aucun club ne correspond à votre recherche"))
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-        hardLinkAdd, hardLinkDel, hardLinkAddPrez, hardLinkWhoUser = getHardLinks()
+        hardLinkAdd, hardLinkDel, hardLinkAddPrez, hardLinkWhoUser, hardLinkAddMail = getHardLinks()
 
         context = {
             'clubs': clubs,
