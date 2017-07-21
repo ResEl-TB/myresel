@@ -82,7 +82,7 @@ class Home(View):
 
         # Load some clubs
         clubs = [c for c in StudentOrganisation.all() if "tbClub" in c.object_classes]
-        if len(club) > 3:
+        if len(clubs) > 3:
             date = timezone.now()
             random.seed(a=date.day + 100 * date.month + 10000*date.year)
             clubs = random.sample(clubs, 3)
