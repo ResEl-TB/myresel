@@ -452,6 +452,13 @@ iframe {
     font-size: 1.3em;
 }
 
+.club-name {
+    overflow: hidden;
+    text-align: center;
+    font-size: 1em;
+    height: 3em;
+}
+
 .birthdays-list {
     padding: 10px 0 5px 20px;
     color: #000000;
@@ -475,4 +482,3 @@ iframe {
     font-size: 1.4em;
     color: #000000;
 }
-

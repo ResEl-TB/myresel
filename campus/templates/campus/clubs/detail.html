@@ -10,7 +10,10 @@
 {% endblock %}
 {% block content %}
 <div class="btn-home">
-  <a href="{% url 'campus:clubs:list' %}" class="noncolored-a"><span class="fa fa-group"></span> {% trans "" %} </a>
+  <a href="{% url 'campus:clubs:list' %}" class="noncolored-a"><span class="fa fa-group"></span>   </a>
+</div>
+<div class="btn-home btn-home-campus">
+  <a href="{% url 'campus:home' %}" class="noncolored-a"><span class="fa fa-home"></span>   </a>
 </div>
 <div class="container well">
   <div class="row">

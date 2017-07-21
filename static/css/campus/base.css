@@ -204,6 +204,8 @@ body {
 }
 
 .btn-home {
+  text-align: right;
+  width: 40px;
   z-index: 10;
   padding: 10px;
   border: 1px solid #e3e3e3;
@@ -213,6 +215,25 @@ body {
   left: 0;
   background-color: #f5f5f5;
   box-shadow: -1px 0px 10px rgba(0,0,0,0.3);
+  transition: all 0.5s;
+}
+
+.btn-home-campus {
+  margin-top: 55px;
+}
+
+.btn-home:hover{
+    width: 60px;
+    transition: all 0.5s;
+}
+
+.btn-home .fa {
+    transition: all 0.5s;
+}
+
+.btn-home:hover .fa{
+    text-shadow: 0px 0px 5px rgba(94, 166, 75, 1);
+    transition: all 0.5s;
 }
 
 /* removes bootsrap component's radius */
