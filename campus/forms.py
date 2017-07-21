@@ -120,7 +120,7 @@ class RoomBookingForm(ModelForm):
 
         if rooms and self.user:
             for room in rooms:
-                if not room.user_can_manage(self.user):
+                if not room.user_can_access(self.user):
                     self.add_error('room', _("Vous ne pouvez pas gérer cette salle"))
         elif rooms: #Needed for testing purpose, otherwise it crashes
             for room in rooms:
