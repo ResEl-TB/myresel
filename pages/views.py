@@ -12,8 +12,10 @@ from django.db import ProgrammingError
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import View, ListView, DetailView
+from django.views.i18n import set_language
 from django.utils import timezone
 
 from fonctions import network, decorators
@@ -266,3 +268,8 @@ def faqUpvote(request):
     faq = get_object_or_404(Faq, pk=request.POST['faq_id'])
     faq.upvote()
     return HttpResponse('OK')
+
+@csrf_exempt
+def unsecure_set_language(request):
+    """ set_language without a csrf """
+    return set_language(request)

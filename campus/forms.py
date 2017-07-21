@@ -384,7 +384,7 @@ class MajPersonnalInfo(PersonnalInfoForm):
     photo = forms.ImageField(
         widget = forms.ClearableFileInput(),
         label = 'Photo',
-        label_suffix = _(''),
+        label_suffix = '',
         required = False,
 
     )
@@ -399,7 +399,7 @@ class MajPersonnalInfo(PersonnalInfoForm):
     is_public = forms.BooleanField(
         widget = forms.CheckboxInput(),
         label = _("Rendre publiques les details de mon profil"),
-        label_suffix = _(''),
+        label_suffix = '',
         initial = False,
         required = False,
     )
@@ -435,7 +435,7 @@ class SearchSomeone(forms.Form):
     strict = forms.BooleanField(
         widget = forms.CheckboxInput(),
         label = _('Recherche stricte'),
-        label_suffix = _(''),
+        label_suffix = '',
         required = False,
     )
 
