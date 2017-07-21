@@ -500,12 +500,12 @@ class SendUidForm(forms.Form):
             subject=_("Identifiants ResEl"),
             body=_("Bonjour,\n\n" +
                    "Vous venez de demander l'envoi de vos identifiants ResEl, les voici : \n" +
-                   "Nom d'utilisateur : {}\n" +
+                   "Nom d'utilisateur : %(uid)s\n" +
                    "Mot de passe : ****** (celui que vous avez choisi à l'inscription)\n\n" +
-                   "Vous pourrez vous connecter à votre tableau de bord en cliquant sur le lien suiviant : {}\n\n" +
+                   "Vous pourrez vous connecter à votre tableau de bord en cliquant sur le lien suiviant : %(url)s\n\n" +
                    "------------------------\n\n" +
                    "Si vous pensez que vous recevez cet e-mail par erreur, veuillez l'ignorer. Dans tous les cas, n'hésitez pas à nous contacter " +
-                   "à support@resel.fr pour toute question.").format(user.uid, request.build_absolute_uri(reverse('login')))
+                   "à support@resel.fr pour toute question.") % {'uid': user.uid, 'url': request.build_absolute_uri(reverse('login'))}
             ,
             from_email="secretaire@resel.fr",
             reply_to=["support@resel.fr"],
