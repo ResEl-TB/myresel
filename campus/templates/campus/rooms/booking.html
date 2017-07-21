@@ -31,7 +31,7 @@
                             <div class="form-group {% if form.description.errors %}has-error{% endif %}">
                                 <label class="col-sm-2 control-label">Description</label>
                                 <div class="col-sm-10">
-                                    <textarea class="form-control" rows="5" name="description" placeholder="{{ form.description.help_text }}">{{ form.description.value }}</textarea>
+                                    <textarea class="form-control" rows="5" name="description" placeholder="{{ form.description.help_text }}">{{ form.description.value|default_if_none:'' }}</textarea>
                                     {% if form.description.errors %}<span class="help-block">{{ form.description.errors }}</span>{% endif %}
                                 </div>
                             </div>
@@ -39,11 +39,7 @@
                             <div class="form-group {% if form.room.errors %}has-error{% endif %}">
                                 <label class="col-sm-2 control-label">Salle(s)</label>
                                 <div class="col-sm-10">
-                                    <select multiple name="room" class="form-control" size="{{ form.room.field.choices|length }}">
-                                        {% for choice_id, choice_label in form.room.field.choices %}
-                                            <option {% if choice_id in form.room.value %}selected{% endif %} class="room-choice"value="{{ choice_id }}">{{ choice_label }}</option>
-                                        {% endfor %}
-                                    </select>
+                                    {{form.room}}
                                     <p class="small">{% trans 'Maintenez la touche controle pour sélectionner plusieurs salles'%}</p>
                                     {% if form.room.errors %}<span class="help-block">{{ form.room.errors }}</span>{% endif %}
                                 </div>
@@ -66,7 +62,7 @@
                             <div class="form-group {% if form.start_time.errors %}has-error{% endif %}">
                                 <label class="col-sm-2 control-label">Début</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control datetimepicker" id="starttime" name="start_time" value="{{ form.start_time.value|date:'Y-m-d H:i:00' }}">
+                                    <input type="text" id="startDate" onChange="addEndDate()" class="form-control datetimepicker" id="starttime" name="start_time" value="{% firstof form.start_time.value|date:'Y-m-d H:i:00' form.start_time.value %}">
                                     {% if form.start_time.errors %}<span class="help-block">{{ form.start_time.errors }}</span>{% endif %}
                                 </div>
                             </div>
@@ -75,7 +71,7 @@
                             <div class="form-group {% if form.end_time.errors %}has-error{% endif %}">
                                 <label class="col-sm-2 control-label">Fin</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control datetimepicker" id="endtime" name="end_time" value="{{ form.end_time.value|date:'Y-m-d H:i:00' }}">
+                                    <input type="text" id="endDate" class="form-control datetimepicker" id="endtime" name="end_time" value="{% firstof form.end_time.value|date:'Y-m-d H:i:00' form.end_time.value %}">
                                     {% if form.end_time.errors %}<span class="help-block">{{ form.end_time.errors }}</span>{% endif %}
                                 </div>
                             </div>
@@ -96,7 +92,7 @@
                             <div class="form-group {% if form.end_recurring_period.errors %}has-error{% endif %}">
                                 <label class="col-sm-2 control-label">Fin de récurrence</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control datetimepicker" name="end_recurring_period" value="{{ form.end_recurring_period.value|date:'Y-m-d H:i:00' }}">
+                                    <input type="text" class="form-control datetimepicker" name="end_recurring_period" value="{% firstof form.end_recurring_period.value|date:'Y-m-d H:i:00' form.end_recurring_period.value %}">
                                     {% if form.end_recurring_period.errors %}<span class="help-block">{{ form.end_recurring_period.errors }}</span>{% endif %}
                                 </div>
                             </div>
@@ -170,6 +166,15 @@
     </script>
     <script src="{% static 'js/jquery.datetimepicker.full.min.js' %}"></script>
     <script type="text/javascript">
+        var startDateInput = document.getElementById("startDate");
+        var endDateInput = document.getElementById("endDate");
+
+        function addEndDate(){
+            if (!endDateInput.value){
+                endDateInput.value = startDateInput.value;
+            }
+        };
+
         jQuery.datetimepicker.setLocale( "{{ request.LANGUAGE_CODE }}" );
         $( ".datetimepicker" ).datetimepicker({
             format: 'Y-m-d H:i:00',
