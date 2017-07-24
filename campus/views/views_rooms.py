@@ -43,7 +43,7 @@ def construct_query(request, start_date, end_date, room='all'):
     """
     q_rooms = Q()
     if room == 'all':
-        q_rooms = Q()
+        q_rooms &= Q(displayable=True)
     else:
         if not request.user.is_authenticated():
             raise UserNotAuthenticatedException(_('Vous devez être connecté pour accéder à cette page'))

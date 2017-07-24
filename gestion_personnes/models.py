@@ -3,6 +3,7 @@ import json
 import uuid
 from datetime import datetime, timedelta
 
+from django.conf import settings
 from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -13,6 +14,7 @@ from ldapback.models.fields import LdapCharField, LdapPasswordField, LdapNtPassw
     LdapDatetimeField, LdapBooleanField
 from myresel.settings import LDAP_DN_PEOPLE
 from myresel.settings_local import LDAP_DN_GROUPS
+from fonctions import ldap
 
 
 class LdapUser(ldapback.models.LdapModel):
