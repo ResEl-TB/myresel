@@ -138,6 +138,12 @@ class LdapUser(ldapback.models.LdapModel):
         """
         return LdapGroup.get(pk='campusmodo').is_member(self.uid)
 
+    def is_staff(self):
+        is_staff = False
+        if ldap.search(settings.LDAP_OU_ADMIN, '(&(uid=%s))' % self.uid):
+            is_staff=True
+        return(is_staff)
+
 
 class LdapOldUser(LdapUser):
     """

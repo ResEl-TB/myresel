@@ -74,7 +74,7 @@ class Room(models.Model):
                 if user.uid in '\t'.join(club.prezs) + '\t'.join(club.members):
                     granted = True
                     break
-        elif user.is_campus_moderator(): #TODO: resel admin (changer backend ldap)
+        elif user.is_campus_moderator() or user.is_staff():
             granted=True
         return granted
 
