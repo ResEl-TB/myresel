@@ -381,7 +381,7 @@ iframe {
     margin-top: 15px;
     border: 1px solid #ddd;
     padding: 20px 20px 10px 30px;
-    background-color: #F7F7F7CC;
+    background-color: rgba(247, 247, 247, 0.81);
     min-height: 60px;
     border-radius: 5px;
 }
@@ -434,7 +434,7 @@ iframe {
     position: relative;
     color: #000000;
     vertical-align: text-bottom;
-    background-color: #F7F7F7CC;
+    background-color: rgba(247, 247, 247, 0.81);
 }
 
 .club-bloc a:hover {
@@ -465,7 +465,7 @@ iframe {
 }
 
 .club-news {
-    background-color: #F7F7F7CC;
+    background-color: rgba(247, 247, 247, 0.81);
     border-radius: 4px;
     padding-top: 5px;
     padding-bottom: 5px;
