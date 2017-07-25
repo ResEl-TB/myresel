@@ -80,7 +80,7 @@
                 <div class="carousel-inner">
                     {% for personn in birthdays %}
                     <div class="item {% if forloop.first %}active{% endif %} well text-center">
-                        <a href="{% url "campus:who:user-details" personn.pk %}">
+                        <a href="{% url "campus:who:user-details" personn.uid %}">
                             {% if personn.photo_file == "" %}
                             <div class="user-photo">
                               <img src="{% static "images/campus/photo-placeholder.jpg" %}" />
