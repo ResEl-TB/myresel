@@ -1,3 +1,5 @@
+import feedparser
+
 from django.shortcuts import render
 from django.views.generic import View
 from django.utils import timezone
@@ -23,10 +25,14 @@ class Home(View):
         birthdays = ListBirthdays.get_today_birthdays()
         campus_mail = Mail.objects.order_by('-date').filter(moderated=True).all()[:4]
 
+        python_wiki_rss_url = "http://www.history.com/this-day-in-history/rss"
+        feed = feedparser.parse( python_wiki_rss_url )
+
         context = {
             'events': events,
             'birthdays': birthdays,
             'campus_mail': campus_mail,
+            'historicstuff': feed['items'],
         }
 
         return render(request, self.template_name, context)

@@ -12,7 +12,7 @@
 <div class="container">
     <div class="row home-title">
 
-            <div class=wrapper>
+            <div class="col-md-4 wrapper">
               <div class="I polygon"></div>
               <div class="M1 polygon"></div>
               <div class="M2 polygon"></div>
@@ -24,14 +24,18 @@
               <div class="T4 polygon"></div>
             </div>
 
+            <div class="col-md-offset-1 col-md-4">
+                CAMPUS BRESTOIS <hr> IMT ATLANTIQUE
+            </div>
+
     </div>
     <div class="row" style="margin-top: 3%;">
         <div class="col-md-4">
-            <div class="row text-center bold well">
+            <div class="text-center bold well">
                 <span class="fa fa-calendar"></span> {% trans "EVÉNEMENTS" %}
             </div>
             {% for event in events %}
-            <div class="row well">
+            <div class="row well delete-margin event">
                 <div class="col-xs-4 event-badge">
                     <div class="text-center">
                         <span>{{event.start_time|date:"l"|upper}}</span><br>
@@ -45,7 +49,7 @@
                 </div>
             </div>
             {% empty %}
-            <div class="well">
+            <div class="well event">
                 {% trans "Pas d'événements à l'horizon" %}
             </div>
             {% endfor %}
@@ -55,7 +59,7 @@
                 <span class="fa fa-envelope"></span> {% trans "MAILS CAMPUS" %}
             </div>
             {% for campus_mail in campus_mails %}
-            <div class="well">
+            <div class="well mail">
                 <a href="{% url 'piece-of-news' campus_mail.pk %}">
                     <span class="title">{{ campus_mail.subject }}</span>
                 </a>
@@ -64,14 +68,14 @@
                 </div>
             </div>
             {% empty %}
-            <div class="text-center well"><span>{% trans "Pas de mail campus à l'horizon" %}</span></div>
+            <div class="text-center well mail"><span>{% trans "Pas de mail campus à l'horizon" %}</span></div>
             {% endfor %}
         </div>
         <div class="col-md-2">
             <div class=" text-center bold well remove-h-padding">
                 <span class="fa fa-birthday-cake"></span> {% trans "ANNIVERSAIRES" %}
             </div>
-            <div id="myCarousel" class="carousel slide" data-ride="carousel">
+            <div id="myCarousel" class="carousel slide birthday" data-ride="carousel">
                 <!-- Wrapper for slides -->
                 <div class="carousel-inner">
                     {% for personn in birthdays %}
@@ -92,6 +96,12 @@
                             </div>
                         </a>
                     </div>
+                    {% endfor %}
+                    {% for event in historicstuff %}
+                        <div class="item well text-justified">
+                            <a href="{{event.link}}" class="title-a">{{ event.title }}</a><br>
+                            {{ event.summary|truncatewords:10|safe }}
+                        </div>
                     {% endfor %}
                 </div>
                 <!-- Left and right controls -->
