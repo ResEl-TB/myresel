@@ -278,11 +278,11 @@ a:hover {
 
 @keyframes T2-animation {
     50%{
-        transform: rotateZ(30deg) rotateY(20deg);
+        transform: rotateZ(50deg) rotateY(-60deg);
     }
 
     60% {
-        transform: rotateY(70deg) rotateZ(40deg);
+        transform: rotateY(70deg) rotateX(40deg);
     }
 
     90% {
