@@ -10,6 +10,7 @@ from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import EmailMessage
+from smtplib import SMTPException
 from django.views.generic import FormView, View
 
 from io import BytesIO
@@ -317,7 +318,10 @@ class AddPersonToClub(View):
                     reply_to=["listmaster@resel.fr"],
                     to=["sympa@resel.fr"],
                 )
-                subscription_email.send()
+                try:
+                    subscription_email.send()
+                except SMTPException:
+                    print("Somthing went wrong when trying to send club subscription message")
         else:
             messages.info(request, _("Le système a déjà trouvé le membre correspondant comme étant inscrit, inscription impossible."))
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
@@ -361,7 +365,10 @@ class AddMailToClub(View):
             reply_to=["listmaster@resel.fr"],
             to=["sympa@resel.fr"],
         )
-        subscription_email.send()
+        try:
+            subscription_email.send()
+        except SMTPException:
+            print("Somthing went wrong when trying to send club subscription message")
 
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
@@ -457,7 +464,10 @@ class RemovePersonFromClub(View):
                     reply_to=["listmaster@resel.fr"],
                     to=["sympa@resel.fr"],
                 )
-                subscription_email.send()
+                try:
+                    subscription_email.send()
+                except SMTPException:
+                    print("Somthing went wrong when trying to send club unsubscription message")
             messages.success(request, _("Désinscription terminée avec succès"))
         else:
             messages.info(request, _("Le système n'a pas trouvé de personne à désinscrire dans la liste des membres"))
