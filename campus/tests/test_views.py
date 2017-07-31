@@ -930,5 +930,5 @@ class CampusHomeTestCase(TestCase):
 
     def testSimpleLoad(self):
         self.client.login(username="jbvallad", password="blabla")
-        r = self.client.get(reverse("campus"), HTTP_HOST="10.0.3.94")
+        r = self.client.get(reverse("campus:home"), HTTP_HOST="10.0.3.94")
         self.assertEqual(r.status_code, 200)
