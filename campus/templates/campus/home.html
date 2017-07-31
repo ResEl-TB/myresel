@@ -56,7 +56,7 @@
         </div>
         <div class="col-md-6">
             <div class=" text-center bold well">
-                <a href="{% url 'campus:mails' %}"><span class="fa fa-envelope"></span> {% trans "MAILS CAMPUS" %}</a>
+                <span class="fa fa-envelope"></span> {% trans "MAILS CAMPUS" %}
             </div>
             {% for campus_mail in campus_mails %}
             <div class="well mail">
@@ -73,7 +73,7 @@
         </div>
         <div class="col-md-2">
             <div class=" text-center bold well remove-h-padding">
-                <span class="fa fa-birthday-cake"></span> {% trans "ANNIVERSAIRES" %}
+                <a href="{% url 'campus:who:list-birthdays' %}"><span class="fa fa-birthday-cake"></span> {% trans "ANNIVERSAIRES" %}</a>
             </div>
             <div id="myCarousel" class="carousel slide birthday" data-ride="carousel">
                 <!-- Wrapper for slides -->
