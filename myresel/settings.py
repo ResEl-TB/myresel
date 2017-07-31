@@ -434,4 +434,3 @@ elif DEBUG or TESTING:
         queueConfig['ASYNC'] = False
 else:
     LOGGING = PROD_LOGGING_CONF
-

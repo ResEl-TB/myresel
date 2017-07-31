@@ -132,7 +132,7 @@ def createClubEditForm(type="CLUB", cn="tenniscn", name="Club Tennis", email="te
     })
     return(form)
 
-class HomeTestCase(TestCase):
+class ClubHomeTestCase(TestCase):
 
     def setUp(self):
         try_delete_user("jbvallad")
@@ -921,7 +921,7 @@ class DeleteEventTestCase(TestCase):
         r = self.client.post(reverse("campus:rooms:delete-booking", kwargs={'pk': booking.id}), HTTP_HOST="10.0.3.94")
         self.assertTrue(RoomBooking.objects.all().filter(id=booking.id))
 
-class HomeTestCase(TestCase):
+class CampusHomeTestCase(TestCase):
 
     def setUp(self):
         try_delete_user("jbvallad")
@@ -931,4 +931,4 @@ class HomeTestCase(TestCase):
     def testSimpleLoad(self):
         self.client.login(username="jbvallad", password="blabla")
         r = self.client.get(reverse("campus"), HTTP_HOST="10.0.3.94")
-        slef.assertEqual(r.status_code, 200)
+        self.assertEqual(r.status_code, 200)
