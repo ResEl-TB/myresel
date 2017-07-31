@@ -920,3 +920,15 @@ class DeleteEventTestCase(TestCase):
         self.client.login(username="vallad", password="blabla")
         r = self.client.post(reverse("campus:rooms:delete-booking", kwargs={'pk': booking.id}), HTTP_HOST="10.0.3.94")
         self.assertTrue(RoomBooking.objects.all().filter(id=booking.id))
+
+class HomeTestCase(TestCase):
+
+    def setUp(self):
+        try_delete_user("jbvallad")
+        user = create_full_user(uid="jbvalld", pwd="blabla")
+        user.save()
+
+    def testSimpleLoad(self):
+        self.client.login(username="jbvallad", password="blabla")
+        r = self.client.get(reverse("campus"), HTTP_HOST="10.0.3.94")
+        slef.assertEqual(r.status_code, 200)
