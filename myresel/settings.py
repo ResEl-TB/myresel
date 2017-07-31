@@ -80,9 +80,10 @@ INSCRIPTION_ZONE_ALLOWED_URLNAMESPACE = [
     'tresorerie',
 ]
 
-#
+# Various settings
 
 NUMBER_NEWS_IN_HOME = 4
+HOME_RSS_LINK = "http://www.history.com/this-day-in-history/rss"
 
 # Cookies settings
 SESSION_COOKIE_AGE = 365 * 24 * 60 * 60
