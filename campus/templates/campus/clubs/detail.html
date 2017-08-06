@@ -57,6 +57,9 @@
     <div class="col-md-4 mobile-centered">
       <a href="{% url 'campus:who:user-details' uid=member.uid %}">
         <span class="fa fa-user-o"></span> {{member.first_name}} {{member.last_name|upper}}
+        {% if request.ldap_user.is_campus_moderator or 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in asso.prezs or request.user.is_staff %}
+            <a class="fa fa-trash-o dell-user" href="{% url 'campus:clubs:remove-person' club.cn %}?id_user={{member.uid}}" title="{% trans 'Supprimer' %}"></a>
+        {% endif %}
       </a>
     </div>
   {% if forloop.counter|divisibleby:3 or forloop.last %}

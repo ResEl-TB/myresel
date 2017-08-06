@@ -42,53 +42,58 @@
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                 <span class="menu-text">Menu</span>
                 <span class="menu-bar">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </span>
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </span>
             </button>
             <div>
                 <a class="navbar-brand" href="{% url 'home' %}"><img style="width: auto; height: 45px; margin-top: -13px;" src="{% static 'images/logo_resel_flat.png' %}"></a>
             </div>
         </div>
-        <ul id="navbar" class="nav navbar-top-links navbar-right navbar-collapse collapse">
+        <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-top-links navbar-left navbar-collapse">
+            <li class="dropdown">
+                <a href="{% url 'wiki:show-category' slug='lassociation' %}" class="dropdown-toggle" data-toggle="dropdown"><i class="fa {{ association_category.fa_icon_name }} fa-fw" aria-hidden="true"></i> <span class="hidden-sm">{{ association_category.name }}</span></a>
+                <ul class="dropdown-menu">
+                    {% for stuff in association_category.get_articles_and_links_to_display %}
+                    <li>
+                        <a href="{{ stuff.get_absolute_url }}">{{ stuff.name }}</a>
+                    </li>
+                    {% empty %}
+                    <li>
+                        <a>{% trans "Aucun article" %}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </li>
+
+            <li class="dropdown">
+                <a href="{% url 'wiki:show-category' slug='services' %}" class="dropdown-toggle" data-toggle="dropdown"><i class="fa {{ services_category.fa_icon_name }} fa-fw" aria-hidden="true"></i> <span class="hidden-sm">{{ services_category.name }}</span></a>
+                <ul class="dropdown-menu">
+                    {% for stuff in services_category.get_articles_and_links_to_display %}
+                    <li>
+                        <a href="{{ stuff.get_absolute_url }}">{{ stuff.name }}</a>
+                    </li>
+                    {% empty %}
+                    <li>
+                        <a>{% trans "Aucun article" %}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </li>
+
+            <li>
+                <a class="btn-campus" href="{% url 'campus:home' %}"><i class="fa fa-bicycle fa-fw"></i> <span class="hidden-sm btn-campus-text">{% trans "Campus" %}</span></a>
+            </li>
             {% if request.user.is_staff %}
-                <li>
-                    <a href="/gestion"><i class="fa fa-gears fa-fw"></i></a>
-                </li>
+            <li>
+                <a href="/gestion"><i class="fa fa-gears fa-fw"></i></a>
+            </li>
             {% endif %}
-
-            <!-- Lists of categories -->
-            {% for category in categories %}
-                <li class="dropdown">
-                    <a href="{% url 'wiki:show-category' slug=category.slug %}" class="dropdown-toggle" data-toggle="dropdown"><i class="fa {{ category.fa_icon_name }} fa-fw" aria-hidden="true"></i> <span class="hidden-sm">{{ category.name }}</span></a>
-                    <ul class="dropdown-menu">
-                        {% for stuff in category.get_articles_and_links_to_display %}
-                            <li>
-                                <a href="{{ stuff.get_absolute_url }}">{{ stuff.name }}</a>
-                            </li>
-                        {% empty %}
-                            <li>
-                                <a>{% trans "Aucun article" %}</a>
-                            </li>
-                        {% endfor %}
-
-                        {% if category.is_display_truncated %}
-                            <p><a href="{% url 'wiki:show-category' slug=category.slug%}">{% trans "... plus d'articles"%}</a></p>
-                        {% endif %}
-                    </ul>
-                </li>
-            {% endfor %}
-            <li>
-                <a class="btn-campus" href="{% url 'campus:home' %}"><i class="fa fa-bicycle fa-fw"></i> <span class="hidden-sm hidden-md">{% trans "Campus" %}</span></a>
-                </li>
-                <li>
-                    <a href="{% url 'news' %}"><i class="fa fa-newspaper-o fa-fw"></i> <span class="hidden-sm hidden-md">{% trans "Actualités" %}</span></a>
-            </li>
-            <li>
-                <a href="{% url 'faq' %}"><i class="fa fa-question fa-fw"></i> <span class="hidden-sm hidden-md">{% trans "FAQ" %}</span></a>
-            </li>
+        </ul>
+        <ul class="nav navbar-top-links navbar-right navbar-collapse">
             <li>
                 <a href="{% url 'contact' %}"><i class="fa fa-comment-o fa-fw"></i> {% trans "Contact" %}</a>
             </li>
@@ -96,9 +101,9 @@
             <hr class="visible-xs"/>
 
             {% if request.user.is_authenticated %}
-                <li>
+            <li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user fa-fw" aria-hidden="true"></i> {{ ldapuser.first_name }} <span class="hidden-sm">{{ ldapuser.last_name }} ({{ ldapuser.uid }})</span> <span class="fa fa-caret-down"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user fa-fw" aria-hidden="true"></i> {{ ldapuser.first_name }} <span class="hidden-sm">({{ ldapuser.uid }})</span> <span class="fa fa-caret-down"></span></a>
                     <ul class="dropdown-menu">
                         <li>
                             <a href="{% url 'gestion-personnes:personal-infos' %}"><i class="fa fa-sliders fa-fw" ></i> {% trans "Paramètres" %}</a>
@@ -119,27 +124,27 @@
                     </ul>
                 </li>
 
-            {% else %}
+                {% else %}
                 <li>
                     <a href="/login"><i class="fa fa-sign-in fa-fw"></i> {% trans "Connexion" %}</a>
                 </li>
-            {% endif %}
-            {#            <hr class="visible-xs"/>#}
-            {#                <li class="dropdown">#}
-            {#                    <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw" aria-hidden="true"></i> {% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE | upper }}</a>#}
-            {#                    <div class="dropdown-menu">#}
-            {#                        {% get_available_languages as LANGUAGES %}#}
-            {#                        {% get_language_info_list for LANGUAGES as languages %}#}
-            {#                        <form action="{% url 'set_language' %}" method="post">#}
-            {#                            {% csrf_token %}#}
-            {#                            <input name="next" type="hidden" value="{{ request.path }}"/>#}
-            {#                            {% for language in languages %}#}
-            {#                                    <button class="btn btn-link" name="language" type="submit" value="{{ language.code }}">{{ language.name_local|title }}</button>#}
-            {#                            {% endfor %}#}
-            {#                        </form>#}
-            {#                    </div>#}
-            {#                </li>#}
+                {% endif %}
+                <hr class="visible-xs"/>
+                <li class="dropdown">
+                    <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw" aria-hidden="true"></i> {% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE | upper }}</a>
+                    <div class="dropdown-menu">
+                        {% get_available_languages as LANGUAGES %}
+                        {% get_language_info_list for LANGUAGES as languages %}
+                        <form action="{% url 'set_language' %}" method="post">
+                            <input name="next" type="hidden" value="{{ request.path }}"/>
+                            {% for language in languages %}
+                            <button class="btn btn-link" name="language" type="submit" value="{{ language.code }}">{{ language.name_local|title }}</button>
+                            {% endfor %}
+                        </form>
+                    </div>
+                </li>
         </ul>
+        </div>
     </div><!-- /.container -->
 </nav>
 {% if has_paid_cotiz == "danger" %}

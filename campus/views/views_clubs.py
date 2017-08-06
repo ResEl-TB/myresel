@@ -397,7 +397,7 @@ class RemovePersonFromClub(View):
                     user = LdapUser.get(uid=uid)
                 except ObjectDoesNotExist:
                     raise Http404("L'utilisateur n'éxiste pas")
-        if "tbAsso" not in club.object_classes and user.pk in club.members:
+        if user.pk in club.members:
             club.members.remove(user.pk)
             club.save()
             if club.email:
@@ -417,43 +417,29 @@ class RemovePersonFromClub(View):
             messages.info(request, _("Le système n'a pas trouvé de personne à désinscrire dans la liste des membres"))
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-class RequestMembers(View):
+class RequestClubs(View):
     """
-    View used to request (using ajax) the list of users from a club
+    View used to request (using ajax) alist of clubs
     """
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
-        return super(RequestMembers, self).dispatch(*args, **kwargs)
+        return super(RequestClubs, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax():
-            pk = request.GET.get('pk', None)
-            if pk == None:
-                raise Http404("")
-            try:
-                club=StudentOrganisation.get(cn=pk)
-            except ObjectDoesNotExist:
-                raise Http404("")
-
             #We check if the request is for memebers or prezs
-            if request.path == reverse("campus:clubs:request_members"):
-                entries = club.members
-            elif request.path == reverse("campus:clubs:request_prezs"):
-                entries = club.prezs
-            else:
-                raise Http404("") #U never know
-            results = []
-            for entry in entries:
-                uid = re.search('uid=([a-z0-9]+),', entry).group(1)
-                user = LdapUser.get(pk=uid)
-                user_json = {}
-                user_json['uid'] = user.uid
-                user_json['full_name'] = '%(first_name)s %(last_name)s' % {
-                    'first_name': user.first_name,
-                    'last_name': user.last_name,
-                }
-                results.append(user_json)
+            what = request.GET.get("term", None)
+            if what == None or len(what) <3:
+                raise Http404
+            clubs = StudentOrganisation.filter(name__contains=what)
+            results=[]
+            for club in clubs:
+                club_json = {}
+                club_json['id'] = club.cn
+                club_json['label'] = '%s - %s' % (club.name, club.description[:35])
+                club_json['value'] = club.cn
+                results.append(club_json)
             data = json.dumps(results)
             mimetype = 'application/json'
             return HttpResponse(data, mimetype)

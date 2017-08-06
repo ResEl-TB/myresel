@@ -12,6 +12,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from myresel.settings_local import *
 
+from datetime import timedelta
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -83,6 +85,7 @@ INSCRIPTION_ZONE_ALLOWED_URLNAMESPACE = [
 #
 
 NUMBER_NEWS_IN_HOME = 4
+FREE_DURATION = timedelta(days=3*7)
 
 # Cookies settings
 SESSION_COOKIE_AGE = 365 * 24 * 60 * 60
@@ -433,4 +436,3 @@ elif DEBUG or TESTING:
         queueConfig['ASYNC'] = False
 else:
     LOGGING = PROD_LOGGING_CONF
-

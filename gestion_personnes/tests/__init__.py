@@ -5,6 +5,8 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from gestion_personnes.models import LdapUser, LdapOldUser
 
+from myresel.settings import FREE_DURATION
+
 
 def try_delete_user(uid):
     try:
@@ -37,7 +39,7 @@ def create_full_user(uid="amanoury", pwd="blahblah", email="alexandre.manoury@te
 
     user.inscr_date = now
     user.cotiz = ["2016"]
-    user.end_cotiz = now + timedelta(days=7)
+    user.end_cotiz = now + FREE_DURATION
     user.campus = "Brest"
     user.building = "I11"
     user.room_number = "123"

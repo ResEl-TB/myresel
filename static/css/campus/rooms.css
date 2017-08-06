@@ -60,40 +60,44 @@
 }
 
 .alert-party {
-    background-color: #93FFA4;
+    background-color: rgba(147, 255, 164, 0.7);
 }
 
 .alert-club {
-    background-color: #F9BDFD;
+    background-color: rgba(251, 219, 147, 0.7);
 }
 
 .alert-meeting {
-    background-color: #FAFF9A;
+    background-color: rgba(250, 255, 154, 0.7);
 }
 
 .alert-training {
-    background-color: #A3B2FC;
+    background-color: rgba(163, 178, 252, 0.7);
 }
 
 .alert-event {
-    background-color: #FBDB93;
+    background-color: rgba(148, 214, 228, 0.7);
 }
 
 .alert-sport {
-    background-color: #FA5E56;
+    background-color: rgba(240, 176, 173, 0.7);
 }
 
 .alert-arts {
-    background-color: #ADD56C;
+    background-color: rgba(173, 213, 108, 0.7);
 }
 
 .alert-other {
-    background-color: #D0D4CF;
+    background-color: rgba(207, 212, 206, 0.7);
 }
 
 .time {
-    color: #F3FFE2;
+    color: rgb(64, 64, 64);
     display: block;
+}
+
+.description {
+    color: rgb(208, 63, 63);
 }
 
 .event {
@@ -111,4 +115,14 @@
 }
 .current-day {
     background-color: #cfdfff !important;
+}
+
+.small {
+    font-size: 0.8em;
+    font-style: oblique;
+}
+
+.bigger-bold {
+    font-size: 1.1em;
+    font-weight: bold;
 }

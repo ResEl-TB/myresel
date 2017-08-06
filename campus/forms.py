@@ -1,8 +1,8 @@
 from django import forms
 from django.conf import settings
 from django.core.validators import MaxLengthValidator
-from django.core.exceptions import ValidationError
-from django.forms import ModelForm, CharField, TextInput, Form, Textarea, ChoiceField, EmailField, IntegerField
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
+from django.forms import ModelForm, CharField, TextInput, Form, Textarea, ChoiceField, EmailField, IntegerField, Select, CheckboxInput
 from django.forms.models import ModelMultipleChoiceField
 from django.utils.translation import ugettext_lazy as _
 from django.db.models import Q
@@ -29,16 +29,19 @@ class RoomBookingForm(ModelForm):
         super(RoomBookingForm, self).__init__(*args, **kwargs)
 
         # Display the rooms the user is allowed to book
-        self.user = user.uid
-        if not RoomAdmin.objects.filter(user__username=user.uid):
+        if user: #Otherwise the test crashes
+            self.user = user.uid
+            if not RoomAdmin.objects.filter(user__username=user.uid):
+                del self.fields['user']
+                clubs = StudentOrganisation.filter(members__contains='uid=%s' % user.uid)
+                queryset = Q(private=False)
+                for club in clubs:
+                    queryset |= Q(private=True, clubs__contains=club.cn)
+                self.fields['room'] = ModelMultipleChoiceField(
+                    queryset=Room.objects.filter(queryset)
+                )
+        else:
             del self.fields['user']
-            clubs = StudentOrganisation.filter(members__contains='uid=%s' % user.uid)
-            queryset = Q(private=False)
-            for club in clubs:
-                queryset |= Q(private=True, clubs__contains=club.cn)
-            self.fields['room'] = ModelMultipleChoiceField(
-                queryset=Room.objects.filter(queryset)
-            )
 
     def save(self, commit=True, *args, **kwargs):
         m = super(RoomBookingForm, self).save(commit=False, *args, **kwargs)
@@ -53,70 +56,119 @@ class RoomBookingForm(ModelForm):
 
         m.save()
 
-        piano, created = Room.objects.get_or_create(
-            name='Salle piano',
-            defaults={'location': 'F', 'private': True},
-        )
-        meeting, created = Room.objects.get_or_create(
-            name='Salle réunion',
-            defaults={'location': 'F', 'private': False},
-        )
+        #piano, created = Room.objects.get_or_create(
+        #    name='Salle piano',
+        #    defaults={'location': 'F', 'private': True},
+        #)
+        #meeting, created = Room.objects.get_or_create(
+        #    name='Salle réunion',
+        #    defaults={'location': 'F', 'private': False},
+        #)
 
-        pr = False    # Detects is the piano or réunion room is selected
-        rooms = []
-        for room in self.cleaned_data['room']:
-            if 'piano' in room.name.lower() or 'réunion' in room.name.lower():
-                pr = True
-            else:
-                rooms.append(room)
-
-        if m.pk:
-            m.room.clear()
-
-        if pr:
-            m.room.add(piano)
-            m.room.add(meeting)
-        for room in rooms:
-            m.room.add(room)
+        #pr = False    # Detects is the piano or réunion room is selected
+        #rooms = []
+        #for room in self.cleaned_data['room']:
+        #    if 'piano' in room.name.lower() or 'réunion' in room.name.lower():
+        #        pr = True
+        #    else:
+        #        rooms.append(room)
+        #
+        #if m.pk:
+        #    m.room.clear()
+        #
+        #if pr:
+        #    m.room.add(piano)
+        #    m.room.add(meeting)
+        #for room in rooms:
+        #    m.room.add(room)
+        m.room = self.cleaned_data['room']
         m.notify_mailing_list()
         return m
 
 
     def clean(self):
         cleaned_data = super(RoomBookingForm, self).clean()
-        start_time = cleaned_data['start_time']
-        end_time = cleaned_data['end_time']
+        start_time = cleaned_data.get('start_time', None)
+        end_time = cleaned_data.get('end_time', None)
+        recurring_rule = cleaned_data.get('recurring_rule', None)
+        rooms = cleaned_data.get('room', None)
 
         # DAT HACK
-        piano, created = Room.objects.get_or_create(
-            name='Salle piano',
-            defaults={'location': 'F', 'private': True},
-        )
-        meeting, created = Room.objects.get_or_create(
-            name='Salle réunion',
-            defaults={'location': 'F', 'private': False},
-        )
+        #piano, created = Room.objects.get_or_create(
+        #    name='Salle piano',
+        #    defaults={'location': 'F', 'private': True},
+        #)
+        #meeting, created = Room.objects.get_or_create(
+        #    name='Salle réunion',
+        #    defaults={'location': 'F', 'private': False},
+        #)
 
         # Deactivated because it is possible to add past events for record
         # if start_time < datetime.datetime.now():
         #     self.add_error('start_time', _('La date de début est antérieure à aujourd\'hui'))
 
-        if end_time < start_time:
-            self.add_error('end_time', _('La date de fin est avant la date de début de l\'évènement'))
+        #If a user disable JS, he can send empty fields
+        if end_time and start_time:
+            if end_time < start_time:
+                self.add_error('end_time', _('La date de fin est avant la date de début de l\'évènement'))
+
+        if recurring_rule != "NONE" and not cleaned_data.get('end_recurring_period', None):
+            self.add_error('end_recurring_period', _('La date de fin de la récurrence est invalide'))
+
+        if rooms and 'user' in self.fields:
+            for room in rooms:
+                if not room.user_can_manage(self.user):
+                    self.add_error('room', _("Vous ne pouvez pas gérer cette salle"))
+        elif rooms: #Needed for testing purpose, otherwise it crashes
+            for room in rooms:
+                if room.private:
+                    self.add_error('room', _("Vous ne pouvez pas gérer cette salle"))
+
 
         # Deactivated because why hu ??
         # if start_time.date() != end_time.date():
         #     self.add_error('end_time', _('Vous ne pouvez réserver sur plusieurs jours'))
 
         # Check if room are available
-        for room in cleaned_data['room']:
-            # DAT HACK BIS
-            if 'piano' in room.name.lower() or 'réunion' in room.name.lower():
-                if not piano.is_free(start_time, end_time) or \
-                        not meeting.is_free(start_time, end_time):
-                    self.add_error('room', _("La salle %s n'est pas disponible") % room)
-            elif not room.is_free(start_time, end_time):
-                self.add_error('room', _("La salle %s n'est pas disponible") % room)
+        #for room in cleaned_data['room']:
+        #    # DAT HACK BIS
+        #    if 'piano' in room.name.lower() or 'réunion' in room.name.lower():
+        #        if not piano.is_free(start_time, end_time) or \
+        #                not meeting.is_free(start_time, end_time):
+        #            self.add_error('room', _("La salle %s n'est pas disponible") % room)
+        #    elif not room.is_free(start_time, end_time):
+        #        self.add_error('room', _("La salle %s n'est pas disponible") % room)
+
+class AddRoomForm(ModelForm):
+    class Meta:
+        model = Room
+        fields = ("location", "name", "mailing_list", "private", "clubs")
+        widgets = {
+            'location': Select(attrs={'class': 'form-control'}),
+            'name': TextInput(attrs={'class': 'form-control'}),
+            'mailing_list': TextInput(attrs={'class': 'form-control'}),
+            'private': CheckboxInput(attrs={'class': 'form-check-input'}),
+            'clubs': TextInput(attrs={'class': 'form-control form-control-warning', 'id': 'clubs_area'}),
+        }
+
+    def clean_mailing_list(self):
+        email=self.cleaned_data["mailing_list"]
+        if not (re.match(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+', email) or email == ""):
+            raise ValidationError(message=_("L'adresse email semble être invalide"), code="Bad MAIL")
+        return(email)
+
+    def clean_clubs(self):
+        clubs = ""
+        if self.cleaned_data["clubs"] != '':
+            clubs = list(set(self.cleaned_data["clubs"].split(";"))) #deletes duplicates
+            for club in clubs:
+                try:
+                    StudentOrganisation.get(cn=club)
+                except ObjectDoesNotExist:
+                    raise ValidationError(message=_("Le club suivant n'existe pas: %s"%(club,)), code="CLUB DOES NOT EXIST")
+                if not re.match(r'^[a-z0-9-]+', club):
+                    raise ValidationError(message=_("Le club suivant n'est pas un nom valide: %s"%(club,)), code="BAD CLUB")
+        return(";".join(clubs))
 
 
 class DisabledCharField(CharField):
@@ -332,7 +384,7 @@ class MajPersonnalInfo(PersonnalInfoForm):
     photo = forms.ImageField(
         widget = forms.ClearableFileInput(),
         label = 'Photo',
-        label_suffix = _(''),
+        label_suffix = '',
         required = False,
 
     )
@@ -347,7 +399,7 @@ class MajPersonnalInfo(PersonnalInfoForm):
     is_public = forms.BooleanField(
         widget = forms.CheckboxInput(),
         label = _("Rendre publiques les details de mon profil"),
-        label_suffix = _(''),
+        label_suffix = '',
         initial = False,
         required = False,
     )
@@ -383,7 +435,7 @@ class SearchSomeone(forms.Form):
     strict = forms.BooleanField(
         widget = forms.CheckboxInput(),
         label = _('Recherche stricte'),
-        label_suffix = _(''),
+        label_suffix = '',
         required = False,
     )
 

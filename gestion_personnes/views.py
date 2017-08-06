@@ -25,6 +25,8 @@ from gestion_personnes.models import LdapUser, UserMetaData
 from .forms import InscriptionForm, ModPasswdForm, CGUForm, InvalidUID, PersonnalInfoForm, ResetPwdSendForm, \
     ResetPwdForm, SendUidForm, RoutingMailForm
 
+from myresel.settings import FREE_DURATION
+
 
 class Inscription(View):
     """
@@ -102,9 +104,8 @@ class InscriptionCGU(View):
             user = LdapUser.from_json(self.request.session['logup_user'])
             user.inscr_date = datetime.now()
 
-            # Add 7 free days :
-            free_duration = timedelta(days=7)  # TODO: move that to config file
-            user.end_cotiz = datetime.now() + free_duration  # That does not survive the json parser
+            # Add 3 free weeks :
+            user.end_cotiz = datetime.now() + FREE_DURATION  # That does not survive the json parser
             user.save()
 
             user_meta, __ = UserMetaData.objects.get_or_create(uid=user.uid)
