@@ -925,7 +925,7 @@ class CampusHomeTestCase(TestCase):
 
     def setUp(self):
         try_delete_user("jbvallad")
-        user = create_full_user(uid="jbvalld", pwd="blabla")
+        user = create_full_user(uid="jbvallad", pwd="blabla")
         user.save()
 
     def testSimpleLoad(self):
