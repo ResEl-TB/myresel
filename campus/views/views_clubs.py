@@ -268,29 +268,61 @@ class SearchClub(View):
 
         return render(request, self.template_name, context)
 
+@method_decorator(login_required, name="dispatch")
 class AddPersonToClub(View):
     """
     View used to add a person to a specific club/list or asso if he's got the right to do so
     """
 
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(AddPersonToClub, self).dispatch(*args, **kwargs)
+    def add_user(self, user, club, request):
+        """
+        Add a `user` to a `club` and subscribe him to the mlist, 
+        no verification is made.
+        """
+        club.members.append(user.pk)
+        club.save()
+        if not club.email:
+            return
 
-    def get(self, request, pk):
-        uid=request.GET.get('id_user', None)
+        mail_search = re.search('^([a-z1-9-_.+]+)\@.+$', club.email)
+        mail = mail_search.group(1)
+        subscription_email = EmailMessage(
+            subject="SUBSCRIBE {} {} {}".format(mail, user.first_name,
+                                                    user.last_name),
+            body="Inscription automatique de {} à {}".format(user.uid, club.name),
+            from_email=user.mail,
+            reply_to=["listmaster@resel.fr"],
+            to=["sympa@resel.fr"],
+        )
         try:
-            club=StudentOrganisation.get(cn=pk)
-            #If we don't do this we get an error cuz our LDAP scheme does not allow
+            subscription_email.send()
+        except SMTPException:
+            logger.warning(
+                "Erreur lors de l'inscription à la mlist %s de %s" % (mail, user.mail),
+                extra={
+                    'uid': user.uid,
+                    'user_mail': user.mail,
+                    'mlist': mail,
+                    'message_code': 'ERROR_SUBSCRIBE',
+                    }
+                )
+        messages.success(request, _("Inscription terminée avec succès"))
+
+
+    def post(self, request, pk):
+        try:
+            club = StudentOrganisation.get(cn=pk)
+            # If we don't do this we get an error cuz our LDAP scheme does not allow
             # a single model for each type of organisation
             if "tbCampagne" in club.object_classes:
-                club=ListeCampagne.get(cn=pk)
+                club = ListeCampagne.get(cn=pk)
             elif "tbAsso" in club.object_classes:
-                club=Association.get(cn=pk)
+                club = Association.get(cn=pk)
         except ObjectDoesNotExist:
-            raise Http404("Aucun club trouvé")
+            raise Http404("Le club n'existe pas")
 
-        if uid == None:
+        uid = request.POST.get('id_user', None)
+        if uid is None:
             user = request.ldap_user
         else:
             if not (self.request.ldap_user.is_campus_moderator() or self.request.ldap_user.pk in club.prezs or request.user.is_staff):
@@ -300,30 +332,14 @@ class AddPersonToClub(View):
                 try:
                     user = LdapUser.get(uid=uid)
                 except ObjectDoesNotExist:
-                    raise Http404("L'utilisateur n'éxiste pas")
+                    raise Http404("L'utilisateur n'existe pas")
 
         if not user.pk in club.members and (("tbClub" in club.object_classes or \
         "tbCampagne" in club.object_classes or "tbClubSport in club.object_classes") or \
         (self.request.ldap_user.is_campus_moderator() or self.request.ldap_user.pk in club.prezs or\
-        request.user.is_staff)): #Our ldap is crap
-            messages.success(request, _("Inscription terminée avec succès"))
-            club.members.append(user.pk)
-            club.save()
-            if club.email:
-                mail_search = re.search('^([a-z1-9-_.+]+)\@.+$', club.email)
-                mail = mail_search.group(1)
-                subscription_email = EmailMessage(
-                    subject="SUBSCRIBE {} {} {}".format(mail, user.first_name,
-                                                            user.last_name),
-                    body="Inscription automatique de {} à {}".format(user.uid, club.name),
-                    from_email=user.mail,
-                    reply_to=["listmaster@resel.fr"],
-                    to=["sympa@resel.fr"],
-                )
-                try:
-                    subscription_email.send()
-                except SMTPException:
-                    print("Somthing went wrong when trying to send club subscription message")
+        request.user.is_staff)): # Our ldap is crap
+            self.add_user(user, club, request)
+
         else:
             messages.info(request, _("Le système a déjà trouvé le membre correspondant comme étant inscrit, inscription impossible."))
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

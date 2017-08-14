@@ -268,12 +268,12 @@ class AddPersonTestCase(TestCase):
         self.client.login(username="jbvallad", password="blabla")
 
     def testAddSelf(self):
-        r = self.client.get(reverse("campus:clubs:add-person", kwargs={'pk':self.cn}),
+        r = self.client.post(reverse("campus:clubs:add-person", kwargs={'pk':self.cn}),
                                     HTTP_HOST="10.0.3.94")
         self.assertTrue(LdapUser.get(uid="jbvallad").pk in StudentOrganisation.get(cn=self.cn).members)
 
     def testAddSomeone(self):
-        r = self.client.get(reverse("campus:clubs:add-person", kwargs={'pk':self.cn}),
+        r = self.client.post(reverse("campus:clubs:add-person", kwargs={'pk':self.cn}),
                                     data={"id_user":"bvallad"},
                                     HTTP_HOST="10.0.3.94")
         self.assertTrue(LdapUser.get(uid="bvallad").pk in StudentOrganisation.get(cn=self.cn).members)

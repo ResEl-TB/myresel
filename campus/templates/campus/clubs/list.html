@@ -89,9 +89,12 @@
                 <div class="col-sm-3 mobile-margin-top">
                     {% if request.user.is_authenticated %}
                     <p><button class="btn btn-success" data-toggle="collapse" data-target="#{{club.cn}}"><span class="fa fa-angle-double-down"></span> Actions <span class="fa fa-angle-double-down"></span></button></p>
-                    <div class="collapse" id="{{club.cn}}">
-                        {% if not request.ldap_user.pk in club.members%}
-                        <p><a href="{% url 'campus:clubs:add-person' club.cn%}"><span class="fa fa-sign-in"></span> m'inscrire</a></p>
+                    <div class="collapse" id="{{ club.cn }}">
+                        {% if not request.ldap_user.pk in club.members %}
+                        <p><form method="POST" action="{% url 'campus:clubs:add-person' club.cn %}" class="inline" >
+                           {% csrf_token %}
+                           <button type="submit" class="btn btn-link add-user" /><span class="fa fa-fw fa-sign-in"></span> m'inscrire</button>
+                        </form></p>
                         {% else %}
                         <p><form method="POST" action="{% url 'campus:clubs:remove-person' club.cn %}" class="inline" >
                            {% csrf_token %}
@@ -99,11 +102,11 @@
                         </form></p>
                         {% endif %}
                         {% if request.ldap_user.is_campus_moderator or 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in club.prezs or request.user.is_staff%}
-                        <p><a href="{% url 'campus:clubs:edit' club.cn%}"><span class="fa fa-edit"></span> éditer</a></p>
-                        <p><a class="addPersonLink" data-toggle="modal" data-target="#addPerson" data="{{club.cn}}"><span class="fa fa-user-plus"></span> inscrire un membre</a></p>
-                        <p><a class="addMailLink" data-toggle="modal" data-target="#addEmail" data="{{club.cn}}"><span class="fa fa-envelope"></span> abonner un membre</a></p>
-                        <p><a class="delPersonLink" data-toggle="modal" data-target="#delPerson" data="{{club.cn}}"><span class="fa fa-user-times"></span> désinscrire un membre</a></p>
-                        <p><a class="addPrezLink" data-toggle="modal" data-target="#addPrez" data="{{club.cn}}"><span class="fa fa-street-view"></span> effectuer une passation</a></p>
+                        <p><a href="{% url 'campus:clubs:edit' club.cn%}"><span class="fa fa-fw fa-edit"></span> éditer</a></p>
+                        <p><a class="addPersonLink" data-toggle="modal" data-target="#addPerson" data="{{club.cn}}"><span class="fa fa-fw fa-user-plus"></span> inscrire un membre</a></p>
+                        <p><a class="addMailLink" data-toggle="modal" data-target="#addEmail" data="{{club.cn}}"><span class="fa fa-fw fa-envelope"></span> abonner un membre</a></p>
+                        <p><a class="delPersonLink" data-toggle="modal" data-target="#delPerson" data="{{club.cn}}"><span class="fa fa-fw fa-user-times"></span> désinscrire un membre</a></p>
+                        <p><a class="addPrezLink" data-toggle="modal" data-target="#addPrez" data="{{club.cn}}"><span class="fa fa-fw fa-street-view"></span> effectuer une passation</a></p>
                         {% endif%}
                     </div>
                     {% endif %}
@@ -142,7 +145,10 @@
                     <p><button class="btn btn-success" data-toggle="collapse" data-target="#{{list.cn}}"><span class="fa fa-angle-double-down"></span> Actions <span class="fa fa-angle-double-down"></span></button></p>
                     <div class="collapse" id="{{list.cn}}">
                         {% if not 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in list.members%}
-                        <p><a href="{% url 'campus:clubs:add-person' list.cn%}"><span class="fa fa-sign-in"></span> m'inscrire</a></p>
+                        <p><form method="POST" action="{% url 'campus:clubs:add-person' list.cn %}" class="inline" >
+                           {% csrf_token %}
+                           <button type="submit" class="btn btn-link add-user" /><span class="fa fa-fw fa-sign-in"></span> m'inscrire</button>
+                        </form></p>
                         {% else %}
                         <p><form method="POST" action="{% url 'campus:clubs:remove-person' list.cn %}" class="inline" >
                            {% csrf_token %}
@@ -150,11 +156,11 @@
                         </form></p>
                         {% endif %}
                         {% if request.ldap_user.is_campus_moderator or 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in list.prezs or request.user.is_staff%}
-                        <p><a href="{% url 'campus:clubs:edit' list.cn%}"><span class="fa fa-edit"></span> éditer</a></p>
-                        <p><a class="addPersonLink" data-toggle="modal" data-target="#addPerson" data="{{list.cn}}"><span class="fa fa-user-plus"></span> inscrire un membre</a></p>
-                        <p><a class="addMailLink" data-toggle="modal" data-target="#addEmail" data="{{list.cn}}"><span class="fa fa-envelope"></span> abonner un membre</a></p>
-                        <p><a class="delPersonLink" data-toggle="modal" data-target="#delPerson" data="{{list.cn}}"><span class="fa fa-user-times"></span> désinscrire un membre</a></p>
-                        <p><a class="addPrezLink" data-toggle="modal" data-target="#addPrez" data="{{list.cn}}"><span class="fa fa-street-view"></span> effectuer une passation</a></p>
+                        <p><a href="{% url 'campus:clubs:edit' list.cn %}"><span class="fa fa-fw fa-edit"></span> éditer</a></p>
+                        <p><a class="addPersonLink" data-toggle="modal" data-target="#addPerson" data="{{ list.cn }}"><span class="fa fa-fw fa-user-plus"></span> inscrire un membre</a></p>
+                        <p><a class="addMailLink" data-toggle="modal" data-target="#addEmail" data="{{ list.cn }}"><span class="fa fa-fw fa-envelope"></span> abonner un membre</a></p>
+                        <p><a class="delPersonLink" data-toggle="modal" data-target="#delPerson" data="{{ list.cn }}"><span class="fa fa-fw fa-user-times"></span> désinscrire un membre</a></p>
+                        <p><a class="addPrezLink" data-toggle="modal" data-target="#addPrez" data="{{ list.cn }}"><span class="fa fa-fw fa-street-view"></span> effectuer une passation</a></p>
                         {% endif%}
                     </div>
                     {% endif %}

@@ -201,6 +201,11 @@ button.dell-user {
   padding: 0;
 }
 
+button.add-user, button.add-user:hover {
+  padding: 0;
+  color: #8BBF82;
+}
+
 .noncolored-a, .noncolored-a:hover, .noncolored-a:visited, .noncolored-a:focus{
    color: inherit;
    cursor: pointer;
