@@ -40,17 +40,20 @@
                 <div class="col-sm-3 mobile-margin-top">
                     {% if request.user.is_authenticated %}
                     <p><button class="btn btn-success" data-toggle="collapse" data-target="#{{asso.cn}}"><span class="fa fa-angle-double-down"></span> Actions <span class="fa fa-angle-double-down"></span></button></p>
-                    <div class="collapse" id="{{asso.cn}}">
-                        {% if 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in asso.members%}
-                        <p><a href="{% url 'campus:clubs:remove-person' asso.cn%}"><span class="fa fa-sign-out"></span> me désinscrire</a></p>
-                        {% endif %}
+                    <div class="collapse" id="{{ asso.cn }}">
                         {% if request.ldap_user.is_campus_moderator or 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in asso.prezs or request.user.is_staff %}
                         <p><a href="{% url 'campus:clubs:edit' asso.cn%}"><span class="fa fa-edit"></span> éditer</a></p>
-                        <p><a class="addPersonLink" data-toggle="modal" data-target="#addPerson" data="{{asso.cn}}"><span class="fa fa-user-plus"></span> inscrire un membre</a></p>
-                        <p><a class="addMailLink" data-toggle="modal" data-target="#addEmail" data="{{asso.cn}}"><span class="fa fa-envelope"></span> abonner un membre</a></p>
-                        <p><a class="delPersonLink" data-toggle="modal" data-target="#delPerson" data="{{asso.cn}}"><span class="fa fa-user-times"></span> désinscrire un membre</a></p>
-                        <p><a class="addPrezLink" data-toggle="modal" data-target="#addPrez" data="{{asso.cn}}"><span class="fa fa-street-view"></span> effectuer une passation</a></p>
+                        <p><a class="addPersonLink" data-toggle="modal" data-target="#addPerson" data="{{asso.cn}}"><span class="fa fa-fw fa-user-plus"></span> inscrire un membre</a></p>
+                        <p><a class="addMailLink" data-toggle="modal" data-target="#addEmail" data="{{asso.cn}}"><span class="fa fa-fw fa-envelope"></span> abonner un membre</a></p>
+                        <p><a class="delPersonLink" data-toggle="modal" data-target="#delPerson" data="{{asso.cn}}"><span class="fa fa-fw fa-user-times"></span> désinscrire un membre</a></p>
+                        <p><a class="addPrezLink" data-toggle="modal" data-target="#addPrez" data="{{ asso.cn }}"><span class="fa fa-fw fa-street-view"></span> effectuer une passation</a></p>
                         {% endif%}
+                        {% if request.ldap_user.pk in asso.members %}
+                        <p><form method="POST" action="{% url 'campus:clubs:remove-person' asso.cn %}" class="inline" >
+                           {% csrf_token %}
+                           <button type="submit" class="btn btn-link dell-user" /><span class="fa fa-fw fa-sign-out"></span> me désinscrire</button>
+                        </form></p>
+                        {% endif %}
                     </div>
                     {% endif %}
                 </div>
@@ -87,10 +90,13 @@
                     {% if request.user.is_authenticated %}
                     <p><button class="btn btn-success" data-toggle="collapse" data-target="#{{club.cn}}"><span class="fa fa-angle-double-down"></span> Actions <span class="fa fa-angle-double-down"></span></button></p>
                     <div class="collapse" id="{{club.cn}}">
-                        {% if not 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in club.members%}
+                        {% if not request.ldap_user.pk in club.members%}
                         <p><a href="{% url 'campus:clubs:add-person' club.cn%}"><span class="fa fa-sign-in"></span> m'inscrire</a></p>
                         {% else %}
-                        <p><a href="{% url 'campus:clubs:remove-person' club.cn%}"><span class="fa fa-sign-out"></span> me désinscrire</a></p>
+                        <p><form method="POST" action="{% url 'campus:clubs:remove-person' club.cn %}" class="inline" >
+                           {% csrf_token %}
+                           <button type="submit" class="btn btn-link dell-user" /><span class="fa fa-fw fa-sign-out"></span> me désinscrire</button>
+                        </form></p>
                         {% endif %}
                         {% if request.ldap_user.is_campus_moderator or 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in club.prezs or request.user.is_staff%}
                         <p><a href="{% url 'campus:clubs:edit' club.cn%}"><span class="fa fa-edit"></span> éditer</a></p>
@@ -138,7 +144,10 @@
                         {% if not 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in list.members%}
                         <p><a href="{% url 'campus:clubs:add-person' list.cn%}"><span class="fa fa-sign-in"></span> m'inscrire</a></p>
                         {% else %}
-                        <p><a href="{% url 'campus:clubs:remove-person' list.cn%}"><span class="fa fa-sign-out"></span> me désinscrire</a></p>
+                        <p><form method="POST" action="{% url 'campus:clubs:remove-person' list.cn %}" class="inline" >
+                           {% csrf_token %}
+                           <button type="submit" class="btn btn-link dell-user" /><span class="fa fa-fw fa-sign-out"></span> me désinscrire</button>
+                        </form></p>
                         {% endif %}
                         {% if request.ldap_user.is_campus_moderator or 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in list.prezs or request.user.is_staff%}
                         <p><a href="{% url 'campus:clubs:edit' list.cn%}"><span class="fa fa-edit"></span> éditer</a></p>
@@ -215,7 +224,7 @@
 <div class="modal fade" id="delPerson" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" id="delPersonForm" action="" method="get">
+            <form class="form-horizontal" id="delPersonForm" action="" method="POST">
                 {% csrf_token %}
                 <div class="modal-header">
                     <h4 class="modal-title">{% trans "Désinscrire une personne" %}</h4>
@@ -228,7 +237,7 @@
                   </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-success">{% trans "Ajouter" %}</button>
+                    <button type="submit" class="btn btn-success">{% trans "Désinscrire" %}</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Annuler" %}</button>
                 </div>
             </form>
@@ -309,13 +318,13 @@
 
     function changeDelLinkValue(i) {
     return function(){
-        delform.action = "{{hardLinkDel}}"+dellinks[i].getAttribute('data');
+        delform.action = "{{ hardLinkDel }}" + dellinks[i].getAttribute('data');
         };
     };
 
     function changeAddEmailLinkValue(i) {
     return function(){
-        addmailform.action = "{{hardLinkAddMail}}"+addmaillinks[i].getAttribute('data');
+        addmailform.action = "{{ hardLinkAddMail }}"+addmaillinks[i].getAttribute('data');
         };
     };
 

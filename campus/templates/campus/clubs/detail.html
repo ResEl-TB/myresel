@@ -3,7 +3,7 @@
 {% load i18n %}
 {% load clubs_extras %}
 
-{% block title %}Mes clubs{% endblock %}
+{% block title %}{% trans "Mes clubs" %}{% endblock %}
 {% block css %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/campus/clubs.css' %}">
     <link href="{% static 'jquery/jquery-ui.min.css' %}" rel="Stylesheet"></link>
@@ -18,7 +18,7 @@
 <div class="container well">
   <div class="row">
     <div class="col-lg-12 text-center margin-bottom">
-      <h2 class="text-center"> {{club.name}} </h2>
+      <h2 class="text-center">{{ club.name }}</h2>
     </div>
   </div>
   <div class="row">
@@ -36,40 +36,45 @@
       {% endif %}
     </div>
     <div class="col-md-9 mobile-centered mobile-margin-top">
-      <p><strong><span class="fa fa-user-circle-o"></span> Président :</strong>
+            <p><strong><span class="fa fa-user-circle-o"></span> {% trans "Président :" %}</strong>
         {% if prez %}
         <a href="{% url 'campus:who:user-details' uid=prez.uid %}">
           {{prez.first_name}} {{prez.last_name|upper}}
         </a>
         {% else %}
-          {% trans 'Aucun président renseigné' %}
+          {% trans "Aucun président renseigné" %}
         {% endif %}
       </p>
-      <p><strong><span class="fa fa-comment-o"></span> Description : </strong>{{club.description}}</p>
-      <p><strong><span class="fa fa-envelope-o"></span> Mailing List : </strong><a href="mailto:{{club.email}}">{{club.email}}</a></p>
-      <p><strong><span class="fa fa-globe"></span> Site Web : </strong><a href="{{club.website}}">{{club.website}}</a></p>
+      <p><strong><span class="fa fa-comment-o"></span> {% trans "Description :" %} </strong>{{club.description}}</p>
+      <p><strong><span class="fa fa-envelope-o"></span> {% trans "Mailing List :" %} </strong><a href="mailto:{{club.email}}">{{club.email}}</a></p>
+      <p><strong><span class="fa fa-globe"></span> {% trans "Site Web :" %} </strong><a href="{{club.website}}">{{club.website}}</a></p>
       {% if request.user.is_authenticated %}
-      {% if request.ldap_user.is_campus_moderator or 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in club.prezs or request.user.is_staff %}
-      <a href="{% url 'campus:clubs:edit' club.cn%}" class="btn btn-default"><span class="fa fa-edit"></span> éditer</a>
-      {% endif %}
+        {% if request.ldap_user.is_campus_moderator or 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in club.prezs or request.user.is_staff %}
+        <a href="{% url 'campus:clubs:edit' club.cn%}" class="btn btn-default"><span class="fa fa-edit"></span> {% trans "éditer" %}</a>
+        {% endif %}
       {% endif %}
     </div>
   </div>
-  {% if user.is_authenticated%}
+  {% if user.is_authenticated %}
   <div class="row mobile-centered mobile-margin-top">
     <div class="col-lg-12 margin-bottom">
       <br /><strong><span class="fa fa-id-badge"></span> {% trans "Membres" %} </strong>
     </div>
   </div>
-  {% for member in members%}
-  {% if forloop.counter|add:-1|divisibleby:3%}
+  {% for member in members %}
+  {% if forloop.counter|add:-1|divisibleby:3 %}
   <div class="row mobile-margin-top">
   {% endif %}
     <div class="col-md-4 mobile-centered">
       <a href="{% url 'campus:who:user-details' uid=member.uid %}">
         <span class="fa fa-user-o"></span> {{member.first_name}} {{member.last_name|upper}}
         {% if request.ldap_user.is_campus_moderator or 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in asso.prezs or request.user.is_staff %}
-            <a class="fa fa-trash-o dell-user" href="{% url 'campus:clubs:remove-person' club.cn %}?id_user={{member.uid}}" title="{% trans 'Supprimer' %}"></a>
+      </a>
+      <form method="POST" action="{% url 'campus:clubs:remove-person' club.cn %}" class="inline" >
+         {% csrf_token %}
+         <input type="hidden" name="id_user" value="{{ member.uid }}" />
+         <button type="submit" class="btn btn-link dell-user" /><span class="fa fa-trash-o"></span></button>
+      </form>
         {% endif %}
       </a>
     </div>
@@ -77,7 +82,7 @@
   </div>
   {% endif %}
   {% empty %}
-    Aucun membre trouvé
+  {% trans "Aucun membre trouvé" %}
   {% endfor %}
   {% endif %}
 </div>

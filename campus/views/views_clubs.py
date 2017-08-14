@@ -1,6 +1,7 @@
 import os
 import re
 import json
+import logging
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -23,6 +24,7 @@ from fonctions.decorators import ae_required
 
 from myresel.settings import MEDIA_ROOT, LDAP_DN_PEOPLE
 
+logger = logging.getLogger("default")
 
 def list_clubs(request):
     """
@@ -418,59 +420,72 @@ class AddPrezToClub(View):
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
+@method_decorator(login_required, name="dispatch")
 class RemovePersonFromClub(View):
     """
     View used to remove a person from a specific club
     """
 
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(RemovePersonFromClub, self).dispatch(*args, **kwargs)
-
-    def get(self, request, pk):
-        uid=request.GET.get('id_user', None)
+    def remove_user(self, user, club, request):
+        """Remove a `user` from the `club` and sign him off the mlist"""
+        club.members.remove(user.pk)
+        club.save()
+        messages.success(request, _("Désinscription terminée avec succès"))
+        if not club.email:
+            return
+        mail_search = re.search('^([a-z1-9-_.+]+)\@.+$', club.email)
+        mail = mail_search.group(1)
+        subscription_email = EmailMessage(
+            subject="SIGNOFF {} {} {}".format(mail, user.first_name, user.last_name),
+            body="Désinscription automatique de {} a {}".format(user.uid, club.name),
+            from_email=user.mail,
+            reply_to=["listmaster@resel.fr"],
+            to=["sympa@resel.fr"],
+        )
         try:
-            club=StudentOrganisation.get(cn=pk)
-            #If we don't do this we get an error cuz our LDAP scheme does not allow
+            subscription_email.send()
+        except SMTPException:
+            logger.warning(
+                "Erreur lors de la désinscription de la mlist %s de %s" % (mail, user.mail),
+                extra={
+                    'uid': user.uid,
+                    'user_mail': user.mail,
+                    'mlist': mail,
+                    'message_code': 'ERROR_UNSUBSCRIBE',
+                }
+            )
+
+    def post(self, request, pk):
+        try:
+            club = StudentOrganisation.get(cn=pk)
+            # If we don't do this we get an error cuz our LDAP scheme does not allow
             # a single model for each type of organisation
             if "tbCampagne" in club.object_classes:
-                club=ListeCampagne.get(cn=pk)
+                club = ListeCampagne.get(cn=pk)
             elif "tbAsso" in club.object_classes:
-                club=Association.get(cn=pk)
+                club = Association.get(cn=pk)
         except ObjectDoesNotExist:
             raise Http404("Aucun club trouvé")
-        if uid == None:
+
+        uid = request.POST.get('id_user', None)
+        if uid is None:
             user = request.ldap_user
         else:
-            if not (self.request.ldap_user.is_campus_moderator() or self.request.ldap_user.pk in club.prezs or request.user.is_staff):
-                messages.error(request, _("Vous n'êtes pas modérateur campus ou président de ce club"))
-                return HttpResponseRedirect(reverse('campus:clubs:list'))
-            else:
-                try:
-                    user = LdapUser.get(uid=uid)
-                except ObjectDoesNotExist:
-                    raise Http404("L'utilisateur n'éxiste pas")
-        if user.pk in club.members:
-            club.members.remove(user.pk)
-            club.save()
-            if club.email:
-                mail_search = re.search('^([a-z1-9-_.+]+)\@.+$', club.email)
-                mail = mail_search.group(1)
-                subscription_email = EmailMessage(
-                    subject="SIGNOFF {} {} {}".format(mail, user.first_name,
-                                                            user.last_name),
-                    body="Désinscription automatique de {} a {}".format(user.uid, club.name),
-                    from_email=user.mail,
-                    reply_to=["listmaster@resel.fr"],
-                    to=["sympa@resel.fr"],
-                )
-                try:
-                    subscription_email.send()
-                except SMTPException:
-                    print("Somthing went wrong when trying to send club unsubscription message")
-            messages.success(request, _("Désinscription terminée avec succès"))
+            try:
+                user = LdapUser.get(uid=uid)
+            except ObjectDoesNotExist:
+                raise Http404("L'utilisateur n'existe pas")
+        allowed = (
+            self.request.ldap_user.is_campus_moderator()
+            or self.request.ldap_user.pk in club.prezs
+            or request.user.is_staff
+            or user.uid == request.ldap_user
+        )
+
+        if allowed and user.pk in club.members:
+            self.remove_user(user, club, request)
         else:
-            messages.info(request, _("Le système n'a pas trouvé de personne à désinscrire dans la liste des membres"))
+            messages.info(request, _("Cette personne ne fait pas partie du club ou alors vous n'êtes pas autorisé"))
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 class RequestClubs(View):
@@ -504,7 +519,7 @@ class RequestClubs(View):
 
 def getHardLinks():
     """
-    View used to retrieve various hard links
+    Function used to retrieve various hard links
     """
 
     hardLinkAdd = reverse('campus:clubs:add-person', kwargs={'pk': "a"})[:-1]

@@ -197,6 +197,10 @@ body {
   color: red;
 }
 
+button.dell-user {
+  padding: 0;
+}
+
 .noncolored-a, .noncolored-a:hover, .noncolored-a:visited, .noncolored-a:focus{
    color: inherit;
    cursor: pointer;
@@ -256,4 +260,8 @@ body {
     background-size: cover;
     background-image: url(/static/images/campus/hugo.png);
     position:fixed;
+}
+
+.inline {
+    display: inline;
 }
