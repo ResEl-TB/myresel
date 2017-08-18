@@ -11,6 +11,7 @@ uwsgi.*
 !uwsgi.service
 db.sqlite3
 db.sqlite3_admin
+*.mo
 
 media/image/users_photo/
 media/image/ASSOS/
