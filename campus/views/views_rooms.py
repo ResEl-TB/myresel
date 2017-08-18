@@ -67,6 +67,9 @@ def construct_query(request, start_date, end_date, room='all'):
 
 def calendar_view(request, room='all', year=timezone.now().year, month=timezone.now().month, day='all'):
     """ View to display the month calendar of all events """
+    # TODO: LE CODE CI BAS EST UN MONSTRE ILLISIBLE... IL FONCTIONNE (COMME LE
+    # PROUVENT LES TESTS :/ ) PAR CONTRE IL FAUDRAIT QU'UN JOUR QUELQU'UN DE
+    # RAISONÉ PRENNE LE TEMPS DE LE RÉÉCRIRE CORRECTEMENT...
 
     # Slight hack to convert string parameters in good format
     year = int(year)
@@ -102,12 +105,12 @@ def calendar_view(request, room='all', year=timezone.now().year, month=timezone.
 
     for event in events:
         for occ in event.get_occurences():
-            #Temporarily changes the start_date and end_date for each event
-            #This is needed in order to properly display dates for recurrent event that last multiple days
+            # Temporarily changes the start_date and end_date for each event
+            # This is needed in order to properly display dates for recurrent event that last multiple days
             event = copy.deepcopy(event)
             event.start_time, event.end_time = occ[0], occ[1]
             single_events.append((occ, event))
-    #We only need event that are from this month
+    # We only need event that are from this month
     single_events = [e for e in single_events if ((e[0][0].month <= month and e[0][0].year == year) or e[0][0].year < year) and ((e[0][1].month >= month and e[0][1].year == year) or e[0][1].year > year)]
     # calendar date limits
     if day > 0:  # Show a single day
