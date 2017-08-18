@@ -23,9 +23,12 @@ class Home(View):
     #    return super(Home, self).dispatch(self, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
-        events = RoomBooking.objects.order_by('start_time').filter(start_time__gt=timezone.now(), displayable=True).all()[:4]
+        events = RoomBooking.objects.order_by('start_time').filter(
+            start_time__gt=timezone.now(),
+            displayable=True
+        ).all()[:4]
         birthdays = ListBirthdays.get_today_birthdays()
-        campus_mail = Mail.objects.order_by('-date').filter(moderated=True).all()[:4]
+        campus_mails = Mail.objects.order_by('-date').filter(moderated=True).all()[:4]
 
         python_wiki_rss_url = HOME_RSS_LINK
         feed = feedparser.parse( python_wiki_rss_url )
@@ -33,7 +36,7 @@ class Home(View):
         context = {
             'events': events,
             'birthdays': birthdays,
-            'campus_mail': campus_mail,
+            'campus_mails': campus_mails,
             'historicstuff': feed['items'],
         }
 
