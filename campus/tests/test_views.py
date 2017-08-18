@@ -322,7 +322,7 @@ class AddPrezTestCase(TestCase):
     def setUp(self):
         populate_orgas()
         self.cn = "tenniscn"
-        club=StudentOrganisation.get(cn=self.cn)
+        club = StudentOrganisation.get(cn=self.cn)
 
         try_delete_user("jbvallad")
         try_delete_user("bvallad")
@@ -347,23 +347,39 @@ class AddPrezTestCase(TestCase):
 
     def testAddPrezBeingModo(self):
         self.client.login(username="jbvallad", password="blabla")
-        r = self.client.get(reverse("campus:clubs:add-prez", kwargs={'pk':self.cn}),
-                                    data={"id_user":"bvallad"},
-                                    HTTP_HOST="10.0.3.94")
+        self.assertFalse(LdapUser.get(uid="bvallad").pk in StudentOrganisation.get(cn=self.cn).prezs)
+        
+        r = self.client.post(reverse("campus:clubs:add-prez", kwargs={'pk': self.cn}),
+                                    data={"id_user": "bvallad"},
+                                    HTTP_HOST="10.0.3.94",
+                                    follow=True,
+                                    HTTP_REFERER=reverse('campus:clubs:list'))
+
+        self.assertEquals(200, r.status_code)
         self.assertTrue(LdapUser.get(uid="bvallad").pk in StudentOrganisation.get(cn=self.cn).prezs)
 
     def testAddPrezBeingPrez(self):
         self.client.login(username="vallad", password="blabla")
-        r = self.client.get(reverse("campus:clubs:add-prez", kwargs={'pk':self.cn}),
-                                    data={"id_user":"jbvallad"},
-                                    HTTP_HOST="10.0.3.94")
+        self.assertFalse(LdapUser.get(uid="jbvallad").pk in StudentOrganisation.get(cn=self.cn).prezs)
+        r = self.client.post(reverse("campus:clubs:add-prez", kwargs={'pk': self.cn}),
+                                    data={"id_user": "jbvallad"},
+                                    HTTP_HOST="10.0.3.94",
+                                    follow=True,
+                                    HTTP_REFERER=reverse('campus:clubs:list'))
+
+        self.assertEquals(200, r.status_code)
         self.assertTrue(LdapUser.get(uid="jbvallad").pk in StudentOrganisation.get(cn=self.cn).prezs)
 
     def testAddPrezBeingNobody(self):
         self.client.login(username="allad", password="blabla")
-        r = self.client.get(reverse("campus:clubs:add-prez", kwargs={'pk':self.cn}),
-                                    data={"id_user":"allad"},
-                                    HTTP_HOST="10.0.3.94")
+        self.assertFalse(LdapUser.get(uid="allad").pk in StudentOrganisation.get(cn=self.cn).prezs)
+        r = self.client.post(reverse("campus:clubs:add-prez", kwargs={'pk': self.cn}),
+                                    data={"id_user": "allad"},
+                                    HTTP_HOST="10.0.3.94",
+                                    follow=True,
+                                    HTTP_REFERER=reverse('campus:clubs:list'))
+
+        self.assertEquals(200, r.status_code)
         self.assertFalse(LdapUser.get(uid="allad").pk in StudentOrganisation.get(cn=self.cn).prezs)
 
 class DeleteClubTestCase(TestCase):
