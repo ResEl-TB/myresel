@@ -378,8 +378,15 @@ class DeleteClubTestCase(TestCase):
 
     def testDeleteClubBeingModo(self):
         self.client.login(username="jbvallad", password="blabla")
-        r = self.client.get(reverse("campus:clubs:delete", kwargs={'pk':'tenniscn'}), HTTP_HOST="10.0.3.94")
+        self.assertTrue(StudentOrganisation.filter(cn="tenniscn"))
+        r = self.client.post(
+            reverse("campus:clubs:delete",
+                    kwargs={'pk':'tenniscn'}),
+                    HTTP_HOST="10.0.3.94",
+                    follow=True
+            )
 
+        self.assertEquals(200, r.status_code)
         self.assertFalse(StudentOrganisation.filter(cn="tenniscn"))
 
 ################################

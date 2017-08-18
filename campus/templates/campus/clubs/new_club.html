@@ -87,7 +87,10 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-success" data-dismiss="modal">Annuler</button>
-            <a href="{% url 'campus:clubs:delete' pk %}" class="btn btn-danger" >Confirmer</a>
+            <form method="POST" action="{% url 'campus:clubs:delete' pk %}" class="inline" >
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger">Confirmer</a>
+            </form>
           </div>
         </div>
       </div>

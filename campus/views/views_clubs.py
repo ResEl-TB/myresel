@@ -178,16 +178,13 @@ class EditClub(FormView):
 
         return super(EditClub, self).form_valid(form)
 
+@method_decorator(login_required, name="dispatch")
 class DeleteClub(View):
     """
     View used to remove a club/asso/list
     """
 
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(DeleteClub, self).dispatch(*args, **kwargs)
-
-    def get(self, request, pk):
+    def post(self, request, pk):
         if not (request.ldap_user.is_campus_moderator() or request.user.is_staff):
             messages.error(request, _("Vous n'êtes pas modérateur campus"))
             return HttpResponseRedirect(reverse('campus:who:home'))
@@ -197,16 +194,13 @@ class DeleteClub(View):
         except ObjectDoesNotExist:
             raise Http404("Aucun club trouvé")
 
+@method_decorator(login_required, name="dispatch")
 class MyClubs(View):
     """
     View used to list the current user's clubs
     """
 
     template_name = 'campus/clubs/list.html'
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(MyClubs, self).dispatch(*args, **kwargs)
 
     def get(self, request):
         orgas = StudentOrganisation.all()
@@ -345,14 +339,11 @@ class AddPersonToClub(View):
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
+@method_decorator(login_required, name="dispatch")
 class AddMailToClub(View):
     """
     View used to add a person to a specific club/list or asso if he's got the right to do so
     """
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(AddMailToClub, self).dispatch(*args, **kwargs)
 
     def get(self, request, pk):
         try:
@@ -391,14 +382,11 @@ class AddMailToClub(View):
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
+@method_decorator(login_required, name="dispatch")
 class AddPrezToClub(View):
     """
     View used to add a person to a specific club as a prez
     """
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(AddPrezToClub, self).dispatch(*args, **kwargs)
 
     def get(self, request, pk):
         uid=request.GET.get('id_user', None)
@@ -504,14 +492,12 @@ class RemovePersonFromClub(View):
             messages.info(request, _("Cette personne ne fait pas partie du club ou alors vous n'êtes pas autorisé"))
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+
+@method_decorator(login_required, name="dispatch")
 class RequestClubs(View):
     """
     View used to request (using ajax) alist of clubs
     """
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(RequestClubs, self).dispatch(*args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         if request.is_ajax():
