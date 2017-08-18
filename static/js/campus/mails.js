@@ -48,15 +48,15 @@ $('tr').each(function() {
                     
                     '<div class="form-group">' +
                     '<div class="input-group">' +
-                    '<span class="input-group-addon"><i class="fa fa-user"></i></span>' +
-                    '<input type="text" name="sender" class="form-control" value="'+response.sender+'" readonly="readonly">' +
+                    '<span class="input-group-addon"><i class="fa fa-fw fa-user"></i></span>' +
+                    '<input type="text" name="sender" class="form-control" value="'+ response.sender +'" readonly="readonly">' +
                     '</div>' +
                     '</div>' +
 
                     '<div class="form-group">' +
                     '<div class="input-group">' +
-                    '<span class="input-group-addon"><i class="fa fa-envelope-o"></i></span>' +
-                    '<input type="text" name="subject" class="form-control" value="'+response.subject+'">' +
+                    '<span class="input-group-addon"><i class="fa fa-fw fa-envelope-o"></i></span>' +
+                    '<input type="text" name="subject" class="form-control" value="'+ response.subject +'">' +
                     '</div>' +
                     '</div>' +
 

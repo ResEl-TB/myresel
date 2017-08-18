@@ -43,7 +43,7 @@ def construct_query(request, start_date, end_date, room='all'):
     """
     q_rooms = Q()
     if room == 'all':
-        q_rooms = Q()
+        q_rooms &= Q(displayable=True)
     else:
         if not request.user.is_authenticated():
             raise UserNotAuthenticatedException(_('Vous devez être connecté pour accéder à cette page'))
@@ -67,6 +67,9 @@ def construct_query(request, start_date, end_date, room='all'):
 
 def calendar_view(request, room='all', year=timezone.now().year, month=timezone.now().month, day='all'):
     """ View to display the month calendar of all events """
+    # TODO: LE CODE CI BAS EST UN MONSTRE ILLISIBLE... IL FONCTIONNE (COMME LE
+    # PROUVENT LES TESTS :/ ) PAR CONTRE IL FAUDRAIT QU'UN JOUR QUELQU'UN DE
+    # RAISONÉ PRENNE LE TEMPS DE LE RÉÉCRIRE CORRECTEMENT...
 
     # Slight hack to convert string parameters in good format
     year = int(year)
@@ -102,12 +105,12 @@ def calendar_view(request, room='all', year=timezone.now().year, month=timezone.
 
     for event in events:
         for occ in event.get_occurences():
-            #Temporarily changes the start_date and end_date for each event
-            #This is needed in order to properly display dates for recurrent event that last multiple days
+            # Temporarily changes the start_date and end_date for each event
+            # This is needed in order to properly display dates for recurrent event that last multiple days
             event = copy.deepcopy(event)
             event.start_time, event.end_time = occ[0], occ[1]
             single_events.append((occ, event))
-    #We only need event that are from this month
+    # We only need event that are from this month
     single_events = [e for e in single_events if ((e[0][0].month <= month and e[0][0].year == year) or e[0][0].year < year) and ((e[0][1].month >= month and e[0][1].year == year) or e[0][1].year > year)]
     # calendar date limits
     if day > 0:  # Show a single day
@@ -115,7 +118,7 @@ def calendar_view(request, room='all', year=timezone.now().year, month=timezone.
         current_date = datetime.date(year=year, month=month, day=day)
         cal.append(
             # Shows the day's event and also those that last multiple days
-            [(datetime.date(year=year, month=month, day=day), [e[1] for e in single_events if e[0][0].day == day or (e[0][0].day < day and e[0][1].day >= day) ])]
+            [(datetime.date(year=year, month=month, day=day), [e[1] for e in single_events if (e[0][0].day == day and e[0][0].month == month and e[0][0].year == year) or ((e[0][0].day < day or e[0][0].month < month or e[0][0].year < year) and (e[0][1].day >= day or e[0][1].month > month or e[0][1].year > year))])]
         )
     else:
         current_date = datetime.date(year=year, month=month, day=15)
@@ -235,7 +238,7 @@ class BookingView(FormView):
         self.booking = None
         if self.kwargs.get('booking', None):
             self.booking = get_object_or_404(RoomBooking, id=self.kwargs['booking'])
-            if not self.booking.user_can_manage(self.request.ldap_user):
+            if not (self.booking.user_can_manage(self.request.ldap_user) or request.user.is_staff or request.ldap_user.is_campus_moderator()):
                 messages.error(self.request, _('Vous ne pouvez pas modifier cette réservation'))
                 return HttpResponseRedirect(reverse('campus:rooms:calendar'))
         return super(BookingView, self).dispatch(request, *args, **kwargs)
@@ -243,7 +246,14 @@ class BookingView(FormView):
     def get_form(self, form_class=None):
         if form_class is None:
             form_class = self.get_form_class()
-        return form_class(self.request.POST or None, user=self.request.ldap_user, instance=self.booking)
+        return form_class(self.request.POST or None, user=self.request.ldap_user, instance=self.booking,)
+
+    def get_context_data(self, **kwargs):
+        context = super(BookingView, self).get_context_data(**kwargs)
+        context["booking"] = None
+        if self.booking:
+            context["booking"] = self.booking.id
+        return context
 
     def form_valid(self, form):
         form.save()
@@ -260,10 +270,16 @@ class DeleteBooking(DeleteView):
     @method_decorator(login_required)
     def dispatch(self, request, *args, **kwargs):
         booking = get_object_or_404(RoomBooking, id=self.kwargs['pk'])
-        if not (self.booking.user_can_manage(request.ldap_user) or request.user.is_staff or request.ldap_user.is_campus_moderator()):
+        if not (booking.user_can_manage(request.ldap_user) or request.user.is_staff or request.ldap_user.is_campus_moderator()):
             messages.error(self.request, _("Vous ne pouvez pas supprimer cette réservation"))
             return HttpResponseRedirect(reverse('campus:rooms:calendar'))
         return super(DeleteBooking, self).dispatch(request, *args, **kwargs)
+
+
+class BookingDetailView(DetailView):
+    model = RoomBooking
+    template_name = 'campus/rooms/booking_detail.html'
+    slug_field = "pk"
 
 
 class RequestAvailability(View):
@@ -280,18 +296,20 @@ class RequestAvailability(View):
             room_pk = request.GET.get('value', None)
             start = request.GET.get('start', None)
             end = request.GET.get('end', None)
-            print(room_pk, start, end)
+            booking_id = request.GET.get('id', None)
+            answer = 0
+
             if room_pk == None or start == None or end == None:
                 raise Http404
             room = get_object_or_404(Room, pk=room_pk)
-            answer = 0
+
+            if booking_id:
+                booking = get_object_or_404(RoomBooking, id=booking_id)
+                if room in booking.room.all():
+                    return(answer)
+
             if not room.is_free(start, end):
                 answer = room.name
             return HttpResponse(answer)
         else:
             raise Http404
-
-class BookingDetailView(DetailView):
-    model = RoomBooking
-    template_name = 'campus/rooms/booking_detail.html'
-    slug_field = "pk"

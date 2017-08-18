@@ -10,6 +10,10 @@
 {% endblock %}
 
 {% block content %}
+<div class="btn-home btn-home-campus">
+  <a href="{% url 'campus:home' %}" class="noncolored-a"><span class="fa fa-home"></span>   </a>
+</div>
+
 <div class="container">
    <div class="row">
       <div class="col-md-12">
@@ -55,14 +59,14 @@
                         </div>
                      </div>
                      <div class="form-category">
-                        <label for="remove_photo" class="col-sm-3 control-label">{% trans "" %}</label>
+                        <label for="remove_photo" class="col-sm-3 control-label"> </label>
                         <div class="col-sm-8">
                            {{form.remove_photo.errors}}
                            {{form.remove_photo}} {{form.remove_photo.label_tag}}
                         </div>
                      </div>
                      <div class="form-category">
-                        <label class="col-sm-3 control-label"> {% trans "" %}</label>
+                        <label class="col-sm-3 control-label">  </label>
                         <div class="col-sm-8 text-center">
                            <h4 class="well">Merci de respecter le format 300x400 pixels ou un ratio identique</h4>
                         </div>

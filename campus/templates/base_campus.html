@@ -75,13 +75,13 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="fa fa-fw fa-plus"></span><span class="hidden-sm"> Mail campus</span><span class="fa fa-fw fa-caret-down"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="{% url "campus:rooms:booking" %}"><span class="fa fa-fw fa-calendar-plus-o"></span> Créer un événement <span class="label label-success">bientôt</span></a></li>
+                        <li><a href="{% url "campus:rooms:booking" %}"><span class="fa fa-fw fa-calendar-plus-o"></span> Créer un événement </a></li>
                         <li><a href="{% url "campus:mails:send" %}"><span class="fa fa-fw fa-envelope"></span> Envoyer un mail campus@resel.fr</a></li>
                         {% if request.ldap_user.is_campus_moderator or request.user.is_staff%}<li><a href="{% url 'campus:clubs:new'%}"><span class="fa fa-fw fa-users"></span> Nouveau club </a></li>{% endif %}
                     </ul>
                 </li>
                 {% if not request.user.is_authenticated %}
-                    <li><a href="{% url 'login' %}"><span class="fa fa-fw fa-sign-in"></span> Connexion</a></li>
+                    <li><a href="{% url 'login' %}?next={{request.get_full_path}}"><span class="fa fa-fw fa-sign-in"></span> Connexion</a></li>
                 {% else %}
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user fa-fw" aria-hidden="true"></i> <span class="hidden-sm">{{ request.ldap_user.first_name }} {{ request.ldap_user.last_name }}</span><span class="fa fa-fw fa-caret-down"></span></a>

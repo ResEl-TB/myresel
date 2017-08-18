@@ -3,6 +3,7 @@ import json
 import uuid
 from datetime import datetime, timedelta
 
+from django.conf import settings
 from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
 from django.db import models
@@ -13,6 +14,7 @@ from ldapback.models.fields import LdapCharField, LdapPasswordField, LdapNtPassw
     LdapDatetimeField, LdapBooleanField
 from myresel.settings import LDAP_DN_PEOPLE
 from myresel.settings_local import LDAP_DN_GROUPS
+from fonctions import ldap
 
 
 class LdapUser(ldapback.models.LdapModel):
@@ -133,10 +135,19 @@ class LdapUser(ldapback.models.LdapModel):
 
     def is_campus_moderator(self):
         """
-        Tels whether the user is allowed to moderate campus emails
+        Tells whether the user is allowed to moderate campus emails
         :return: bool
         """
         return LdapGroup.get(pk='campusmodo').is_member(self.uid)
+
+    def is_staff(self):
+        """
+        Tells if the user is part of the ResEl staff
+        :return: bool
+        """
+        if ldap.search(settings.LDAP_OU_ADMIN, '(&(uid=%s))' % self.uid):
+            return True
+        return False
 
 
 class LdapOldUser(LdapUser):

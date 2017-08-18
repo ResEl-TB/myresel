@@ -9,6 +9,10 @@
 {% endblock css %}
 
 {% block content %}
+    <div class="btn-home btn-home-campus">
+      <a href="{% url 'campus:home' %}" class="noncolored-a"><span class="fa fa-home"></span>   </a>
+    </div>
+
     <div class="container title">
         <h1>Calendrier de l'AE</h1>
     </div>
@@ -45,7 +49,7 @@
                     {% if current_room == 'all' %}
                         Toutes les salles
                         {% if user.is_authenticated %}
-                        <a href="{% url 'campus:rooms:booking' %}" class="btn btn-default">Créer un événement</a>
+                        <a href="{% url 'campus:rooms:booking' %}" class="btn btn-success">Créer un événement</a>
                         {% if user.is_staff %}
                         <a href="{% url 'campus:rooms:add-room' %}" class="btn btn-default">Ajouter une salle</a>
                         <a href="{% url 'campus:rooms:manage-rooms' %}" class="btn btn-default">Gérer les salles</a>
@@ -101,13 +105,13 @@
                                                 <a class="event" href="{% url "campus:rooms:booking-detail"  event.pk %}">
                                                     <div class="alert-{{ event.booking_type }} {% if calendar|length_is:'1' %} col-md-3 {% endif %}">
                                                         <span class="time">
-                                                            {% if event.start_time|date:'j' == day|date:'j' and event.start_time|date:'n' == current_day.1 and event.start_time|date:'Y' == current_day.2 %}
+                                                            {% if event.start_time|date:'j' == day|date:'j' and event.start_time|date:'n' == current_date|date:'n' and event.start_time|date:'Y' == current_day.2 %}
                                                                 {{ event.start_time|time:'H:i' }}
                                                             {% else %}
                                                                 00:00
                                                             {% endif %}
                                                             -
-                                                            {% if event.end_time|date:'j' == day|date:'j' and event.end_time|date:'n' == current_day.1 and event.end_time|date:'Y' == current_day.2 %}
+                                                            {% if event.end_time|date:'j' == day|date:'j' and event.end_time|date:'n' == current_date|date:'n' and event.end_time|date:'Y' == current_day.2 %}
                                                                 {{ event.end_time|time:'H:i' }}
                                                             {% else %}
                                                                 23:59
@@ -134,6 +138,7 @@
                             <td><span class="alert alert-event">Évènement</span></td>
                             <td><span class="alert alert-sport">Sport</span></td>
                             <td><span class="alert alert-arts">Arts et culture</span></td>
+                            <td><span class="alert alert-trip">Sortie</span></td>
                             <td><span class="alert alert-other">Autre</span></td>
                         </tr>
                     </table>

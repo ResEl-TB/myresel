@@ -149,7 +149,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-5">
-                        <h2 class="title"><a href="{% url 'campus:home'%}">{% trans "En ce moment sur le campus" %}</a></h2>
+                        <h2 class="title"><a href="{% url 'campus:rooms:calendar'%}">{% trans "En ce moment sur le campus" %}</a></h2>
                     {% for event in campus_events %}
                         <div class="event-bloc">
                             <div class="row" />
@@ -187,7 +187,7 @@
                                     {% else %}
                                     <img class="logo img-responsive" src="{% static 'images/campus/orga.png' %}">
                                     {% endif %}
-                                    <div class="club-name">{{ club.name }}</div>
+                                    <p class="club-name">{{ club.name }}</p>
                                     {# <div class="club-description">{{ club.description }}</div> #}
                                 </a>
                             </div>
@@ -208,7 +208,7 @@
 
                         {% if birthdays_users|length > 0 %}
                         <div class="birthdays-list">
-                            <span class="fa fa-fw fa-birthday-cake"></span> 
+                            <span class="fa fa-fw fa-birthday-cake"></span>
                             {% for user_b in birthdays_users %}{{ user_b.first_name }}{%if forloop.last == False %},{% endif %}{% endfor %}
                         </div>
                         {% endif %}
@@ -264,6 +264,6 @@
                 rennes_loaded = true;
             }
         });
-        
+
     </script>
 {% endblock %}
