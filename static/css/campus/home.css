@@ -10,12 +10,30 @@ a:hover {
     font-weight: bold;
 }
 
+.title {
+    font-size: 1.8em;
+    color: rgba(0, 0, 0, 1);
+}
+
 .event {
     animation: fade-from-left 1s;
+    margin-top:4px;
 }
 
 .mail {
     animation: fade-from-bottom 1s;
+    margin-top: 4px;
+}
+
+.mail-content {
+    margin-top: 16px;
+    margin-bottom: 16px;
+}
+
+.sender {
+    margin-top: 16px;
+    margin-bottom: -16px;
+    font-size: .9em;
 }
 
 .birthday {
@@ -28,8 +46,18 @@ a:hover {
 
 }
 
-.well {
-    border-radius: 0px !important;
+.block-head {
+    margin-top: 16px;
+    margin-bottom: 32px;
+}
+
+.block-header {
+    margin-top: 16px;
+}
+
+.block {
+    background-color: rgba(255, 255, 255, .85);
+    padding: 20px;
 }
 
 .event-badge-container {
@@ -99,6 +127,10 @@ a:hover {
 
 .carousel-control.left {
     background-image: none !important;
+}
+
+.carousel-inner .item {
+    height: 200px;
 }
 
 .small-fixed-margin-top {
