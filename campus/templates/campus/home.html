@@ -30,23 +30,29 @@
 
     </div>
     <div class="row" style="margin-top: 3%;">
-        <div class="col-md-4">
+        <div class="col-md-5">
             <div class="text-center bold well">
-                <a href="{% url 'campus:rooms:calendar' %}"><span class="fa fa-calendar"></span> {% trans "EVÉNEMENTS" %}</a>
+                <a href="{% url 'campus:rooms:calendar' %}"><span class="fa fa-fw fa-calendar"></span> {% trans "PROCHAINS ÉVÉNEMENTS" %}</a>
             </div>
             {% for event in events %}
             <div class="row well delete-margin event">
-                <div class="col-xs-4 event-badge">
-                    <div class="text-center">
-                        <span>{{event.start_time|date:"l"|upper}}</span><br>
-                        <span class="fa fa-calendar-o"></span> {{event.start_time|date:"d N"}}<br>
-                        <span class="fa fa-clock-o"></span> {{event.start_time|date:"H\hm"}}
+                    <div class="row" />
+                            <div class="col-xs-3 event-badge-container">
+                                    <div class="event-badge">
+                                            <div class="day">{{ event.start_time|date:"l"|upper }}</div>
+                                            <div class="date">{{ event.start_time|date:"j b"|upper }}</div>
+                                            <div class="hour">{{ event.start_time|date:"H\hi" }}</div>
+                                    </div>
+                            </div>
+                            <div class="col-xs-9">
+                                    <a href="{% url 'campus:rooms:booking-detail' event.pk %}">
+                                            <div class="event-description">
+                                                    {{ event.description|truncatewords_html:17|linebreaks }}
+                                            </div>
+                                    </a>
+                                    <div><a class="animated-fa" href="{% url 'campus:rooms:calendar-room' event.room.first.pk %}" ><span class="fa fa-fw fa-map-marker"></span> {{ event.room.first.name }}</a></div>
+                            </div>
                     </div>
-                </div>
-                <div class="col-xs-8 text-justified">
-                    <a class="event-description" href="{% url 'campus:rooms:booking-detail' event.pk %}"> {{event.description|truncatewords:10}} </a> <br><br>
-                    <a class="animated-fa" href="{% url 'campus:rooms:calendar-room' event.room.first.pk %}"><span class="fa fa-map-marker"></span> {{event.room.first.name}}</a>
-                </div>
             </div>
             {% empty %}
             <div class="well event">
@@ -54,9 +60,9 @@
             </div>
             {% endfor %}
         </div>
-        <div class="col-md-6">
+        <div class="col-md-5">
             <div class=" text-center bold well">
-                <span class="fa fa-envelope"></span> {% trans "MAILS CAMPUS" %}
+                <span class="fa fa-fw fa-envelope"></span> {% trans "MAILS CAMPUS" %}
             </div>
             {% for campus_mail in campus_mails %}
             <div class="well mail">
