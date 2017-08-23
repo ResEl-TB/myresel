@@ -374,9 +374,8 @@ class AddMailToClub(View):
             logger.warning(
                 "Erreur lors de la désinscription de la mlist %s de %s" % (mail, user.mail),
                 extra={
-                    'uid': self.request.ldap_user.uid,
                     'user_mail': mail,
-                    'mlist': club.mail,
+                    'mlist': club.email,
                     'message_code': 'ERROR_UNSUBSCRIBE',
                 }
             )
