@@ -91,7 +91,7 @@
           {% for event in historicstuff %}
           <div class="item block text-justified">
             <a href="{{ event.link }}" class="title-a">{{ event.title }}</a><br>
-            {{ event.summary|truncatewords:10|safe }}
+            {{ event.summary|truncatewords:15|safe }}
           </div>
           {% endfor %}
         </div>

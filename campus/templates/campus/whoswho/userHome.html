@@ -153,19 +153,29 @@
             </p>
             <h3 class="text-center">Mes filleuls <a style="padding:0 0 0 0;" class="btn" data-toggle="modal" data-target="#addBizu"><span class="fa fa-plus-circle" style="color:#8BBF82"></span></a></h3>
             {% for godchild in user.godchildren %}
-            <p class="text-center">
-                  <a href="{% url 'campus:who:user-details' uid=godchild.uid %}">{{ godchild.first_name }} {{godchild.last_name}}</a> (Promo {{godchild.promo}})
-                  <a class="fa fa-trash-o dell-user" href="{% url 'campus:who:remove-person' godchild.uid False %}" title="{% trans 'Supprimer' %}"></a>
+            <div class="text-center">
+                <p align="right" class="text-center" style="display:inline">
+                      <a href="{% url 'campus:who:user-details' uid=godchild.uid %}">{{ godchild.first_name }} {{godchild.last_name}}</a> (Promo {{godchild.promo}})
+                </p>
+                <form class="dell-form" action="{% url 'campus:who:remove-person' godchild.uid False %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="fa fa-trash-o btn dell-user"></button>
+                </form>
+            </div>
             {% empty %}
                   <p class="text-center">Vous n'avez pas de filleuls</p>
             {% endfor %}
-            </p>
             <h3 class="text-center">Mes parains <a style="padding:0 0 0 0;" class="btn" data-toggle="modal" data-target="#addParain"><span class="fa fa-plus-circle" style="color:#8BBF82"></span></a></h3>
             {% for godparent in user.godparents %}
-            <p class="text-center">
-                <a href="{% url 'campus:who:user-details' uid=godparent.uid %}">{{ godparent.first_name }} {{godparent.last_name}}</a> (Promo {{godparent.promo}})
-                <a class="fa fa-trash-o dell-user" href="{% url 'campus:who:remove-person' godparent.uid True %}" title="{% trans 'Supprimer' %}"></a>
-            </p>
+            <div class="text-center">
+                <p class="text-center" style="display:inline">
+                    <a href="{% url 'campus:who:user-details' uid=godparent.uid %}">{{ godparent.first_name }} {{godparent.last_name}}</a> (Promo {{godparent.promo}})
+                </p>
+                <form class="dell-form" action="{% url 'campus:who:remove-person' godparent.uid True %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="fa fa-trash-o btn dell-user"></button>
+                </form>
+            </div>
             {% empty %}
                 <p class="text-center">Vous n'avez pas de parains</p>
             {% endfor %}

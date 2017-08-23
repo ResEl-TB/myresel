@@ -264,7 +264,7 @@ class AddPersonToClub(View):
 
     def add_user(self, user, club, request):
         """
-        Add a `user` to a `club` and subscribe him to the mlist, 
+        Add a `user` to a `club` and subscribe him to the mlist,
         no verification is made.
         """
         club.members.append(user.pk)
@@ -339,7 +339,7 @@ class AddMailToClub(View):
     View used to add a person to a specific club/list or asso if he's got the right to do so
     """
 
-    def get(self, request, pk):
+    def post(self, request, pk):
         try:
             club=StudentOrganisation.get(cn=pk)
             if "tbCampagne" in club.object_classes:
