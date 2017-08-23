@@ -372,7 +372,7 @@ class AddMailToClub(View):
             subscription_email.send()
         except SMTPException:
             logger.warning(
-                "Erreur lors de la désinscription de la mlist %s de %s" % (mail, user.mail),
+                "Erreur lors de la désinscription de la mlist %s de %s" % (club.email, mail),
                 extra={
                     'user_mail': mail,
                     'mlist': club.email,
