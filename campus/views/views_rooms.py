@@ -111,14 +111,18 @@ def calendar_view(request, room='all', year=timezone.now().year, month=timezone.
             event.start_time, event.end_time = occ[0], occ[1]
             single_events.append((occ, event))
     # We only need event that are from this month
-    single_events = [e for e in single_events if ((e[0][0].month <= month and e[0][0].year == year) or e[0][0].year < year) and ((e[0][1].month >= month and e[0][1].year == year) or e[0][1].year > year)]
+    single_events = [e for e in single_events if ((e[0][0].month <= month and e[0][0].year == year) \
+                                                or e[0][0].year < year) \
+                                                and ((e[0][1].month >= month and e[0][1].year == year) or e[0][1].year > year)]
     # calendar date limits
     if day > 0:  # Show a single day
         day = int(day)
         current_date = datetime.date(year=year, month=month, day=day)
         cal.append(
             # Shows the day's event and also those that last multiple days
-            [(datetime.date(year=year, month=month, day=day), [e[1] for e in single_events if (e[0][0].day == day and e[0][0].month == month and e[0][0].year == year) or ((e[0][0].day < day or e[0][0].month < month or e[0][0].year < year) and (e[0][1].day >= day or e[0][1].month > month or e[0][1].year > year))])]
+            [(datetime.date(year=year, month=month, day=day), [e[1] for e in single_events if (e[0][0].day == day and e[0][0].month == month and e[0][0].year == year) \
+                                                                                            or ((e[0][0].day < day or e[0][0].month < month or e[0][0].year < year) \
+                                                                                            and (e[0][1].day >= day or e[0][1].month > month or e[0][1].year > year))])]
         )
     else:
         current_date = datetime.date(year=year, month=month, day=15)
@@ -132,7 +136,9 @@ def calendar_view(request, room='all', year=timezone.now().year, month=timezone.
                     )
                 else:
                     week_events.append(
-                        (datetime.date(year=year, month=month, day=day), [e[1] for e in single_events if (e[0][0].day == day and e[0][0].month == month and e[0][0].year == year) or ((e[0][0].day < day or e[0][0].month < month or e[0][0].year < year) and (e[0][1].day >= day or e[0][1].month > month or e[0][1].year > year))])
+                        (datetime.date(year=year, month=month, day=day), [e[1] for e in single_events if (e[0][0].day == day and e[0][0].month == month and e[0][0].year == year) \
+                                                                                                        or ((e[0][0].day < day or e[0][0].month < month or e[0][0].year < year) \
+                                                                                                        and (e[0][1].day >= day or e[0][1].month > month or e[0][1].year > year))])
                     )
             cal.append(week_events)
 
