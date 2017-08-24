@@ -85,8 +85,9 @@ $('tr').each(function() {
                             'sender': this.$content.find('input[name="sender"]').val(),
                             'subject': this.$content.find('input[name="subject"]').val(),
                             'content': this.$content.find('textarea[name="content"]').val(),
+                            'csrfmiddlewaretoken': this.$content.find('input[name="csrfmiddlewaretoken"]').val(),
                         },
-                        success: function() { 
+                        success: function() {
                             // close the popup
                             location.reload()
                         }
@@ -128,7 +129,7 @@ $('tr').each(function() {
                             'explanation': this.$content.find('.explanation').val(),
                             'csrfmiddlewaretoken': this.$content.find('input[name="csrfmiddlewaretoken"]').val(),
                         },
-                        success: function() { 
+                        success: function() {
                             // close the popup
                             location.reload()
                         }

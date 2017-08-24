@@ -231,7 +231,7 @@ class ClubManagementForm(Form):
         label=_("Description"),
     )
 
-    logo = forms.ImageField( #logo
+    logo = forms.ImageField( # logo
         widget = forms.ClearableFileInput(),
         label = 'Logo',
         required = False,
@@ -271,46 +271,46 @@ class ClubManagementForm(Form):
         type = self.cleaned_data['type']
         if type not in [o[0] for o in self.ORGA_TYPE]:
             raise ValidationError(message=_("Merci de sélectionner un choix valide"), code="BAD TYPE")
-        return (type)
+        return type
 
     def clean_cn(self):
-        cn = self.cleaned_data['cn'].lower()
+        cn = self.cleaned_data['cn'].lower().strip()
         if StudentOrganisation.filter(cn=cn):
             raise ValidationError(_("Ce nom existe déjà, assurez vous de créer un club/asso qui n'existe pas déjà"), code="CN EXISTS")
         elif not re.match(r'^[a-z0-9-]+$', cn):
             raise ValidationError(message=_("Le nom court ne doit pas contenir d'espace est n'est contitué que de lettres et de chiffres"))
-        return(cn)
+        return cn
 
     def clean_logo(self):
         logo = self.cleaned_data['logo']
-        if self.cleaned_data['type'] != 'CLUB' and logo == None:
+        if self.cleaned_data['type'] != 'CLUB' and logo is None:
             raise ValidationError(message=_("Merci de renseigner un logo pour votre association/liste"), code="NO LOGO")
-        return(logo)
+        return logo
 
     def clean_website(self):
-        website = self.cleaned_data['website'].lower()
-        if not re.match(r'^(http(s)*:\/\/)*[a-z0-9.-]+\.[a-z0-9]+$', website) and website != "":
+        website = self.cleaned_data['website'].lower().strip()
+        if not re.match(r'^(http(s)*:\/\/)*[a-z0-9.-]+\.[a-z0-9]+', website) and website != "":
             raise ValidationError(message=_("Veuillez rentrer une adresse web valide"), code="BAD WEBSITE")
-        return(website)
+        return website
 
     def clean_email(self):
-        email = self.cleaned_data['email'].lower()
-        if not re.match(r'^[a-z1-9-_.+]+\@[a-z1-9-]+\.[a-z0-9-]+$', email) and email != "":
-            raise ValidationError(message=_("Veuillez rentrer une adresse mail valide"), code="BAD MAIL")
-        return(email)
+        email = self.cleaned_data['email'].lower().strip()
+        if not re.match(r'^[a-z1-9-_.+]+\@[a-z1-9-]+\.[a-z0-9-]+', email) and email != "":
+            raise ValidationError(message=_("Veuillez rentrer une adresse mail valide"), code="BAD EMAIL")
+        return email
 
     def clean_campagneYear(self):
         year = self.cleaned_data['campagneYear']
-        if self.cleaned_data['type'] == "LIST" and year == None:
+        if self.cleaned_data['type'] == "LIST" and year is None:
             raise ValidationError(_("Veuillez entrer une année de campagne valide"), code="WRONG YEAR")
-        return(year)
+        return year
 
     def clean(self):
         cleaned_data = super(ClubManagementForm, self).clean()
 
     def create_club(self, user):
 
-        #If we don't do this we get an error cuz our LDAP scheme does not allow
+        # If we don't do this we get an error cuz our LDAP scheme does not allow
         # a single model for each type of organisation
         if self.cleaned_data['type'] == "CLUB":
             new_club = StudentOrganisation()
@@ -322,6 +322,8 @@ class ClubManagementForm(Form):
             new_club = ListeCampagne()
             new_club.object_classes = ["tbCampagne"]
             new_club.campagneYear = self.cleaned_data['campagneYear']
+        else:
+            raise ValueError("Invalid club type: %s " % self.cleaned_data['type'])
 
         new_club.name = self.cleaned_data['name']
         new_club.cn = self.cleaned_data['cn']
@@ -331,7 +333,7 @@ class ClubManagementForm(Form):
         new_club.members = [user]
         new_club.prezs = [user]
 
-        if self.cleaned_data["logo"] != None:
+        if self.cleaned_data["logo"] is not None:
             new_club.logo = self.cleaned_data["logo"]
 
         new_club.email = self.cleaned_data['email']
