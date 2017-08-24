@@ -91,10 +91,7 @@ class NewClub(FormView):
     success_url = '/campus/clubs'
 
     def form_valid(self, form):
-        if not (self.request.ldap_user.is_campus_moderator() or self.request.user.is_staff):
-            messages.error(self.request, _("Vous n'êtes pas modérateur campus"))
-            return HttpResponseRedirect(reverse('campus:clubs:list'))
-        if form.cleaned_data['logo'] != None:
+        if form.cleaned_data['logo']:
             logo = form.cleaned_data['logo']
             logo = Image.open(BytesIO(logo.read()))
             try:
@@ -104,7 +101,7 @@ class NewClub(FormView):
                 pass
             logo.save(path+form.cleaned_data['cn']+".png", "PNG")
             form.cleaned_data['logo'] = form.cleaned_data['cn']+".png"
-        form.create_club()
+        form.create_club(self.request.ldap_user.pk)
         pk = None
         return super(NewClub, self).form_valid(form)
 
@@ -352,7 +349,7 @@ class AddMailToClub(View):
         if not (self.request.ldap_user.is_campus_moderator() or self.request.ldap_user.pk in club.prezs or request.user.is_staff):
             messages.error(request, _("Vous n'êtes pas modérateur campus ou président de ce club"))
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-        mail = request.GET.get("mail", None)
+        mail = request.POST.get("mail", None)
 
         if not mail:
             raise Http404

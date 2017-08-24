@@ -33,7 +33,7 @@
       <div class="row text-center">
         <div class="col-sm-4"><a href="{% url 'campus:mails:send'%}"><span class="fa fa-fw fa-pencil"></span> {% trans "Rédiger un mail" %}</a></div>
         <div class="col-sm-4"><a href="{% url 'campus:rooms:booking'%}"><span class="fa fa-fw fa-calendar"></span> {% trans "Nouvel événement" %}</a></div>
-        <div class="col-sm-4"><a href="#"><span class="fa fa-fw fa-users"></span> {% trans "Nouveau club" %}</a></div>
+        <div class="col-sm-4"><a href="{% url 'campus:clubs:new' %}"><span class="fa fa-fw fa-users"></span> {% trans "Nouveau club" %}</a></div>
       </div>
     </div>
   </div>
