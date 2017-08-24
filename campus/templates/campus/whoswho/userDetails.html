@@ -67,7 +67,10 @@
                   <a href="{% url 'campus:who:user-details' godparent.uid %}">{{godparent.first_name}} {{godparent.last_name|upper}}</a>
                   ({%trans 'Promo' %} {{godparent.promo}})
                   {% if ldapuser.uid == display_user.uid %}
-                    <a class="fa fa-trash-o dell-user" href="{% url 'campus:who:remove-person' godparent.uid True %}" title="{% trans 'Supprimer' %}"></a>
+                    <form class="dell-form" action="{% url 'campus:who:remove-person' godparent.uid True %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="fa fa-trash-o btn dell-user"></button>
+                    </form>
                   {% endif %}
                 </li>
                 {% if forloop.last %}
@@ -87,7 +90,10 @@
                   <a href="{% url 'campus:who:user-details' godchild.uid %}">{{godchild.first_name}} {{godchild.last_name|upper}}</a>
                   ({%trans 'Promo' %} {{godchild.promo}})
                   {% if ldapuser.uid == display_user.uid %}
-                    <a class="fa fa-trash-o dell-user" href="{% url 'campus:who:remove-person' godchild.uid False %}" title="{% trans 'Supprimer' %}"></a>
+                      <form class="dell-form" action="{% url 'campus:who:remove-person' godchild.uid False %}" method="POST">
+                          {% csrf_token %}
+                          <button type="submit" class="fa fa-trash-o btn dell-user"></button>
+                      </form>
                   {% endif %}
                 </li>
                 {% if forloop.last %}

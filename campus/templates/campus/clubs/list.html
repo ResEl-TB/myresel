@@ -207,7 +207,7 @@
 <div class="modal fade" id="addPerson" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" id="addPersonForm" action="" method="get">
+            <form class="form-horizontal" id="addPersonForm" action="" method="POST">
                 {% csrf_token %}
                 <div class="modal-header">
                     <h4 class="modal-title">{% trans "Ajouter une Personne" %}</h4>
@@ -253,7 +253,7 @@
 <div class="modal fade" id="addEmail" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" id="addMailForm" action="" method="get">
+            <form class="form-horizontal" id="addMailForm" action="" method="POST">
                 {% csrf_token %}
                 <div class="modal-header">
                     <h4 class="modal-title">{% trans "Désinscrire une personne" %}</h4>

@@ -208,7 +208,7 @@ class NewClubTestCase(TestCase):
     def testCorrectClub(self):
         form = createClubForm()
         self.assertTrue(form.is_valid())
-        form.create_club()
+        form.create_club("uid=jvalladea,ou=people,dc=maisel,dc=enst-bretagne,dc=fr")
         self.assertTrue(StudentOrganisation.filter(cn="tenniscn"))
 
     def testWrongCN(self):
@@ -348,7 +348,7 @@ class AddPrezTestCase(TestCase):
     def testAddPrezBeingModo(self):
         self.client.login(username="jbvallad", password="blabla")
         self.assertFalse(LdapUser.get(uid="bvallad").pk in StudentOrganisation.get(cn=self.cn).prezs)
-        
+
         r = self.client.post(reverse("campus:clubs:add-prez", kwargs={'pk': self.cn}),
                                     data={"id_user": "bvallad"},
                                     HTTP_HOST="10.0.3.94",
@@ -869,7 +869,7 @@ class RoomFormTestCase(TestCase):
 
     def testUnknownClub(self):
         self.client.login(username="jbvallad", password="blabla")
-        form = createRoomForm(clubs="test")
+        form = createRoomForm(clubs="udhezohiez")
         self.assertFalse(form.is_valid())
 
     def testWrongLocation(self):

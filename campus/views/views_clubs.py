@@ -91,10 +91,7 @@ class NewClub(FormView):
     success_url = '/campus/clubs'
 
     def form_valid(self, form):
-        if not (self.request.ldap_user.is_campus_moderator() or self.request.user.is_staff):
-            messages.error(self.request, _("Vous n'êtes pas modérateur campus"))
-            return HttpResponseRedirect(reverse('campus:clubs:list'))
-        if form.cleaned_data['logo'] != None:
+        if form.cleaned_data['logo']:
             logo = form.cleaned_data['logo']
             logo = Image.open(BytesIO(logo.read()))
             try:
@@ -104,7 +101,7 @@ class NewClub(FormView):
                 pass
             logo.save(path+form.cleaned_data['cn']+".png", "PNG")
             form.cleaned_data['logo'] = form.cleaned_data['cn']+".png"
-        form.create_club()
+        form.create_club(self.request.ldap_user.pk)
         pk = None
         return super(NewClub, self).form_valid(form)
 
@@ -264,7 +261,7 @@ class AddPersonToClub(View):
 
     def add_user(self, user, club, request):
         """
-        Add a `user` to a `club` and subscribe him to the mlist, 
+        Add a `user` to a `club` and subscribe him to the mlist,
         no verification is made.
         """
         club.members.append(user.pk)
@@ -323,7 +320,7 @@ class AddPersonToClub(View):
                     raise Http404("L'utilisateur n'existe pas")
 
         if not user.pk in club.members and (("tbClub" in club.object_classes or \
-        "tbCampagne" in club.object_classes or "tbClubSport in club.object_classes") or \
+        "tbCampagne" in club.object_classes or "tbClubSport" in club.object_classes) or \
         (self.request.ldap_user.is_campus_moderator() or self.request.ldap_user.pk in club.prezs or\
         request.user.is_staff)): # Our ldap is crap
             self.add_user(user, club, request)
@@ -339,7 +336,7 @@ class AddMailToClub(View):
     View used to add a person to a specific club/list or asso if he's got the right to do so
     """
 
-    def get(self, request, pk):
+    def post(self, request, pk):
         try:
             club=StudentOrganisation.get(cn=pk)
             if "tbCampagne" in club.object_classes:
@@ -352,7 +349,7 @@ class AddMailToClub(View):
         if not (self.request.ldap_user.is_campus_moderator() or self.request.ldap_user.pk in club.prezs or request.user.is_staff):
             messages.error(request, _("Vous n'êtes pas modérateur campus ou président de ce club"))
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-        mail = request.GET.get("mail", None)
+        mail = request.POST.get("mail", None)
 
         if not mail:
             raise Http404
@@ -371,7 +368,14 @@ class AddMailToClub(View):
         try:
             subscription_email.send()
         except SMTPException:
-            print("Somthing went wrong when trying to send club subscription message")
+            logger.warning(
+                "Erreur lors de la désinscription de la mlist %s de %s" % (club.email, mail),
+                extra={
+                    'user_mail': mail,
+                    'mlist': club.email,
+                    'message_code': 'ERROR_UNSUBSCRIBE',
+                }
+            )
 
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
@@ -404,16 +408,12 @@ class AddPrezToClub(View):
         except ObjectDoesNotExist:
             raise Http404("L'utilisateur n'éxiste pas")
 
-        if "tbClub" in club.object_classes and not user.pk in club.prezs:
-            club.prezs = [user.pk]
-            club.save()
-            messages.success(request, _("Le président viens d'être ajouté"))
-        else:
-            messages.info(request, _("Cette personne est déjà président(e)"))
-
-        if "tbClub" in club.object_classes and not user.pk in club.members:
+        club.prezs = [user.pk]
+        if not user.pk in club.members:
             club.members.append(user.pk)
-            club.save()
+        club.save()
+
+        messages.success(request, _("Le président viens d'être ajouté"))
 
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
