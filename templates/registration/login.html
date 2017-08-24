@@ -20,14 +20,14 @@
                     {% endif %}
                     <div class="form-group {% if form.username.errors %}has-error{% endif %}">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                            <span class="input-group-addon"><i class="fa fa-fw fa-user"></i></span>
                             <input type="text" class="form-control" name="username"  placeholder="{% trans "Nom d'utilisateur" %}">
                         </div>
                         {% if form.username.errors %}<span class="help-block">{{ form.username.errors }}</span>{% endif %}
                     </div>
                     <div class="form-group {% if form.password.errors %}has-error{% endif %}">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="fa fa-key"></i></span>
+                            <span class="input-group-addon"><i class="fa fa-fw fa-key"></i></span>
                             <input type="password" class="form-control" name="password" placeholder="{% trans "Mot de passe" %}">
                         </div>
                         {% if form.password.errors %}<span class="help-block">{{ form.password.errors }}</span>{% endif %}

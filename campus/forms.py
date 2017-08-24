@@ -2,7 +2,8 @@ from django import forms
 from django.conf import settings
 from django.core.validators import MaxLengthValidator
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
-from django.forms import ModelForm, CharField, TextInput, Form, Textarea, ChoiceField, EmailField, IntegerField, Select, CheckboxInput
+from django.forms import ModelForm, CharField, TextInput, Form, Textarea, ChoiceField,\
+                                    EmailField, IntegerField, Select, CheckboxInput, SelectMultiple
 from django.forms.models import ModelMultipleChoiceField
 from django.utils.translation import ugettext_lazy as _
 from django.db.models import Q
@@ -30,7 +31,7 @@ class RoomBookingForm(ModelForm):
 
         # Display the rooms the user is allowed to book
         if user: #Otherwise the test crashes
-            self.user = user.uid
+            self.user = user
             if not RoomAdmin.objects.filter(user__username=user.uid):
                 del self.fields['user']
                 clubs = StudentOrganisation.filter(members__contains='uid=%s' % user.uid)
@@ -38,10 +39,12 @@ class RoomBookingForm(ModelForm):
                 for club in clubs:
                     queryset |= Q(private=True, clubs__contains=club.cn)
                 self.fields['room'] = ModelMultipleChoiceField(
-                    queryset=Room.objects.filter(queryset)
+                    queryset=Room.objects.filter(queryset),
+                    widget=SelectMultiple(attrs={'class': 'form-control'})
                 )
         else:
             del self.fields['user']
+            self.user = None
 
     def save(self, commit=True, *args, **kwargs):
         m = super(RoomBookingForm, self).save(commit=False, *args, **kwargs)
@@ -52,7 +55,7 @@ class RoomBookingForm(ModelForm):
         if 'user' in self.fields:
             m.user = self.cleaned_data['user']
         else:
-            m.user = self.user
+            m.user = self.user.uid
 
         m.save()
 
@@ -115,9 +118,9 @@ class RoomBookingForm(ModelForm):
         if recurring_rule != "NONE" and not cleaned_data.get('end_recurring_period', None):
             self.add_error('end_recurring_period', _('La date de fin de la récurrence est invalide'))
 
-        if rooms and 'user' in self.fields:
+        if rooms and self.user:
             for room in rooms:
-                if not room.user_can_manage(self.user):
+                if not room.user_can_access(self.user):
                     self.add_error('room', _("Vous ne pouvez pas gérer cette salle"))
         elif rooms: #Needed for testing purpose, otherwise it crashes
             for room in rooms:
@@ -138,6 +141,7 @@ class RoomBookingForm(ModelForm):
         #            self.add_error('room', _("La salle %s n'est pas disponible") % room)
         #    elif not room.is_free(start_time, end_time):
         #        self.add_error('room', _("La salle %s n'est pas disponible") % room)
+        return self.cleaned_data
 
 class AddRoomForm(ModelForm):
     class Meta:
@@ -304,7 +308,7 @@ class ClubManagementForm(Form):
     def clean(self):
         cleaned_data = super(ClubManagementForm, self).clean()
 
-    def create_club(self):
+    def create_club(self, user):
 
         #If we don't do this we get an error cuz our LDAP scheme does not allow
         # a single model for each type of organisation
@@ -324,8 +328,8 @@ class ClubManagementForm(Form):
         new_club.website = self.cleaned_data['website']
         new_club.description = self.cleaned_data['description']
         new_club.object_classes = ["studentOrganisation"]
-        new_club.memebers = []
-        new_club.prezs = []
+        new_club.members = [user]
+        new_club.prezs = [user]
 
         if self.cleaned_data["logo"] != None:
             new_club.logo = self.cleaned_data["logo"]

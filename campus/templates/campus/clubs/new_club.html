@@ -8,6 +8,12 @@
 {% endblock %}
 
 {% block content %}
+    <div class="btn-home">
+      <a href="{% url 'campus:clubs:list' %}" class="noncolored-a"><span class="fa fa-group"></span>   </a>
+    </div>
+    <div class="btn-home btn-home-campus">
+      <a href="{% url 'campus:home' %}" class="noncolored-a"><span class="fa fa-home"></span>   </a>
+    </div>
     <div class="container" id="content">
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
@@ -18,8 +24,8 @@
                 </h1>
             </div>
         </div>
-        <div class="col-md-8 col-md-offset-2">
-            <form class="form well" action="{% if not pk%}{% url 'campus:clubs:new' %}{% else %}{% url 'campus:clubs:edit' pk %}{% endif %}" method="post" enctype="multipart/form-data">
+        <div class="col-md-8 col-md-offset-2 well">
+            <form class="form" action="{% if not pk%}{% url 'campus:clubs:new' %}{% else %}{% url 'campus:clubs:edit' pk %}{% endif %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="form-group" {% if pk %} style="display: none"{% endif %}>
                     {{ form.type.errors }}
@@ -61,9 +67,9 @@
                     <label for="name">{{ form.campagneYear.label }}:</label>
                     {{ form.campagneYear }}
                 </div>
-                <button class="btn btn-success">{% trans 'Confirmer' %}</button>
+                <button class="btn btn-success pull-right">{% trans 'Confirmer' %}</button>
                 {% if pk and request.ldap_user.is_campus_moderator or request.user.is_staff%}
-                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete" style="float: right">Supprimer</button>
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete">Supprimer</button>
                 {% endif%}
             </form>
         </div>
@@ -81,7 +87,10 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-success" data-dismiss="modal">Annuler</button>
-            <a href="{% url 'campus:clubs:delete' pk %}" class="btn btn-danger" >Confirmer</a>
+            <form method="POST" action="{% url 'campus:clubs:delete' pk %}" class="inline" >
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger">Confirmer</a>
+            </form>
           </div>
         </div>
       </div>

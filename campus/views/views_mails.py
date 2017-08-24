@@ -52,7 +52,7 @@ def send_email_view(request):
                 notify_moderator(mod_email, m.pk)
 
             messages.success(request, _('Votre mail sera traité par les modérateurs.'))
-            return HttpResponseRedirect(reverse('home'))
+            return HttpResponseRedirect(reverse('campus:home'))
 
     return render(
         request,
@@ -134,7 +134,7 @@ def rejectView(request, mail):
                      "Cordialement,\n" +
                      "~ le gentil bot ResEl ~",
                 from_email="secretaire@resel.fr",
-                reply_to="support@resel.fr",
+                reply_to=["support@resel.fr"],
                 to=[m.sender]
             )
             notify.send()

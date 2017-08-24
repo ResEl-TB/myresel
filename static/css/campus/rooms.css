@@ -87,6 +87,10 @@
     background-color: rgba(173, 213, 108, 0.7);
 }
 
+.alert-trip {
+    background-color: rgba(165, 114, 250, 0.5);
+}
+
 .alert-other {
     background-color: rgba(207, 212, 206, 0.7);
 }
@@ -125,4 +129,8 @@
 .bigger-bold {
     font-size: 1.1em;
     font-weight: bold;
+}
+
+label {
+    text-align: left !important;
 }

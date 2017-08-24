@@ -132,7 +132,7 @@ def createClubEditForm(type="CLUB", cn="tenniscn", name="Club Tennis", email="te
     })
     return(form)
 
-class HomeTestCase(TestCase):
+class ClubHomeTestCase(TestCase):
 
     def setUp(self):
         try_delete_user("jbvallad")
@@ -208,7 +208,7 @@ class NewClubTestCase(TestCase):
     def testCorrectClub(self):
         form = createClubForm()
         self.assertTrue(form.is_valid())
-        form.create_club()
+        form.create_club("uid=jvalladea,ou=people,dc=maisel,dc=enst-bretagne,dc=fr")
         self.assertTrue(StudentOrganisation.filter(cn="tenniscn"))
 
     def testWrongCN(self):
@@ -268,12 +268,12 @@ class AddPersonTestCase(TestCase):
         self.client.login(username="jbvallad", password="blabla")
 
     def testAddSelf(self):
-        r = self.client.get(reverse("campus:clubs:add-person", kwargs={'pk':self.cn}),
+        r = self.client.post(reverse("campus:clubs:add-person", kwargs={'pk':self.cn}),
                                     HTTP_HOST="10.0.3.94")
         self.assertTrue(LdapUser.get(uid="jbvallad").pk in StudentOrganisation.get(cn=self.cn).members)
 
     def testAddSomeone(self):
-        r = self.client.get(reverse("campus:clubs:add-person", kwargs={'pk':self.cn}),
+        r = self.client.post(reverse("campus:clubs:add-person", kwargs={'pk':self.cn}),
                                     data={"id_user":"bvallad"},
                                     HTTP_HOST="10.0.3.94")
         self.assertTrue(LdapUser.get(uid="bvallad").pk in StudentOrganisation.get(cn=self.cn).members)
@@ -302,25 +302,27 @@ class RemovePersonTestCase(TestCase):
         self.client.login(username="jbvallad", password="blabla")
 
     def testRemoveSelf(self):
-        #We just make sure that there is something to remove
+        # We just make sure that there is something to remove
         self.assertTrue(LdapUser.get(uid="jbvallad").pk in StudentOrganisation.get(cn=self.cn).members)
-        r=self.client.get(reverse("campus:clubs:remove-person", kwargs={"pk":self.cn}),
+        r=self.client.post(reverse("campus:clubs:remove-person", kwargs={"pk":self.cn}),
                                     HTTP_HOST="10.0.3.94")
         self.assertFalse(LdapUser.get(uid="jbvallad").pk in StudentOrganisation.get(cn=self.cn).members)
+        self.assertEqual(1, len(mail.outbox))
 
     def testRemoveSomeone(self):
         self.assertTrue(LdapUser.get(uid="bvallad").pk in StudentOrganisation.get(cn=self.cn).members)
-        r=self.client.get(reverse("campus:clubs:remove-person", kwargs={"pk":self.cn}),
+        r=self.client.post(reverse("campus:clubs:remove-person", kwargs={"pk":self.cn}),
                                     data={"id_user":"bvallad"},
                                     HTTP_HOST="10.0.3.94")
         self.assertFalse(LdapUser.get(uid="bvallad").pk in StudentOrganisation.get(cn=self.cn).members)
+        self.assertEqual(1, len(mail.outbox))
 
 class AddPrezTestCase(TestCase):
 
     def setUp(self):
         populate_orgas()
         self.cn = "tenniscn"
-        club=StudentOrganisation.get(cn=self.cn)
+        club = StudentOrganisation.get(cn=self.cn)
 
         try_delete_user("jbvallad")
         try_delete_user("bvallad")
@@ -345,23 +347,39 @@ class AddPrezTestCase(TestCase):
 
     def testAddPrezBeingModo(self):
         self.client.login(username="jbvallad", password="blabla")
-        r = self.client.get(reverse("campus:clubs:add-prez", kwargs={'pk':self.cn}),
-                                    data={"id_user":"bvallad"},
-                                    HTTP_HOST="10.0.3.94")
+        self.assertFalse(LdapUser.get(uid="bvallad").pk in StudentOrganisation.get(cn=self.cn).prezs)
+
+        r = self.client.post(reverse("campus:clubs:add-prez", kwargs={'pk': self.cn}),
+                                    data={"id_user": "bvallad"},
+                                    HTTP_HOST="10.0.3.94",
+                                    follow=True,
+                                    HTTP_REFERER=reverse('campus:clubs:list'))
+
+        self.assertEquals(200, r.status_code)
         self.assertTrue(LdapUser.get(uid="bvallad").pk in StudentOrganisation.get(cn=self.cn).prezs)
 
     def testAddPrezBeingPrez(self):
         self.client.login(username="vallad", password="blabla")
-        r = self.client.get(reverse("campus:clubs:add-prez", kwargs={'pk':self.cn}),
-                                    data={"id_user":"jbvallad"},
-                                    HTTP_HOST="10.0.3.94")
+        self.assertFalse(LdapUser.get(uid="jbvallad").pk in StudentOrganisation.get(cn=self.cn).prezs)
+        r = self.client.post(reverse("campus:clubs:add-prez", kwargs={'pk': self.cn}),
+                                    data={"id_user": "jbvallad"},
+                                    HTTP_HOST="10.0.3.94",
+                                    follow=True,
+                                    HTTP_REFERER=reverse('campus:clubs:list'))
+
+        self.assertEquals(200, r.status_code)
         self.assertTrue(LdapUser.get(uid="jbvallad").pk in StudentOrganisation.get(cn=self.cn).prezs)
 
     def testAddPrezBeingNobody(self):
         self.client.login(username="allad", password="blabla")
-        r = self.client.get(reverse("campus:clubs:add-prez", kwargs={'pk':self.cn}),
-                                    data={"id_user":"allad"},
-                                    HTTP_HOST="10.0.3.94")
+        self.assertFalse(LdapUser.get(uid="allad").pk in StudentOrganisation.get(cn=self.cn).prezs)
+        r = self.client.post(reverse("campus:clubs:add-prez", kwargs={'pk': self.cn}),
+                                    data={"id_user": "allad"},
+                                    HTTP_HOST="10.0.3.94",
+                                    follow=True,
+                                    HTTP_REFERER=reverse('campus:clubs:list'))
+
+        self.assertEquals(200, r.status_code)
         self.assertFalse(LdapUser.get(uid="allad").pk in StudentOrganisation.get(cn=self.cn).prezs)
 
 class DeleteClubTestCase(TestCase):
@@ -376,8 +394,15 @@ class DeleteClubTestCase(TestCase):
 
     def testDeleteClubBeingModo(self):
         self.client.login(username="jbvallad", password="blabla")
-        r = self.client.get(reverse("campus:clubs:delete", kwargs={'pk':'tenniscn'}), HTTP_HOST="10.0.3.94")
+        self.assertTrue(StudentOrganisation.filter(cn="tenniscn"))
+        r = self.client.post(
+            reverse("campus:clubs:delete",
+                    kwargs={'pk':'tenniscn'}),
+                    HTTP_HOST="10.0.3.94",
+                    follow=True
+            )
 
+        self.assertEquals(200, r.status_code)
         self.assertFalse(StudentOrganisation.filter(cn="tenniscn"))
 
 ################################
@@ -844,7 +869,7 @@ class RoomFormTestCase(TestCase):
 
     def testUnknownClub(self):
         self.client.login(username="jbvallad", password="blabla")
-        form = createRoomForm(clubs="test")
+        form = createRoomForm(clubs="udhezohiez")
         self.assertFalse(form.is_valid())
 
     def testWrongLocation(self):
@@ -892,4 +917,43 @@ class EventDetailTestCase(TestCase):
 
         self.client.login(username="jbvallad", password="blabla")
         r = self.client.get(reverse("campus:rooms:booking-detail", kwargs={'slug': booking.id}), HTTP_HOST="10.0.3.94")
+        self.assertEqual(r.status_code, 200)
+
+class DeleteEventTestCase(TestCase):
+
+    year = date.today().year+1
+
+    def setUp(self):
+        try_delete_user("jbvallad")
+        try_delete_user("vallad")
+        user = create_full_user(uid="jbvallad", pwd="blabla")
+        user.save()
+        LdapGroup.get(pk='campusmodo').add_member(user.pk)
+        user = create_full_user(uid="vallad", pwd="blabla")
+        user.save()
+
+    def testSimpleDeletion(self):
+        booking = createBooking(datetime(self.year,9,1,18,0,0), datetime(self.year,9,1,19,0,0))
+
+        self.client.login(username="jbvallad", password="blabla")
+        r = self.client.post(reverse("campus:rooms:delete-booking", kwargs={'pk': booking.id}), HTTP_HOST="10.0.3.94")
+        self.assertFalse(RoomBooking.objects.all().filter(id=booking.id))
+
+    def testForbidenDeletion(self):
+        booking = createBooking(datetime(self.year,9,1,18,0,0), datetime(self.year,9,1,19,0,0))
+
+        self.client.login(username="vallad", password="blabla")
+        r = self.client.post(reverse("campus:rooms:delete-booking", kwargs={'pk': booking.id}), HTTP_HOST="10.0.3.94")
+        self.assertTrue(RoomBooking.objects.all().filter(id=booking.id))
+
+class CampusHomeTestCase(TestCase):
+
+    def setUp(self):
+        try_delete_user("jbvallad")
+        user = create_full_user(uid="jbvallad", pwd="blabla")
+        user.save()
+
+    def testSimpleLoad(self):
+        self.client.login(username="jbvallad", password="blabla")
+        r = self.client.get(reverse("campus:home"), HTTP_HOST="10.0.3.94")
         self.assertEqual(r.status_code, 200)

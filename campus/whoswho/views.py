@@ -288,7 +288,7 @@ class RemovePerson(View):
     def dispatch(self, *args, **kwargs):
         return super(RemovePerson, self).dispatch(*args, **kwargs)
 
-    def get(self, request, uid, is_gp):
+    def post(self, request, uid, is_gp):
         #is_gp reports if the user that our beloved user wants to remove
         #is a godchild or a godparent
 
