@@ -1,27 +1,26 @@
-import os
-import re
+# -*- coding: utf-8 -*-
 import json
 import logging
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
-from django.http import HttpResponseRedirect, HttpResponse, Http404
-from django.utils.translation import ugettext_lazy as _
+import os
+import re
+from io import BytesIO
+from smtplib import SMTPException
+
+from PIL import Image
 from django.contrib import messages
-from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import EmailMessage
-from smtplib import SMTPException
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
+from django.shortcuts import render, redirect
+from django.utils.decorators import method_decorator
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, View
 
-from io import BytesIO
-from PIL import Image
-
-from campus.forms import SendMailForm, ClubManagementForm, ClubEditionForm
+from campus.forms import ClubManagementForm, ClubEditionForm
 from campus.models.clubs_models import StudentOrganisation, Association, ListeCampagne
-from gestion_personnes.models import LdapUser, LdapGroup
-from fonctions.decorators import ae_required
-
+from gestion_personnes.models import LdapUser
 from myresel.settings import MEDIA_ROOT, LDAP_DN_PEOPLE
 
 logger = logging.getLogger("default")
@@ -29,7 +28,7 @@ logger = logging.getLogger("default")
 def list_clubs(request):
     """
     The default view, used to list every club, list and assos
-    Users can subscribe, prezs can add memebers, edit the club etc.
+    Users can subscribe, prezs can add members, edit the club etc.
     """
 
     organisations = StudentOrganisation.all()
@@ -60,8 +59,8 @@ def list_clubs(request):
         }
     )
 
-class ClubDetail(View):
 
+class ClubDetail(View):
     template_name = "campus/clubs/detail.html"
 
     def get(self, request, pk):
@@ -126,14 +125,14 @@ class EditClub(FormView):
             return HttpResponseRedirect(reverse('campus:clubs:list'))
 
         if 'tbClub' in orga.object_classes or 'tbClubSport' in orga.object_classes:
-            type='CLUB'
+            orga_type = 'CLUB'
         elif 'tbAsso' in orga.object_classes:
-            type='ASSOS'
+            orga_type = 'ASSOS'
         elif 'tbCampagne' in orga.object_classes:
-            type='LIST'
+            orga_type = 'LIST'
 
         form = self.form_class(initial={
-            'type': type,
+            'type': orga_type,
             'cn': orga.cn,
             'name': orga.name,
             'description': orga.description,
@@ -168,6 +167,15 @@ class EditClub(FormView):
         form.edit_club(pk)
 
         return super(EditClub, self).form_valid(form)
+
+    def form_invalid(self, form):
+        """
+        If the form is invalid, re-render the context data with the
+        data-filled form and errors.
+        """
+        context = self.get_context_data(form=form)
+        context['pk'] = self.kwargs['pk']
+        return self.render_to_response(context)
 
 @method_decorator(login_required, name="dispatch")
 class DeleteClub(View):
