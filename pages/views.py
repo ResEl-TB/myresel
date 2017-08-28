@@ -225,7 +225,7 @@ class Contact(View):
         return render(request, self.template_name, {'form': form})
 
 
-@method_decorator(resel_required)
+@resel_required
 def inscription_zone_info(request):
     """
     View which explains the users on how to register to the ResEl
