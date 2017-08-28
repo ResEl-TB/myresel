@@ -45,7 +45,6 @@ $('tr').each(function() {
             }).done( function (response) {
                 self.setContent(
                     '<form action="">' +
-                    
                     '<div class="form-group">' +
                     '<div class="input-group">' +
                     '<span class="input-group-addon"><i class="fa fa-fw fa-user"></i></span>' +

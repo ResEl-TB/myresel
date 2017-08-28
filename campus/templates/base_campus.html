@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load i18n %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -32,6 +33,9 @@
   <div class="floatin_hugo_7 floating_meme"></div>
   <div class="floatin_hugo_8 floating_meme"></div>
   <div class="floatin_hugo_9 floating_meme"></div>
+<div class="text-center beta-banner">
+    {% trans "Cette partie du site est encore en BETA, n'hésitez pas " %}<a href="{% url 'contact'%}">{% trans "à rapporter un bug" %}</a>
+</div>
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
