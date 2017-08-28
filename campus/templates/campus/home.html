@@ -48,7 +48,7 @@
           <span class="title">{{ campus_mail.subject }}</span>
         </a>
         <div class="mail-content">
-          {{ campus_mail.content }}
+          {{ campus_mail.content|linebreaks }}
         </div>
         <div class="sender">
           {% trans "publié par" %} <span class="label label-success">{{ campus_mail.sender }}</span> par <span class="label label-default"><span class="fa fa-envelope-o"></span> mail campus</span> le {{ campus_mail.date }}
