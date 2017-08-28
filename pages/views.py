@@ -19,6 +19,7 @@ from django.views.i18n import set_language
 from django.utils import timezone
 
 from fonctions import network, decorators
+from fonctions.decorators import resel_required
 from fonctions.generic import sizeof_fmt
 from devices.models import LdapDevice, PeopleData
 from gestion_personnes.models import LdapUser, UserMetaData
@@ -224,6 +225,7 @@ class Contact(View):
         return render(request, self.template_name, {'form': form})
 
 
+@method_decorator(resel_required)
 def inscription_zone_info(request):
     """
     View which explains the users on how to register to the ResEl
