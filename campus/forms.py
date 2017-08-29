@@ -30,7 +30,7 @@ class RoomBookingForm(ModelForm):
         super(RoomBookingForm, self).__init__(*args, **kwargs)
 
         # Display the rooms the user is allowed to book
-        if user: #Otherwise the test crashes
+        if user: # Otherwise the test crashes
             self.user = user
             if not RoomAdmin.objects.filter(user__username=user.uid):
                 del self.fields['user']

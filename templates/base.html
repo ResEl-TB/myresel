@@ -54,6 +54,7 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-top-links navbar-left navbar-collapse">
+            {% if association_category %}
             <li class="dropdown">
                 <a href="{% url 'wiki:show-category' slug='lassociation' %}" class="dropdown-toggle" data-toggle="dropdown"><i class="fa {{ association_category.fa_icon_name }} fa-fw" aria-hidden="true"></i> <span class="hidden-sm">{{ association_category.name }}</span></a>
                 <ul class="dropdown-menu">
@@ -64,11 +65,13 @@
                     {% empty %}
                     <li>
                         <a>{% trans "Aucun article" %}</a>
-                    </li>
+                        </li>
                     {% endfor %}
                 </ul>
             </li>
+            {% endif %}
 
+            {% if services_category %}
             <li class="dropdown">
                 <a href="{% url 'wiki:show-category' slug='services' %}" class="dropdown-toggle" data-toggle="dropdown"><i class="fa {{ services_category.fa_icon_name }} fa-fw" aria-hidden="true"></i> <span class="hidden-sm">{{ services_category.name }}</span></a>
                 <ul class="dropdown-menu">
@@ -83,6 +86,7 @@
                     {% endfor %}
                 </ul>
             </li>
+            {% endif %}
 
             <li>
                 <a class="btn-campus" href="{% url 'campus:home' %}"><i class="fa fa-bicycle fa-fw"></i> <span class="hidden-sm btn-campus-text">{% trans "Campus" %}</span></a>
