@@ -395,14 +395,14 @@ class TransactionDetailView(DetailView):
             context['invoice_path'] = None
 
             # Trigger invoice regeneration
-            user_datas = {
+            user_data = {
                 'first_name': self.request.ldap_user.first_name,
                 'last_name' : self.request.ldap_user.last_name,
                 'uid': self.request.ldap_user.uid,
                 'email' : self.request.ldap_user.mail,
                 'address' : self.request.ldap_user.postal_address,
             }
-            transaction_datas = {
+            transaction_data = {
                 'uuid': context['transaction'].uuid,
                 'date_creation': context['transaction'].date_creation,
                 'date_paiement': context['transaction'].date_creation,
@@ -418,7 +418,7 @@ class TransactionDetailView(DetailView):
             queue = django_rq.get_queue()
             queue.enqueue_call(
                 async_tasks.generate_and_email_invoice,
-                args=(user_datas, transaction_datas, user_lang, 'user'),
+                args=(user_data, transaction_data, user_lang, 'user'),
             )
 
         return context

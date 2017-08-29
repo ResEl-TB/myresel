@@ -1,4 +1,5 @@
 import base64
+import logging
 
 from datetime import timedelta
 from os import path
@@ -11,6 +12,8 @@ from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from django_rq import job
+
+logger = logging.getLogger("default")
 
 @job
 def generate_and_email_invoice(user: object, transaction: object, lang: str='fr', send_to:str='user-treasurer') -> None:
@@ -32,9 +35,12 @@ def generate_and_email_invoice(user: object, transaction: object, lang: str='fr'
         text = laputex_req.text
 
     except requests.exceptions.RequestException as err:
-        print(err)
-        status_code = "'Error handled'"
         text = str(err)
+        status_code = "'Error handled'"
+        logger.warning(
+            text,
+            extra={'message_code': 'LAPUTEX_HTTP_WARNING'},
+        )
 
     # Handle response, status_code 201 or 409 means the document is being processed
     if status_code in (201, 409):
@@ -48,9 +54,10 @@ def generate_and_email_invoice(user: object, transaction: object, lang: str='fr'
     # There is an error, fallback and send error
     else:
         error_display = "New LaPuTeX document request returned {} :\n{}".format(status_code, text)
-
-        queue = django_rq.get_queue()
-        queue.enqueue(send_invoice_mail, user, transaction, send_to, errors=error_display)
+        logger.error(
+            error_display,
+            extra={'message_code': 'LAPUTEX_REQUEST_ERROR'},
+        )
 
 @job
 def invoice_laputex_check(user: object, transaction: object,
