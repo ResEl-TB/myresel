@@ -264,11 +264,16 @@ class FaqList(ListView):
     def get_queryset(self):
         return Faq.objects.order_by('-vote').all()
 
-def faqUpvote(request):
+def faqVote(request):
 
-    faq = get_object_or_404(Faq, pk=request.POST['faq_id'])
-    faq.upvote()
+    faq = get_object_or_404(Faq, pk=request.POST.get('faq_id', None))
+    vote = request.POST.get('vote', None)
+    if vote == "upvote":
+        faq.upvote()
+    elif vote == "downvote":
+        faq.downvote()
     return HttpResponse('OK')
+
 
 @csrf_exempt
 def unsecure_set_language(request):
