@@ -27,6 +27,10 @@ class Faq(models.Model):
         self.vote += 1
         self.save()
 
+    def downvote(self):
+        self.vote -= 1
+        self.save()
+
 
     def __str__(self):
         return self.question_text
