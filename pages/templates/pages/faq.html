@@ -57,7 +57,6 @@
             $(".vote").click(function() {
                 var id = $(this).prop("id");
                 var vote = document.getElementById(id).getAttribute("vote");
-                alert(vote);
                 var $response = $("<span style='color: gray'>...</span>");
                 $(this).replaceWith($response);
 
