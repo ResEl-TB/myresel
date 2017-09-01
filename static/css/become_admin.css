@@ -1,0 +1,42 @@
+.page-header {
+    margin: 20px 0 50px 0;
+    background: #2E3440;
+    color: #E5E9F0;
+    padding: 50px;
+    font-family: 'Roboto Mono', 'sans-serif';
+}
+
+.exp {
+    color: #5E81AC ;
+}
+
+.hash {
+    color: #EBCB8B;
+}
+h1 {
+    font-size: 2.5em;
+}
+
+.advantages {
+    margin: 100px 0 100px 0;
+}
+
+.advantages .text {
+    padding-top: 30px;
+}
+
+.postes {
+    margin: 50px 0 20px 0;
+}
+
+.postes .active {
+    font-size: 1.4em;
+}
+
+.act {
+    margin: 100px 0 50px 0;
+}
+
+.act h2 {
+    margin-bottom: 50px;
+}
