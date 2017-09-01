@@ -121,6 +121,7 @@
     <div class="home-fragment home-blog">
         <div class="container">
             <h2 class="clickable-title"><a href="{% url 'news'%}">{% trans "Les dernières nouvelles ResEl" %}</a> {% if user.is_staff %}<small><a href="/gestion/pages/news/add/"><span class="fa fa-plus"></span> Créer une news</a></small>{% endif %}</h2>
+            <h3><a href="{% url 'rss' %}"><span class="fa fa-rss-square"></span> {% trans "Flux RSS" %}</a></h3>
             <div class="row">
                 <div class="col-md-7">
                     {% for pieceofnews in news %}

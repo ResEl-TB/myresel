@@ -16,6 +16,7 @@
                 <div class="container">
                     <div class="row">
                         <h2>{% trans pieceOfNews.title %}</h2>
+                        <a href="{% url 'rss' %}"><span class="fa fa-rss-square"></span> {% trans "Flux RSS" %}</a>
                         <p><a href="{% url 'news'%}"><span class="fa fa-arrow-left" aria-hidden="true"></span>{% trans " Retour"%}</a></p>
                     </div>
                 </div>
