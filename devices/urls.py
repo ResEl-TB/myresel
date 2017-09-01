@@ -22,6 +22,6 @@ urlpatterns = [
     url(r'^ajout$', AddDeviceView.as_view(), name ='ajout'),
     url(r'^ajout-manuel$', ManualAddDeviceView.as_view(), name='ajout-manuel'),
     url(r'^liste$', ListDevicesView.as_view(), name='liste'),
-    url(r'^modifier/(?P<host>[a-z0-9-]{2,})$', EditDeviceView.as_view(), name='modifier'),
+    url(r'^modifier/(?P<host>[A-Za-z0-9-]{2,})$', EditDeviceView.as_view(), name='modifier'),
     url(r'^consommation$', BandwidthUsage.as_view(), name='bandwidth-usage')
 ]

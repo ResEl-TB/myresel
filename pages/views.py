@@ -21,6 +21,7 @@ from django.contrib.syndication.views import Feed
 from django.utils.feedgenerator import Atom1Feed
 
 from fonctions import network, decorators
+from fonctions.decorators import resel_required
 from fonctions.generic import sizeof_fmt
 from devices.models import LdapDevice, PeopleData
 from gestion_personnes.models import LdapUser, UserMetaData
@@ -56,9 +57,6 @@ class Home(View):
 
     @method_decorator(decorators.correct_vlan)
     def dispatch(self, *args, **kwargs):
-        from debug_toolbar import settings as dt_settings
-
-        print(dt_settings.get_config()['SHOW_TOOLBAR_CALLBACK'])
         return super(Home, self).dispatch(*args, **kwargs)
 
 
@@ -249,6 +247,7 @@ class Contact(View):
         return render(request, self.template_name, {'form': form})
 
 
+@resel_required
 def inscription_zone_info(request):
     """
     View which explains the users on how to register to the ResEl
@@ -290,11 +289,16 @@ class FaqList(ListView):
     def get_queryset(self):
         return Faq.objects.order_by('-vote').all()
 
-def faqUpvote(request):
+def faqVote(request):
 
-    faq = get_object_or_404(Faq, pk=request.POST['faq_id'])
-    faq.upvote()
+    faq = get_object_or_404(Faq, pk=request.POST.get('faq_id', None))
+    vote = request.POST.get('vote', None)
+    if vote == "upvote":
+        faq.upvote()
+    elif vote == "downvote":
+        faq.downvote()
     return HttpResponse('OK')
+
 
 @csrf_exempt
 def unsecure_set_language(request):

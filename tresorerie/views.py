@@ -12,7 +12,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404
 from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.decorators import method_decorator
@@ -367,6 +367,14 @@ class TransactionDetailView(DetailView):
     template_name = "tresorerie/transaction_detail.html"
     slug_field = "uuid"
 
+    def get_object(self, queryset=None):
+        transaction = super(TransactionDetailView, self).get_object(queryset)
+
+        if transaction.utilisateur != self.request.ldap_user.uid:
+            # 404 because the user should not even know if the object exists
+            raise Http404(_("No transaction found"))
+        return transaction
+
     def get_context_data(self, **kwargs):
         context = super(TransactionDetailView, self).get_context_data(**kwargs)
         context['user'] = self.request.ldap_user
@@ -387,14 +395,14 @@ class TransactionDetailView(DetailView):
             context['invoice_path'] = None
 
             # Trigger invoice regeneration
-            user_datas = {
+            user_data = {
                 'first_name': self.request.ldap_user.first_name,
                 'last_name' : self.request.ldap_user.last_name,
                 'uid': self.request.ldap_user.uid,
                 'email' : self.request.ldap_user.mail,
                 'address' : self.request.ldap_user.postal_address,
             }
-            transaction_datas = {
+            transaction_data = {
                 'uuid': context['transaction'].uuid,
                 'date_creation': context['transaction'].date_creation,
                 'date_paiement': context['transaction'].date_creation,
@@ -410,7 +418,7 @@ class TransactionDetailView(DetailView):
             queue = django_rq.get_queue()
             queue.enqueue_call(
                 async_tasks.generate_and_email_invoice,
-                args=(user_datas, transaction_datas, user_lang, 'user'),
+                args=(user_data, transaction_data, user_lang, 'user'),
             )
 
         return context

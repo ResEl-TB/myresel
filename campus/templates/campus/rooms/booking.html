@@ -106,8 +106,8 @@
                                 <div class="form-group {% if form.user.errors %}has-error{% endif %}">
                                     <label class="col-sm-2 control-label">Utilisateur</label>
                                     <div class="col-sm-10">
-                                        <input type="text" class="form-control" name="user" value="{{ form.user.value }}">
-                                        {% if form.user.errors %}<span class="help-block">{{ form.user.errors }}</span>{% endif %}
+                                        <input type="text" class="form-control" name="user" value="{{ form.fields.user.value }}">
+                                        {% if form.user.errors %}<span class="help-block">{{ form.fields.user.errors }}</span>{% endif %}
                                     </div>
                                 </div>
                             {% endif %}
