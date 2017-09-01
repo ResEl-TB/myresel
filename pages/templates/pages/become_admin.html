@@ -5,6 +5,8 @@
 {% block titre %}{% trans "Devenez adminitrateur ResEl" %}{% endblock %}
 
 {% block content %}
+  <script src="https://unpkg.com/vue"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tween.js@16.3.4"></script>
   <div class="container" id="become-app" xmlns:v-on="http://www.w3.org/1999/xhtml"
        xmlns:v-bind="http://www.w3.org/1999/xhtml">
     <div class="page-header">
@@ -16,7 +18,7 @@
     </div>
     <div class="row advantages">
       <div class="col-md-5">
-<img src="{% static 'images/IMG_9789_1.jpg' %}" class="img-responsive img-rounded">
+<img src="{% static 'images/become/servers_light.jpg' %}" class="img-responsive img-rounded">
       </div>
       <div class="col-md-5 col-md-offset-1 text">
         <h3>...monter en compétences techniques</h3>
@@ -30,7 +32,7 @@
 
     <div class="row advantages">
       <div class="col-md-5 col-md-push-6">
-        <img src="{% static 'images/IMG_20161114_201931.jpg' %}" class="img-responsive img-rounded">
+        <img src="{% static 'images/become/meeting_light.jpg' %}" class="img-responsive img-rounded">
       </div>
       <div class="col-md-5 col-md-pull-5 text-right text">
         <h3>...apprendre à gérer une équipe</h3>
@@ -42,7 +44,7 @@
 
     <div class="row advantages">
       <div class="col-md-5">
-        <img src="{% static 'images/IMG_20170223_183626.jpg' %}" class="img-responsive img-rounded">
+        <img src="{% static 'images/become/hashcode_light.jpg' %}" class="img-responsive img-rounded">
       </div>
       <div class="col-md-5 col-md-offset-1 text">
         <h3>...participer à des événements uniques</h3>
@@ -57,7 +59,7 @@
 
     <div class="row advantages">
       <div class="col-md-5 col-md-push-6">
-        <img src="{% static 'images/img_005.jpg' %}" class="img-responsive img-rounded">
+        <img src="{% static 'images/become/federez_light.jpg' %}" class="img-responsive img-rounded">
       </div>
       <div class="col-md-5 col-md-pull-5 text-right text">
         <h3>...étoffer votre réseau professionnel</h3>
@@ -130,18 +132,16 @@
 {% endblock %}
 
 {% block javascript %}
-  <script src="https://unpkg.com/vue"></script>
-  <script src="https://cdn.jsdelivr.net/npm/tween.js@16.3.4"></script>
   <script>
     var app = new Vue({
       el: '#become-app',
       data: {
         experiences: [
-            'AVENTURE',
-            'EXPÉRIENCE',
-            'ASSOCIATION',
-            'FAMILLE'
-      ],
+          'AVENTURE',
+          'EXPÉRIENCE',
+          'ASSOCIATION',
+          'FAMILLE'
+        ],
         experience: 'AVENTURE',
         animatedExperience: 'AVENTURE',
         dash:'_',
@@ -203,9 +203,9 @@
         this.showPoste(this.postes[0])
       },
       methods: {
-       showPoste: function (poste) {
-         this.currentPoste = poste
-       }
+        showPoste: function (poste) {
+          this.currentPoste = poste
+        }
       },
       watch: {
         experience: function (newValue, oldValue) {

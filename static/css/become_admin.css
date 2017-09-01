@@ -40,3 +40,7 @@ h1 {
 .act h2 {
     margin-bottom: 50px;
 }
+
+[v-cloak] {
+    display: none;
+  }
