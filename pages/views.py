@@ -159,7 +159,7 @@ class NewsDetail(DetailView):
     model = News
 
 class NewsRSS(Feed):
-    title = _("Les dernières infos ResLE")
+    title = _("Les dernières infos ResEl")
     link = "/rss-news/"
     description = _("Des informations sur l'état du réseau sur les campus de Brest et Rennes")
 
