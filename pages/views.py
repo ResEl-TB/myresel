@@ -17,8 +17,11 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import View, ListView, DetailView
 from django.views.i18n import set_language
 from django.utils import timezone
+from django.contrib.syndication.views import Feed
+from django.utils.feedgenerator import Atom1Feed
 
 from fonctions import network, decorators
+from fonctions.decorators import resel_required
 from fonctions.generic import sizeof_fmt
 from devices.models import LdapDevice, PeopleData
 from gestion_personnes.models import LdapUser, UserMetaData
@@ -54,9 +57,6 @@ class Home(View):
 
     @method_decorator(decorators.correct_vlan)
     def dispatch(self, *args, **kwargs):
-        from debug_toolbar import settings as dt_settings
-
-        print(dt_settings.get_config()['SHOW_TOOLBAR_CALLBACK'])
         return super(Home, self).dispatch(*args, **kwargs)
 
 
@@ -158,6 +158,29 @@ class NewsDetail(DetailView):
     context_object_name = 'pieceOfNews'
     model = News
 
+class NewsRSS(Feed):
+    title = _("Les dernières infos ResEl")
+    link = "/rss-news/"
+    description = _("Des informations sur l'état du réseau sur les campus de Brest et Rennes")
+
+    def items(self):
+        return News.objects.order_by('-date')[:5]
+
+    def item_title(self, item):
+        return item.title
+
+    def item_description(self, item):
+        return item.content
+
+    def item_link(self, item):
+        return reverse('piece-of-news', args=[item.pk])
+
+
+class NewsAtom(NewsRSS):
+    feed_type = Atom1Feed
+    subtitle = NewsRSS.description
+
+
 class Services(ListView):
     """ Vue appelée pour afficher la liste des services du ResEl """
     template_name = 'pages/service.html'
@@ -224,6 +247,7 @@ class Contact(View):
         return render(request, self.template_name, {'form': form})
 
 
+@resel_required
 def inscription_zone_info(request):
     """
     View which explains the users on how to register to the ResEl
@@ -265,11 +289,16 @@ class FaqList(ListView):
     def get_queryset(self):
         return Faq.objects.order_by('-vote').all()
 
-def faqUpvote(request):
+def faqVote(request):
 
-    faq = get_object_or_404(Faq, pk=request.POST['faq_id'])
-    faq.upvote()
+    faq = get_object_or_404(Faq, pk=request.POST.get('faq_id', None))
+    vote = request.POST.get('vote', None)
+    if vote == "upvote":
+        faq.upvote()
+    elif vote == "downvote":
+        faq.downvote()
     return HttpResponse('OK')
+
 
 @csrf_exempt
 def unsecure_set_language(request):

@@ -33,7 +33,7 @@
                     <p><a href="mailto:{{ asso.email }}"><p><span class="fa fa-envelope"><span> <a href="mailto:{{ asso.email }}"> {{ asso.email}}</a></p>
                     {% endif %}
                     {% if asso.website %}
-                    <p><a href="http://{{ asso.website }}"><span class="fa fa-globe"></span> {{ asso.website }}</a></p>
+                    <p><a href="{{ asso.website }}"><span class="fa fa-globe"></span> {{ asso.website }}</a></p>
                     {% endif %}
                     <a href="{% url 'campus:clubs:club_detail' asso.cn %}"><span class="fa fa-info-circle"></span> En savoir plus</a>
                 </div>
@@ -79,10 +79,10 @@
                     <p class="club-name">{{ club.name }}</p>
                     <p>{{ club.description|truncatewords:30 }}</p>
                     {% if club.email %}
-                    <p><a href="mailto:{{ club.email }}"><p><span class="fa fa-envelope"><span> <a href="mailto:{{ club.email }}"> {{ club.email}}</a></p>
+                    <p><a href="mailto:{{ club.email }}"><span class="fa fa-envelope"><span>{{ club.email}}</a></p>
                     {% endif %}
                     {% if club.website %}
-                    <p><a href="http://{{ club.website }}"><span class="fa fa-globe"></span> {{ club.website }}</a></p>
+                    <p><a href="{{ club.website }}"><span class="fa fa-globe"></span> {{ club.website }}</a></p>
                     {% endif %}
                     <a href="{% url 'campus:clubs:club_detail' club.cn %}"><span class="fa fa-info-circle"></span> En savoir plus</a>
                 </div>
@@ -93,12 +93,12 @@
                         {% if not request.ldap_user.pk in club.members %}
                         <p><form method="POST" action="{% url 'campus:clubs:add-person' club.cn %}" class="inline" >
                            {% csrf_token %}
-                           <button type="submit" class="btn btn-link add-user" /><span class="fa fa-fw fa-sign-in"></span> m'inscrire</button>
+                           <button type="submit" class="btn btn-link add-user" ><span class="fa fa-fw fa-sign-in"></span> m'inscrire</button>
                         </form></p>
                         {% else %}
                         <p><form method="POST" action="{% url 'campus:clubs:remove-person' club.cn %}" class="inline" >
                            {% csrf_token %}
-                           <button type="submit" class="btn btn-link dell-user" /><span class="fa fa-fw fa-sign-out"></span> me désinscrire</button>
+                           <button type="submit" class="btn btn-link dell-user" ><span class="fa fa-fw fa-sign-out"></span> me désinscrire</button>
                         </form></p>
                         {% endif %}
                         {% if request.ldap_user.is_campus_moderator or 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in club.prezs or request.user.is_staff%}
@@ -133,10 +133,10 @@
                     <p class="club-name">{{ list.name }}</p>
                     <p>{{ list.description|truncatewords:30 }}</p>
                     {% if list.email %}
-                    <p><a href="mailto:{{ list.email }}"><span class="fa fa-envelope"><span> <a href="mailto:{{ list.email }}"> {{ list.email}}</a></p>
+                    <p><a href="mailto:{{ list.email }}"><span class="fa fa-envelope"><span>{{ list.email}}</a></p>
                     {% endif %}
                     {% if list.website %}
-                    <p><a href="http://{{ list.website }}"><span class="fa fa-globe"></span> {{ list.website }}</a></p>
+                    <p><a href="{{ list.website }}"><span class="fa fa-globe"></span> {{ list.website }}</a></p>
                     {% endif %}
                     <a href="{% url 'campus:clubs:club_detail' list.cn %}"><span class="fa fa-info-circle"></span> En savoir plus</a>
                 </div>
@@ -147,12 +147,12 @@
                         {% if not 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in list.members%}
                         <p><form method="POST" action="{% url 'campus:clubs:add-person' list.cn %}" class="inline" >
                            {% csrf_token %}
-                           <button type="submit" class="btn btn-link add-user" /><span class="fa fa-fw fa-sign-in"></span> m'inscrire</button>
+                           <button type="submit" class="btn btn-link add-user" ><span class="fa fa-fw fa-sign-in"></span> m'inscrire</button>
                         </form></p>
                         {% else %}
                         <p><form method="POST" action="{% url 'campus:clubs:remove-person' list.cn %}" class="inline" >
                            {% csrf_token %}
-                           <button type="submit" class="btn btn-link dell-user" /><span class="fa fa-fw fa-sign-out"></span> me désinscrire</button>
+                           <button type="submit" class="btn btn-link dell-user" ><span class="fa fa-fw fa-sign-out"></span> me désinscrire</button>
                         </form></p>
                         {% endif %}
                         {% if request.ldap_user.is_campus_moderator or 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in list.prezs or request.user.is_staff%}

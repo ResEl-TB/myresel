@@ -223,6 +223,7 @@ class MyClubs(View):
             'hardLinkDel': hardLinkDel,
             'hardLinkAddPrez': hardLinkAddPrez,
             'hardLinkWhoUser': hardLinkWhoUser,
+            'hardLinkAddMail': hardLinkAddMail,
         }
         return render(request, self.template_name, context)
 
@@ -257,6 +258,7 @@ class SearchClub(View):
             'hardLinkDel': hardLinkDel,
             'hardLinkAddPrez': hardLinkAddPrez,
             'hardLinkWhoUser': hardLinkWhoUser,
+            'hardLinkAddMail': hardLinkAddMail,
         }
 
         return render(request, self.template_name, context)

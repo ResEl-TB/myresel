@@ -241,7 +241,6 @@ class EditDeviceView(View):
             else:
                 machine.aliases = [alias]
             machine.save()
-            print(alias)
             messages.success(request, _("L'alias de la machine a bien été modifié."))
             return HttpResponseRedirect(reverse('gestion-machines:liste'))
 

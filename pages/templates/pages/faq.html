@@ -28,11 +28,11 @@
                     {% for question in questions %}
                         {% if forloop.first %}{% endif %}
                         <div class="panel panel-info">
-                            <div class="panel-heading"><h3 id="{{ question.id }}" class="panel-title faq-question" style="cursor: pointer;"><b>{{ question.question_text }}</b></h3></div>
+                            <div class="panel-heading"><h3 class="panel-title faq-question" style="cursor: pointer;"><b>{{ question.question_text }}</b></h3></div>
                             <div class="panel-body">
                                 {{ question.response|safe }}
-                                <a id="{{ question.id }}" class="vote" href="javascript:void(false)"><span class="fa fa-thumbs-up"></span> {% trans "Cette réponse m'a été utile" %}</a>
-                                <a class="vote" href="{% url "contact" %}"><span class="fa fa-thumbs-down"></span> Cette réponse est inutile</a> </div>
+                                <a id="{{ question.id }}" class="vote" href="javascript:void(false)" vote="upvote"><span class="fa fa-thumbs-up"></span> {% trans "Cette réponse m'a été utile" %}</a>
+                                <a class="vote" href="{% url "contact" %}" vote="downvote"><span class="fa fa-thumbs-down"></span> Cette réponse est inutile</a> </div>
                         </div>{% if forloop.last %}{% endif %}
                     {% empty %}
                         <p>{% trans "Pas de question à l'horizon" %}</p>
@@ -56,6 +56,7 @@
 
             $(".vote").click(function() {
                 var id = $(this).prop("id");
+                var vote = document.getElementById(id).getAttribute("vote");
                 var $response = $("<span style='color: gray'>...</span>");
                 $(this).replaceWith($response);
 
@@ -63,6 +64,7 @@
                     type:"POST",
                     url:"/faq/upvote/",
                     data: {
+                        'vote': vote,
                         'faq_id': id,
                         'csrfmiddlewaretoken': '{{ csrf_token }}'
                     }
