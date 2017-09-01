@@ -17,6 +17,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import View, ListView, DetailView
 from django.views.i18n import set_language
 from django.utils import timezone
+from django.contrib.syndication.views import Feed
+from django.utils.feedgenerator import Atom1Feed
 
 from fonctions import network, decorators
 from fonctions.decorators import resel_required
@@ -155,6 +157,29 @@ class NewsDetail(DetailView):
     template_name = 'pages/piece_of_news.html'
     context_object_name = 'pieceOfNews'
     model = News
+
+class NewsRSS(Feed):
+    title = _("Les dernières infos ResLE")
+    link = "/rss-news/"
+    description = _("Des informations sur l'état du réseau sur les campus de Brest et Rennes")
+
+    def items(self):
+        return News.objects.order_by('-date')[:5]
+
+    def item_title(self, item):
+        return item.title
+
+    def item_description(self, item):
+        return item.content
+
+    def item_link(self, item):
+        return reverse('piece-of-news', args=[item.pk])
+
+
+class NewsAtom(NewsRSS):
+    feed_type = Atom1Feed
+    subtitle = NewsRSS.description
+
 
 class Services(ListView):
     """ Vue appelée pour afficher la liste des services du ResEl """
