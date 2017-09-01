@@ -20,7 +20,7 @@ from django.contrib.auth import views as auth_views
 from django.views.generic import RedirectView
 from django.views.generic import TemplateView
 from django.views.i18n import javascript_catalog
-from pages.views import Home, Contact, NewsListe, inscription_zone_info, FaqList, faqUpvote, NewsDetail, Services, unsecure_set_language, NewsRSS
+from pages.views import Home, Contact, NewsListe, inscription_zone_info, FaqList, faqUpvote, NewsDetail, Services, unsecure_set_language, NewsRSS, NewsAtom
 from myresel import settings
 
 
@@ -48,6 +48,7 @@ urlpatterns = [
     url(r'^news/$', NewsListe.as_view(), name='news'),
     url(r'^news/(?P<pk>\d+)$', NewsDetail.as_view(), name='piece-of-news'),
     url(r'^rss-news$', NewsRSS(), name="rss"),
+    url(r'^atom-news$', NewsAtom(), name="atom"),
     url(r'^faq/$', FaqList.as_view(), name='faq'),
     url(r'^faq/upvote/$', faqUpvote, name='upvote'),
     url(r'^contact/', Contact.as_view(), name='contact'),

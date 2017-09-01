@@ -18,7 +18,7 @@
                         <h2>{% trans "Les dernières Actualités" %}</h2>
                         <p>{% trans "Vous trouverez ici l'intégralité des Actualités ResEl."%}</p>
                         <p>{% trans "N'hésitez pas non plus à nous trouver sur "%} <a href="https://www.facebook.com/Reselfr">Facebook</a> et <a href="https://twitter.com/resel_fr">Twitter</a></p>
-                        <p><a href="{% url 'rss' %}"><span class="fa fa-rss-square"></span> {% trans "Flux RSS" %}</a></p>
+                        <p><a href="{% url 'rss' %}"><span class="fa fa-rss-square"></span> {% trans "Flux RSS" %}</a> <a href="{% url 'atom' %}">{% trans "Flux Atom" %}</a></p>
                     </div>
                 </div>
             </div>

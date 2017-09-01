@@ -18,6 +18,7 @@ from django.views.generic import View, ListView, DetailView
 from django.views.i18n import set_language
 from django.utils import timezone
 from django.contrib.syndication.views import Feed
+from django.utils.feedgenerator import Atom1Feed
 
 from fonctions import network, decorators
 from fonctions.generic import sizeof_fmt
@@ -175,6 +176,12 @@ class NewsRSS(Feed):
 
     def item_link(self, item):
         return reverse('piece-of-news', args=[item.pk])
+
+
+class NewsAtom(NewsRSS):
+    feed_type = Atom1Feed
+    subtitle = NewsRSS.description
+
 
 class Services(ListView):
     """ Vue appelée pour afficher la liste des services du ResEl """
