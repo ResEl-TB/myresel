@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block titre %}{% trans "418" %}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">{% trans "Une petite soif ?" %}</h1>
+            <div class="col-lg-12 text-center">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">{% blocktrans %}<strong>418 :</strong> Je suis une théière{% endblocktrans %}</h3>
+                    </div>
+                </div>
+                <img style="width: 400px; height: auto; margin: auto;" class="img-responsive" src="{% static 'images/teapot.jpg' %}"/>
+            </div>
+        </div> <!-- /.col-lg-12 -->
+    </div> <!-- /.row -->
+</div> <!-- /.container -->
+{% endblock %}
