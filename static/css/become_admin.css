@@ -4,6 +4,11 @@
     color: #E5E9F0;
     padding: 50px;
     font-family: 'Roboto Mono', 'sans-serif';
+    border-radius: 4px;
+}
+
+.page-header h1:nth-child(2) {
+    padding-left: 42px;
 }
 
 .exp {
@@ -34,6 +39,16 @@ h1 {
     margin: 100px 0 100px 0;
 }
 
+
+.advantages img {
+    transition-property: transform;
+    transition-duration: 0.5s;
+    transition-timing-function: ease-out;
+}
+.advantages img:hover {
+    transform: scale(1.05, 1.05);
+}
+
 .advantages .text {
     padding-top: 30px;
 }
@@ -42,15 +57,21 @@ h1 {
     margin: 50px 0 20px 0;
 }
 
+.postes button {
+    transition-property: transform, font-size;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-out;
+}
+
 .postes .active {
-    font-size: 1.3em;
+    font-size: 1.1em;
     transform: scale(1.05, 1.05);
     box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
 
 }
 
 .act {
-    margin: 100px 0 50px 0;
+    margin: 100px 0 150px 0;
 }
 
 .act h2 {
