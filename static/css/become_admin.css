@@ -16,6 +16,19 @@
 h1 {
     font-size: 2.5em;
 }
+@media(max-width:767px){
+    h1 {
+        font-size: 1.5em;
+    }
+    .page-header {
+        margin: 20px 0 50px 0;
+        padding: 20px;
+        font-family: 'Roboto Mono', 'sans-serif';
+    }
+    .advantages {
+        margin: 20px 0 20px 0;
+    }
+}
 
 .advantages {
     margin: 100px 0 100px 0;
@@ -30,7 +43,10 @@ h1 {
 }
 
 .postes .active {
-    font-size: 1.4em;
+    font-size: 1.3em;
+    transform: scale(1.05, 1.05);
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, .5);
+
 }
 
 .act {
