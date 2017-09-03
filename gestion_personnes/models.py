@@ -225,6 +225,7 @@ class LdapGroup(ldapback.models.LdapModel):
 
     def get_members(self):
         members = []
+        # pylint: disable=not-an-iterable
         for member in self.members:
             m = re.search(r'^uid=(\w+)', member)
             members.append(LdapUser.get(uid=m.group(1)))
