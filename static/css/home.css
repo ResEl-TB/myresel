@@ -1,6 +1,6 @@
 .jumbotron {
-    padding-bottom: 100px;
-    padding-top: 0;
+    padding-bottom: 30px;
+    padding-top: 30px;
     margin-bottom: 0;
     margin-top: 0;
     background: #ffffff;
@@ -20,6 +20,7 @@
     max-width: 400px;
     margin-left: auto;
     margin-right: auto;
+    animation: 1s ease-out 0s 1 appear;
 }
 
 .home-fragment {
@@ -33,6 +34,36 @@
     box-shadow: inset 0 5px 6px 0 #122a3c;
 }
 
+@keyframes slideInFromLeft {
+    0% {
+        transform: translateX(-20px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes appear {
+    0% {
+        transform: scale(.9, .9);
+        opacity: .3;
+    }
+    80% {
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1, 1);
+    }
+}
+.assos-title {
+    animation: 2s ease-out 0s 1 slideInFromLeft;
+}
+
+.assos-slogan {
+    animation: 4s ease-out 0s 1 slideInFromLeft;
+}
 
 #carousel-quotes {
     height: 170px;
