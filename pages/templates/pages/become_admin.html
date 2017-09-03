@@ -1,0 +1,243 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block titre %}{% trans "Devenez adminitrateur ResEl" %}{% endblock %}
+
+{% block content %}
+  <script src="https://unpkg.com/vue"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tween.js@16.3.4"></script>
+  <div class="container" id="become-app" xmlns:v-on="http://www.w3.org/1999/xhtml"
+       xmlns:v-bind="http://www.w3.org/1999/xhtml">
+    <div class="page-header">
+      <h1><span class="hash">#</span> Participe à une</h1>
+      <h1>GRANDE <span class="exp">[[ animatedExperience ]][[ dash ]]</span></h1>
+    </div>
+    <div>
+      <h2>En devenant admnistrateur ResEl tu pourras...</h2>
+    </div>
+    <div class="row advantages">
+      <div class="col-md-5">
+<img src="{% static 'images/become/servers_light.jpg' %}" class="img-responsive img-rounded">
+      </div>
+      <div class="col-md-5 col-md-offset-1 text">
+        <h3>...monter en compétences techniques</h3>
+        <p>Avec son réseau de plus de 3000 machines réparties sur 2 campus,
+          le ResEl est une association technique avant tout. En participant au ResEl
+          que que tu sois novice ou expert en informatique tu apprendras à maîtriser
+          de nombreuses technologies utiles pour ta vie professionnelle.
+          </p>
+      </div>
+    </div>
+
+    <div class="row advantages">
+      <div class="col-md-5 col-md-push-6">
+        <img src="{% static 'images/become/meeting_light.jpg' %}" class="img-responsive img-rounded">
+      </div>
+      <div class="col-md-5 col-md-pull-5 text-right text">
+        <h3>...apprendre à gérer une équipe</h3>
+        <p>En manageant une équipe d'une dizaine d'étudiants administrateurs, il n'existe pas
+        de meilleure méthode pour apprendre à gérer des projets de petite ou de grande
+        envergure.</p>
+      </div>
+    </div>
+
+    <div class="row advantages">
+      <div class="col-md-5">
+        <img src="{% static 'images/become/hashcode_light.jpg' %}" class="img-responsive img-rounded">
+      </div>
+      <div class="col-md-5 col-md-offset-1 text">
+        <h3>...participer et organiser des événements uniques</h3>
+        <p>
+          Le ResEl est avant tout une association étudiante, elle participe à la vie
+          associative du campus au même titre que les autres associations. Cela passe par l'organisation
+          d'événements plus ou moins importants comme le <a href="https://hashcode.withgoogle.com/">Google Hash code</a>,
+          les journés ResEl, ou même quelques sorties entre administrateurs ResEl.
+        </p>
+      </div>
+    </div>
+
+    <div class="row advantages">
+      <div class="col-md-5 col-md-push-6">
+        <img src="{% static 'images/become/federez_light.jpg' %}" class="img-responsive img-rounded">
+      </div>
+      <div class="col-md-5 col-md-pull-5 text-right text">
+        <h3>...étoffer ton réseau professionnel</h3>
+        <p>
+          En devenant administrateur tu entreras automatiquement dans le réseau <a href="https://federez.net/">Fédérez</a>
+          qui regroupe l'ensemble des associations de réseau des Grandes Écoles. Tu profiteras de nombreuses
+          opportunités de stage ou d'emplois proposés par les membres de l'association, une occasion unique.
+        </p>
+      </div>
+    </div>
+
+    <div>
+    <h2>Les différents postes disponibles</h2>
+
+    <div class="row postes">
+      <div class="col-md-4 col-lg-offset-1">
+        <div class="list-group">
+          <button v-for="poste in postes"
+                  type="button" class="list-group-item" v-bind:class="{ active: poste.name === currentPoste.name }"
+                  v-on:click="showPoste(poste)">[[ poste.name ]]</button>
+        </div>
+      </div>
+      <div class="col-lg-6 col-md-7">
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <h3>[[ currentPoste.name ]]</h3>
+            <hr />
+            <p>[[ currentPoste.description ]]</p>
+            <a href="#"><span class="fa fa-fw fa-link"></span> Voir la fiche de poste</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+    <div>
+    <div class="row text-center act">
+      <h2>Investis-toi dès maintenant !</h2>
+      <div class="col-md-4">
+        <div><span class="fa fa-fw fa-5x fa-telegram"></span> </div>
+        <h3><strong>Contacte</strong> l'équipe en place</h3>
+        <p>
+          Rejoins-nous sur le
+          <a href="https://resel.fr/wiki/tutoriaux/discuss-with-irc">chan IRC #ResEl Réseau Sup</a>,
+          sur <a href="https://telegram.org/">Telegram</a> channel #ResEl, par mail à
+          <a href="mailto:dreamteam@resel.fr">dreamteam@resel.fr</a> ou <a href="{% url 'contact' %}">passe en
+          perm au foyer</a> !
+        </p>
+      </div>
+      <div class="col-md-4">
+        <div><span class="fa fa-fw fa-5x fa-book"></span> </div>
+        <h3><strong>Apprends</strong> et documente-toi</h3>
+        <p>
+          Que ce soit techniquement ou humainement, tu passeras tout ton temps au ResEl à apprendre. Alors dès maintenant
+          tu peux aller faire un tour sur le <a href="https://wiki.resel.fr">wiki</a> ou jeter un coup d'oeil aux
+          <a href="https://git.resel.fr/resel/Formation">cours ResEl</a>.
+        </p>
+      </div>
+      <div class="col-md-4">
+        <div><span class="fa fa-fw fa-5x fa-gitlab"></span> </div>
+        <h3><strong>Participe</strong> aux projets en cours</h3>
+        <p>
+          Tu te sens prêt pour participer dès maintenant aux projets de l'association, alors rends-toi dès maintenant
+          sur le <a href="https://git.resel.fr/resel/general/">gestionnaire de projet</a> !
+        </p>
+      </div>
+    </div>
+
+    </div>
+  </div> <!-- /.container -->
+{% endblock %}
+
+{% block css %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/become_admin.css' %}">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+{% endblock %}
+
+{% block javascript %}
+  <script>
+    var app = new Vue({
+      el: '#become-app',
+      data: {
+        experiences: [
+          'AVENTURE',
+          'EXPÉRIENCE',
+          'ASSOCIATION',
+          'FAMILLE',
+          'ANNÉE'
+        ],
+        experience: 'AVENTURE',
+        animatedExperience: 'AVENTURE',
+        dash:'_',
+        postes: [
+          {
+            name: 'Président',
+            description: 'Le président de l\'association ResEl est la personne qui est en charge de la gestion de l\'association. Il est le représentant légal de l\'association.'
+          },
+          {
+            name: 'Secrétaire',
+            description: 'Le secrétaire est un membre du bureau, dont la tâche est de gérer le Secrétariat et d\'épauler le Président pour les tâches administratives.'
+          },
+          {
+            name: 'Trésorier',
+            description: ''
+          },
+          {
+            name: 'Animation des Équipes',
+            description: 'Assure le recrutement des nouveaux administrateurs, présente l’association et mène les entretiens. Assure le respect du parcours d’intégration (formations, projets encadrés) et du suivi des nouveaux administrateurs. Anime l’esprit associatif, notamment par de l\'événementiel interne. Assure le suivi des administrateurs en poste.'
+          },
+          {
+            name: 'Parc Opérationnel',
+            description: 'Assure la coordination des actions de maintenance. Veille au suivi du parc matériel. Veille au respect des bonnes pratiques de maintenance (notamment le respect des heures pleines). Veille au bon fonctionnement du système. Procède à l\'inventaire annuel du parc.'
+          },
+          {
+            name: 'Projets et Développement',
+            description: 'Veille à l’homogénéité et la cohérence des projets de déploiement. Coordonne les actions de développement et de déploiement. Rend compte au président et au CA des actions en cours.'
+          },
+          {
+            name: 'Communication',
+            description: 'Prépare les supports de communication (e-mails, affiches, tracs...) pour les événements. Anime le compte ResEl sur les réseaux sociaux (Facebook, Twitter). Informe par les divers média (news sur le site, annonce sur les réseaux sociaux, mail) les informations importantes.'
+          },
+          {
+            name: 'Support',
+            description: 'S\'assurer que tous les services de support fonctionnent bien. S\'assurer que les demandes des utilisateurs sont bien traitées en moins de 24h. S\'assurer que les permanences ResEl soient bien tenues. Le responsable support ne doit pas répondre à toutes les demandes, il doit inciter les administrateurs à le faire en leur assignant des tickets, et en s\'assurant que les différentes tâches du support soit accomplies. Former les administrateurs aux questions les plus fréquemment posées, aux problèmes les plus fréquemment rencontrés. Faire remonter au responsable parc opérationnel les problèmes du parc rencontrés.'
+          },
+          {
+            name: 'Formation et Intégration',
+            description: 'Préparer les formations en amont de la rentrée avec un planning détaillé des différentes formations et activités d\'intégration. S\'assurer que les « professeurs » préparent leur cours suffisamment en avance. S\'assurer que les nouveaux administrateurs reçoivent une formation cohérente avec leurs compétences initiales / objectif de formations.'
+          },
+          {
+            name: 'Directeur site Rennais',
+            description: 'Assurer la bonne tenue des documentations techniques. Organiser des réunions de formation et d\'explication sur des nouveaux services mis en place Assurer la bonne communication de rapport d\'opérations réalisées, de mises en places, etc...'
+          },
+        ],
+        currentPoste: {}
+      },
+      delimiters: ['[[', ']]'],
+      mounted: function () {
+        var exp_index = 0
+        var that = this
+        setInterval(function () {
+          that.experience = that.experiences[exp_index]
+          exp_index = (exp_index + 1) % that.experiences.length
+        }, 3500);
+        setInterval(function () {
+          that.dash = that.dash === '_' ? ' ' : '_'
+        }, 500);
+        this.showPoste(this.postes[0])
+      },
+      methods: {
+        showPoste: function (poste) {
+          this.currentPoste = poste
+        }
+      },
+      watch: {
+        experience: function (newValue, oldValue) {
+          var that = this
+
+          function animate() {
+            if (TWEEN.update()) {
+              requestAnimationFrame(animate)
+            }
+          }
+
+          new TWEEN.Tween({tweeningNumber: oldValue.length})
+              .easing(TWEEN.Easing.Quadratic.Out)
+              .to({tweeningNumber: 0}, 2500)
+              .to({tweeningNumber: -newValue.length}, 2000)
+              .onUpdate(function () {
+                if (this.tweeningNumber > 0) {
+                  that.animatedExperience = that.animatedExperience.substring(0, that.animatedExperience.length - 1)
+                } else {
+                  that.animatedExperience = newValue.substring(0, -this.tweeningNumber)
+                }
+              })
+              .start()
+          animate()
+        }
+      }
+    })
+  </script>
+{% endblock %}

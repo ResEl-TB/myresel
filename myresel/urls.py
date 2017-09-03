@@ -62,6 +62,8 @@ urlpatterns = [
     url(r'^favicon.ico', RedirectView.as_view(url='/static/images/icons/favicon-96x96.png', permanent=False), name="favicon"),
 
     url(r'^help-needed/', TemplateView.as_view(template_name='help_needed.html'), name="help-needed"),
+    url(r'^become/$', TemplateView.as_view(template_name='pages/become_admin.html'), name='become-admin'),
+    url(r'^wp-login.php$', TemplateView.as_view(template_name='418.html'), name='418'),
 
     url(r'^$', Home.as_view(), name='home'),
 ]
