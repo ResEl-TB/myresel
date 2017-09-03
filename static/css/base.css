@@ -52,12 +52,29 @@ body {
     color: #555555;
 }
 
+.dropdown-menu {
+    transition: opacity, max-height;
+    transition-duration: .2s, .3s;
+
+    opacity: 0;
+    max-height: 0;
+    display: block;
+    overflow: hidden;
+}
+
 /* to make the menu reactive on hover */
 @media (min-width: 979px) {
-  ul.nav li.dropdown:hover > ul.dropdown-menu {
-    display: block;
+  ul.nav li.dropdown:hover > .dropdown-menu {
+      display: block;
       margin: 0;
+      opacity: 1;
+      max-height: 1500px;
   }
+}
+
+.open > .dropdown-menu {
+    opacity: 1;
+    max-height: 1500px;
 }
 
 .nav .btn-campus {
