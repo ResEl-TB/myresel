@@ -101,6 +101,11 @@
                                    <a href="{% url "campus:mails:moderate" %}"><i class="fa fa-eye fa-fw"></i> Modération mails campus</a>
                                 </li>
                             {% endif %}
+                            {% if request.ldap_user.is_staff %}
+                                <li>
+                                   <a href="{% url "campus:gestion:modo" %}"><i class="fa fa-beer fa-fw"></i> Gérer les modérateurs campus</a>
+                                </li>
+                            {% endif %}
                             <hr />
                             <li>
                                 <a href="{% url "campus:who:user-home" %}"><i class="fa fa-sliders fa-id-card"></i> Mon profil</a>

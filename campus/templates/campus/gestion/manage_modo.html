@@ -1,0 +1,82 @@
+{% extends "base_campus.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Gestion des Modérateurs campus" %}{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/campus/gestion.css' %}">
+<link href="{% static 'jquery/jquery-ui.min.css' %}" rel="Stylesheet"></link>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row margin-bottom">
+            {% csrf_token %}
+            <button class="btn btn-danger" data-toggle="modal" data-target="#addModo" type="submit">{% trans "Ajouter un modo" %}</button>
+    </div>
+</div>
+<div class="container well">
+    <div class="row caption">
+        <div class="col-md-3 text-center">
+            <strong>Modérateur</strong>
+        </div>
+        <div class="col-md-4 text-center">
+            <strong>Email</strong>
+        </div>
+        <div class="col-md-2 col-md-offset-3 text-center">
+            <strong>Supprimer</strong>
+        </div>
+    </div>
+    {% for modo in modos %}
+    <div class="row margin-top">
+        <div class="col-md-3 text-center">
+            {{modo.first_name}}
+            {{modo.last_name|upper}}
+        </div>
+        <div class="col-md-4 text-center">
+            <a href="mailto:{{modo.mail}}">{{modo.mail}}</a>
+        </div>
+        <div class="col-md-2 col-md-offset-3 text-center">
+            <form action="{% url 'campus:gestion:delmodo' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="uid" value="{{ modo.uid }}" />
+                <button class="btn btn-danger" type="submit"><span class="fa fa-ban"></span></button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<div class="modal fade" id="addModo" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">{% trans "Ajouter un modérateur campus" %}</h4>
+            </div>
+            <form class="form-horizontal" action="{% url 'campus:gestion:addmodo'%}" method="POST">
+                {% csrf_token %}
+            <div class="modal-body">
+                <label>Entrez le nom du modérateur à ajouter :</label>
+                <input class="form-control" type="text" id="id_modo" name="uid" value="">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger pull-right"type="submit" name="button"><span class="fa fa-beer"></span> Let's gros</button>
+            </div>
+            </form>
+        </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script src="{% static 'jquery/jquery-ui.min.js' %}"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+      $('#id_modo').autocomplete({
+          source: "{% url 'campus:who:request-user' %}",
+          minLength: 3,
+      });
+    })
+</script>
+{% endblock %}
