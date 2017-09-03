@@ -1,6 +1,7 @@
 # coding: utf-8
 import json
 import uuid
+import re
 from datetime import datetime, timedelta
 
 from django.conf import settings
@@ -222,9 +223,25 @@ class LdapGroup(ldapback.models.LdapModel):
             return uid in [member.split(',')[0].split('uid=')[1] for member in self.members]
         return False
 
+    def get_members(self):
+        members = []
+        # pylint: disable=not-an-iterable
+        for member in self.members:
+            m = re.search(r'^uid=(\w+)', member)
+            members.append(LdapUser.get(uid=m.group(1)))
+        return members
+
     def add_member(self, pk):
         # pylint: disable=unsupported-membership-test
         if pk not in self.members:
             # pylint: disable=unsupported-membership-test,no-member
             self.members.append(pk)
+            self.save()
+
+    def remove_member(self, uid):
+        uid = "uid="+uid+",ou=people,dc=maisel,dc=enst-bretagne,dc=fr"
+        # pylint: disable=unsupported-membership-test
+        if uid in self.members and len(self.members) > 1: #Avoid error if there is no member
+            # pylint: disable=unsupported-membership-test,no-member
+            self.members.remove(uid)
             self.save()

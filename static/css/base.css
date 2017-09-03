@@ -23,6 +23,60 @@ body {
     display: inline-block;
 }
 
+.dropdown-link {
+    /*display: block;*/
+    max-width: 500px;
+    padding: 15px 30px 20px 20px !important;
+}
+
+.dropdown-link .glyphicon {
+    margin: 10px 0 0 auto;
+    font-size: 30px;
+    color: #00ABBB;
+}
+
+.dropdown-link .icon {
+    text-align: right;
+}
+
+.dropdown-link .link-name {
+    color: #225378;
+    font-size: 1.0em;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-family: 'Roboto Medium', sans-serif;
+}
+
+.dropdown-link .link-description {
+    color: #555555;
+}
+
+.dropdown-menu {
+    transition: opacity, max-height;
+    transition-duration: .2s, .3s;
+
+    opacity: 0;
+    max-height: 0;
+    display: block;
+    overflow: hidden;
+}
+
+/* to make the menu reactive on hover */
+@media (min-width: 979px) {
+  ul.nav li.dropdown:hover > .dropdown-menu {
+      display: block;
+      margin: 0;
+      opacity: 1;
+      max-height: 1500px;
+  }
+}
+
+.open > .dropdown-menu {
+    opacity: 1;
+    max-height: 1500px;
+}
+
 .nav .btn-campus {
     font-weight: bold;
 }
@@ -268,6 +322,14 @@ body {
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
 }
 
+@font-face {
+    font-family: 'Roboto Medium';
+    font-style: normal;
+    font-weight: 500;
+    src: url('../fonts/Roboto/Roboto-Medium.ttf') format('truetype');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2212, U+2215, U+E0FF, U+EFFD, U+F000;
+}
+
 #unregistered-device:hover {
     background-color: #d9534f;
 }
@@ -347,7 +409,6 @@ body {
     color: #5bc0de;
 }
 
-}
 
 @media screen and (max-width: 765px) {
     .graph {

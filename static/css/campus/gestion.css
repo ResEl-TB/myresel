@@ -1,0 +1,21 @@
+strong {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.caption {
+    padding: 5px;
+    border-bottom: 1px solid rgb(134, 134, 134);
+}
+
+.margin-top {
+    margin-top: 20px;
+}
+
+.margin-bottom {
+    margin-bottom: 20px;
+}
+
+.ban {
+    color: rgb(198, 47, 37);
+}

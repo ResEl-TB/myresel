@@ -59,9 +59,19 @@
                 <a href="{% url 'wiki:show-category' slug='lassociation' %}" class="dropdown-toggle" data-toggle="dropdown"><i class="fa {{ association_category.fa_icon_name }} fa-fw" aria-hidden="true"></i> <span class="hidden-sm">{{ association_category.name }}</span></a>
                 <ul class="dropdown-menu">
                     {% for stuff in association_category.get_articles_and_links_to_display %}
-                    <li>
-                        <a href="{{ stuff.get_absolute_url }}">{{ stuff.name }}</a>
-                    </li>
+                      <li>
+                        <a href="{{ stuff.get_absolute_url }}" class="container dropdown-link">
+                          <div class="row">
+                            <div class="col-xs-2 icon">
+                              <span class="glyphicon {{ stuff.glyphicon_name }}"></span>
+                            </div>
+                            <div class="col-xs-10">
+                              <div class="link-name">{{ stuff.name }}</div>
+                              <div class="link-description">{{ stuff.description }}</div>
+                            </div>
+                          </div>
+                        </a>
+                      </li>
                     {% empty %}
                     <li>
                         <a>{% trans "Aucun article" %}</a>
@@ -77,7 +87,17 @@
                 <ul class="dropdown-menu">
                     {% for stuff in services_category.get_articles_and_links_to_display %}
                     <li>
-                        <a href="{{ stuff.get_absolute_url }}">{{ stuff.name }}</a>
+                      <a href="{{ stuff.get_absolute_url }}" class="container dropdown-link">
+                        <div class="row">
+                          <div class="col-xs-2 icon">
+                            <span class="glyphicon {{ stuff.glyphicon_name }}"></span>
+                          </div>
+                          <div class="col-xs-10">
+                            <div class="link-name">{{ stuff.name }}</div>
+                            <div class="link-description">{{ stuff.description }}</div>
+                          </div>
+                        </div>
+                      </a>
                     </li>
                     {% empty %}
                     <li>
@@ -136,7 +156,7 @@
                 <hr class="visible-xs"/>
                 <li class="dropdown">
                     <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-fw" aria-hidden="true"></i> {% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE | upper }}</a>
-                    <div class="dropdown-menu">
+                    <ul class="dropdown-menu">
                         {% get_available_languages as LANGUAGES %}
                         {% get_language_info_list for LANGUAGES as languages %}
                         <form action="{% url 'set_language' %}" method="post">
@@ -145,7 +165,7 @@
                             <button class="btn btn-link" name="language" type="submit" value="{{ language.code }}">{{ language.name_local|title }}</button>
                             {% endfor %}
                         </form>
-                    </div>
+                    </ul>
                 </li>
         </ul>
         </div>
