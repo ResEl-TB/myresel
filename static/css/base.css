@@ -23,6 +23,13 @@ body {
     display: inline-block;
 }
 
+/* to make the menu reactive on hover */
+@media (min-width: 979px) {
+  .navbar-main li.dropdown:hover > ul.dropdown-menu {
+    display: block;
+  }
+}
+
 .nav .btn-campus {
     font-weight: bold;
 }
@@ -347,7 +354,6 @@ body {
     color: #5bc0de;
 }
 
-}
 
 @media screen and (max-width: 765px) {
     .graph {
