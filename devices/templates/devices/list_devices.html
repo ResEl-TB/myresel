@@ -36,11 +36,14 @@
                             <span class="label label-success">{% trans "Activée" %}</span>
                         {% elif m.get_status == "inactive" %}
                             <span class="label label-default">{% trans "Inactive" %}</span>
-                        {% elif m.get_status == "wrong_campus" %}
-                            <span class="label label-default">{% trans "Mauvais campus" %}</span>
                         {% else %}
                             <span class="label label-danger">{% trans "Erreur" %}</span>
                         {% endif %}
+			{% if "Brest" in m.zones %}
+			    <span class="label label-success">Brest</span>
+			{% elif "Rennes" in m.zones %}
+			    <span class="label label-success">Rennes</span>
+			{% endif %}
 {#                        {% if current_device.hostname == m.hostname %}#}
 {#                            <span class="label label-info">{% trans "Machine courante" %}</span>#}
 {#                        {% endif %}#}
