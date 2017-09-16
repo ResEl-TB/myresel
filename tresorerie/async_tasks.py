@@ -73,6 +73,14 @@ def invoice_laputex_check(user: object, transaction: object,
         text = laputex_req.text
 
     except requests.exceptions.RequestException as err:
+        logger.error(
+            'Error handling requesting LaPuTeX document status: %s' % str(err),
+            extra={
+                'message_code': 'LAPUTEX_REQUEST_ERROR',
+                'uid': user.uid,
+                'transaction_uuid': transaction.uuid,
+            },
+            )
         no_error = False
         status_code = "'Error handled'"
         text = str(err)
@@ -84,6 +92,14 @@ def invoice_laputex_check(user: object, transaction: object,
 
         eta = int(laputex_req.json()['eta']) if 'eta' in laputex_req.json() else settings.LAPUTEX_WAITING_TIME
         scheduler = django_rq.get_scheduler()
+        logger.info(
+            'Rescheduling LaPuTeX transaction %s' % transaction.uuid,
+            extra={
+                'message_code': 'LAPUTEX_RESCHEDULE',
+                'uid': user.uid,
+                'transaction_uuid': transaction.uuid,
+            }
+        )
         scheduler.enqueue_in(
             timedelta(seconds=eta), invoice_laputex_check,
             user, transaction, laputex_invoice_id, send_to, attempt_num+1
