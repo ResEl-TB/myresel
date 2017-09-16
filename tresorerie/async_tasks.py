@@ -81,7 +81,8 @@ def invoice_laputex_check(user: object, transaction: object,
     # noinspection PyUnboundLocalVariable
     if no_error and (attempt_num < settings.LAPUTEX_MAX_ATTEMPTS and
                      laputex_req.json()['state'] in ('compiling', 'pending')):
-        eta = laputex_req.json()['eta'] if 'eta' in laputex_req.json() else settings.LAPUTEX_WAITING_TIME
+
+        eta = int(laputex_req.json()['eta']) if 'eta' in laputex_req.json() else settings.LAPUTEX_WAITING_TIME
         scheduler = django_rq.get_scheduler()
         scheduler.enqueue_in(
             timedelta(seconds=eta), invoice_laputex_check,
