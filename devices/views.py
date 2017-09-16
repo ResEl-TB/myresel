@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 import logging
+import time
+from datetime import datetime, timedelta
 
+import math
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -8,6 +11,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import mail_admins
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.http import HttpResponseRedirect
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
@@ -17,7 +21,7 @@ from django.views.generic import View, ListView
 from fonctions import ldap, network
 from fonctions.decorators import resel_required, unknown_machine
 from fonctions.network import get_campus
-from devices.models import LdapDevice
+from devices.models import LdapDevice, PeopleHistory
 from gestion_personnes.models import LdapUser
 from .forms import AddDeviceForm, ManualDeviceAddForm
 
@@ -242,3 +246,82 @@ class EditDeviceView(View):
 
         return render(request, self.template_name, {'form': form})
 
+
+@method_decorator(login_required, name="dispatch")
+class BandwidthUsage(View):
+    """
+    Display the bandwidth used by the user
+    For the moment it only display per user, but in the future we can
+    imagine that it show bandwidth par device
+    """
+    template_name = "devices/bandwidth.html"
+
+    def get(self, request, *args, **kwargs):
+        if request.is_ajax():
+            start_date_str = request.GET.get('s', '')
+            end_date_str = request.GET.get('e', '')
+            device = None
+            try:
+                start_date = datetime.strptime(start_date_str , "%Y-%m-%dT%H:%M:%S.%fZ")
+                end_date = datetime.strptime(end_date_str , "%Y-%m-%dT%H:%M:%S.%fZ")
+            except ValueError:
+                start_date = datetime.strptime(start_date_str, "%Y-%m-%d")
+                end_date = datetime.strptime(end_date_str, "%Y-%m-%d")
+            data = self.get_graph_data(start_date, end_date, device)
+            return JsonResponse(data, safe=False)
+        else:
+            return render(request, self.template_name)
+
+    def get_graph_data(self, start_date, end_date, device=None):
+        """
+        Get the graph data in the form of a table
+
+        :param start_date:
+        :param end_date:
+        :param device: Unused, for later usage
+        :return:
+        """
+        batchs = settings.BANDWIDTH_BATCHS
+
+        # update end_date to the end of the day
+        end_date = min(end_date + timedelta(days=1), datetime.now())
+
+        # Convert everything to seconds, which is simple to use
+        duration = end_date - start_date
+        start_st = int(start_date.timestamp())
+        end_st = int(end_date.timestamp())
+        duration_st = duration.days * 24 * 60 + duration.seconds
+
+        precision = -int(math.log10(duration_st / batchs))
+
+        bare_up = list(PeopleHistory.objects.raw(
+            'SELECT site, cn, way, flow, '
+            'ROUND(timestamp, %i) AS batch, '
+            'SUM(amount) AS amount FROM people_history '
+            'WHERE timestamp >= %i AND '
+            'timestamp <= %i AND '
+            'way="%s" AND '
+            'uid="%s" '
+            'GROUP BY site, cn, way, flow, batch '
+            'ORDER BY timestamp;' %
+            (precision, start_st, end_st, PeopleHistory.UP, self.request.ldap_user.uid)
+        ))
+
+        bare_down = list(PeopleHistory.objects.raw(
+            'SELECT site, cn, way, flow, '
+            'ROUND(timestamp,%i) AS batch, '
+            'SUM(amount) AS amount FROM people_history '
+            'WHERE timestamp >= %i AND '
+            'timestamp <= %i AND '
+            'way="%s" AND '
+            'uid="%s" '
+            'GROUP BY site, cn, way, flow, batch '
+            'ORDER BY timestamp;' %
+            (precision, start_st, end_st, PeopleHistory.DOWN, self.request.ldap_user.uid)
+        ))
+
+        return {
+            "up": [int(p.amount) for p in bare_up],
+            "down": [int(p.amount) for p in bare_down],
+            "labels": [p.batch for p in bare_up],
+        }

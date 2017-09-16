@@ -211,7 +211,49 @@ DATABASES = {
         'PASSWORD': DB_PASSWORD,
         'HOST': DB_HOST,
     },
+    'qos': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': DB_QOS_NAME,
+        'USER': DB_QOS_USER,
+        'PASSWORD': DB_QOS_PASSWORD,
+        'HOST': DB_QOS_HOST,
+    }
 }
+DATABASE_ROUTERS = ['devices.models.QoSRouter']
+
+
+####
+# DIRTY HACK FOR QoS DATABASE
+####
+
+# During tests, the Django ORM would not create the unmanaged models
+# This Hack makes it possible :
+# See : https://gist.github.com/raprasad/f292f94657728de45d1614a741928308
+#
+# More help and links:
+# Old version of the hack: http://bit.ly/2fsyM5X
+# Blog article explaining the problem: http://bit.ly/2gnX5i1
+# To make it work in Django 1.9: https://stackoverflow.com/a/29739109
+#
+class UnManagedModelTestRunner(DiscoverRunner):
+    """
+    Test runner that automatically makes all unmanaged models in your Django
+    project managed for the duration of the test run.
+    Many thanks to the Caktus Group: http://bit.ly/1N8TcHW
+    """
+
+    def setup_test_environment(self, *args, **kwargs):
+        from django.apps import apps
+        self.unmanaged_models = [m for m in apps.get_models() if not m._meta.managed]
+        for m in self.unmanaged_models:
+            m._meta.managed = True
+        super(UnManagedModelTestRunner, self).setup_test_environment(*args, **kwargs)
+
+    def teardown_test_environment(self, *args, **kwargs):
+        super(UnManagedModelTestRunner, self).teardown_test_environment(*args, **kwargs)
+        # reset unmanaged models
+        for m in self.unmanaged_models:
+            m._meta.managed = False
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
@@ -270,6 +312,12 @@ ADMIN_MEDIA_PREFIX = '/media/adm/'
 PHONENUMBER_DB_FORMAT = "E164"
 
 PHONENUMBER_DEFAULT_REGION = "FR"
+
+
+# QOS Conf
+
+# Number of batchs to do, smaller is faster but less precise
+BANDWIDTH_BATCHS = 2
 
 
 # Redis conf
