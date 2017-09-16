@@ -97,7 +97,7 @@ class LdapUser(ldapback.models.LdapModel):
         now = datetime.now()
         if self.end_cotiz < now:
             return 'danger'
-        elif self.end_cotiz < (now + timedelta(days=7)):
+        elif self.end_cotiz < (now + timedelta(days=25)):
             return 'warning'
         else:
             return 'success'

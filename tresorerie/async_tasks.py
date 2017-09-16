@@ -60,7 +60,7 @@ def generate_and_email_invoice(user: object, transaction: object, lang: str='fr'
         )
 
 @job
-def invoice_laputex_check(user: object, transaction: object,
+def invoice_laputex_check(user: object, transaction: dict,
                           laputex_invoice_id: str, send_to: str,
                           attempt_num: int=1) -> None:
 
@@ -73,15 +73,33 @@ def invoice_laputex_check(user: object, transaction: object,
         text = laputex_req.text
 
     except requests.exceptions.RequestException as err:
+        logger.error(
+            'Error handling requesting LaPuTeX document status: %s' % str(err),
+            extra={
+                'message_code': 'LAPUTEX_REQUEST_ERROR',
+                'uid': user['uid'],
+                'transaction': transaction,
+            },
+            )
         no_error = False
         status_code = "'Error handled'"
         text = str(err)
 
     # If it's still compiling, reschedule task
+    # noinspection PyUnboundLocalVariable
     if no_error and (attempt_num < settings.LAPUTEX_MAX_ATTEMPTS and
                      laputex_req.json()['state'] in ('compiling', 'pending')):
-        eta = laputex_req.json()['eta'] if laputex_req.has_key('eta') else settings.LAPUTEX_WAITING_TIME
+
+        eta = int(laputex_req.json()['eta']) if 'eta' in laputex_req.json() else settings.LAPUTEX_WAITING_TIME
         scheduler = django_rq.get_scheduler()
+        logger.info(
+            'Rescheduling LaPuTeX transaction %s' % transaction,
+            extra={
+                'message_code': 'LAPUTEX_RESCHEDULE',
+                'uid': user['uid'],
+                'transaction': transaction,
+            }
+        )
         scheduler.enqueue_in(
             timedelta(seconds=eta), invoice_laputex_check,
             user, transaction, laputex_invoice_id, send_to, attempt_num+1
@@ -89,7 +107,7 @@ def invoice_laputex_check(user: object, transaction: object,
 
         return
 
-    # Compilation suceeded
+    # Compilation succeeded
     if no_error and laputex_req.json()['state'] == 'ready':
         pdf_raw = laputex_req.json()['document-pdf']
         invoice = base64.b64decode(pdf_raw.encode('utf-8'))

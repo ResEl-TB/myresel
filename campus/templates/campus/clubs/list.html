@@ -5,8 +5,8 @@
 
 {% block title %}Associations et clubs{% endblock %}
 {% block css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/campus/clubs.css' %}">
-    <link href="{% static 'jquery/jquery-ui.min.css' %}" rel="Stylesheet"></link>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/campus/clubs.css' %}" />
+  <link href="{% static 'jquery/jquery-ui.min.css' %}" rel="Stylesheet" />
 {% endblock %}
 {% block content %}
 
@@ -21,7 +21,7 @@
             <div class="row assos-card mobile-centered {% if forloop.counter|divisibleby:2 %} alternative-color {% endif %}">
                 <div class="col-sm-2 col-sm-offset-1 text-center">
                   {% if asso.logo and asso.logo != "None" %}
-                  <img class="logo" src="/media/image/ASSOS/{{ asso.logo }}">
+                  <img class="logo" data-src="/media/image/ASSOS/{{ asso.logo }}">
                   {% else %}
                   <img class="logo" src="{% static 'images/campus/orga.png' %}">
                   {% endif %}
@@ -30,12 +30,12 @@
                     <p class="club-name">{{ asso.name }}</p>
                     <p>{{ asso.description|truncatewords:30 }}</p>
                     {% if asso.email %}
-                    <p><a href="mailto:{{ asso.email }}"><p><span class="fa fa-envelope"><span> <a href="mailto:{{ asso.email }}"> {{ asso.email}}</a></p>
+                    <p><a href="mailto:{{ asso.email }}"><p><span class="fa fa-fw fa-envelope"></span> <a href="mailto:{{ asso.email }}"> {{ asso.email}}</a></p>
                     {% endif %}
                     {% if asso.website %}
-                    <p><a href="{{ asso.website }}"><span class="fa fa-globe"></span> {{ asso.website }}</a></p>
+                    <p><a href="{{ asso.website }}"><span class="fa fa-fw fa-globe"></span> {{ asso.website }}</a></p>
                     {% endif %}
-                    <a href="{% url 'campus:clubs:club_detail' asso.cn %}"><span class="fa fa-info-circle"></span> En savoir plus</a>
+                    <a href="{% url 'campus:clubs:club_detail' asso.cn %}"><span class="fa fa-fw fa-info-circle"></span> En savoir plus</a>
                 </div>
                 <div class="col-sm-3 mobile-margin-top">
                     {% if request.user.is_authenticated %}
@@ -70,7 +70,7 @@
             <div class="row assos-card mobile-centered {% if forloop.counter|divisibleby:2 %} alternative-color {% endif %}">
                 <div class="col-sm-2 col-sm-offset-1 text-center">
                   {% if club.logo and club.logo != "None" %}
-                  <img class="logo" src="/media/image/CLUB/{{ club.logo }}">
+                  <img class="logo" data-src="/media/image/CLUB/{{ club.logo }}">
                   {% else %}
                   <img class="logo" src="{% static 'images/campus/orga.png' %}">
                   {% endif %}
@@ -79,7 +79,7 @@
                     <p class="club-name">{{ club.name }}</p>
                     <p>{{ club.description|truncatewords:30 }}</p>
                     {% if club.email %}
-                    <p><a href="mailto:{{ club.email }}"><span class="fa fa-envelope"><span>{{ club.email}}</a></p>
+                    <p><a href="mailto:{{ club.email }}"><span class="fa fa-envelope"></span> {{ club.email }}</a></p>
                     {% endif %}
                     {% if club.website %}
                     <p><a href="{{ club.website }}"><span class="fa fa-globe"></span> {{ club.website }}</a></p>
@@ -101,7 +101,7 @@
                            <button type="submit" class="btn btn-link dell-user" ><span class="fa fa-fw fa-sign-out"></span> me désinscrire</button>
                         </form></p>
                         {% endif %}
-                        {% if request.ldap_user.is_campus_moderator or 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in club.prezs or request.user.is_staff%}
+                        {% if request.ldap_user.is_campus_moderator or 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in club.prezs or request.user.is_staff %}
                         <p><a href="{% url 'campus:clubs:edit' club.cn%}"><span class="fa fa-fw fa-edit"></span> éditer</a></p>
                         <p><a class="addPersonLink" data-toggle="modal" data-target="#addPerson" data="{{club.cn}}"><span class="fa fa-fw fa-user-plus"></span> inscrire un membre</a></p>
                         <p><a class="addMailLink" data-toggle="modal" data-target="#addEmail" data="{{club.cn}}"><span class="fa fa-fw fa-envelope"></span> abonner un membre</a></p>
@@ -124,7 +124,7 @@
             <div class="row assos-card mobile-centered {% if forloop.counter|divisibleby:2 %} alternative-color {% endif %}">
                 <div class="col-sm-2 col-sm-offset-1 text-center">
                   {% if list.logo and list.logo != "None" %}
-                  <img class="logo" src="/media/image/LIST/{{ list.logo }}">
+                  <img class="logo" data-src="/media/image/LIST/{{ list.logo }}">
                   {% else %}
                   <img class="logo" src="{% static 'images/campus/orga.png' %}">
                   {% endif %}
@@ -133,12 +133,12 @@
                     <p class="club-name">{{ list.name }}</p>
                     <p>{{ list.description|truncatewords:30 }}</p>
                     {% if list.email %}
-                    <p><a href="mailto:{{ list.email }}"><span class="fa fa-envelope"><span>{{ list.email}}</a></p>
+                    <p><a href="mailto:{{ list.email }}"><span class="fa fa-fw fa-envelope"></span>{{ list.email}}</a></p>
                     {% endif %}
                     {% if list.website %}
-                    <p><a href="{{ list.website }}"><span class="fa fa-globe"></span> {{ list.website }}</a></p>
+                    <p><a href="{{ list.website }}"><span class="fa fa-fw fa-globe"></span> {{ list.website }}</a></p>
                     {% endif %}
-                    <a href="{% url 'campus:clubs:club_detail' list.cn %}"><span class="fa fa-info-circle"></span> En savoir plus</a>
+                    <a href="{% url 'campus:clubs:club_detail' list.cn %}"><span class="fa fa-fw fa-info-circle"></span> En savoir plus</a>
                 </div>
                 <div class="col-sm-3 mobile-margin-top">
                     {% if request.user.is_authenticated %}
@@ -192,8 +192,8 @@
                 <div class="modal-body">
                     <p>{% trans "Entrer la personne à ajouter en tant que président à ce club:" %}</p>
                     <div class="input-group">
-                        <span class="input-group-addon" id="basic-addon1"><span class="fa fa-user"></span></span>
-                        <input type="text" class="form-control" name="id_user" id="id_prez_to_add" style="width:70%;"></input>
+                      <span class="input-group-addon" id="basic-addon1"><span class="fa fa-user"></span></span>
+                      <input type="text" class="form-control" name="id_user" id="id_prez_to_add" style="width:70%;"/>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -284,6 +284,7 @@
 
 {% block javascript %}
 <script src="{% static 'jquery/jquery-ui.min.js' %}"></script>
+<script src="{% static 'js/jquery.unveil.js' %}"></script>
 <script>
     var addprezlinks = document.getElementsByClassName('addPrezLink');
     var addlinks = document.getElementsByClassName('addPersonLink');
@@ -356,5 +357,10 @@
           minLength: 3,
       });
     })
+</script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("img").unveil();
+    });
 </script>
 {% endblock %}
