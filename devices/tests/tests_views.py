@@ -261,37 +261,6 @@ class ManualAddCase(TestCase):
         self.assertContains(r, "Ce champ est obligatoire.")
 
 
-class BandwidthUsageCase(TestCase):
-    def setUp(self):
-        try_delete_user("amanoury")
-        try_delete_old_user("amanoury")
-        self.user = create_full_user()
-        self.user.save()
-        self.client.login(username=self.user.uid, password=self.user.user_password)
-        self.owner = ("uid=amanoury,%s" % settings.LDAP_DN_PEOPLE)
-        user_devices = LdapDevice.filter(owner=self.owner)
-        for device in user_devices:
-            try_delete_device(device.hostname)
-
-    def test_simple_display(self):
-        response = self.client.get(reverse("gestion-machines:bandwidth-usage"),
-                                   HTTP_HOST="10.0.3.199", follow=True)
-        self.assertEqual(200, response.status_code)
-        self.assertTemplateUsed(response, "devices/bandwidth.html")
-
-    @skip("Temporarily disabled")
-    def test_simple_ajax(self):
-        r = self.client.get(reverse("gestion-machines:bandwidth-usage"),
-                            {'s': '2017-02-05', 'e': '2017-02-05'},
-                            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
-                            HTTP_HOST="10.0.3.199", follow=True)
-        self.assertEqual(200, r.status_code)
-        data = json.loads(r.content.decode())
-        self.assertGreaterEqual(settings.BANDWIDTH_BATCHS + 1, len(data["up"]))
-        self.assertGreaterEqual(settings.BANDWIDTH_BATCHS + 1, len(data["down"]), settings.BANDWIDTH_BATCHS )
-        self.assertGreaterEqual(settings.BANDWIDTH_BATCHS + 1, len(data["labels"]), settings.BANDWIDTH_BATCHS)
-
-
 class ListDevicesCase(TestCase):
     pass  # TODO
 
