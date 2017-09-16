@@ -60,7 +60,7 @@ def generate_and_email_invoice(user: object, transaction: object, lang: str='fr'
         )
 
 @job
-def invoice_laputex_check(user: object, transaction: object,
+def invoice_laputex_check(user: object, transaction: dict,
                           laputex_invoice_id: str, send_to: str,
                           attempt_num: int=1) -> None:
 
@@ -78,7 +78,7 @@ def invoice_laputex_check(user: object, transaction: object,
             extra={
                 'message_code': 'LAPUTEX_REQUEST_ERROR',
                 'uid': user.uid,
-                'transaction_uuid': transaction.uuid,
+                'transaction': transaction,
             },
             )
         no_error = False
@@ -93,11 +93,11 @@ def invoice_laputex_check(user: object, transaction: object,
         eta = int(laputex_req.json()['eta']) if 'eta' in laputex_req.json() else settings.LAPUTEX_WAITING_TIME
         scheduler = django_rq.get_scheduler()
         logger.info(
-            'Rescheduling LaPuTeX transaction %s' % transaction.uuid,
+            'Rescheduling LaPuTeX transaction %s' % transaction,
             extra={
                 'message_code': 'LAPUTEX_RESCHEDULE',
                 'uid': user.uid,
-                'transaction_uuid': transaction.uuid,
+                'transaction': transaction,
             }
         )
         scheduler.enqueue_in(
