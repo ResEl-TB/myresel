@@ -78,9 +78,10 @@ def invoice_laputex_check(user: object, transaction: object,
         text = str(err)
 
     # If it's still compiling, reschedule task
+    # noinspection PyUnboundLocalVariable
     if no_error and (attempt_num < settings.LAPUTEX_MAX_ATTEMPTS and
                      laputex_req.json()['state'] in ('compiling', 'pending')):
-        eta = laputex_req.json()['eta'] if laputex_req.has_key('eta') else settings.LAPUTEX_WAITING_TIME
+        eta = laputex_req.json()['eta'] if 'eta' in laputex_req.json() else settings.LAPUTEX_WAITING_TIME
         scheduler = django_rq.get_scheduler()
         scheduler.enqueue_in(
             timedelta(seconds=eta), invoice_laputex_check,
@@ -89,7 +90,7 @@ def invoice_laputex_check(user: object, transaction: object,
 
         return
 
-    # Compilation suceeded
+    # Compilation succeeded
     if no_error and laputex_req.json()['state'] == 'ready':
         pdf_raw = laputex_req.json()['document-pdf']
         invoice = base64.b64decode(pdf_raw.encode('utf-8'))
