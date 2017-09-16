@@ -77,7 +77,7 @@ def invoice_laputex_check(user: object, transaction: dict,
             'Error handling requesting LaPuTeX document status: %s' % str(err),
             extra={
                 'message_code': 'LAPUTEX_REQUEST_ERROR',
-                'uid': user.uid,
+                'uid': user['uid'],
                 'transaction': transaction,
             },
             )
@@ -96,7 +96,7 @@ def invoice_laputex_check(user: object, transaction: dict,
             'Rescheduling LaPuTeX transaction %s' % transaction,
             extra={
                 'message_code': 'LAPUTEX_RESCHEDULE',
-                'uid': user.uid,
+                'uid': user['uid'],
                 'transaction': transaction,
             }
         )
