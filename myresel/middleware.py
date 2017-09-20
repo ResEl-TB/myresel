@@ -130,11 +130,31 @@ class InscriptionNetworkHandler(object):
                 return HttpResponseRedirect(reverse(settings.INSCRIPTION_ZONE_FALLBACK_URLNAME))
 
         # If it is a 404, it is very likely that it is because the browser
-        # tried to open a tab in order to test the  connection. The best
+        # tried to open a tab in order to test the connection. The best
         # solution is to redirect the user to the landing page.
         except Resolver404:  # It's a 404
             return HttpResponseRedirect(reverse(settings.INSCRIPTION_ZONE_FALLBACK_URLNAME))
         return None
+
+    @staticmethod
+    def log_deportation(host, ip, is_logged_in, is_registered, vlan, zone):
+        """Helper function"""
+        logger.info("Device deported to the inscription zone"
+                    "\n IP : %s"
+                    "\n HOST : %s"
+                    "\n ZONE : %s"
+                    "\n VLAN : %s"
+                    "\n Utilisateur : %s"
+                    "\n Machine : %s"
+                    % (ip, host, zone, vlan, is_logged_in, is_registered),
+                    extra={
+                        "device_ip": ip,
+                        "device_hostname": host,
+                        "device_zone": zone,
+                        "device_vlan": vlan,
+                        "user": is_logged_in,
+                        'message_code': 'DEVICE_DEPORTED'
+                    })
 
     def __call__(self, request):
         """
@@ -168,10 +188,9 @@ class InscriptionNetworkHandler(object):
 
         # Vlan inscription
         if vlan == '995':
-            # Preliminary check
-
             if 'inscription' not in zone:
-                logger.warning("IP et VLAN non concordants"
+                # Error ! In vlan 995 without inscription IP address
+                logger.error("IP et VLAN non concordants"
                              "\n IP : %s"
                              "\n HOST : %s"
                              "\n ZONE : %s"
@@ -187,18 +206,35 @@ class InscriptionNetworkHandler(object):
                                  "user": is_logged_in,
                                  'message_code': 'UNMATCHING_IP_VLAN',
                              })
-
-                # Error ! In vlan 995 without inscription IP address
-                return HttpResponseBadRequest(_("Vous vous trouvez sur un réseau d'inscription mais ne possédez pas d'IP dans ce réseau. Veuillez contacter un administrateur."))
-
+                return HttpResponseBadRequest(_(
+                    "Vous vous trouvez sur un réseau d'inscription mais ne possédez pas d'IP dans ce réseau."
+                      "Si le problème persiste veuillez contacter un administrateur."
+                ))
             else:
                 redirect = self.deport()
                 if redirect:
+                    self.log_deportation(host, ip, is_logged_in, is_registered, vlan, zone)
                     return redirect
 
         elif vlan == '999':
             if zone == 'internet':
                 # Error ! Zone internet shouldn't be on vlan 999 !
+                logger.error("Mauvaise zone: utilisateur dans le vlan 999 mais dans la zone internet, 400 returned"
+                               "\n IP : %s"
+                               "\n HOST : %s"
+                               "\n ZONE : %s"
+                               "\n VLAN : %s"
+                               "\n Utilisateur : %s"
+                               "\n Machine : %s"
+                               % (ip, host, zone, vlan, is_logged_in, is_registered),
+                               extra={
+                                   "device_ip": ip,
+                                   "device_hostname": host,
+                                   "device_zone": zone,
+                                   "device_vlan": vlan,
+                                   "user": is_logged_in,
+                                   'message_code': 'UNMATCHING_ZONE_VLAN',
+                               })
                 return HttpResponseBadRequest(_("Une erreur s'est glissée dans le traitement de votre requête. Si le problème persiste, contactez un administrateur."))
 
             elif (zone == 'Brest-user' or zone == 'Rennes-user') and is_registered == 'unknown':
@@ -207,16 +243,34 @@ class InscriptionNetworkHandler(object):
                 # This is new from 2017-05-04, see : https://git.resel.fr/resel/general/issues/1
                 redirect = self.deport()
                 if redirect:
+                    self.log_deportation(host, ip, is_logged_in, is_registered, vlan, zone)
                     return redirect
 
             elif zone == 'Brest-inscription-999' or zone == 'Rennes-inscription-999':
                 redirect = self.deport()
                 if redirect:
+                    self.log_deportation(host, ip, is_logged_in, is_registered, vlan, zone)
                     return redirect
 
             else:
-                # Other possiblities: Brest-inscription, Brest-other.
+                # Other possibilities: Brest-inscription, Brest-other.
                 # Should never happen... but ?
+                logger.warning("Machine in no valid zone, no deportation made, you should check that"
+                             "\n IP : %s"
+                             "\n HOST : %s"
+                             "\n ZONE : %s"
+                             "\n VLAN : %s"
+                             "\n Utilisateur : %s"
+                             "\n Machine : %s"
+                             % (ip, host, zone, vlan, is_logged_in, is_registered),
+                             extra={
+                                 "device_ip": ip,
+                                 "device_hostname": host,
+                                 "device_zone": zone,
+                                 "device_vlan": vlan,
+                                 "user": is_logged_in,
+                                 'message_code': 'INVALID_ZONE'
+                             })
                 pass
 
         response = self.get_response(request)
