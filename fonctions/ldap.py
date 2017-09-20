@@ -69,6 +69,12 @@ def get_status(ip):
         - inactive
         - mauvais campus
         - inexistante
+
+    Cette fonction va d'abord rechercher la mac associée à l'ip, puis faire
+    la recherche ldap associée. Cela permet une plus grande réactivitée,
+    en particulier quand le bail DHCP n'est pas à jour.
+    :param: ip adresse de la machine à vérifier
+    :return: string
     """
     # TODO: viruses computers
     # Identification du campus

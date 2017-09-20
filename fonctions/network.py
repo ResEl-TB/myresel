@@ -62,19 +62,12 @@ def get_mac(ip):
     if settings.DEBUG or settings.TESTING:
         return settings.DEBUG_SETTINGS['mac']
 
-    # TODO : move interfaces to configuration file
-    if re.match(r'^172\.2[2-3]\.22[4-5]', ip):
-        eth = 'eth4'
-    elif re.match(r'^172\.2[2-3]\.22[6-7]', ip):
-        eth = 'eth3'
-    else:
-        eth = 'eth2'
     mac = str(subprocess.Popen(["/usr/sbin/arp -an {} | awk ' {{print $4}}'".format(ip)],
                                stdout=subprocess.PIPE,
                                shell=True).communicate()[0]).split('\'')[1].split('\\n')[0]
 
     if not is_mac(mac):
-        raise NetworkError("The string %s is not a valid mac address" % mac)
+        raise NetworkError("The string %s is not a valid mac address, search for ip: %s" % (mac, ip))
     return mac
 
 

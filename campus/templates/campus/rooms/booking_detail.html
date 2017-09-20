@@ -26,7 +26,7 @@
         {% endif %}
         {% endif %}
         <h3>{{ object.description }}</h3>
-        <p>{% trans "De" %} {{ object.start_time|date:"j l H:m:s" }} {% trans "à" %} {{ object.end_time|date:"j l H:m:s" }}</p>
+        <p>{% trans "De" %} {{ object.start_time|date:"j l H:i:s" }} {% trans "à" %} {{ object.end_time|date:"j l H:i:s" }}</p>
         <p>
             {% for room in object.room.all %}
                 - <i>{{ room.name }}</i><br>
