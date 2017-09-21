@@ -93,6 +93,10 @@ def update_all():
     # TODO: do that in background
     os.system(settings.DNS_DHCP_RELOAD_COMMAND)
     os.system(settings.FIREWALL_RELOAD_COMMAND)
+    logger.info("DHCP & DNS reloaded",
+                extra={
+                    'message_code': 'NETWORK_UPDATE'
+                })
 
 
 def is_resel_ip(ip: str) -> bool:

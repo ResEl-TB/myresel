@@ -241,26 +241,35 @@ def inscription_zone_info(request):
     :param request:
     :return: HttpResponse
     """
-    zone = request.network_data['zone']
     is_registered = False
-    if "user" in zone or "inscription" in zone:
-        mac = network.get_mac(request.network_data['ip'])
-        try:
-            device = LdapDevice.get(mac_address=mac)
-            is_registered = device.get_status() == 'active'
-            if not is_registered:
-                return HttpResponseRedirect(reverse("gestion-machines:reactivation"))
-        except ObjectDoesNotExist:
-            logger.warning("The device with the mac %s was not found in the LDAP" % mac,
-                    extra={"device_mac": mac}
-            )
+    is_active = False
 
+    campus = network.get_campus(request.network_data['ip'])
+    mac = network.get_mac(request.network_data['ip'])
     vlan = request.network_data['vlan']
     is_logged_in = request.user.is_authenticated()
+
+    try:
+        device = LdapDevice.get(mac_address=mac)
+        is_registered = True
+        is_active = device.get_status(current_campus=campus) == 'active'
+        if not is_active:
+            return HttpResponseRedirect(reverse("gestion-machines:reactivation"))
+    except ObjectDoesNotExist:
+        logger.info("The device with the mac %s was not found in the LDAP" % mac,
+                extra={
+                    'campus': campus,
+                    'vlan': vlan,
+                    'is_logged_in': is_logged_in,
+                    'device_mac': mac,
+                    'message_code': 'UNKNOWN_MAC'
+                }
+        )
+
     return render(
         request,
         'pages/inscription_zone_info.html',
-        {'vlan': vlan, 'is_logged_in': is_logged_in, 'is_registered': is_registered}
+        {'vlan': vlan, 'is_logged_in': is_logged_in, 'is_registered': is_registered, 'is_active': is_active}
     )
 
 class FaqList(ListView):
