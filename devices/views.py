@@ -32,20 +32,44 @@ class Reactivation(View):
     """
     def get(self, request, *args, **kwargs):
         mac = network.get_mac(request.network_data['ip'])
+        campus = network.get_campus(request.network_data['ip'])
 
         try:
             device = LdapDevice.get(mac_address=mac)
         except ObjectDoesNotExist:
+            logger.warning("the device with the mac %s was meant to be reactivated, but it is not in the ldap" % mac,
+                        extra={
+                            'device_mac': mac,
+                            'device_ip': request.network_data['ip'],
+                            'message_code': 'REACTIVATION_TRY_BUT_UNKNOWN'
+                        })
             return HttpResponseRedirect(reverse('home'))
 
-        if device.get_status() == 'active':
-            messages.info(request, _("Votre machine n'a pas besoin d'être ré-activée."))
+        if device.get_status(current_campus=campus) == 'active':
+            logger.warning("the device with the mac %s was meant to be reactivated, but it is already activated" % mac,
+                           extra={
+                               'device_mac': mac,
+                               'device_ip': request.network_data['ip'],
+                               'message_code': 'REACTIVATION_BUT_ALREADY'
+                           })
+            messages.info(request,
+                          _("Votre machine n'a pas besoin d'être ré-activée. "
+                            "Si le problème persiste veuillez contacter un administrateur."))
             return HttpResponseRedirect(reverse('home'))
 
-        device.activate(campus=settings.CURRENT_CAMPUS)
+        device.activate(campus=campus)
         device.save()
         owner_uid = device.owner.split(',')[0][4:]
         network.update_all()
+        logger.info("the device with the mac %s was reactivated" % mac,
+            extra={
+               'campus': campus,
+               'device_mac': mac,
+               'device_previous_ip': request.network_data['ip'],
+               'device_ip': device.ip,
+               'device_hostname': device.hostname,
+               'message_code': 'REACTIVATION'
+            })
         mail_admins(
             "[Reactivation {}] 172.22.{} - {} [{}] par {}".format(settings.CURRENT_CAMPUS,
                                                                   device.ip, device.mac_address, device.hostname,

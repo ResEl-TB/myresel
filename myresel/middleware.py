@@ -117,7 +117,6 @@ class InscriptionNetworkHandler(object):
 
         :return HttpResponseRedirect if necessary, None if nothing to do
         """
-        # Check if logged in & registered
         # We check that he only browses intended part of the website
         try:
             path_url = resolve(self.request.path).url_name
@@ -237,7 +236,7 @@ class InscriptionNetworkHandler(object):
                                })
                 return HttpResponseBadRequest(_("Une erreur s'est glissée dans le traitement de votre requête. Si le problème persiste, contactez un administrateur."))
 
-            elif (zone == 'Brest-user' or zone == 'Rennes-user') and is_registered == 'unknown':
+            elif 'user' in zone and is_registered == 'unknown':
                 # Check if the device is in the LDAP, if no put him in the
                 # inscription zone.
                 # This is new from 2017-05-04, see : https://git.resel.fr/resel/general/issues/1
@@ -246,13 +245,13 @@ class InscriptionNetworkHandler(object):
                     self.log_deportation(host, ip, is_logged_in, is_registered, vlan, zone)
                     return redirect
 
-            elif zone == 'Brest-inscription-999' or zone == 'Rennes-inscription-999':
+            elif 'inscription-999' in zone:
                 redirect = self.deport()
                 if redirect:
                     self.log_deportation(host, ip, is_logged_in, is_registered, vlan, zone)
                     return redirect
 
-            else:
+            elif is_registered != 'active':
                 # Other possibilities: Brest-inscription, Brest-other.
                 # Should never happen... but ?
                 logger.warning("Machine in no valid zone, no deportation made, you should check that"
@@ -271,6 +270,8 @@ class InscriptionNetworkHandler(object):
                                  "user": is_logged_in,
                                  'message_code': 'INVALID_ZONE'
                              })
+            else:
+                # Nothing to do, the device is registered.
                 pass
 
         response = self.get_response(request)

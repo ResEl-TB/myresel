@@ -1,6 +1,6 @@
+# -*- coding: utf-8 -*-
 import time
 
-from django.db import models
 import ldapback
 from ldapback.models.fields import LdapCharField, LdapListField
 from myresel import settings
@@ -41,7 +41,7 @@ class LdapDevice(ldapback.models.LdapModel):
             self.zones.remove(old)
         self.add_zone(new)
 
-    def get_status(self):
+    def get_status(self, current_campus=settings.CURRENT_CAMPUS):
         """
         Return the machine status :
         inactive : the device wasn't seen in a long time
@@ -49,7 +49,6 @@ class LdapDevice(ldapback.models.LdapModel):
         wrong campus : the device is on the wrong campus
         :return:
         """
-        current_campus = settings.CURRENT_CAMPUS
         lower_zone = [z.lower() for z in self.zones]
 
         if 'inactive' in lower_zone:
@@ -71,6 +70,7 @@ class LdapDevice(ldapback.models.LdapModel):
         if campus not in self.CAMPUS:
             raise ValueError("Campus %s doesn't exist" % campus)
 
+        # FIXME: This code will bug when we will have 3 campuses (like Nantes)
         old_camp = next(c for c in self.CAMPUS if c != campus)
         self.replace_or_add_zone(old_camp, campus)
 

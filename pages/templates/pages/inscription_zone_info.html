@@ -28,7 +28,7 @@
 </head>
 {# TODO: DONT SHOW ERROR, it is a normal behavior #}
 <body>
-{% if is_registered %} {# Computer known #}
+{% if is_active %} {# Computer known #}
     {% if vlan == "999" %} {# Computer known on 999 wrong ip #}
         <div class="page-title">
             <h2>{% trans "Vous venez d'activer votre appareil"%}</h2>
