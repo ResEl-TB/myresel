@@ -171,14 +171,21 @@ class Pay(View):
         try:
             token = request.POST['stripeToken']
             given_uuid = uuid.UUID(request.POST['uuid'])
-        except MultiValueDictKeyError:
-            logger.error("Un utilisateur n'a pas pu payer car Stripe ne s'est pas chargé,\n pika check le fw ;)",
+        except MultiValueDictKeyError as e:
+            logger.error("Un %s n'a pas pu payer : Stripe.js ne s'est pas chargé. Erreur: %s" % (user.uid, e),
                     extra={
                         "transaction_uuid": transaction_uuid,
+                        "transaction_name": transaction_full_name,
                         "uid": user.uid,
+                        "ip": request.network_data['ip'],
+                        "is_registred": request.network_data['is_registred'],
+                        "end_internet": user.end_cotiz,
                         'message_code': 'STRIPE_FIREWALL_ERROR',
                     })
-            messages.error(request, _("Il semblerait que nous n'avons pas réussi à contacter le système de paiement. Si le problème se reproduit vous pouvez le contouner soit en essayant de payer depuis une connexion exterieur (depuis l'école ou en 4G), soit en nous contactant directement."))
+            messages.error(request, _("Il semblerait que nous n'avons pas réussi à contacter le système de paiement. "
+                                      "Si le problème se reproduit vous pouvez le contouner soit en essayant de payer"
+                                      " depuis une connexion exterieur (depuis l'école ou en 4G), soit en contactant "
+                                      "directemnt un administrateur."))
             return HttpResponseRedirect(reverse('tresorerie:pay', kwargs={'product_id': main_product_id}))
 
         customer = StripeCustomer.retrieve_or_create(user)
