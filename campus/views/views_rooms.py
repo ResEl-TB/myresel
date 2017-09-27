@@ -99,7 +99,7 @@ def calendar_view(request, room='all', year=timezone.now().year, month=timezone.
     except (UserNotAuthenticatedException, NotAllowedException) as e :
         messages.error(request, e)
         return HttpResponseRedirect(reverse('campus:home'))
-    events = RoomBooking.objects.filter(q)
+    events = RoomBooking.objects.filter(q).order_by('start_time')
 
     single_events = []
 
