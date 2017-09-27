@@ -12,9 +12,10 @@ from django.core.urlresolvers import reverse, reverse_lazy
 from django.db.models import Q
 from django.http import Http404
 
-import calendar, datetime, json, copy
+import calendar, datetime, json, copy, pytz
 
 from django.views.generic import DetailView, FormView, View, ListView, DeleteView, UpdateView
+from myresel.settings import TIME_ZONE
 
 from campus.forms import RoomBookingForm, AddRoomForm
 from campus.models import RoomBooking, Room, StudentOrganisation
@@ -65,6 +66,24 @@ def construct_query(request, start_date, end_date, room='all'):
 
     return q_rooms & (q_dates_in | q_recc)
 
+def get_events(single_events, day, month, year):
+    """
+    Returns a list of events to display
+
+    :param single_events:
+    :return:
+    """
+    single_events = [e[1] for e in single_events if (tz(e[0][0]).day == day and tz(e[0][0]).month == month and tz(e[0][0]).year == year) \
+                                    or ((tz(e[0][0]).day < day or tz(e[0][0]).month < month or tz(e[0][0]).year < year) \
+                                    and (tz(e[0][1]).day >= day or tz(e[0][1]).month > month or tz(e[0][1]).year > year))]
+    return(single_events)
+
+def tz(date):
+    """
+    Set the date timezone according to settings.py
+    """
+    return(date.astimezone(pytz.timezone(TIME_ZONE)))
+
 def calendar_view(request, room='all', year=timezone.now().year, month=timezone.now().month, day='all'):
     """ View to display the month calendar of all events """
     # TODO: LE CODE CI BAS EST UN MONSTRE ILLISIBLE... IL FONCTIONNE (COMME LE
@@ -99,7 +118,7 @@ def calendar_view(request, room='all', year=timezone.now().year, month=timezone.
     except (UserNotAuthenticatedException, NotAllowedException) as e :
         messages.error(request, e)
         return HttpResponseRedirect(reverse('campus:home'))
-    events = RoomBooking.objects.filter(q)
+    events = RoomBooking.objects.filter(q).order_by('start_time')
 
     single_events = []
 
@@ -114,16 +133,15 @@ def calendar_view(request, room='all', year=timezone.now().year, month=timezone.
     single_events = [e for e in single_events if ((e[0][0].month <= month and e[0][0].year == year) \
                                                 or e[0][0].year < year) \
                                                 and ((e[0][1].month >= month and e[0][1].year == year) or e[0][1].year > year)]
-    # calendar date limits
+    # calendar date limits2017/9/28/
     if day > 0:  # Show a single day
         day = int(day)
         current_date = datetime.date(year=year, month=month, day=day)
         cal.append(
             # Shows the day's event and also those that last multiple days
-            [(datetime.date(year=year, month=month, day=day), [e[1] for e in single_events if (e[0][0].day == day and e[0][0].month == month and e[0][0].year == year) \
-                                                                                            or ((e[0][0].day < day or e[0][0].month < month or e[0][0].year < year) \
-                                                                                            and (e[0][1].day >= day or e[0][1].month > month or e[0][1].year > year))])]
+            [(datetime.date(year=year, month=month, day=day), get_events(single_events, day, month, year))]
         )
+
     else:
         current_date = datetime.date(year=year, month=month, day=15)
         # Show all weeks of month
@@ -136,9 +154,7 @@ def calendar_view(request, room='all', year=timezone.now().year, month=timezone.
                     )
                 else:
                     week_events.append(
-                        (datetime.date(year=year, month=month, day=day), [e[1] for e in single_events if (e[0][0].day == day and e[0][0].month == month and e[0][0].year == year) \
-                                                                                                        or ((e[0][0].day < day or e[0][0].month < month or e[0][0].year < year) \
-                                                                                                        and (e[0][1].day >= day or e[0][1].month > month or e[0][1].year > year))])
+                        (datetime.date(year=year, month=month, day=day), get_events(single_events, day, month, year))
                     )
             cal.append(week_events)
 
