@@ -64,7 +64,10 @@ class ClubDetail(View):
     template_name = "campus/clubs/detail.html"
 
     def get(self, request, pk):
-        club = StudentOrganisation.get(pk=pk)
+        try:
+            club = StudentOrganisation.get(pk=pk)
+        except ObjectDoesNotExist:
+            return Http404(_("Ce club n'existe pas"))
         members = club.members
         prez=[]
         if club.prezs:
