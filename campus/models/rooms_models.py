@@ -138,7 +138,7 @@ class RoomBooking(models.Model):
 
     RECURRING_CHOICES = (
         ('NONE', _("Pas de récurrence")),
-        ('DAILY', _("Quotidient")),
+        ('DAILY', _("Quotidien")),
         ('WEEKLY', _("Hebdomadaire")),
         ('MONTHLY', _("Mensuel")),
         ('ANNUALLY', _("Annuel")),

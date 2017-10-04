@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponse, Http404
+from django.http import HttpResponseRedirect, HttpResponse, Http404, HttpResponseNotFound
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
@@ -64,7 +64,10 @@ class ClubDetail(View):
     template_name = "campus/clubs/detail.html"
 
     def get(self, request, pk):
-        club = StudentOrganisation.get(pk=pk)
+        try:
+            club = StudentOrganisation.get(pk=pk)
+        except ObjectDoesNotExist:
+            return HttpResponseNotFound(_("Ce club n'existe pas"))
         members = club.members
         prez=[]
         if club.prezs:
