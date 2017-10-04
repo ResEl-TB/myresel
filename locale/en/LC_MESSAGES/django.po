@@ -291,7 +291,7 @@ msgid "Pas de récurrence"
 msgstr "Not reccuring"
 
 #: campus/models/rooms_models.py:139
-msgid "Quotidient"
+msgid "Quotidien"
 msgstr "Daily"
 
 #: campus/models/rooms_models.py:140
