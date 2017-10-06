@@ -6,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.core.mail import EmailMessage
+from django.core.exceptions import ObjectDoesNotExist
 
 import json
 from campus.async_tasks import notify_moderator
