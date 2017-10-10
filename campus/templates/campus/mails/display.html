@@ -1,0 +1,23 @@
+{% extends "base_campus.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block title %}{% trans "Mails campus" %}{% endblock %}
+
+{% block content %}
+    <div class="container" id="content">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="page-header text-center" style="color: white;">
+                    {{mail.subject}}
+                </h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 well">
+                <p>{{ mail.content }}</p>
+                <p>{% trans "publié par" %} <span class="label label-success">{{ mail.sender }}</span> par <span class="label label-default"><span class="fa fa-envelope-o"></span> mail campus</span> le {{ mail.date }}</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

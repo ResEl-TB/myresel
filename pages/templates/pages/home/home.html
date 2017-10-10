@@ -202,7 +202,7 @@
                     <div class="club-news">
                         {% for campus_mail in campus_mails %}
                         <div class="club-news-bloc">
-                            <a href="{% url 'piece-of-news' campus_mail.pk %}">
+                            <a href="{% url 'campus:mails:display' campus_mail.pk %}">
                                 <span class="title">{{ campus_mail.subject }}</span>
                             </a>
                         </div>

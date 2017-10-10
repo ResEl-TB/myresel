@@ -6,6 +6,7 @@ import subprocess
 import redis
 from ipaddress import ip_address
 
+from django.core.exceptions import ObjectDoesNotExist
 from rq.decorators import job
 
 from myresel import settings
@@ -66,9 +67,20 @@ def get_mac(ip):
                                stdout=subprocess.PIPE,
                                shell=True).communicate()[0]).split('\'')[1].split('\\n')[0]
 
-    if not is_mac(mac):
-        raise NetworkError("The string %s is not a valid mac address, search for ip: %s" % (mac, ip))
-    return mac
+    if is_mac(mac):
+        return mac
+
+    logger.warning(
+        'ip address %s not find in arp table, something fishy!!' % ip,
+        extra={'ip_address': ip, 'message_code': 'IP_NOT_FIND_ARP_TABLE'}
+    )
+    # Last chance: Look in the ldap the ip
+    try:
+        from devices.models import LdapDevice
+        ip_suffix = '.'.join(ip.split('.')[2:])
+        return LdapDevice.get(ip=ip_suffix).mac_address
+    except ObjectDoesNotExist:
+        raise NetworkError("The mac associated with the ip %s was not found in the ldap or in any arp table" % ip)
 
 
 def get_campus(ip_str: str) -> str:

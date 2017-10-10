@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.utils.translation import ugettext_lazy as _
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.core.mail import EmailMessage
+from django.core.exceptions import ObjectDoesNotExist
 
 import json
 from campus.async_tasks import notify_moderator
@@ -143,3 +144,10 @@ def rejectView(request, mail):
             m.delete()
 
         return HttpResponse()
+
+def display_mail(request, mail):
+    try:
+        m = Mail.objects.get(pk=mail)
+    except ObjectDoesNotExist:
+        raise Http404
+    return render(request, 'campus/mails/display.html', {"mail":m})
