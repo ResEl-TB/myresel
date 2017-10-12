@@ -24,12 +24,11 @@ body {
 
 .beta-banner {
     color: white;
-    background-color: rgb(99, 173, 200);
+    background-color: rgb(0, 150, 0);
     height: 1.5em;
 }
 
 .beta-banner a {
-    color: rgb(231, 231, 231);
     font-weight: bold;
 }
 
