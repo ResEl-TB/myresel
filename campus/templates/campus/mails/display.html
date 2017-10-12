@@ -15,7 +15,7 @@
         </div>
         <div class="row">
             <div class="col-md-12 well">
-                <p>{{ mail.content }}</p>
+                <p>{{ mail.content|linebreaks }}</p>
                 <p>{% trans "publié par" %} <span class="label label-success">{{ mail.sender }}</span> par <span class="label label-default"><span class="fa fa-envelope-o"></span> mail campus</span> le {{ mail.date }}</p>
             </div>
         </div>
