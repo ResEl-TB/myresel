@@ -63,6 +63,7 @@ urlpatterns = [
 
     url(r'^help-needed/', TemplateView.as_view(template_name='help_needed.html'), name="help-needed"),
     url(r'^become/$', TemplateView.as_view(template_name='pages/become_admin.html'), name='become-admin'),
+    url(r'^status/$', TemplateView.as_view(template_name='pages/network_status.html'), name='network-status'),
     url(r'^wp-login.php$', TemplateView.as_view(template_name='418.html'), name='418'),
 
     url(r'^$', Home.as_view(), name='home'),
