@@ -194,7 +194,7 @@ class MyClubTestCase(TestCase):
     def testSimpleLoad(self):
         self.client.login(username="jbvallad", password="blabla")
         r = self.client.get(reverse("campus:clubs:my-clubs"), HTTP_HOST="10.0.3.94")
-        self.assertTemplateUsed("campus/clubs/list.html")
+        self.assertTemplateUsed(r, "campus/clubs/list.html")
 
 class NewClubTestCase(TestCase):
 
@@ -754,7 +754,10 @@ class BookingFormTestCase(TestCase):
         populate_orgas(club_cn="club-test")
 
         try_delete_user("jbvallad")
+        try_delete_user("bvallad")
         user = create_full_user(uid="jbvallad", pwd="blabla")
+        user.save()
+        user = create_full_user(uid="bvallad", pwd="blabla")
         user.save()
 
     def testValidForm(self):
@@ -917,7 +920,7 @@ class BookingTestCase(TestCase):
     def testSimpleLoad(self):
         self.client.login(username="jbvallad", password="blabla")
         r = self.client.get(reverse("campus:rooms:booking"), HTTP_HOST="10.0.3.94")
-        self.assertTemplateUsed('booking.html')
+        self.assertTemplateUsed(r, 'campus/rooms/booking.html')
 
 class EventDetailTestCase(TestCase):
 
