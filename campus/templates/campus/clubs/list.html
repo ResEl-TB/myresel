@@ -14,384 +14,438 @@
     <div class="btn-home btn-home-campus">
         <a href="{% url 'campus:home' %}" class="noncolored-a"><span class="fa fa-home"></span>   </a>
     </div>
-    <div class="row">
-        <div class="col-md-12 well entries-container">
-            <h1 class="mobile-centered name">{% trans 'Assos' %}</h1>
-            {% for asso in assos %}
-            <div class="row assos-card mobile-centered {% if forloop.counter|divisibleby:2 %} alternative-color {% endif %}">
-                <div class="col-sm-2 col-sm-offset-1 text-center">
-                    {% if asso.logo and asso.logo != "None" %}
-                    <img class="logo" data-src="/media/image/ASSOS/{{ asso.logo }}">
+    <div class="col-md-12 entries-container">
+        <h1 class="mobile-centered name">{% trans 'Associations' %}</h1>
+        {% for asso in assos %}
+        {% if forloop.counter|add:-1|divisibleby:4 %}
+        <div class="row assos-card mobile-centered">
+        {% endif %}
+            <div class="col-md-3">
+                <div class="col-md-12 well">
+                    <div class="col-md-12 text-center">
+                        {% if asso.logo and asso.logo != "None" %}
+                        <img class="logo" data-src="/media/image/ASSOS/{{ asso.logo }}">
+                        {% else %}
+                        <img class="logo" src="{% static 'images/campus/orga.png' %}">
+                        {% endif %}
+                    </div>
+                    <div class="col-md-12 mobile-margin-top">
+                        <p class="club-name">{{ asso.name }}</p>
+                        <p class="description">{{ asso.description|truncatechars:70 }}</p>
+                        <p><a href="mailto:{{ asso.email }}"><span class="fa fa-envelope"></span> {% if asso.email %}{{ asso.email }}{% else %}{% trans "non renseigné" %}{% endif %}</a></p>
+                        <p><a href="{{ asso.website }}"><span class="fa fa-globe"></span> {% if asso.website %}{{ asso.website }}{% else %}{% trans "non renseigné" %}{% endif %}</a></p>
+                        <hr />
+                        <span class="actions">
+                            <a href="{% url 'campus:clubs:club_detail' asso.cn %}"><span class="fa fa-info-circle"></span></a>
+                            <a href="#" data-toggle="modal" data-target="#{{asso.cn}}"><span class="fa fa-cog"></span></a>
+                                {% if request.user.is_authenticated %}
+                                {% if request.ldap_user.pk in asso.members %}<span class="label pull-right label-success"><span class="fa fa-check"></span> membre</span>{% endif %}
+                                {% endif %}
+                        </span>
+                    </div>
+                    <div class="modal fade" id="{{asso.cn}}">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    {% if request.user.is_authenticated %}
+                                    {% if not request.ldap_user.pk in asso.members %}
+                                    <p>
+                                        <form method="POST" action="{% url 'campus:clubs:add-person' asso.cn %}" class="inline" >
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-success" ><span class="fa fa-fw fa-sign-in"></span> m'inscrire</button>
+                                        </form>
+                                    </p>
+                                    {% else %}
+                                    <p>
+                                        <form method="POST" action="{% url 'campus:clubs:remove-person' asso.cn %}" class="inline" >
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-warning" ><span class="fa fa-fw fa-sign-out"></span> me désinscrire</button>
+                                        </form>
+                                    </p>
+                                    {% endif %}
+                                    {% if request.ldap_user.is_campus_moderator or 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in asso.prezs or request.user.is_staff %}
+                                    <p>
+                                        <a class="btn btn-info" href="{% url 'campus:clubs:edit' asso.cn%}"><span class="fa fa-fw fa-edit"></span> éditer</a>
+                                    </p>
+                                    <div class="btn-group" role="group" style="margin-top: 5px;">
+                                        <button class="btn btn-default addPersonLink" data-toggle="modal" data-target="#addPerson" data="{{asso.cn}}"><span class="fa fa-fw fa-user-plus"></span> inscrire un membre</button>
+                                        <button class="btn btn-default addMailLink" data-toggle="modal" data-target="#addEmail" data="{{asso.cn}}"><span class="fa fa-fw fa-envelope"></span> abonner un membre</button>
+                                    </div>
+                                    <div class="btn-group" role="group" style="margin-top: 5px;">
+                                        <button class="btn btn-default delPersonLink" data-toggle="modal" data-target="#delPerson" data="{{asso.cn}}"><span class="fa fa-fw fa-user-times"></span> désinscrire un membre</button>
+                                        <button class="btn btn-danger addPrezLink" data-toggle="modal" data-target="#addPrez" data="{{asso.cn}}"><span class="fa fa-fw fa-street-view"></span> passation</button>
+                                    </div>
+                                    {% endif%}
+                                    {% endif %}
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% if forloop.counter|divisibleby:4 or forloop.last%}
+        </div>
+        {% endif %}
+        {% empty %}
+        <p class="well">{% trans "Aucunne association trouvée" %}</p>
+        {% endfor %}
+    </div>
+
+    <div class="col-md-12 entries-container">
+        <h1 class="mobile-centered name">{% trans 'Clubs' %}</h1>
+        {% for club in clubs %}
+        {% if forloop.counter|add:-1|divisibleby:4 %}
+        <div class="row assos-card mobile-centered">
+        {% endif %}
+        <div class="col-md-3">
+            <div class="col-md-12 well">
+                <div class="col-md-12 text-center">
+                    {% if club.logo and club.logo != "None" %}
+                    <img class="logo" data-src="/media/image/CLUB/{{ club.logo }}">
                     {% else %}
                     <img class="logo" src="{% static 'images/campus/orga.png' %}">
                     {% endif %}
                 </div>
-                <div class="col-sm-6 mobile-margin-top">
-                    <p class="club-name">{{ asso.name }}</p>
-                    <p>{{ asso.description|truncatewords:30 }}</p>
-                    {% if asso.email %}
-                    <p><a href="mailto:{{ asso.email }}"><p><span class="fa fa-fw fa-envelope"></span> <a href="mailto:{{ asso.email }}"> {{ asso.email}}</a></p>
-                    {% endif %}
-                    {% if asso.website %}
-                    <p><a href="{{ asso.website }}"><span class="fa fa-fw fa-globe"></span> {{ asso.website }}</a></p>
-                    {% endif %}
-                    <a href="{% url 'campus:clubs:club_detail' asso.cn %}"><span class="fa fa-fw fa-info-circle"></span> En savoir plus</a>
+                <div class="col-md-12 mobile-margin-top">
+                    <p class="club-name">{{ club.name }}</p>
+                    <p class="description">{{ club.description|truncatechars:70 }}</p>
+                    <p><a href="mailto:{{ club.email }}"><span class="fa fa-envelope"></span> {% if club.email %}{{ club.email }}{% else %}{% trans "non renseigné" %}{% endif %}</a></p>
+                    <p><a href="{{ club.website }}"><span class="fa fa-globe"></span> {% if club.website %}{{ club.website }}{% else %}{% trans "non renseigné" %}{% endif %}</a></p>
+                    <hr />
+                    <span class="actions">
+                        <a href="{% url 'campus:clubs:club_detail' club.cn %}"><span class="fa fa-info-circle"></span></a>
+                        <a href="#" data-toggle="modal" data-target="#{{club.cn}}"><span class="fa fa-cog"></span></a>
+                            {% if request.user.is_authenticated %}
+                            {% if request.ldap_user.pk in club.members %}<span class="label pull-right label-success"><span class="fa fa-check"></span> membre</span>{% endif %}
+                            {% endif %}
+                    </span>
                 </div>
-                <div class="col-sm-3 mobile-margin-top">
-                    {% if request.user.is_authenticated %}
-                    <p><button class="btn btn-success" data-toggle="collapse" data-target="#{{asso.cn}}"><span class="fa fa-angle-double-down"></span> Actions <span class="fa fa-angle-double-down"></span></button></p>
-                    <div class="collapse" id="{{ asso.cn }}">
-                        {% if request.ldap_user.is_campus_moderator or 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in asso.prezs or request.user.is_staff %}
-                        <p><a href="{% url 'campus:clubs:edit' asso.cn%}"><span class="fa fa-edit"></span> éditer</a></p>
-                        <p><a class="addPersonLink" data-toggle="modal" data-target="#addPerson" data="{{asso.cn}}"><span class="fa fa-fw fa-user-plus"></span> inscrire un membre</a></p>
-                        <p><a class="addMailLink" data-toggle="modal" data-target="#addEmail" data="{{asso.cn}}"><span class="fa fa-fw fa-envelope"></span> abonner un membre</a></p>
-                        <p><a class="delPersonLink" data-toggle="modal" data-target="#delPerson" data="{{asso.cn}}"><span class="fa fa-fw fa-user-times"></span> désinscrire un membre</a></p>
-                        <p><a class="addPrezLink" data-toggle="modal" data-target="#addPrez" data="{{ asso.cn }}"><span class="fa fa-fw fa-street-view"></span> effectuer une passation</a></p>
-                        {% endif%}
-                        {% if request.ldap_user.pk in asso.members %}
-                        <p><form method="POST" action="{% url 'campus:clubs:remove-person' asso.cn %}" class="inline" >
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-link dell-user" /><span class="fa fa-fw fa-sign-out"></span> me désinscrire</button>
-                        </form></p>
-                        {% endif %}
-                    </div>
-                    {% endif %}
-                </div>
-            </div>
-            {% empty%}
-            <p class="well">{% trans "Aucune association trouvée" %}</p>
-            {% endfor %}
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12 entries-container">
-            <h1 class="mobile-centered name">{% trans 'Clubs' %}</h1>
-            {% for club in clubs %}
-            {% if forloop.counter|add:-1|divisibleby:4 %}
-            <div class="row assos-card mobile-centered">
-                {% endif %}
-                <div class="col-md-3">
-                    <div class="col-md-12 well">
-                        <div class="row">
-                            <div class="col-md-12 text-center">
-                                {% if club.logo and club.logo != "None" %}
-                                <img class="logo" data-src="/media/image/CLUB/{{ club.logo }}">
+                <div class="modal fade" id="{{club.cn}}">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                {% if request.user.is_authenticated %}
+                                {% if not request.ldap_user.pk in club.members %}
+                                <p>
+                                    <form method="POST" action="{% url 'campus:clubs:add-person' club.cn %}" class="inline" >
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-success" ><span class="fa fa-fw fa-sign-in"></span> m'inscrire</button>
+                                    </form>
+                                </p>
                                 {% else %}
-                                <img class="logo" src="{% static 'images/campus/orga.png' %}">
+                                <p>
+                                    <form method="POST" action="{% url 'campus:clubs:remove-person' club.cn %}" class="inline" >
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-warning" ><span class="fa fa-fw fa-sign-out"></span> me désinscrire</button>
+                                    </form>
+                                </p>
+                                {% endif %}
+                                {% if request.ldap_user.is_campus_moderator or 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in club.prezs or request.user.is_staff %}
+                                <p>
+                                    <a class="btn btn-info" href="{% url 'campus:clubs:edit' club.cn%}"><span class="fa fa-fw fa-edit"></span> éditer</a>
+                                </p>
+                                <div class="btn-group" role="group" style="margin-top: 5px;">
+                                    <button class="btn btn-default addPersonLink" data-toggle="modal" data-target="#addPerson" data="{{club.cn}}"><span class="fa fa-fw fa-user-plus"></span> inscrire un membre</button>
+                                    <button class="btn btn-default addMailLink" data-toggle="modal" data-target="#addEmail" data="{{club.cn}}"><span class="fa fa-fw fa-envelope"></span> abonner un membre</button>
+                                </div>
+                                <div class="btn-group" role="group" style="margin-top: 5px;">
+                                    <button class="btn btn-default delPersonLink" data-toggle="modal" data-target="#delPerson" data="{{club.cn}}"><span class="fa fa-fw fa-user-times"></span> désinscrire un membre</button>
+                                    <button class="btn btn-danger addPrezLink" data-toggle="modal" data-target="#addPrez" data="{{club.cn}}"><span class="fa fa-fw fa-street-view"></span> passation</button>
+                                </div>
+                                {% endif%}
                                 {% endif %}
                             </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12 mobile-margin-top">
-                                <p class="club-name">{{ club.name }}</p>
-                                <p class="description">{{ club.description|truncatechars:70 }}</p>
-                                <p><a href="mailto:{{ club.email }}"><span class="fa fa-envelope"></span> {% if club.email %}{{ club.email }}{% else %}{% trans "non renseigné" %}{% endif %}</a></p>
-                                <p><a href="{{ club.website }}"><span class="fa fa-globe"></span> {% if club.website %}{{ club.website }}{% else %}{% trans "non renseigné" %}{% endif %}</a></p>
-                                <hr />
-                                <span class="actions">
-                                    <a href="{% url 'campus:clubs:club_detail' club.cn %}"><span class="fa fa-info-circle"></span></a>
-                                    <a href="#" data-toggle="modal" data-target="#{{club.cn}}"><span class="fa fa-cog"></a>
-                                        {% if request.user.is_authenticated %}
-                                        {% if request.ldap_user.pk in club.members %}<span class="label pull-right label-success"><span class="fa fa-check"></span> membre</span>{% endif %}
-                                        {% endif %}
-                                    </span>
-                                </div>
-                                <div class="modal fade" id="{{club.cn}}">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-body">
-                                                {% if request.user.is_authenticated %}
-                                                {% if not request.ldap_user.pk in club.members %}
-                                                <p>
-                                                    <form method="POST" action="{% url 'campus:clubs:add-person' club.cn %}" class="inline" >
-                                                        {% csrf_token %}
-                                                        <button type="submit" class="btn btn-success" ><span class="fa fa-fw fa-sign-in"></span> m'inscrire</button>
-                                                    </form>
-                                                </p>
-                                                {% else %}
-                                                <p>
-                                                    <form method="POST" action="{% url 'campus:clubs:remove-person' club.cn %}" class="inline" >
-                                                        {% csrf_token %}
-                                                        <button type="submit" class="btn btn-warning" ><span class="fa fa-fw fa-sign-out"></span> me désinscrire</button>
-                                                    </form>
-                                                </p>
-                                                {% endif %}
-                                                {% if request.ldap_user.is_campus_moderator or 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in club.prezs or request.user.is_staff %}
-                                                <p>
-                                                    <button class="btn btn-info" href="{% url 'campus:clubs:edit' club.cn%}"><span class="fa fa-fw fa-edit"></span> éditer</button>
-                                                </p>
-                                                <div class="btn-group" role="group" style="margin-top: 5px;">
-                                                    <button class="btn btn-default addPersonLink" data-toggle="modal" data-target="#addPerson" data="{{club.cn}}"><span class="fa fa-fw fa-user-plus"></span> inscrire un membre</button>
-                                                    <button class="btn btn-default addMailLink" data-toggle="modal" data-target="#addEmail" data="{{club.cn}}"><span class="fa fa-fw fa-envelope"></span> abonner un membre</button>
-                                                </div>
-                                                <div class="btn-group" role="group" style="margin-top: 5px;">
-                                                    <button class="btn btn-default delPersonLink" data-toggle="modal" data-target="#delPerson" data="{{club.cn}}"><span class="fa fa-fw fa-user-times"></span> désinscrire un membre</button>
-                                                    <button class="btn btn-danger addPrezLink" data-toggle="modal" data-target="#addPrez" data="{{club.cn}}"><span class="fa fa-fw fa-street-view"></span> passation</button>
-                                                </div>
-                                                {% endif%}
-                                                {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if forloop.counter|divisibleby:4 or forloop.last %}
+        </div>
+        {% endif %}
+        {% empty %}
+        <p class="well">{% trans "Aucunne club trouvé" %}</p>
+        {% endfor %}
+    </div>
+    <div class="col-md-12 entries-container">
+        <h1 class="mobile-centered name">{% trans 'Listes' %}</h1>
+        {% for list in lists %}
+        {% if forloop.counter|add:-1|divisibleby:4 %}
+        <div class="row assos-card mobile-centered">
+        {% endif %}
+            <div class="col-md-3">
+                <div class="col-md-12 well">
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            {% if list.logo and list.logo != "None" %}
+                            <img class="logo" data-src="/media/image/LIST/{{ list.logo }}">
+                            {% else %}
+                            <img class="logo" src="{% static 'images/campus/orga.png' %}">
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mobile-margin-top">
+                            <p class="club-name">{{ list.name }}</p>
+                            <p class="description">{{ list.description|truncatechars:70 }}</p>
+                            <p><a href="mailto:{{ list.email }}"><span class="fa fa-envelope"></span> {% if list.email %}{{ list.email }}{% else %}{% trans "non renseigné" %}{% endif %}</a></p>
+                            <p><a href="{{ list.website }}"><span class="fa fa-globe"></span> {% if list.website %}{{ list.website }}{% else %}{% trans "non renseigné" %}{% endif %}</a></p>
+                            <hr />
+                            <span class="actions">
+                                <a href="{% url 'campus:clubs:club_detail' list.cn %}"><span class="fa fa-info-circle"></span></a>
+                                <a href="#" data-toggle="modal" data-target="#{{list.cn}}"><span class="fa fa-cog"></a>
+                                    {% if request.user.is_authenticated %}
+                                    {% if request.ldap_user.pk in list.members %}<span class="label pull-right label-success"><span class="fa fa-check"></span> membre</span>{% endif %}
+                                    {% endif %}
+                                </span>
+                            </div>
+                            <div class="modal fade" id="{{list.cn}}">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            {% if request.user.is_authenticated %}
+                                            {% if not request.ldap_user.pk in list.members %}
+                                            <p>
+                                                <form method="POST" action="{% url 'campus:clubs:add-person' list.cn %}" class="inline" >
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-success" ><span class="fa fa-fw fa-sign-in"></span> m'inscrire</button>
+                                                </form>
+                                            </p>
+                                            {% else %}
+                                            <p>
+                                                <form method="POST" action="{% url 'campus:clubs:remove-person' list.cn %}" class="inline" >
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-warning" ><span class="fa fa-fw fa-sign-out"></span> me désinscrire</button>
+                                                </form>
+                                            </p>
+                                            {% endif %}
+                                            {% if request.ldap_user.is_campus_moderator or 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in list.prezs or request.user.is_staff %}
+                                            <p>
+                                                <a class="btn btn-info" href="{% url 'campus:clubs:edit' list.cn%}"><span class="fa fa-fw fa-edit"></span> éditer</a>
+                                            </p>
+                                            <div class="btn-group" role="group" style="margin-top: 5px;">
+                                                <button class="btn btn-default addPersonLink" data-toggle="modal" data-target="#addPerson" data="{{list.cn}}"><span class="fa fa-fw fa-user-plus"></span> inscrire un membre</button>
+                                                <button class="btn btn-default addMailLink" data-toggle="modal" data-target="#addEmail" data="{{list.cn}}"><span class="fa fa-fw fa-envelope"></span> abonner un membre</button>
                                             </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <div class="btn-group" role="group" style="margin-top: 5px;">
+                                                <button class="btn btn-default delPersonLink" data-toggle="modal" data-target="#delPerson" data="{{list.cn}}"><span class="fa fa-fw fa-user-times"></span> désinscrire un membre</button>
+                                                <button class="btn btn-danger addPrezLink" data-toggle="modal" data-target="#addPrez" data="{{list.cn}}"><span class="fa fa-fw fa-street-view"></span> passation</button>
                                             </div>
+                                            {% endif%}
+                                            {% endif %}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    {% if forloop.counter|divisibleby:4 %}
                 </div>
-                {% endif %}
-                {% empty %}
-                <p class="well">{% trans "Aucun club trouvé" %}</p>
-                {% endfor %}
+                {% if forloop.counter|divisibleby:4 or forloop.last%}
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12 well entries-container">
-                <h1 class="mobile-centered name">{% trans 'Listes' %}</h1>
-                {% for list in lists %}
-                <div class="row assos-card mobile-centered {% if forloop.counter|divisibleby:2 %} alternative-color {% endif %}">
-                    <div class="col-sm-2 col-sm-offset-1 text-center">
-                        {% if list.logo and list.logo != "None" %}
-                        <img class="logo" data-src="/media/image/LIST/{{ list.logo }}">
-                        {% else %}
-                        <img class="logo" src="{% static 'images/campus/orga.png' %}">
-                        {% endif %}
-                    </div>
-                    <div class="col-sm-6 mobile-margin-top">
-                        <p class="club-name">{{ list.name }}</p>
-                        <p>{{ list.description|truncatewords:30 }}</p>
-                        {% if list.email %}
-                        <p><a href="mailto:{{ list.email }}"><span class="fa fa-fw fa-envelope"></span>{{ list.email}}</a></p>
-                        {% endif %}
-                        {% if list.website %}
-                        <p><a href="{{ list.website }}"><span class="fa fa-fw fa-globe"></span> {{ list.website }}</a></p>
-                        {% endif %}
-                        <a href="{% url 'campus:clubs:club_detail' list.cn %}"><span class="fa fa-fw fa-info-circle"></span> En savoir plus</a>
-                    </div>
-                    <div class="col-sm-3 mobile-margin-top">
-                        {% if request.user.is_authenticated %}
-                        <p><button class="btn btn-success" data-toggle="collapse" data-target="#{{list.cn}}"><span class="fa fa-angle-double-down"></span> Actions <span class="fa fa-angle-double-down"></span></button></p>
-                        <div class="collapse" id="{{list.cn}}">
-                            {% if not 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in list.members%}
-                            <p><form method="POST" action="{% url 'campus:clubs:add-person' list.cn %}" class="inline" >
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-link add-user" ><span class="fa fa-fw fa-sign-in"></span> m'inscrire</button>
-                            </form></p>
-                            {% else %}
-                            <p><form method="POST" action="{% url 'campus:clubs:remove-person' list.cn %}" class="inline" >
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-link dell-user" ><span class="fa fa-fw fa-sign-out"></span> me désinscrire</button>
-                            </form></p>
-                            {% endif %}
-                            {% if request.ldap_user.is_campus_moderator or 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in list.prezs or request.user.is_staff%}
-                            <p><a href="{% url 'campus:clubs:edit' list.cn %}"><span class="fa fa-fw fa-edit"></span> éditer</a></p>
-                            <p><a class="addPersonLink" data-toggle="modal" data-target="#addPerson" data="{{ list.cn }}"><span class="fa fa-fw fa-user-plus"></span> inscrire un membre</a></p>
-                            <p><a class="addMailLink" data-toggle="modal" data-target="#addEmail" data="{{ list.cn }}"><span class="fa fa-fw fa-envelope"></span> abonner un membre</a></p>
-                            <p><a class="delPersonLink" data-toggle="modal" data-target="#delPerson" data="{{ list.cn }}"><span class="fa fa-fw fa-user-times"></span> désinscrire un membre</a></p>
-                            <p><a class="addPrezLink" data-toggle="modal" data-target="#addPrez" data="{{ list.cn }}"><span class="fa fa-fw fa-street-view"></span> effectuer une passation</a></p>
-                            {% endif%}
-                        </div>
-                        {% endif %}
+            {% endif %}
+            {% empty %}
+            <p class="well">{% trans "Aucunne liste trouvée" %}</p>
+            {% endfor %}
+    </div>
+</div>
+<div class="modal fade" id="addPrez" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="form-horizontal" id="addPrezForm" action="" method="post">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h4 class="modal-title">{% trans "Ajouter un président" %}</h4>
+                </div>
+                <div class="alert alert-danger text-center remove-radius">
+                    <span class="fa fa-spin fa-warning"></span>
+                    <p>
+                        {% trans "Attention, cette action n'est pas sans conséquences." %} <br />
+                        {% trans "Le président actuel sera destitué" %} <br />
+                        {% trans "Assurez-vous de renseigner la bonne personne." %} <br />
+                        {% trans "En cas d'erreur" %} <a href="{% url 'contact'%}"> {% trans "contactez un administrateur ResEl" %} </a>
+                    </p>
+                </div>
+                <div class="modal-body">
+                    <p>{% trans "Entrer la personne à ajouter en tant que président à ce club:" %}</p>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1"><span class="fa fa-user"></span></span>
+                        <input type="text" class="form-control" name="id_user" id="id_prez_to_add" style="width:70%;"/>
                     </div>
                 </div>
-                {% empty %}
-                <p class="well">{% trans "Aucune liste trouvée" %}</p>
-                {% endfor %}
-            </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">{% trans "Ajouter" %}</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Annuler" %}</button>
+                </div>
+            </form>
         </div>
     </div>
-    <div class="modal fade" id="addPrez" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form class="form-horizontal" id="addPrezForm" action="" method="post">
-                    {% csrf_token %}
-                    <div class="modal-header">
-                        <h4 class="modal-title">{% trans "Ajouter un président" %}</h4>
+</div>
+<div class="modal fade" id="addPerson" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="form-horizontal" id="addPersonForm" action="" method="POST">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h4 class="modal-title">{% trans "Ajouter une Personne" %}</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{% trans "Entrer la personne à ajouter à ce club:" %}</p>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1"><span class="fa fa-user"></span></span>
+                        <input type="text" class="form-control" name="id_user" id="id_user_to_add" style="width:70%;"></input>
                     </div>
-                    <div class="alert alert-danger text-center remove-radius">
-                        <span class="fa fa-spin fa-warning"></span>
-                        <p>
-                            {% trans "Attention, cette action n'est pas sans conséquences." %} <br />
-                            {% trans "Le président actuel sera destitué" %} <br />
-                            {% trans "Assurez-vous de renseigner la bonne personne." %} <br />
-                            {% trans "En cas d'erreur" %} <a href="{% url 'contact'%}"> {% trans "contactez un administrateur ResEl" %} </a>
-                        </p>
-                    </div>
-                    <div class="modal-body">
-                        <p>{% trans "Entrer la personne à ajouter en tant que président à ce club:" %}</p>
-                        <div class="input-group">
-                            <span class="input-group-addon" id="basic-addon1"><span class="fa fa-user"></span></span>
-                            <input type="text" class="form-control" name="id_user" id="id_prez_to_add" style="width:70%;"/>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-success">{% trans "Ajouter" %}</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Annuler" %}</button>
-                    </div>
-                </form>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">{% trans "Ajouter" %}</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Annuler" %}</button>
+                </div>
+            </form>
         </div>
     </div>
-    <div class="modal fade" id="addPerson" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form class="form-horizontal" id="addPersonForm" action="" method="POST">
-                    {% csrf_token %}
-                    <div class="modal-header">
-                        <h4 class="modal-title">{% trans "Ajouter une Personne" %}</h4>
+</div>
+<div class="modal fade" id="delPerson" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="form-horizontal" id="delPersonForm" action="" method="POST">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h4 class="modal-title">{% trans "Désinscrire une personne" %}</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{% trans "Entrer la personne à ajouter à désinscrire de ce club:" %}</p>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1"><span class="fa fa-user"></span></span>
+                        <input type="text" class="form-control" name="id_user" id="id_user_to_del" style="width:70%;"></input>
                     </div>
-                    <div class="modal-body">
-                        <p>{% trans "Entrer la personne à ajouter à ce club:" %}</p>
-                        <div class="input-group">
-                            <span class="input-group-addon" id="basic-addon1"><span class="fa fa-user"></span></span>
-                            <input type="text" class="form-control" name="id_user" id="id_user_to_add" style="width:70%;"></input>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-success">{% trans "Ajouter" %}</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Annuler" %}</button>
-                    </div>
-                </form>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">{% trans "Désinscrire" %}</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Annuler" %}</button>
+                </div>
+            </form>
         </div>
     </div>
-    <div class="modal fade" id="delPerson" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form class="form-horizontal" id="delPersonForm" action="" method="POST">
-                    {% csrf_token %}
-                    <div class="modal-header">
-                        <h4 class="modal-title">{% trans "Désinscrire une personne" %}</h4>
+</div>
+<div class="modal fade" id="addEmail" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="form-horizontal" id="addMailForm" action="" method="POST">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h4 class="modal-title">{% trans "Désinscrire une personne" %}</h4>
+                </div>
+                <div class="alert alert-danger text-center remove-radius">
+                    <span class="fa fa-spin fa-warning"></span>
+                    <p>
+                        {% trans "Attention, cette option, n'est à utilser que pour les membres non inscrits au ResEl" %} <br />
+                        {% trans "Ajouter un utilisateur ResEl inscrit déjà automatiquement à la mailing list" %} <br />
+                    </p>
+                </div>
+                <div class="modal-body">
+                    <p>{% trans "Entrer l'email à abonner:" %}</p>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1"><span class="fa fa-envelope"></span></span>
+                        <input type="text" class="form-control" name="mail" style="width:70%;"></input>
                     </div>
-                    <div class="modal-body">
-                        <p>{% trans "Entrer la personne à ajouter à désinscrire de ce club:" %}</p>
-                        <div class="input-group">
-                            <span class="input-group-addon" id="basic-addon1"><span class="fa fa-user"></span></span>
-                            <input type="text" class="form-control" name="id_user" id="id_user_to_del" style="width:70%;"></input>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-success">{% trans "Désinscrire" %}</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Annuler" %}</button>
-                    </div>
-                </form>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">{% trans "Ajouter" %}</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Annuler" %}</button>
+                </div>
+            </form>
         </div>
     </div>
-    <div class="modal fade" id="addEmail" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form class="form-horizontal" id="addMailForm" action="" method="POST">
-                    {% csrf_token %}
-                    <div class="modal-header">
-                        <h4 class="modal-title">{% trans "Désinscrire une personne" %}</h4>
-                    </div>
-                    <div class="alert alert-danger text-center remove-radius">
-                        <span class="fa fa-spin fa-warning"></span>
-                        <p>
-                            {% trans "Attention, cette option, n'est à utilser que pour les membres non inscrits au ResEl" %} <br />
-                            {% trans "Ajouter un utilisateur ResEl inscrit déjà automatiquement à la mailing list" %} <br />
-                        </p>
-                    </div>
-                    <div class="modal-body">
-                        <p>{% trans "Entrer l'email à abonner:" %}</p>
-                        <div class="input-group">
-                            <span class="input-group-addon" id="basic-addon1"><span class="fa fa-envelope"></span></span>
-                            <input type="text" class="form-control" name="mail" style="width:70%;"></input>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-success">{% trans "Ajouter" %}</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Annuler" %}</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    {% endblock %}
+</div>
+{% endblock %}
 
-    {% block javascript %}
-    <script src="{% static 'jquery/jquery-ui.min.js' %}"></script>
-    <script src="{% static 'js/jquery.unveil.js' %}"></script>
-    <script>
-    var addprezlinks = document.getElementsByClassName('addPrezLink');
-    var addlinks = document.getElementsByClassName('addPersonLink');
-    var dellinks = document.getElementsByClassName('delPersonLink');
-    var addmaillinks = document.getElementsByClassName('addMailLink');
-    var addprezform = document.getElementById('addPrezForm');
-    var addform = document.getElementById('addPersonForm');
-    var delform = document.getElementById('delPersonForm');
-    var addmailform = document.getElementById('addMailForm');
+{% block javascript %}
+<script src="{% static 'jquery/jquery-ui.min.js' %}"></script>
+<script src="{% static 'js/jquery.unveil.js' %}"></script>
+<script>
+var addprezlinks = document.getElementsByClassName('addPrezLink');
+var addlinks = document.getElementsByClassName('addPersonLink');
+var dellinks = document.getElementsByClassName('delPersonLink');
+var addmaillinks = document.getElementsByClassName('addMailLink');
+var addprezform = document.getElementById('addPrezForm');
+var addform = document.getElementById('addPersonForm');
+var delform = document.getElementById('delPersonForm');
+var addmailform = document.getElementById('addMailForm');
 
-    for (var i = 0; i < addprezlinks.length; i++) {
-        addprezlinks[i].addEventListener("click", changeAddPrezLinkValue(i));
+for (var i = 0; i < addprezlinks.length; i++) {
+    addprezlinks[i].addEventListener("click", changeAddPrezLinkValue(i));
+};
+
+for (var i = 0; i < addlinks.length; i++) {
+    addlinks[i].addEventListener("click", changeAddLinkValue(i));
+};
+
+for (var i = 0; i < dellinks.length; i++) {
+    dellinks[i].addEventListener("click", changeDelLinkValue(i));
+};
+
+for (var i = 0; i < addmaillinks.length; i++) {
+    addmaillinks[i].addEventListener("click", changeAddEmailLinkValue(i));
+};
+
+function changeAddPrezLinkValue(i) {
+    return function(){
+        addprezform.action = "{{hardLinkAddPrez}}"+addprezlinks[i].getAttribute('data');
     };
+};
 
-    for (var i = 0; i < addlinks.length; i++) {
-        addlinks[i].addEventListener("click", changeAddLinkValue(i));
+function changeAddLinkValue(i) {
+    return function(){
+        addform.action = "{{hardLinkAdd}}"+addlinks[i].getAttribute('data');
     };
+};
 
-    for (var i = 0; i < dellinks.length; i++) {
-        dellinks[i].addEventListener("click", changeDelLinkValue(i));
+function changeDelLinkValue(i) {
+    return function(){
+        delform.action = "{{ hardLinkDel }}" + dellinks[i].getAttribute('data');
     };
+};
 
-    for (var i = 0; i < addmaillinks.length; i++) {
-        addmaillinks[i].addEventListener("click", changeAddEmailLinkValue(i));
+function changeAddEmailLinkValue(i) {
+    return function(){
+        addmailform.action = "{{ hardLinkAddMail }}"+addmaillinks[i].getAttribute('data');
     };
+};
 
-    function changeAddPrezLinkValue(i) {
-        return function(){
-            addprezform.action = "{{hardLinkAddPrez}}"+addprezlinks[i].getAttribute('data');
-        };
-    };
-
-    function changeAddLinkValue(i) {
-        return function(){
-            addform.action = "{{hardLinkAdd}}"+addlinks[i].getAttribute('data');
-        };
-    };
-
-    function changeDelLinkValue(i) {
-        return function(){
-            delform.action = "{{ hardLinkDel }}" + dellinks[i].getAttribute('data');
-        };
-    };
-
-    function changeAddEmailLinkValue(i) {
-        return function(){
-            addmailform.action = "{{ hardLinkAddMail }}"+addmaillinks[i].getAttribute('data');
-        };
-    };
-
-    </script>
-    <script>
-    jQuery(document).ready(function ($) {
-        $('#id_prez_to_add').autocomplete({
-            source: "{% url 'campus:who:request-user' %}",
-            minLength: 3,
-        });
-    })
-
-    jQuery(document).ready(function ($) {
-        $('#id_user_to_add').autocomplete({
-            source: "{% url 'campus:who:request-user' %}",
-            minLength: 3,
-        });
-    })
-
-    jQuery(document).ready(function ($) {
-        $('#id_user_to_del').autocomplete({
-            source: "{% url 'campus:who:request-user' %}",
-            minLength: 3,
-        });
-    })
-    </script>
-    <script type="text/javascript">
-    $(document).ready(function() {
-        $("img").unveil();
+</script>
+<script>
+jQuery(document).ready(function ($) {
+    $('#id_prez_to_add').autocomplete({
+        source: "{% url 'campus:who:request-user' %}",
+        minLength: 3,
     });
-    </script>
-    {% endblock %}
+})
+
+jQuery(document).ready(function ($) {
+    $('#id_user_to_add').autocomplete({
+        source: "{% url 'campus:who:request-user' %}",
+        minLength: 3,
+    });
+})
+
+jQuery(document).ready(function ($) {
+    $('#id_user_to_del').autocomplete({
+        source: "{% url 'campus:who:request-user' %}",
+        minLength: 3,
+    });
+})
+</script>
+<script type="text/javascript">
+$(document).ready(function() {
+    $("img").unveil();
+});
+</script>
+{% endblock %}

@@ -308,7 +308,7 @@ class ClubManagementForm(Form):
     def clean(self):
         cleaned_data = super(ClubManagementForm, self).clean()
 
-    def create_club(self, user):
+    def create_club(self):
 
         # If we don't do this we get an error cuz our LDAP scheme does not allow
         # a single model for each type of organisation
@@ -330,8 +330,8 @@ class ClubManagementForm(Form):
         new_club.website = self.cleaned_data['website']
         new_club.description = self.cleaned_data['description']
         new_club.object_classes = ["studentOrganisation"]
-        new_club.members = [user]
-        new_club.prezs = [user]
+        new_club.members = []
+        new_club.prezs = []
 
         if self.cleaned_data["logo"] is not None:
             new_club.logo = self.cleaned_data["logo"]
