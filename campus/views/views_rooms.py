@@ -260,7 +260,7 @@ class BookingView(FormView):
         self.booking = None
         if self.kwargs.get('booking', None):
             self.booking = get_object_or_404(RoomBooking, id=self.kwargs['booking'])
-            if not (self.booking.user_can_manage(self.request.ldap_user) or request.user.is_staff or request.ldap_user.is_campus_moderator()):
+            if not (self.booking.user_can_manage(self.request.ldap_user) or request.user.is_staff or request.ldap_user.is_campus_moderator() or request.ldap_user.uid == self.booking.user):
                 messages.error(self.request, _('Vous ne pouvez pas modifier cette réservation'))
                 return HttpResponseRedirect(reverse('campus:rooms:calendar'))
         return super(BookingView, self).dispatch(request, *args, **kwargs)

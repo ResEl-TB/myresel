@@ -764,6 +764,23 @@ class BookingFormTestCase(TestCase):
 
         self.assertTrue(form.is_valid())
 
+    def testCreatorCanManage(self):
+        booking = createBooking(datetime(self.year,9,1,18,0,0), datetime(self.year,9,1,19,0,0))
+
+        self.client.login(username="jbvallad", password="blabla")
+        r = self.client.get(reverse("campus:rooms:mod-booking", kwargs={'booking': booking.id}), HTTP_HOST="10.0.3.94")
+
+        self.assertTemplateUsed(r, 'campus/rooms/booking.html')
+
+    def testPlebsCantManage(self):
+        self.client.login(username="jbvallad", password="blabla")
+        booking = createBooking(datetime(self.year,1,1,18,0,0), datetime(self.year,1,1,19,0,0))
+
+        self.client.login(username="bvallad", password="blabla")
+        r = self.client.get(reverse("campus:rooms:mod-booking", kwargs={'booking': booking.id}), HTTP_HOST="10.0.3.94")
+        self.assertEqual(r.status_code, 302)
+        self.assertTemplateNotUsed(r, 'calendar.html')
+
     def testValidRecurrentForm(self):
         self.client.login(username="jbvallad", password="blabla")
         room = createRoom()

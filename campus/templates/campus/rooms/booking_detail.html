@@ -21,7 +21,7 @@
     </div>
     <div class="container well" id="content">
         {% if user.is_authenticated %}
-        {% if object.user_can_manage or request.user.is_staff or request.ldap_user.is_campus_moderator %}
+        {% if object.user_can_manage or request.user.is_staff or request.ldap_user.is_campus_moderator or request.ldap_user.uid in object.user%}
         <a class="btn btn-default pull-right" href="{% url "campus:rooms:mod-booking" object.pk %}">Modifier l'événement</a>
         {% endif %}
         {% endif %}
