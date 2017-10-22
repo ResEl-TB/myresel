@@ -208,7 +208,7 @@ class NewClubTestCase(TestCase):
     def testCorrectClub(self):
         form = createClubForm()
         self.assertTrue(form.is_valid())
-        form.create_club("uid=jvalladea,ou=people,dc=maisel,dc=enst-bretagne,dc=fr")
+        form.create_club()
         self.assertTrue(StudentOrganisation.filter(cn="tenniscn"))
 
     def testWrongCN(self):
