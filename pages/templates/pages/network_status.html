@@ -5,15 +5,11 @@
 {% block titre %}{% trans "Statut du réseau" %}{% endblock %}
 
 {% block content %}
-  <script src="https://unpkg.com/vue"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.4/lodash.min.js"></script>
+  <script src="{% static 'js/vendors/vue.js' %}"></script>
+  <script src="{% static 'js/vendors/lodash.js' %}"></script>
   <script src="{% static 'js/vendors/anime.js' %}"></script>
   <div id="network-status-app" xmlns:v-on="http://www.w3.org/1999/xhtml"
        xmlns:v-bind="http://www.w3.org/1999/xhtml">
-    <div class="page-header">
-      <h1><span class="hash">#</span> Statut du réseau</h1>
-    </div>
-
     <div class="global-status" v-bind:class="global_status">
       <span class="fa fa-fw fa-circle" v-bind:class="global_status"></span> [[ global_status_text ]]
     </div>
@@ -33,80 +29,58 @@
       </div>
     </div>
     </transition>
-    <div id="svgContainer" style="margin: 50px 50px;">
-      <div class="el el1"></div>
-      <div class="el el2"></div>
-      <div class="el el3"></div>
-      <div class="el el4"></div>
-      <div class="el el5"></div>
-      <div class="el el6"></div>
-      <div class="el el7"></div>
-      <svg id="svg1" width="0" height="0" >
-        <path
-            id="path1"
+    <div id="svgContainer" ref="pathContainer" style="margin: 50px 50px;">
+      <div class="el" v-for="(path, i) in connections" ref="el" :class="'el' + i"></div>
+      <svg id="svg1" width="0" height="0" ref="svg1" >
+        <path v-for="(path, i) in connections"
+            :id="'path' + i"
             d="M0 0"
             stroke="rgb(107, 79, 187)"
             fill="none"
-            stroke-width="3px"></path>
-        <path
-            id="path2"
-            d="M0 0"></path>
-        <path
-            id="path3"
-            d="M0 0"></path>
-        <path
-            id="path4"
-            d="M0 0"></path>
-        <path
-            id="path5"
-            d="M0 0"></path>
-        <path
-            id="path6"
-            d="M0 0"></path>
-        <path
-            id="path7"
-            d="M0 0"></path>
+            stroke-width="3px"
+            ref="path"></path>
       </svg>
     </div>
     <div class="network">
-      <div id="internet-access">
+      <div id="internet-access" ref="#internet-access">
         <div class="network-description">Internet</div>
-        <span id="adista" class="fa fa-cloud" @mouseenter="show_details('#adista')" ref="#adista" :class="services['#adista'].status"></span>
-        <span id="renater" class="fa fa-cloud" @mouseenter="show_details('#renater')" ref="#renater" :class="services['#renater'].status"></span>
+        <div class="card">
+          <div id="adista" class="fa fa-cloud" @mouseenter="show_details('#adista')" ref="#adista" :class="services['#adista'].status"></div>
+          <div id="renater" class="fa fa-cloud" @mouseenter="show_details('#renater')" ref="#renater" :class="services['#renater'].status"></div>
+        </div>
       </div>
-      <div id="network-edge">
+      <div id="network-edge" ref="#network-edge">
         <div class="network-description">Tête de réseau</div>
-        <div id="network-edge-top"></div>
         <div class="content">
           <div id="zahia" class="fa fa-server" @mouseenter="show_details('#zahia')" ref="#zahia" :class="services['#zahia'].status"></div>
           <div id="matahari" class="fa fa-server" @mouseenter="show_details('#matahari')" ref="#matahari" :class="services['#matahari'].status"></div>
         </div>
-        <div id="network-edge-bottom"></div>
       </div>
-      <div id="network-core">
-        <div class="network-description">Coeur du réseau</div>
-        <div id="rescure-stack">
-          <span id="radius" class="fa fa-wifi service" @mouseenter="show_details('#zahia')" ref="#zahia"></span>
-          <span id="dhcp" class="fa fa-legal service" @mouseenter="show_details('#zahia')" ref="#zahia"></span>
-          <span id="dns" class="fa fa-book service" @mouseenter="show_details('#zahia')" ref="#zahia"></span>
-        </div>
-        <span id="kuma" class="fa fa-circle-o" @mouseenter="show_details('#kuma')" ref="#kuma" :class="services['#kuma'].status"></span>
-        <div id="main-stack">
-          <span id="radius" class="fa fa-wifi service" @mouseenter="show_details('#zahia')" ref="#zahia"></span>
-          <span id="dhcp" class="fa fa-legal service" @mouseenter="show_details('#zahia')" ref="#zahia"></span>
-          <span id="dns" class="fa fa-book service" @mouseenter="show_details('#zahia')" ref="#zahia"></span>
-          <span id="ldap" class="fa fa-address-book service" @mouseenter="show_details('#zahia')" ref="#zahia"></span>
-          <span id="mysql" class="fa fa-database service" @mouseenter="show_details('#zahia')" ref="#zahia"></span>
-          <span id="monitoring" class="fa fa-area-chart service" @mouseenter="show_details('#zahia')" ref="#zahia"></span>
-          <span id="web" class="fa fa-internet-explorer service" @mouseenter="show_details('#zahia')" ref="#zahia"></span>
-          <span id="tv" class="fa fa-television service" @mouseenter="show_details('#zahia')" ref="#zahia"></span>
-          <span id="backup" class="fa fa-floppy-o service" @mouseenter="show_details('#zahia')" ref="#zahia"></span>
-          <span id="mail" class="fa fa-envelope service" @mouseenter="show_details('#zahia')" ref="#zahia"></span>
-          <span id="garbage" class="fa fa-film service" @mouseenter="show_details('#zahia')" ref="#zahia"></span>
-        </div>
+      <div id="network-core" ref="#network-core">
+        <div class="network-description">Coeur de réseau</div>
+        <div class="content">
+          <div id="rescure-stack">
+            <span id="radius" class="fa fa-wifi service" @mouseenter="show_details('#wifi')" ref="#wifi"></span>
+            <span id="dhcp" class="fa fa-legal service" @mouseenter="show_details('#legal')" ref="#legal"></span>
+            <span id="dns" class="fa fa-book service" @mouseenter="show_details('#book')" ref="#book"></span>
+          </div>
+          <span id="kuma" class="fa fa-circle-o" @mouseenter="show_details('#kuma')" ref="#kuma" :class="services['#kuma'].status"></span>
+          <div id="main-stack">
+            <span id="radius" class="fa fa-wifi service" @mouseenter="show_details('#wifi')" ref="#wifi"></span>
+            <span id="dhcp" class="fa fa-legal service" @mouseenter="show_details('#legal')" ref="#legal"></span>
+            <span id="dns" class="fa fa-book service" @mouseenter="show_details('#book')" ref="#book"></span>
+            <span id="ldap" class="fa fa-address-book service" @mouseenter="show_details('#address-book')" ref="#address-book"></span>
+            <span id="mysql" class="fa fa-database service" @mouseenter="show_details('#database')" ref="#database"></span>
+            <span id="monitoring" class="fa fa-area-chart service" @mouseenter="show_details('#area-chart')" ref="#area-chart"></span>
+            <span id="web" class="fa fa-internet-explorer service" @mouseenter="show_details('#ie')" ref="#ie"></span>
+            <span id="tv" class="fa fa-television service" @mouseenter="show_details('#television')" ref="#television"></span>
+            <span id="backup" class="fa fa-floppy-o service" @mouseenter="show_details('#floppy')" ref="#floppy"></span>
+            <span id="mail" class="fa fa-envelope service" @mouseenter="show_details('#envelope')" ref="#envelope"></span>
+            <span id="garbage" class="fa fa-film service" @mouseenter="show_details('#film')" ref="#film"></span>
+          </div></div>
 
       </div>
-      <div id="network-access">
+      <div id="network-access" class="card" ref="#network-access">
         <div class="network-description">Réseau d'accès</div>
         <span id="i1" class="fa fa-building building" @mouseenter="show_details('#i1')" ref="#i1"></span>
         <span id="i2" class="fa fa-building building" @mouseenter="show_details('#i2')" ref="#i2"></span>
@@ -122,6 +96,7 @@
         <span id="i12" class="fa fa-building building" @mouseenter="show_details('#i12')" ref="#i12"></span>
       </div>
     </div>
+    <div class="sep"></div>
   </div> <!-- /.container -->
 {% endblock %}
 
@@ -132,163 +107,6 @@
 
 {% block javascript %}
   <script>
-  //helper functions, it turned out chrome doesn't support Math.sgn()
-function signum(x) {
-    return (x < 0) ? -1 : 1;
-}
-function absolute(x) {
-    return (x < 0) ? -x : x;
-}
-
-function drawPath(svg, path, startX, startY, endX, endY) {
-    // get the path's stroke width (if one wanted to be  really precize, one could use half the stroke size)
-    var stroke =  parseFloat(path.attr("stroke-width"));
-    // check if the svg is big enough to draw the path, if not, set heigh/width
-    if (svg.attr("height") <  endY)                 svg.attr("height", endY);
-    if (svg.attr("width" ) < (startX + stroke) )    svg.attr("width", (startX + stroke));
-    if (svg.attr("width" ) < (endX   + stroke) )    svg.attr("width", (endX   + stroke));
-
-    var deltaX = (endX - startX) * 0.15;
-    var deltaY = (endY - startY) * 0.15;
-    // for further calculations which ever is the shortest distance
-    var delta  =  deltaY < absolute(deltaX) ? deltaY : absolute(deltaX);
-
-    // set sweep-flag (counter/clock-wise)
-    // if start element is closer to the left edge,
-    // draw the first arc counter-clockwise, and the second one clock-wise
-    var arc1 = 0; var arc2 = 1;
-    if (startX > endX) {
-        arc1 = 1;
-        arc2 = 0;
-    }
-    // draw tha pipe-like path
-    // 1. move a bit down, 2. arch,  3. move a bit to the right, 4.arch, 5. move down to the end
-    path.attr("d",  "M"  + startX + " " + startY +
-                    " V" + (startY + delta) +
-                    " A" + delta + " " +  delta + " 0 0 " + arc1 + " " + (startX + delta*signum(deltaX)) + " " + (startY + 2*delta) +
-                    " H" + (endX - delta*signum(deltaX)) +
-                    " A" + delta + " " +  delta + " 0 0 " + arc2 + " " + endX + " " + (startY + 3*delta) +
-                    " V" + endY );
-}
-
-function connectElements(svg, path, startElem, endElem) {
-    var svgContainer= $("#svgContainer");
-
-    // if first element is lower than the second, swap!
-    if(startElem.offset().top > endElem.offset().top){
-        var temp = startElem;
-        startElem = endElem;
-        endElem = temp;
-    }
-
-    // get (top, left) corner coordinates of the svg container
-    var svgTop  = svgContainer.offset().top;
-    var svgLeft = svgContainer.offset().left;
-
-    // get (top, left) coordinates for the two elements
-    var startCoord = startElem.offset();
-    var endCoord   = endElem.offset();
-
-    // calculate path's start (x,y)  coords
-    // we want the x coordinate to visually result in the element's mid point
-    var startX = startCoord.left + 0.5*startElem.outerWidth() - svgLeft;    // x = left offset + 0.5*width - svg's left offset
-    var startY = startCoord.top  + startElem.outerHeight() - svgTop;        // y = top offset + height - svg's top offset
-
-        // calculate path's end (x,y) coords
-    var endX = endCoord.left + 0.5*endElem.outerWidth() - svgLeft;
-    var endY = endCoord.top  - svgTop;
-
-    // call function for drawing the path
-    drawPath(svg, path, startX, startY, endX, endY);
-
-}
-
-function connectAll() {
-    // connect all the paths you want!
-    connectElements($("#svg1"), $("#path1"), $("#adista"),   $("#network-edge"));
-    connectElements($("#svg1"), $("#path2"), $("#network-edge-top"),   $("#zahia"));
-    connectElements($("#svg1"), $("#path3"), $("#zahia"),   $("#network-edge-bottom"));
-    connectElements($("#svg1"), $("#path4"), $("#network-edge"),   $("#kuma"));
-{#    connectElements($("#svg1"), $("#path5"), $("#rescure-stack"),   $("#kuma"));#}
-{#    connectElements($("#svg1"), $("#path6"), $("#kuma"),   $("#main-stack"));#}
-  connectElements($("#svg1"), $("#path7"), $("#kuma"),   $("#network-access"));
-}
-
-function positionDetails(icon, details) {
-  var left = icon.offset().left - 10
-  var top = icon.offset().top - 100
-  details.offset({left: left, top: top})
-}
-
-$(document).ready(function() {
-    // reset svg each time
-    $("#svg1").attr("height", "0");
-    $("#svg1").attr("width", "0");
-    connectAll();
-
-    positionDetails($("#adista"), $("#adista-details"))
-
-    var path1 = anime.path('#path1');
-    var path2 = anime.path('#path2');
-    var path3 = anime.path('#path3');
-    var path4 = anime.path('#path4');
-    var path7 = anime.path('#path7');
-
-  anime({
-    targets: '#svgContainer .el1',
-    translateX: path1('x'),
-    translateY: path1('y'),
-    rotate: path1('angle'),
-    easing: 'linear',
-    duration: 2000,
-    loop: true
-  });
-  anime({
-    targets: '#svgContainer .el2',
-    translateX: path2('x'),
-    translateY: path2('y'),
-    rotate: path2('angle'),
-    easing: 'linear',
-    duration: 2000,
-    loop: true
-  });
-  anime({
-    targets: '#svgContainer .el3',
-    translateX: path3('x'),
-    translateY: path3('y'),
-    rotate: path3('angle'),
-    easing: 'linear',
-    duration: 2000,
-    loop: true
-  });
-  anime({
-    targets: '#svgContainer .el4',
-    translateX: path4('x'),
-    translateY: path4('y'),
-    rotate: path4('angle'),
-    easing: 'linear',
-    duration: 2000,
-    loop: true
-  });
-  anime({
-    targets: '#svgContainer .el7',
-    translateX: path7('x'),
-    translateY: path7('y'),
-    rotate: path7('angle'),
-    easing: 'linear',
-    duration: 2000,
-    loop: true
-  });
-});
-
-$(window).resize(function () {
-    // reset svg each time
-    $("#svg1").attr("height", "0");
-    $("#svg1").attr("width", "0");
-    connectAll();
-});
-  </script>
-  <script>
     var app = new Vue({
       el: '#network-status-app',
       data: {
@@ -297,6 +115,28 @@ $(window).resize(function () {
         mouse_hover_details: false,
         global_status: "success",
         global_status_text: "Tous les services sont nominaux",
+        connections: [
+          {
+            start: '#adista',
+            end: '#network-edge',
+          },
+          {
+            start: '#internet-access',
+            end: '#zahia',
+          },
+          {
+            start: '#zahia',
+            end: '#network-core',
+          },
+          {
+            start: '#network-edge',
+            end: '#kuma',
+          },
+          {
+            start: '#kuma',
+            end: '#network-access',
+          },
+        ],
         services: {
           '#adista': {
             title: "Connexion Adista",
@@ -358,7 +198,8 @@ $(window).resize(function () {
       },
       delimiters: ['[[', ']]'],
       mounted: function () {
-
+        this.initPaths()
+        window.addEventListener('resize', this.initPaths)
       },
       methods: {
         show_details: function (target) {
@@ -374,6 +215,87 @@ $(window).resize(function () {
               that.display_details = false
             }
           }, 400)
+        },
+        initPaths:  function () {
+          this.$refs['svg1'].setAttribute('width', 0)
+          this.$refs['svg1'].setAttribute('height', 0)
+          for (var i in this.connections) {
+            this.connectElements(
+                this.$refs['svg1'],
+                this.$refs['path'][i],
+                this.$refs[this.connections[i].start],
+                this.$refs[this.connections[i].end])
+            var path = anime.path('#path' + i)
+            anime({
+              targets: '#svgContainer .el' + i,
+              translateX: path('x'),
+              translateY: path('y'),
+              rotate: path('angle'),
+              easing: 'linear',
+              duration: 1500,
+              loop: true
+            });
+          }
+        },
+        connectElements: function (svg, path, startElem, endElem) {
+          var svgContainer = this.$refs['pathContainer']
+
+          // if first element is lower than the second, swap!
+          if (startElem.offsetTop > endElem.offsetTop) {
+            var temp = startElem
+            startElem = endElem
+            endElem = temp
+          }
+
+          // get (top, left) corner coordinates of the svg container
+          var svgTop  = svgContainer.offsetTop
+          var svgLeft = svgContainer.offsetLeft
+
+          // get (top, left) coordinates for the two elements
+          var startCoord = {left: startElem.offsetLeft, top: startElem.offsetTop}
+          var endCoord = {left: endElem.offsetLeft, top: endElem.offsetTop}
+
+          // calculate path's start (x,y)  coords
+          // we want the x coordinate to visually result in the element's mid point
+          var startX = startCoord.left + 0.5*startElem.offsetWidth - svgLeft    // x = left offset + 0.5*width - svg's left offset
+          var startY = startCoord.top  + startElem.offsetHeight - svgTop        // y = top offset + height - svg's top offset
+
+          // calculate path's end (x,y) coords
+          var endX = endCoord.left + 0.5*endElem.offsetWidth - svgLeft
+          var endY = endCoord.top  - svgTop
+
+          // call function for drawing the path
+          this.drawPath(svg, path, startX, startY, endX, endY);
+        },
+        drawPath: function (svg, path, startX, startY, endX, endY) {
+          // get the path's stroke width (if one wanted to be  really precise, one could use half the stroke size)
+          var stroke =  parseFloat(path.getAttribute("stroke-width"));
+          // check if the svg is big enough to draw the path, if not, set heigh/width
+          if (svg.getAttribute("height") <  endY)                 svg.setAttribute("height", endY);
+          if (svg.getAttribute("width" ) < (startX + stroke) )    svg.setAttribute("width", (startX + stroke));
+          if (svg.getAttribute("width" ) < (endX   + stroke) )    svg.setAttribute("width", (endX   + stroke));
+
+          var deltaX = (endX - startX) * .18;
+          var deltaY = (endY - startY) * .18
+          // for further calculations which ever is the shortest distance
+          var delta  =  deltaY < Math.abs(deltaX) ? deltaY : Math.abs(deltaX)
+
+          // set sweep-flag (counter/clock-wise)
+          // if start element is closer to the left edge,
+          // draw the first arc counter-clockwise, and the second one clock-wise
+          var arc1 = 0; var arc2 = 1;
+          if (startX > endX) {
+            arc1 = 1;
+            arc2 = 0;
+          }
+          // draw tha pipe-like path
+          // 1. move a bit down, 2. arch,  3. move a bit to the right, 4.arch, 5. move down to the end
+          path.setAttribute("d",  "M"  + startX + " " + startY +
+              " V" + (startY + delta) +
+              " A" + delta + " " +  delta + " 0 0 " + arc1 + " " + (startX + delta*Math.sign(deltaX)) + " " + (startY + 2*delta) +
+              " H" + (endX - delta*Math.sign(deltaX)) +
+              " A" + delta + " " +  delta + " 0 0 " + arc2 + " " + endX + " " + (startY + 3*delta) +
+              " V" + endY );
         }
       },
       watch: {
