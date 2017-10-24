@@ -11,7 +11,8 @@ html {
 
 body {
     /* margin-bottom: 400px; */
-    background: url(/static/images/campus/bgimg.jpg) no-repeat center center fixed;
+    /*background: url(/static/images/campus/bgimg.jpg) no-repeat center center fixed;*/
+    background-color: #8BBF82;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
@@ -24,12 +25,13 @@ body {
 
 .beta-banner {
     color: white;
-    background-color: rgb(0, 150, 0);
+    background-color: #8BBF82;
     height: 1.5em;
 }
 
 .beta-banner a {
     font-weight: bold;
+    color: white !important;
 }
 
 /* Navbar styles */
@@ -38,7 +40,8 @@ body {
     color: #FFFFFF;
 }
 .navbar {
-    background-color: #f5f5f5;
+    /*background-color: #f5f5f5;*/
+    background-color: white;
     border: none;
     border-radius: 0px;
     font-family: 'Roboto', 'sans-serif';
@@ -90,6 +93,13 @@ body {
     background-color: rgba(255, 255, 255, 0.9);
 }
 
+.well {
+    border-radius: 0px;
+    background-color: white;
+    border: 2px solid #e9f1ec;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
 /* Style for calendar.html */
 
 #month-navigation .btn-link {
@@ -129,7 +139,8 @@ body {
     /* width: 100%;
     position: absolute;
     bottom: 0; */
-    background-color: rgba(255, 255, 255, 0.9);
+    box-shadow: -1px -1px 5px rgba(0, 0, 0, 0.1);
+    background-color: white;
     padding-top: 15px;
     color: #8BBF82;
 }
