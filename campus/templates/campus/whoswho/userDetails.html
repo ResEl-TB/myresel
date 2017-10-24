@@ -98,22 +98,26 @@
             </div>
             <div class="col-md-offset-1 col-md-5 well">
                 <h3 class="text-center">{% trans "Clubs" %}</h3>
-                <ul class="centered-list">
                     {% for club in clubs %}
-                    <li class="well text-center">
-                        <p>
-                            {% if club.logo and club.logo != "None" %}
-                            <img class="logo" src="/media/image/CLUB/{{ club.logo }}">
-                            {% else %}
-                            <img class="logo" src="{% static 'images/campus/orga.png' %}">
-                            {% endif %}
-                            <a style="font-size:1.3em"href="{% url 'campus:clubs:club_detail' club.cn %}">{{club.name|upper}}</a>
-                        </p>
-                    </li>
+                    {% if forloop.counter|add:-1|divisibleby:3 %}
+                    <div class="row text-center">
+                    {% endif %}
+                        <div class="col-xs-4">
+                            <a href="{% url 'campus:clubs:club_detail' club.cn %}">
+                                {% if club.logo and club.logo != "None" %}
+                                <img class="logo" src="/media/image/CLUB/{{ club.logo }}">
+                                {% else %}
+                                <img class="logo" src="{% static 'images/campus/orga.png' %}">
+                                {% endif %}
+                                <p>{{club.name|upper}}</p>
+                            </a>
+                        </div>
+                    {% if forloop.counter|divisibleby:3 or forloop.last %}
+                    </div>
+                    {% endif %}
                     {% empty %}
                     <p class="text-center">{{display_user.first_name}} {{display_user.last_name|upper}} {% trans " n'est membre d'aucun club" %}</p>
                     {% endfor %}
-                </ul>
             </div>
         </div>
     </div>
