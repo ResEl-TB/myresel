@@ -20,6 +20,16 @@ label input {
     bottom: 4px;
 }
 
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+.logo {
+    height: 50px;
+    float: left;
+}
+
 .user-form {
    width: 100%;
 }

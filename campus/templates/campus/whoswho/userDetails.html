@@ -18,96 +18,105 @@
   <a href="{% url 'campus:home' %}" class="noncolored-a"><span class="fa fa-home"></span>   </a>
 </div>
 
- <div class="container">
-    <div class="row">
-      <div class="col-md-6 well">
-        <div class="col-md-4 user-photo">
-             {% if display_user.photo_file == "" %}
-               <img src="{% static "images/campus/photo-placeholder.jpg" %}" />
-             {% else %}
-               <img src="/media/image/users_photo/{{display_user.photo_file}}" />
-             {% endif %}
+<div class="wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row well">
+                    <div class="col-md-4 user-photo">
+                        {% if display_user.photo_file == "" %}
+                        <img src="{% static "images/campus/photo-placeholder.jpg" %}" />
+                        {% else %}
+                        <img src="/media/image/users_photo/{{display_user.photo_file}}" />
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8 mobile-centered">
+                        <h3>{{display_user.first_name}} {{display_user.last_name}}</h3>
+                        <b>{% trans "Promo" %}</b> : {{display_user.promo}}
+                        {% if display_user.formation != "" %}<b>{% trans "Formation" %}</b> : {{display_user.formation}}<br />{% endif %}
+                        {% if display_user.is_public == True %}
+                        <b>Email:</b> <a href="mailto:{{ display_user.mail}}" style="color: inherit !important;">{{ display_user.mail }}</a><br>
+                        {% if display_user.campus != "None"%}
+                        <b>Anniversaire: </b>{{ display_user.birth_date.date }}<br>
+                        <b>Batiment:</b> {{display_user.building}} <b>Chambre:</b> {{display_user.room_number}}<br>
+                        {% else %}
+                        <b>Adresse:</b> {{display_user.postal_address}}
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row well">
+                    <div class="col-md-12">
+                        <h3 class="text-center category-title">{% trans "Parrains" %}{% if ldapuser.uid == display_user.uid %}  <a style="padding:0 0 0 0;" class="btn" data-toggle="modal" data-target="#addParain"><span class="fa fa-plus-circle" style="color:#8BBF82"></span></a>{% endif %}</h3>
+                        {% for godparent in display_user.godparents %}
+                        {% if forloop.first %}
+                        <ul class="centered-list">
+                            {% endif %}
+                            <li>
+                                <a href="{% url 'campus:who:user-details' godparent.uid %}">{{godparent.first_name}} {{godparent.last_name|upper}}</a>
+                                ({%trans 'Promo' %} {{godparent.promo}})
+                                {% if ldapuser.uid == display_user.uid %}
+                                <form class="dell-form" action="{% url 'campus:who:remove-person' godparent.uid True %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" class="fa fa-trash-o btn dell-user"></button>
+                                </form>
+                                {% endif %}
+                            </li>
+                            {% if forloop.last %}
+                        </ul>
+                        {% endif %}
+                        {% empty %}
+                        <p class="text-center">{{display_user.first_name}} {{display_user.last_name|upper}} {% trans " n'a pas de parrain" %}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="row well">
+                    <div class="col-md-12">
+                        <h3 class="text-center">{% trans "Filleuls" %} {% if ldapuser.uid == display_user.uid %}  <a style="padding:0 0 0 0;" class="btn" data-toggle="modal" data-target="#addBizu"><span class="fa fa-plus-circle" style="color:#8BBF82"></span></a>{% endif %}</h3>
+                        {% for godchild in display_user.godchildren %}
+                        {% if forloop.first %}
+                        <ul class="centered-list">
+                            {% endif %}
+                            <li>
+                                <a href="{% url 'campus:who:user-details' godchild.uid %}">{{godchild.first_name}} {{godchild.last_name|upper}}</a>
+                                ({%trans 'Promo' %} {{godchild.promo}})
+                                {% if ldapuser.uid == display_user.uid %}
+                                <form class="dell-form" action="{% url 'campus:who:remove-person' godchild.uid False %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" class="fa fa-trash-o btn dell-user"></button>
+                                </form>
+                                {% endif %}
+                            </li>
+                            {% if forloop.last %}
+                        </ul>
+                        {% endif %}
+                        {% empty %}
+                        <p class="text-center">{{display_user.first_name}} {{display_user.last_name|upper}} {% trans " n'a pas de filleul" %}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-offset-1 col-md-5 well">
+                <h3 class="text-center">{% trans "Clubs" %}</h3>
+                <ul class="centered-list">
+                    {% for club in clubs %}
+                    <li class="well text-center">
+                        <p>
+                            {% if club.logo and club.logo != "None" %}
+                            <img class="logo" src="/media/image/CLUB/{{ club.logo }}">
+                            {% else %}
+                            <img class="logo" src="{% static 'images/campus/orga.png' %}">
+                            {% endif %}
+                            <a style="font-size:1.3em"href="{% url 'campus:clubs:club_detail' club.cn %}">{{club.name|upper}}</a>
+                        </p>
+                    </li>
+                    {% empty %}
+                    <p class="text-center">{{display_user.first_name}} {{display_user.last_name|upper}} {% trans " n'est membre d'aucun club" %}</p>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
-        <div class="col-md-8 mobile-centered">
-            <h3>{{display_user.first_name}} {{display_user.last_name}}</h3>
-            <b>{% trans "Promo" %}</b> : {{display_user.promo}}
-            {% if display_user.formation != "" %}<b>{% trans "Formation" %}</b> : {{display_user.formation}}<br />{% endif %}
-            {% if display_user.is_public == True %}
-              <b>Email:</b> <a href="mailto:{{ display_user.mail}}" style="color: inherit !important;">{{ display_user.mail }}</a><br>
-              {% if display_user.campus != "None"%}
-                <b>Anniversaire: </b>{{ display_user.birth_date.date }}<br>
-                <b>Batiment:</b> {{display_user.building}} <b>Chambre:</b> {{display_user.room_number}}<br>
-              {% else %}
-                <b>Adresse:</b> {{display_user.postal_address}}
-              {% endif %}
-              {% endif %}
-        </div>
-      </div>
-      <div class="col-md-offset-1 col-md-5 well">
-        <h3 class="text-center">{% trans "Clubs" %}</h3>
-        <ul class="centered-list">
-          {% for club in clubs %}
-             <li><a href="{% url 'campus:clubs:club_detail' club.cn %}">{{club.name}}</a></li>
-         {% empty %}
-             <p class="text-center">{{display_user.first_name}} {{display_user.last_name|upper}} {% trans " n'est membre d'aucun club" %}</p>
-         {% endfor %}
-        </ul>
-      </div>
     </div>
-
-     <div class="row margin-top">
-         <div class="col-md-12 well ">
-            <div class="col-md-6">
-                <h3 class="text-center category-title">{% trans "Parrains" %}{% if ldapuser.uid == display_user.uid %}  <a style="padding:0 0 0 0;" class="btn" data-toggle="modal" data-target="#addParain"><span class="fa fa-plus-circle" style="color:#8BBF82"></span></a>{% endif %}</h3>
-                {% for godparent in display_user.godparents %}
-                {% if forloop.first %}
-                <ul class="centered-list">
-                {% endif %}
-                <li>
-                  <a href="{% url 'campus:who:user-details' godparent.uid %}">{{godparent.first_name}} {{godparent.last_name|upper}}</a>
-                  ({%trans 'Promo' %} {{godparent.promo}})
-                  {% if ldapuser.uid == display_user.uid %}
-                    <form class="dell-form" action="{% url 'campus:who:remove-person' godparent.uid True %}" method="POST">
-                        {% csrf_token %}
-                        <button type="submit" class="fa fa-trash-o btn dell-user"></button>
-                    </form>
-                  {% endif %}
-                </li>
-                {% if forloop.last %}
-                </ul>
-                {% endif %}
-                {% empty %}
-                  <p class="text-center">{{display_user.first_name}} {{display_user.last_name|upper}} {% trans " n'a pas de parrain" %}</p>
-                {% endfor %}
-            </div>
-            <div class="col-md-6">
-                <h3 class="text-center">{% trans "Filleuls" %} {% if ldapuser.uid == display_user.uid %}  <a style="padding:0 0 0 0;" class="btn" data-toggle="modal" data-target="#addBizu"><span class="fa fa-plus-circle" style="color:#8BBF82"></span></a>{% endif %}</h3>
-                {% for godchild in display_user.godchildren %}
-                {% if forloop.first %}
-                <ul class="centered-list">
-                {% endif %}
-                <li>
-                  <a href="{% url 'campus:who:user-details' godchild.uid %}">{{godchild.first_name}} {{godchild.last_name|upper}}</a>
-                  ({%trans 'Promo' %} {{godchild.promo}})
-                  {% if ldapuser.uid == display_user.uid %}
-                      <form class="dell-form" action="{% url 'campus:who:remove-person' godchild.uid False %}" method="POST">
-                          {% csrf_token %}
-                          <button type="submit" class="fa fa-trash-o btn dell-user"></button>
-                      </form>
-                  {% endif %}
-                </li>
-                {% if forloop.last %}
-                </ul>
-                {% endif %}
-                {% empty %}
-                  <p class="text-center">{{display_user.first_name}} {{display_user.last_name|upper}} {% trans " n'a pas de filleul" %}</p>
-                {% endfor %}
-            </div>
-         </div>
-     </div>
-     <div class="row">
-
-     </div>
 </div>
 
 {% if ldapuser.uid == display_user.uid %}
