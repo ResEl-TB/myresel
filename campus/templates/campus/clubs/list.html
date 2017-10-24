@@ -23,11 +23,13 @@
             <div class="col-md-3">
                 <div class="col-md-12 well">
                     <div class="col-md-12 text-center">
-                        {% if asso.logo and asso.logo != "None" %}
-                        <img class="logo" data-src="/media/image/ASSOS/{{ asso.logo }}">
-                        {% else %}
-                        <img class="logo" src="{% static 'images/campus/orga.png' %}">
-                        {% endif %}
+                        <a href="{% url 'campus:clubs:club_detail' asso.cn %}">
+                            {% if asso.logo and asso.logo != "None" %}
+                            <img class="logo" data-src="/media/image/ASSOS/{{ asso.logo }}">
+                            {% else %}
+                            <img class="logo" src="{% static 'images/campus/orga.png' %}">
+                            {% endif %}
+                        </a>
                     </div>
                     <div class="col-md-12 mobile-margin-top">
                         <p class="club-name">{{ asso.name }}</p>
@@ -38,9 +40,9 @@
                         <span class="actions">
                             <a href="{% url 'campus:clubs:club_detail' asso.cn %}"><span class="fa fa-info-circle"></span></a>
                             <a href="#" data-toggle="modal" data-target="#{{asso.cn}}"><span class="fa fa-cog"></span></a>
-                                {% if request.user.is_authenticated %}
-                                {% if request.ldap_user.pk in asso.members %}<span class="label pull-right label-success"><span class="fa fa-check"></span> membre</span>{% endif %}
-                                {% endif %}
+                            {% if request.user.is_authenticated %}
+                            {% if request.ldap_user.pk in asso.members %}<span class="label pull-right label-success"><span class="fa fa-check"></span> membre</span>{% endif %}
+                            {% endif %}
                         </span>
                     </div>
                     <div class="modal fade" id="{{asso.cn}}">
@@ -103,11 +105,13 @@
         <div class="col-md-3">
             <div class="col-md-12 well">
                 <div class="col-md-12 text-center">
-                    {% if club.logo and club.logo != "None" %}
-                    <img class="logo" data-src="/media/image/CLUB/{{ club.logo }}">
-                    {% else %}
-                    <img class="logo" src="{% static 'images/campus/orga.png' %}">
-                    {% endif %}
+                    <a href="{% url 'campus:clubs:club_detail' club.cn %}">
+                        {% if club.logo and club.logo != "None" %}
+                        <img class="logo" data-src="/media/image/CLUB/{{ club.logo }}">
+                        {% else %}
+                        <img class="logo" src="{% static 'images/campus/orga.png' %}">
+                        {% endif %}
+                    </a>
                 </div>
                 <div class="col-md-12 mobile-margin-top">
                     <p class="club-name">{{ club.name }}</p>
@@ -183,11 +187,13 @@
                 <div class="col-md-12 well">
                     <div class="row">
                         <div class="col-md-12 text-center">
-                            {% if list.logo and list.logo != "None" %}
-                            <img class="logo" data-src="/media/image/LIST/{{ list.logo }}">
-                            {% else %}
-                            <img class="logo" src="{% static 'images/campus/orga.png' %}">
-                            {% endif %}
+                            <a href="{% url 'campus:clubs:club_detail' list.cn %}">
+                                {% if list.logo and list.logo != "None" %}
+                                <img class="logo" data-src="/media/image/LIST/{{ list.logo }}">
+                                {% else %}
+                                <img class="logo" src="{% static 'images/campus/orga.png' %}">
+                                {% endif %}
+                            </a>
                         </div>
                     </div>
                     <div class="row">
