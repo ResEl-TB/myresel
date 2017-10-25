@@ -194,7 +194,7 @@ class MyClubTestCase(TestCase):
     def testSimpleLoad(self):
         self.client.login(username="jbvallad", password="blabla")
         r = self.client.get(reverse("campus:clubs:my-clubs"), HTTP_HOST="10.0.3.94")
-        self.assertTemplateUsed("campus/clubs/list.html")
+        self.assertTemplateUsed(r, "campus/clubs/list.html")
 
 class NewClubTestCase(TestCase):
 
@@ -208,7 +208,7 @@ class NewClubTestCase(TestCase):
     def testCorrectClub(self):
         form = createClubForm()
         self.assertTrue(form.is_valid())
-        form.create_club("uid=jvalladea,ou=people,dc=maisel,dc=enst-bretagne,dc=fr")
+        form.create_club()
         self.assertTrue(StudentOrganisation.filter(cn="tenniscn"))
 
     def testWrongCN(self):
@@ -754,7 +754,10 @@ class BookingFormTestCase(TestCase):
         populate_orgas(club_cn="club-test")
 
         try_delete_user("jbvallad")
+        try_delete_user("bvallad")
         user = create_full_user(uid="jbvallad", pwd="blabla")
+        user.save()
+        user = create_full_user(uid="bvallad", pwd="blabla")
         user.save()
 
     def testValidForm(self):
@@ -763,6 +766,23 @@ class BookingFormTestCase(TestCase):
         form = createBookingForm(rooms=[room.id])
 
         self.assertTrue(form.is_valid())
+
+    def testCreatorCanManage(self):
+        booking = createBooking(datetime(self.year,9,1,18,0,0), datetime(self.year,9,1,19,0,0))
+
+        self.client.login(username="jbvallad", password="blabla")
+        r = self.client.get(reverse("campus:rooms:mod-booking", kwargs={'booking': booking.id}), HTTP_HOST="10.0.3.94")
+
+        self.assertTemplateUsed(r, 'campus/rooms/booking.html')
+
+    def testPlebsCantManage(self):
+        self.client.login(username="jbvallad", password="blabla")
+        booking = createBooking(datetime(self.year,1,1,18,0,0), datetime(self.year,1,1,19,0,0))
+
+        self.client.login(username="bvallad", password="blabla")
+        r = self.client.get(reverse("campus:rooms:mod-booking", kwargs={'booking': booking.id}), HTTP_HOST="10.0.3.94")
+        self.assertEqual(r.status_code, 302)
+        self.assertTemplateNotUsed(r, 'calendar.html')
 
     def testValidRecurrentForm(self):
         self.client.login(username="jbvallad", password="blabla")
@@ -900,7 +920,7 @@ class BookingTestCase(TestCase):
     def testSimpleLoad(self):
         self.client.login(username="jbvallad", password="blabla")
         r = self.client.get(reverse("campus:rooms:booking"), HTTP_HOST="10.0.3.94")
-        self.assertTemplateUsed('booking.html')
+        self.assertTemplateUsed(r, 'campus/rooms/booking.html')
 
 class EventDetailTestCase(TestCase):
 

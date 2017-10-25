@@ -20,6 +20,15 @@ label input {
     bottom: 4px;
 }
 
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+.logo {
+    height: 50px;
+}
+
 .user-form {
    width: 100%;
 }

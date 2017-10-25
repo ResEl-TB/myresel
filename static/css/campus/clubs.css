@@ -14,13 +14,9 @@ a, a:hover, a:active, a:visited {
 }
 
 .assos-card {
+    font-size: 0.8em;
     padding-top: 2%;
     padding-bottom: 2%;
-}
-
-.alternative-color {
-  background-color: #ececec;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
 }
 
 .navbar-clubs {
@@ -33,7 +29,15 @@ a, a:hover, a:active, a:visited {
 }
 
 .logo {
-    max-width:85%;
+    max-height: 150px;
+}
+
+.name {
+    color: rgb(59, 59, 59);
+}
+
+.actions {
+    font-size: 1.3em;
 }
 
 .margin-bottom {
@@ -41,18 +45,20 @@ a, a:hover, a:active, a:visited {
 }
 
 .club-name {
+  text-align: center;
   font-weight: bold;
   font-size: 1.1em;é
+}
+
+.description {
+    height: 3em;
 }
 
 /* Mobile CSS */
 @media (max-width: 991px) {
 
   .assos-card {
-    background-color: #f5f5f5 !important;
     margin-bottom: 4%;
-    border: 1px solid #e3e3e3;
-    border-radius: 5px;
   }
 
   .entries-container {
@@ -78,7 +84,6 @@ a, a:hover, a:active, a:visited {
   }
 
   .name {
-    color: white;
     margin-bottom: 2%;
     font-weight: bold;
     text-decoration: underline;

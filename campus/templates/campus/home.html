@@ -24,26 +24,27 @@
     </div>
 
     <div class="col-md-offset-1 col-md-4">
-      CAMPUS BRESTOIS <hr> IMT ATLANTIQUE
+      {% trans "CAMPUS BRESTOIS" %} <hr> IMT ATLANTIQUE
     </div>
   </div>
 
   <div class="row">
-    <div class="col-md-offset-3 col-md-6 block block-head">
+    <div class="col-md-12 well block-head">
       <div class="row text-center">
-        <div class="col-sm-4"><a href="{% url 'campus:mails:send'%}"><span class="fa fa-fw fa-pencil"></span> {% trans "Rédiger un mail" %}</a></div>
-        <div class="col-sm-4"><a href="{% url 'campus:rooms:booking'%}"><span class="fa fa-fw fa-calendar"></span> {% trans "Nouvel événement" %}</a></div>
-        <div class="col-sm-4"><a href="{% url 'campus:clubs:new' %}"><span class="fa fa-fw fa-users"></span> {% trans "Nouveau club" %}</a></div>
+        <div class="col-sm-3"><a href="{% url 'campus:mails:send'%}"><span class="fa fa-fw fa-pencil"></span> {% trans "Rédiger un mail" %}</a></div>
+        <div class="col-sm-3"><a href="{% url 'campus:rooms:booking'%}"><span class="fa fa-fw fa-calendar"></span> {% trans "Nouvel événement" %}</a></div>
+        <div class="col-sm-3"><a href="{% url 'campus:clubs:new' %}"><span class="fa fa-fw fa-users"></span> {% trans "Nouveau club" %}</a></div>
+        <div class="col-sm-3"><a href="{% url 'campus:mails:send'%}"><span class="fa fa-fw fa-address-book"></span> {% trans "Annuaire du campus" %}</a></div>
       </div>
     </div>
   </div>
   <div class="row block-head" >
     <div class="col-md-7">
-      <div class=" text-center bold block">
+      <div class=" text-center bold well">
          {% trans "DERNIÈRES PUBLICATIONS CAMPUS" %}
       </div>
       {% for campus_mail in campus_mails %}
-      <div class="block mail">
+      <div class="well mail">
         <a href="{% url 'campus:mails:display' campus_mail.pk %}">
           <span class="title">{{ campus_mail.subject }}</span>
         </a>
@@ -55,18 +56,18 @@
         </div>
       </div>
       {% empty %}
-      <div class="text-center block mail"><span>{% trans "Pas de mail campus à l'horizon" %}</span></div>
+      <div class="text-center well mail"><span>{% trans "Pas de mail campus à l'horizon" %}</span></div>
       {% endfor %}
     </div>
     <div class="col-md-5">
-      <div class=" text-center bold block remove-h-padding">
+      <div class=" text-center bold well remove-h-padding">
         <a href="{% url 'campus:who:list-birthdays' %}"><span class="fa fa-birthday-cake"></span> {% trans "ANNIVERSAIRES" %}</a>
       </div>
       <div id="myCarousel" class="carousel slide birthday" data-ride="carousel">
         <!-- Wrapper for slides -->
         <div class="carousel-inner">
           {% for personn in birthdays %}
-          <div class="item {% if forloop.first %}active{% endif %} block text-center">
+          <div class="item {% if forloop.first %}active{% endif %} well text-center">
             <a href="{% url "campus:who:user-details" personn.uid %}">
               {% if personn.photo_file == "" %}
               <div class="user-photo">
@@ -84,12 +85,12 @@
             </a>
           </div>
           {% empty %}
-          <div class="item active block text-center">
+          <div class="item active well text-center">
             <p>Aucun anniversaire aujourd'hui</p>
           </div>
           {% endfor %}
           {% for event in historicstuff %}
-          <div class="item block text-justified">
+          <div class="item well text-justified">
             <a href="{{ event.link }}" class="title-a">{{ event.title }}</a><br>
             {{ event.summary|truncatewords:15|safe }}
           </div>
@@ -105,11 +106,11 @@
           <span class="sr-only">Next</span>
         </a>
       </div>
-      <div class="text-center bold block block-header">
+      <div class="text-center bold well block-header">
         <a href="{% url 'campus:rooms:calendar' %}"><span class="fa fa-fw fa-calendar"></span> {% trans "PROCHAINS ÉVÉNEMENTS" %}</a>
       </div>
       {% for event in events %}
-      <div class="row block delete-margin event">
+      <div class="row well delete-margin event">
         <div class="row" />
           <div class="col-xs-3 event-badge-container">
             <div class="event-badge">
@@ -129,7 +130,7 @@
         </div>
       </div>
       {% empty %}
-      <div class="block event">
+      <div class="well event">
         {% trans "Pas d'événements à l'horizon" %}
       </div>
       {% endfor %}

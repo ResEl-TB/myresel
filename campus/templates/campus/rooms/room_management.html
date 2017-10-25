@@ -16,9 +16,14 @@
     <div class="btn-home btn-home-campus">
       <a href="{% url 'campus:home' %}" class="noncolored-a"><span class="fa fa-home"></span>   </a>
     </div>
-    
+
     <div class="container">
-        <div class="row well bigger-bold">
+        <div class="row">
+            <div class="col-md-12">
+                <a href="{% url 'campus:rooms:add-room' %}" class="btn btn-success pull-right">Ajouter une salle</a>
+            </div>
+        </div>
+        <div class="row well bigger-bold" style="margin-top:5px;">
             <div class="col-sm-2">
                 <p>{% trans "Nom" %}</p>
             </div>

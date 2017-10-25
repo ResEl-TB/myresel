@@ -55,11 +55,6 @@ a:hover {
     margin-top: 16px;
 }
 
-.block {
-    background-color: rgba(255, 255, 255, .85);
-    padding: 20px;
-}
-
 .event-badge-container {
     padding: 0;
 }
@@ -168,7 +163,7 @@ a:hover {
   height: 0;
   border-style: solid;
   border-width: 0px 0 100px 100px;
-  border-color: transparent transparent transparent #7ec951;
+  border-color: transparent transparent transparent #4ae8ff ;
 }
 
 .M1 {
@@ -179,21 +174,21 @@ a:hover {
   height: 0;
   border-style: solid;
   border-width: 50px 0 0px 50px;
-  border-color: transparent transparent transparent #7ec951;
+  border-color: transparent transparent transparent #4ae8ff;
 }
 
 .M2 {
   animation: M2-animation 12s infinite;
   grid-column: 3;
   grid-row: 2;
-  background-color: #7ec951;
+  background-color: #4ae8ff;
 }
 
 .M3 {
   animation: M3-animation 12s infinite;
   grid-column: 4;
   grid-row: 2;
-  background-color: #7ec951;
+  background-color: #4ae8ff;
 }
 
 .M4 {
@@ -204,7 +199,7 @@ a:hover {
   height: 0;
   border-style: solid;
   border-width: 0 0 50px 50px;
-  border-color: transparent transparent #7ec951 transparent ;
+  border-color: transparent transparent #4ae8ff transparent ;
 }
 
 .T1 {
@@ -215,14 +210,14 @@ a:hover {
   height: 0;
   border-style: solid;
   border-width: 0 0 50px 50px;
-  border-color: transparent transparent #7ec951 transparent ;
+  border-color: transparent transparent #4ae8ff transparent ;
 }
 
 .T2 {
   animation: T2-animation 12s infinite;
   grid-column: 6;
   grid-row: 1;
-  background-color: #7ec951;
+  background-color: #4ae8ff;
 }
 
 .T3 {
@@ -233,7 +228,7 @@ a:hover {
   height: 0;
   border-style: solid;
   border-width: 50px 50px 0 0;
-  border-color: #7ec951 transparent transparent transparent ;
+  border-color: #4ae8ff transparent transparent transparent ;
 }
 
 .T4 {
@@ -244,7 +239,7 @@ a:hover {
   height: 0;
   border-style: solid;
   border-width: 50px 50px 0 0;
-  border-color: #7ec951 transparent transparent transparent ;
+  border-color: #4ae8ff transparent transparent transparent ;
 }
 
 @keyframes I-animation {
