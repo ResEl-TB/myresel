@@ -19,11 +19,6 @@ a, a:hover, a:active, a:visited {
     padding-bottom: 2%;
 }
 
-.alternative-color {
-  background-color: #ececec;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
-}
-
 .navbar-clubs {
     margin-top: -20px;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2) inset;
@@ -34,11 +29,11 @@ a, a:hover, a:active, a:visited {
 }
 
 .logo {
-    height: 150px;
+    max-height: 150px;
 }
 
 .name {
-    color: white;
+    color: rgb(59, 59, 59);
 }
 
 .actions {

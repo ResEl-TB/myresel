@@ -15,7 +15,7 @@
         <a href="{% url 'campus:home' %}" class="noncolored-a"><span class="fa fa-home"></span>   </a>
     </div>
     <div class="col-md-12 entries-container">
-        <h1 class="mobile-centered name">{% trans 'Associations' %}</h1>
+        <h1 class="text-center well name">{% trans 'Associations' %}</h1>
         {% for asso in assos %}
         {% if forloop.counter|add:-1|divisibleby:4 %}
         <div class="row assos-card mobile-centered">
@@ -97,7 +97,7 @@
     </div>
 
     <div class="col-md-12 entries-container">
-        <h1 class="mobile-centered name">{% trans 'Clubs' %}</h1>
+        <h1 class="text-center well name">{% trans 'Clubs' %}</h1>
         {% for club in clubs %}
         {% if forloop.counter|add:-1|divisibleby:4 %}
         <div class="row assos-card mobile-centered">
@@ -178,7 +178,7 @@
         {% endfor %}
     </div>
     <div class="col-md-12 entries-container">
-        <h1 class="mobile-centered name">{% trans 'Listes' %}</h1>
+        <h1 class="text-center well name">{% trans 'Listes' %}</h1>
         {% for list in lists %}
         {% if forloop.counter|add:-1|divisibleby:4 %}
         <div class="row assos-card mobile-centered">
