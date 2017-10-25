@@ -472,7 +472,7 @@ class SearchSomeone(forms.Form):
         # Delete duplicates
         results = []
         for r in unsorted:
-           if r not in [u.uid for u in results]:
+           if r.uid not in [u.uid for u in results]:
                results.append(r)
         for result in results:
             result.promo = self.int_safe(result.promo)
