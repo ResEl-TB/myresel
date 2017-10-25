@@ -236,16 +236,13 @@ class InscriptionNetworkHandler(object):
                                })
                 return HttpResponseBadRequest(_("Une erreur s'est glissée dans le traitement de votre requête. Si le problème persiste, contactez un administrateur."))
 
-            elif 'user' in zone and is_registered == 'unknown':
+            # change campus or new device with bad DHCP
+            # OR new device
+            elif ('user' in zone and is_registered in ['unknown', 'disabled']) \
+                or ('inscription-999' in zone):
                 # Check if the device is in the LDAP, if no put him in the
                 # inscription zone.
                 # This is new from 2017-05-04, see : https://git.resel.fr/resel/general/issues/1
-                redirect = self.deport()
-                if redirect:
-                    self.log_deportation(host, ip, is_logged_in, is_registered, vlan, zone)
-                    return redirect
-
-            elif 'inscription-999' in zone:
                 redirect = self.deport()
                 if redirect:
                     self.log_deportation(host, ip, is_logged_in, is_registered, vlan, zone)
