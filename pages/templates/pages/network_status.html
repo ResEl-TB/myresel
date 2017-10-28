@@ -6,6 +6,7 @@
 
 {% block content %}
   <script src="{% static 'js/vendors/vue.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.3.4"></script>
   <script src="{% static 'js/vendors/lodash.js' %}"></script>
   <script src="{% static 'js/vendors/anime.js' %}"></script>
   <div id="network-status-app" xmlns:v-on="http://www.w3.org/1999/xhtml"
@@ -120,291 +121,13 @@
     var app = new Vue({
       el: '#network-status-app',
       data: {
-        current_details: "#adista",
+        current_details: "",
         display_details: false,
         mouse_hover_details: false,
-        global_status: "success",
-        global_status_text: "Tous les services sont nominaux",
-        connections: [
-          {
-            start: 'adista',
-            end: 'network-edge',
-          },
-          {
-            start: 'internet-access',
-            end: 'zahia',
-          },
-          {
-            start: 'zahia',
-            end: 'network-core',
-          },
-          {
-            start: 'network-edge',
-            end: 'kuma',
-          },
-          {
-            start: 'kuma',
-            end: 'network-access',
-          },
-        ],
-        services: {
-          'adista': {
-            title: "Connexion Adista",
-            status_text: "Connexion fonctionnelle",
-            text: "La connexion Adista est la connexion principale du ResEl",
-            icon: "fa-cloud",
-            status: "success",
-            category: "internet-access"
-          },
-          'renater': {
-            title: "Connexion Renater",
-            status_text: "Connexion fonctionnelle",
-            text: "La connexion Renater est la connexion de secours du ResEl sur le campus de Brest",
-            icon: "fa-cloud",
-            status: "success",
-            category: "internet-access"
-          },
-          'zahia': {
-            title: "Firewall Zahia",
-            status_text: "Fonctionnel",
-            text: "Zahia est le firewall principal à Brest",
-            icon: "fa-server",
-            status: "success",
-            category: "network-edge"
-          },
-          'matahari': {
-            title: "Firewall Matahari",
-            status_text: "Fonctionnel",
-            text: "Matahari est le firewall secondaire à Brest",
-            icon: "fa-server",
-            status: "success",
-            category: "network-edge"
-          },
-          'kuma': {
-            title: "Routeur de coeur Kuma",
-            status_text: "Fonctionnel",
-            text: "Kuma est le routeur de coeur du campus de Brest, il permet de router les packets entre les différents réseaux",
-            icon: "fa-circle-o",
-            status: "success",
-            category: "network-core"
-          },
-          'radius2': {
-            title: "Radius de secours",
-            status_text: "Fonctionnel",
-            text: "Le radius de secours",
-            icon: "fa-wifi",
-            status: "success",
-            category: "rescue-stack"
-          },
-          'dhcp2': {
-            title: "DHCP de secours",
-            status_text: "Fonctionnel",
-            text: "Le dhcp de secours",
-            icon: "fa-legal",
-            status: "success",
-            category: "rescue-stack"
-          },
-          'dns2': {
-            title: "DNS de secours",
-            status_text: "Fonctionnel",
-            text: "Le DNS de secours",
-            icon: "fa-book",
-            status: "success",
-            category: "rescue-stack"
-          },
-          'radius': {
-            title: "RADIUS principal",
-            status_text: "Fonctionnel",
-            text: "Le RADIUS principal",
-            icon: "fa-wifi",
-            status: "success",
-            category: "main-stack"
-          },
-          'dns': {
-            title: "DNS principal",
-            status_text: "Fonctionnel",
-            text: "Le DNS principal",
-            icon: "fa-book",
-            status: "success",
-            category: "main-stack"
-          },
-          'dhcp': {
-            title: "DHCP principal",
-            status_text: "Fonctionnel",
-            text: "Le DHCP principal",
-            icon: "fa-legal",
-            status: "success",
-            category: "main-stack"
-          },
-          'ldap': {
-            title: "LDAP",
-            status_text: "Fonctionnel",
-            text: "Le LDAP principal",
-            icon: "fa-address-book",
-            status: "success",
-            category: "main-stack"
-          },
-          'mysql': {
-            title: "MariaDB",
-            status_text: "Fonctionnel",
-            text: "Le MariaDB principal",
-            icon: "fa-database",
-            status: "success",
-            category: "main-stack"
-          },
-          'monitoring': {
-            title: "Monitoring",
-            status_text: "Fonctionnel",
-            text: "Le monitoring principal",
-            icon: "fa-area-chart",
-            status: "success",
-            category: "main-stack"
-          },
-          'web': {
-            title: "Les sites web",
-            status_text: "Fonctionnel",
-            text: "Le web principal",
-            icon: "fa-internet-explorer",
-            status: "success",
-            category: "main-stack"
-          },
-          'tv': {
-            title: "Les services TV",
-            status_text: "Fonctionnel",
-            text: "Le tv principal",
-            icon: "fa-television",
-            status: "success",
-            category: "main-stack"
-          },
-          'backup': {
-            title: "Le système de backup",
-            status_text: "Fonctionnel",
-            text: "Le backup principal",
-            icon: "fa-floppy-o",
-            status: "success",
-            category: "main-stack"
-          },
-          'mail': {
-            title: "Le système de mail",
-            status_text: "Fonctionnel",
-            text: "Le mail principal",
-            icon: "fa-envelope",
-            status: "success",
-            category: "main-stack"
-          },
-          'garbage': {
-            title: "Le système de garbage",
-            status_text: "Fonctionnel",
-            text: "Le garbage principal",
-            icon: "fa-film",
-            status: "success",
-            category: "main-stack"
-          },
-          'i1': {
-            title: "Bâtiment I1",
-            status_text: "Fonctionnel",
-            text: "Switch d'accès au I1 et bornes Wi-Fi du I1",
-            icon: "fa-building building",
-            status: "success",
-            category: "network-access"
-          },
-          'i2': {
-            title: "Bâtiment I2",
-            status_text: "Fonctionnel",
-            text: "Switch d'accès au I1 et bornes Wi-Fi du I1",
-            icon: "fa-building building",
-            status: "success",
-            category: "network-access"
-          },
-          'i3': {
-            title: "Bâtiment I3",
-            status_text: "Fonctionnel",
-            text: "Switch d'accès au I1 et bornes Wi-Fi du I1",
-            icon: "fa-building building",
-            status: "success",
-            category: "network-access"
-          },
-          'i4': {
-            title: "Bâtiment I4",
-            status_text: "Fonctionnel",
-            text: "Switch d'accès au I1 et bornes Wi-Fi du I1",
-            icon: "fa-building building",
-            status: "success",
-            category: "network-access"
-          },
-          'i5': {
-            title: "Bâtiment I5",
-            status_text: "Fonctionnel",
-            text: "Switch d'accès au I1 et bornes Wi-Fi du I1",
-            icon: "fa-building building",
-            status: "success",
-            category: "network-access"
-          },
-          'i6': {
-            title: "Bâtiment I6",
-            status_text: "Fonctionnel",
-            text: "Switch d'accès au I1 et bornes Wi-Fi du I1",
-            icon: "fa-building building",
-            status: "success",
-            category: "network-access"
-          },
-          'i7': {
-            title: "Bâtiment I7",
-            status_text: "Fonctionnel",
-            text: "Switch d'accès au I1 et bornes Wi-Fi du I1",
-            icon: "fa-building building",
-            status: "success",
-            category: "network-access"
-          },
-          'i8': {
-            title: "Bâtiment I8",
-            status_text: "Fonctionnel",
-            text: "Switch d'accès au I1 et bornes Wi-Fi du I1",
-            icon: "fa-building building",
-            status: "success",
-            category: "network-access"
-          },
-          'i9': {
-            title: "Bâtiment I9",
-            status_text: "Fonctionnel",
-            text: "Switch d'accès au I1 et bornes Wi-Fi du I1",
-            icon: "fa-building building",
-            status: "success",
-            category: "network-access"
-          },
-          'i10': {
-            title: "Bâtiment I10",
-            status_text: "Fonctionnel",
-            text: "Switch d'accès au I1 et bornes Wi-Fi du I1",
-            icon: "fa-building building",
-            status: "success",
-            category: "network-access"
-          },
-          'i11': {
-            title: "Bâtiment I11",
-            status_text: "Fonctionnel",
-            text: "Switch d'accès au I1 et bornes Wi-Fi du I1",
-            icon: "fa-building building",
-            status: "success",
-            category: "network-access"
-          },
-          'i12': {
-            title: "Bâtiment I12",
-            status_text: "Fonctionnel",
-            text: "Switch d'accès au I1 et bornes Wi-Fi du I1",
-            icon: "fa-building building",
-            status: "success",
-            category: "network-access"
-          },
-          'foyer': {
-            title: "Foyer",
-            status_text: "Fonctionnel",
-            text: "Switch d'accès au I1 et bornes Wi-Fi du I1",
-            icon: "fa-building building",
-            status: "success",
-            category: "network-access"
-          },
-        }
+        global_status: "",
+        global_status_text: "",
+        connections: [],
+        services: {}
       },
       computed: {
         details: function() {
@@ -422,12 +145,18 @@
       },
       delimiters: ['[[', ']]'],
       mounted: function () {
-        this.initPaths()
-        window.addEventListener('resize', this.initPaths)
+        var that = this
+        this.$http.get('/_api/v1/status/').then(function(response) {
+              that.global_status = response.data.global_status
+              that.global_status_text = response.data.global_status_text
+              that.services = response.data.services
+              that.connections = response.data.connections
+              window.addEventListener('resize', that.initPaths)
+            }
+        )
       },
       methods: {
         show_details: function (service, event) {
-          console.log(service)
           this.current_details = {service: service, target: event.target}
           this.display_details = true
           this.mouse_hover_details = true
@@ -530,6 +259,9 @@
         }
       },
       watch: {
+        connections: function () {
+          Vue.nextTick(this.initPaths)
+        }
       }
     })
   </script>

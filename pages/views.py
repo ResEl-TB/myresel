@@ -298,4 +298,12 @@ def unsecure_set_language(request):
     return set_language(request)
 
 def status_page_xhr(request):
-    pass
+    import yaml
+    import json
+
+    with open('myresel/icinga_status.yml', 'r') as document:
+        services = yaml.load(document)
+        services['global_status'] = 'warning'
+        services['global_status_text'] = 'Des incidents sur le réseau'
+        return HttpResponse(json.dumps(services), content_type='application/json')
+
