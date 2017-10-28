@@ -32,7 +32,7 @@ body {
     background-color: #ffffff;
     padding: 20px 20px 20px 20px;
     position: absolute;
-    z-index: 2;
+    z-index: 3;
     transform-origin: 0 0;
     transition: left .3s, top .3s, width .6s, height .6s;
     width: 400px;
@@ -138,13 +138,6 @@ path {
     margin-bottom: -20px;
 }
 
-#adista {
-}
-
-#renater {
-    /*margin-left: 50%;*/
-}
-
 #network-edge {
     padding: 70px 35% 100px  35%;
     background-color: #f2f2f2;
@@ -160,12 +153,9 @@ path {
     text-align: center;
 }
 
-#matahari {
+#network-edge server {
     width: 100%;
-}
-
-#zahia {
-    width: 100%;
+    z-index: 2;
 }
 
 #network-core {
@@ -186,14 +176,14 @@ path {
     align-items: center;
 }
 
-#kuma {
+#network-core .content > span {
     width: 100%;
     text-align: center;
     margin-top: 100px;
     margin-bottom: 100px;
 }
 
-#rescure-stack {
+#rescue-stack {
     border-radius: 2px;
     box-shadow: 0px 0px 4px #8d8d8d;
     background-color: #ffffff;
@@ -216,7 +206,6 @@ path {
 }
 
 .service {
-    color: rgb(26, 174, 16);
     font-size: 40px;
     height: 40px;
     margin-top: 20px;

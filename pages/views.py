@@ -296,3 +296,6 @@ def faqVote(request):
 def unsecure_set_language(request):
     """ set_language without a csrf """
     return set_language(request)
+
+def status_page_xhr(request):
+    pass

@@ -10,8 +10,19 @@
   <script src="{% static 'js/vendors/anime.js' %}"></script>
   <div id="network-status-app" xmlns:v-on="http://www.w3.org/1999/xhtml"
        xmlns:v-bind="http://www.w3.org/1999/xhtml">
-    <div class="global-status" v-bind:class="global_status">
-      <span class="fa fa-fw fa-circle" v-bind:class="global_status"></span> [[ global_status_text ]]
+    <div class="global-status container" v-bind:class="global_status">
+      <div class="row">
+        <div class="col-sm-8">
+          <span class="fa fa-fw fa-circle" v-bind:class="global_status"></span> [[ global_status_text ]]
+        </div>
+        <div class="col-sm-4">
+          <div class="btn-group" v-bind:class="global_status">
+            <button class="btn btn-info">Brest</button>
+            <button class="btn btn-default" disabled>Rennes</button>
+            <button class="btn btn-default" disabled>Nantes</button>
+          </div>
+        </div>
+      </div>
     </div>
     <transition name="fade">
     <div class="details" v-if="display_details" v-bind:style="{ left: details.left + 'px', top: details.top + 'px' }"
@@ -42,58 +53,57 @@
       </svg>
     </div>
     <div class="network">
-      <div id="internet-access" ref="#internet-access">
+      <div id="internet-access">
         <div class="network-description">Internet</div>
         <div class="card">
-          <div id="adista" class="fa fa-cloud" @mouseenter="show_details('#adista')" ref="#adista" :class="services['#adista'].status"></div>
-          <div id="renater" class="fa fa-cloud" @mouseenter="show_details('#renater')" ref="#renater" :class="services['#renater'].status"></div>
+          <div v-for="(service, name) in getServices('internet-access')"
+               class="fa fa-cloud"
+               :class="[service.icon, service.status]"
+               :id="name"
+          @mouseenter="show_details(service, $event)"></div>
         </div>
       </div>
-      <div id="network-edge" ref="#network-edge">
+      <div id="network-edge">
         <div class="network-description">Tête de réseau</div>
         <div class="content">
-          <div id="zahia" class="fa fa-server" @mouseenter="show_details('#zahia')" ref="#zahia" :class="services['#zahia'].status"></div>
-          <div id="matahari" class="fa fa-server" @mouseenter="show_details('#matahari')" ref="#matahari" :class="services['#matahari'].status"></div>
+          <div v-for="(service, name) in getServices('network-edge')"
+               class="fa server"
+               :class="[service.icon, service.status]"
+               :id="name"
+               @mouseenter="show_details(service, $event)"></div>
         </div>
       </div>
       <div id="network-core" ref="#network-core">
         <div class="network-description">Coeur de réseau</div>
         <div class="content">
-          <div id="rescure-stack">
-            <span id="radius" class="fa fa-wifi service" @mouseenter="show_details('#wifi')" ref="#wifi"></span>
-            <span id="dhcp" class="fa fa-legal service" @mouseenter="show_details('#legal')" ref="#legal"></span>
-            <span id="dns" class="fa fa-book service" @mouseenter="show_details('#book')" ref="#book"></span>
+          <div id="rescue-stack">
+          <span v-for="(service, name) in getServices('rescue-stack')"
+                class="fa service"
+                :class="[service.icon, service.status]"
+                :id="name"
+                @mouseenter="show_details(service, $event)"></span>
           </div>
-          <span id="kuma" class="fa fa-circle-o" @mouseenter="show_details('#kuma')" ref="#kuma" :class="services['#kuma'].status"></span>
+          <span v-for="(service, name) in getServices('network-core')"
+               class="fa"
+               :class="[service.icon, service.status]"
+               :id="name"
+               @mouseenter="show_details(service, $event)"></span>
           <div id="main-stack">
-            <span id="radius" class="fa fa-wifi service" @mouseenter="show_details('#wifi')" ref="#wifi"></span>
-            <span id="dhcp" class="fa fa-legal service" @mouseenter="show_details('#legal')" ref="#legal"></span>
-            <span id="dns" class="fa fa-book service" @mouseenter="show_details('#book')" ref="#book"></span>
-            <span id="ldap" class="fa fa-address-book service" @mouseenter="show_details('#address-book')" ref="#address-book"></span>
-            <span id="mysql" class="fa fa-database service" @mouseenter="show_details('#database')" ref="#database"></span>
-            <span id="monitoring" class="fa fa-area-chart service" @mouseenter="show_details('#area-chart')" ref="#area-chart"></span>
-            <span id="web" class="fa fa-internet-explorer service" @mouseenter="show_details('#ie')" ref="#ie"></span>
-            <span id="tv" class="fa fa-television service" @mouseenter="show_details('#television')" ref="#television"></span>
-            <span id="backup" class="fa fa-floppy-o service" @mouseenter="show_details('#floppy')" ref="#floppy"></span>
-            <span id="mail" class="fa fa-envelope service" @mouseenter="show_details('#envelope')" ref="#envelope"></span>
-            <span id="garbage" class="fa fa-film service" @mouseenter="show_details('#film')" ref="#film"></span>
+          <span v-for="(service, name) in getServices('main-stack')"
+                class="fa service"
+                :class="[service.icon, service.status]"
+                :id="name"
+                @mouseenter="show_details(service, $event)"></span>
           </div></div>
 
       </div>
       <div id="network-access" class="card" ref="#network-access">
         <div class="network-description">Réseau d'accès</div>
-        <span id="i1" class="fa fa-building building" @mouseenter="show_details('#i1')" ref="#i1"></span>
-        <span id="i2" class="fa fa-building building" @mouseenter="show_details('#i2')" ref="#i2"></span>
-        <span id="i3" class="fa fa-building building" @mouseenter="show_details('#i3')" ref="#i3"></span>
-        <span id="i4" class="fa fa-building building" @mouseenter="show_details('#i4')" ref="#i4"></span>
-        <span id="i5" class="fa fa-building building" @mouseenter="show_details('#i5')" ref="#i5"></span>
-        <span id="i6" class="fa fa-building building" @mouseenter="show_details('#i6')" ref="#i6"></span>
-        <span id="i7" class="fa fa-building building" @mouseenter="show_details('#i7')" ref="#i7"></span>
-        <span id="i8" class="fa fa-building building" @mouseenter="show_details('#i8')" ref="#i8"></span>
-        <span id="i9" class="fa fa-building building" @mouseenter="show_details('#i9')" ref="#i9"></span>
-        <span id="i10" class="fa fa-building building" @mouseenter="show_details('#i10')" ref="#i10"></span>
-        <span id="i11" class="fa fa-building building" @mouseenter="show_details('#i11')" ref="#i11"></span>
-        <span id="i12" class="fa fa-building building" @mouseenter="show_details('#i12')" ref="#i12"></span>
+        <span v-for="(service, name) in getServices('network-access')"
+              class="fa service"
+              :class="[service.icon, service.status]"
+              :id="name"
+              @mouseenter="show_details(service, $event)"></span>
       </div>
     </div>
     <div class="sep"></div>
@@ -117,80 +127,294 @@
         global_status_text: "Tous les services sont nominaux",
         connections: [
           {
-            start: '#adista',
-            end: '#network-edge',
+            start: 'adista',
+            end: 'network-edge',
           },
           {
-            start: '#internet-access',
-            end: '#zahia',
+            start: 'internet-access',
+            end: 'zahia',
           },
           {
-            start: '#zahia',
-            end: '#network-core',
+            start: 'zahia',
+            end: 'network-core',
           },
           {
-            start: '#network-edge',
-            end: '#kuma',
+            start: 'network-edge',
+            end: 'kuma',
           },
           {
-            start: '#kuma',
-            end: '#network-access',
+            start: 'kuma',
+            end: 'network-access',
           },
         ],
         services: {
-          '#adista': {
+          'adista': {
             title: "Connexion Adista",
             status_text: "Connexion fonctionnelle",
             text: "La connexion Adista est la connexion principale du ResEl",
             icon: "fa-cloud",
-            status: "success"
+            status: "success",
+            category: "internet-access"
           },
-          '#renater': {
+          'renater': {
             title: "Connexion Renater",
             status_text: "Connexion fonctionnelle",
             text: "La connexion Renater est la connexion de secours du ResEl sur le campus de Brest",
             icon: "fa-cloud",
-            status: "success"
+            status: "success",
+            category: "internet-access"
           },
-          '#zahia': {
+          'zahia': {
             title: "Firewall Zahia",
             status_text: "Fonctionnel",
             text: "Zahia est le firewall principal à Brest",
             icon: "fa-server",
-            status: "success"
+            status: "success",
+            category: "network-edge"
           },
-          '#matahari': {
+          'matahari': {
             title: "Firewall Matahari",
             status_text: "Fonctionnel",
             text: "Matahari est le firewall secondaire à Brest",
             icon: "fa-server",
-            status: "success"
+            status: "success",
+            category: "network-edge"
           },
-          '#kuma': {
+          'kuma': {
             title: "Routeur de coeur Kuma",
             status_text: "Fonctionnel",
             text: "Kuma est le routeur de coeur du campus de Brest, il permet de router les packets entre les différents réseaux",
             icon: "fa-circle-o",
-            status: "success"
+            status: "success",
+            category: "network-core"
           },
-          '#i1': {
+          'radius2': {
+            title: "Radius de secours",
+            status_text: "Fonctionnel",
+            text: "Le radius de secours",
+            icon: "fa-wifi",
+            status: "success",
+            category: "rescue-stack"
+          },
+          'dhcp2': {
+            title: "DHCP de secours",
+            status_text: "Fonctionnel",
+            text: "Le dhcp de secours",
+            icon: "fa-legal",
+            status: "success",
+            category: "rescue-stack"
+          },
+          'dns2': {
+            title: "DNS de secours",
+            status_text: "Fonctionnel",
+            text: "Le DNS de secours",
+            icon: "fa-book",
+            status: "success",
+            category: "rescue-stack"
+          },
+          'radius': {
+            title: "RADIUS principal",
+            status_text: "Fonctionnel",
+            text: "Le RADIUS principal",
+            icon: "fa-wifi",
+            status: "success",
+            category: "main-stack"
+          },
+          'dns': {
+            title: "DNS principal",
+            status_text: "Fonctionnel",
+            text: "Le DNS principal",
+            icon: "fa-book",
+            status: "success",
+            category: "main-stack"
+          },
+          'dhcp': {
+            title: "DHCP principal",
+            status_text: "Fonctionnel",
+            text: "Le DHCP principal",
+            icon: "fa-legal",
+            status: "success",
+            category: "main-stack"
+          },
+          'ldap': {
+            title: "LDAP",
+            status_text: "Fonctionnel",
+            text: "Le LDAP principal",
+            icon: "fa-address-book",
+            status: "success",
+            category: "main-stack"
+          },
+          'mysql': {
+            title: "MariaDB",
+            status_text: "Fonctionnel",
+            text: "Le MariaDB principal",
+            icon: "fa-database",
+            status: "success",
+            category: "main-stack"
+          },
+          'monitoring': {
+            title: "Monitoring",
+            status_text: "Fonctionnel",
+            text: "Le monitoring principal",
+            icon: "fa-area-chart",
+            status: "success",
+            category: "main-stack"
+          },
+          'web': {
+            title: "Les sites web",
+            status_text: "Fonctionnel",
+            text: "Le web principal",
+            icon: "fa-internet-explorer",
+            status: "success",
+            category: "main-stack"
+          },
+          'tv': {
+            title: "Les services TV",
+            status_text: "Fonctionnel",
+            text: "Le tv principal",
+            icon: "fa-television",
+            status: "success",
+            category: "main-stack"
+          },
+          'backup': {
+            title: "Le système de backup",
+            status_text: "Fonctionnel",
+            text: "Le backup principal",
+            icon: "fa-floppy-o",
+            status: "success",
+            category: "main-stack"
+          },
+          'mail': {
+            title: "Le système de mail",
+            status_text: "Fonctionnel",
+            text: "Le mail principal",
+            icon: "fa-envelope",
+            status: "success",
+            category: "main-stack"
+          },
+          'garbage': {
+            title: "Le système de garbage",
+            status_text: "Fonctionnel",
+            text: "Le garbage principal",
+            icon: "fa-film",
+            status: "success",
+            category: "main-stack"
+          },
+          'i1': {
             title: "Bâtiment I1",
             status_text: "Fonctionnel",
             text: "Switch d'accès au I1 et bornes Wi-Fi du I1",
             icon: "fa-building building",
-            status: "success"
+            status: "success",
+            category: "network-access"
+          },
+          'i2': {
+            title: "Bâtiment I2",
+            status_text: "Fonctionnel",
+            text: "Switch d'accès au I1 et bornes Wi-Fi du I1",
+            icon: "fa-building building",
+            status: "success",
+            category: "network-access"
+          },
+          'i3': {
+            title: "Bâtiment I3",
+            status_text: "Fonctionnel",
+            text: "Switch d'accès au I1 et bornes Wi-Fi du I1",
+            icon: "fa-building building",
+            status: "success",
+            category: "network-access"
+          },
+          'i4': {
+            title: "Bâtiment I4",
+            status_text: "Fonctionnel",
+            text: "Switch d'accès au I1 et bornes Wi-Fi du I1",
+            icon: "fa-building building",
+            status: "success",
+            category: "network-access"
+          },
+          'i5': {
+            title: "Bâtiment I5",
+            status_text: "Fonctionnel",
+            text: "Switch d'accès au I1 et bornes Wi-Fi du I1",
+            icon: "fa-building building",
+            status: "success",
+            category: "network-access"
+          },
+          'i6': {
+            title: "Bâtiment I6",
+            status_text: "Fonctionnel",
+            text: "Switch d'accès au I1 et bornes Wi-Fi du I1",
+            icon: "fa-building building",
+            status: "success",
+            category: "network-access"
+          },
+          'i7': {
+            title: "Bâtiment I7",
+            status_text: "Fonctionnel",
+            text: "Switch d'accès au I1 et bornes Wi-Fi du I1",
+            icon: "fa-building building",
+            status: "success",
+            category: "network-access"
+          },
+          'i8': {
+            title: "Bâtiment I8",
+            status_text: "Fonctionnel",
+            text: "Switch d'accès au I1 et bornes Wi-Fi du I1",
+            icon: "fa-building building",
+            status: "success",
+            category: "network-access"
+          },
+          'i9': {
+            title: "Bâtiment I9",
+            status_text: "Fonctionnel",
+            text: "Switch d'accès au I1 et bornes Wi-Fi du I1",
+            icon: "fa-building building",
+            status: "success",
+            category: "network-access"
+          },
+          'i10': {
+            title: "Bâtiment I10",
+            status_text: "Fonctionnel",
+            text: "Switch d'accès au I1 et bornes Wi-Fi du I1",
+            icon: "fa-building building",
+            status: "success",
+            category: "network-access"
+          },
+          'i11': {
+            title: "Bâtiment I11",
+            status_text: "Fonctionnel",
+            text: "Switch d'accès au I1 et bornes Wi-Fi du I1",
+            icon: "fa-building building",
+            status: "success",
+            category: "network-access"
+          },
+          'i12': {
+            title: "Bâtiment I12",
+            status_text: "Fonctionnel",
+            text: "Switch d'accès au I1 et bornes Wi-Fi du I1",
+            icon: "fa-building building",
+            status: "success",
+            category: "network-access"
+          },
+          'foyer': {
+            title: "Foyer",
+            status_text: "Fonctionnel",
+            text: "Switch d'accès au I1 et bornes Wi-Fi du I1",
+            icon: "fa-building building",
+            status: "success",
+            category: "network-access"
           },
         }
       },
       computed: {
         details: function() {
-          var target = this.$refs[this.current_details]
+          var target = this.current_details.target
           return {
-            title: this.services[this.current_details].title,
-            status_text: this.services[this.current_details].status_text,
-            status: this.services[this.current_details].status,
-            text: this.services[this.current_details].text,
-            icon: this.services[this.current_details].icon,
+            title: this.current_details.service.title,
+            status_text: this.current_details.service.status_text,
+            status: this.current_details.service.status,
+            text: this.current_details.service.text,
+            icon: this.current_details.service.icon,
             left: target.offsetLeft - 60,
             top: target.offsetTop - 60
           }
@@ -202,8 +426,9 @@
         window.addEventListener('resize', this.initPaths)
       },
       methods: {
-        show_details: function (target) {
-          this.current_details = target
+        show_details: function (service, event) {
+          console.log(service)
+          this.current_details = {service: service, target: event.target}
           this.display_details = true
           this.mouse_hover_details = true
         },
@@ -223,8 +448,8 @@
             this.connectElements(
                 this.$refs['svg1'],
                 this.$refs['path'][i],
-                this.$refs[this.connections[i].start],
-                this.$refs[this.connections[i].end])
+                document.getElementById(this.connections[i].start),
+                document.getElementById(this.connections[i].end))
             var path = anime.path('#path' + i)
             anime({
               targets: '#svgContainer .el' + i,
@@ -269,33 +494,39 @@
         },
         drawPath: function (svg, path, startX, startY, endX, endY) {
           // get the path's stroke width (if one wanted to be  really precise, one could use half the stroke size)
-          var stroke =  parseFloat(path.getAttribute("stroke-width"));
+          var stroke = parseFloat(path.getAttribute("stroke-width"));
           // check if the svg is big enough to draw the path, if not, set heigh/width
-          if (svg.getAttribute("height") <  endY)                 svg.setAttribute("height", endY);
-          if (svg.getAttribute("width" ) < (startX + stroke) )    svg.setAttribute("width", (startX + stroke));
-          if (svg.getAttribute("width" ) < (endX   + stroke) )    svg.setAttribute("width", (endX   + stroke));
+          if (svg.getAttribute("height") < endY) svg.setAttribute("height", endY);
+          if (svg.getAttribute("width") < (startX + stroke)) svg.setAttribute("width", (startX + stroke));
+          if (svg.getAttribute("width") < (endX + stroke)) svg.setAttribute("width", (endX + stroke));
 
           var deltaX = (endX - startX) * .18;
           var deltaY = (endY - startY) * .18
           // for further calculations which ever is the shortest distance
-          var delta  =  deltaY < Math.abs(deltaX) ? deltaY : Math.abs(deltaX)
+          var delta = deltaY < Math.abs(deltaX) ? deltaY : Math.abs(deltaX)
 
           // set sweep-flag (counter/clock-wise)
           // if start element is closer to the left edge,
           // draw the first arc counter-clockwise, and the second one clock-wise
-          var arc1 = 0; var arc2 = 1;
+          var arc1 = 0;
+          var arc2 = 1;
           if (startX > endX) {
             arc1 = 1;
             arc2 = 0;
           }
           // draw tha pipe-like path
           // 1. move a bit down, 2. arch,  3. move a bit to the right, 4.arch, 5. move down to the end
-          path.setAttribute("d",  "M"  + startX + " " + startY +
+          path.setAttribute("d", "M" + startX + " " + startY +
               " V" + (startY + delta) +
-              " A" + delta + " " +  delta + " 0 0 " + arc1 + " " + (startX + delta*Math.sign(deltaX)) + " " + (startY + 2*delta) +
-              " H" + (endX - delta*Math.sign(deltaX)) +
-              " A" + delta + " " +  delta + " 0 0 " + arc2 + " " + endX + " " + (startY + 3*delta) +
-              " V" + endY );
+              " A" + delta + " " + delta + " 0 0 " + arc1 + " " + (startX + delta * Math.sign(deltaX)) + " " + (startY + 2 * delta) +
+              " H" + (endX - delta * Math.sign(deltaX)) +
+              " A" + delta + " " + delta + " 0 0 " + arc2 + " " + endX + " " + (startY + 3 * delta) +
+              " V" + endY);
+        },
+        getServices: function(category) {
+          return _.pickBy(this.services, function (s) {
+            return s.category === category
+          })
         }
       },
       watch: {
