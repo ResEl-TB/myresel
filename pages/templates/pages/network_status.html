@@ -18,9 +18,12 @@
         </div>
         <div class="col-sm-4">
           <div class="btn-group" v-bind:class="global_status">
-            <button class="btn btn-info">Brest</button>
-            <button class="btn btn-default" disabled>Rennes</button>
-            <button class="btn btn-default" disabled>Nantes</button>
+            <a v-for="campus in campuses"
+                :href="'#' + campus.name"
+                class="btn btn-default" :class="{'btn-info': campus.name === current_campus}"
+                :disabled="!campus.enabled"
+                @click="set_campus(campus.name)"
+                >[[ campus.name | capitalize ]]</a>
           </div>
         </div>
       </div>
@@ -57,20 +60,20 @@
       <div id="internet-access">
         <div class="network-description">Internet</div>
         <div class="card">
-          <div v-for="(service, name) in getServices('internet-access')"
+          <div v-for="service in getServices('internet-access')"
                class="fa fa-cloud"
                :class="[service.icon, service.status]"
-               :id="name"
+               :id="service.name"
           @mouseenter="show_details(service, $event)"></div>
         </div>
       </div>
       <div id="network-edge">
         <div class="network-description">Tête de réseau</div>
         <div class="content">
-          <div v-for="(service, name) in getServices('network-edge')"
+          <div v-for="service in getServices('network-edge')"
                class="fa server"
                :class="[service.icon, service.status]"
-               :id="name"
+               :id="service.name"
                @mouseenter="show_details(service, $event)"></div>
         </div>
       </div>
@@ -78,32 +81,32 @@
         <div class="network-description">Coeur de réseau</div>
         <div class="content">
           <div id="rescue-stack">
-          <span v-for="(service, name) in getServices('rescue-stack')"
+          <span v-for="service in getServices('rescue-stack')"
                 class="fa service"
                 :class="[service.icon, service.status]"
-                :id="name"
+                :id="service.name"
                 @mouseenter="show_details(service, $event)"></span>
           </div>
-          <span v-for="(service, name) in getServices('network-core')"
+          <span v-for="service in getServices('network-core')"
                class="fa"
                :class="[service.icon, service.status]"
-               :id="name"
+               :id="service.name"
                @mouseenter="show_details(service, $event)"></span>
           <div id="main-stack">
-          <span v-for="(service, name) in getServices('main-stack')"
+          <span v-for="service in getServices('main-stack')"
                 class="fa service"
                 :class="[service.icon, service.status]"
-                :id="name"
+                :id="service.name"
                 @mouseenter="show_details(service, $event)"></span>
           </div></div>
 
       </div>
       <div id="network-access" class="card" ref="#network-access">
         <div class="network-description">Réseau d'accès</div>
-        <span v-for="(service, name) in getServices('network-access')"
+        <span v-for="service in getServices('network-access')"
               class="fa service"
               :class="[service.icon, service.status]"
-              :id="name"
+              :id="service.name"
               @mouseenter="show_details(service, $event)"></span>
       </div>
     </div>
@@ -121,36 +124,53 @@
     var app = new Vue({
       el: '#network-status-app',
       data: {
+        current_campus: "brest",
         current_details: "",
         display_details: false,
         mouse_hover_details: false,
         global_status: "",
         global_status_text: "",
-        connections: [],
-        services: {}
+        campuses: []
       },
       computed: {
         details: function() {
           var target = this.current_details.target
           return {
             title: this.current_details.service.title,
-            status_text: this.current_details.service.status_text,
+            status_text: this.current_details.service.status_text + this.current_route,
             status: this.current_details.service.status,
             text: this.current_details.service.text,
             icon: this.current_details.service.icon,
             left: target.offsetLeft - 60,
             top: target.offsetTop - 60
           }
+        },
+        services: function() {
+          var campus = this.current_campus
+          if (this.campuses.length === 0){
+            return {}
+          }
+          return this.campuses.find(function (e){return e.name === campus}).services
+        },
+        connections: function() {
+          var campus = this.current_campus
+          if (this.campuses.length === 0){
+            return []
+          }
+          return this.campuses.find(function (e){ return e.name === campus}).connections
         }
       },
       delimiters: ['[[', ']]'],
       mounted: function () {
+        var selected_campus = window.location.hash.substr(1);
+        if (selected_campus.length > 0) {
+          this.current_campus = selected_campus
+        }
         var that = this
         this.$http.get('/_api/v1/status/').then(function(response) {
               that.global_status = response.data.global_status
               that.global_status_text = response.data.global_status_text
-              that.services = response.data.services
-              that.connections = response.data.connections
+              that.campuses = response.data.campuses
               window.addEventListener('resize', that.initPaths)
             }
         )
@@ -253,14 +273,25 @@
               " V" + endY);
         },
         getServices: function(category) {
-          return _.pickBy(this.services, function (s) {
-            return s.category === category
-          })
+          return this.services[category]
+        },
+        set_campus: function(new_campus) {
+          this.current_campus = new_campus
         }
       },
       watch: {
-        connections: function () {
+        campuses: function () {
           Vue.nextTick(this.initPaths)
+        },
+        current_campus: function () {
+          Vue.nextTick(this.initPaths)
+        },
+      },
+      filters: {
+        capitalize: function (value) {
+          if (!value) return ''
+          value = value.toString()
+          return value.charAt(0).toUpperCase() + value.slice(1)
         }
       }
     })
