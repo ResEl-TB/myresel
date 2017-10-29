@@ -118,9 +118,9 @@
             {% endif %}
         </ul>
         <ul class="nav navbar-top-links navbar-right navbar-collapse">
-            <li>
-                <a href="{% url 'contact' %}"><i class="fa fa-comment-o fa-fw"></i> {% trans "Contact" %}</a>
-            </li>
+          <li>
+            <a href="{% url 'contact' %}"><i class="fa fa-comment-o fa-fw"></i> {% trans "Contact" %}</a>
+          </li>
 
             <hr class="visible-xs"/>
 
@@ -167,6 +167,9 @@
                         </form>
                     </ul>
                 </li>
+          <li>
+            <a href="{% url 'network-status' %}"><i class="fa fa-heartbeat fa-fw warning"></i></a>
+          </li>
         </ul>
         </div>
     </div><!-- /.container -->
@@ -233,9 +236,9 @@
             <div class="col-sm-4">
                 <ul>
                     {#                        <li><a href="https://status.resel.fr">{% trans "État du réseau" %}</a></li>#}
-                    <li><a href="https://clubs.resel.fr">{% trans "Les clubs" %}</a></li>
-                    <li><a href="{% url 'campus:home' %}">{% trans "Campus" %}</a></li>
+                    <li><a href="{% url 'network-status' %}">{% trans "État du réseau" %}</a></li>
                     <li><a href="{% url 'gestion-personnes:webmail' %}">Webmail</a></li>
+                  <li><a href="{% url 'campus:home' %}">{% trans "Les clubs et la vie du campus" %}</a></li>
                     <li><a href="{% url 'become-admin' %}">{% trans "Devenez Administrateur ResEl !" %}</a></li>
                     <li><a href="https://old.resel.fr/">{% trans "Ancien site ResEl" %}</a></li>
                 </ul>
