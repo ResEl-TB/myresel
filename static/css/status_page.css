@@ -1,0 +1,347 @@
+
+/* STATUS PANEL */
+
+.global-status {
+    padding: 20px 20px 20px 20px;
+    margin: 0 20% 0 20%;
+    font-weight: bolder;
+}
+
+.global-status .fa-circle {
+  animation: blinker 5s linear infinite;
+}
+
+.global-status-text{
+    padding: 8px 16px;
+}
+
+@keyframes blinker {
+  40% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.success {
+    /*color: rgb(26, 174, 16);*/
+}
+body {
+    perspective: 800px;
+}
+
+.card {
+    border-radius: 2px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.39);
+    background-color: #ffffff;
+}
+
+.global-status .btn {
+    padding: 8px 16px;
+}
+
+/* DETAILS PANEL */
+
+.details {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.39);
+    padding: 20px 20px 20px 20px;
+    position: absolute;
+    z-index: 3;
+    transform-origin: 0 0;
+    transition: left .3s, top .3s, width .6s, height .6s;
+    width: 400px;
+}
+
+.details .details-status {
+    font-size: .8em;
+    height: 20px;
+}
+
+.details .details-title {
+    font-size: 1.3em;
+}
+
+.details .details-details {
+    width: 150px;
+}
+
+.details .details-icon {
+    text-align: center;
+}
+
+.details .details-icon .fa {
+    font-size: 75px;
+    height: 70px;
+    width: 70px;
+    padding-top: -20px;
+    margin-bottom: -20px;
+}
+
+.details .grid-wrap {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 15px;
+}
+
+.fade-enter-active, .fade-leave-active {
+    transition: all .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
+    transform: rotate3d(0,1,0,10deg);
+}
+
+#svgContainer {
+	position:absolute;
+	opacity: 0.5;
+    pointer-events: none;
+}
+
+.el {
+    width: 4px;
+    height: 4px;
+    left: -2px;
+    top: -2px;
+    background-color: #f9f9f9;
+    position: absolute;
+}
+
+path {
+    stroke: #1b6d85;
+    stroke-width: 3px;
+    fill: none;
+}
+
+#page-wrapper {
+    background-color: #f9f9f9;
+}
+
+/* GENERAL */
+.content {
+    padding: 20px 20px 20px 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    text-align: center;
+    align-items: start;
+}
+
+.network {
+}
+
+.network-description {
+    position: absolute;
+    font-size: 5em;
+    color: rgba(255, 255, 255, 0.90);
+    margin-left: -30%;
+}
+
+
+
+/* INTERNET ACCESS PANEL */
+
+#internet-access {
+    padding: 70px 35% 100px  35%;
+    background: linear-gradient(to bottom, #cde3ff 40%,#f2f2f2 100%);
+}
+
+#internet-access .network-description {
+}
+
+#internet-access .card {
+    padding: 20px 20px 20px 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    text-align: center;
+    height: 110px;
+    align-items: start;
+}
+
+#internet-access .card div {
+    width: 100%;
+}
+
+.fa-cloud, .fa-server, .fa-circle-o {
+    font-size: 75px;
+    height: 70px;
+    width: 70px;
+    padding-top: -20px;
+    margin-bottom: -20px;
+}
+
+#network-edge {
+    padding: 70px 35% 100px  35%;
+    background-color: #f2f2f2;
+}
+
+#network-edge .network-description {
+    color: rgba(180, 180, 180, 0.67);
+}
+
+#network-edge .content {
+}
+
+#network-edge .server {
+    width: 100%;
+    z-index: 2;
+}
+
+#network-core {
+    padding: 50px 25% 50px  25%;
+    background-color: #3f3f3f;
+}
+
+#network-core .network-description {
+    color: rgba(180, 180, 180, 0.38);
+    margin-left: -20%;
+    margin-top: 90px;
+}
+
+#network-core .content {
+    display: grid;
+    grid-template-columns: 40% auto 40%;
+    grid-gap: 15px;
+    align-items: center;
+}
+
+#network-core .content > span {
+    width: 100%;
+    text-align: center;
+    margin-top: 100px;
+    margin-bottom: 100px;
+}
+
+#rescue-stack {
+    border-radius: 2px;
+    box-shadow: 0px 0px 4px #8d8d8d;
+    background-color: #ffffff;
+    padding: 0 5% 0 5%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    text-align: center;
+}
+
+#main-stack {
+    border-radius: 2px;
+    box-shadow: 0px 0px 4px #8d8d8d;
+    background-color: #ffffff;
+    padding: 0 5% 0 5%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    text-align: center;
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+}
+
+.service {
+    font-size: 40px;
+    height: 40px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#network-access {
+    margin: 100px auto 70px auto;
+    max-width: 420px;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    text-align: center;
+    grid-gap: 15px;
+}
+
+#network-access .network-description {
+    color: rgba(180, 180, 180, 0.67);
+    margin-top: 50px;
+}
+
+.building {
+    font-size: 40px;
+    height: 40px;
+    margin-top: 20px;
+    margin-bottom: 0px;
+    text-align: center;
+}
+
+.sep {
+    height: 70px;
+    background-color: #f9f9f9;
+}
+
+
+/* small screens exceptions */
+@media screen and (max-width: 1280px) {
+    .network-description {
+        display:none;
+    }
+
+    #internet-access {
+        padding: 70px 25% 100px 25%;
+    }
+
+    #network-edge {
+        padding: 70px 25% 100px 25%;
+    }
+
+    #network-core {
+        padding: 50px 10% 50px 10%;
+    }
+}
+
+@media screen and (max-width: 800px) {
+
+    #internet-access {
+        padding: 70px 20% 100px 20%;
+    }
+
+    #network-edge {
+        padding: 70px 20% 100px 20%;
+    }
+
+    #network-core {
+        padding: 50px 2% 50px 2%;
+    }
+}
+
+@media screen and (max-width: 600px) {
+
+    .global-status {
+        padding: 20px 20px 20px 20px;
+        margin: 0 0 0 0;
+        font-weight: bolder;
+    }
+    .global-status .btn-group {
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    #internet-access {
+        padding: 70px 10% 100px 10%;
+    }
+
+    #network-edge {
+        padding: 70px 10% 100px 10%;
+    }
+
+    #network-core {
+        padding: 50px 2% 50px 2%;
+    }
+
+    .fa-cloud, .fa-server, .fa-circle-o {
+        font-size: 50px;
+        height: 50px;
+        width: 50px;
+        padding-top: -20px;
+        margin-bottom: -20px;
+    }
+
+    .service {
+        font-size: 20px;
+        height: 20px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    #main-stack {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+}

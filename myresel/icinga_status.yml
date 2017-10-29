@@ -1,0 +1,457 @@
+---
+
+campuses:
+  - name: brest
+    enabled: true
+    connections:
+      - start: adista
+        end: network-edge
+      - start: internet-access
+        end: zahia
+      - start: zahia
+        end: network-core
+      - start: network-edge
+        end: kuma
+      - start: kuma
+        end: network-access
+    services:
+      internet-access:
+        - name: adista
+          title: Connexion Adista
+          text: La connexion Adista est la connexion principale du ResEl
+          icon: fa-cloud
+          essential: true
+          _hosts:
+            - zahia
+            - matahari
+        - name: renater
+          title: Connexion Renater
+          text: La connexion Renater est la connexion de secours du ResEl sur le campus de
+            Brest
+          icon: fa-cloud
+          essential: true
+          _hosts:
+            - zahia
+            - matahari
+      network-edge:
+        - name: zahia
+          title: Firewall Zahia
+          text: Zahia est le firewall principal à Brest
+          icon: fa-server
+          essential: true
+          _hosts:
+            - zahia
+        - name: matahari
+          title: Firewall Matahari
+          text: Matahari est le firewall secondaire à Brest
+          icon: fa-server
+          essential: true
+          _hosts:
+            - matahari
+      network-core:
+        - name: kuma
+          title: Routeur de coeur Kuma
+          text: Kuma est le routeur de coeur du campus de Brest, il permet de router les packets
+            entre les différents réseaux
+          icon: fa-circle-o
+          essential: true
+          _hosts:
+            - kuma
+      rescue-stack:
+        - name: radius2
+          title: Radius de secours
+          text: Le radius de secours
+          icon: fa-wifi
+          essential: false
+          _hosts:
+            - rescuerad
+        - name: dhcp2
+          title: DHCP de secours
+          text: Le dhcp de secours
+          icon: fa-legal
+          essential: false
+          _hosts:
+            - braum
+        - name: dns2
+          title: DNS de secours
+          text: Le DNS de secours
+          icon: fa-book
+          essential: false
+          _hosts:
+            - zahia
+      main-stack:
+        - name: radius
+          title: RADIUS principal
+          text: Le RADIUS principal
+          icon: fa-wifi
+          essential: true
+          _hosts:
+            - beowulf
+        - name: dns
+          title: DNS principal
+          text: Le DNS principal
+          icon: fa-book
+          essential: true
+          _hosts:
+            - saymyname
+        - name: dhcp
+          title: DHCP principal
+          text: Le DHCP principal
+          icon: fa-legal
+          essential: true
+          _hosts:
+            - saymyname
+        - name: ldap
+          title: LDAP
+          text: Le LDAP principal
+          icon: fa-address-book
+          essential: true
+          _hosts:
+            - beaune
+        - name: mysql
+          title: MariaDB
+          text: Le MariaDB principal
+          icon: fa-database
+          essential: false
+          _hosts:
+            - lena
+            - maia
+        - name: monitoring
+          title: Monitoring
+          text: Le monitoring principal
+          icon: fa-area-chart
+          essential: false
+          _hosts:
+            - dgsi
+            - eris
+        - name: web
+          title: Les sites web
+          text: Le web principal
+          icon: fa-internet-explorer
+          essential: false
+          _hosts:
+            - flea
+            - skynet
+            - teia
+        - name: tv
+          title: Les services TV
+          text: Le tv principal
+          icon: fa-television
+          essential: false
+          _hosts:
+            - foucault
+            - reychnam
+        - name: backup
+          title: Le système de backup
+          text: Le backup principal
+          icon: fa-floppy-o
+          essential: false
+          _hosts:
+            - padova
+        - name: mail
+          title: Le système de mail
+          text: Le mail principal
+          icon: fa-envelope
+          essential: false
+          _hosts:
+            - luigi
+            - toad
+        - name: garbage
+          title: Le système de garbage
+          text: Le garbage principal
+          icon: fa-film
+          essential: false
+          _hosts:
+            - alphabet
+      network-access:
+        - name: i1
+          title: Bâtiment I1
+          text: Switch d'accès au I1 et bornes Wi-Fi du I1
+          icon: fa-building building
+          essential: false
+          _hosts:
+           - romane
+           - romane1
+           - ap-i1-01
+           - ap-i1-02
+        - name: i2
+          title: Bâtiment I2
+          text: Switch d'accès au I1 et bornes Wi-Fi du I1
+          icon: fa-building building
+          essential: false
+          _hosts:
+           - gepetto
+           - gepetto1
+           - ap-i2-01
+           - ap-i2-02
+        - name: i3
+          title: Bâtiment I3
+          text: Switch d'accès au I1 et bornes Wi-Fi du I1
+          icon: fa-building building
+          essential: false
+          _hosts:
+           - lea
+           - lea1
+           - ap-i3-01
+           - ap-i3-02
+        - name: i4
+          title: Bâtiment I4
+          text: Switch d'accès au I1 et bornes Wi-Fi du I1
+          icon: fa-building building
+          essential: false
+          _hosts:
+           - jacky
+           - bruce
+           - ap-i4-01
+           - ap-i4-02
+           - ap-i4-03
+        - name: i5
+          title: Bâtiment I5
+          text: Switch d'accès au I1 et bornes Wi-Fi du I1
+          icon: fa-building building
+          essential: false
+          _hosts:
+           - zoe
+           - zoe1
+           - ap-i5-01
+           - ap-i5-02
+        - name: i6
+          title: Bâtiment I6
+          text: Switch d'accès au I1 et bornes Wi-Fi du I1
+          icon: fa-building building
+          essential: false
+          _hosts:
+           - caroline
+           - caroline1
+           - ap-i6-01
+           - ap-i6-02
+        - name: i7
+          title: Bâtiment I7
+          text: Switch d'accès au I1 et bornes Wi-Fi du I1
+          icon: fa-building building
+          essential: false
+          _hosts:
+           - marion
+           - marion1
+           - ap-i7-01
+           - ap-i7-02
+        - name: i8
+          title: Bâtiment I8
+          text: Switch d'accès au I1 et bornes Wi-Fi du I1
+          icon: fa-building building
+          essential: false
+          _hosts:
+           - cloe
+           - cloe1
+           - ap-i8-01
+           - ap-i8-02
+           - ap-i8-03
+        - name: i9
+          title: Bâtiment I9
+          text: Switch d'accès au I1 et bornes Wi-Fi du I1
+          icon: fa-building building
+          essential: false
+          _hosts:
+           - elric
+           - elric1
+           - ap-i9-01
+           - ap-i9-02
+           - ap-i9-03
+        - name: i10
+          title: Bâtiment I10
+          text: Switch d'accès au I1 et bornes Wi-Fi du I1
+          icon: fa-building building
+          essential: false
+          _hosts:
+           - elise
+           - ap-i10-01
+           - ap-i10-02
+        - name: i11
+          title: Bâtiment I11
+          text: Switch d'accès au I1 et bornes Wi-Fi du I1
+          icon: fa-building building
+          essential: false
+          _hosts:
+           - romane
+           - romane1
+           - ap-i11-01
+           - ap-i11-02
+        - name: i12
+          title: Bâtiment I12
+          text: Switch d'accès au I1 et bornes Wi-Fi du I1
+          icon: fa-building building
+          essential: false
+          _hosts:
+           - clara
+           - ap-i12-01
+        - name: foyer
+          title: Foyer
+          text: Switch d'accès au I1 et bornes Wi-Fi du I1
+          icon: fa-building building
+          essential: false
+          _hosts:
+           - guacamolcacao
+           - ap-foyer-bar
+           - ap-foyer-troll
+  -  name: rennes
+     enabled: true
+     connections:
+       - start: quantic
+         end: network-edge
+       - start: internet-access
+         end: peach
+       - start: peach
+         end: network-core
+       - start: network-edge
+         end: pessac
+       - start: pessac
+         end: network-access
+     services:
+       internet-access:
+         - name: quantic
+           title: Connexion Quantic Télécom
+           text: La connexion Quantic est la connexion principale du ResEl
+           icon: fa-cloud
+           essential: true
+           _hosts:
+             - peach
+         - name: renater
+           title: Connexion Renater
+           text: La connexion Renater est la connexion de secours du ResEl sur le campus de
+             Rennes
+           icon: fa-cloud
+           essential: true
+           _hosts:
+             - peach
+       network-edge:
+         - name: peach
+           title: Firewall Peach
+           text: Peach est le firewall principal à Rennes
+           icon: fa-server
+           essential: true
+           _hosts:
+             - peach
+       network-core:
+         - name: pessac
+           title: Routeur de coeur Pessac
+           text: Kuma est le routeur de coeur du campus de Brest, il permet de router les packets
+             entre les différents réseaux
+           icon: fa-circle-o
+           essential: true
+           _hosts:
+             - pessac
+       rescue-stack: []
+       main-stack:
+         - name: radius
+           title: RADIUS principal
+           text: Le RADIUS principal
+           icon: fa-wifi
+           essential: true
+           _hosts:
+             - wifiradix
+         - name: dns
+           title: DNS principal
+           text: Le DNS principal
+           icon: fa-book
+           essential: true
+           _hosts:
+             - loupiac
+         - name: dhcp
+           title: DHCP principal
+           text: Le DHCP principal
+           icon: fa-legal
+           essential: true
+           _hosts:
+             - loupiac
+         - name: ldap
+           title: LDAP
+           text: Le LDAP principal
+           icon: fa-address-book
+           essential: true
+           _hosts:
+             - lussac
+         - name: mysql
+           title: MariaDB
+           text: Le MariaDB principal
+           icon: fa-database
+           essential: false
+           _hosts:
+             - nairac
+         - name: monitoring
+           title: Monitoring
+           text: Le monitoring principal
+           icon: fa-area-chart
+           essential: false
+           _hosts:
+             - cadillac
+         - name: web
+           title: Les sites web
+           text: Le web principal
+           icon: fa-internet-explorer
+           essential: false
+           _hosts:
+             - doubidou
+#         - name: tv
+#           title: Les services TV
+#           text: Le tv principal
+#           icon: fa-television
+#           essential: false
+#           _hosts:
+#             - foucault
+#             - reychnam
+         - name: backup
+           title: Le système de backup
+           text: Le backup principal
+           icon: fa-floppy-o
+           essential: false
+           _hosts:
+             - gargantua
+         - name: garbage
+           title: Le système de garbage
+           text: Le garbage principal
+           icon: fa-film
+           essential: false
+           _hosts:
+             - alphabet
+       network-access:
+         - name: chambres
+           title: Bâtiment des chambres
+           text: Switch d'accès au I1 et bornes Wi-Fi du I1
+           icon: fa-building building
+           essential: false
+           _hosts:
+            - rouky
+            - germaine
+            - germaine1
+            - erdgardpoe
+            - ap-c1-01
+            - ap-c1-02
+            - ap-c1-03
+            - ap-c1-04
+            - ap-c1-11
+            - ap-c1-12
+            - ap-c1-13
+            - ap-c1-14
+         - name: studios
+           title: Bâtiment des studios
+           text: Switch d'accès au I1 et bornes Wi-Fi du I1
+           icon: fa-building building
+           essential: false
+           _hosts:
+            - rox
+            - lysiane
+            - lysiane1
+            - ap-s1-01
+            - ap-s1-02
+            - ap-s1-11
+            - ap-s1-12
+            - ap-s1-13
+            - ap-s1-21
+            - ap-s1-22
+            - ap-c1-23
+  -  name: nantes
+     enabled: false
+     connections: []
+     services: []
+
+
