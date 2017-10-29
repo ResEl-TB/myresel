@@ -125,3 +125,18 @@ class ServiceViewCase(TestCase):
         self.assertContains(r, self.ln.name)
         self.assertContains(r, self.ln.description)
         self.assertContains(r, self.ln.url)
+
+class StatusViewCase(TestCase):
+
+    def test_simple_load(self):
+        r = self.client.get(reverse("network-status"),
+                            HTTP_HOST="10.0.3.94", follow=True)
+
+        self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed(r, "pages/network_status.html")
+
+    def test_simple_load_api(self):
+        r = self.client.get(reverse("network-status-xhr"),
+                            HTTP_HOST="10.0.3.94", follow=True)
+
+        self.assertEqual(200, r.status_code)

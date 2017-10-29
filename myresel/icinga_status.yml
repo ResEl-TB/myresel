@@ -18,205 +18,202 @@ campuses:
       internet-access:
         - name: adista
           title: Connexion Adista
-          status_text: Connexion fonctionnelle
           text: La connexion Adista est la connexion principale du ResEl
           icon: fa-cloud
-          status: success
+          essential: true
+          _hosts:
+            - zahia
+            - matahari
         - name: renater
           title: Connexion Renater
-          status_text: Connexion fonctionnelle
           text: La connexion Renater est la connexion de secours du ResEl sur le campus de
             Brest
           icon: fa-cloud
-          status: success
+          essential: true
+          _hosts:
+            - zahia
+            - matahari
       network-edge:
         - name: zahia
           title: Firewall Zahia
-          status_text: Fonctionnel
           text: Zahia est le firewall principal à Brest
           icon: fa-server
-          status: success
+          essential: true
+          _hosts:
+            - zahia
         - name: matahari
           title: Firewall Matahari
-          status_text: Fonctionnel
           text: Matahari est le firewall secondaire à Brest
           icon: fa-server
-          status: success
+          essential: true
+          _hosts:
+            - matahari
       network-core:
         - name: kuma
           title: Routeur de coeur Kuma
-          status_text: Fonctionnel
           text: Kuma est le routeur de coeur du campus de Brest, il permet de router les packets
             entre les différents réseaux
           icon: fa-circle-o
-          status: success
+          essential: true
       rescue-stack:
         - name: radius2
           title: Radius de secours
-          status_text: Fonctionnel
           text: Le radius de secours
           icon: fa-wifi
-          status: success
+          essential: false
+          _hosts:
+            - rescuerad
         - name: dhcp2
           title: DHCP de secours
-          status_text: Fonctionnel
           text: Le dhcp de secours
           icon: fa-legal
-          status: success
+          essential: false
         - name: dns2
           title: DNS de secours
-          status_text: Fonctionnel
           text: Le DNS de secours
           icon: fa-book
-          status: success
+          essential: false
+          _hosts:
+            - zahia
       main-stack:
         - name: radius
           title: RADIUS principal
-          status_text: Fonctionnel
           text: Le RADIUS principal
           icon: fa-wifi
-          status: success
+          essential: true
+          _hosts:
+            - beowulf
         - name: dns
           title: DNS principal
-          status_text: Fonctionnel
           text: Le DNS principal
           icon: fa-book
-          status: success
+          essential: true
+          _hosts:
+            - saymyname
         - name: dhcp
           title: DHCP principal
-          status_text: Fonctionnel
           text: Le DHCP principal
           icon: fa-legal
-          status: success
+          essential: true
+          _hosts:
+            - saymyname
         - name: ldap
           title: LDAP
-          status_text: Fonctionnel
           text: Le LDAP principal
           icon: fa-address-book
-          status: success
+          essential: true
+          _hosts:
+            - beaune
         - name: mysql
           title: MariaDB
-          status_text: Fonctionnel
           text: Le MariaDB principal
           icon: fa-database
-          status: success
+          essential: false
+          _hosts:
+            - lena
+            - maia
         - name: monitoring
           title: Monitoring
-          status_text: Fonctionnel
           text: Le monitoring principal
           icon: fa-area-chart
-          status: success
+          essential: false
+          _hosts:
+            - dgsi
+            - eris
         - name: web
           title: Les sites web
-          status_text: Fonctionnel
           text: Le web principal
           icon: fa-internet-explorer
-          status: success
+          essential: false
+          _hosts:
+            - flea
+            - skynet
+            - teia
         - name: tv
           title: Les services TV
-          status_text: Fonctionnel
           text: Le tv principal
           icon: fa-television
-          status: success
+          essential: false
+          _hosts:
+            - foucault
+            - reychnam
         - name: backup
           title: Le système de backup
-          status_text: Fonctionnel
           text: Le backup principal
           icon: fa-floppy-o
-          status: success
+          essential: false
+          _host:
+            - padova
         - name: mail
           title: Le système de mail
-          status_text: Fonctionnel
           text: Le mail principal
           icon: fa-envelope
-          status: success
+          essential: false
+          _host:
+            - luigi
+            - toad
         - name: garbage
           title: Le système de garbage
-          status_text: Fonctionnel
           text: Le garbage principal
           icon: fa-film
-          status: success
+          essential: false
+          _host:
+            - alphabet
       network-access:
         - name: i1
           title: Bâtiment I1
-          status_text: Fonctionnel
           text: Switch d'accès au I1 et bornes Wi-Fi du I1
           icon: fa-building building
-          status: success
         - name: i2
           title: Bâtiment I2
-          status_text: Fonctionnel
           text: Switch d'accès au I1 et bornes Wi-Fi du I1
           icon: fa-building building
-          status: success
         - name: i3
           title: Bâtiment I3
-          status_text: Fonctionnel
           text: Switch d'accès au I1 et bornes Wi-Fi du I1
           icon: fa-building building
-          status: success
         - name: i4
           title: Bâtiment I4
-          status_text: Fonctionnel
           text: Switch d'accès au I1 et bornes Wi-Fi du I1
           icon: fa-building building
-          status: success
         - name: i5
           title: Bâtiment I5
-          status_text: Fonctionnel
           text: Switch d'accès au I1 et bornes Wi-Fi du I1
           icon: fa-building building
-          status: success
         - name: i6
           title: Bâtiment I6
-          status_text: Fonctionnel
           text: Switch d'accès au I1 et bornes Wi-Fi du I1
           icon: fa-building building
-          status: success
         - name: i7
           title: Bâtiment I7
-          status_text: Fonctionnel
           text: Switch d'accès au I1 et bornes Wi-Fi du I1
           icon: fa-building building
-          status: success
         - name: i8
           title: Bâtiment I8
-          status_text: Fonctionnel
           text: Switch d'accès au I1 et bornes Wi-Fi du I1
           icon: fa-building building
-          status: success
         - name: i9
           title: Bâtiment I9
-          status_text: Fonctionnel
           text: Switch d'accès au I1 et bornes Wi-Fi du I1
           icon: fa-building building
-          status: success
         - name: i10
           title: Bâtiment I10
-          status_text: Fonctionnel
           text: Switch d'accès au I1 et bornes Wi-Fi du I1
           icon: fa-building building
-          status: success
         - name: i11
           title: Bâtiment I11
-          status_text: Fonctionnel
           text: Switch d'accès au I1 et bornes Wi-Fi du I1
           icon: fa-building building
-          status: success
         - name: i12
           title: Bâtiment I12
-          status_text: Fonctionnel
           text: Switch d'accès au I1 et bornes Wi-Fi du I1
           icon: fa-building building
-          status: success
         - name: foyer
           title: Foyer
-          status_text: Fonctionnel
           text: Switch d'accès au I1 et bornes Wi-Fi du I1
           icon: fa-building building
-          status: success
   -  name: rennes
-     enabled: false
+     enabled: true
      connections: []
      services: []
   -  name: nantes
