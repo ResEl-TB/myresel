@@ -216,7 +216,7 @@ campuses:
           icon: fa-building building
           status: success
   -  name: rennes
-     enabled: true
+     enabled: false
      connections: []
      services: []
   -  name: nantes

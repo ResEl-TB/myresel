@@ -1,3 +1,6 @@
+
+/* STATUS PANEL */
+
 .global-status {
     padding: 20px 20px 20px 20px;
     margin: 0 20% 0 20%;
@@ -6,6 +9,10 @@
 
 .global-status .fa-circle {
   animation: blinker 5s linear infinite;
+}
+
+.global-status-text{
+    padding: 8px 16px;
 }
 
 @keyframes blinker {
@@ -26,10 +33,14 @@ body {
     background-color: #ffffff;
 }
 
+.global-status .btn {
+    padding: 8px 16px;
+}
+
+/* DETAILS PANEL */
+
 .details {
-    border-radius: 4px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.39);
-    background-color: #ffffff;
     padding: 20px 20px 20px 20px;
     position: absolute;
     z-index: 3;
@@ -53,6 +64,14 @@ body {
 
 .details .details-icon {
     text-align: center;
+}
+
+.details .details-icon .fa {
+    font-size: 75px;
+    height: 70px;
+    width: 70px;
+    padding-top: -20px;
+    margin-bottom: -20px;
 }
 
 .details .grid-wrap {
@@ -95,23 +114,32 @@ path {
     background-color: #f9f9f9;
 }
 
+/* GENERAL */
+.content {
+    padding: 20px 20px 20px 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    text-align: center;
+    align-items: start;
+}
 
 .network {
 }
 
 .network-description {
     position: absolute;
-    font-size: 4em;
-    color: rgba(255, 255, 255, 0.68);
-    font-weight: bold;
+    font-size: 5em;
+    color: rgba(255, 255, 255, 0.90);
     margin-left: -30%;
 }
 
+
+
+/* INTERNET ACCESS PANEL */
+
 #internet-access {
     padding: 70px 35% 100px  35%;
-    /*background-color: #cde3ff;*/
-    /*background: #e4f0ff linear-gradient(to bottom, #f9f9f9 0%, #cde3ff 45%);*/
-     background: linear-gradient(to bottom, #cde3ff 40%,#f2f2f2 100%);
+    background: linear-gradient(to bottom, #cde3ff 40%,#f2f2f2 100%);
 }
 
 #internet-access .network-description {
@@ -148,12 +176,9 @@ path {
 }
 
 #network-edge .content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    text-align: center;
 }
 
-#network-edge server {
+#network-edge .server {
     width: 100%;
     z-index: 2;
 }
@@ -164,9 +189,9 @@ path {
 }
 
 #network-core .network-description {
-    font-size: 3.5em;
     color: rgba(180, 180, 180, 0.38);
     margin-left: -20%;
+    margin-top: 90px;
 }
 
 #network-core .content {
@@ -214,7 +239,6 @@ path {
 }
 
 #network-access {
-    padding: 20px 5% 20px 5%;
     margin: 100px auto 70px auto;
     max-width: 420px;
     display: grid;
@@ -225,6 +249,7 @@ path {
 
 #network-access .network-description {
     color: rgba(180, 180, 180, 0.67);
+    margin-top: 50px;
 }
 
 .building {
@@ -238,4 +263,75 @@ path {
 .sep {
     height: 70px;
     background-color: #f9f9f9;
+}
+
+
+/* small screens exceptions */
+@media screen and (max-width: 1280px) {
+    .network-description {
+        display:none;
+    }
+
+    #internet-access {
+        padding: 70px 25% 100px 25%;
+    }
+
+    #network-edge {
+        padding: 70px 25% 100px 25%;
+    }
+
+    #network-core {
+        padding: 50px 10% 50px 10%;
+    }
+}
+
+@media screen and (max-width: 800px) {
+
+    #internet-access {
+        padding: 70px 20% 100px 20%;
+    }
+
+    #network-edge {
+        padding: 70px 20% 100px 20%;
+    }
+
+    #network-core {
+        padding: 50px 2% 50px 2%;
+    }
+}
+
+@media screen and (max-width: 600px) {
+
+    #internet-access {
+        padding: 70px 10% 100px 10%;
+    }
+
+    #network-edge {
+        padding: 70px 10% 100px 10%;
+    }
+
+    #network-core {
+        padding: 50px 2% 50px 2%;
+    }
+
+    .fa-cloud, .fa-server, .fa-circle-o {
+        font-size: 50px;
+        height: 50px;
+        width: 50px;
+        padding-top: -20px;
+        margin-bottom: -20px;
+    }
+
+    .service {
+        font-size: 20px;
+        height: 20px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    #main-stack {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
 }

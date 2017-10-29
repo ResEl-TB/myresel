@@ -14,7 +14,9 @@
     <div class="global-status container" v-bind:class="global_status">
       <div class="row">
         <div class="col-sm-8">
-          <span class="fa fa-fw fa-circle" v-bind:class="global_status"></span> [[ global_status_text ]]
+          <div class="global-status-text">
+            <span class="fa fa-fw fa-circle" v-bind:class="global_status"></span> [[ global_status_text ]]
+          </div>
         </div>
         <div class="col-sm-4">
           <div class="btn-group" v-bind:class="global_status">
@@ -29,14 +31,14 @@
       </div>
     </div>
     <transition name="fade">
-    <div class="details" v-if="display_details" v-bind:style="{ left: details.left + 'px', top: details.top + 'px' }"
+    <div class="card details" v-if="display_details" v-bind:style="{ left: details.left + 'px', top: details.top + 'px' }"
     @mouseleave="hide_details()">
       <div class="details-status">
         <span class="fa fa-fw fa-circle" :class="details.status"></span> [[ details.status_text ]]
       </div>
       <div class="grid-wrap">
         <div class="details-icon">
-          <span class="fa" :class="[ details.icon, details.status ]"></span>
+          <span class="fa " :class="[ details.icon, details.status ]"></span>
           <div class="details-title">[[ details.title ]]</div>
         </div>
         <div class="details-details">[[ details.text ]]
@@ -59,7 +61,7 @@
     <div class="network">
       <div id="internet-access">
         <div class="network-description">Internet</div>
-        <div class="card">
+        <div class="content card">
           <div v-for="service in getServices('internet-access')"
                class="fa fa-cloud"
                :class="[service.icon, service.status]"
@@ -78,7 +80,7 @@
         </div>
       </div>
       <div id="network-core" ref="#network-core">
-        <div class="network-description">Coeur de réseau</div>
+        <div class="network-description">Coeur</div>
         <div class="content">
           <div id="rescue-stack">
           <span v-for="service in getServices('rescue-stack')"
@@ -101,8 +103,8 @@
           </div></div>
 
       </div>
-      <div id="network-access" class="card" ref="#network-access">
-        <div class="network-description">Réseau d'accès</div>
+      <div id="network-access" class="content card" ref="#network-access">
+        <div class="network-description">Accès</div>
         <span v-for="service in getServices('network-access')"
               class="fa service"
               :class="[service.icon, service.status]"
@@ -124,6 +126,7 @@
     var app = new Vue({
       el: '#network-status-app',
       data: {
+        pulling_delta: 30000,
         current_campus: "brest",
         current_details: "",
         display_details: false,
@@ -137,7 +140,7 @@
           var target = this.current_details.target
           return {
             title: this.current_details.service.title,
-            status_text: this.current_details.service.status_text + this.current_route,
+            status_text: this.current_details.service.status_text,
             status: this.current_details.service.status,
             text: this.current_details.service.text,
             icon: this.current_details.service.icon,
@@ -166,14 +169,8 @@
         if (selected_campus.length > 0) {
           this.current_campus = selected_campus
         }
-        var that = this
-        this.$http.get('/_api/v1/status/').then(function(response) {
-              that.global_status = response.data.global_status
-              that.global_status_text = response.data.global_status_text
-              that.campuses = response.data.campuses
-              window.addEventListener('resize', that.initPaths)
-            }
-        )
+        this.pull_update()
+        setInterval(this.pull_update, this.pulling_delta)
       },
       methods: {
         show_details: function (service, event) {
@@ -277,6 +274,16 @@
         },
         set_campus: function(new_campus) {
           this.current_campus = new_campus
+        },
+        pull_update: function() {
+          var that = this
+          this.$http.get('/_api/v1/status/').then(function(response) {
+                that.global_status = response.data.global_status
+                that.global_status_text = response.data.global_status_text
+                that.campuses = response.data.campuses
+                window.addEventListener('resize', that.initPaths)
+              }
+          )
         }
       },
       watch: {

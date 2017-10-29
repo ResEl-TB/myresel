@@ -303,7 +303,7 @@ def status_page_xhr(request):
 
     with open('myresel/icinga_status.yml', 'r') as document:
         services = yaml.load(document)
-        services['global_status'] = 'warning'
-        services['global_status_text'] = 'Des incidents sur le réseau'
+        services['global_status'] = 'success'
+        services['global_status_text'] = 'Tous les services sont nominaux'
         return HttpResponse(json.dumps(services), content_type='application/json')
 
