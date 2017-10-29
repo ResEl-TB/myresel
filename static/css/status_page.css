@@ -302,6 +302,16 @@ path {
 
 @media screen and (max-width: 600px) {
 
+    .global-status {
+        padding: 20px 20px 20px 20px;
+        margin: 0 0 0 0;
+        font-weight: bolder;
+    }
+    .global-status .btn-group {
+        margin-top: 10px;
+        text-align: center;
+    }
+
     #internet-access {
         padding: 70px 10% 100px 10%;
     }
