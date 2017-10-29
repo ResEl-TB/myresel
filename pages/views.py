@@ -348,6 +348,8 @@ def status_page_xhr(request):
                 },
                 data='{ "joins": [ "host.name", "host.address" ], "attrs": [ "name", "state", "downtime_depth", "acknowledgement" ], "filter": "service.state != ServiceOK && service.downtime_depth == 0.0 && service.acknowledgement == 0.0" }'
             )
+            if r.status_code != 200:
+                raise ValueError('Icinga responded with %i status code' % r.status_code)
             result = r.json()
         except (requests.exceptions.RequestException, ValueError, TypeError) as err:
             # TODO: create a nice fallback template
