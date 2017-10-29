@@ -302,19 +302,31 @@ def status_page_xhr(request):
     import json
     import requests
 
-    def get_service_status(icinga_rsp, service):
+    def set_service_status(icinga_rsp, service):
         max_score = 0
+
+        if service.get('_hosts', None) is None:
+            service['status_text'] = 'Pas de métriques'
+            service['status'] = 'default'
+            return -1
+
         for icn_service in icinga_rsp['results']:
             if icn_service['joins']['host']['name'] in service.get('_hosts', []):
                 max_score = max(max_score, icn_service['attrs']['state'])
 
         cleanup(service)
         if max_score == 0:
-            return max_score, 'success'
+            service['status_text'] = 'Système nominal'
+            service['status'] = 'success'
+            return max_score
         elif max_score == 1:
-            return max_score, 'warning'
+            service['status_text'] = 'Incidents mineurs'
+            service['status'] = 'warning'
+            return max_score
         else:
-            return max_score, 'danger'
+            service['status_text'] = 'Incidents majeurs'
+            service['status'] = 'danger'
+            return max_score
 
     def cleanup(service, mangle=False):
         internals = []
@@ -349,7 +361,7 @@ def status_page_xhr(request):
         for campus in services['campuses']:
             for section in campus['services']:
                 for service in campus['services'][section]:
-                    score, service['status'] = get_service_status(result, service)
+                    score = set_service_status(result, service)
                     if service.get('essential', False):
                         max_score = max(max_score, score)
                     else:
