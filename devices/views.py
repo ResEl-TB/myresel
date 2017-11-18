@@ -260,9 +260,35 @@ class EditDeviceView(View):
                 machine.aliases[0] = alias
             else:
                 machine.aliases = [alias]
-            machine.save()
-            messages.success(request, _("L'alias de la machine a bien été modifié."))
-            return HttpResponseRedirect(reverse('gestion-machines:liste'))
+
+            try:
+                machine.save()
+                messages.success(request, _("L'alias de la machine a bien été modifié."))
+                return HttpResponseRedirect(reverse('gestion-machines:liste'))
+            except SaveError as e:
+                messages.error(
+                    request,
+                    _("Une erreur s'est produite lors de l'enregistrement."
+                    " Veuillez re-essayer plus tard"))
+                logger.error(
+                        "ERROR_SAVING_ALIAS: "
+                        "Erreur lors du changement de l'alias de la machine."
+                        "uid: {uid} "
+                        "hostname: {hostname} "
+                        "new alias: {alias} "
+                        "error: {error}".format(
+                            uid=request.user.username,
+                            alias=alias,
+                            hostname=hostname,
+                            error=e,),
+                        extra={
+                            "message_code": "ERROR_SAVING_ALIAS",
+                            "uid": request.user.username,
+                            "new_alias": alias,
+                            "device_hostname": hostname,
+                            "error": e,
+                        }
+                )
 
         return render(request, self.template_name, {'form': form})
 
