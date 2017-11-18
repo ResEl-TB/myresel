@@ -14,6 +14,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView
 from django.views.generic import View, ListView
 
+from ldapback.backends.ldap.base import SaveError
 from fonctions import ldap, network
 from fonctions.decorators import resel_required, unknown_machine
 from fonctions.network import get_campus
