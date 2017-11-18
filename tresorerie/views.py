@@ -276,8 +276,6 @@ class Pay(View):
             }
             user_lang = get_language().split('-')[0]
 
-            queue = django_rq.get_queue()
-
             logger.info(
                 "Paiement validé par le système, uid: %s, uuid: %s, stripe id : %s" %(request.ldap_user.uid, transaction.uuid, transaction.stripe_id),
                 extra={
@@ -290,20 +288,49 @@ class Pay(View):
             messages.success(request, _("Vous venez de payer votre accès au ResEl, vous devriez recevoir sous peu un email avec votre facture."))
 
             # Send a french version for treasurer and one in the user's language
-            if user_lang == 'fr':
-                queue.enqueue_call(
-                    async_tasks.generate_and_email_invoice,
-                    args=(user_datas, transaction_datas, 'fr', 'user-treasurer'),
+            try:
+                queue = django_rq.get_queue()
+                if user_lang == 'fr':
+                    queue.enqueue_call(
+                        async_tasks.generate_and_email_invoice,
+                        args=(user_datas, transaction_datas,
+                            'fr', 'user-treasurer'),
+                    )
+                else:
+                    queue.enqueue_call(
+                        async_tasks.generate_and_email_invoice,
+                        args=(user_datas, transaction_datas,
+                            'fr', 'treasurer'),
+                    )
+                    queue.enqueue_call(
+                        async_tasks.generate_and_email_invoice,
+                        args=(user_datas, transaction_datas,
+                            user_lang, 'user'),
+                    )
+            except Exception as e:
+                logger.error(
+                    "ERROR_ENQUEING_INVOICE: "
+                    "Une erreur s'est produite lors de l'ajout de la facture "
+                    "à la queue de facturation. L'utilisateur sera bien "
+                    "débité, mais il ne recevra pas de facture par mail. "
+                    "uid: %s "
+                    "uuid: %s "
+                    "stripe_id: %s "
+                    "error: %s " % (
+                        request.ldap_user.uid,
+                        transaction.uuid,
+                        transaction.stripe_id,
+                        e,
+                    ),
+                    extra={
+                        'uid': request.ldap_user.uid,
+                        'transaction_uuid': transaction.uuid,
+                        'transaction_stripe_id': transaction.stripe_id,
+                        'error': e,
+                        'message_code': 'ERROR_ENQUEING_INVOICE',
+                    }
                 )
-            else:
-                queue.enqueue_call(
-                    async_tasks.generate_and_email_invoice,
-                    args=(user_datas, transaction_datas, 'fr', 'treasurer'),
-                )
-                queue.enqueue_call(
-                    async_tasks.generate_and_email_invoice,
-                    args=(user_datas, transaction_datas, user_lang, 'user'),
-                )
+
 
             return HttpResponseRedirect(reverse('tresorerie:historique'))
 
