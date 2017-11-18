@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block css %}
+<link href="{% static 'css/home.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block titre %}{% trans 'Inscription ResEl' %}{% endblock %}
+
+{% block content %}
+<div>
+  <div>
+    <div class="home-fragment home-user-management">
+    </div>
+    <div class="home-fragment home-presentation">
+      <div class="container text-left article">
+        <div class="news-container">
+          <div class="panel-heading centered">
+            <h3 style="color: #2b669a;">
+              Comment s'inscrire au ResEl ?
+              <hr />
+            </h3>
+          </div>
+          <div class="panel-body" style="font-size:1.1em">
+            <h4>
+            {% trans "Avoir Internet au ResEl ? Rien de plus simple !" %}
+            </h4>
+            <p>
+              À votre arrivée sur le campus de l'IMT-Atlantique, vous pourrez vous connecter
+              sur le réseau Wi-Fi <b>ResEl Inscription</b> disponible dans toutes les
+              résidences. Rendez-vous ensuite sur la page
+              <a href="https://resel.fr">https://resel.fr</a> (si ce n'est pas
+              fait automatiquement). <b>Enfin suivez les instructions à l'écran</b>.
+            </p>
+            <p>
+            <b>Vous n'avez pas besoin de vous créer un compte auparavant !</b>
+              L'inscription est automatique, ne prend que 30 secondes et vous
+              aurez immédiatement accès à Internet sur l'ensemble du campus.
+            </p>
+            <p>
+            <b>Les 3 premières semaines sont gratuites</b>, à la suite de quoi vous devrez
+              régler vos <a href="{% url "tresorerie:prices" %}">frais d'accès</a> afin de continuer à avoir accès
+              à Internet via le ResEl.
+            <p>
+              {% trans "Vous pouvez également télécharger nos guides de connexion :" %}
+            </p>
+            <ul>
+              <li><a href="{% static "files/guide_connexion_BREST_2016.pdf" %}">
+                  {% trans "Guide connexion campus de Brest" %}</a>
+              </li>
+              <li><a href="{% static "files/guide_connexion_RENNES_2016.pdf" %}">
+                  {% trans "Guide connexion campus de Rennes" %}</a></li>
+            </ul>
+            <p>
+              Enfin, si vous désirez contribuer à l'amélioration du réseau, de l'association, en apprendre
+              sur le fonctionnement d'une telle infrastructure, faire du développement web ou tout simplement 
+              organiser des événements sur le thème de la tech, n'hésitez pas à 
+              <a href="{% url "become-admin" %}">devenir administrateur ResEl</a> !
+            <p>
+          </div><hr />
+          <div class="pieceofnews-footer">Les membres du ResEl</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
