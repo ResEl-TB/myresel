@@ -70,7 +70,7 @@ def get_mac(ip):
     if is_mac(mac):
         logger.warning(
            'ip address %s was found in arp table of web server, mac: %s' % (
-               ip, mac)
+               ip, mac),
             extra={
                 'ip_address': ip,
                 'mac_address': mac,
@@ -89,7 +89,7 @@ def get_mac(ip):
         mac = LdapDevice.get(ip=ip_suffix).mac_address
         logger.warning(
            'ip address %s was found in ldap (last ressort), mac: %s' % (
-               ip, mac)
+               ip, mac),
             extra={
                 'ip_address': ip,
                 'mac_address': mac,
