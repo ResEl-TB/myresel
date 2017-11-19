@@ -68,6 +68,14 @@ def get_mac(ip):
                                shell=True).communicate()[0]).split('\'')[1].split('\\n')[0]
 
     if is_mac(mac):
+        logger.warning(
+           'ip address %s was found in arp table of web server, mac: %s' % (
+               ip, mac)
+            extra={
+                'ip_address': ip,
+                'mac_address': mac,
+                'message_code': 'IP_FOUND_ARP_TABLE'}
+        )
         return mac
 
     logger.warning(
@@ -78,7 +86,16 @@ def get_mac(ip):
     try:
         from devices.models import LdapDevice
         ip_suffix = '.'.join(ip.split('.')[2:])
-        return LdapDevice.get(ip=ip_suffix).mac_address
+        mac = LdapDevice.get(ip=ip_suffix).mac_address
+        logger.warning(
+           'ip address %s was found in ldap (last ressort), mac: %s' % (
+               ip, mac)
+            extra={
+                'ip_address': ip,
+                'mac_address': mac,
+                'message_code': 'IP_FOUND_LDAP'}
+        )
+        return mac
     except ObjectDoesNotExist:
         raise NetworkError("The mac associated with the ip %s was not found in the ldap or in any arp table" % ip)
 
