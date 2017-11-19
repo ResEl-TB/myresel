@@ -21,7 +21,7 @@ from django.views.generic import RedirectView
 from django.views.generic import TemplateView
 from django.views.i18n import javascript_catalog
 from pages.views import Home, Contact, NewsListe, inscription_zone_info, FaqList, faqVote, NewsDetail, Services, \
-    unsecure_set_language, NewsRSS, NewsAtom, status_page_xhr
+    unsecure_set_language, NewsRSS, NewsAtom, StatusPageXhr
 
 from myresel import settings
 
@@ -69,7 +69,7 @@ urlpatterns = [
 
     # FIXME: For the moment we keep the API here, in the future we might make that
     # cleaner
-    url(r'^_api/v1/status/$', status_page_xhr, name='network-status-xhr'),
+    url(r'^_api/v1/status/$', StatusPageXhr.as_view(), name='network-status-xhr'),
 
     url(r'^$', Home.as_view(), name='home'),
 

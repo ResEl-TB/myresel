@@ -1,6 +1,12 @@
 from devices.models import LdapDevice
 from gestion_personnes.models import LdapUser
+from pages.views import StatusPageXhr
 
+def get_network_status():
+    services = StatusPageXhr.get_services()
+    services_status = StatusPageXhr.load_services_status(services)
+    return (services_status['global_status'],
+            services_status['global_status_text'])
 
 def resel_context(request):
     """
@@ -15,6 +21,7 @@ def resel_context(request):
 
     context['need_to_pay'] = False
     context['has_paid_cotiz'] = 'success'
+    context['i_network_status'], context['i_network_status_text'] = get_network_status()
     if request.user.is_authenticated():
         user = LdapUser.get(pk=request.user.username)
         context['need_to_pay'] = user.need_to_pay()

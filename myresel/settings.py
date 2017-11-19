@@ -122,6 +122,15 @@ CKEDITOR_CONFIGS = {
     },
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'super-banana-split',
+    }
+}
+ICINGA_SERVICES_CACHE_DURATION = 60 * 60
+ICINGA_STATUS_CACHE_DURATION = 60
+
 # Languages
 
 LANGUAGES = [

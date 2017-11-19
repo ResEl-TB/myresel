@@ -1,5 +1,6 @@
 {% load staticfiles %}
 {% load i18n %}
+{% load cache %}
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -171,7 +172,14 @@
                     </ul>
                 </li>
           <li>
-            <a href="{% url 'network-status' %}"><i class="fa fa-heartbeat fa-fw warning"></i></a>
+            {% cache 60 i_network_status %}
+            <a href="{% url 'network-status' %}" 
+              data-toggle="tooltip" 
+              data-placement="bottom" 
+              title="{{ i_network_status_text }}">
+              <i class="fa fa-heartbeat fa-fw {{ i_network_status }}"></i>
+            </a>
+            {% endcache %}
           </li>
         </ul>
         </div>
@@ -276,6 +284,9 @@
 <!-- Custom Theme JavaScript -->
 {#    <script src="{% static 'js/base.js' %}"></script>#}
 
+<!-- Custom Javascript -->
+{% block javascript %}{% endblock %}
+
 <!-- Piwik -->
 <script type="text/javascript">
     var _paq = _paq || [];
@@ -294,9 +305,6 @@
 </script>
 <noscript><p><img src="//stats.resel.fr/piwik.php?idsite=1" style="border:0;" alt="" /></p></noscript>
 <!-- End Piwik Code -->
-
-<!-- Custom Javascript -->
-{% block javascript %}{% endblock %}
 
 </body>
 </html>
