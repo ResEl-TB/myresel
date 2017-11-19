@@ -9,8 +9,6 @@ campuses:
       - start: internet-access
         end: zahia
       - start: zahia
-        end: network-core
-      - start: network-edge
         end: kuma
       - start: kuma
         end: network-access
@@ -301,8 +299,6 @@ campuses:
        - start: internet-access
          end: peach
        - start: peach
-         end: network-core
-       - start: network-edge
          end: pessac
        - start: pessac
          end: network-access

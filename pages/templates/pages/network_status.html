@@ -24,7 +24,7 @@
                 :href="'#' + campus.name"
                 class="btn btn-default" :class="{'btn-info': campus.name === current_campus}"
                 :disabled="!campus.enabled"
-                @click="set_campus(campus.name)"
+                @click="set_campus(campus.name, campus.enabled)"
                 >[[ campus.name | capitalize ]]</a>
           </div>
         </div>
@@ -32,7 +32,8 @@
     </div>
     <transition name="fade">
     <div class="card details" v-if="display_details" v-bind:style="{ left: details.left + 'px', top: details.top + 'px' }"
-    @mouseleave="hide_details()">
+    @mouseleave="hide_details(400)">
+      <div class="close" @click="hide_details(10)"><i class="fa fa-times"></i></div>
       <div class="details-status">
         <span class="fa fa-fw fa-circle" :class="details.status"></span> [[ details.status_text ]]
       </div>
@@ -63,14 +64,19 @@
         <div class="network-description">Internet</div>
         <div class="content card">
           <div v-for="service in getServices('internet-access')"
-               class="fa fa-cloud"
-               :class="[service.icon, service.status]"
                :id="service.name"
-          @mouseenter="show_details(service, $event)"></div>
+               @mouseenter="show_details(service, $event)">
+            <div
+               class="fa fa-cloud"
+               :class="[service.icon, service.status]"></div>
+            <div>
+              [[ service.title ]]
+            </div>
+          </div>
         </div>
       </div>
       <div id="network-edge">
-        <div class="network-description">Tête de réseau</div>
+        <div class="network-description">Tête</div>
         <div class="content">
           <div v-for="service in getServices('network-edge')"
                class="fa server"
@@ -84,32 +90,48 @@
         <div class="content">
           <div id="rescue-stack">
           <span v-for="service in getServices('rescue-stack')"
-                class="fa service"
-                :class="[service.icon, service.status]"
                 :id="service.name"
-                @mouseenter="show_details(service, $event)"></span>
+                @mouseenter="show_details(service, $event)">
+            <div
+                class="fa service"
+                :class="[service.icon, service.status]"></div>
+            <div>
+              [[ service.title ]]
+            </div>
           </div>
-          <span v-for="service in getServices('network-core')"
-               class="fa"
-               :class="[service.icon, service.status]"
+          <div v-for="service in getServices('network-core')"
                :id="service.name"
-               @mouseenter="show_details(service, $event)"></span>
+               @mouseenter="show_details(service, $event)">
+            <i class="fa" 
+               :class="[service.icon, service.status]"
+            ></i>
+          </div>
           <div id="main-stack">
-          <span v-for="service in getServices('main-stack')"
-                class="fa service"
-                :class="[service.icon, service.status]"
+          <div v-for="service in getServices('main-stack')"
                 :id="service.name"
-                @mouseenter="show_details(service, $event)"></span>
+                @mouseenter="show_details(service, $event)">
+            <div
+                class="fa service"
+                :class="[service.icon, service.status]"></div>
+            <div>
+              [[ service.title ]]
+            </div>
+          </div>
           </div></div>
 
       </div>
       <div id="network-access" class="content card" ref="#network-access">
         <div class="network-description">Accès</div>
-        <span v-for="service in getServices('network-access')"
-              class="fa service"
-              :class="[service.icon, service.status]"
+        <div v-for="service in getServices('network-access')"
               :id="service.name"
-              @mouseenter="show_details(service, $event)"></span>
+              @mouseenter="show_details(service, $event)">
+            <div
+                class="fa service"
+                :class="[service.icon, service.status]"></div>
+            <div>
+              [[ service.title ]]
+            </div>
+        </div>
       </div>
     </div>
     <div class="sep"></div>
@@ -126,7 +148,7 @@
     var app = new Vue({
       el: '#network-status-app',
       data: {
-        pulling_delta: 30000,
+        pulling_delta: 60000,
         current_campus: "brest",
         current_details: "",
         display_details: false,
@@ -178,14 +200,14 @@
           this.display_details = true
           this.mouse_hover_details = true
         },
-        hide_details: function () {
+        hide_details: function (wait) {
           that = this
           this.mouse_hover_details = false
           _.delay(function () {
             if (!that.mouse_hover_details) {
               that.display_details = false
             }
-          }, 400)
+          }, wait)
         },
         initPaths:  function () {
           this.$refs['svg1'].setAttribute('width', 0)
@@ -272,8 +294,10 @@
         getServices: function(category) {
           return this.services[category]
         },
-        set_campus: function(new_campus) {
-          this.current_campus = new_campus
+        set_campus: function(new_campus, enabled) {
+          if(enabled) {
+            this.current_campus = new_campus
+          }
         },
         pull_update: function() {
           var that = this

@@ -169,6 +169,7 @@ path {
 #network-edge {
     padding: 70px 35% 100px  35%;
     background-color: #f2f2f2;
+    text-align: center;
 }
 
 #network-edge .network-description {
@@ -176,6 +177,7 @@ path {
 }
 
 #network-edge .content {
+    grid-auto-columns: 60px;
 }
 
 #network-edge .server {
@@ -196,7 +198,7 @@ path {
 
 #network-core .content {
     display: grid;
-    grid-template-columns: 40% auto 40%;
+    grid-template-columns: 40% auto 60%;
     grid-gap: 15px;
     align-items: center;
 }
@@ -212,7 +214,7 @@ path {
     border-radius: 2px;
     box-shadow: 0px 0px 4px #8d8d8d;
     background-color: #ffffff;
-    padding: 0 5% 0 5%;
+    padding: 0 5% 16px 5%;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     text-align: center;
@@ -222,7 +224,7 @@ path {
     border-radius: 2px;
     box-shadow: 0px 0px 4px #8d8d8d;
     background-color: #ffffff;
-    padding: 0 5% 0 5%;
+    padding: 0 5% 16px 5%;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     text-align: center;
@@ -240,7 +242,7 @@ path {
 
 #network-access {
     margin: 100px auto 70px auto;
-    max-width: 420px;
+    max-width: 520px;
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     text-align: center;
