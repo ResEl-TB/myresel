@@ -88,8 +88,6 @@ NUMBER_NEWS_IN_HOME = 4
 HOME_RSS_LINK = "http://www.history.com/this-day-in-history/rss"
 FREE_DURATION = timedelta(days=3*7)
 
-# Cookies settings
-SESSION_COOKIE_AGE = 365 * 24 * 60 * 60
 
 #
 
@@ -161,7 +159,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'django.middleware.cache.UpdateCacheMiddleware',
+    # 'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -175,7 +173,7 @@ MIDDLEWARE = [
     'myresel.middleware.IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAResElAdminSoCheckTheLdapBeforeMiddleware',
     'myresel.middleware.NetworkConfiguration',
     'myresel.middleware.InscriptionNetworkHandler',
-    'django.middleware.cache.FetchFromCacheMiddleware',
+    # 'django.middleware.cache.FetchFromCacheMiddleware',
 ]
 
 ROOT_URLCONF = 'myresel.urls'
@@ -297,10 +295,13 @@ CACHES = {
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
             "PASSWORD": REDIS_PASSWORD,
+            "IGNORE_EXCEPTIONS": True,
         }
     }
 }
 CACHE_MIDDLEWARE_KEY_PREFIX = 'myresel_cache_'
+DJANGO_REDIS_LOG_IGNORED_EXCEPTIONS = True
+
 
 ####
 # SESSIONS management
@@ -309,6 +310,7 @@ CACHE_MIDDLEWARE_KEY_PREFIX = 'myresel_cache_'
 # Use redis as session cache
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
+SESSION_COOKIE_AGE = 365 * 24 * 60 * 60
 
 
 ####
