@@ -9,8 +9,6 @@ campuses:
       - start: internet-access
         end: zahia
       - start: zahia
-        end: network-core
-      - start: network-edge
         end: kuma
       - start: kuma
         end: network-access
@@ -26,8 +24,8 @@ campuses:
             - matahari
         - name: renater
           title: Connexion Renater
-          text: La connexion Renater est la connexion de secours du ResEl sur le campus de
-            Brest
+          text: La connexion Renater est la connexion de secours du ResEl 
+            sur le campus de Brest
           icon: fa-cloud
           essential: true
           _hosts:
@@ -36,14 +34,16 @@ campuses:
       network-edge:
         - name: zahia
           title: Firewall Zahia
-          text: Zahia est le firewall principal à Brest
+          text: Zahia est le firewall principal à Brest. Il permet de
+            contrôler l'accès à Internet.
           icon: fa-server
           essential: true
           _hosts:
             - zahia
         - name: matahari
           title: Firewall Matahari
-          text: Matahari est le firewall secondaire à Brest
+          text: Matahari est le firewall de secours à Brest. Au cas où
+            Zahia tombe en panne.
           icon: fa-server
           essential: true
           _hosts:
@@ -51,8 +51,8 @@ campuses:
       network-core:
         - name: kuma
           title: Routeur de coeur Kuma
-          text: Kuma est le routeur de coeur du campus de Brest, il permet de router les packets
-            entre les différents réseaux
+          text: Kuma est le routeur de coeur du campus de Brest, il permet de 
+            router les packets entre les différents réseaux du campus.
           icon: fa-circle-o
           essential: true
           _hosts:
@@ -60,21 +60,24 @@ campuses:
       rescue-stack:
         - name: radius2
           title: Radius de secours
-          text: Le radius de secours
+          text: Le radius de secours permet l'authentification Wi-Fi en
+            cas de panne du radius principal.
           icon: fa-wifi
           essential: false
           _hosts:
             - rescuerad
         - name: dhcp2
           title: DHCP de secours
-          text: Le dhcp de secours
+          text: Le dhcp de secours permet de transmettre les adresses
+            ip si le dhcp principal est en panne.
           icon: fa-legal
           essential: false
           _hosts:
             - braum
         - name: dns2
           title: DNS de secours
-          text: Le DNS de secours
+          text: Le DNS de secours permet de convertir les noms de domaine
+            en adresses IP si le serveurs principale est en panne.
           icon: fa-book
           essential: false
           _hosts:
@@ -82,35 +85,38 @@ campuses:
       main-stack:
         - name: radius
           title: RADIUS principal
-          text: Le RADIUS principal
+          text: Le RADIUS permet l'authentification Wi-Fi.
           icon: fa-wifi
           essential: true
           _hosts:
             - beowulf
         - name: dns
           title: DNS principal
-          text: Le DNS principal
+          text: Le DNS principal permet de convertir les noms de domaine
+            en adresses IP.
           icon: fa-book
           essential: true
           _hosts:
             - saymyname
         - name: dhcp
           title: DHCP principal
-          text: Le DHCP principal
+          text: Le DHCP principal permet de transmettre les adresses
+            IP aux appareils qui se connectent.
           icon: fa-legal
           essential: true
           _hosts:
             - saymyname
         - name: ldap
           title: LDAP
-          text: Le LDAP principal
+          text: Le LDAP est la base de données principale au ResEl.
           icon: fa-address-book
           essential: true
           _hosts:
             - beaune
         - name: mysql
           title: MariaDB
-          text: Le MariaDB principal
+          text: La base de données MariaDB contient toutes les informations
+            non-essentielles au fonctionnement du ResEl.
           icon: fa-database
           essential: false
           _hosts:
@@ -118,7 +124,8 @@ campuses:
             - maia
         - name: monitoring
           title: Monitoring
-          text: Le monitoring principal
+          text: Les services de monitoring permettent aux administrateurs de
+            bien vérifier l'état du réseau.
           icon: fa-area-chart
           essential: false
           _hosts:
@@ -126,7 +133,8 @@ campuses:
             - eris
         - name: web
           title: Les sites web
-          text: Le web principal
+          text: Le ResEl héberge différents services web afin de faciliter
+            les opérations de l'associations et des clubs.
           icon: fa-internet-explorer
           essential: false
           _hosts:
@@ -135,14 +143,14 @@ campuses:
             - teia
         - name: tv
           title: Les services TV
-          text: Le tv principal
+          text: Le service de télévision est hébergé sur deux machines.
           icon: fa-television
           essential: false
           _hosts:
             - foucault
             - reychnam
         - name: backup
-          title: Le système de backup
+          title: Le système de backup est essentiel en cas d'incident majeur.
           text: Le backup principal
           icon: fa-floppy-o
           essential: false
@@ -150,14 +158,15 @@ campuses:
             - padova
         - name: mail
           title: Le système de mail
-          text: Le mail principal
+          text: Le service de couriel permet l'hébergement des listes de
+            diffusions essentiels aux clubs du campus.
           icon: fa-envelope
           essential: false
           _hosts:
             - luigi
             - toad
         - name: garbage
-          title: Le système de garbage
+          title: Le garbage
           text: Le garbage principal
           icon: fa-film
           essential: false
@@ -176,7 +185,7 @@ campuses:
            - ap-i1-02
         - name: i2
           title: Bâtiment I2
-          text: Switch d'accès au I1 et bornes Wi-Fi du I1
+          text: Switch d'accès au I2 et bornes Wi-Fi du I2
           icon: fa-building building
           essential: false
           _hosts:
@@ -186,7 +195,7 @@ campuses:
            - ap-i2-02
         - name: i3
           title: Bâtiment I3
-          text: Switch d'accès au I1 et bornes Wi-Fi du I1
+          text: Switch d'accès au I3 et bornes Wi-Fi du I3
           icon: fa-building building
           essential: false
           _hosts:
@@ -196,7 +205,7 @@ campuses:
            - ap-i3-02
         - name: i4
           title: Bâtiment I4
-          text: Switch d'accès au I1 et bornes Wi-Fi du I1
+          text: Switch d'accès au I4 et bornes Wi-Fi du I4
           icon: fa-building building
           essential: false
           _hosts:
@@ -207,7 +216,7 @@ campuses:
            - ap-i4-03
         - name: i5
           title: Bâtiment I5
-          text: Switch d'accès au I1 et bornes Wi-Fi du I1
+          text: Switch d'accès au I5 et bornes Wi-Fi du I5
           icon: fa-building building
           essential: false
           _hosts:
@@ -217,7 +226,7 @@ campuses:
            - ap-i5-02
         - name: i6
           title: Bâtiment I6
-          text: Switch d'accès au I1 et bornes Wi-Fi du I1
+          text: Switch d'accès au I6 et bornes Wi-Fi du I6
           icon: fa-building building
           essential: false
           _hosts:
@@ -227,7 +236,7 @@ campuses:
            - ap-i6-02
         - name: i7
           title: Bâtiment I7
-          text: Switch d'accès au I1 et bornes Wi-Fi du I1
+          text: Switch d'accès au I7 et bornes Wi-Fi du I7
           icon: fa-building building
           essential: false
           _hosts:
@@ -237,7 +246,7 @@ campuses:
            - ap-i7-02
         - name: i8
           title: Bâtiment I8
-          text: Switch d'accès au I1 et bornes Wi-Fi du I1
+          text: Switch d'accès au I8 et bornes Wi-Fi du I8
           icon: fa-building building
           essential: false
           _hosts:
@@ -248,7 +257,7 @@ campuses:
            - ap-i8-03
         - name: i9
           title: Bâtiment I9
-          text: Switch d'accès au I1 et bornes Wi-Fi du I1
+          text: Switch d'accès au I1 et bornes Wi-Fi du I9
           icon: fa-building building
           essential: false
           _hosts:
@@ -259,7 +268,7 @@ campuses:
            - ap-i9-03
         - name: i10
           title: Bâtiment I10
-          text: Switch d'accès au I1 et bornes Wi-Fi du I1
+          text: Switch d'accès au I10 et bornes Wi-Fi du I10
           icon: fa-building building
           essential: false
           _hosts:
@@ -268,7 +277,7 @@ campuses:
            - ap-i10-02
         - name: i11
           title: Bâtiment I11
-          text: Switch d'accès au I1 et bornes Wi-Fi du I1
+          text: Switch d'accès au I11 et bornes Wi-Fi du I11
           icon: fa-building building
           essential: false
           _hosts:
@@ -278,7 +287,7 @@ campuses:
            - ap-i11-02
         - name: i12
           title: Bâtiment I12
-          text: Switch d'accès au I1 et bornes Wi-Fi du I1
+          text: Switch d'accès au I12 et bornes Wi-Fi du I12
           icon: fa-building building
           essential: false
           _hosts:
@@ -286,7 +295,7 @@ campuses:
            - ap-i12-01
         - name: foyer
           title: Foyer
-          text: Switch d'accès au I1 et bornes Wi-Fi du I1
+          text: Switch d'accès au foyer et bornes Wi-Fi du foyer.
           icon: fa-building building
           essential: false
           _hosts:
@@ -301,8 +310,6 @@ campuses:
        - start: internet-access
          end: peach
        - start: peach
-         end: network-core
-       - start: network-edge
          end: pessac
        - start: pessac
          end: network-access
@@ -326,7 +333,7 @@ campuses:
        network-edge:
          - name: peach
            title: Firewall Peach
-           text: Peach est le firewall principal à Rennes
+           text: Peach l'unique mur-de-feu du campus de Rennes.
            icon: fa-server
            essential: true
            _hosts:
@@ -334,7 +341,7 @@ campuses:
        network-core:
          - name: pessac
            title: Routeur de coeur Pessac
-           text: Kuma est le routeur de coeur du campus de Brest, il permet de router les packets
+           text: Pessac est le routeur de coeur du campus de Rennes, il permet de router les packets
              entre les différents réseaux
            icon: fa-circle-o
            essential: true

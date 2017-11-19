@@ -2,6 +2,10 @@
 import logging
 import random
 
+import yaml
+import json
+import requests
+
 from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
@@ -17,6 +21,8 @@ from django.views.i18n import set_language
 from django.utils import timezone
 from django.contrib.syndication.views import Feed
 from django.utils.feedgenerator import Atom1Feed
+from django.views.decorators.cache import cache_page
+from django.core.cache import cache
 
 from fonctions import network, decorators
 from fonctions.decorators import resel_required
@@ -297,11 +303,10 @@ def unsecure_set_language(request):
     """ set_language without a csrf """
     return set_language(request)
 
-def status_page_xhr(request):
-    import yaml
-    import json
-    import requests
+# @cache_page(30)
+class StatusPageXhr(View):
 
+    @staticmethod
     def set_service_status(icinga_rsp, service):
         max_score = 0
 
@@ -314,7 +319,7 @@ def status_page_xhr(request):
             if icn_service['joins']['host']['name'] in service.get('_hosts', []):
                 max_score = max(max_score, icn_service['attrs']['state'])
 
-        cleanup(service)
+        StatusPageXhr.cleanup(service)
         if max_score == 0:
             service['status_text'] = 'Système nominal'
             service['status'] = 'success'
@@ -328,42 +333,13 @@ def status_page_xhr(request):
             service['status'] = 'danger'
             return max_score
 
-    def cleanup(service, mangle=False):
-        internals = []
-        for k in service:
-            if k.startswith('_'):
-                internals.append(k)
-        for k in internals:
-            del service[k]
-
-
-    with open('myresel/icinga_status.yml', 'r') as document:
-        try:
-            r = requests.post(
-                url=settings.ICINGA_BASE_URL + "/v1/objects/services",
-                auth=settings.ICINGA_AUTH,
-                headers={
-                    'Accept': 'application/json',
-                    'X-HTTP-Method-Override': 'GET',
-                },
-                data='{ "joins": [ "host.name", "host.address" ], "attrs": [ "name", "state", "downtime_depth", "acknowledgement" ], "filter": "service.state != ServiceOK && service.downtime_depth == 0.0 && service.acknowledgement == 0.0" }'
-            )
-            if r.status_code != 200:
-                raise ValueError('Icinga responded with %i status code' % r.status_code)
-            result = r.json()
-        except (requests.exceptions.RequestException, ValueError, TypeError) as err:
-            # TODO: create a nice fallback template
-            logger.error("Could not load icinga, "
-                         "loading default configuration instead: %s " % err)
-            result = {"results":[{"attrs":{"acknowledgement":0.0,"downtime_depth":0.0,"name":"cluster","state":2.0},"joins":{"host":{"address":"172.22.2.87","name":"eris"}},"meta":{},"name":"eris!cluster","type":"Service"},{"attrs":{"acknowledgement":0.0,"downtime_depth":0.0,"name":"cluster-zone-rennes","state":2.0},"joins":{"host":{"address":"172.22.2.87","name":"eris"}},"meta":{},"name":"eris!cluster-zone-rennes","type":"Service"},{"attrs":{"acknowledgement":0.0,"downtime_depth":0.0,"name":"ssh","state":2.0},"joins":{"host":{"address":"172.22.1.112","name":"ap-i11-02"}},"meta":{},"name":"ap-i11-02!ssh","type":"Service"},{"attrs":{"acknowledgement":0.0,"downtime_depth":0.0,"name":"ntp","state":2.0},"joins":{"host":{"address":"172.22.205.153","name":"azathoth"}},"meta":{},"name":"azathoth!ntp","type":"Service"},{"attrs":{"acknowledgement":0.0,"downtime_depth":0.0,"name":"http","state":1.0},"joins":{"host":{"address":"dgsi.adm.resel.fr","name":"cacti.resel.fr"}},"meta":{},"name":"cacti.resel.fr!http","type":"Service"},{"attrs":{"acknowledgement":0.0,"downtime_depth":0.0,"name":"http_reverse","state":1.0},"joins":{"host":{"address":"dgsi.adm.resel.fr","name":"cacti.resel.fr"}},"meta":{},"name":"cacti.resel.fr!http_reverse","type":"Service"},{"attrs":{"acknowledgement":0.0,"downtime_depth":0.0,"name":"ssh","state":2.0},"joins":{"host":{"address":"172.23.2.82","name":"cadillac"}},"meta":{},"name":"cadillac!ssh","type":"Service"},{"attrs":{"acknowledgement":0.0,"downtime_depth":0.0,"name":"disks","state":3.0},"joins":{"host":{"address":"172.23.2.82","name":"cadillac"}},"meta":{},"name":"cadillac!disks","type":"Service"},{"attrs":{"acknowledgement":0.0,"downtime_depth":0.0,"name":"load","state":3.0},"joins":{"host":{"address":"172.23.2.82","name":"cadillac"}},"meta":{},"name":"cadillac!load","type":"Service"},{"attrs":{"acknowledgement":0.0,"downtime_depth":0.0,"name":"apt","state":3.0},"joins":{"host":{"address":"172.23.2.82","name":"cadillac"}},"meta":{},"name":"cadillac!apt","type":"Service"},{"attrs":{"acknowledgement":0.0,"downtime_depth":0.0,"name":"ntp","state":2.0},"joins":{"host":{"address":"172.23.2.82","name":"cadillac"}},"meta":{},"name":"cadillac!ntp","type":"Service"},{"attrs":{"acknowledgement":0.0,"downtime_depth":0.0,"name":"processes","state":3.0},"joins":{"host":{"address":"172.23.2.82","name":"cadillac"}},"meta":{},"name":"cadillac!processes","type":"Service"},{"attrs":{"acknowledgement":0.0,"downtime_depth":0.0,"name":"entropy","state":3.0},"joins":{"host":{"address":"172.23.2.82","name":"cadillac"}},"meta":{},"name":"cadillac!entropy","type":"Service"},{"attrs":{"acknowledgement":0.0,"downtime_depth":0.0,"name":"ssh","state":2.0},"joins":{"host":{"address":"172.23.0.10","name":"erdgardpoe"}},"meta":{},"name":"erdgardpoe!ssh","type":"Service"},{"attrs":{"acknowledgement":0.0,"downtime_depth":0.0,"name":"flea-rqworker","state":1.0},"joins":{"host":{"address":"172.22.2.124","name":"flea"}},"meta":{},"name":"flea!flea-rqworker","type":"Service"},{"attrs":{"acknowledgement":0.0,"downtime_depth":0.0,"name":"mysql","state":2.0},"joins":{"host":{"address":"lena.adm.resel.fr","name":"lena"}},"meta":{},"name":"lena!mysql","type":"Service"},{"attrs":{"acknowledgement":0.0,"downtime_depth":0.0,"name":"postgres","state":2.0},"joins":{"host":{"address":"lena.adm.resel.fr","name":"lena"}},"meta":{},"name":"lena!postgres","type":"Service"},{"attrs":{"acknowledgement":0.0,"downtime_depth":0.0,"name":"apt","state":2.0},"joins":{"host":{"address":"172.22.2.144","name":"luigi"}},"meta":{},"name":"luigi!apt","type":"Service"},{"attrs":{"acknowledgement":0.0,"downtime_depth":0.0,"name":"processes","state":2.0},"joins":{"host":{"address":"172.22.2.144","name":"luigi"}},"meta":{},"name":"luigi!processes","type":"Service"},{"attrs":{"acknowledgement":0.0,"downtime_depth":0.0,"name":"apt","state":2.0},"joins":{"host":{"address":"maia.adm.resel.fr","name":"maia"}},"meta":{},"name":"maia!apt","type":"Service"},{"attrs":{"acknowledgement":0.0,"downtime_depth":0.0,"name":"http","state":1.0},"joins":{"host":{"address":"dgsi.adm.resel.fr","name":"munin.resel.fr"}},"meta":{},"name":"munin.resel.fr!http","type":"Service"},{"attrs":{"acknowledgement":0.0,"downtime_depth":0.0,"name":"disks","state":2.0},"joins":{"host":{"address":"172.22.2.55","name":"neko"}},"meta":{},"name":"neko!disks","type":"Service"},{"attrs":{"acknowledgement":0.0,"downtime_depth":0.0,"name":"backuppc-status","state":1.0},"joins":{"host":{"address":"172.22.2.5","name":"padova"}},"meta":{},"name":"padova!backuppc-status","type":"Service"},{"attrs":{"acknowledgement":0.0,"downtime_depth":0.0,"name":"http","state":2.0},"joins":{"host":{"address":"sonic.adm.resel.fr","name":"proxmox-rennes.resel.fr"}},"meta":{},"name":"proxmox-rennes.resel.fr!http","type":"Service"},{"attrs":{"acknowledgement":0.0,"downtime_depth":0.0,"name":"processes","state":2.0},"joins":{"host":{"address":"172.22.2.222","name":"rat"}},"meta":{},"name":"rat!processes","type":"Service"},{"attrs":{"acknowledgement":0.0,"downtime_depth":0.0,"name":"disks","state":3.0},"joins":{"host":{"address":"172.22.2.116","name":"rescuerad"}},"meta":{},"name":"rescuerad!disks","type":"Service"},{"attrs":{"acknowledgement":0.0,"downtime_depth":0.0,"name":"load","state":3.0},"joins":{"host":{"address":"172.22.2.116","name":"rescuerad"}},"meta":{},"name":"rescuerad!load","type":"Service"},{"attrs":{"acknowledgement":0.0,"downtime_depth":0.0,"name":"apt","state":3.0},"joins":{"host":{"address":"172.22.2.116","name":"rescuerad"}},"meta":{},"name":"rescuerad!apt","type":"Service"},{"attrs":{"acknowledgement":0.0,"downtime_depth":0.0,"name":"processes","state":3.0},"joins":{"host":{"address":"172.22.2.116","name":"rescuerad"}},"meta":{},"name":"rescuerad!processes","type":"Service"},{"attrs":{"acknowledgement":0.0,"downtime_depth":0.0,"name":"entropy","state":3.0},"joins":{"host":{"address":"172.22.2.116","name":"rescuerad"}},"meta":{},"name":"rescuerad!entropy","type":"Service"},{"attrs":{"acknowledgement":0.0,"downtime_depth":0.0,"name":"disks","state":1.0},"joins":{"host":{"address":"172.22.2.51","name":"toad"}},"meta":{},"name":"toad!disks","type":"Service"},{"attrs":{"acknowledgement":0.0,"downtime_depth":0.0,"name":"http","state":2.0},"joins":{"host":{"address":"vegeta.adm.resel.fr","name":"tv.resel.fr"}},"meta":{},"name":"tv.resel.fr!http","type":"Service"},{"attrs":{"acknowledgement":0.0,"downtime_depth":0.0,"name":"http_reverse","state":2.0},"joins":{"host":{"address":"vegeta.adm.resel.fr","name":"tv.resel.fr"}},"meta":{},"name":"tv.resel.fr!http_reverse","type":"Service"}]}
-
-        services = yaml.load(document)
-
+    @staticmethod
+    def calc_scores(services, result):
         max_score = 0
         for campus in services['campuses']:
             for section in campus['services']:
                 for service in campus['services'][section]:
-                    score = set_service_status(result, service)
+                    score = StatusPageXhr.set_service_status(result, service)
                     if service.get('essential', False):
                         max_score = max(max_score, score)
                     else:
@@ -383,5 +359,72 @@ def status_page_xhr(request):
                 "Des incidents majeurs sont en cours. "
                 "L'accès à Internet est perturbé")
 
-        return HttpResponse(json.dumps(services), content_type='application/json')
+    @staticmethod
+    def cleanup(service, mangle=False):
+        internals = []
+        for k in service:
+            if k.startswith('_'):
+                internals.append(k)
+        for k in internals:
+            del service[k]
+
+    @staticmethod
+    def get_services():
+        services = cache.get('icinga_services')
+        if services is not None:
+            return services
+        with open('myresel/icinga_status.yml', 'r') as doc:
+            services = yaml.load(doc)
+            cache.set('icinga_services',
+                      services,
+                      settings.ICINGA_SERVICES_CACHE_DURATION)
+            return services
+
+    @staticmethod
+    def load_services_status(services):
+        result = cache.get('icinga_services_status')
+        if result is not None:
+            return result
+        try:
+            r = requests.post(
+                url=settings.ICINGA_BASE_URL + "/v1/objects/services",
+                auth=settings.ICINGA_AUTH,
+                headers={
+                    'Accept': 'application/json',
+                    'X-HTTP-Method-Override': 'GET',
+                },
+                data=json.dumps({
+                    "joins": [ "host.name", "host.address" ],
+                    "attrs": [
+                        "name",
+                        "state",
+                        "downtime_depth",
+                        "acknowledgement"
+                    ],
+                    "filter": ("service.state != ServiceOK && "
+                        "service.downtime_depth == 0.0 && "
+                        "service.acknowledgement == 0.0")
+                })
+            )
+            if r.status_code != 200:
+                raise ValueError('Icinga responded with %i status code' % r.status_code)
+            result = r.json()
+        except (requests.exceptions.RequestException, ValueError, TypeError) as err:
+            # TODO: create a nice fallback template
+            logger.error("Could not load icinga, "
+                         "loading default configuration instead: %s " % err)
+            result = {}
+            with open('myresel/icinga_dummy_resp.yml', 'r') as dummy_resp:
+                result = yaml.load(dummy_resp)
+        StatusPageXhr.calc_scores(services, result)
+        cache.set('icinga_services_status',
+                  services,
+                  settings.ICINGA_STATUS_CACHE_DURATION)
+
+        return services
+
+    def get(self, request):
+        services = self.get_services()
+        services_status = self.load_services_status(services)
+        return HttpResponse(json.dumps(services_status), content_type='application/json')
 
