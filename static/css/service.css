@@ -85,7 +85,7 @@ Class is visible
 }
 
 .service-wrapper {
-   background-color: rgb(25, 101, 139);
+   background-color: rgba(247, 247, 247);
    width: 100%;
    box-shadow: 0px 2px 10px black inset;
 }
@@ -102,6 +102,7 @@ Class is visible
     border-radius: 3px;
     animation-name: description-animation-left;
     animation-duration: 2s;
+    box-shadow: 0px 0px 8px rgb(200, 200, 200);
 
 }
 
@@ -110,6 +111,7 @@ Class is visible
     border-radius: 3px;
     animation-name: description-animation-right;
     animation-duration: 2s;
+    box-shadow: 0px 0px 8px rgb(200, 200, 200);
 
 }
 
@@ -137,7 +139,6 @@ Class is visible
 }
 
 .service-title {
-    font-weight: bold;
     text-align: center;
     border-bottom: 1px solid #eaeaea;
 }
@@ -147,7 +148,7 @@ Class is visible
 }
 
 .service-content h2 {
-   font-size: 1.1em;
+    font-size: 1.7em;
 }
 
 @media screen and (max-width: 992px)  {

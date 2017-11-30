@@ -103,7 +103,7 @@ class NewClub(FormView):
                 pass
             logo.save(path+form.cleaned_data['cn']+".png", "PNG")
             form.cleaned_data['logo'] = form.cleaned_data['cn']+".png"
-        form.create_club(self.request.ldap_user.pk)
+        form.create_club()
         pk = None
         return super(NewClub, self).form_valid(form)
 

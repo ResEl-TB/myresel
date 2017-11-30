@@ -1,0 +1,399 @@
+---
+results:
+- attrs:
+    acknowledgement: 0
+    downtime_depth: 0
+    name: cluster
+    state: 2
+  joins:
+    host:
+      address: 172.22.2.87
+      name: eris
+  meta: {}
+  name: eris!cluster
+  type: Service
+- attrs:
+    acknowledgement: 0
+    downtime_depth: 0
+    name: cluster-zone-rennes
+    state: 2
+  joins:
+    host:
+      address: 172.22.2.87
+      name: eris
+  meta: {}
+  name: eris!cluster-zone-rennes
+  type: Service
+- attrs:
+    acknowledgement: 0
+    downtime_depth: 0
+    name: ssh
+    state: 2
+  joins:
+    host:
+      address: 172.22.1.112
+      name: ap-i11-02
+  meta: {}
+  name: ap-i11-02!ssh
+  type: Service
+- attrs:
+    acknowledgement: 0
+    downtime_depth: 0
+    name: ntp
+    state: 2
+  joins:
+    host:
+      address: 172.22.205.153
+      name: azathoth
+  meta: {}
+  name: azathoth!ntp
+  type: Service
+- attrs:
+    acknowledgement: 0
+    downtime_depth: 0
+    name: http
+    state: 1
+  joins:
+    host:
+      address: dgsi.adm.resel.fr
+      name: cacti.resel.fr
+  meta: {}
+  name: cacti.resel.fr!http
+  type: Service
+- attrs:
+    acknowledgement: 0
+    downtime_depth: 0
+    name: http_reverse
+    state: 1
+  joins:
+    host:
+      address: dgsi.adm.resel.fr
+      name: cacti.resel.fr
+  meta: {}
+  name: cacti.resel.fr!http_reverse
+  type: Service
+- attrs:
+    acknowledgement: 0
+    downtime_depth: 0
+    name: ssh
+    state: 2
+  joins:
+    host:
+      address: 172.23.2.82
+      name: cadillac
+  meta: {}
+  name: cadillac!ssh
+  type: Service
+- attrs:
+    acknowledgement: 0
+    downtime_depth: 0
+    name: disks
+    state: 3
+  joins:
+    host:
+      address: 172.23.2.82
+      name: cadillac
+  meta: {}
+  name: cadillac!disks
+  type: Service
+- attrs:
+    acknowledgement: 0
+    downtime_depth: 0
+    name: load
+    state: 3
+  joins:
+    host:
+      address: 172.23.2.82
+      name: cadillac
+  meta: {}
+  name: cadillac!load
+  type: Service
+- attrs:
+    acknowledgement: 0
+    downtime_depth: 0
+    name: apt
+    state: 3
+  joins:
+    host:
+      address: 172.23.2.82
+      name: cadillac
+  meta: {}
+  name: cadillac!apt
+  type: Service
+- attrs:
+    acknowledgement: 0
+    downtime_depth: 0
+    name: ntp
+    state: 2
+  joins:
+    host:
+      address: 172.23.2.82
+      name: cadillac
+  meta: {}
+  name: cadillac!ntp
+  type: Service
+- attrs:
+    acknowledgement: 0
+    downtime_depth: 0
+    name: processes
+    state: 3
+  joins:
+    host:
+      address: 172.23.2.82
+      name: cadillac
+  meta: {}
+  name: cadillac!processes
+  type: Service
+- attrs:
+    acknowledgement: 0
+    downtime_depth: 0
+    name: entropy
+    state: 3
+  joins:
+    host:
+      address: 172.23.2.82
+      name: cadillac
+  meta: {}
+  name: cadillac!entropy
+  type: Service
+- attrs:
+    acknowledgement: 0
+    downtime_depth: 0
+    name: ssh
+    state: 2
+  joins:
+    host:
+      address: 172.23.0.10
+      name: erdgardpoe
+  meta: {}
+  name: erdgardpoe!ssh
+  type: Service
+- attrs:
+    acknowledgement: 0
+    downtime_depth: 0
+    name: flea-rqworker
+    state: 1
+  joins:
+    host:
+      address: 172.22.2.124
+      name: flea
+  meta: {}
+  name: flea!flea-rqworker
+  type: Service
+- attrs:
+    acknowledgement: 0
+    downtime_depth: 0
+    name: mysql
+    state: 2
+  joins:
+    host:
+      address: lena.adm.resel.fr
+      name: lena
+  meta: {}
+  name: lena!mysql
+  type: Service
+- attrs:
+    acknowledgement: 0
+    downtime_depth: 0
+    name: postgres
+    state: 2
+  joins:
+    host:
+      address: lena.adm.resel.fr
+      name: lena
+  meta: {}
+  name: lena!postgres
+  type: Service
+- attrs:
+    acknowledgement: 0
+    downtime_depth: 0
+    name: apt
+    state: 2
+  joins:
+    host:
+      address: 172.22.2.144
+      name: luigi
+  meta: {}
+  name: luigi!apt
+  type: Service
+- attrs:
+    acknowledgement: 0
+    downtime_depth: 0
+    name: processes
+    state: 2
+  joins:
+    host:
+      address: 172.22.2.144
+      name: luigi
+  meta: {}
+  name: luigi!processes
+  type: Service
+- attrs:
+    acknowledgement: 0
+    downtime_depth: 0
+    name: apt
+    state: 2
+  joins:
+    host:
+      address: maia.adm.resel.fr
+      name: maia
+  meta: {}
+  name: maia!apt
+  type: Service
+- attrs:
+    acknowledgement: 0
+    downtime_depth: 0
+    name: http
+    state: 1
+  joins:
+    host:
+      address: dgsi.adm.resel.fr
+      name: munin.resel.fr
+  meta: {}
+  name: munin.resel.fr!http
+  type: Service
+- attrs:
+    acknowledgement: 0
+    downtime_depth: 0
+    name: disks
+    state: 2
+  joins:
+    host:
+      address: 172.22.2.55
+      name: neko
+  meta: {}
+  name: neko!disks
+  type: Service
+- attrs:
+    acknowledgement: 0
+    downtime_depth: 0
+    name: backuppc-status
+    state: 1
+  joins:
+    host:
+      address: 172.22.2.5
+      name: padova
+  meta: {}
+  name: padova!backuppc-status
+  type: Service
+- attrs:
+    acknowledgement: 0
+    downtime_depth: 0
+    name: http
+    state: 2
+  joins:
+    host:
+      address: sonic.adm.resel.fr
+      name: proxmox-rennes.resel.fr
+  meta: {}
+  name: proxmox-rennes.resel.fr!http
+  type: Service
+- attrs:
+    acknowledgement: 0
+    downtime_depth: 0
+    name: processes
+    state: 2
+  joins:
+    host:
+      address: 172.22.2.222
+      name: rat
+  meta: {}
+  name: rat!processes
+  type: Service
+- attrs:
+    acknowledgement: 0
+    downtime_depth: 0
+    name: disks
+    state: 3
+  joins:
+    host:
+      address: 172.22.2.116
+      name: rescuerad
+  meta: {}
+  name: rescuerad!disks
+  type: Service
+- attrs:
+    acknowledgement: 0
+    downtime_depth: 0
+    name: load
+    state: 3
+  joins:
+    host:
+      address: 172.22.2.116
+      name: rescuerad
+  meta: {}
+  name: rescuerad!load
+  type: Service
+- attrs:
+    acknowledgement: 0
+    downtime_depth: 0
+    name: apt
+    state: 3
+  joins:
+    host:
+      address: 172.22.2.116
+      name: rescuerad
+  meta: {}
+  name: rescuerad!apt
+  type: Service
+- attrs:
+    acknowledgement: 0
+    downtime_depth: 0
+    name: processes
+    state: 3
+  joins:
+    host:
+      address: 172.22.2.116
+      name: rescuerad
+  meta: {}
+  name: rescuerad!processes
+  type: Service
+- attrs:
+    acknowledgement: 0
+    downtime_depth: 0
+    name: entropy
+    state: 3
+  joins:
+    host:
+      address: 172.22.2.116
+      name: rescuerad
+  meta: {}
+  name: rescuerad!entropy
+  type: Service
+- attrs:
+    acknowledgement: 0
+    downtime_depth: 0
+    name: disks
+    state: 1
+  joins:
+    host:
+      address: 172.22.2.51
+      name: toad
+  meta: {}
+  name: toad!disks
+  type: Service
+- attrs:
+    acknowledgement: 0
+    downtime_depth: 0
+    name: http
+    state: 2
+  joins:
+    host:
+      address: vegeta.adm.resel.fr
+      name: tv.resel.fr
+  meta: {}
+  name: tv.resel.fr!http
+  type: Service
+- attrs:
+    acknowledgement: 0
+    downtime_depth: 0
+    name: http_reverse
+    state: 2
+  joins:
+    host:
+      address: vegeta.adm.resel.fr
+      name: tv.resel.fr
+  meta: {}
+  name: tv.resel.fr!http_reverse
+  type: Service
+

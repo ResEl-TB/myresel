@@ -20,7 +20,8 @@ from django.contrib.auth import views as auth_views
 from django.views.generic import RedirectView
 from django.views.generic import TemplateView
 from django.views.i18n import javascript_catalog
-from pages.views import Home, Contact, NewsListe, inscription_zone_info, FaqList, faqVote, NewsDetail, Services, unsecure_set_language, NewsRSS, NewsAtom
+from pages.views import Home, Contact, NewsListe, inscription_zone_info, FaqList, faqVote, NewsDetail, Services, \
+    unsecure_set_language, NewsRSS, NewsAtom, StatusPageXhr
 
 from myresel import settings
 
@@ -62,10 +63,19 @@ urlpatterns = [
     url(r'^favicon.ico', RedirectView.as_view(url='/static/images/icons/favicon-96x96.png', permanent=False), name="favicon"),
 
     url(r'^help-needed/', TemplateView.as_view(template_name='help_needed.html'), name="help-needed"),
+    url(r'^how-to-signup', TemplateView.as_view(template_name='pages/how_to_signup.html'), name="how-to-signup"),
     url(r'^become/$', TemplateView.as_view(template_name='pages/become_admin.html'), name='become-admin'),
+    url(r'^status/$', TemplateView.as_view(template_name='pages/network_status.html'), name='network-status'),
     url(r'^wp-login.php$', TemplateView.as_view(template_name='418.html'), name='418'),
 
+    # FIXME: For the moment we keep the API here, in the future we might make that
+    # cleaner
+    url(r'^_api/v1/status/$', StatusPageXhr.as_view(), name='network-status-xhr'),
+
     url(r'^$', Home.as_view(), name='home'),
+
+
+
 ]
 
 if settings.DEBUG:

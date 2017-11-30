@@ -2,6 +2,10 @@
 import logging
 import random
 
+import yaml
+import json
+import requests
+
 from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
@@ -17,6 +21,8 @@ from django.views.i18n import set_language
 from django.utils import timezone
 from django.contrib.syndication.views import Feed
 from django.utils.feedgenerator import Atom1Feed
+from django.views.decorators.cache import cache_page
+from django.core.cache import cache
 
 from fonctions import network, decorators
 from fonctions.decorators import resel_required
@@ -296,3 +302,129 @@ def faqVote(request):
 def unsecure_set_language(request):
     """ set_language without a csrf """
     return set_language(request)
+
+# @cache_page(30)
+class StatusPageXhr(View):
+
+    @staticmethod
+    def set_service_status(icinga_rsp, service):
+        max_score = 0
+
+        if service.get('_hosts', None) is None:
+            service['status_text'] = 'Pas de métriques'
+            service['status'] = 'default'
+            return -1
+
+        for icn_service in icinga_rsp['results']:
+            if icn_service['joins']['host']['name'] in service.get('_hosts', []):
+                max_score = max(max_score, icn_service['attrs']['state'])
+
+        StatusPageXhr.cleanup(service)
+        if max_score == 0:
+            service['status_text'] = 'Système nominal'
+            service['status'] = 'success'
+            return max_score
+        elif max_score == 1:
+            service['status_text'] = 'Incidents mineurs'
+            service['status'] = 'warning'
+            return max_score
+        else:
+            service['status_text'] = 'Incidents majeurs'
+            service['status'] = 'danger'
+            return max_score
+
+    @staticmethod
+    def calc_scores(services, result):
+        max_score = 0
+        for campus in services['campuses']:
+            for section in campus['services']:
+                for service in campus['services'][section]:
+                    score = StatusPageXhr.set_service_status(result, service)
+                    if service.get('essential', False):
+                        max_score = max(max_score, score)
+                    else:
+                        max_score = max(max_score, min(score, 1))
+
+        if max_score == 0:
+            services['global_status'] = 'success'
+            services['global_status_text'] = 'Tous les services sont nominaux'
+        if max_score == 1:
+            services['global_status'] = 'warning'
+            services['global_status_text'] = (
+                "Incidents mineurs en cours sur le réseau. "
+                "L'accès à Internet ne devrait pas être affecté")
+        else:
+            services['global_status'] = 'danger'
+            services['global_status_text'] = (
+                "Des incidents majeurs sont en cours. "
+                "L'accès à Internet est perturbé")
+
+    @staticmethod
+    def cleanup(service, mangle=False):
+        internals = []
+        for k in service:
+            if k.startswith('_'):
+                internals.append(k)
+        for k in internals:
+            del service[k]
+
+    @staticmethod
+    def get_services():
+        services = cache.get('icinga_services')
+        if services is not None:
+            return services
+        with open('myresel/icinga_status.yml', 'r') as doc:
+            services = yaml.load(doc)
+            cache.set('icinga_services',
+                      services,
+                      settings.ICINGA_SERVICES_CACHE_DURATION)
+            return services
+
+    @staticmethod
+    def load_services_status(services):
+        result = cache.get('icinga_services_status')
+        if result is not None:
+            return result
+        try:
+            r = requests.post(
+                url=settings.ICINGA_BASE_URL + "/v1/objects/services",
+                auth=settings.ICINGA_AUTH,
+                headers={
+                    'Accept': 'application/json',
+                    'X-HTTP-Method-Override': 'GET',
+                },
+                data=json.dumps({
+                    "joins": [ "host.name", "host.address" ],
+                    "attrs": [
+                        "name",
+                        "state",
+                        "downtime_depth",
+                        "acknowledgement"
+                    ],
+                    "filter": ("service.state != ServiceOK && "
+                        "service.downtime_depth == 0.0 && "
+                        "service.acknowledgement == 0.0")
+                })
+            )
+            if r.status_code != 200:
+                raise ValueError('Icinga responded with %i status code' % r.status_code)
+            result = r.json()
+        except (requests.exceptions.RequestException, ValueError, TypeError) as err:
+            # TODO: create a nice fallback template
+            logger.error("Could not load icinga, "
+                         "loading default configuration instead: %s " % err)
+            result = {}
+            with open('myresel/icinga_dummy_resp.yml', 'r') as dummy_resp:
+                result = yaml.load(dummy_resp)
+        StatusPageXhr.calc_scores(services, result)
+        cache.set('icinga_services_status',
+                  services,
+                  settings.ICINGA_STATUS_CACHE_DURATION)
+
+        return services
+
+    def get(self, request):
+        services = self.get_services()
+        services_status = self.load_services_status(services)
+        return HttpResponse(json.dumps(services_status), content_type='application/json')
+
