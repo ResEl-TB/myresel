@@ -473,6 +473,7 @@ iframe {
 }
 
 .club-bloc .club-img {
+    max-height: 130px;
 }
 
 .club-bloc .club-name {
