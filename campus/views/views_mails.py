@@ -50,7 +50,7 @@ def send_email_view(request):
             ]
 
             for mod_email in moderators_emails_addresses:
-                notify_moderator(mod_email, m.pk)
+                notify_moderator(mod_email, m.pk, m.content)
 
             messages.success(request, _('Votre mail sera traité par les modérateurs.'))
             return HttpResponseRedirect(reverse('campus:home'))
