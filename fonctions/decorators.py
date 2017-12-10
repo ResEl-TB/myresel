@@ -9,10 +9,13 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.utils.decorators import available_attrs
 from django.utils.translation import ugettext_lazy as _
+from django.db.utils import OperationalError
+from django.core.cache import cache
 
 from fonctions import ldap, network
 
 logger = logging.getLogger("default")
+
 
 def resel_required(function=None, redirect_to='home'):
     """ Vérifie que l'user a une IP resel
@@ -143,7 +146,7 @@ def correct_vlan(function=None, redirect_to='home'):
         return _dec(function)
 
 def ae_required(function, redirect_to='campus:rooms:calendar'):
-    """ 
+    """
     Checks if the user is a valid ae member
     """
 
@@ -156,12 +159,137 @@ def ae_required(function, redirect_to='campus:rooms:calendar'):
                 if start <= datetime.now().date() <= end:
                     ae = True
                     break
-            
+
             if not ae:
                 messages.error(request, _('Vous n\'êtes pas membre de l\'AE, vous ne pouvez donc pas réserver de salle'))
-                return HttpResponseRedirect(reverse(redirect_to))             
+                return HttpResponseRedirect(reverse(redirect_to))
 
             return view_func(request, *args, **kwargs)
         return _view
 
     return _dec(function)
+
+#################################################
+#
+# Tools for the robust_cache
+#
+#################################################
+
+
+# The following code is under the Python Foundation License:
+#
+# Copyright (c) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009,
+# 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017
+# Python Software Foundation. All rights reserved.
+
+
+class _HashedSeq(list):
+    """ This class guarantees that hash() will be called no more than once
+        per element.  This is important because the lru_cache() will hash
+        the key multiple times on a cache miss.
+    """
+
+    __slots__ = 'hashvalue'
+
+    def __init__(self, tup, hash=hash):
+        self[:] = tup
+        self.hashvalue = hash(tup)
+
+    def __hash__(self):
+        return self.hashvalue
+
+def _make_key(args, kwds, typed,
+             kwd_mark = (object(),),
+             fasttypes = {int, str, frozenset, type(None)},
+             tuple=tuple, type=type, len=len):
+    """Make a cache key from optionally typed positional and keyword arguments
+    The key is constructed in a way that is flat as possible rather than
+    as a nested structure that would take more memory.
+    If there is only a single argument and its data type is known to cache
+    its hash value, then that argument is returned without a wrapper.  This
+    saves space and improves lookup speed.
+    """
+    # All of code below relies on kwds preserving the order input by the user.
+    # Formerly, we sorted() the kwds before looping.  The new way is *much*
+    # faster; however, it means that f(x=1, y=2) will now be treated as a
+    # distinct call from f(y=2, x=1) which will be cached separately.
+    key = args
+    if kwds:
+        key += kwd_mark
+        for item in kwds.items():
+            key += item
+    if typed:
+        key += tuple(type(v) for v in args)
+        if kwds:
+            key += tuple(type(v) for v in kwds.values())
+    elif len(key) == 1 and type(key[0]) in fasttypes:
+        return key[0]
+    return _HashedSeq(key)
+
+############################################
+#
+# Robust cache functions
+# "ResEl license"
+#
+############################################
+
+
+class LongCacheMissException(Exception):
+    pass
+
+def robust_cache(short_timeout=300, long_timeout=604800, exp=(OperationalError,)):
+    """
+    Load and save data from cache
+
+    This cache is like a simple lru cache, but is a bit smarter because of
+    ResEl constrains: Unreliable network...
+    """
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwds):
+            result = None
+            func_key = '%s.%s:%s' % (
+                func.__module__,
+                func.__name__,
+                _make_key(args, kwds, typed=False)
+            )
+
+            short_cache_key = 's_%s' % func_key
+            long_cache_key = 'l_%s' % func_key
+
+            # 1. fetch from short cache:
+            result = cache.get(short_cache_key)
+
+            print(result)
+            if result is not None:
+                return result
+
+            # 2. fetch from function
+            try:
+                result = func(*args, **kwds)
+
+                # save in both caches
+                cache.set(short_cache_key, result, short_timeout)
+                cache.set(long_cache_key, result, long_timeout)
+                return result
+
+            except exp as e:
+                logger.warning(
+                    "cached function called raised an exception: %s - %s" % (
+                        func_key, e),
+                    extra={
+                        "function": '%s.%s:%s' % (
+                            func.__module__,
+                            func.__name__,
+                            e),
+                        "exception": str(e),
+                        'message_code': 'EXCEPTION_CALLING_CACHED_FUNC',
+                    }
+                )
+                # 3. fecth from long cache
+                result = cache.get(long_cache_key)
+                if result is None:
+                   raise LongCacheMissException('Function call result no where')
+            return result
+        return wrapper
+    return decorator

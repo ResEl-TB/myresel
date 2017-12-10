@@ -38,6 +38,45 @@ from campus.whoswho.views import ListBirthdays
 
 logger = logging.getLogger("default")
 
+@decorators.robust_cache()
+def load_home_data(in_resel):
+    args_for_response = {}
+
+    # Load services
+    try:
+        services = Category.objects.get(name='Services')
+        services = services.get_articles_and_links(in_resel)[:2]
+    except Category.DoesNotExist:
+        services = []
+    args_for_response['services'] = services
+
+    # Load some news
+    news = News.objects.order_by('-date').all()[:settings.NUMBER_NEWS_IN_HOME]
+    args_for_response['news'] = list(news)
+
+    # Load some campus events
+    events = RoomBooking.objects.order_by('start_time').filter(
+            start_time__gt=timezone.now(), displayable=True).all()[:4]
+    args_for_response['campus_events'] = list(events)
+
+    # Load some clubs
+    clubs = [c for c in StudentOrganisation.all() if "tbClub" in c.object_classes]
+    if len(clubs) > 3:
+        date = timezone.now()
+        random.seed(a=date.day + 100 * date.month + 10000*date.year)
+        clubs = random.sample(clubs, 3)
+    args_for_response['clubs'] = list(clubs)
+
+    # Load some birthdays
+    birthdays_users = ListBirthdays.get_today_birthdays()
+    args_for_response['birthdays_users'] = list(birthdays_users)
+
+    # Load some campus mails
+    args_for_response['campus_mails'] = list(Mail.objects.order_by('-date').filter(
+            moderated=True).all()[:settings.NUMBER_NEWS_IN_HOME])
+
+    args_for_response['ip_in_resel'] = in_resel
+    return args_for_response
 
 class Home(View):
     """
@@ -67,43 +106,9 @@ class Home(View):
         ip = request.network_data['ip']
 
         template_for_response = self.exterior_template
-        args_for_response = {}
+        in_resel = network.is_resel_ip(ip)
 
-        # Load services
-        try:
-            services = Category.objects.get(name='Services')
-            services = services.get_articles_and_links('user' in network.get_network_zone(ip))[:2]
-        except Category.DoesNotExist:
-            services = []
-        args_for_response['services'] = services
-
-        # Load some news
-        news = News.objects.order_by('-date').all()[:settings.NUMBER_NEWS_IN_HOME]
-        args_for_response['news'] = news
-
-        # Load some campus events
-        events = RoomBooking.objects.order_by('start_time').filter(start_time__gt=timezone.now(), displayable=True).all()[:4]
-        args_for_response['campus_events'] = events
-
-        # Load some clubs
-        clubs = [c for c in StudentOrganisation.all() if "tbClub" in c.object_classes]
-        if len(clubs) > 3:
-            date = timezone.now()
-            random.seed(a=date.day + 100 * date.month + 10000*date.year)
-            clubs = random.sample(clubs, 3)
-        args_for_response['clubs'] = clubs
-
-        # Load some birthdays
-        birthdays_users = ListBirthdays.get_today_birthdays()
-        args_for_response['birthdays_users'] = birthdays_users
-
-        # Load some campus mails
-        args_for_response['campus_mails'] = Mail.objects.order_by('-date').filter(moderated=True).all()[:settings.NUMBER_NEWS_IN_HOME]
-
-        # Automatically active the computer if it is known
-        # Change campus automatically
-        is_in_resel = network.is_resel_ip(ip)
-        args_for_response['ip_in_resel'] = is_in_resel
+        args_for_response = load_home_data(in_resel)
 
         if request.user.is_authenticated():
             end_fee = request.ldap_user.end_cotiz if request.ldap_user.end_cotiz else False
@@ -112,7 +117,7 @@ class Home(View):
             user_meta = UserMetaData.objects.get_or_create(uid=request.ldap_user.uid)
             args_for_response['user_meta'] = user_meta
             # Check his end fees date
-            if is_in_resel:
+            if in_resel:
                 try:
                     mac = network.get_mac(request.network_data['ip'])
                     device = LdapDevice.get(mac_address=mac)
@@ -124,7 +129,7 @@ class Home(View):
             template_for_response = self.logged_template
             args_for_response['end_fee'] = end_fee
 
-        elif network.is_resel_ip(ip):
+        elif in_resel:
             template_for_response = self.interior_template
 
         return render(request, template_for_response, args_for_response)
