@@ -309,6 +309,7 @@ class StatusPageXhr(View):
     @staticmethod
     def set_service_status(icinga_rsp, service, excl):
         max_score = 0
+        lvl = service.get('level', 1)  # Default to warning
 
         if service.get('_hosts', None) is None:
             service['status_text'] = 'Pas de métriques'
@@ -324,15 +325,13 @@ class StatusPageXhr(View):
         if max_score == 0:
             service['status_text'] = 'Système nominal'
             service['status'] = 'success'
-            return max_score
         elif max_score == 1:
             service['status_text'] = 'Incidents mineurs'
             service['status'] = 'warning'
-            return max_score
         else:
             service['status_text'] = 'Incidents majeurs'
             service['status'] = 'danger'
-            return max_score
+        return lvl * max_score
 
     @staticmethod
     def calc_scores(services, result):
@@ -353,7 +352,7 @@ class StatusPageXhr(View):
         if max_score == 0:
             services['global_status'] = 'success'
             services['global_status_text'] = 'Tous les services sont nominaux'
-        if max_score == 1:
+        if max_score <= 2:
             services['global_status'] = 'warning'
             services['global_status_text'] = (
                 "Incidents mineurs en cours sur le réseau. "
