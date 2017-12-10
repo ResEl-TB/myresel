@@ -1,5 +1,8 @@
 ---
 
+exclusions:
+  - apt
+
 campuses:
   - name: brest
     enabled: true

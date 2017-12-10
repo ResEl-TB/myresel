@@ -307,7 +307,7 @@ def unsecure_set_language(request):
 class StatusPageXhr(View):
 
     @staticmethod
-    def set_service_status(icinga_rsp, service):
+    def set_service_status(icinga_rsp, service, excl):
         max_score = 0
 
         if service.get('_hosts', None) is None:
@@ -316,7 +316,8 @@ class StatusPageXhr(View):
             return -1
 
         for icn_service in icinga_rsp['results']:
-            if icn_service['joins']['host']['name'] in service.get('_hosts', []):
+            if icn_service['joins']['host']['name'] in service.get('_hosts', []) \
+                    and icn_service['attrs']['name'] not in excl:
                 max_score = max(max_score, icn_service['attrs']['state'])
 
         StatusPageXhr.cleanup(service)
@@ -339,7 +340,11 @@ class StatusPageXhr(View):
         for campus in services['campuses']:
             for section in campus['services']:
                 for service in campus['services'][section]:
-                    score = StatusPageXhr.set_service_status(result, service)
+                    score = StatusPageXhr.set_service_status(
+                            result,
+                            service,
+                            services['exclusions'],
+                    )
                     if service.get('essential', False):
                         max_score = max(max_score, score)
                     else:
