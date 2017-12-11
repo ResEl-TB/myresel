@@ -192,9 +192,9 @@
                             <div class="club-bloc thumbnail">
                                 <a href="{% url 'campus:clubs:club_detail' club.cn %}" >
                                     {% if club.logo and club.logo != "None" %}
-                                    <img class="logo img-responsive" src="/media/image/CLUB/{{ club.logo }}">
+                                    <img class="logo img-responsive club-img" src="/media/image/CLUB/{{ club.logo }}">
                                     {% else %}
-                                    <img class="logo img-responsive" src="{% static 'images/campus/orga.png' %}">
+                                    <img class="logo img-responsive club-img" src="{% static 'images/campus/orga.png' %}">
                                     {% endif %}
                                     <p class="club-name">{{ club.name }}</p>
                                     {# <div class="club-description">{{ club.description }}</div> #}

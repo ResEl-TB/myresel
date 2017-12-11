@@ -30,6 +30,7 @@ a, a:hover, a:active, a:visited {
 
 .logo {
     max-height: 150px;
+    max-width: 100%;
 }
 
 .name {
@@ -47,11 +48,12 @@ a, a:hover, a:active, a:visited {
 .club-name {
   text-align: center;
   font-weight: bold;
-  font-size: 1.1em;é
+  font-size: 1.1em;
+  height: 3em;
 }
 
 .description {
-    height: 3em;
+    height: 3.2em;
 }
 
 /* Mobile CSS */

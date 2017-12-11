@@ -38,19 +38,27 @@ def notify_mailing_list(user, room):
     mail.send()
 
 @job
-def notify_moderator(moderator_address, mail_id):
+def notify_moderator(moderator_address, mail_id, content):
     """
     Notify the campus moderators that an email has arrived
     :param moderator_address:
     :param mail_id:
+    :param content: content of the mail
     :return:
     """
-    # TODO: create direct validate lik
+    # TODO: create direct validate link
     mail = EmailMessage(
         subject='Nouveau mail campus à modérer',
         body=('Bonjour,\n\n' +
               'Un nouveau mail campus requiert votre modération.\n' +
-              'Vous pouvez suivre directement ce lien pour le faire : ' + reverse("campus:mails:moderate") +'\n\n' +
+              'Vous pouvez suivre ce lien pour le faire :\n' +
+              'https://resel.fr' + reverse("campus:mails:moderate") + '\n\n' +
+              '---------- aperçu ----------\n\n' +
+              content +
+              '\n\n' +
+              '----------------------------\n\n' +
+              'Pour toute demande annexe : ' +
+              'support@resel.fr ou https://resel.fr/support\n\n' +
               'Have fun,\n' +
               '~ Le gentil bot ResEl ~'
         ),
