@@ -23,7 +23,10 @@ def send_email_view(request):
     if request.method == 'POST':
         form = SendMailForm(
             request.POST,
-            initial={'sender': request.ldap_user.mail})
+            initial={'sender': '"%s %s" <%s>' % (request.ldap_user.first_name,
+                                                 request.ldap_user.last_name,
+                                                 request.ldap_user.mail,
+                                                )})
         if form.is_valid():
             m = form.save()
 
@@ -50,7 +53,7 @@ def send_email_view(request):
             ]
 
             for mod_email in moderators_emails_addresses:
-                notify_moderator(mod_email, m.pk, m.content)
+                notify_moderator(mod_email, m.pk, m.sender, m.subject, m.content)
 
             messages.success(request, _('Votre mail sera traité par les modérateurs.'))
             return HttpResponseRedirect(reverse('campus:home'))

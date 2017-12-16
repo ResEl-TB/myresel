@@ -39,7 +39,7 @@ $('tr').each(function() {
         content: function () {
             var self = this;
             return $.ajax({
-                url: '/campus/mails/modérer/',
+                url: '/campus/mails/moderate',
                 data: {'id': mailid},
                 method: 'GET'
             }).done( function (response) {
