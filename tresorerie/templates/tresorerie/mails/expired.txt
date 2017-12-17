@@ -1,0 +1,16 @@
+Bonjour {{ user.first_name }},
+
+Vos frais d'accès ResEl viennent d'arriver à échéance. Vous ne pouvez plus
+accéder à Internet à compter de ce jour.
+
+Vous pouvez dès à présent régler vos frais d'accès en suivant le lien suivant:
+
+https://resel.fr/paiement/
+
+Si vous pensez que ce message est une erreur, n'hésitez pas à nous envoyer un
+message soit par le support (support@resel.fr ou https://resel.fr/contact)
+soit en venant pendant lors d'une de nos permanences au foyer de Brest de 18h
+à 19h30 en semaine.
+
+Cordialement,
+L'équipe ResEl
