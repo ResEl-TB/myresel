@@ -33,7 +33,8 @@ class LdapModel(object):
             new_arg = arg
             arg_value = arg_value if arg_value is not None else ""
             new_arg_value = Ldap.sanitize(arg_value)
-            arg_match_type="="
+            arg_prefix = ""
+            arg_match_type = "="
             arg_splited = arg.split("__")
             if len(arg_splited) > 1:
                 new_arg, matching_type = arg_splited
@@ -44,15 +45,19 @@ class LdapModel(object):
                 elif matching_type == "endswith":
                     new_arg_value = "*" + arg_value
                 elif matching_type == "lt":
-                    arg_match_type = "<"
+                    arg_match_type = ">="
+                    arg_prefix = "!"
                 elif matching_type == "le":
                     arg_match_type = "<="
                 elif matching_type == "gt":
-                    arg_match_type = ">"
+                    arg_match_type = "<="
+                    arg_prefix = "!"
                 elif matching_type == "ge":
                     arg_match_type = ">="
+                elif matching_type == "not":
+                    arg_prefix = "!"
 
-            new_kwargs[new_arg] = (arg_match_type, new_arg_value)
+            new_kwargs[new_arg] = (arg_prefix, arg_match_type, new_arg_value)
         return cls._search(**new_kwargs)
 
     @classmethod

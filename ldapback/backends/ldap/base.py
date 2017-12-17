@@ -67,8 +67,8 @@ class Ldap(object):
         """
         query = "(&"
         for name, match_value in kwargs.items():
-            match, value = match_value
-            query += "(%s%s%s)" % (name, match, value)
+            prefix, match, value = match_value
+            query += "%s(%s%s%s)" % (prefix, name, match, value)
         query += ")"
         return query
 

@@ -49,10 +49,12 @@ class TestGenericPerson(LdapModel):
 
 class QueryConstructorTestCase(TestCase):
     def test_simple_build_search_query(self):
-        query = Ldap.build_search_query(uid=("=", "loic"))
+        query = Ldap.build_search_query(uid=("", "=", "loic"))
         self.assertEqual("(&(uid=loic))", query)
 
-        query = Ldap.build_search_query(uid=("=", "martin"), promo=("=", 2016))
+        query = Ldap.build_search_query(
+                uid=("", "=", "martin"),
+                promo=("", "=", 2016))
         self.assertIn(query, ("(&(uid=martin)(promo=2016))", "(&(promo=2016)(uid=martin))"))
 
 
@@ -128,14 +130,14 @@ class LdapModelTestCase(TestCase):
         self.assertEqual("", promo_ldap)
 
     def test_search(self):
-        users = TestGenericPerson._search(uid=('=', 'blahlcarr'))
+        users = TestGenericPerson._search(uid=('', '=', 'blahlcarr'))
         self.assertGreater(len(users), 0)
         for u in users:
             self.assertIsInstance(u, TestGenericPerson)
             self.assertEqual("blahlcarr", u.uid)
             self.assertEqual("uid=blahlcarr,ou=people,dc=maisel,dc=enst-bretagne,dc=fr", u.pk)
 
-        users = TestGenericPerson._search(uid=('=', 'aqwxs01edc'))
+        users = TestGenericPerson._search(uid=('', '=', 'aqwxs01edc'))
         self.assertEqual(len(users), 0)
 
     def test_filter(self):
