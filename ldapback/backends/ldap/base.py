@@ -66,8 +66,9 @@ class Ldap(object):
         :return:
         """
         query = "(&"
-        for name, value in kwargs.items():
-            query += "(" + str(name) + "=" + str(value) + ")"
+        for name, match_value in kwargs.items():
+            match, value = match_value
+            query += "(%s%s%s)" % (name, match, value)
         query += ")"
         return query
 

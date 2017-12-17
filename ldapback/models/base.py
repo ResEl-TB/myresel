@@ -33,6 +33,7 @@ class LdapModel(object):
             new_arg = arg
             arg_value = arg_value if arg_value is not None else ""
             new_arg_value = Ldap.sanitize(arg_value)
+            arg_match_type="="
             arg_splited = arg.split("__")
             if len(arg_splited) > 1:
                 new_arg, matching_type = arg_splited
@@ -42,7 +43,16 @@ class LdapModel(object):
                     new_arg_value = arg_value + "*"
                 elif matching_type == "endswith":
                     new_arg_value = "*" + arg_value
-            new_kwargs[new_arg] = new_arg_value
+                elif matching_type == "lt":
+                    arg_match_type = "<"
+                elif matching_type == "le":
+                    arg_match_type = "<="
+                elif matching_type == "gt":
+                    arg_match_type = ">"
+                elif matching_type == "ge":
+                    arg_match_type = ">="
+
+            new_kwargs[new_arg] = (arg_match_type, new_arg_value)
         return cls._search(**new_kwargs)
 
     @classmethod
@@ -75,10 +85,9 @@ class LdapModel(object):
         for arg, arg_value in kwargs.items():
             if arg == "pk":
                 arg = cls.get_pk_field()[1].db_column  # TODO : THIS IS MOCHE, redéfinition de args pour quelque chose de sémentiquement différent
-                search_args[arg] = arg_value
             else:
                 arg = getattr(cls, arg).db_column
-                search_args[arg] = arg_value
+            search_args[arg] = arg_value
         search_query = ldap.build_search_query(**search_args)
         search_results = ldap.search(cls.base_dn, search_query, attr=[ALL_ATTRIBUTES, ALL_OPERATIONAL_ATTRIBUTES])
         if search_results is None:
