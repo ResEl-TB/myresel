@@ -73,7 +73,7 @@ django test suite:
 python linting:
   stage: test
   script:
-    - pip3 install pylint --quiet
+    - pip3 install pylint==1.7.5 --quiet
     - pip3 install pylint-django --quiet --upgrade
     - pylint --rcfile=.pylintrc campus devices fonctions gestion_personnes ldapback myresel pages tresorerie wiki || exit $((35 & $?))
   allow_failure: false
