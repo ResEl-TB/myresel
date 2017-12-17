@@ -28,7 +28,7 @@ class LdapModel(object):
         :param kwargs:
         :return:
         """
-        new_kwargs = {}
+        new_args = []
         for arg, arg_value in kwargs.items():
             new_arg = arg
             arg_value = arg_value if arg_value is not None else ""
@@ -57,8 +57,8 @@ class LdapModel(object):
                 elif matching_type == "not":
                     arg_prefix = "!"
 
-            new_kwargs[new_arg] = (arg_prefix, arg_match_type, new_arg_value)
-        return cls._search(**new_kwargs)
+            new_args.append((new_arg, arg_prefix, arg_match_type, new_arg_value))
+        return cls._search(*new_args)
 
     @classmethod
     def all(cls):
@@ -78,22 +78,27 @@ class LdapModel(object):
         return results
 
     @classmethod
-    def _search(cls, **kwargs):
+    def _search(cls, *args):
         """
         Perform a search in the ldap
         :return:
         """
         ldap = Ldap()
-        search_args = {}
+        search_args = []
 
         # Convert search query into db_column search query
-        for arg, arg_value in kwargs.items():
+        for arg_values in args:
+            arg = arg_values[0]
             if arg == "pk":
                 arg = cls.get_pk_field()[1].db_column  # TODO : THIS IS MOCHE, redéfinition de args pour quelque chose de sémentiquement différent
             else:
                 arg = getattr(cls, arg).db_column
-            search_args[arg] = arg_value
-        search_query = ldap.build_search_query(**search_args)
+            search_args.append((
+                    arg,
+                    arg_values[1],
+                    arg_values[2],
+                    arg_values[3]))
+        search_query = ldap.build_search_query(*search_args)
         search_results = ldap.search(cls.base_dn, search_query, attr=[ALL_ATTRIBUTES, ALL_OPERATIONAL_ATTRIBUTES])
         if search_results is None:
             return []
@@ -154,6 +159,7 @@ class LdapModel(object):
         pk_field_name, pk_field = self.get_pk_field()
         pk_field_value = str(getattr(self, pk_field_name))
         if len(pk_field_value) == 0:
+            print(self.uid)
             raise ValueError("Empty pk value")
         pk = "%s=%s,%s" % (pk_field.db_column, pk_field_value, self.base_dn)
         return pk
