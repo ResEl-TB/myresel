@@ -62,7 +62,7 @@ ADMINS = [
 # Option to totally disable or enable the feature
 REMINDERS_ACTIVATED = True
 # Do everything but do not send the emails
-REMINDER_DRY = True
+REMINDER_DRY = False
 # remind 1 week before and the eve
 REMINDERS_DAYS = [7, 1]
 # send an email on the expiration date
