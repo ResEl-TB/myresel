@@ -1,15 +1,19 @@
-import redis
+"""Command to create email reminders"""
 import logging
 from itertools import chain
-from django.core.management.base import BaseCommand, CommandError
+from datetime import datetime, timedelta, date, time
+
+import redis
+from django.core.management.base import BaseCommand
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from myresel import settings
 from gestion_personnes.models import LdapUser
-from datetime import datetime, timedelta, date, time
 
+# pylint: disable=invalid-name
 logger = logging.getLogger("default")
 
+# pylint: disable=missing-docstring
 class Command(BaseCommand):
     help = 'Create reminders emails for every members'
 
@@ -34,28 +38,30 @@ class Command(BaseCommand):
             settings.REMINDER_REDIS_PREFIX,
             user.uid,
             day.isoformat()[:-9])
-        email_sent = self.r.set(redis_key, 'email_sent')
+        self.r.set(redis_key, 'email_sent')
 
 
-    def get_user_day(self, day):
+    @staticmethod
+    def get_user_day(day):
         one_day = timedelta(days=1)
         targeted_users = LdapUser.filter(
-                end_cotiz__ge=day.strftime('%Y%m%d%H%M%SZ'),
-                end_cotiz__lt=(day+one_day).strftime('%Y%m%d%H%M%SZ'))
+            end_cotiz__ge=day.strftime('%Y%m%d%H%M%SZ'),
+            end_cotiz__lt=(day+one_day).strftime('%Y%m%d%H%M%SZ'))
         return targeted_users
 
-    def new_reminder_email(self, user, day, expired=False):
+    @staticmethod
+    def new_reminder_email(user, day, expired=False):
         if not expired:
             days = user.end_cotiz - day
             content = render_to_string(
-                    "tresorerie/mails/reminder.txt",
-                    {'user': user, 'day': day,
-                        'days': days, 'reminders': settings.REMINDERS_DAYS})
+                "tresorerie/mails/reminder.txt",
+                {'user': user, 'day': day,
+                 'days': days, 'reminders': settings.REMINDERS_DAYS})
             subject = "[ResEl] Vos frais d'accès expirent dans %s jours" % days.days
         else:
             content = render_to_string(
-                    "tresorerie/mails/expired.txt",
-                    {'user': user, 'day': day})
+                "tresorerie/mails/expired.txt",
+                {'user': user, 'day': day})
             subject = "[ResEl] Vos frais d'accès ont expirés"
 
         email = EmailMessage(
@@ -81,7 +87,8 @@ class Command(BaseCommand):
     def send_emails(self, emails, dry=False):
         for email in emails:
             if self.is_email_in_redis(email['user'], email['day']):
-                logger.warning("Today email already sent for user %s on day %s",
+                logger.warning(
+                    "Today email already sent for user %s on day %s",
                     email['user'].uid,
                     email['day'].isoformat(),
                     extra={
@@ -97,26 +104,28 @@ class Command(BaseCommand):
                     self.put_email_in_redis(email['user'], email['day'])
                 else:
                     print(email['content'].body)
-                logger.info("Reminder email sent to %s", email['user'].uid,
-                        extra={
-                            'uid': email['user'].uid,
-                            'address': email['user'].mail,
-                            'day': email['day'].isoformat(),
-                            'message_code': 'REMINDER_SENT',
-                            }
-                        )
+                logger.info(
+                    "Reminder email sent to %s", email['user'].uid,
+                    extra={
+                        'uid': email['user'].uid,
+                        'address': email['user'].mail,
+                        'day': email['day'].isoformat(),
+                        'message_code': 'REMINDER_SENT',
+                        }
+                    )
             except Exception as e:
-                logger.error("Error while sending reminder to %s: %s",
-                        email['user'].uid,
-                        e,
-                        extra={
-                            'uid': email['user'].uid,
-                            'address': email['user'].mail,
-                            'day': email['day'].isoformat(),
-                            'error': e,
-                            'message_code': 'REMINDER_SENT',
-                            }
-                        )
+                logger.error(
+                    "Error while sending reminder to %s: %s",
+                    email['user'].uid,
+                    e,
+                    extra={
+                        'uid': email['user'].uid,
+                        'address': email['user'].mail,
+                        'day': email['day'].isoformat(),
+                        'error': e,
+                        'message_code': 'REMINDER_SENT',
+                    }
+                )
 
     def handle(self, *args, **options):
         if not settings.REMINDERS_ACTIVATED:
@@ -127,7 +136,7 @@ class Command(BaseCommand):
 
         today = datetime.combine(date.today(), time())
         reminder_days = [today + timedelta(days=delta)
-                for delta in settings.REMINDERS_DAYS]
+                         for delta in settings.REMINDERS_DAYS]
 
         emails = iter(())
         # Reminders emails
@@ -139,4 +148,3 @@ class Command(BaseCommand):
             emails = chain(emails, self.emails_gen(today, expired=True))
 
         self.send_emails(emails, dry=settings.REMINDER_DRY)
-
