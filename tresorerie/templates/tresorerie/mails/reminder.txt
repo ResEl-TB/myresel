@@ -1,3 +1,5 @@
+**English translation below**
+
 Bonjour {{ user.first_name }},
 
 Nous tenons à vous informer que vos frais d'accès ResEl arrivent à échéance
@@ -18,3 +20,24 @@ soit en venant pendant lors d'une de nos permanences au foyer de Brest de 18h
 
 Cordialement,
 L'équipe ResEl
+
+------------
+
+Hello {{ user.first_name }},
+
+We would like to inform you that your ResEl Internet fees end in {{ days.days }} day(s),
+on the {{ user.end_cotiz|date:"d/m/Y" }}. You will not be able to use the
+internet connection after this date.
+
+You can now pay your Internet fees by following the link below:
+
+https://resel.fr/paiement/
+
+You will receive this email {% for d in reminders %}{% if not forloop.first%}, {% elif forloop.last %}and {% endif %}{{ d }} days{% endfor %} before the end of your fees.
+
+If you think this email is an error, please contact us either on the support
+(support@resel.fr or https://resel.fr/contact) or by coming at "Le foyer des
+élèves de Brest" between 6:00pm and 7:30pm every day of the week.
+
+Yours sincerely.
+The ResEl team

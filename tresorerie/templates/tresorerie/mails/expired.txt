@@ -1,3 +1,5 @@
+**English translation below**
+
 Bonjour {{ user.first_name }},
 
 Vos frais d'accès ResEl viennent d'arriver à échéance. Vous ne pouvez plus
@@ -14,3 +16,21 @@ soit en venant pendant lors d'une de nos permanences au foyer de Brest de 18h
 
 Cordialement,
 L'équipe ResEl
+
+------------
+
+Hello {{ user.first_name }},
+
+Your ResEl Internet fees just expired. You cannot access the Internet from now
+on.
+
+You can pay your Internet fees by following the link below:
+
+https://resel.fr/paiement/
+
+If you think this email is an error, please contact us either on the support
+(support@resel.fr or https://resel.fr/contact) or by coming at "Le foyer des
+élèves de Brest" between 6:00pm and 7:30pm every day of the week.
+
+Yours sincerely.
+The ResEl team
