@@ -51,7 +51,7 @@ class Command(BaseCommand):
                     "tresorerie/mails/reminder.txt",
                     {'user': user, 'day': day,
                         'days': days, 'reminders': settings.REMINDERS_DAYS})
-            subject = "[ResEl] Vos frais d'accès expirent dans %s jours" % days
+            subject = "[ResEl] Vos frais d'accès expirent dans %s jours" % days.days
         else:
             content = render_to_string(
                     "tresorerie/mails/expired.txt",
@@ -126,7 +126,7 @@ class Command(BaseCommand):
         self.new_redis()
 
         today = datetime.combine(date.today(), time())
-        reminder_days = [today - timedelta(days=delta)
+        reminder_days = [today + timedelta(days=delta)
                 for delta in settings.REMINDERS_DAYS]
 
         emails = iter(())

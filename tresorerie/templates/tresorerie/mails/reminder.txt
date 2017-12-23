@@ -1,7 +1,7 @@
 Bonjour {{ user.first_name }},
 
 Nous tenons à vous informer que vos frais d'accès ResEl arrivent à échéance
-dans moins de {{ days.days }} jours, le {{ user.end_cotiz|date:"d/m/Y" }} très
+dans moins de {{ days.days }} jour(s), le {{ user.end_cotiz|date:"d/m/Y" }} très
 exactement. Vous ne pourrez plus accéder à Internet à compter de ce jour.
 
 Vous pouvez dès à présent régler vos frais d'accès en suivant le lien suivant
