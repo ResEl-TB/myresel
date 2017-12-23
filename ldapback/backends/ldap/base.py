@@ -57,7 +57,7 @@ class Ldap(object):
         return result
 
     @staticmethod
-    def build_search_query(**kwargs):
+    def build_search_query(*args):
         """
         Build a query based on the kwargs.
         For the moment it is a simple `and` between them
@@ -66,9 +66,11 @@ class Ldap(object):
         :return:
         """
         query = "(&"
-        for name, match_value in kwargs.items():
-            prefix, match, value = match_value
-            query += "%s(%s%s%s)" % (prefix, name, match, value)
+        for name, prefix, match, value in args:
+            if prefix != "":
+                query += "(%s(%s%s%s))" % (prefix, name, match, value)
+            else:
+                query += "%s(%s%s%s)" % (prefix, name, match, value)
         query += ")"
         return query
 
