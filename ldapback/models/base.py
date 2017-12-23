@@ -159,7 +159,6 @@ class LdapModel(object):
         pk_field_name, pk_field = self.get_pk_field()
         pk_field_value = str(getattr(self, pk_field_name))
         if len(pk_field_value) == 0:
-            print(self.uid)
             raise ValueError("Empty pk value")
         pk = "%s=%s,%s" % (pk_field.db_column, pk_field_value, self.base_dn)
         return pk
