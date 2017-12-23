@@ -38,7 +38,7 @@ class Command(BaseCommand):
             settings.REMINDER_REDIS_PREFIX,
             user.uid,
             day.isoformat()[:-9])
-        self.r.set(redis_key, 'email_sent')
+        self.r.set(redis_key, 'email_sent', settings.REMINDER_REDIS_EXPIRATON)
 
 
     @staticmethod

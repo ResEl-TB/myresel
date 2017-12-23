@@ -68,6 +68,8 @@ REMINDERS_DAYS = [7, 1]
 # send an email on the expiration date
 REMINDER_EXPIRATION_DAY = True
 REMINDER_REDIS_PREFIX = 'myresel_reminders_'
+# Number of seconds after which the keys expires
+REMINDER_REDIS_EXPIRATON = 60 * 60 * 24 * 30
 
 ## Login
 
