@@ -68,7 +68,17 @@ class RoomAdministratorAdmin(admin.ModelAdmin):
         return format_html(mark_safe(html))
     list_rooms.short_description = 'salles administrées'
 
+
+class MailAdmin(admin.ModelAdmin):
+    """
+    Admin configuration for Mail model
+    """
+    list_display = ('subject', 'sender', 'moderated', 'moderated_by', 'date')
+    list_filter = ('moderated', 'date')
+    search_fields = ('subject', 'sender', 'content',)
+
+
 admin.site.register(Room, RoomAdmin)
 admin.site.register(RoomBooking, RoomBookingAdmin)
 admin.site.register(RoomAdministrator, RoomAdministratorAdmin)
-admin.site.register(Mail)
+admin.site.register(Mail, MailAdmin)
