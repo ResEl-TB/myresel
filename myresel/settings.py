@@ -52,12 +52,26 @@ BUFFERED_AV_IPS = 100
 # Redis key in which the potential available ips are
 REDIS_AV_IPS_KEY = 'av_ips'
 
-# Mails
+## Mails
 ADMINS = [
     ('Inscription bot', 'inscription-bot@resel.fr'),
 ]
 
-# Login
+## Reminders emails
+
+# Option to totally disable or enable the feature
+REMINDERS_ACTIVATED = True
+# Do everything but do not send the emails
+REMINDER_DRY = False
+# remind 1 week before and the eve
+REMINDERS_DAYS = [7, 1]
+# send an email on the expiration date
+REMINDER_EXPIRATION_DAY = True
+REMINDER_REDIS_PREFIX = 'myresel_reminders_'
+# Number of seconds after which the keys expires
+REMINDER_REDIS_EXPIRATON = 60 * 60 * 24 * 30
+
+## Login
 
 LOGIN_URL = '/login'
 
@@ -91,7 +105,7 @@ FREE_DURATION = timedelta(days=3*7)
 # Cookies settings
 SESSION_COOKIE_AGE = 365 * 24 * 60 * 60
 
-#
+# Authentication
 
 AUTHENTICATION_BACKENDS = (
     'django_python3_ldap.auth.LDAPBackend',

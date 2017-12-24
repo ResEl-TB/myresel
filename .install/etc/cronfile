@@ -1,2 +1,3 @@
 7 14 * * * www-data /srv/www/resel.fr/env/bin/python /srv/www/resel.fr/manage.py calculate_free_ip >/dev/null 2>&1
+7 50 * * * www-data /srv/www/resel.fr/env/bin/python /srv/www/resel.fr/manage.py fees_reminder >/dev/null
 */1 * * * * root /usr/sbin/csync2 -x >/dev/null 2>&1

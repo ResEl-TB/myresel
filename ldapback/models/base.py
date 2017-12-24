@@ -28,11 +28,13 @@ class LdapModel(object):
         :param kwargs:
         :return:
         """
-        new_kwargs = {}
+        new_args = []
         for arg, arg_value in kwargs.items():
             new_arg = arg
             arg_value = arg_value if arg_value is not None else ""
             new_arg_value = Ldap.sanitize(arg_value)
+            arg_prefix = ""
+            arg_match_type = "="
             arg_splited = arg.split("__")
             if len(arg_splited) > 1:
                 new_arg, matching_type = arg_splited
@@ -42,8 +44,21 @@ class LdapModel(object):
                     new_arg_value = arg_value + "*"
                 elif matching_type == "endswith":
                     new_arg_value = "*" + arg_value
-            new_kwargs[new_arg] = new_arg_value
-        return cls._search(**new_kwargs)
+                elif matching_type == "lt":
+                    arg_match_type = ">="
+                    arg_prefix = "!"
+                elif matching_type == "le":
+                    arg_match_type = "<="
+                elif matching_type == "gt":
+                    arg_match_type = "<="
+                    arg_prefix = "!"
+                elif matching_type == "ge":
+                    arg_match_type = ">="
+                elif matching_type == "not":
+                    arg_prefix = "!"
+
+            new_args.append((new_arg, arg_prefix, arg_match_type, new_arg_value))
+        return cls._search(*new_args)
 
     @classmethod
     def all(cls):
@@ -63,23 +78,27 @@ class LdapModel(object):
         return results
 
     @classmethod
-    def _search(cls, **kwargs):
+    def _search(cls, *args):
         """
         Perform a search in the ldap
         :return:
         """
         ldap = Ldap()
-        search_args = {}
+        search_args = []
 
         # Convert search query into db_column search query
-        for arg, arg_value in kwargs.items():
+        for arg_values in args:
+            arg = arg_values[0]
             if arg == "pk":
                 arg = cls.get_pk_field()[1].db_column  # TODO : THIS IS MOCHE, redéfinition de args pour quelque chose de sémentiquement différent
-                search_args[arg] = arg_value
             else:
                 arg = getattr(cls, arg).db_column
-                search_args[arg] = arg_value
-        search_query = ldap.build_search_query(**search_args)
+            search_args.append((
+                    arg,
+                    arg_values[1],
+                    arg_values[2],
+                    arg_values[3]))
+        search_query = ldap.build_search_query(*search_args)
         search_results = ldap.search(cls.base_dn, search_query, attr=[ALL_ATTRIBUTES, ALL_OPERATIONAL_ATTRIBUTES])
         if search_results is None:
             return []
