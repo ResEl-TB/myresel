@@ -28,6 +28,7 @@
     {% block myresel %}
     {% endblock %}
     {% if not request.user.is_authenticated %}
+        <style>.navbar-brand { display: none; }</style>
         {% block presentation %}
             <div class="home-fragment home-presentation home-user-management">
               <div class="jumbotron-sep hidden-xs"></div>
@@ -93,7 +94,7 @@
                                 <span class="fa fa-code-fork service-icon bigger" aria-hidden="true"></span>
                             </div>
                             <div class="col-sm-6">
-                                <h2>Nous utilisons presque exclusivement que des logiciels libres, ce qui permet une grande flexibilité</h2>
+                                <h2>Nous utilisons exclusivement que des logiciels libres, ce qui permet une grande flexibilité</h2>
                             </div>
                         </div>
                     </div>
