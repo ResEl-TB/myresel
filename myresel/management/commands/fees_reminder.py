@@ -50,9 +50,9 @@ class Command(BaseCommand):
         return targeted_users
 
     @staticmethod
-    def new_reminder_email(user, day, expired=False):
+    def new_reminder_email(user, day, today, expired=False):
         if not expired:
-            days = user.end_cotiz - day
+            days = user.end_cotiz - today
             content = render_to_string(
                 "tresorerie/mails/reminder.txt",
                 {'user': user, 'day': day,
@@ -74,15 +74,16 @@ class Command(BaseCommand):
 
         return {
             'user': user,
-            'day': day,
+            'day': today,
+            'endinternet': day,
             'content': email
         }
 
 
-    def emails_gen(self, day, expired):
+    def emails_gen(self, day, expired, today):
         targeted_users = self.get_user_day(day)
         for user in targeted_users:
-            yield self.new_reminder_email(user, day, expired=expired)
+            yield self.new_reminder_email(user, day, today, expired=expired)
 
     def send_emails(self, emails, dry=False):
         for email in emails:
@@ -141,10 +142,10 @@ class Command(BaseCommand):
         emails = iter(())
         # Reminders emails
         for day in reminder_days:
-            emails = chain(emails, self.emails_gen(day, expired=False))
+            emails = chain(emails, self.emails_gen(day, False, today))
 
         # Payment expired emails
         if settings.REMINDER_EXPIRATION_DAY:
-            emails = chain(emails, self.emails_gen(today, expired=True))
+            emails = chain(emails, self.emails_gen(today, True, today))
 
         self.send_emails(emails, dry=settings.REMINDER_DRY)

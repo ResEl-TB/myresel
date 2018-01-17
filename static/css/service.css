@@ -38,6 +38,11 @@
     text-decoration: none;
 }
 
+.service-wrapper-mobile {
+    background-color: white !important;
+    box-shadow: none !important;
+}
+
 /*
 This class "hides" the icon when it's not visible and is removed when the
 Class is visible
@@ -85,9 +90,9 @@ Class is visible
 }
 
 .service-wrapper {
-   background-color: rgba(247, 247, 247);
+   background-image:linear-gradient(rgb(14, 135, 204), rgb(159, 212, 228));
    width: 100%;
-   box-shadow: 0px 2px 10px black inset;
+   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3) inset;
 }
 
 .service-container {

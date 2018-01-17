@@ -28,6 +28,7 @@
     {% block myresel %}
     {% endblock %}
     {% if not request.user.is_authenticated %}
+        <style>.navbar-brand { display: none; }</style>
         {% block presentation %}
             <div class="home-fragment home-presentation home-user-management">
               <div class="jumbotron-sep hidden-xs"></div>
@@ -43,14 +44,13 @@
                 </div>
                 <div class="container">
                     <div class="row home-login">
-                        <div class="col-md-4 col-md-offset-3">
-                            <h3>{% trans "Connectez-vous pour bénéficier de tous les services du ResEl" %}</h3>
-                        </div>
-                        <div class="col-md-3">
-                            <a href="{% url 'login' %}" class="btn btn-default btn-lg">
+                        <div class="col-md-3 col-md-offset-3">
+                            <a href="{% url 'login' %}" class="btn btn-default">
                               {%  trans "Connexion"%}
                             </a>
-                            <a href="{% url 'how-to-signup' %}" class="btn btn-default">
+                        </div>
+                        <div class="col-md-3">
+                            <a href="{% url 'how-to-signup' %}" class="btn btn-default btn-outline">
                               {%  trans "Comment s'inscrire ?"%}
                             </a>
                         </div>
@@ -93,7 +93,7 @@
                                 <span class="fa fa-code-fork service-icon bigger" aria-hidden="true"></span>
                             </div>
                             <div class="col-sm-6">
-                                <h2>Nous utilisons presque exclusivement que des logiciels libres, ce qui permet une grande flexibilité</h2>
+                                <h2>Nous utilisons exclusivement que des logiciels libres, ce qui permet une grande flexibilité</h2>
                             </div>
                         </div>
                     </div>
@@ -108,18 +108,16 @@
                 {% for service in services %}
                     <div class="col-md-4">
                         <a href="{{ service.get_absolute_url }}">
-                            <span class="glyphicon {{ service.glyphicon_name }} service-icon bigger" aria-hidden="true"></span>
+                            <span class="glyphicon {{ service.glyphicon_name }} service-icon dynamic" aria-hidden="true"></span>
                             <h3 class="service-title">{{ service.name }}</h3>
-                            <p>{{ service.description }}</p>
                         </a>
                     </div>
                 {% empty %}
                 {% endfor %}
                 <div class="col-md-4">
                     <a href="{% url 'services'%}">
-                        <span class="fa fa-rocket service-icon bigger" aria-hidden="true"></span>
+                        <span class="fa fa-rocket service-icon dynamic" aria-hidden="true"></span>
                         <h3 class="service-title">{% trans "Et plein d'autres" %}</h3>
-                        <p><span class="fa fa-ellipsis-h" aria-hidden="true"></span></p>
                     </a>
                 </div>
             </div>
@@ -129,7 +127,7 @@
     <div class="home-fragment home-blog">
         <div class="container">
             <h2 class="clickable-title"><a href="{% url 'news'%}">{% trans "Les dernières nouvelles ResEl" %}</a> {% if user.is_staff %}<small><a href="/gestion/pages/news/add/"><span class="fa fa-plus"></span> Créer une news</a></small>{% endif %}</h2>
-            <h3><span class="fa fa-rss-square" style="color:#F99C2D"></span> <a href="{% url 'rss' %}">{% trans "Flux RSS" %}</a> <a href="{% url 'atom' %}">{% trans "Flux Atom" %}</a></h3>
+            <h4><span class="fa fa-rss-square" style="color:#F99C2D"></span> <a href="{% url 'rss' %}">{% trans "RSS" %}</a> <a href="{% url 'atom' %}">{% trans "Atom" %}</a></h3>
             <div class="row">
                 <div class="col-md-7">
                     {% for pieceofnews in news %}
@@ -228,7 +226,7 @@
     </div>
     <div class="home-fragment">
         <div id="graph"  class="container article">
-            <h1>Bande passante générale <a href="https://graph.resel.fr/dashboard/db/vue-generale"><small>plus de statistiques</small></a></h1>
+          <h1>Bande passante générale <a href="https://graph.resel.fr/dashboard/db/vue-generale"><small><i class="fa fa-fw fa-plus"></i></small></a></h1>
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="graph-brest">
                     <div class="embed-responsive graph">
@@ -243,10 +241,10 @@
                 </div>
 
                 <div role="tabpanel" class="tab-pane fade" id="graph-nantes" style="height: 218px">
-                    <h2 style="margin-top: 70px" ><small>Un jour peut être !</small><h2>
+                    <h2 style="margin-top: 100px; text-align: center;"><small>Bientôt !</small><h2>
                 </div>
             </div>
-            <ul class="nav nav-pills" role="tablist" style="margin-top: 20px; display: flex; justify-content: center;">
+            <ul class="nav nav-pills" role="tablist">
                 <li role="presentation" class="active"><a href="#graph-brest" aria-controls="brest" role="tab" data-toggle="tab">Brest</a></li>
                 <li role="presentation" ><a href="#graph-rennes" aria-controls="rennes" role="tab" data-toggle="tab">Rennes</a></li>
                 <li role="presentation" ><a href="#graph-nantes" aria-controls="nantes" role="tab" data-toggle="tab">Nantes</a></li>
@@ -258,7 +256,7 @@
             <h4>
                 Vous souhaitez contribuer au ResEl et monter en compétences ? <br />
                 Alors n'hésitez pas à
-                <b><a class="" href="{% url 'become-admin' %}">{% trans "devenir administrateur ResEl" %}</a></b>
+                <b><a class="" href="{% url 'become-admin' %}">{% trans "devenir administrateur ResEl" %}</a></b>.
             </h4>
         </div>
     </div>
