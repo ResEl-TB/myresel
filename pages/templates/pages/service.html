@@ -51,17 +51,11 @@
                   </div>
                </div>
             </div>
-            <div class="home-fragment home-presentation service-wrapper-mobile">
+            <div class="home-fragment service-wrapper-mobile">
                 <div class="container">
                    {% for service in services %}
-                   {% if forloop.counter|add:-1|divisibleby:2 %}
                      <div class="row service">
-                   {% endif %}
-                      {% if forloop.counter|add:-1|divisibleby:2 %}
                         <div class="col-md-2">
-                      {% else %}
-                        <div class=" col-md-offset-2 col-md-2">
-                      {% endif %}
                           <a class="service-link" href="{{ service.get_absolute_url }}">
                              <span class="glyphicon service-glyphicon {{ service.glyphicon_name }} service-icon revealOnScroll" aria-hidden="true"></span>
                           </a>
@@ -73,9 +67,7 @@
                            <a href="{{ service.get_absolute_url }}">En savoir plus</a>
                          </span>
                       </div>
-                   {% if forloop.counter|divisibleby:2 %}
                      </div>
-                   {% endif %}
                    {% empty %}
                    {% endfor %}
                   </div>
