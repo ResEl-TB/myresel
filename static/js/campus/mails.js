@@ -77,7 +77,7 @@ $('tr').each(function() {
                 btnClass: 'btn-green',
                 action: function () {
                     $.ajax({
-                        url: '/campus/mails/modérer/',
+                        url: '/campus/mails/moderate/',
                         type: 'POST',
                         data: {
                             'id': mailid,
