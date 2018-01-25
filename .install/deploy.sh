@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 ROOT=/srv/www/resel.fr/
 PYTHON=/srv/www/resel.fr/env/bin/python
 PIP=/srv/www/resel.fr/env/bin/pip
