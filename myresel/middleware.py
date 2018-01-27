@@ -238,7 +238,7 @@ class InscriptionNetworkHandler(object):
 
             # change campus or new device with bad DHCP
             # OR new device
-            elif ('user' in zone and is_registered in ['unknown', 'disabled']) \
+            elif ('user' in zone and is_registered in ['unknown', 'disabled', 'inactive']) \
                 or ('inscription-999' in zone):
                 # Check if the device is in the LDAP, if no put him in the
                 # inscription zone.
