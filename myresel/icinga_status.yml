@@ -472,7 +472,7 @@ campuses:
       network-access:
         - name: chambres
           title: Bâtiment des chambres
-          text: Switch d'accès au I1 et bornes Wi-Fi du I1
+          text: Switch d'accès aux Chambres et bornes Wi-Fi
           icon: fa-building building
           essential: false
           level: 1
@@ -491,7 +491,7 @@ campuses:
            - ap-c1-14
         - name: studios
           title: Bâtiment des studios
-          text: Switch d'accès au I1 et bornes Wi-Fi du I1
+          text: Switch d'accès aux studios et bornes Wi-Fi
           icon: fa-building building
           essential: false
           level: 1
