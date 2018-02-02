@@ -45,6 +45,7 @@ urlpatterns = [
     url(r'^machines/', include('devices.urls', namespace='gestion-machines')),
     url(r'^personnes/', include('gestion_personnes.urls', namespace='gestion-personnes')),
     url(r'^paiement/', include('tresorerie.urls', namespace='tresorerie')),
+    url(r'^tarifs/', RedirectView.as_view(pattern_name="tresorerie:prices", permanent=False)),
 
     url(r'^wiki/', include('wiki.urls', namespace='wiki')),
     url(r'^news/$', NewsListe.as_view(), name='news'),
