@@ -359,7 +359,7 @@ class StatusPageXhr(View):
             services['global_status'] = 'success'
             services['global_status_text'] = (
                 "Incidents mineurs en cours sur le réseau. "
-                "L'accès à Internet ne devrait pas être affecté")
+                "L'accès à Internet n'est pas affecté")
         elif max_score <= 3:
             services['global_status'] = 'warning'
             services['global_status_text'] = (
