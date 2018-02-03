@@ -6,7 +6,9 @@ def get_network_status():
     services = StatusPageXhr.get_services()
     services_status = StatusPageXhr.load_services_status(services)
     return (services_status['global_status'],
-            services_status['global_status_text'])
+            services_status['global_status_text'],
+            services_status['global_status_score'],
+    )
 
 def resel_context(request):
     """
@@ -21,7 +23,7 @@ def resel_context(request):
 
     context['need_to_pay'] = False
     context['has_paid_cotiz'] = 'success'
-    context['i_network_status'], context['i_network_status_text'] = get_network_status()
+    context['i_network_status'], context['i_network_status_text'], context['i_network_status_score'] = get_network_status()
     if request.user.is_authenticated():
         user = LdapUser.get(pk=request.user.username)
         context['need_to_pay'] = user.need_to_pay()

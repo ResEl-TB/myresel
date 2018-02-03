@@ -368,7 +368,8 @@ class StatusPageXhr(View):
             services['global_status'] = 'danger'
             services['global_status_text'] = (
                 "Des incidents majeurs sont en cours. "
-                "L'accès à Internet est perturbé")
+                "L'accès à Internet est fortement perturbé")
+        services['global_score'] = max_score
 
     @staticmethod
     def cleanup(service, mangle=False):

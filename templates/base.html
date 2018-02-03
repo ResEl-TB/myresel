@@ -178,6 +178,9 @@
               data-placement="bottom" 
               title="{{ i_network_status_text }}">
               <i class="fa fa-heartbeat fa-fw {{ i_network_status }}"></i>
+              {% if i_network_status_score == 1 %}
+              <i class="fa fa-exclamation fa-fw"></i>
+              {% endif %}
             </a>
             {% endcache %}
           </li>
