@@ -351,6 +351,7 @@ class StatusPageXhr(View):
                         # higher than the level 1
                         max_score = max(max_score, min(score, 1))
 
+        services['global_status_score'] = max_score
         if max_score <= 0:
             services['global_status'] = 'success'
             services['global_status_text'] = 'Tous les services sont nominaux'
@@ -369,7 +370,6 @@ class StatusPageXhr(View):
             services['global_status_text'] = (
                 "Des incidents majeurs sont en cours. "
                 "L'accès à Internet est fortement perturbé")
-        services['global_score'] = max_score
 
     @staticmethod
     def cleanup(service, mangle=False):
@@ -394,7 +394,9 @@ class StatusPageXhr(View):
 
     @staticmethod
     def load_services_status(services):
-        result = cache.get('icinga_services_status')
+        result = cache.get(
+            'icinga_services_status',
+            version=settings.ICINGA_STATUS_CACHE_VERSION)
         if result is not None:
             return result
         try:
@@ -431,7 +433,9 @@ class StatusPageXhr(View):
         StatusPageXhr.calc_scores(services, result)
         cache.set('icinga_services_status',
                   services,
-                  settings.ICINGA_STATUS_CACHE_DURATION)
+                  settings.ICINGA_STATUS_CACHE_DURATION,
+                  version=settings.ICINGA_STATUS_CACHE_VERSION
+        )
 
         return services
 

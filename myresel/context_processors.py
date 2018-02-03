@@ -5,9 +5,10 @@ from pages.views import StatusPageXhr
 def get_network_status():
     services = StatusPageXhr.get_services()
     services_status = StatusPageXhr.load_services_status(services)
-    return (services_status['global_status'],
-            services_status['global_status_text'],
-            services_status['global_status_score'],
+    return (
+        services_status['global_status'],
+        services_status['global_status_text'],
+        services_status['global_status_score'],
     )
 
 def resel_context(request):
