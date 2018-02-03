@@ -73,16 +73,14 @@ msgid "Présentation du l'organisation"
 msgstr ""
 
 #: campus/forms.py:227
-#, fuzzy
 #| msgid "Inscription"
 msgid "Description"
 msgstr "Description"
 
 #: campus/forms.py:240
-#, fuzzy
 #| msgid "Adresse MAC de la machine"
 msgid "Adresse de la mailing liste "
-msgstr "Email adress"
+msgstr "Mailing list address"
 
 #: campus/forms.py:243
 msgid "Mailing liste"
@@ -101,7 +99,6 @@ msgid "Année de Campagne"
 msgstr ""
 
 #: campus/forms.py:269
-#, fuzzy
 #| msgid "Veuillez sélectionner un campus"
 msgid "Merci de sélectionner un choix valide"
 msgstr "Please select a valid choice"
@@ -2305,18 +2302,14 @@ msgid "Contact"
 msgstr "Contact"
 
 #: templates/base.html:118
-#, fuzzy
-#| msgid "Mes listes de diffusion"
 msgid "Listes de diffusion"
-msgstr "My mailing lists"
+msgstr "Mailing lists"
 
 #: templates/base.html:122 templates/registration/logout.html:4
 msgid "Déconnexion"
 msgstr "Log out"
 
 #: templates/base.html:152
-#, fuzzy
-#| msgid "Votre carte a expiré"
 msgid "Votre accès internet a expiré :"
 msgstr "Your Internet access has expired"
 
@@ -2328,8 +2321,6 @@ msgstr ""
 "To use ResEl services you must "
 
 #: templates/base.html:156
-#, fuzzy
-#| msgid "Votre accès a bien été réglé"
 msgid "Votre accès internet va bientôt expirer :"
 msgstr "Your internet access will soon expire: "
 
@@ -2354,22 +2345,16 @@ msgid "Attention"
 msgstr "Warning"
 
 #: templates/base.html:203
-#, fuzzy
-#| msgid "Gérer mes clubs et associations"
 msgid "Les statuts de l'association"
 msgstr "Association status"
 
 #: templates/base.html:204
-#, fuzzy
-#| msgid "Règlement intérieur du ResEl"
 msgid "Le règlement intérieur"
 msgstr "ResEl Rules of Procedure"
 
 #: templates/base.html:205
-#, fuzzy
-#| msgid "Cotisation"
 msgid "Tarifs et Cotisation"
-msgstr "Member fees"
+msgstr "Prices and member fees"
 
 #: templates/base.html:212
 msgid "Les clubs"
@@ -2377,31 +2362,29 @@ msgstr "Clubs"
 
 #: templates/base.html:215
 msgid "Devenez Administrateur ResEl !"
-msgstr ""
+msgstr "Become a ResEl Admin!"
 
 #: templates/base.html:216
 msgid "Ancien site ResEl"
-msgstr ""
+msgstr "Former ResEl website"
 
 #: templates/base.html:221
 msgid "Fédérez"
-msgstr ""
+msgstr "Fédérez"
 
 #: templates/base.html:222
 msgid "IMT Atlantique"
-msgstr ""
+msgstr "IMT Atlantique"
 
 #: templates/base.html:224
 msgid "Associations de l'IMT Atlantique"
-msgstr ""
+msgstr "IMT Atlantique associations"
 
 #: templates/base.html:225
 msgid "Alumni"
-msgstr ""
+msgstr "Alumni"
 
 #: templates/base.html:234
-#, fuzzy
-#| msgid "Code client"
 msgid "Code Source"
 msgstr "Source Code"
 
@@ -2468,8 +2451,6 @@ msgid "Et plus encore !"
 msgstr "And more!"
 
 #: templates/registration/login.html:62
-#, fuzzy
-#| msgid "Veuillez vous connecter"
 msgid "Vous désirez vous connecter ?"
 msgstr "Would you like to log in?"
 
@@ -2482,8 +2463,6 @@ msgid "Merci pour le temps que vous avez accordé à ce site aujourd'hui."
 msgstr "Thank you for browsing ResEl website"
 
 #: tresorerie/async_tasks.py:117 tresorerie/async_tasks.py:144
-#, fuzzy
-#| msgid "Facture"
 msgid "Facture ResEl"
 msgstr "Invoice"
 
@@ -2547,8 +2526,6 @@ msgid "déjà payé"
 msgstr "already paid"
 
 #: tresorerie/templates/tresorerie/choose_product.html:72
-#, fuzzy
-#| msgid "Vous êtes nouveau ?"
 msgid "Vous êtes étudiant en FIP ?"
 msgstr "Are a FIP student?"
 
@@ -2646,8 +2623,6 @@ msgid "Tarifs"
 msgstr "Prices"
 
 #: tresorerie/templates/tresorerie/list_product.html:11
-#, fuzzy
-#| msgid "Les mails"
 msgid "Les tarifs"
 msgstr "Prices"
 
@@ -2660,8 +2635,6 @@ msgid "Accès au ResEl FIP"
 msgstr "FIP ResEl access"
 
 #: tresorerie/templates/tresorerie/recap.html:11
-#, fuzzy
-#| msgid "Statut de la machine"
 msgid "Récapitulatif de la commande"
 msgstr "Order recap"
 
@@ -2677,8 +2650,6 @@ msgstr "Transaction id"
 
 #: tresorerie/templates/tresorerie/recap.html:23
 #: tresorerie/templates/tresorerie/transaction_detail.html:21
-#, fuzzy
-#| msgid "Moyen de paiement"
 msgid "Type de paiement"
 msgstr "Payment type"
 
@@ -2695,8 +2666,6 @@ msgstr "Credit card"
 #: tresorerie/templates/tresorerie/transaction_detail.html:5
 #: tresorerie/templates/tresorerie/transaction_detail.html:9
 #: tresorerie/templates/tresorerie/transaction_detail.html:22
-#, fuzzy
-#| msgid "Toutes vos transactions"
 msgid "Résumé de la transaction"
 msgstr "Transaction sum up"
 
