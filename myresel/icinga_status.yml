@@ -173,7 +173,7 @@ campuses:
           text: Le système de backup est essentiel en cas d'incident majeur.
           icon: fa-floppy-o
           essential: false
-          level: 0
+          level: 1
           _hosts:
             - padova
         - name: mail
@@ -182,7 +182,7 @@ campuses:
             diffusions essentiels aux clubs du campus.
           icon: fa-envelope
           essential: false
-          level: 0
+          level: 1
           _hosts:
             - luigi
             - toad
@@ -191,7 +191,7 @@ campuses:
           text: Le garbage principal
           icon: fa-film
           essential: false
-          level: 0
+          level: 1
           _hosts:
             - alphabet
       network-access:
@@ -457,7 +457,7 @@ campuses:
           text: Le backup principal
           icon: fa-floppy-o
           essential: false
-          level: 0
+          level: 1
           _hosts:
             - gargantua
         - name: garbage
@@ -465,7 +465,7 @@ campuses:
           text: Le garbage principal
           icon: fa-film
           essential: false
-          level: 0
+          level: 1
           _hosts:
             - alphabet
       network-access:
@@ -479,7 +479,7 @@ campuses:
            - rouky
            - germaine
            - germaine1
-#           - erdgardpoe
+           - erdgardpoe
            - ap-c1-01
            - ap-c1-02
            - ap-c1-03
