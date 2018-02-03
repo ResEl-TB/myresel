@@ -452,7 +452,6 @@ campuses:
 #          level: 0
 #          _hosts:
 #            - foucault
-#            - reychnam
         - name: backup
           title: Le système de backup
           text: Le backup principal
