@@ -181,7 +181,7 @@ campuses:
           text: Le service de couriel permet l'hébergement des listes de
             diffusions essentiels aux clubs du campus.
           icon: fa-envelope
-          essential: false
+          essential: true
           level: 1
           _hosts:
             - luigi
@@ -424,8 +424,8 @@ campuses:
           title: MariaDB
           text: Le MariaDB principal
           icon: fa-database
-          essential: false
-          level: 2
+          essential: true
+          level: 1
           _hosts:
             - nairac
         - name: monitoring
