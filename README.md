@@ -5,23 +5,26 @@ Le site resel.fr
 [![coverage report](https://git.resel.fr/resel/myresel/badges/master/coverage.svg)](https://git.resel.fr/resel/myresel/commits/master)
 
 
-Ceci est le code pour le nouveau site ResEl [resel.fr](resel.fr) il est développé 
-en [Python](https://python.org) avec le [framework Django](https://www.djangoproject.com/).
-Ce document a pour objectif de vous présenter rapidement le projet et son 
-fonctionnement. Il sert également de guide pour les nouveaux développeurs qui 
-veulent contribuer au projet et de guide pour les administrateurs systèmes qui 
-voudraient installer (ou réparer) le service.
+Ceci est le code pour le site ResEl [resel.fr](resel.fr) il est développé en
+[Python](https://python.org) avec le [framework
+Django](https://www.djangoproject.com/). Ce document a pour objectif de vous
+présenter rapidement le projet et son fonctionnement. Il sert également de
+guide pour les nouveaux développeurs qui veulent contribuer au projet et de
+guide pour les administrateurs systèmes qui voudraient installer (ou réparer)
+le service.
 
-Dans la suite du document nous supposons que le lecteur est famillier avec 
-[Python](https://python.org) et avec le framework [Django](https://www.djangoproject.com/) 
-(et toutes les technologies associées HTTP, MYSQL, HTML, CSS, Javascript).
+Dans la suite du document nous supposons que le lecteur est famillier avec
+[Python](https://python.org) et avec le framework
+[Django](https://www.djangoproject.com/) (et toutes les technologies associées
+HTTP, MYSQL, HTML, CSS, Javascript).
 
 ![](.gitlab/screen1.png)
 
 # Démarrage en 2 minutes
-Cette démarche vous permettra d'avoir un serveur de développement prêt à être 
-utilisé en créant et en populant les bases de données (MYSQL, LDAP) 
-automatiquement. Nous utilisons Vagrant qui permet de faire tout cela automagiquement.
+Cette démarche vous permettra d'avoir un serveur de développement prêt à être
+utilisé en créant et en populant les bases de données (MYSQL, LDAP)
+automatiquement. Nous utilisons Vagrant qui permet de faire tout cela
+automagiquement.
 
 Installer [Vagrant](https://www.vagrantup.com/)
 ```
@@ -96,29 +99,30 @@ sur les serveurs de production.
 
 # Zone d'inscription
 
-Du fait de l'architecture très spécialisée du ResEl, toute les fonctionnalités 
-touchants à l'inscription et la gestion des machines sont sensibles. En effet, 
-pour détecter la bonne addresse MAC et pour proposer un site différent 
+Du fait de l'architecture très spécialisée du ResEl, toute les fonctionnalités
+touchants à l'inscription et la gestion des machines sont sensibles. En effet,
+pour détecter la bonne addresse MAC et pour proposer un site différent
 dépendant de l'origine de l'utilisateur, il est nécéssaire de mettre la machine
 sur plusieurs réseaux.  
 
-Dépendant du VLAN d'origine, le serveur NGINX taggera les requêtes HTTP 
-différement. Puis, en fonction du tag les middlewares `NetworkConfiguration` 
-et `InscriptionNetworkHandler` ajouterons des métadonnées aux requetes (comme 
-par exemple l'adresse mac de l'utilisateur) puis vont rerouter les requêtes 
-vers les bonnes vues.
+Dépendant du VLAN d'origine, le serveur NGINX taggera les requêtes HTTP
+différement. Puis, en fonction du tag les middlewares `NetworkConfiguration` et
+`InscriptionNetworkHandler` ajouterons des métadonnées aux requetes (comme par
+exemple l'adresse mac de l'utilisateur) puis vont rerouter les requêtes vers
+les bonnes vues.
 
-Dans l'environnement de développement, comme il est extrêmement compliqué de 
-totalement simuler l'architecture du ResEl, le choix a été fait de créer un 
-nouveau middleware `SimulateProductionNetwork` qui empoisonera les requetes 
+Dans l'environnement de développement, comme il est extrêmement compliqué de
+totalement simuler l'architecture du ResEl, le choix a été fait de créer un
+nouveau middleware `SimulateProductionNetwork` qui empoisonera les requetes
 avec de fausses ip.
 
 
 # Astuces
 
 ## Mettre le site en mode maintenance
-Lorsque vous avez de grosses migrations à faire, il est parfois nécéssaire de 
-mettre le site en mode maintenance pour éviter que les utilisateurs écrivent 
+
+Lorsque vous avez de grosses migrations à faire, il est parfois nécéssaire de
+mettre le site en mode maintenance pour éviter que les utilisateurs écrivent
 dans la base de données en même temps que vos migrations. Pour cela il suffit
 de renommer le fichier `maintenance_off.html` en `maintenance_on.html`. Si la
 configuration de nginx est correcte, le site devrait retourner une erreur `503`
@@ -132,11 +136,13 @@ mv maintenance_off.html maintenance_on.html
 mv mv maintenance_on.html maintenance_off.html
 ```
 
+
 ## Passer superutilisateur sur l'environement de dev
-Pour pouvoir administrer le site il faut avoir un compte avec les droits admins.
-Malheureusement en local (comme la population de la base de données n'est pas
-encore terminée) il n'est pas facile de se créer un compte admin. Voici un petit
-hack que je vous propose :
+
+Pour pouvoir administrer le site il faut avoir un compte avec les droits
+admins.  Malheureusement en local (comme la population de la base de données
+n'est pas encore terminée) il n'est pas facile de se créer un compte admin.
+Voici un petit hack que je vous propose :
 
 
 1. Modifier le ficher `myresel/middleware.py`, à la ligne 30 remplacer :
@@ -162,8 +168,13 @@ Vous pouvez vous connecter à l'administration en cliquant sur les engrenages
 dans la barre de navigation.
 
 # Notes
-Deux modules : la génération automatique de facture et l'affichage des documents de l'association, reposent sur un service [LaPuTeX](https://git.resel.fr/resel/laputex/).
-Pour mettre le mettre en place, suivez les détails du [README](https://git.resel.fr/resel/laputex/) puis configurer le `settings_local.py` ou bien utilisez l'installateur automatique :
+
+Deux modules : la génération automatique de facture et l'affichage des
+documents de l'association, reposent sur un service
+[LaPuTeX](https://git.resel.fr/resel/laputex/).  Pour mettre le mettre en
+place, suivez les détails du [README](https://git.resel.fr/resel/laputex/) puis
+configurer le `settings_local.py` ou bien utilisez l'installateur automatique :
+
 ```python
 LAPUTEX_HOST = "http://10.0.3.253:8000/"
 LAPUTEX_DOC_URL = LAPUTEX_HOST+"beta/documents/"

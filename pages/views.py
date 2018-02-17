@@ -347,21 +347,29 @@ class StatusPageXhr(View):
                     if service.get('essential', False):
                         max_score = max(max_score, score)
                     else:
+                        # If a service is non essential, no need to escalate
+                        # higher than the level 1
                         max_score = max(max_score, min(score, 1))
 
-        if max_score == 0:
+        services['global_status_score'] = max_score
+        if max_score <= 0:
             services['global_status'] = 'success'
             services['global_status_text'] = 'Tous les services sont nominaux'
-        if max_score <= 2:
+        elif max_score <= 1:
+            services['global_status'] = 'success'
+            services['global_status_text'] = (
+                "Incidents mineurs en cours sur le réseau. "
+                "L'accès à Internet n'est pas affecté")
+        elif max_score <= 3:
             services['global_status'] = 'warning'
             services['global_status_text'] = (
                 "Incidents mineurs en cours sur le réseau. "
-                "L'accès à Internet ne devrait pas être affecté")
+                "Quelques perturbations de l'accès à internet peuvent se produire")
         else:
             services['global_status'] = 'danger'
             services['global_status_text'] = (
                 "Des incidents majeurs sont en cours. "
-                "L'accès à Internet est perturbé")
+                "L'accès à Internet est fortement perturbé")
 
     @staticmethod
     def cleanup(service, mangle=False):
@@ -386,7 +394,9 @@ class StatusPageXhr(View):
 
     @staticmethod
     def load_services_status(services):
-        result = cache.get('icinga_services_status')
+        result = cache.get(
+            'icinga_services_status',
+            version=settings.ICINGA_STATUS_CACHE_VERSION)
         if result is not None:
             return result
         try:
@@ -423,7 +433,9 @@ class StatusPageXhr(View):
         StatusPageXhr.calc_scores(services, result)
         cache.set('icinga_services_status',
                   services,
-                  settings.ICINGA_STATUS_CACHE_DURATION)
+                  settings.ICINGA_STATUS_CACHE_DURATION,
+                  version=settings.ICINGA_STATUS_CACHE_VERSION
+        )
 
         return services
 

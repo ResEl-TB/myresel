@@ -173,7 +173,7 @@ campuses:
           text: Le système de backup est essentiel en cas d'incident majeur.
           icon: fa-floppy-o
           essential: false
-          level: 0
+          level: 1
           _hosts:
             - padova
         - name: mail
@@ -181,8 +181,8 @@ campuses:
           text: Le service de couriel permet l'hébergement des listes de
             diffusions essentiels aux clubs du campus.
           icon: fa-envelope
-          essential: false
-          level: 0
+          essential: true
+          level: 1
           _hosts:
             - luigi
             - toad
@@ -191,7 +191,7 @@ campuses:
           text: Le garbage principal
           icon: fa-film
           essential: false
-          level: 0
+          level: 1
           _hosts:
             - alphabet
       network-access:
@@ -424,8 +424,8 @@ campuses:
           title: MariaDB
           text: Le MariaDB principal
           icon: fa-database
-          essential: false
-          level: 2
+          essential: true
+          level: 1
           _hosts:
             - nairac
         - name: monitoring
@@ -452,13 +452,12 @@ campuses:
 #          level: 0
 #          _hosts:
 #            - foucault
-#            - reychnam
         - name: backup
           title: Le système de backup
           text: Le backup principal
           icon: fa-floppy-o
           essential: false
-          level: 0
+          level: 1
           _hosts:
             - gargantua
         - name: garbage
@@ -466,7 +465,7 @@ campuses:
           text: Le garbage principal
           icon: fa-film
           essential: false
-          level: 0
+          level: 1
           _hosts:
             - alphabet
       network-access:
@@ -480,7 +479,7 @@ campuses:
            - rouky
            - germaine
            - germaine1
-#           - erdgardpoe
+           - erdgardpoe
            - ap-c1-01
            - ap-c1-02
            - ap-c1-03

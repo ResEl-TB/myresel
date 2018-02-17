@@ -67,7 +67,7 @@
                     <li data-target="#carousel-quotes" data-slide-to="2"></li>
                 </ol>
                 <div class="carousel-inner" role="listbox">
-                    <div class="container item active">
+                    <div class="container item active" role="option">
                         <div class="row">
                             <div class="col-sm-4 col-sm-offset-1">
                                 <span class="fa fa-heart-o service-icon bigger" aria-hidden="true"></span>
@@ -77,7 +77,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="container item">
+                    <div class="container item" role="option">
                         <div class="row">
                             <div class="col-sm-4 col-sm-offset-1">
                                 <span class="fa fa-graduation-cap service-icon bigger" aria-hidden="true"></span>
@@ -87,7 +87,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="container item">
+                    <div class="container item" role="option">
                         <div class="row">
                             <div class="col-sm-4 col-sm-offset-1">
                                 <span class="fa fa-code-fork service-icon bigger" aria-hidden="true"></span>
@@ -190,9 +190,9 @@
                             <div class="club-bloc thumbnail">
                                 <a href="{% url 'campus:clubs:club_detail' club.cn %}" >
                                     {% if club.logo and club.logo != "None" %}
-                                    <img class="logo img-responsive club-img" src="/media/image/CLUB/{{ club.logo }}">
+                                    <img class="logo img-responsive club-img" src="/media/image/CLUB/{{ club.logo }}" alt="logo club {{ club.name }}">
                                     {% else %}
-                                    <img class="logo img-responsive club-img" src="{% static 'images/campus/orga.png' %}">
+                                    <img class="logo img-responsive club-img" src="{% static 'images/campus/orga.png' %}" alt="logo club {{ club.name }}">
                                     {% endif %}
                                     <p class="club-name">{{ club.name }}</p>
                                     {# <div class="club-description">{{ club.description }}</div> #}
@@ -226,17 +226,17 @@
     </div>
     <div class="home-fragment">
         <div id="graph"  class="container article">
-          <h1>Bande passante générale <a href="https://graph.resel.fr/dashboard/db/vue-generale"><small><i class="fa fa-fw fa-plus"></i></small></a></h1>
+          <h1>Bande passante générale <a href="https://graph.resel.fr/dashboard/db/vue-generale" aria-label="Plus d'info sur la bande passante"><small><i class="fa fa-fw fa-plus"></i></small></a></h1>
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="graph-brest">
                     <div class="embed-responsive graph">
-                        <iframe src="https://graph.resel.fr/dashboard-solo/db/public-stats?panelId=1&from=now-13h&to=now" width="450" height="200" frameborder="0"></iframe>
+                        <iframe title="graph Brest" src="https://graph.resel.fr/dashboard-solo/db/public-stats?panelId=1&from=now-13h&to=now" width="450" height="200" frameborder="0"></iframe>
                     </div>
                 </div>
 
                 <div role="tabpanel" class="tab-pane fade" id="graph-rennes">
                     <div class="embed-responsive graph" >
-                        <iframe id="iframe-rennes" src="https://graph.resel.fr/dashboard-solo/db/public-stats?refresh=1m&orgId=1&panelId=2&from=now-13h&to=now" width="450" height="200" frameborder="0"></iframe>
+                        <iframe id="iframe-rennes" title="graph Rennes" src="https://graph.resel.fr/dashboard-solo/db/public-stats?refresh=1m&orgId=1&panelId=2&from=now-13h&to=now" width="450" height="200" frameborder="0"></iframe>
                     </div>
                 </div>
 
@@ -245,9 +245,9 @@
                 </div>
             </div>
             <ul class="nav nav-pills" role="tablist">
-                <li role="presentation" class="active"><a href="#graph-brest" aria-controls="brest" role="tab" data-toggle="tab">Brest</a></li>
-                <li role="presentation" ><a href="#graph-rennes" aria-controls="rennes" role="tab" data-toggle="tab">Rennes</a></li>
-                <li role="presentation" ><a href="#graph-nantes" aria-controls="nantes" role="tab" data-toggle="tab">Nantes</a></li>
+                <li role="presentation" class="active"><a href="#graph-brest" aria-controls="graph-brest" role="tab" data-toggle="tab">Brest</a></li>
+                <li role="presentation" ><a href="#graph-rennes" aria-controls="graph-rennes" role="tab" data-toggle="tab">Rennes</a></li>
+                <li role="presentation" ><a href="#graph-nantes" aria-controls="graph-nantes" role="tab" data-toggle="tab">Nantes</a></li>
             </ul>
         </div>
     </div>
