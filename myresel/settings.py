@@ -96,7 +96,9 @@ INSCRIPTION_ZONE_ALLOWED_URLNAMESPACE = [
     'tresorerie',
 ]
 
-# Various settings
+#
+## Various settings
+#
 
 NUMBER_NEWS_IN_HOME = 4
 HOME_RSS_LINK = "http://www.history.com/this-day-in-history/rss"
@@ -306,6 +308,17 @@ RQ_QUEUES = {
    },
 }
 RQ_SHOW_ADMIN_LINK = True
+
+# eggdrop settings
+EGGDROP_FOLDER = os.path.join(MEDIA_ROOT, 'eggdrop')
+EGGDROP_CHANNELS = [
+    ('Conversation ResEl', 'resel'),
+    ('Conversation Dreamteam', 'dreamteam'),
+    ('Conversation CA', 'ca'),
+    ('Conversation ResEl2', 'resel2'),
+    ('Logs ResEl', 'resellog'),
+]
+EGGDROP_DEFAULT_CHANNEL = 'resel'
 
 
 ####

@@ -21,7 +21,7 @@ from django.views.generic import RedirectView
 from django.views.generic import TemplateView
 from django.views.i18n import javascript_catalog
 from pages.views import Home, Contact, NewsListe, inscription_zone_info, FaqList, faqVote, NewsDetail, Services, \
-    unsecure_set_language, NewsRSS, NewsAtom, StatusPageXhr
+    unsecure_set_language, NewsRSS, NewsAtom, StatusPageXhr, eggdrop
 
 from myresel import settings
 
@@ -57,6 +57,9 @@ urlpatterns = [
     url(r'^contact/', Contact.as_view(), name='contact'),
     url(r'^services/', Services.as_view(), name='services'),
     url(r'^campus/', include('campus.urls', namespace='campus')),
+    url(r'^eggdrop/$', eggdrop, name='eggdrop-default'),
+    url(r'^eggdrop/(?P<channel>\w+)/$', eggdrop, name='eggdrop-channel'),
+    url(r'^eggdrop/(?P<channel>\w+)/(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<day>\d{1,2})/$', eggdrop, name='eggdrop-date'),
 
     # Subcription related urls and log spamming workarounds
     url(r'^inscription_zone/', inscription_zone_info, name="inscription-zone"),

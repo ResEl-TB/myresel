@@ -13,10 +13,12 @@ db.sqlite3
 db.sqlite3_admin
 *.mo
 
+# Mediafiles
 media/image/users_photo/
 media/image/ASSOS/
 media/image/LIST/
 media/image/CLUB/
+media/eggdrop/
 
 # Editor auto save file
 .DS_Store

@@ -1,6 +1,8 @@
 # coding: utf-8
+import os
 import logging
 import random
+import datetime
 
 import yaml
 import json
@@ -11,7 +13,7 @@ from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.shortcuts import render, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -22,6 +24,7 @@ from django.utils import timezone
 from django.contrib.syndication.views import Feed
 from django.utils.feedgenerator import Atom1Feed
 from django.views.decorators.cache import cache_page
+from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 
 from fonctions import network, decorators
@@ -444,3 +447,61 @@ class StatusPageXhr(View):
         services_status = self.load_services_status(services)
         return HttpResponse(json.dumps(services_status), content_type='application/json')
 
+
+@login_required
+def eggdrop(request, channel=None, year=None, month=None, day=None):
+    """Page with the irc logs"""
+
+    def convert_to_html(filename):
+        import io
+        import irclog2html.irclog2html as irc
+
+        try:
+            infile = irc.open_log_file(filename)
+        except EnvironmentError as e:
+            raise Http404
+        outfile = io.BytesIO()
+
+        parser = irc.LogParser(infile)
+        formatter = irc.XHTMLStyle(outfile)
+        irc.convert_irc_log(parser, formatter,
+                title='', prev=('', ''), index=('', ''), next=('', ''))
+
+        outfile.seek(0)
+        return outfile.read().decode('utf-8')
+
+    if channel is None:
+        requested_channel = settings.EGGDROP_DEFAULT_CHANNEL
+    elif channel in [c[1] for c in settings.EGGDROP_CHANNELS]:
+        requested_channel = channel
+    else:
+        raise Http404
+
+    if year is None:
+        requested_date_r = timezone.now()
+    else:
+        requested_date_r = datetime.datetime(year=int(year), month=int(month), day=int(day))
+
+    requested_date = requested_date_r.strftime('%Y%m%d')
+
+    log_file = os.path.join(
+        settings.EGGDROP_FOLDER,
+        '%s.log.%s' % (requested_channel, requested_date)
+    )
+
+    if not os.path.isfile(log_file):
+        raise Http404
+
+    logs = convert_to_html(log_file)
+
+    return render(
+        request,
+        'pages/eggdrop.html', {
+            'logs': logs,
+            'channels': settings.EGGDROP_CHANNELS,
+            'channel': { 'slug': requested_channel, 'name': ''},
+            'date': requested_date_r,
+            'previous': requested_date_r + datetime.timedelta(days=-1),
+            'next': requested_date_r + datetime.timedelta(days=1),
+        }
+    )

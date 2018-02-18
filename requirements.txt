@@ -25,3 +25,4 @@ django-redis>=4.5.0
 phonenumbers==8.6.0
 feedparser
 PyYAML
+irclog2html
