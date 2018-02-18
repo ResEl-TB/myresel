@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block css %}
+<link href="{% static 'css/home.css' %}" rel="stylesheet">
+<style>
+
+.irc {
+  min-height: 500px;
+}
+
+.irc .generatedby {
+  margin-top: 50px;
+  color: #777777;
+  font-size: .8em;
+}
+
+.active {
+  color: #FFFFFF!important;
+}
+
+</style>
+{% endblock %}
+
+{% block titre %}Eggdrop{% endblock %}
+
+{% block content %}
+<div>
+  <div>
+    <div class="home-fragment home-user-management">
+      <div class="container">
+        <div class="row">
+          <h2>{% trans "Historique IRC ResEL" %}</h2>
+          <p>{% trans "Vous trouverez ici l'intégralité des discussions ResEl."%}</p>
+        </div>
+      </div>
+    </div>
+    <div class="home-fragment home-presentation">
+      <div class="container">
+      <div class="row">
+        <div class="col-md-3">
+          <div class="list-group">
+            {% for name, slug in channels %}
+            <a href="{% url 'eggdrop-channel' slug %}" class="list-group-item {% if slug == channel.slug %}active{% endif %}">
+              {{ name }}
+            </a>
+            {% endfor %}
+          </div>
+      </div>
+      <div class="col-md-9">
+        <div class="text-left">
+          <nav class="navbar navbar-default">
+            <div class="navbar-form navbar-left">
+              <a href="{% url 'eggdrop-date' channel.slug previous.year previous.month previous.day %}" class="btn btn-link"><span class="fa fa-fw fa-arrow-left"></span></a>
+              <a href="{% url 'eggdrop-date' channel.slug next.year next.month next.day %}" class="btn btn-link"><span class="fa fa-fw fa-arrow-right"></span></a>
+            </div>
+            <span class="navbar-brand">{{ date|date:"d F Y" }}</span>
+            <div class="navbar-form navbar-right">
+              <form action="">
+                <div class="form-group">
+                  <input type="text" class="form-control" placeholder="Rechercher" disabled>
+                </div>
+                <button type="submit" class="btn btn-default" disabled><span class="fa fa-search"></span></button>
+              </form>
+            </div>
+          </nav>
+
+          <div class="irc">{{ logs|safe }}</div>
+
+          <a href="{% url 'eggdrop-date' channel.slug previous.year previous.month previous.day %}" class="btn btn-default"><span class="fa fa-fw fa-arrow-left"></span> Jour précédant</a>
+          <a href="{% url 'eggdrop-date' channel.slug next.year next.month next.day %}" class="btn btn-default" style="float: right">Jour suivant <span class="fa fa-fw fa-arrow-right"></span></a>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+  <!-- /.col-lg-12 -->
+</div>
+<!-- /.row -->
+{% endblock %}
