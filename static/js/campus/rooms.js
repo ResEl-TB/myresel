@@ -13,7 +13,7 @@ $( ".list-group-item a" ).on( "click", function(event) {
 
         // Unsuccessfull response
         error : function(xhr,errmsg,err) {
-            
+
         }
     });
 });

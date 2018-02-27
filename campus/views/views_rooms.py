@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import permission_required, login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.db.models import Q
-from django.http import Http404
+from django.http import Http404, JsonResponse
 
 import calendar, datetime, json, copy, pytz
 
@@ -173,12 +173,15 @@ def calendar_view(request, room='all', year=timezone.now().year, month=timezone.
         ('Autre', Room.objects.filter(private=False, location__in=['O', 'C'])),
     ]
 
+    form = RoomBookingForm()
+
     context = {
         'calendar': cal,
         'current_date': current_date,
         'rooms': rooms,
         'current_room': room,
-        'current_day': [str(timezone.now().day), str(timezone.now().month), str(timezone.now().year)]
+        'current_day': [str(timezone.now().day), str(timezone.now().month), str(timezone.now().year)],
+        'form': form,
     }
 
     return render(
@@ -277,10 +280,19 @@ class BookingView(FormView):
             context["booking"] = self.booking.id
         return context
 
+    def form_invalid(self, form):
+        if self.request.is_ajax():
+            errors = str(form.errors)
+            return JsonResponse({'errors': errors}, status=400)
+        else:
+            return Http404
+
     def form_valid(self, form):
-        form.save()
-        messages.success(self.request, _('Opération réussie'))
-        return super(BookingView, self).form_valid(form)
+        if self.request.is_ajax():
+            form.save()
+            return JsonResponse({}, status=200)
+        else:
+            return Http404
 
 class DeleteBooking(DeleteView):
     """

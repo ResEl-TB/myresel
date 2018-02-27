@@ -277,6 +277,11 @@ button.add-user, button.add-user:hover {
     border-radius: 0px !important;
 }
 
+/* Used to remove rows negative margin */
+.remove-margin {
+    margin: 0px !important;
+}
+
 .row-eq-height {
   display: -webkit-box;
   display: -webkit-flex;
@@ -296,6 +301,15 @@ button.add-user, button.add-user:hover {
 
 .inline {
     display: inline;
+}
+
+textarea{
+    resize: vertical;
+}
+
+/* Requires to be used in the **modal-dialog** div */
+.modal-large {
+    width: 75% !important;
 }
 
 @media (max-width: 767px) {
