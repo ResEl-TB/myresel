@@ -249,13 +249,10 @@ class DeleteRoom(DeleteView):
             return HttpResponseRedirect(reverse('campus:rooms:calendar'))
         return super(DeleteRoom, self).dispatch(request, *args, **kwargs)
 
-class BookingView(FormView):
+class BookingView(View):
     """
     View to book an event or edit an event
     """
-    template_name = 'campus/rooms/booking.html'
-    success_url = reverse_lazy('campus:rooms:calendar')
-    form_class = RoomBookingForm
 
     @method_decorator(login_required)
     #@method_decorator(ae_required)
@@ -268,29 +265,19 @@ class BookingView(FormView):
                 return HttpResponseRedirect(reverse('campus:rooms:calendar'))
         return super(BookingView, self).dispatch(request, *args, **kwargs)
 
-    def get_form(self, form_class=None):
-        if form_class is None:
-            form_class = self.get_form_class()
-        return form_class(self.request.POST or None, user=self.request.ldap_user, instance=self.booking,)
-
-    def get_context_data(self, **kwargs):
-        context = super(BookingView, self).get_context_data(**kwargs)
-        context["booking"] = None
-        if self.booking:
-            context["booking"] = self.booking.id
-        return context
-
-    def form_invalid(self, form):
-        if self.request.is_ajax():
-            errors = str(form.errors)
-            return JsonResponse({'errors': errors}, status=400)
-        else:
-            return Http404
-
-    def form_valid(self, form):
-        if self.request.is_ajax():
-            form.save()
-            return JsonResponse({}, status=200)
+    def post(self, request, booking=None):
+        if request.is_ajax():
+            instance = None
+            if booking:
+                instance = RoomBooking(pk=booking)
+            form = RoomBookingForm(request.POST, instance=instance)
+            form.user = request.ldap_user
+            if form.is_valid():
+                form.save()
+                return JsonResponse({}, status=200)
+            else:
+                errors = str(form.errors)
+                return JsonResponse({'errors': errors}, status=400)
         else:
             return Http404
 
@@ -314,6 +301,11 @@ class BookingDetailView(DetailView):
     model = RoomBooking
     template_name = 'campus/rooms/booking_detail.html'
     slug_field = "pk"
+
+    def get_context_data(self, **kwargs):
+        context = super(BookingDetailView, self).get_context_data(**kwargs)
+        context["form"] = RoomBookingForm(instance=context["object"])
+        return(context)
 
 
 class RequestAvailability(View):

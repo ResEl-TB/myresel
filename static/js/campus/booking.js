@@ -15,7 +15,7 @@ function checkAvailability(form){
                 url : checkFormURL, // /!\ Needs to be defined in the html page /!\
                 type : "GET",
                 async: false,
-                data : {"value": roomChoices[i].value, "start": start, "end": end, /* {% if booking %}"id":  {{booking}}  {% endif %} */},// atm let's take care of the creation
+                data : {"value": roomChoices[i].value, "start": start, "end": end, "id": id}, // set id in the html page
                 success : function(data){
                     if(data != "0"){
                         answer = confirm(

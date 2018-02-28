@@ -172,7 +172,7 @@
     </div>
 
     <!-- Modal for the booking form -->
-
+    {% if user.is_authenticated %}
     <div class="modal fade" id="addBooking" role="dialog">
         <div class="modal-dialog modal-large">
             <div class="modal-content">
@@ -278,7 +278,7 @@
 
                                 <div class="form-group">
                                     <div class="col-sm-offset-2 col-sm-10">
-                                        <button type="submit" id="booking-submit" class="btn btn-success pull-right">Réserver</button>
+                                        <button type="submit" id="booking-submit" class="btn btn-success pull-right">{% trans "Réserver" %}</button>
                                     </div>
                                 </div>
                             </div>
@@ -292,6 +292,7 @@
             </div>
         </div>
     </div>
+    {% endif %}
 {% endblock %}
 
 {% block javascript %}
@@ -299,6 +300,7 @@
     <script>
         checkFormURL = "{% url 'campus:rooms:check-availability'%}";
         sendFormURL = "{% url 'campus:rooms:booking'%}";
+        id = null;
     </script>
     <script src="{% static 'js/campus/booking.js' %}"></script>
 {% endblock %}
