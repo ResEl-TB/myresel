@@ -153,6 +153,7 @@ class RoomBooking(models.Model):
 
     name = models.TextField(
         help_text=_('nom de l\'évènement'),
+        default="Evenement",
     )
 
     description = models.TextField(
