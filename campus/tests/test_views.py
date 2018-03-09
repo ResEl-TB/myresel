@@ -454,7 +454,7 @@ def createBooking(start_time, end_time, recurring_rule = "NONE", end_recurring_p
     booking.save()
     return booking
 
-def createBookingForm(rooms=[1], description="Automaticaly Generated", start_time=None, end_time=None, booking_type="club", recurring_rule="NONE", end_recurring_period="", displayable=True):
+def createBookingForm(rooms=[1], name="Booking", description="Automaticaly Generated", start_time=None, end_time=None, booking_type="club", recurring_rule="NONE", end_recurring_period="", displayable=True):
 
     year = date.today().year+1
 
@@ -465,6 +465,7 @@ def createBookingForm(rooms=[1], description="Automaticaly Generated", start_tim
 
     form = RoomBookingForm(data={
         'room': rooms,
+        'name': name,
         'description': description,
         'start_time': start_time,
         'end_time': end_time,
@@ -843,6 +844,9 @@ class BookingFormTestCase(TestCase):
         room = createRoom()
 
         form = createBookingForm(rooms=[])
+        self.assertFalse(form.is_valid())
+
+        form = createBookingForm(rooms=[room.id], name="")
         self.assertFalse(form.is_valid())
 
         form = createBookingForm(rooms=[room.id], description="")
