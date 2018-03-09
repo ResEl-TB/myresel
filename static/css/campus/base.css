@@ -25,8 +25,9 @@ body {
 
 .beta-banner {
     color: white;
-    background-color: #8BBF82;
     height: 1.5em;
+    width: 100%;
+    height: auto;
 }
 
 .beta-banner a {

@@ -34,7 +34,7 @@
   <div class="floatin_hugo_8 floating_meme"></div>
   <div class="floatin_hugo_9 floating_meme"></div>
 <div class="text-center beta-banner">
-    {% trans "Cette partie du site est encore en BETA, n'hésitez pas " %}<a href="{% url 'contact'%}">{% trans "à rapporter un bug" %}</a>
+    <p>{% trans "Cette partie du site est encore en BETA, n'hésitez pas " %}<a href="{% url 'contact'%}">{% trans "à rapporter un bug" %}</a></p>
 </div>
 <nav class="navbar navbar-default">
     <div class="container-fluid">
@@ -102,7 +102,7 @@
                                    <a href="{% url "campus:mails:moderate" %}"><i class="fa fa-eye fa-fw"></i> Modération mails campus</a>
                                 </li>
                             {% endif %}
-                            {% if request.ldap_user.is_staff %}
+                            {% if request.user.is_staff %}
                                 <li>
                                    <a href="{% url "campus:gestion:modo" %}"><i class="fa fa-beer fa-fw"></i> Gérer les modérateurs campus</a>
                                 </li>

@@ -56,6 +56,10 @@ a, a:hover, a:active, a:visited {
     height: 3.2em;
 }
 
+.logo-wrapper {
+    height: 150px;
+}
+
 /* Mobile CSS */
 @media (max-width: 991px) {
 

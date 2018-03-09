@@ -22,7 +22,7 @@
         {% endif %}
             <div class="col-md-3">
                 <div class="col-md-12 well">
-                    <div class="col-md-12 text-center">
+                    <div class="col-md-12 text-center logo-wrapper">
                         <a href="{% url 'campus:clubs:club_detail' asso.cn %}">
                             {% if asso.logo and asso.logo != "None" %}
                             <img class="logo" data-src="/media/image/ASSOS/{{ asso.logo }}">
@@ -104,7 +104,7 @@
         {% endif %}
         <div class="col-md-3">
             <div class="col-md-12 well">
-                <div class="col-md-12 text-center">
+                <div class="col-md-12 text-center logo-wrapper">
                     <a href="{% url 'campus:clubs:club_detail' club.cn %}">
                         {% if club.logo and club.logo != "None" %}
                         <img class="logo" data-src="/media/image/CLUB/{{ club.logo }}">
@@ -186,7 +186,7 @@
             <div class="col-md-3">
                 <div class="col-md-12 well">
                     <div class="row">
-                        <div class="col-md-12 text-center">
+                        <div class="col-md-12 text-center logo-wrapper">
                             <a href="{% url 'campus:clubs:club_detail' list.cn %}">
                                 {% if list.logo and list.logo != "None" %}
                                 <img class="logo" data-src="/media/image/LIST/{{ list.logo }}">
