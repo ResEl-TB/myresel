@@ -11,8 +11,8 @@ html {
 
 body {
     /* margin-bottom: 400px; */
-    /*background: url(/static/images/campus/bgimg.jpg) no-repeat center center fixed;*/
-    background-color: #8BBF82;
+    background: url(/static/images/campus/bgimg.png) no-repeat center center fixed;
+    background-color: #78c429;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
@@ -50,15 +50,15 @@ body {
 
 .navbar-header .navbar-toggle.collapsed {
     background-color: transparent !important;
-    border-color: #8BBF82;
+    border-color: #8BCC48;
 }
 
 .navbar-header .navbar-toggle.collapsed .icon-bar {
-    background-color: #8BBF82;
+    background-color: #8BCC48;
 }
 
 .navbar-header .navbar-toggle {
-    background-color: #8BBF82 !important;
+    background-color: #8BCC48 !important;
     border-color: white;
 }
 
@@ -75,7 +75,7 @@ body {
 .dropdown-menu > li > a,
 .navbar .navbar-nav > li > a {
     background-color: transparent;
-    color: #8BBF82 !important;
+    color: #8BCC48 !important;
     font-weight: bold;
 }
 
@@ -85,7 +85,7 @@ body {
 .navbar-default .navbar-nav > .open > a:focus,
 .navbar-default .navbar-nav > .open > a:hover {
     color: white !important;
-    background-color: #8BBF82;
+    background-color: #8BCC48;
 }
 
 .dropdown-menu {
@@ -115,7 +115,7 @@ body {
 /* Form Style */
 
 .form-control:focus {
-  box-shadow: 1px 0px 5px #8BBF82;
+  box-shadow: 1px 0px 5px #8BCC48;
   border-color: #a6d69e;
 }
 
@@ -142,7 +142,7 @@ body {
     box-shadow: -1px -1px 5px rgba(0, 0, 0, 0.1);
     background-color: white;
     padding-top: 15px;
-    color: #8BBF82;
+    color: #8BCC48;
 }
 
 .footer .row {
@@ -151,7 +151,7 @@ body {
 }
 
 .footer a{
-    color: #8BBF82;
+    color: #8BCC48;
 }
 
 .footer ul {
@@ -176,7 +176,7 @@ body {
 .ui-state-focus {
    background: #cbf9c2 !important;
    color: inherit !important;
-   border-color: #8BBF82 !important;
+   border-color: #8BCC48 !important;
 }
 
 .ui-autocomplete-input {
@@ -195,25 +195,25 @@ body {
 .ui-widget-header, .ui-state-highlight, .ui-state-hover {
   background: #95db87 !important;
   color: inherit !important;
-  border-color: #8BBF82 !important;
+  border-color: #8BCC48 !important;
 }
 
 .ui-state-hover{
   background: #cbf9c2 !important;
   color: inherit !important;
-  border-color: #8BBF82 !important;
+  border-color: #8BCC48 !important;
 }
 
 .ui-widget-content .ui-state-active {
   background: #95db87 !important;
   color: inherit !important;
-  border-color: #8BBF82 !important;
+  border-color: #8BCC48 !important;
 }
 
 .modal-header {
   color: white;
   text-align: center;
-  background: url(/static/images/campus/bgimg.jpg) no-repeat center center fixed;
+  background: url(/static/images/campus/modal-bg.png) no-repeat center center fixed;
 }
 
 .dell-user, .dell-user:hover {
@@ -230,7 +230,7 @@ button.dell-user {
 
 button.add-user, button.add-user:hover {
   padding: 0;
-  color: #8BBF82;
+  color: #8BCC48;
 }
 
 .noncolored-a, .noncolored-a:hover, .noncolored-a:visited, .noncolored-a:focus{
