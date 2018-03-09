@@ -26,7 +26,8 @@
         <button data-toggle="modal" data-target="#addBooking" class="btn btn-success">Modifier l'événement</button>
         {% endif %}
         {% endif %}
-        <h3>{{ object.description }}</h3>
+        <h3>{{ object.name }}</h3>
+        <h4>{{ object.description }}</h4>
         <p>{% trans "De" %} {{ object.start_time|date:"j l H:i:s" }} {% trans "à" %} {{ object.end_time|date:"j l H:i:s" }}</p>
         <p>
             {% for room in object.room.all %}

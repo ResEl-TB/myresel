@@ -22,7 +22,7 @@ import re
 class RoomBookingForm(ModelForm):
     class Meta:
         model = RoomBooking
-        fields = ("room", "description", "start_time", "end_time", "user", "booking_type", "displayable",
+        fields = ("room", "name", "description", "start_time", "end_time", "user", "booking_type", "displayable",
                   "recurring_rule", "end_recurring_period",)
 
     def __init__(self, *args, **kwargs):
