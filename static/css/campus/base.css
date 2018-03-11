@@ -210,6 +210,10 @@ body {
   border-color: #8BBF82 !important;
 }
 
+.modal-content {
+  overflow: hidden;
+}
+
 .modal-header {
   color: white;
   text-align: center;
