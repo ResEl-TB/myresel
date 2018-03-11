@@ -577,12 +577,12 @@ msgstr ""
 #: campus/templates/campus/whoswho/userHome.html:235
 #, fuzzy
 #| msgid "Ajout de machine"
-msgid "Ajouter un parain"
+msgid "Ajouter un parrain"
 msgstr "Add a godfather"
 
 #: campus/templates/campus/whoswho/userDetails.html:142
 #: campus/templates/campus/whoswho/userHome.html:238
-msgid "Entrer le nom du parain que vous souhaitez ajouter :"
+msgid "Entrer le nom du parrain que vous souhaitez ajouter :"
 msgstr ""
 
 #: campus/templates/campus/whoswho/userHome.html:45

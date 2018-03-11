@@ -165,7 +165,7 @@
             {% empty %}
                   <p class="text-center">Vous n'avez pas de filleuls</p>
             {% endfor %}
-            <h3 class="text-center">Mes parains <a style="padding:0 0 0 0;" class="btn" data-toggle="modal" data-target="#addParain"><span class="fa fa-plus-circle" style="color:#8BBF82"></span></a></h3>
+            <h3 class="text-center">Mes parrains <a style="padding:0 0 0 0;" class="btn" data-toggle="modal" data-target="#addParain"><span class="fa fa-plus-circle" style="color:#8BBF82"></span></a></h3>
             {% for godparent in user.godparents %}
             <div class="text-center">
                 <p class="text-center" style="display:inline">
@@ -177,7 +177,7 @@
                 </form>
             </div>
             {% empty %}
-                <p class="text-center">Vous n'avez pas de parains</p>
+                <p class="text-center">Vous n'avez pas de parrains</p>
             {% endfor %}
          </div>
       </div>
@@ -226,7 +226,7 @@
                   <p>{% trans "Entrer le nom du filleul que vous souhaitez ajouter :" %}</p>
                   <div class="input-group">
                     <span class="input-group-addon" id="basic-addon1"><span class="fa fa-user"></span></span>
-                    <input type="text" class="form-control" name="id_user" id="id_parain" style="width:70%;"></input>
+                    <input type="text" class="form-control" name="id_user" id="id_parrain" style="width:70%;"></input>
                   </div>
                 </div>
                 <div class="modal-footer">
@@ -246,10 +246,10 @@
             <form class="form-horizontal" action="{% url 'campus:who:add-person' True %}" method="post">
                 {% csrf_token %}
                 <div class="modal-header">
-                    <h4 class="modal-title">{% trans "Ajouter un parain" %}</h4>
+                    <h4 class="modal-title">{% trans "Ajouter un parrain" %}</h4>
                 </div>
                 <div class="modal-body">
-                  <p>{% trans "Entrer le nom du parain que vous souhaitez ajouter :" %}</p>
+                  <p>{% trans "Entrer le nom du parrain que vous souhaitez ajouter :" %}</p>
                   <div class="input-group">
                     <span class="input-group-addon" id="basic-addon1"><span class="fa fa-user"></span></span>
                     <input type="text" class="form-control" name="id_user" id="id_bizzu" style="width:70%;"></input>
@@ -310,7 +310,7 @@
     <script src="{% static 'jquery/jquery-ui.min.js' %}"></script>
     <script>
         jQuery(document).ready(function ($) {
-          $('#id_parain').autocomplete({
+          $('#id_parrain').autocomplete({
               source: "{% url 'campus:who:request-user' %}",
               minLength: 3,
           });
