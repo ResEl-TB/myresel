@@ -66,6 +66,7 @@ urlpatterns = [
     url(r'^generate_204/', RedirectView.as_view(pattern_name="inscription-zone", permanent=False), name="generate_204"),
     url(r'^favicon.ico', RedirectView.as_view(url='/static/images/icons/favicon-96x96.png', permanent=False), name="favicon"),
 
+    url(r'^tv', TemplateView.as_view(template_name='pages/tv.html'), name="tv-index"),
     url(r'^help-needed/', TemplateView.as_view(template_name='help_needed.html'), name="help-needed"),
     url(r'^how-to-signup', TemplateView.as_view(template_name='pages/how_to_signup.html'), name="how-to-signup"),
     url(r'^become/$', TemplateView.as_view(template_name='pages/become_admin.html'), name='become-admin'),
