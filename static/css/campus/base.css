@@ -11,8 +11,7 @@ html {
 
 body {
     /* margin-bottom: 400px; */
-    background: url(/static/images/campus/bgimg.png) no-repeat center center fixed;
-    background-color: #78c429;
+    background-color: #65d145;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
@@ -41,25 +40,25 @@ body {
     color: #FFFFFF;
 }
 .navbar {
-    /*background-color: #f5f5f5;*/
     background-color: white;
     border: none;
     border-radius: 0px;
     font-family: 'Roboto', 'sans-serif';
     font-size: 1.0em;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .navbar-header .navbar-toggle.collapsed {
     background-color: transparent !important;
-    border-color: #8BCC48;
+    border-color: #65d145;
 }
 
 .navbar-header .navbar-toggle.collapsed .icon-bar {
-    background-color: #8BCC48;
+    background-color: #65d145;
 }
 
 .navbar-header .navbar-toggle {
-    background-color: #8BCC48 !important;
+    background-color: #65d145 !important;
     border-color: white;
 }
 
@@ -76,7 +75,7 @@ body {
 .dropdown-menu > li > a,
 .navbar .navbar-nav > li > a {
     background-color: transparent;
-    color: #8BCC48 !important;
+    color: #65d145 !important;
     font-weight: bold;
 }
 
@@ -86,7 +85,7 @@ body {
 .navbar-default .navbar-nav > .open > a:focus,
 .navbar-default .navbar-nav > .open > a:hover {
     color: white !important;
-    background-color: #8BCC48;
+    background-color: #65d145;
 }
 
 .dropdown-menu {
@@ -97,8 +96,8 @@ body {
 .well {
     border-radius: 0px;
     background-color: white;
-    border: 2px solid #e9f1ec;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    border: 2px solid #dbdbdb;
+    box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.3);
 }
 
 /* Style for calendar.html */
@@ -116,7 +115,7 @@ body {
 /* Form Style */
 
 .form-control:focus {
-  box-shadow: 1px 0px 5px #8BCC48;
+  box-shadow: 1px 0px 5px #65d145;
   border-color: #a6d69e;
 }
 
@@ -140,10 +139,10 @@ body {
     /* width: 100%;
     position: absolute;
     bottom: 0; */
-    box-shadow: -1px -1px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: -2px -2px 4px rgba(0, 0, 0, 0.2);
     background-color: white;
     padding-top: 15px;
-    color: #8BCC48;
+    color: #65d145;
 }
 
 .footer .row {
@@ -152,7 +151,7 @@ body {
 }
 
 .footer a{
-    color: #8BCC48;
+    color: #65d145;
 }
 
 .footer ul {
@@ -177,7 +176,7 @@ body {
 .ui-state-focus {
    background: #cbf9c2 !important;
    color: inherit !important;
-   border-color: #8BCC48 !important;
+   border-color: #65d145 !important;
 }
 
 .ui-autocomplete-input {
@@ -196,19 +195,19 @@ body {
 .ui-widget-header, .ui-state-highlight, .ui-state-hover {
   background: #95db87 !important;
   color: inherit !important;
-  border-color: #8BCC48 !important;
+  border-color: #65d145 !important;
 }
 
 .ui-state-hover{
   background: #cbf9c2 !important;
   color: inherit !important;
-  border-color: #8BCC48 !important;
+  border-color: #65d145 !important;
 }
 
 .ui-widget-content .ui-state-active {
   background: #95db87 !important;
   color: inherit !important;
-  border-color: #8BCC48 !important;
+  border-color: #65d145 !important;
 }
 
 .modal-header {
@@ -231,7 +230,7 @@ button.dell-user {
 
 button.add-user, button.add-user:hover {
   padding: 0;
-  color: #8BCC48;
+  color: #65d145;
 }
 
 .noncolored-a, .noncolored-a:hover, .noncolored-a:visited, .noncolored-a:focus{
@@ -251,7 +250,7 @@ button.add-user, button.add-user:hover {
   top: 17%;
   left: 0;
   background-color: #f5f5f5;
-  box-shadow: -1px 0px 10px rgba(0,0,0,0.3);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
   transition: all 0.5s;
 }
 
@@ -260,17 +259,8 @@ button.add-user, button.add-user:hover {
 }
 
 .btn-home:hover{
-    width: 60px;
-    transition: all 0.5s;
-}
-
-.btn-home .fa {
-    transition: all 0.5s;
-}
-
-.btn-home:hover .fa{
-    text-shadow: 0px 0px 5px rgba(94, 166, 75, 1);
-    transition: all 0.5s;
+    width: 47px;
+    transition: all 0.3s;
 }
 
 /* removes bootsrap component's radius */
