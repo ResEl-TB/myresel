@@ -149,6 +149,7 @@ section
     opacity: 1;
 	position: absolute;
 	z-index: 1;
+	overflow: hidden;
 }
 
 #overlay *
@@ -158,12 +159,25 @@ section
 
 #overlay-title
 {
+	margin-bottom: calc(-0.1 * var(--h));
     font-weight: bold;
     font-size: calc(0.08 * var(--h));
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    line-height: calc(0.1 * var(--h));
+	overflow: hidden;
+}
+
+#overlay-title.overflow:hover
+{
+	position: absolute;
+    transform: translateX(calc(var(--h) * 16 / 9 - 2 * var(--bp) - 100%));
+    transition: transform 2s;
 }
 
 #overlay #separator
 {
+	margin-top: calc(0.1 * var(--h) + var(--bp));
     background: #fff;
     height: calc(0.005 * var(--h));
     width: calc(50% + var(--bp));
@@ -174,6 +188,19 @@ section
 {
     width: calc(50% - var(--bp));
     text-align: justify;
+    position: relative;
+    padding-right: calc(2 * var(--bp));
+    height: calc(100% - 5vh - 2 * var(--bp) - 0.105 * var(--h));
+}
+
+#overlay-page .content-y
+{
+    background: none !important;
+}
+
+#overlay-page .scrollbar-y
+{
+    background: rgba(255, 255, 255, .5);
 }
 
 #overlay-subtitle
@@ -190,6 +217,7 @@ section
 {
     font-size: calc(0.025 * var(--h));
     font-weight: bold;
+	margin: 0;
 }
 
 input[type=range]
@@ -208,29 +236,21 @@ input[type=range]:focus
 input[type=range]::-webkit-slider-runnable-track
 {
     width: 100%;
-    height: 4px;
-    box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
-    background: #676767;
-    border-radius: 7px;
-    border: 0px solid #ff0000;
+    height: 0.45vh;
+    background: rgba(255, 255, 255, .5);
+    border-radius: 1vh;
 }
 
 input[type=range]::-webkit-slider-thumb
 {
-    box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
-    border: 5px solid #ff0000;
-    height: 4px;
-    width: 4px;
-    border-radius: 23px;
+    border: 0.5vh solid #ff0000;
+    height: 0.45vh;
+    width: .45vh;
+    border-radius: 1vh;
     background: #ff0000;
     cursor: pointer;
     -webkit-appearance: none;
     margin-top: 0px;
-}
-
-input[type=range]:focus::-webkit-slider-runnable-track
-{
-    background: #797979;
 }
 
 input[type=range]::-moz-range-track
@@ -246,7 +266,7 @@ input[type=range]::-moz-range-thumb
 {
     background: #ff0000;
     cursor: pointer;
-    border: 0.6vh solid #ff0000;
+    border: 0.5vh solid #ff0000;
     height: 0.45vh;
     width: .45vh;
     border-radius: 1vh;
@@ -255,71 +275,41 @@ input[type=range]::-moz-range-thumb
 input[type=range]::-ms-track
 {
     width: 100%;
-    height: 4px;
+    height: 2px;
     cursor: pointer;
-    background: transparent;
-    border-color: transparent;
-    color: transparent;
-}
-
-input[type=range]::-ms-fill-lower
-{
-    background: #555555;
-    border: 0px solid #ff0000;
-    border-radius: 14px;
-    box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
-}
-
-input[type=range]::-ms-fill-upper
-{
-    background: #676767;
-    border: 0px solid #ff0000;
-    border-radius: 14px;
-    box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
+    background: rgba(255, 255, 255, .5);
+    border-radius: 2px;
 }
 
 input[type=range]::-ms-thumb
 {
-    box-shadow: 0px 0px 0px #000000, 0px 0px 0px #0d0d0d;
-    border: 5px solid #ff0000;
+    border: 4px solid #ff0000;
+    height: 4px;
     width: 4px;
-    border-radius: 23px;
+    border-radius: 10px;
     background: #ff0000;
     cursor: pointer;
-    height: 4px;
-}
-
-input[type=range]:focus::-ms-fill-lower
-{
-    background: #676767;
-}
-
-input[type=range]:focus::-ms-fill-upper
-{
-    background: #797979;
 }
 
 #sound {
     position: absolute;
-    top: 1vh;
-    left: 8.5vh;
     fill: #fff;
-    height: 2.1vh;
-    padding: .45vh 0;
+    height: 100%;
     width: 3vh;
-	cursor: pointer;
+    position: relative;
+    float: left;
 }
 
 #volume
 {
     width: 0;
-    top: 1vh;
     position: absolute;
-    left: 11.5vh;
-    height: 3vh;
+    height: 100%;
     padding: 0;
     opacity: 0;
     transition: all .25s ease-in;
+    width: 2vh;
+    left: 1vh;
 }
 
 #sound *
@@ -333,11 +323,28 @@ input[type=range]:focus::-ms-fill-upper
 	opacity: 0 !important;
 }
 
+#sound-container
+{
+    position: relative;
+    top: 1.55vh;
+    height: 2.1vh;
+    width: 3vh;
+    cursor: pointer;
+    float: left;
+    left: 3vh;
+    transition: all .25s ease-in;
+}
+
+#sound-container:hover
+{
+    width: 19vh;
+}
+
 #sound-container:hover #volume
 {
 	width: 15vh;
 	opacity: 1;
-	padding-left: 1vh;
+	left: 4vh;
 }
 
 #videobar
@@ -348,10 +355,26 @@ input[type=range]:focus::-ms-fill-upper
     width: 100%;
     background: rgba(255, 255, 255, .25);
     left: 0;
-    margin: 0;
     background: linear-gradient(0, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 100%);
     padding: 0 3vh;
     box-sizing: border-box;
+    margin: 0;
+    overflow: hidden;
+}
+
+#duration-indicator
+{
+    display: inline-block;
+    position: relative;
+    float: left;
+	line-height: 5.1vh;
+    font-size: 1.6vh;
+    left: 5vh;
+}
+
+#videobar *
+{
+    margin: 0;
 }
 
 #videobar .progressbar
@@ -360,26 +383,38 @@ input[type=range]:focus::-ms-fill-upper
     position: relative;
     height: .3vh;
     background: rgba(255, 255, 255, .5);
+    margin: 0;
+    position: absolute;
+    width: calc(100% - 6vh);
 }
 
 .overlay-button
 {
     width: 0;
     height: 0;
-    top: 1.6vh;
+    top: 1.75vh;
     position: absolute;
 	cursor: pointer;
 	transition: all .25s ease-in;
 }
 
-#stop
+.playpause-container
 {
-    left: 4vh;
-	border: .95vh solid #fff;
+    position: relative;
+    left: 1vh;
+    width: 2vh;
+    float: left;
 }
 
-#resume {
-    left: 4vh;
+#videobar #play-pause
+{
+	border: .95vh solid #fff;
+    float: left;
+    position: relative;
+}
+
+#videobar #play-pause.paused
+{
     border: .95vh solid transparent;
     border-left: 1.6vh solid white;
 }
@@ -443,9 +478,6 @@ body:not(.expanded) .channel.active {
 
 .channel.active
 {
-    position: sticky;
-    left: .35vh;
-    z-index: 1;
     box-shadow: 0 0.25vh 0.6vh #aaa;
 }
 
@@ -572,7 +604,7 @@ body.expanded .channel:not(.selected)
   display: none;
 }
 
-body.expanded .ss-scrollbar
+body.expanded .scrollbar-x
 {
   display: none;
 }
@@ -727,7 +759,7 @@ body.expanded .duration
 
 .channel.selected .right
 {
-    width: 33.33334vw;
+    width: 33.33333vw;
     position: absolute;
     left: 66.66667vw;
     margin-left: -1.5vh;
@@ -744,72 +776,18 @@ body.expanded .duration
 
 .description
 {
+    height: 100%;
+    pointer-events: all;
+}
+
+.description p
+{
     line-height: normal;
     display: inline-block;
     vertical-align: middle;
 }
 
-
 body.fullscreen #overlay
 {
     opacity: 0 !important;
 }
-
-/**
- * Scrollbar related css
- */
-
-.ss-wrapper {
-  overflow: hidden;
-  width: 100%;
-  height: 100%;
-  position: relative;
-  z-index: 1;
-  float: left;
-}
-
-.ss-content {
-  width: 100%;
-  height: 200%;
-  padding: 0 0.6vh 0 0.6vh;
-  position: relative;
-  overflow: auto;
-  box-sizing: border-box;
-}
-
-.ss-content.rtl {
-  height: 200%;
-  bottom: auto;
-}
-
-.ss-scrollbar {
-    background: #eee;
-    border-radius: 0.35vh;
-    top: 0;
-    position: absolute;
-    width: 100%;
-    z-index: 2;
-    height: 0.7vh;
-}
-
-.ss-scroll {
-    position: relative;
-    background: #ff0000;
-    height: 100%;
-    border-radius: .35vh;
-    cursor: pointer;
-}
-
-.ss-hidden {
-  display: none;
-}
-
-.ss-grabbed {
-  -o-user-select: none;
-  -ms-user-select: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  user-select: none;
-}
-
-

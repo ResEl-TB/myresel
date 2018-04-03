@@ -4,10 +4,11 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link href="https://fonts.googleapis.com/css?family=Lato|Noto+Sans" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="{% static 'css/tv.css' %}">
-<script src="{% static 'js/vendors/dash.all.min.js' %}"></script>
-<script src="{% static 'js/vendors/scrollbar.js' %}"></script>
-<script src="{% static 'js/tv.js' %}"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'css/tv/style.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/tv/scrollbar.css' %}">
+<script src="{% static 'js/tv/dash.all.min.js' %}"></script>
+<script src="{% static 'js/tv/scrollbar.min.js' %}"></script>
+<script src="{% static 'js/tv.min.js' %}"></script>
 <title>ResEl TV</title>
 </head>
 <body><div id="loading">
@@ -31,29 +32,32 @@
     	<div id="overlay">
         	<div id="overlay-title"></div>
 			<div id="separator"></div>
-        	<div id="overlay-page">
+        	<div id="overlay-page" scrollable-y>
             	<div id="overlay-subtitle"></div>
                 <div id="overlay-description"></div>
                 <div id="overlay-time"></div>
             </div>
-            <div id="videobar">
+			<div id="videobar">
             	<div class="progressbar">
                 	<div id="overlay-progress" class="progress"></div>
                 </div>
-              	<div id="stop" class="overlay-button" onclick="playPause(this)"></div>
-                <div id="sound-container">
-					<svg id="sound" viewBox="0 0 297.6 290" onclick="switchVolume()">
-                        <polygon points="0 95.4 0 194.6 66.1 194.6 148.8 277.3 148.8 12.7 66.1 95.4"/>
-                        <path d="M223.2 145c0-28.8-16.9-53.9-41.3-66.1v132.3C206.4 199.9 223.2 174.3 223.2 145z" id="volume1"/>
-                        <path d="M181.9 0v34.1c47.8 14.2 82.7 58.5 82.7 111S229.7 241.8 181.9 256v34.1c66.3-15 115.8-74.2 115.8-145S248.2 15 181.9 0z" id="volume2"/>
-                    </svg>
-                    <input id="volume" type="range" oninput="updateVolume(this.value);" onchange="updateVolume(this.value)" onmousedown="if (this.value > 0) this.dataset.prev = this.value" value="100" data-prev="100">
+                <div class="playpause-container">
+	              	<div id="play-pause" class="overlay-button"></div>
                 </div>
-				<svg id="fullscreen" class="overlay-button" onclick="fullScreen()" viewBox="10 10 16 16">
-					<path d="m10 16 2 0 0-4 4 0 0-2L10 10l0 6 0 0z"/>
-					<path d="m20 10 0 2 4 0 0 4 2 0L26 10l-6 0 0 0z"/>
-					<path d="m24 24-4 0 0 2L26 26l0-6-2 0 0 4 0 0z"/>
-					<path d="M12 20 10 20 10 26l6 0 0-2-4 0 0-4 0 0z"/>
+                <div id="sound-container">
+					<svg id="sound" viewBox="0 0 297.6 290">
+                        <polygon points="0 95.4 0 194.6 66.1 194.6 148.8 277.3 148.8 12.7 66.1 95.4"></polygon>
+                        <path d="M223.2 145c0-28.8-16.9-53.9-41.3-66.1v132.3C206.4 199.9 223.2 174.3 223.2 145z" id="volume1"></path>
+                        <path d="M181.9 0v34.1c47.8 14.2 82.7 58.5 82.7 111S229.7 241.8 181.9 256v34.1c66.3-15 115.8-74.2 115.8-145S248.2 15 181.9 0z" id="volume2"></path>
+                    </svg>
+                    <input id="volume" value="100" type="range">
+                </div>
+				<div id="duration-indicator"></div>
+				<svg id="fullscreen" class="overlay-button" viewBox="10 10 16 16">
+					<path d="m10 16 2 0 0-4 4 0 0-2L10 10l0 6 0 0z"></path>
+					<path d="m20 10 0 2 4 0 0 4 2 0L26 10l-6 0 0 0z"></path>
+					<path d="m24 24-4 0 0 2L26 26l0-6-2 0 0 4 0 0z"></path>
+					<path d="M12 20 10 20 10 26l6 0 0-2-4 0 0-4 0 0z"></path>
                 </svg>
             </div>
         </div>
@@ -62,165 +66,7 @@
     <div id="channels"></div>
 </div>
 <script type="text/javascript">
-var channelsData;
-console.log("test");
-ajaxGet('http://172.22.199.18:9000/data.json', function(data) {
-	channelsData = data;
-	var current_time = Math.round((new Date).getTime()/1000);
-	var channelsDiv = document.getElementById("channels");
-	for (var lcn in data)
-	{
-		var channel = data[lcn]
-		var programs_length = channel["programs"].length
-		var title = "Indisponible"
-		var subtitle = "Information indisponible"
-		var desc = "";
-		var start = current_time;
-		var stop = 0;
-		for (var i = 0; i < programs_length; i++)
-		{
-			var program = channel["programs"][i];
-			if (program["start"] <= current_time && current_time < program["stop"])
-			{
-				start = program["start"];
-				stop = program["stop"];
-				title = program["title"];
-				if ("sub-title" in program)
-					subtitle = program["sub-title"]
-				if ("desc" in program)
-					desc = program["desc"]
-				break;
-			}
-		}
-		channelsDiv.insertAdjacentHTML('beforeend', `<div tabindex="0" class="channel" data-lcn="${lcn}" data-sid="${channel["sid"]}"><div class="flip"><div class="card"><div class="channel-logo" style="background-image: url('${channel["sid"]}.png');"></div><div class="channel-more"><div class="more-button"></div></div></div></div><div class="program"><div class="program-title">${title}</div><div class="progressbar"><div class="progress" style="width:${Math.round(100 * (current_time - start) / (stop - start))}%"></div></div><div class="duration">${displayDuration(start, stop)}</div></div><div class="middle"><div class="subtitle">${subtitle}</div><div class="time">${displayRange(start, stop)}</div></div><div class="right"><div class="description">${desc}</div></div></div>`);
-		channelDiv = channelsDiv.lastChild;
-		titleDiv = channelDiv.querySelector(".program-title");
-		channelDiv.onclick = switchChannel(channel['sid']);
-		if (titleDiv.scrollWidth > titleDiv.offsetWidth)
-		    channelDiv.classList.add("overflow");
-	}
-	
-	var channels = Array.prototype.slice.call(document.getElementsByClassName("channel"));
-
-	for (var i = 0; i < channels.length; i++)
-	{
-		channels[i].id=i;
-		channels[i].getElementsByClassName("channel-more")[0].onclick = expand(i);
-	}
-	channelsDiv.firstChild.classList.add("active");
-    SimpleScrollbar.initEl(channelsDiv);
-
-var evt = document.createEvent("Event");
-evt.initEvent("backToNormal", true, true);
-var channels = Array.prototype.slice.call(document.getElementsByClassName("channel"));
-var currentChannel = 1;
-var clickableChannels = channels.slice();
-clickableChannels.splice(currentChannel, 1);
-
-document.getElementById('channels').onmouseover = function () {
-    interacting = 1;
-}
-
-document.getElementById('channels').onmouseout = function () {
-    interacting = 0;
-}
-
-document.getElementById('videobar').onmouseover = function () {
-    interacting = 1;
-}
-
-document.getElementById('videobar').onmouseout = function () {
-    interacting = 0;
-}
-
-document.onkeydown = keyDown;
-
-(function() {
-    var mouseTimer = null, cursorVisible = true;
-
-    function fullscreen() {
-        mouseTimer = null;
-        document.body.className = "fullscreen";
-        state = 2;
-    }
-
-    var timer = function() {
-			console.warn(interacting+state);
-
-        if (mouseTimer) {
-            window.clearTimeout(mouseTimer);
-        }
-        if (state == 2) {
-            document.body.className = "";
-            state = 0;
-		}
-		
-		if (state + interacting == 0)
-            mouseTimer = window.setTimeout(fullscreen, 2500);
-    };
-	
-	document.onmousemove = timer;
-	document.onmouseup = timer;
-	document.onmousedown = timer;
-	
-	updateOverlay(document.querySelector(".active"));
-	
-	document.getElementById("loading").classList.add("done");
-	setTimeout(function(){document.body.removeChild(document.body.firstChild)}, 1000);
-})();
-
-setInterval(function()
-{
-	var current_time = Math.round((new Date).getTime()/1000);
-	var channelsDiv = document.querySelector(".ss-content");
-	for (var lcn in channelsData)
-	{
-		var channel = channelsData[lcn]
-		var programs_length = channel["programs"].length
-		var title = "Indisponible"
-		var subtitle = "Information indisponible"
-		var desc = "";
-		var start = current_time;
-		var stop = 0;
-		for (var i = 0; i < programs_length; i++)
-		{
-			var program = channel["programs"][i];
-			if (program["start"] <= current_time && current_time < program["stop"])
-			{
-				start = program["start"];
-				stop = program["stop"];
-				title = program["title"];
-				if ("sub-title" in program)
-					subtitle = program["sub-title"]
-				if ("desc" in program)
-					desc = program["desc"]
-				break;
-			}
-		}
-		var channelDiv = document.querySelector(`[data-lcn="${lcn}"]`);
-		var titleDiv = channelDiv.querySelector(".program-title");
-		titleDiv.innerHTML = title;
-		channelDiv.querySelector(".progress").style.width = `${Math.round(100 * (current_time - start) / (stop - start))}%`;
-		channelDiv.querySelector(".duration").innerHTML = displayDuration(start, stop);
-		channelDiv.querySelector(".subtitle").innerHTML = subtitle;
-		channelDiv.querySelector(".time").innerHTML = displayRange(start, stop);
-		channelDiv.querySelector(".description").innerHTML = desc;
-		channelDiv.onclick = switchChannel(channel['sid']);
-		if (titleDiv.scrollWidth > titleDiv.offsetWidth)
-		    channelDiv.classList.add("overflow");
-		else
-		    channelDiv.classList.remove("overflow");
-		var currentChannel = document.querySelector('.active');
-		updateOverlay(currentChannel);
-	}
-}, 10000);
-});
-
-  var url = "http://172.22.199.18:9000/play/dash/1537/index.mpd";
-  var player = dashjs.MediaPlayer().create();
-  player.initialize(document.querySelector("video"), url, true);
-  switchChannel(1537);
-
+var TV = new ResElTV(document, window);
 </script>
 </body>
 </html>
