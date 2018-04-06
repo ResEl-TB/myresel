@@ -1,10 +1,13 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.views.generic import View
 from django.http import Http404
 from gestion_personnes.models import LdapGroup, LdapUser
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
+from django.utils.translation import ugettext as _
 
 
 @method_decorator(login_required, name="dispatch")
@@ -35,11 +38,18 @@ class AddCampusModo(View):
             raise Http404
         return super(AddCampusModo, self).dispatch(request)
 
-    def post(self, request, *args, **kwargsé):
+    def post(self, request, *args, **kwargs):
         uid = request.POST.get('uid', None)
         if uid:
-            user = LdapUser.get(uid=uid)
-            LdapGroup.get(pk='campusmodo').add_member(user.pk)
+            try:
+                user = LdapUser.get(uid=uid)
+                LdapGroup.get(pk='campusmodo').add_member(user.pk)
+            except ObjectDoesNotExist:
+                messages.error(
+                    request,
+                    _(uid+" n'est pas un uid valide ou n'existe pas. \
+                    Pensez à utiliser l'autocomplétion.")
+                )
         return redirect(reverse('campus:gestion:modo'))
 
 
