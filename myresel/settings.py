@@ -427,3 +427,6 @@ elif DEBUG or TESTING:
         queueConfig['ASYNC'] = False
 else:
     LOGGING = PROD_LOGGING_CONF
+
+if 'test' in sys.argv:
+    CAPTCHA_TEST_MODE = True
