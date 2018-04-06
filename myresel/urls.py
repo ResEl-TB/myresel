@@ -33,6 +33,7 @@ js_info_dict = {
 urlpatterns = [
     url(r'^jsi18n/$', javascript_catalog, js_info_dict, name='javascript-catalog'),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
+    url(r'^captcha/', include('captcha.urls')),
 
     url(r'^lang/setlang/$', unsecure_set_language, name='set_language'),
     url(r'^lang/', include('django.conf.urls.i18n')),
