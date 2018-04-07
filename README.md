@@ -203,6 +203,6 @@ Pour ce magnifique site, on peut remercier :
  - Guillaume Buret @thebigtouffe : guillaume.buret@telecom-bretagne.eu
  - Morgan Robin @tharkunn : morgan.robin@telecom-bretagne.eu
 
-Code sous license "ne faites pas de bêtises".
+Code sous license [GPL](LICENSE)
 
 Allez lire la [documentation](doc/README.md) !
