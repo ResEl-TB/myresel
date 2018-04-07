@@ -10,6 +10,6 @@ En complément n'hésitez pas à
 * Consulter le [wiki du ResEl](https://wiki.resel.fr)
 
 # Sommaire
-* [Guide de contribution](CONTRIBUTING.md)
+* [Guide de contribution](../CONTRIBUTING.md)
 * [Installation d'un enviromenment de production](Installation.md)
 * [Architecture du code](Architecture.md)

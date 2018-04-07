@@ -1,4 +1,5 @@
 from django import forms
+from captcha.fields import CaptchaField
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -16,3 +17,4 @@ class ContactForm(forms.Form):
         attrs={'class': 'form-control', 'style': 'resize:none;'}
     ))
     uid = forms.CharField(label="", widget=forms.HiddenInput(), required=False)
+    captcha = CaptchaField()

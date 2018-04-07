@@ -11,13 +11,14 @@ class RoomAdminMiddleware(object):
     Check if user is a RoomAdmin, and updates his credentials accordingly
     """
 
+    # pylint: disable=no-member
     @staticmethod
     def process_request(request):
         """
         Do the room checking then update user credentials
         Should only be called by Django
-        
-        :param request: 
+
+        :param request:
         :return: None
         """
         # TODO: this method is not actually working...

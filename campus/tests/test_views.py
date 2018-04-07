@@ -421,6 +421,7 @@ def createRoom(clubs=[], private=False):
     room.save()
     return(room)
 
+# pylint: disable=no-member
 def createBooking(start_time, end_time, recurring_rule = "NONE", end_recurring_period = None):
     """
     Simple function that create an event according to various parameters and saves it

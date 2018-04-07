@@ -175,6 +175,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'phonenumber_field',
+    'captcha',
     'devices',
     'gestion_personnes',
     'myresel',
@@ -426,3 +427,6 @@ elif DEBUG or TESTING:
         queueConfig['ASYNC'] = False
 else:
     LOGGING = PROD_LOGGING_CONF
+
+if 'test' in sys.argv:
+    CAPTCHA_TEST_MODE = True

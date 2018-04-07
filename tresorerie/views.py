@@ -249,6 +249,7 @@ class Pay(View):
             transaction.stripe_id = charge.id
             transaction.save()  # Because a UUID is needed before adding products
             for p in products:
+                # pylint: disable=no-member
                 transaction.produit.add(p)
 
             transaction.save()

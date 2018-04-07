@@ -19,11 +19,30 @@ class ContactCase(TestCase):
                 'chambre': "I10 14",
                 'mail': "123soleil@fds.sd",
                 'demande': "Test post, please ignore",
+                'captcha_0': 'dummy-value',
+                'captcha_1': 'PASSED',
             },
             HTTP_HOST="10.0.3.99", follow=True
         )
         self.assertEqual(200, get_page.status_code)
         self.assertEqual(1, len(mail.outbox))
+
+    def test_bad_captcha(self):
+        get_page = self.client.get(reverse("contact"),
+                                   HTTP_HOST="10.0.3.99", follow=True)
+        post_message = self.client.post(
+            reverse("contact"), data={
+                'nom': 'Lolo',
+                'chambre': "I10 14",
+                'mail': "123soleil@fds.sd",
+                'demande': "Test post, please ignore",
+                'captcha_0': 'dummy-value',
+                'captcha_1': 'blabla',
+            },
+            HTTP_HOST="10.0.3.99", follow=True
+        )
+        self.assertEqual(200, get_page.status_code)
+        self.assertEqual(0, len(mail.outbox))
 
 
     def test_loggedin_contact(self):
