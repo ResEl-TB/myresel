@@ -18,7 +18,7 @@ campuses:
     services:
       internet-access:
         - name: adista
-          title: Connexion Adista
+          title: Adista
           text: La connexion Adista est la connexion principale du ResEl
           icon: fa-cloud
           essential: true
@@ -160,8 +160,8 @@ campuses:
             - skynet
             - teia
         - name: tv
-          title: Services TV
-          text: Le service de télévision est hébergé sur deux machines.
+          title: Télévision
+          text: Le service de télévision permet de regarder les chaines de la TNT depuis le réseau du ResEl. 
           icon: fa-television
           essential: false
           level: 0
@@ -169,8 +169,8 @@ campuses:
             - foucault
             - reychnam
         - name: backup
-          title: Backup principal
-          text: Le système de backup est essentiel en cas d'incident majeur.
+          title: Sauvegarde principale
+          text: Le système de sauvegarde est essentiel en cas d'incident majeur afin de récupérer les données.
           icon: fa-floppy-o
           essential: false
           level: 1
@@ -188,7 +188,7 @@ campuses:
             - toad
         - name: garbage
           title: Garbage
-          text: Le garbage principal
+          text: Garbage
           icon: fa-film
           essential: false
           level: 1
@@ -287,7 +287,7 @@ campuses:
            - ap-i8-03
         - name: i9
           title: Bâtiment I9
-          text: Switch d'accès au I1 et bornes Wi-Fi du I9
+          text: Switch d'accès au I9 et bornes Wi-Fi du I9
           icon: fa-building building
           essential: false
           level: 1
@@ -351,17 +351,18 @@ campuses:
     services:
       internet-access:
         - name: quantic
-          title: Connexion Quantic Télécom
-          text: La connexion Quantic est la connexion principale du ResEl
+          title: Quantic Télécom
+          text: La connexion Quantic est la connexion principale du ResEl à sur
+          le campus de Rennes
           icon: fa-cloud
           essential: true
           level: 2
           _hosts:
             - peach
         - name: renater
-          title: Connexion Renater
-          text: La connexion Renater est la connexion de secours du ResEl sur le campus de
-            Rennes
+          title: Renater
+          text: La connexion Renater est la connexion de secours du ResEl sur
+          le campus de Rennes
           icon: fa-cloud
           essential: true
           level: 1
@@ -379,7 +380,7 @@ campuses:
       network-core:
         - name: pessac
           title: Routeur de coeur Pessac
-          text: Pessac est le routeur de coeur du campus de Rennes, il permet de router les packets
+          text: Pessac est le routeur de coeur du campus de Rennes, il permet de router les paquets
             entre les différents réseaux
           icon: fa-circle-o
           essential: true
@@ -422,7 +423,7 @@ campuses:
             - lussac
         - name: mysql
           title: MariaDB
-          text: Le MariaDB principal
+          text: La base de données MariaDB principale
           icon: fa-database
           essential: true
           level: 1
@@ -435,15 +436,16 @@ campuses:
           essential: false
           level: 0
           _hosts:
-            - cadillac
+            - harmonia
         - name: web
           title: Sites web
-          text: Le web principal
+          text: Le campus de rennes propose de la haute disponibilité pour certains services web du ResEl.
           icon: fa-internet-explorer
           essential: false
           level: 0
           _hosts:
             - doubidou
+            - tamere
 #        - name: tv
 #          title: Les services TV
 #          text: Le tv principal
@@ -453,25 +455,25 @@ campuses:
 #          _hosts:
 #            - foucault
         - name: backup
-          title: Le système de backup
-          text: Le backup principal
+          title: Sauvegardes
+          text: Le système de sauvegarde est essentiel en cas d'incident majeur afin de récupérer les données.
           icon: fa-floppy-o
           essential: false
           level: 1
           _hosts:
             - gargantua
-        - name: garbage
-          title: Le système de garbage
-          text: Le garbage principal
-          icon: fa-film
-          essential: false
-          level: 1
-          _hosts:
-            - alphabet
+#         - name: garbage
+#           title: Garbage
+#           text: Le garbage principal
+#           icon: fa-film
+#           essential: false
+#           level: 1
+#           _hosts:
+#             - alphabet
       network-access:
         - name: chambres
-          title: Bâtiment des chambres
-          text: Switch d'accès aux Chambres et bornes Wi-Fi
+          title: Chambress
+          text: Switch d'accès et les bornes Wi-Fi du bâtiment des chambres
           icon: fa-building building
           essential: false
           level: 1
@@ -489,8 +491,8 @@ campuses:
            - ap-c1-13
            - ap-c1-14
         - name: studios
-          title: Bâtiment des studios
-          text: Switch d'accès aux studios et bornes Wi-Fi
+          title: Studios
+          text: Switch d'accès et les bornes Wi-Fi du bâtiment des studios
           icon: fa-building building
           essential: false
           level: 1
