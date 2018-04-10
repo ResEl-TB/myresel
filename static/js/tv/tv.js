@@ -184,7 +184,7 @@ function ResElTV(d, w)
 			tv.channelsDiv.scrollLeft = box.x + (box.width - tv.channelsDiv.clientWidth) * tv.scrollRatio - parseFloat(tv.w.getComputedStyle(channel.channelDiv).marginRight);
 		}
         tv.state = 0;
-        tv.player.attachSource(`http://172.22.199.18:9000/play/dash/${channel.sid}/index.mpd`);
+        tv.player.attachSource(`https://tnt.resel.fr/play/dash/${channel.sid}/index.mpd`);
 		if (tv.init)
 	        tv.updateOverlay(channel);
         tv.w.dispatchEvent(new Event("update"));
@@ -316,7 +316,7 @@ function ResElTV(d, w)
 		}
 	};
 
-	ajaxGet('http://172.22.199.18:9000/data.json', data => {
+	ajaxGet('https://tnt.resel.fr/data.json', data => {
 	    ScrollBarX.initEl(tv.channelsDiv);
 		tv.channelsDiv = tv.channelsDiv.firstChild.firstChild;
 
