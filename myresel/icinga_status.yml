@@ -353,7 +353,7 @@ campuses:
         - name: quantic
           title: Quantic Télécom
           text: La connexion Quantic est la connexion principale du ResEl à sur
-          le campus de Rennes
+            le campus de Rennes
           icon: fa-cloud
           essential: true
           level: 2
@@ -362,7 +362,7 @@ campuses:
         - name: renater
           title: Renater
           text: La connexion Renater est la connexion de secours du ResEl sur
-          le campus de Rennes
+            le campus de Rennes
           icon: fa-cloud
           essential: true
           level: 1
