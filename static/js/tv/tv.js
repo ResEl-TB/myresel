@@ -136,7 +136,7 @@ function Channel(lcn, sid, programs)
     this.programs = programs;
 }
 
-function ResElTV(d, w)
+function ResElTV(d, w, imagePath)
 {
     var tv = this;
     tv.d = d;
@@ -153,6 +153,7 @@ function ResElTV(d, w)
     tv.previousVolume = 100;
     tv.playing = true;
     tv.init = false;
+    tv.imagePath = imagePath;
     
     tv.player = dashjs.MediaPlayer().create();
     tv.player.initialize(tv.videoDiv.querySelector("video"));
@@ -324,7 +325,7 @@ function ResElTV(d, w)
         {
             var channel = new Channel(lcn, data[lcn]["sid"], data[lcn]["programs"]);
             
-            tv.channelsDiv.insertAdjacentHTML('beforeend', `<div tabindex="0" class="channel" data-lcn="${lcn}"><div class="flip"><div class="card"><div class="channel-logo" style="background-image: url('{% static 'images/tv/${channel.sid}.png' %}');"></div><div class="channel-more"><div class="more-button"></div></div></div></div><div class="program"><div class="program-title"></div><div class="progressbar"><div class="progress"></div></div><div class="duration"></div></div><div class="middle"><div class="subtitle"></div><div class="time"></div></div><div class="right"><div class="description"><p></p></div></div></div>`);
+            tv.channelsDiv.insertAdjacentHTML('beforeend', `<div tabindex="0" class="channel" data-lcn="${lcn}"><div class="flip"><div class="card"><div class="channel-logo" style="background-image: url('${tv.imagePath}${channel.sid}.png');"></div><div class="channel-more"><div class="more-button"></div></div></div></div><div class="program"><div class="program-title"></div><div class="progressbar"><div class="progress"></div></div><div class="duration"></div></div><div class="middle"><div class="subtitle"></div><div class="time"></div></div><div class="right"><div class="description"><p></p></div></div></div>`);
             channel.channelDiv = tv.channelsDiv.lastChild;
             channel.channelDiv.onclick = tv.switchChannel(channel);
             channel.channelDiv.querySelector(".description").onclick = e => {e.stopPropagation()};
