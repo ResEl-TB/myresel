@@ -26,3 +26,4 @@ phonenumbers==8.6.0
 feedparser
 PyYAML
 irclog2html
+django-simple-captcha

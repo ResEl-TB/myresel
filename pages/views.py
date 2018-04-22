@@ -18,7 +18,7 @@ from django.shortcuts import render, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import View, ListView, DetailView
+from django.views.generic import View, ListView, DetailView, TemplateView
 from django.views.i18n import set_language
 from django.utils import timezone
 from django.contrib.syndication.views import Feed
@@ -505,3 +505,7 @@ def eggdrop(request, channel=None, year=None, month=None, day=None):
             'next': requested_date_r + datetime.timedelta(days=1),
         }
     )
+
+@method_decorator(resel_required, name='dispatch')
+class Television(TemplateView):
+    template_name = "pages/tv.html"
