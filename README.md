@@ -61,6 +61,11 @@ dans le fichier `myresel/settings_local.py`.
 
 **j'ai mis en gros, c'est pas pour rien ;-).**
 
+## Macro architecture du site
+
+
+![](doc/L5-web-ResEl.png)
+
 -------------------------------------------------------------------------------
 
 # Faire un hotfix/modification sur les serveurs de prod
