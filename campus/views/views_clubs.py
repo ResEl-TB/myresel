@@ -490,7 +490,7 @@ class RemovePersonFromClub(View):
             self.request.ldap_user.is_campus_moderator()
             or self.request.ldap_user.pk in club.prezs
             or request.user.is_staff
-            or user.uid == request.ldap_user
+            or user.uid == request.ldap_user.uid
         )
 
         if allowed and user.pk in club.members:

@@ -287,6 +287,7 @@ class RemovePersonTestCase(TestCase):
 
         try_delete_user("jbvallad")
         try_delete_user("bvallad")
+        try_delete_user("vallad")
 
         user = create_full_user(uid="jbvallad", pwd="blabla")
         user.save()
@@ -297,19 +298,24 @@ class RemovePersonTestCase(TestCase):
         user.save()
         club.members.append(user.pk)
 
+        user = create_full_user(uid="vallad", pwd="blabla")
+        user.save()
+        club.members.append(user.pk)
+
         club.save()
 
-        self.client.login(username="jbvallad", password="blabla")
+        self.client.login(username="vallad", password="blabla")
 
     def testRemoveSelf(self):
         # We just make sure that there is something to remove
-        self.assertTrue(LdapUser.get(uid="jbvallad").pk in StudentOrganisation.get(cn=self.cn).members)
+        self.assertTrue(LdapUser.get(uid="vallad").pk in StudentOrganisation.get(cn=self.cn).members)
         r=self.client.post(reverse("campus:clubs:remove-person", kwargs={"pk":self.cn}),
                                     HTTP_HOST="10.0.3.94")
-        self.assertFalse(LdapUser.get(uid="jbvallad").pk in StudentOrganisation.get(cn=self.cn).members)
+        self.assertFalse(LdapUser.get(uid="vallad").pk in StudentOrganisation.get(cn=self.cn).members)
         self.assertEqual(1, len(mail.outbox))
 
     def testRemoveSomeone(self):
+        self.client.login(username="jbvallad", password="blabla")
         self.assertTrue(LdapUser.get(uid="bvallad").pk in StudentOrganisation.get(cn=self.cn).members)
         r=self.client.post(reverse("campus:clubs:remove-person", kwargs={"pk":self.cn}),
                                     data={"id_user":"bvallad"},
