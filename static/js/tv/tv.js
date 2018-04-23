@@ -1,8 +1,23 @@
+/**
+ * Returns whether an element overflows its container. It both checks if the text overflows (if it
+ * is in a normal flow, that is static or relative) or if it is larger than the regular container
+ * (if it is out of the normal flow, e.g. absolutely-positioned).
+ *
+ * @param {Element} el - The element to check
+ * @returns {Boolean} Whether the element overflows
+ */
 function overflows(el)
 {
     return el.scrollWidth > el.offsetWidth || parseFloat(window.getComputedStyle(el).width) > parseFloat(window.getComputedStyle(el.parentNode).width);
 }
 
+/**
+ * Formats ``hours`` and ``minutes`` to a more human ``hh``:``mm``.
+ *
+ * @param {Number} hours - The hours to convert
+ * @param {Number} minutes - The minutes to convert
+ * @returns {String} Colon-separated time
+ */
 function formatTime(hours, minutes)
 {
     var str = "";
@@ -14,6 +29,15 @@ function formatTime(hours, minutes)
     return str + minutes;
 }
 
+/**
+ * Converts two timestamps into an human-readable duration.
+ *
+ * @param {Number} start - The initial timestamp
+ * @param {Number} stop - The final timestamp
+ * @param {Boolean} col - Whether the duration should be formatted with a colon (``hh``:``mm``)
+ *                        or not (``hours`` h ``minutes`` min)
+ * @returns {String} Formatted duration
+ */
 function displayDuration(start, stop, col)
 {
     if(!start || !stop)
@@ -26,7 +50,6 @@ function displayDuration(start, stop, col)
     if (hours)
     {
         str += `${hours} h`;
-        
         if(minutes)
             str += ' ';
     }
@@ -35,12 +58,25 @@ function displayDuration(start, stop, col)
     return str;
 }
 
+/**
+ * Converts a timestamp into an human-readable time.
+ *
+ * @param {Number} time - The timestamp
+ * @returns {String} (``hh``:``mm``)-formatted duration
+ */
 function displayTime(time)
 {
     var date = new Date(time * 1000);
     return formatTime(date.getHours(), date.getMinutes());
 }
 
+/**
+ * Returns a time range in a human-readable format.
+ *
+ * @param {Number} time - The initial timestamp
+ * @param {Number} time - The final timestamp
+ * @returns {String} (De ``begin`` à ``end``)-formatted range
+ */
 function displayRange(start, stop)
 {
     if (stop)
@@ -49,6 +85,12 @@ function displayRange(start, stop)
         return "Durée indéterminée";
 }
 
+/**
+ * Downloads a file, then executes the given callback with the JSON-parsed file.
+ *
+ * @param {String} url - The file URL
+ * @param {Function} callback - The function to be called when the file has been loaded
+ */
 function ajaxGet(url, callback) {
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = () => {
@@ -93,6 +135,9 @@ function keyDown(e)
 
 var body = document.body;
 
+/**
+ * Enters or leaves the fullscreen mode.
+ */
 function fullScreen()
 {
     var elem = body || document.documentElement;
@@ -120,6 +165,15 @@ function fullScreen()
     }
 }
 
+/**
+ * Class defining a TV program.
+ *
+ * @param {String} title - The program title
+ * @param {String} subtitle - The program subtitle
+ * @param {Number} start - The beginning timestamp
+ * @param {Number} stop - The end timestamp
+ * @param {String} desc - The program description
+ */
 function Program(title, subtitle, start, stop, desc)
 {
     this.title = title;
@@ -129,6 +183,13 @@ function Program(title, subtitle, start, stop, desc)
     this.desc = desc;
 }
 
+/**
+ * Class defining a TV channel.
+ *
+ * @param {Number} lcn - The logical channel number
+ * @param {Number} sid - The MuMuDVB channel identifier
+ * @param {Program[]} programs - The channel programs
+ */
 function Channel(lcn, sid, programs)
 {
     this.lcn = lcn;
@@ -136,6 +197,14 @@ function Channel(lcn, sid, programs)
     this.programs = programs;
 }
 
+/**
+ * Class defining a ResEl TV Player. It requires the document to contain
+ * the main HTML elements shown in :ref:`html_design`.
+ *
+ * @param {Object} d - The document in which the player should lie
+ * @param {Object} w - The window in which the player should lie
+ * @param {String} imagePath - The location of the channels thumbnails
+ */
 function ResElTV(d, w, imagePath)
 {
     var tv = this;
@@ -144,20 +213,45 @@ function ResElTV(d, w, imagePath)
     tv.loadingDiv = d.getElementById("loading");
     tv.videoDiv = d.getElementById("video");
     tv.channelsDiv = d.getElementById("channels");
+	
+    /** Whether the client cursor is on an :ref:`Interactive Zone <interactive_zones>` or not. */
     tv.interacting = 0;
+	
+    /** The interface state. ``0`` is to the Normal State, ``1`` is the Expanded State and ``2`` is the Fullscreen State. See :ref:`states` for further details. */
     tv.state = 0;
+	
+    /** Timer until the :js:func:`fullscreen` function gets called. */
     tv.mouseTimer = null;
-    tv.cursorVisible = true;
+	
+    tv.cursorVisible = true; // TODO: implement or remove
+
+    /** The player channels list. */
     tv.channels = [];
+
+
+    /** The player volume. */
     tv.volume = 100;
+
+    /** The previous player volume. */
     tv.previousVolume = 100;
+
+    /** Whether the player is playing or paused. */
     tv.playing = true;
+	
+    /** Whether the player has been fully initialized. */
     tv.init = false;
+	
     tv.imagePath = imagePath;
     
+    /** The Dash.js video player. */
     tv.player = dashjs.MediaPlayer().create();
     tv.player.initialize(tv.videoDiv.querySelector("video"));
-    
+
+    /**
+     * Updates the overlay with data regarding the given channel.
+     *
+     * @param {Channel} channel - The channel to load the data from
+     */
     tv.updateOverlay = channel => {
         var overlayTitle = tv.d.getElementById("overlay-title");
         overlayTitle.innerHTML = channel.channelDiv.querySelector(".program-title").innerHTML;
@@ -172,6 +266,11 @@ function ResElTV(d, w, imagePath)
             overlayTitle.classList.remove("overflow");
     };
 
+    /**
+     * Switches to another channel.
+     *
+     * @param {Channel} channel - The channel to switch to
+     */
     tv.switchChannel = channel => () => {
         tv.d.body.classList.remove("expanded");
         if (tv.init)
@@ -191,6 +290,11 @@ function ResElTV(d, w, imagePath)
         tv.w.dispatchEvent(new Event("update"));
     };
     
+    /**
+     * Switches between :ref:`normal_state` and :ref:`expanded_state`.
+     *
+     * @param {Channel} channel - The channel whose details should be shown or hidden
+     */
     tv.expand = channel => e => {
         e.stopPropagation();
         if(tv.state)
@@ -227,14 +331,19 @@ function ResElTV(d, w, imagePath)
         }
         tv.w.dispatchEvent(new Event("update"));
     };
-    
+
+    /** Switches to the :ref:`fullscreen_state`. */
     tv.fullscreen = () => {
         tv.mouseTimer = null;
         tv.d.body.className = "fullscreen";
         tv.state = 2;
     };
-    
-    
+
+    /**
+     * Changes the player volume to the given element's value.
+     *
+     * @param {Element} elem - The element whose value sets the new volume
+     */
     tv.updateVolume = elem => () => {
         tv.volume = elem.value;
         tv.d.querySelector("video").volume = elem.value / 100;
@@ -248,6 +357,7 @@ function ResElTV(d, w, imagePath)
         }
     };
 
+    /** Mutes or unmutes the player cleverly. It relies on :js:attr:`previousVolume` to get the last non-null volume. */
     tv.switchVolume = () => {
         var vol = tv.d.getElementById('volume');
         if (tv.volume > 0)
@@ -263,6 +373,11 @@ function ResElTV(d, w, imagePath)
         tv.updateVolume(vol)();
     };
 
+    /**
+     * Plays or pauses the Dash.js player.
+     *
+     * @param {Element} elem - The play/pause button whose state should be changed
+     */
     tv.playPause = elem => {
         if (tv.playing)
         {
@@ -277,7 +392,8 @@ function ResElTV(d, w, imagePath)
             elem.classList.remove("paused");
         }
     };
-    
+
+    /** Updates the programs' time trackers and replaces old programs with the ones currently being broadcast. */
     tv.update = () => {
         tv.currentTime = Math.round((new Date).getTime()/1000);
         var channels_length = tv.channels.length;
