@@ -15,9 +15,29 @@
 <div class="btn-home btn-home-campus">
   <a href="{% url 'campus:home' %}" class="noncolored-a"><span class="fa fa-home"></span>   </a>
 </div>
-<div class="container well">
+<div class="container well" id="management-app">
   <div class="row">
     <div class="col-lg-12 text-center margin-bottom">
+      {% if request.user.is_authenticated %}
+      {% if not request.ldap_user.pk in club.members %}
+      <form method="POST" action="{% url 'campus:clubs:add-person' club.cn %}" class="inline" >
+          {% csrf_token %}
+          <button type="submit" class="btn btn-success" ><span class="fa fa-fw fa-sign-in"></span> m'inscrire</button>
+      </form>
+      {% else %}
+      <form method="POST" action="{% url 'campus:clubs:remove-person' club.cn %}" class="inline" >
+          {% csrf_token %}
+          <button type="submit" class="btn btn-warning" ><span class="fa fa-fw fa-sign-out"></span> me désinscrire</button>
+      </form>
+      {% endif %}
+      {% if request.ldap_user.is_campus_moderator or 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in club.prezs or request.user.is_staff %}
+      <button class="btn btn-danger" data-toggle="modal" data-target="#addPrez"><span class="fa fa-fw fa-street-view"></span> passation</button>
+      <button class="btn btn-default" data-toggle="modal" data-target="#addPerson"><span class="fa fa-fw fa-user-plus"></span> inscrire un membre</button>
+      <button class="btn btn-default" data-toggle="modal" data-target="#addEmail"><span class="fa fa-fw fa-envelope"></span> abonner un membre</button>
+      <button class="btn btn-default" data-toggle="modal" data-target="#delPerson"><span class="fa fa-fw fa-user-times"></span> désinscrire un membre</button>
+      {% endif%}
+      {% endif %}
+      <hr />
       <h2 class="text-center">{{ club.name }}</h2>
     </div>
   </div>
@@ -61,29 +81,175 @@
       <br /><strong><span class="fa fa-id-badge"></span> {% trans "Membres" %} </strong>
     </div>
   </div>
-  {% for member in members %}
-  {% if forloop.counter|add:-1|divisibleby:3 %}
   <div class="row mobile-margin-top">
-  {% endif %}
-    <div class="col-md-4 mobile-centered">
-      <a href="{% url 'campus:who:user-details' uid=member.uid %}">
-        <span class="fa fa-user-o"></span> {{member.first_name}} {{member.last_name|upper}}
-        {% if request.ldap_user.is_campus_moderator or 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in asso.prezs or request.user.is_staff %}
-      </a>
-      <form method="POST" action="{% url 'campus:clubs:remove-person' club.cn %}" class="inline" >
-         {% csrf_token %}
-         <input type="hidden" name="id_user" value="{{ member.uid }}" />
-         <button type="submit" class="btn btn-link dell-user" /><span class="fa fa-trash-o"></span></button>
-      </form>
-        {% endif %}
-      </a>
-    </div>
-  {% if forloop.counter|divisibleby:3 or forloop.last %}
+      <div v-for="member in members">
+          <div class="col-md-4 mobile-centered">
+            <a v-bind:href="[[member.url]]">
+                <span class="fa fa-user-o"></span> [[member.first_name]] [[member.last_name]]
+            </a>
+            <form method="POST" v-if="can_manage" action="{% url 'campus:clubs:remove-person' club.cn %}" class="inline" >
+               {% csrf_token %}
+               <input type="hidden" name="id_user" v-bind:value="[[member.uid]]" />
+               <button type="submit" class="btn btn-link dell-user" /><span class="fa fa-trash-o"></span></button>
+            </form>
+          </div>
+      </div>
   </div>
   {% endif %}
-  {% empty %}
-  {% trans "Aucun membre trouvé" %}
-  {% endfor %}
-  {% endif %}
 </div>
+<div class="modal fade" id="addPrez" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="form-horizontal" action="" method="post">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h4 class="modal-title">{% trans "Ajouter un président" %}</h4>
+                </div>
+                <div class="alert alert-danger text-center remove-radius">
+                    <span class="fa fa-spin fa-warning"></span>
+                    <p>
+                        {% trans "Attention, cette action n'est pas sans conséquences." %} <br />
+                        {% trans "Le président actuel sera destitué" %} <br />
+                        {% trans "Assurez-vous de renseigner la bonne personne." %} <br />
+                        {% trans "En cas d'erreur" %} <a href="{% url 'contact'%}" style="color: rgb(64, 36, 144) !important"> {% trans "contactez un administrateur ResEl" %} </a>
+                    </p>
+                </div>
+                <div class="modal-body">
+                    <p>{% trans "Entrer la personne à ajouter en tant que président à ce club:" %}</p>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1"><span class="fa fa-user"></span></span>
+                        <input type="text" class="form-control" name="id_user" id="id_prez_to_add" style="width:70%;"/>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">{% trans "Confirmer" %}</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Annuler" %}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="addPerson" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="form-horizontal" action="" method="POST">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h4 class="modal-title">{% trans "Ajouter une Personne" %}</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{% trans "Entrer la personne à ajouter à ce club:" %}</p>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1"><span class="fa fa-user"></span></span>
+                        <input type="text" class="form-control" name="id_user" id="id_user_to_add" style="width:70%;"></input>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">{% trans "Ajouter" %}</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Annuler" %}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="delPerson" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="form-horizontal" action="" method="POST">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h4 class="modal-title">{% trans "Désinscrire une personne" %}</h4>
+                </div>
+                <div class="modal-body">
+                    <p>{% trans "Entrer la personne à ajouter à désinscrire de ce club:" %}</p>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1"><span class="fa fa-user"></span></span>
+                        <input type="text" class="form-control" name="id_user" id="id_user_to_del" style="width:70%;"></input>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">{% trans "Désinscrire" %}</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Annuler" %}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="addEmail" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="form-horizontal" action="" method="POST">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <h4 class="modal-title">{% trans "Désinscrire une personne" %}</h4>
+                </div>
+                <div class="alert alert-danger text-center remove-radius">
+                    <span class="fa fa-spin fa-warning"></span>
+                    <p>
+                        {% trans "Attention, cette option, n'est à utilser que pour les membres non inscrits au ResEl" %} <br />
+                        {% trans "Ajouter un utilisateur ResEl inscrit déjà automatiquement à la mailing list" %} <br />
+                    </p>
+                </div>
+                <div class="modal-body">
+                    <p>{% trans "Entrer l'email à abonner:" %}</p>
+                    <div class="input-group">
+                        <span class="input-group-addon" id="basic-addon1"><span class="fa fa-envelope"></span></span>
+                        <input type="text" class="form-control" name="mail" style="width:70%;"></input>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">{% trans "Ajouter" %}</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Annuler" %}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script src="{% static 'js/vendors/vue.js' %}"></script>
+<script type="text/javascript">
+var app = new Vue({
+  el: '#management-app',
+  delimiters: ['[[', ']]'],
+  data: {
+    can_manage: {% if request.ldap_user.is_campus_moderator or 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in asso.prezs or request.user.is_staff %} true, {% else %} false, {% endif %}
+    members: [
+      {% for member in members %}
+          {
+              first_name: '{{member.first_name}}',
+              last_name: '{{member.last_name|upper}}',
+              uid: '{{member.uid}}',
+              url: '{% url 'campus:who:user-details' uid=member.uid %}',
+          },
+      {% endfor %}
+    ]
+  }
+})
+</script>
+
+<script src="{% static 'jquery/jquery-ui.min.js' %}"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+        $('#id_prez_to_add').autocomplete({
+            source: "{% url 'campus:who:request-user' %}",
+            minLength: 3,
+        });
+    })
+
+    jQuery(document).ready(function ($) {
+        $('#id_user_to_add').autocomplete({
+            source: "{% url 'campus:who:request-user' %}",
+            minLength: 3,
+        });
+    })
+
+    jQuery(document).ready(function ($) {
+        $('#id_user_to_del').autocomplete({
+            source: "{% url 'campus:who:request-user' %}",
+            minLength: 3,
+        });
+    })
+</script>
 {% endblock %}
