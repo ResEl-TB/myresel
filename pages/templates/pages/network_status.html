@@ -102,7 +102,7 @@
           <div v-for="service in getServices('network-core')"
                :id="service.name"
                @mouseenter="show_details(service, $event)">
-            <i class="fa" 
+            <i class="fa"
                :class="[service.icon, service.status]"
             ></i>
           </div>

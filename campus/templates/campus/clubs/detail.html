@@ -15,7 +15,8 @@
 <div class="btn-home btn-home-campus">
   <a href="{% url 'campus:home' %}" class="noncolored-a"><span class="fa fa-home"></span>   </a>
 </div>
-<div class="container well" id="management-app">
+<div id="management-app">
+<div class="container well">
   <div class="row">
     <div class="col-lg-12 text-center margin-bottom">
       {% if request.user.is_authenticated %}
@@ -132,7 +133,7 @@
 <div class="modal fade" id="addPerson" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" action="" method="POST">
+            <form class="form-horizontal" v-on:submit.prevent="send_new_user" id="add-person-form" action="" method="POST">
                 {% csrf_token %}
                 <div class="modal-header">
                     <h4 class="modal-title">{% trans "Ajouter une Personne" %}</h4>
@@ -205,6 +206,21 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="notification" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            </div>
+            <div class="modal-body text-center" id="notification-text">
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="retry-btn" data-toggle="modal" data-target="" class="btn btn-info" data-dismiss="modal">{% trans "Recommencer" %}</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Fermer" %}</button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
 {% endblock %}
 
 {% block javascript %}
@@ -224,7 +240,33 @@ var app = new Vue({
               url: '{% url 'campus:who:user-details' uid=member.uid %}',
           },
       {% endfor %}
-    ]
+    ],
+    send_new_user: function(event) {
+      var form = $('#add-person-form');
+      $('#retry-btn').attr("data-target","#addPerson");
+      $.ajax({
+        url: '{% url 'campus:clubs:add-person' pk=club.cn %}',
+        type: "POST",
+        async: false,
+        data: form.serialize(),
+        success : function(data){
+          app.members.push({
+            first_name: data.first_name,
+            last_name: data.last_name,
+            uid: data.uid,
+            url: data.url,
+          });
+          $('#addPerson').modal('hide');
+          $('#notification').modal('show');
+          $('#notification-text').html('<span class="fa fa-check-square-o"></span> '+'{% trans "Ajout terminé avec succès"%}');
+        },
+        error : function(data){
+          $('#addPerson').modal('hide');
+          $('#notification').modal('show');
+          $('#notification-text').html('<span class="fa fa-exclamation-circle"></span> '+data.responseJSON.error);
+        }
+      });
+    },
   }
 })
 </script>

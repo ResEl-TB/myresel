@@ -12,7 +12,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponse, Http404, HttpResponseNotFound
+from django.http import HttpResponseRedirect, HttpResponse, Http404, HttpResponseNotFound, \
+JsonResponse
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
@@ -304,43 +305,52 @@ class AddPersonToClub(View):
                     'message_code': 'ERROR_SUBSCRIBE',
                     }
                 )
-        messages.success(request, _("Inscription terminée avec succès"))
 
 
     def post(self, request, pk):
-        try:
-            club = StudentOrganisation.get(cn=pk)
-            # If we don't do this we get an error cuz our LDAP scheme does not allow
-            # a single model for each type of organisation
-            if "tbCampagne" in club.object_classes:
-                club = ListeCampagne.get(cn=pk)
-            elif "tbAsso" in club.object_classes:
-                club = Association.get(cn=pk)
-        except ObjectDoesNotExist:
-            raise Http404("Le club n'existe pas")
+        if request.is_ajax():
+            try:
+                club = StudentOrganisation.get(cn=pk)
+                # If we don't do this we get an error cuz our LDAP scheme does not allow
+                # a single model for each type of organisation
+                if "tbCampagne" in club.object_classes:
+                    club = ListeCampagne.get(cn=pk)
+                elif "tbAsso" in club.object_classes:
+                    club = Association.get(cn=pk)
+            except ObjectDoesNotExist:
+                return JsonResponse({"error": "Ce club n'existe pas"}, status=400)
 
-        uid = request.POST.get('id_user', None)
-        if uid is None:
-            user = request.ldap_user
-        else:
-            if not (self.request.ldap_user.is_campus_moderator() or self.request.ldap_user.pk in club.prezs or request.user.is_staff):
-                messages.error(request, _("Vous n'êtes pas modérateur campus ou président de ce club"))
-                return HttpResponseRedirect(reverse('campus:clubs:list'))
+            uid = request.POST.get('id_user', None)
+            if uid is None:
+                user = request.ldap_user
             else:
-                try:
-                    user = LdapUser.get(uid=uid)
-                except ObjectDoesNotExist:
-                    raise Http404("L'utilisateur n'existe pas")
+                if not (self.request.ldap_user.is_campus_moderator() or self.request.ldap_user.pk in club.prezs or request.user.is_staff):
+                    return JsonResponse({"error": "Vous n'êtes pas modérateur campus ou président de ce club"}, status=400)
+                else:
+                    try:
+                        user = LdapUser.get(uid=uid)
+                    except ObjectDoesNotExist:
+                        return JsonResponse({"error": "L'utilisateur n'existe pas"}, status=400)
 
-        if not user.pk in club.members and (("tbClub" in club.object_classes or \
-        "tbCampagne" in club.object_classes or "tbClubSport" in club.object_classes) or \
-        (self.request.ldap_user.is_campus_moderator() or self.request.ldap_user.pk in club.prezs or\
-        request.user.is_staff)): # Our ldap is crap
-            self.add_user(user, club, request)
+            answer={
+                "first_name": user.first_name,
+                "last_name": user.last_name,
+                "uid": user.uid,
+                "url": reverse("campus:who:user-details", kwargs={'uid': user.uid}),
+            }
+            status=200
 
+            if not user.pk in club.members and (("tbClub" in club.object_classes or \
+            "tbCampagne" in club.object_classes or "tbClubSport" in club.object_classes) or \
+            (self.request.ldap_user.is_campus_moderator() or self.request.ldap_user.pk in club.prezs or\
+            request.user.is_staff)): # Our ldap is crap
+                self.add_user(user, club, request)
+            else:
+                answer ={"error": "Le système a déjà trouvé le membre correspondant comme étant inscrit, inscription impossible."}
+                status = 400
+            return JsonResponse(answer, status=status)
         else:
-            messages.info(request, _("Le système a déjà trouvé le membre correspondant comme étant inscrit, inscription impossible."))
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+            return Http404
 
 
 @method_decorator(login_required, name="dispatch")
