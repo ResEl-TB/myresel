@@ -509,7 +509,7 @@ class RemovePersonFromClub(View):
                 self.remove_user(user, club, request)
             else:
                 return JsonResponse(
-                    {"error": __("Cette personne ne fait pas partie du club ou \
+                    {"error": _("Cette personne ne fait pas partie du club ou \
                     alors vous n'êtes pas autorisé à faire ça")},
                      status=400
                 )
