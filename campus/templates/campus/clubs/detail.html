@@ -20,22 +20,18 @@
   <div class="row">
     <div class="col-lg-12 text-center margin-bottom">
       {% if request.user.is_authenticated %}
-      {% if not request.ldap_user.pk in club.members %}
-      <form method="POST" action="{% url 'campus:clubs:add-person' club.cn %}" class="inline" >
+      <form {% if request.ldap_user.pk in club.members %}style="display: none"{%endif%} v-on:submit.prevent="send_new_user('add-self-form', true)" id="add-self-form" method="POST" action="" class="inline" >
           {% csrf_token %}
-          <button type="submit" class="btn btn-success" ><span class="fa fa-fw fa-sign-in"></span> m'inscrire</button>
+          <button type="submit" class="btn btn-success" ><span class="fa fa-fw fa-sign-in"></span> {% trans "M'inscrire"%}</button>
       </form>
-      {% else %}
-      <form method="POST" action="{% url 'campus:clubs:remove-person' club.cn %}" class="inline" >
+      <form {% if not request.ldap_user.pk in club.members %}style="display: none"{%endif%} method="POST" v-on:submit.prevent="remove_user('remove-self-form', true)" id="remove-self-form" action="" class="inline" >
           {% csrf_token %}
-          <button type="submit" class="btn btn-warning" ><span class="fa fa-fw fa-sign-out"></span> me désinscrire</button>
+          <button type="submit" class="btn btn-warning" ><span class="fa fa-fw fa-sign-out"></span> {% trans "Me désinscrire"%}</button>
       </form>
-      {% endif %}
       {% if request.ldap_user.is_campus_moderator or 'uid='|add:request.ldap_user.uid|add:','|add:ldapOuPeople in club.prezs or request.user.is_staff %}
       <button class="btn btn-danger" data-toggle="modal" data-target="#addPrez"><span class="fa fa-fw fa-street-view"></span> passation</button>
       <button class="btn btn-default" data-toggle="modal" data-target="#addPerson"><span class="fa fa-fw fa-user-plus"></span> inscrire un membre</button>
       <button class="btn btn-default" data-toggle="modal" data-target="#addEmail"><span class="fa fa-fw fa-envelope"></span> abonner un membre</button>
-      <button class="btn btn-default" data-toggle="modal" data-target="#delPerson"><span class="fa fa-fw fa-user-times"></span> désinscrire un membre</button>
       {% endif%}
       {% endif %}
       <hr />
@@ -83,15 +79,15 @@
     </div>
   </div>
   <div class="row mobile-margin-top">
-      <div v-for="member in members">
-          <div class="col-md-4 mobile-centered">
+      <div v-for="(member, index) in members">
+          <div v-bind:class="[[member.uid]]+' col-md-4'+' mobile-centered'">
             <a v-bind:href="[[member.url]]">
                 <span class="fa fa-user-o"></span> [[member.first_name]] [[member.last_name]]
             </a>
-            <form method="POST" v-if="can_manage" action="{% url 'campus:clubs:remove-person' club.cn %}" class="inline" >
+            <form method="POST" v-bind:id="'del-'+index" v-if="can_manage" v-on:submit.prevent="remove_user([[index]], false)" action="" class="inline" >
                {% csrf_token %}
                <input type="hidden" name="id_user" v-bind:value="[[member.uid]]" />
-               <button type="submit" class="btn btn-link dell-user" /><span class="fa fa-trash-o"></span></button>
+               <button type="submit" class="btn btn-link dell-user" /><span class="fa fa-minus-square "></span></button>
             </form>
           </div>
       </div>
@@ -101,7 +97,7 @@
 <div class="modal fade" id="addPrez" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" action="" method="post">
+            <form class="form-horizontal" action="{% url "campus:clubs:add-prez" club.cn %}" method="post">
                 {% csrf_token %}
                 <div class="modal-header">
                     <h4 class="modal-title">{% trans "Ajouter un président" %}</h4>
@@ -133,7 +129,7 @@
 <div class="modal fade" id="addPerson" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" v-on:submit.prevent="send_new_user" id="add-person-form" action="" method="POST">
+            <form class="form-horizontal" v-on:submit.prevent="send_new_user('add-person-form', false)" id="add-person-form" action="" method="POST">
                 {% csrf_token %}
                 <div class="modal-header">
                     <h4 class="modal-title">{% trans "Ajouter une Personne" %}</h4>
@@ -153,36 +149,13 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="delPerson" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form class="form-horizontal" action="" method="POST">
-                {% csrf_token %}
-                <div class="modal-header">
-                    <h4 class="modal-title">{% trans "Désinscrire une personne" %}</h4>
-                </div>
-                <div class="modal-body">
-                    <p>{% trans "Entrer la personne à ajouter à désinscrire de ce club:" %}</p>
-                    <div class="input-group">
-                        <span class="input-group-addon" id="basic-addon1"><span class="fa fa-user"></span></span>
-                        <input type="text" class="form-control" name="id_user" id="id_user_to_del" style="width:70%;"></input>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-success">{% trans "Désinscrire" %}</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Annuler" %}</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 <div class="modal fade" id="addEmail" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" action="" method="POST">
+            <form class="form-horizontal" v-on:submit.prevent="subscribe_user" id="subsribe-form" action="" method="POST">
                 {% csrf_token %}
                 <div class="modal-header">
-                    <h4 class="modal-title">{% trans "Désinscrire une personne" %}</h4>
+                    <h4 class="modal-title">{% trans "Inscrire une personne à la mailing liste" %}</h4>
                 </div>
                 <div class="alert alert-danger text-center remove-radius">
                     <span class="fa fa-spin fa-warning"></span>
@@ -241,9 +214,10 @@ var app = new Vue({
           },
       {% endfor %}
     ],
-    send_new_user: function(event) {
-      var form = $('#add-person-form');
+    send_new_user: function(form_id, self, event) {
+      var form = $("#"+form_id);
       $('#retry-btn').attr("data-target","#addPerson");
+      $('#retry-btn').attr("style","display: inline");
       $.ajax({
         url: '{% url 'campus:clubs:add-person' pk=club.cn %}',
         type: "POST",
@@ -256,12 +230,63 @@ var app = new Vue({
             uid: data.uid,
             url: data.url,
           });
+          if(self==true){
+            $('#add-self-form').attr("style","display: none");
+            $('#remove-self-form').attr("style","display: inline");
+          }
           $('#addPerson').modal('hide');
           $('#notification').modal('show');
           $('#notification-text').html('<span class="fa fa-check-square-o"></span> '+'{% trans "Ajout terminé avec succès"%}');
         },
         error : function(data){
           $('#addPerson').modal('hide');
+          $('#notification').modal('show');
+          $('#notification-text').html('<span class="fa fa-exclamation-circle"></span> '+data.responseJSON.error);
+        }
+      });
+    },
+
+    subscribe_user: function(event) {
+      var form = $('#subsribe-form');
+      $('#retry-btn').attr("data-target","#addEmail");
+      $('#retry-btn').attr("style","display: inline");
+      $.ajax({
+        url: '{% url 'campus:clubs:add-mail' pk=club.cn %}',
+        type: "POST",
+        async: false,
+        data: form.serialize(),
+        success : function(data){
+          $('#addEmail').modal('hide');
+          $('#notification').modal('show');
+          $('#notification-text').html('<span class="fa fa-check-square-o"></span> '+'{% trans "Ajout terminé avec succès"%}');
+        },
+        error : function(data){
+          $('#addEmail').modal('hide');
+          $('#notification').modal('show');
+          $('#notification-text').html('<span class="fa fa-exclamation-circle"></span> '+data.responseJSON.error);
+        }
+      });
+    },
+
+    remove_user: function(id, self, event) {
+      if(self==true){var form=$("#"+id)}else{var form=$("#del-"+id)};
+      $('#retry-btn').attr("style","display: none");
+      $.ajax({
+        url: '{% url 'campus:clubs:remove-person' pk=club.cn %}',
+        type: "POST",
+        async: false,
+        data: form.serialize(),
+        success : function(data){
+          $('#notification').modal('show');
+          $('#notification-text').html('<span class="fa fa-check-square-o"></span> '+data.message);
+          if(self==true){
+            //TODO:cheap hack but i have no other idea for now
+            $("."+"{{request.ldap_user.uid}}").attr("style","display: none");
+            $('#add-self-form').attr("style","display: inline");
+            $('#remove-self-form').attr("style","display: none");
+          }else{Vue.delete(app.members, id);};
+        },
+        error : function(data){
           $('#notification').modal('show');
           $('#notification-text').html('<span class="fa fa-exclamation-circle"></span> '+data.responseJSON.error);
         }

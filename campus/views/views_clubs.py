@@ -360,47 +360,49 @@ class AddMailToClub(View):
     """
 
     def post(self, request, pk):
-        try:
-            club=StudentOrganisation.get(cn=pk)
-            if "tbCampagne" in club.object_classes:
-                club=ListeCampagne.get(cn=pk)
-            elif "tbAsso" in club.object_classes:
-                club=Association.get(cn=pk)
-        except ObjectDoesNotExist:
-            raise Http404("Aucun club trouvé")
+        if request.is_ajax():
+            try:
+                club=StudentOrganisation.get(cn=pk)
+                if "tbCampagne" in club.object_classes:
+                    club=ListeCampagne.get(cn=pk)
+                elif "tbAsso" in club.object_classes:
+                    club=Association.get(cn=pk)
+            except ObjectDoesNotExist:
+                return JsonResponse({"error": _("Aucun club trouvé")}, status=400)
 
-        if not (self.request.ldap_user.is_campus_moderator() or self.request.ldap_user.pk in club.prezs or request.user.is_staff):
-            messages.error(request, _("Vous n'êtes pas modérateur campus ou président de ce club"))
-            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-        mail = request.POST.get("mail", None)
+            if not (self.request.ldap_user.is_campus_moderator() or self.request.ldap_user.pk in club.prezs or request.user.is_staff):
+                return JsonResponse({"error": _("Vous n'êtes pas modérateur campus ou président de ce club")}, status=400)
+            mail = request.POST.get("mail", None)
 
-        if not mail:
-            raise Http404
-        elif not re.match('^[a-z1-9-_.+]+\@.+$', mail):
-            messages.error(request, _("L'email est invalide"))
-            return HttpResponseRedirect(reverse('campus:clubs:list'))
+            if not mail:
+                raise Http404
+            elif not re.match('^[a-z1-9-_.+]+\@.+$', mail):
+                return JsonResponse({"error": _("L'email semble être invalide, si ce n'est pas le cas contactez nous !")}, status=400)
 
-        messages.success(request, _("Inscription terminée avec succès"))
-        subscription_email = EmailMessage(
-            subject="SUBSCRIBE {}".format(club.email),
-            body="Inscription par un modérateur campus ou président de club de l'adresse {} à {}".format(mail, club.name),
-            from_email=mail,
-            reply_to=["listmaster@resel.fr"],
-            to=["sympa@resel.fr"],
-        )
-        try:
-            subscription_email.send()
-        except SMTPException:
-            logger.warning(
-                "Erreur lors de la désinscription de la mlist %s de %s" % (club.email, mail),
-                extra={
-                    'user_mail': mail,
-                    'mlist': club.email,
-                    'message_code': 'ERROR_UNSUBSCRIBE',
-                }
+            subscription_email = EmailMessage(
+                subject="SUBSCRIBE {}".format(club.email),
+                body="Inscription par un modérateur campus ou président de club de l'adresse {} à {}".format(mail, club.name),
+                from_email=mail,
+                reply_to=["listmaster@resel.fr"],
+                to=["sympa@resel.fr"],
             )
+            try:
+                subscription_email.send()
+            except SMTPException:
+                logger.warning(
+                    "Erreur lors de l'inscription de la mlist %s de %s" % (club.email, mail),
+                    extra={
+                        'user_mail': mail,
+                        'mlist': club.email,
+                        'message_code': 'ERROR_SUBSCRIBE',
+                    }
+                )
+                return JsonResponse({"error": _("Une erreure s'est produite, \
+                mais ce n'est pas votre faute, si le problème persiste, contactez nous.")}, status=400)
 
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+            return JsonResponse({"error": _("Inscription terminée avec succès !")}, status=200)
+        else:
+            return Http404
 
 
 @method_decorator(login_required, name="dispatch")
@@ -451,7 +453,6 @@ class RemovePersonFromClub(View):
         """Remove a `user` from the `club` and sign him off the mlist"""
         club.members.remove(user.pk)
         club.save()
-        messages.success(request, _("Désinscription terminée avec succès"))
         if not club.email:
             return
         mail_search = re.search('^([a-z1-9-_.+]+)\@.+$', club.email)
@@ -477,37 +478,44 @@ class RemovePersonFromClub(View):
             )
 
     def post(self, request, pk):
-        try:
-            club = StudentOrganisation.get(cn=pk)
-            # If we don't do this we get an error cuz our LDAP scheme does not allow
-            # a single model for each type of organisation
-            if "tbCampagne" in club.object_classes:
-                club = ListeCampagne.get(cn=pk)
-            elif "tbAsso" in club.object_classes:
-                club = Association.get(cn=pk)
-        except ObjectDoesNotExist:
-            raise Http404("Aucun club trouvé")
-
-        uid = request.POST.get('id_user', None)
-        if uid is None:
-            user = request.ldap_user
-        else:
+        if request.is_ajax():
             try:
-                user = LdapUser.get(uid=uid)
+                club = StudentOrganisation.get(cn=pk)
+                # If we don't do this we get an error cuz our LDAP scheme does not allow
+                # a single model for each type of organisation
+                if "tbCampagne" in club.object_classes:
+                    club = ListeCampagne.get(cn=pk)
+                elif "tbAsso" in club.object_classes:
+                    club = Association.get(cn=pk)
             except ObjectDoesNotExist:
-                raise Http404("L'utilisateur n'existe pas")
-        allowed = (
-            self.request.ldap_user.is_campus_moderator()
-            or self.request.ldap_user.pk in club.prezs
-            or request.user.is_staff
-            or user.uid == request.ldap_user.uid
-        )
+                return JsonResponse({"error": _("Aucun club trouvé")}, status=400)
 
-        if allowed and user.pk in club.members:
-            self.remove_user(user, club, request)
+            uid = request.POST.get('id_user', None)
+            if uid is None:
+                user = request.ldap_user
+            else:
+                try:
+                    user = LdapUser.get(uid=uid)
+                except ObjectDoesNotExist:
+                    return JsonResponse({"error": _("L'utilisateur n'existe pas")}, status=400)
+            allowed = (
+                self.request.ldap_user.is_campus_moderator()
+                or self.request.ldap_user.pk in club.prezs
+                or request.user.is_staff
+                or user.uid == request.ldap_user.uid
+            )
+
+            if allowed and user.pk in club.members:
+                self.remove_user(user, club, request)
+            else:
+                return JsonResponse(
+                    {"error": __("Cette personne ne fait pas partie du club ou \
+                    alors vous n'êtes pas autorisé à faire ça")},
+                     status=400
+                )
+            return JsonResponse({"message": _("Désinscription terminée avec succès")}, status=200)
         else:
-            messages.info(request, _("Cette personne ne fait pas partie du club ou alors vous n'êtes pas autorisé"))
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+            return Http404
 
 
 @method_decorator(login_required, name="dispatch")
