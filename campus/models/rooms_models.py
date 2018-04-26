@@ -151,6 +151,11 @@ class RoomBooking(models.Model):
         ('DELETED', _("Supprimé")),
     )
 
+    name = models.TextField(
+        help_text=_('nom de l\'évènement'),
+        default="Evenement",
+    )
+
     description = models.TextField(
         help_text=_('description de l\'évènement'),
     )
