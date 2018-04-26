@@ -411,7 +411,7 @@ iframe {
 }
 
 .home-campus {
-    background: url(/static/images/campus/bgimg.png) no-repeat center center;
+    background: linear-gradient(135deg, #56ab2f , #a8e063);
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
@@ -432,10 +432,10 @@ iframe {
 }
 
 .home-campus h2 a:hover, .home-campus .btn-link:hover  {
-    color: #51951b;
+    color: #373737;
 }
 .home-campus h2 a:hover {
-    color: #51951b;
+    color: #373737;
     text-decoration: none;
 }
 
