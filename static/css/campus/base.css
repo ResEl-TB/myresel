@@ -11,7 +11,7 @@ html {
 
 body {
     /* margin-bottom: 400px; */
-    background-color: #65d145;
+    background-image: url("../../images/campus/bg.png");
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
