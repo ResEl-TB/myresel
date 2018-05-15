@@ -1,7 +1,7 @@
 body
 {
-	background: #222;
-	margin: 0;
+    background: #222;
+    margin: 0;
     --h: calc(91.25vh);
     height: 100vh;
     width: 100vw;
@@ -14,8 +14,8 @@ body.expanded
 
 body.fullscreen
 {
-	background: #000;
-	cursor: none;
+    background: #000;
+    cursor: none;
     --h: 100vh;
 }
 
@@ -49,7 +49,7 @@ body.fullscreen #channels
 
 @keyframes spinner
 {
-	0%   {top: -5vw;}
+    0%   {top: -5vw;}
     75%  {top: -5vw;}
     100% {top: 0;}
 }
@@ -68,7 +68,7 @@ body.fullscreen #channels
     height: 6.84vw;
     left: 32.5vw;
     animation: logo 1.5s;
-	top: calc(50% - 5.92vw);
+    top: calc(50% - 5.92vw);
 }
 
 #resel
@@ -104,15 +104,15 @@ body.fullscreen #channels
 
 .done
 {
-	opacity: 0;
-	transition: opacity 1s;
+    opacity: 0;
+    transition: opacity 1s;
 }
 
 video {
     position: absolute;
     top: 0;
     height: 100%;
-	width: 100%;
+    width: 100%;
 }
 
 section
@@ -136,7 +136,6 @@ section
 
 #overlay
 {
-
     font-family: 'Lato', sans serif;
     color: #fff;
     background: linear-gradient(315deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.85) 60%, rgba(0,0,0,0.85) 100%);
@@ -147,9 +146,9 @@ section
     padding: var(--bp);
     transition: opacity .25s ease-in;
     opacity: 1;
-	position: absolute;
-	z-index: 1;
-	overflow: hidden;
+    position: absolute;
+    z-index: 1;
+    overflow: hidden;
 }
 
 #overlay *
@@ -159,7 +158,7 @@ section
 
 #overlay-title
 {
-	margin-bottom: calc(-0.1 * var(--h));
+    margin-bottom: calc(-0.1 * var(--h));
     font-weight: bold;
     font-size: calc(0.08 * var(--h));
     white-space: nowrap;
@@ -790,4 +789,75 @@ body.expanded .duration
 body.fullscreen #overlay
 {
     opacity: 0 !important;
+}
+
+.nav-element
+{
+    float: left;
+    line-height: 5vh;
+    font-family: Lato;
+}
+
+#nav
+{
+    height: 5vh;
+    box-shadow: 0 0 20px #000;
+    font-size: 1.75vh;
+    color: #ee0000;
+    background: linear-gradient(#fff, #eee);
+}
+
+.nav-element.right
+{
+    float: right;
+}
+
+.nav-fill
+{
+    width: 100%;
+    background: transparent;
+    height: 5vh;
+    transform: skew(-30deg);
+    transition: all .25s ease;
+}
+
+.nav-fill.first
+{
+    border-top: 5vh solid transparent;
+    border-right: 2.8867513459vh solid transparent;
+    width: calc(100% - 1.4433756730vh);
+    transform: none;
+    height: 0;
+    background: transparent !important;
+}
+
+.nav-fill.last
+{
+    border-bottom: 5vh solid transparent;
+    border-left: 2.8867513459vh solid transparent;
+    width: calc(100% - 1.4433756730vh);
+    transform: none;
+    height: 0;
+    background: transparent !important;
+    margin-left: -1.4433756730vh;
+}
+
+.nav-fill:hover
+{
+    background: #e4e4e4;
+    border-top-color: #e4e4e4;
+    border-bottom-color: #e4e4e4;
+}
+
+.nav-fill:hover + span
+{
+    color: #d00;
+}
+
+.nav-element > span
+{
+    position: relative;
+    top: -5vh;
+    padding: 0 2vh;
+    pointer-events: none;
 }

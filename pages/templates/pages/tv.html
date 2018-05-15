@@ -4,11 +4,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link href="https://fonts.googleapis.com/css?family=Lato|Noto+Sans" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{% static 'font-awesome/css/font-awesome.min.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/tv/style.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/tv/scrollbar.css' %}">
 <script src="{% static 'js/tv/dash.all.min.js' %}"></script>
 <script src="{% static 'js/tv/scrollbar.min.js' %}"></script>
-<script src="{% static 'js/tv/tv.min.js' %}"></script>
+<script src="{% static 'js/tv/tv.js' %}"></script>
 <title>ResEl TV</title>
 </head>
 <body>
@@ -32,6 +33,27 @@
                 <path d="M296.9 157.7l-19.6 42.7h-10.3l-6.3-42.7h9.8l4.1 31.9 13.8-31.9H296.9z"></path>
             </svg>
             <div id="loader-container"><div id="loader"></div></div>
+        </div>
+    </div>
+    <div id="nav">
+        <div class="nav-element">
+            <div class="nav-fill first"></div>
+            <span>
+                <span class="fa fa-chevron-left"></span>
+                Retour site ResEl
+            </span>
+        </div>
+        <div class="nav-element">
+            <div class="nav-fill"></div>
+            <span>Guide des programmes</span>
+        </div>
+        <div class="nav-element right">
+            <div class="nav-fill last"></div>
+            <span>À propos</span>
+        </div>
+        <div class="nav-element right">
+            <div class="nav-fill"></div>
+            <span>Aide</span>
         </div>
     </div>
     <div id="video">
