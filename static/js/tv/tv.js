@@ -136,36 +136,6 @@ function keyDown(e)
 var body = document.body;
 
 /**
- * Enters or leaves the fullscreen mode.
- */
-function fullScreen()
-{
-    var elem = body || document.documentElement;
-    if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement)
-    {
-        if (elem.requestFullscreen)
-            elem.requestFullscreen();
-        else if (elem.msRequestFullscreen)
-            elem.msRequestFullscreen();
-        else if (elem.mozRequestFullScreen)
-            elem.mozRequestFullScreen();
-        else if (elem.webkitRequestFullscreen)
-            elem.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
-    }
-    else
-    {
-        if (document.exitFullscreen)
-            document.exitFullscreen();
-        else if (document.msExitFullscreen)
-            document.msExitFullscreen();
-        else if (document.mozCancelFullScreen)
-            document.mozCancelFullScreen();
-        else if (document.webkitExitFullscreen)
-            document.webkitExitFullscreen();
-    }
-}
-
-/**
  * Class defining a TV program.
  *
  * @param {String} title - The program title
@@ -213,14 +183,15 @@ function ResElTV(d, w, imagePath)
     tv.loadingDiv = d.getElementById("loading");
     tv.videoDiv = d.getElementById("video");
     tv.channelsDiv = d.getElementById("channels");
+    tv.navDiv = d.getElementById("nav");
 	
     /** Whether the client cursor is on an :ref:`Interactive Zone <interactive_zones>` or not. */
     tv.interacting = 0;
 	
-    /** The interface state. ``0`` is to the Normal State, ``1`` is the Expanded State and ``2`` is the Fullscreen State. See :ref:`states` for further details. */
+    /** The interface state. ``0`` is to the Normal State, ``1`` is the Detailed State and ``2`` is the Expanded State. See :ref:`states` for further details. */
     tv.state = 0;
 	
-    /** Timer until the :js:func:`fullscreen` function gets called. */
+    /** Timer until the :js:func:`expanded` function gets called. */
     tv.mouseTimer = null;
 	
     tv.cursorVisible = true; // TODO: implement or remove
@@ -248,6 +219,37 @@ function ResElTV(d, w, imagePath)
     tv.player.initialize(tv.videoDiv.querySelector("video"));
 
     /**
+     * Enters or leaves the fullscreen mode.
+     */
+    tv.fullScreen = () => {
+        var elem = body || document.documentElement;
+        if (!document.fullscreenElement && !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement)
+        {
+            if (elem.requestFullscreen)
+                elem.requestFullscreen();
+            else if (elem.msRequestFullscreen)
+                elem.msRequestFullscreen();
+            else if (elem.mozRequestFullScreen)
+                elem.mozRequestFullScreen();
+            else if (elem.webkitRequestFullscreen)
+                elem.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+            tv.d.body.classList.add("fullscreen");
+        }
+        else
+        {
+            if (document.exitFullscreen)
+                document.exitFullscreen();
+            else if (document.msExitFullscreen)
+                document.msExitFullscreen();
+            else if (document.mozCancelFullScreen)
+                document.mozCancelFullScreen();
+            else if (document.webkitExitFullscreen)
+                document.webkitExitFullscreen();
+            tv.d.body.classList.remove("fullscreen");
+        }
+    };
+
+    /**
      * Updates the overlay with data regarding the given channel.
      *
      * @param {Channel} channel - The channel to load the data from
@@ -272,7 +274,7 @@ function ResElTV(d, w, imagePath)
      * @param {Channel} channel - The channel to switch to
      */
     tv.switchChannel = channel => () => {
-        tv.d.body.classList.remove("expanded");
+        tv.d.body.classList.remove("detailed");
         if (tv.init)
             tv.currentChannel.channelDiv.classList.remove("active");
         channel.channelDiv.classList.remove("selected");
@@ -284,22 +286,22 @@ function ResElTV(d, w, imagePath)
             tv.channelsDiv.scrollLeft = box.x + (box.width - tv.channelsDiv.clientWidth) * tv.scrollRatio - parseFloat(tv.w.getComputedStyle(channel.channelDiv).marginRight);
         }
         tv.state = 0;
-        tv.player.attachSource(`https://tnt.resel.fr/play/dash/${channel.sid}/index.mpd`);
+        //tv.player.attachSource(`https://tnt.resel.fr/play/dash/${channel.sid}/index.mpd`);
         if (tv.init)
             tv.updateOverlay(channel);
         tv.w.dispatchEvent(new Event("update"));
     };
     
     /**
-     * Switches between :ref:`normal_state` and :ref:`expanded_state`.
+     * Switches between :ref:`normal_state` and :ref:`detailed_state`.
      *
      * @param {Channel} channel - The channel whose details should be shown or hidden
      */
-    tv.expand = channel => e => {
+    tv.switchView = channel => e => {
         e.stopPropagation();
         if(tv.state)
         {
-            tv.d.body.classList.remove("expanded");
+            tv.d.body.classList.remove("detailed");
             channel.channelDiv.querySelector(".channel-more").style.visibility = "hidden";
             setTimeout(() => {channel.channelDiv.querySelector(".channel-more").style.visibility = ""}, 200);
             channel.channelDiv.classList.remove("selected");
@@ -320,7 +322,7 @@ function ResElTV(d, w, imagePath)
         {
             var box = channel.channelDiv.getBoundingClientRect();
             tv.scrollRatio = box.x / (tv.channelsDiv.clientWidth - box.width + 2 * parseFloat(tv.w.getComputedStyle(channel.channelDiv).marginRight));
-            tv.d.body.classList.add("expanded");
+            tv.d.body.classList.add("detailed");
             channel.channelDiv.classList.add("selected");
             if (overflows(channel.channelDiv.querySelector(".program-title")))
                 channel.channelDiv.classList.add("expoverflow");
@@ -332,10 +334,11 @@ function ResElTV(d, w, imagePath)
         tv.w.dispatchEvent(new Event("update"));
     };
 
-    /** Switches to the :ref:`fullscreen_state`. */
-    tv.fullscreen = () => {
+    /** Switches to the :ref:`expanded_state`. */
+    tv.expand = () => {
         tv.mouseTimer = null;
-        tv.d.body.className = "fullscreen";
+        tv.d.body.classList.add("expanded");
+        // tv.d.body.className = "expanded";
         tv.state = 2;
     };
 
@@ -381,13 +384,13 @@ function ResElTV(d, w, imagePath)
     tv.playPause = elem => {
         if (tv.playing)
         {
-            tv.player.pause();
+            //tv.player.pause();
             tv.playing = false;
             elem.classList.add("paused");
         }
         else
         {
-            tv.player.play();
+            //tv.player.play();
             tv.playing = true;
             elem.classList.remove("paused");
         }
@@ -445,7 +448,7 @@ function ResElTV(d, w, imagePath)
             channel.channelDiv = tv.channelsDiv.lastChild;
             channel.channelDiv.onclick = tv.switchChannel(channel);
             channel.channelDiv.querySelector(".description").onclick = e => {e.stopPropagation()};
-            channel.channelDiv.querySelector(".channel-more").onclick = tv.expand(channel);
+            channel.channelDiv.querySelector(".channel-more").onclick = tv.switchView(channel);
             ScrollBarY.initEl(channel.channelDiv.querySelector(".description"));
             
             tv.channels.push(channel);
@@ -456,19 +459,27 @@ function ResElTV(d, w, imagePath)
         tv.update();
 
         tv.channelsDiv.onmouseover = () => {
-            tv.interacting = 1;
+            tv.interacting++;
         };
 
         tv.channelsDiv.onmouseout = () => {
-            tv.interacting = 0;
+            tv.interacting--;
+        };
+
+        tv.navDiv.onmouseover = () => {
+            tv.interacting++;
+        };
+
+        tv.navDiv.onmouseout = () => {
+            tv.interacting--;
         };
 
         tv.d.getElementById('videobar').onmouseover = () => {
-            tv.interacting = 1;
+            tv.interacting++;
         };
 
         tv.d.getElementById('videobar').onmouseout = () => {
-            tv.interacting = 0;
+            tv.interacting--;
         };
 
         var timer = () => {
@@ -479,12 +490,13 @@ function ResElTV(d, w, imagePath)
                 
             if (tv.state == 2)
             {
-                tv.d.body.className = "";
+                tv.d.body.classList.remove("expanded");
+                // tv.d.body.className = "";
                 tv.state = 0;
             }
         
             if (tv.state + tv.interacting == 0)
-                tv.mouseTimer = tv.w.setTimeout(tv.fullscreen, 2500);
+                tv.mouseTimer = tv.w.setTimeout(tv.expand, 1000);
         };
     
         tv.d.onmousemove = timer;
@@ -498,7 +510,7 @@ function ResElTV(d, w, imagePath)
         volumeSlider.onchange = tv.updateVolume(volumeSlider);
         volumeSlider.onmousedown = () => {if (volumeSlider.value > 0) tv.previousVolume = volumeSlider.value};
         tv.d.getElementById("sound").onclick = () => {tv.switchVolume()};
-        tv.d.getElementById("fullscreen").onclick = () => {fullScreen()};
+        tv.d.getElementById("fullscreen").onclick = () => {tv.fullScreen()};
     
     
         tv.loadingDiv.classList.add("done");

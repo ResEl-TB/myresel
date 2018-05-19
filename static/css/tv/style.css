@@ -2,26 +2,46 @@ body
 {
     background: #222;
     margin: 0;
-    --h: calc(91.25vh);
+    --h: 86.25vh;
     height: 100vh;
     width: 100vw;
 }
 
-body.expanded
+body.fullscreen
+{
+    --h: 91.25vh;
+}
+
+body.detailed
+{
+    --h: 75.75vh;
+}
+
+body.fullscreen.detailed
 {
     --h: 80.75vh;
 }
 
-body.fullscreen
+body.expanded
 {
     background: #000;
     cursor: none;
     --h: 100vh;
 }
 
-body.fullscreen #channels
+body.expanded #channels
 {
     bottom: -8.75vh;
+}
+
+body.expanded #nav, body.fullscreen #nav
+{
+    top: -5vh;
+}
+
+body.expanded #video, body.fullscreen #video
+{
+    top: 0;
 }
 
 #loading
@@ -132,6 +152,7 @@ section
     height: var(--h);
     width: calc(var(--h) * 16 / 9);
     left: calc(50% - var(--h) * 8 / 9);
+    top: 5vh;
 }
 
 #overlay
@@ -169,14 +190,14 @@ section
 
 #overlay-title.overflow:hover
 {
-	position: absolute;
+    position: absolute;
     transform: translateX(calc(var(--h) * 16 / 9 - 2 * var(--bp) - 100%));
     transition: transform 2s;
 }
 
 #overlay #separator
 {
-	margin-top: calc(0.1 * var(--h) + var(--bp));
+    margin-top: calc(0.1 * var(--h) + var(--bp));
     background: #fff;
     height: calc(0.005 * var(--h));
     width: calc(50% + var(--bp));
@@ -313,8 +334,8 @@ input[type=range]::-ms-thumb
 
 #sound *
 {
-	opacity: 1;
-	transition: all .25s ease-in;
+    opacity: 1;
+    transition: all .25s ease-in;
 }
 
 .hidden
@@ -341,9 +362,9 @@ input[type=range]::-ms-thumb
 
 #sound-container:hover #volume
 {
-	width: 15vh;
-	opacity: 1;
-	left: 4vh;
+    width: 15vh;
+    opacity: 1;
+    left: 4vh;
 }
 
 #videobar
@@ -393,8 +414,8 @@ input[type=range]::-ms-thumb
     height: 0;
     top: 1.75vh;
     position: absolute;
-	cursor: pointer;
-	transition: all .25s ease-in;
+    cursor: pointer;
+    transition: all .25s ease-in;
 }
 
 .playpause-container
@@ -407,7 +428,7 @@ input[type=range]::-ms-thumb
 
 #videobar #play-pause
 {
-	border: .95vh solid #fff;
+    border: .95vh solid #fff;
     float: left;
     position: relative;
 }
@@ -438,40 +459,40 @@ input[type=range]::-ms-thumb
     overflow: hidden;
     border-top-left-radius: 0.35vh;
     border-top-right-radius: 0.35vh;
-	transition: height .15s ease-in, bottom .15s ease-in;
+    transition: height .15s ease-in, bottom .15s ease-in;
     padding-top: 1.25vh;
     height: 7.5vh;
-	z-index: 2;
+    z-index: 2;
 }
 
-body.expanded #channels
+body.detailed #channels
 {
-	height: 18vh;
-	background: linear-gradient(to right, #fff 25%, #f8f8f8, #fff 75%);
+    height: 18vh;
+    background: linear-gradient(to right, #fff 25%, #f8f8f8, #fff 75%);
 }
 
 .channel
 {
-	color: inherit;
+    color: inherit;
     border-radius: 1vh/7vh;
     display: inline-block;
     cursor: pointer;
-	outline: 0;
-	left: 0;
-	transition: border-radius .15s ease-in;
-	padding: 0.7vh;
-	margin-left: 0.35vh;
-	margin-right: 0.35vh;
-	width: 18.6vh;
-	height: 4.85vh;
-	margin-top: 0.25vh;
+    outline: 0;
+    left: 0;
+    transition: border-radius .15s ease-in;
+    padding: 0.7vh;
+    margin-left: 0.35vh;
+    margin-right: 0.35vh;
+    width: 18.6vh;
+    height: 4.85vh;
+    margin-top: 0.25vh;
 }
 
-body:not(.expanded) .channel:hover, body:not(.expanded) .channel:focus, body:not(.expanded) .channel.active {
+body:not(.detailed) .channel:hover, body:not(.detailed) .channel:focus, body:not(.detailed) .channel.active {
     background: #eee;
 }
 
-body:not(.expanded) .channel.active {
+body:not(.detailed) .channel.active {
     pointer-events: none;
 }
 
@@ -480,7 +501,7 @@ body:not(.expanded) .channel.active {
     box-shadow: 0 0.25vh 0.6vh #aaa;
 }
 
-body:not(.expanded) .flip
+body:not(.detailed) .flip
 {
     perspective: 10vh;
     float: left;
@@ -493,12 +514,12 @@ body:not(.expanded) .flip
     left: -0.7vh;
 }
 
-body:not(.expanded) .channel:not(.active):hover .flip
+body:not(.detailed) .channel:not(.active):hover .flip
 {
 	box-shadow: .3vh .1vh .4vh -.2vh rgba(0,0,0,.25);
 }
 
-body:not(.expanded) .channel:not(.active) .flip:hover
+body:not(.detailed) .channel:not(.active) .flip:hover
 {
   background-color: #ddd;
 }
@@ -528,7 +549,7 @@ body:not(.expanded) .channel:not(.active) .flip:hover
     width: 100%;
 }
 
-body:not(.expanded) .channel:not(.active):hover .card
+body:not(.detailed) .channel:not(.active):hover .card
 {
   transform: rotateX(180deg);
 }
@@ -554,7 +575,7 @@ body:not(.expanded) .channel:not(.active):hover .card
     left: -0.7vh;
 }
 
-body:not(.expanded) .channel-more
+body:not(.detailed) .channel-more
 {
     transform: rotateY(180deg);
 }
@@ -598,17 +619,17 @@ body:not(.expanded) .channel-more
     left: 0.45vh;
 }
 
-body.expanded .channel:not(.selected)
+body.detailed .channel:not(.selected)
 {
   display: none;
 }
 
-body.expanded .scrollbar-x
+body.detailed .scrollbar-x
 {
   display: none;
 }
 
-body.expanded .channel.selected
+body.detailed .channel.selected
 {
     position: absolute;
 	cursor: default;
@@ -622,7 +643,7 @@ body.expanded .channel.selected
     width: 15vh;
 }
 
-body.expanded .program
+body.detailed .program
 {
 	--pw: calc(33.33333vw - 21.2vh);
     left: 18vh;
@@ -634,18 +655,18 @@ body.expanded .program
 	cursor: pointer;
 }
 
-body.expanded .program-title
+body.detailed .program-title
 {
     font-size: 2.25vh;
 }
 
-body.expanded .progressbar
+body.detailed .progressbar
 {
     top: 3.7vh;
     height: 0.6vh;
 }
 
-body.expanded .duration
+body.detailed .duration
 {
     font-size: 1.4vh;
 }
@@ -690,7 +711,7 @@ body.expanded .duration
     top: 2.5vh;
 }
 
-.channel.active .progressbar, body:not(.expanded) .channel:hover .progressbar, body:not(.expanded) .channel:focus .progressbar
+.channel.active .progressbar, body:not(.detailed) .channel:hover .progressbar, body:not(.detailed) .channel:focus .progressbar
 {
     background: #fbb;
     height: 0.5vh;
@@ -786,7 +807,7 @@ body.expanded .duration
     vertical-align: middle;
 }
 
-body.fullscreen #overlay
+body.expanded #overlay
 {
     opacity: 0 !important;
 }
@@ -796,15 +817,22 @@ body.fullscreen #overlay
     float: left;
     line-height: 5vh;
     font-family: Lato;
+    color: #e00;
+    text-decoration: none;
+    height: 100%;
 }
 
 #nav
 {
+    position: absolute;
+    top: 0;
+    width: 100%;
     height: 5vh;
     box-shadow: 0 0 20px #000;
     font-size: 1.75vh;
-    color: #ee0000;
     background: linear-gradient(#fff, #eee);
+    transition: all .15s ease-in;
+    z-index: 2;
 }
 
 .nav-element.right
