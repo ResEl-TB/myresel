@@ -163,7 +163,7 @@ a:hover {
   height: 0;
   border-style: solid;
   border-width: 0px 0 100px 100px;
-  border-color: transparent transparent transparent #00f0ff;
+  border-color: transparent transparent transparent #64fffd;
 }
 
 .M1 {
@@ -174,21 +174,21 @@ a:hover {
   height: 0;
   border-style: solid;
   border-width: 50px 0 0px 50px;
-  border-color: transparent transparent transparent #00f0ff;
+  border-color: transparent transparent transparent #64fffd;
 }
 
 .M2 {
   animation: M2-animation 12s infinite;
   grid-column: 3;
   grid-row: 2;
-  background-color: #00f0ff;
+  background-color: #64fffd;
 }
 
 .M3 {
   animation: M3-animation 12s infinite;
   grid-column: 4;
   grid-row: 2;
-  background-color: #00f0ff;
+  background-color: #64fffd;
 }
 
 .M4 {
@@ -199,7 +199,7 @@ a:hover {
   height: 0;
   border-style: solid;
   border-width: 0 0 50px 50px;
-  border-color: transparent transparent #00f0ff transparent ;
+  border-color: transparent transparent #64fffd transparent ;
 }
 
 .T1 {
@@ -210,14 +210,14 @@ a:hover {
   height: 0;
   border-style: solid;
   border-width: 0 0 50px 50px;
-  border-color: transparent transparent #00f0ff transparent ;
+  border-color: transparent transparent #64fffd transparent ;
 }
 
 .T2 {
   animation: T2-animation 12s infinite;
   grid-column: 6;
   grid-row: 1;
-  background-color: #00f0ff;
+  background-color: #64fffd;
 }
 
 .T3 {
@@ -228,7 +228,7 @@ a:hover {
   height: 0;
   border-style: solid;
   border-width: 50px 50px 0 0;
-  border-color: #00f0ff transparent transparent transparent ;
+  border-color: #64fffd transparent transparent transparent ;
 }
 
 .T4 {
@@ -239,7 +239,7 @@ a:hover {
   height: 0;
   border-style: solid;
   border-width: 50px 50px 0 0;
-  border-color: #00f0ff transparent transparent transparent ;
+  border-color: #64fffd transparent transparent transparent ;
 }
 
 @keyframes I-animation {
