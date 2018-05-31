@@ -5,41 +5,36 @@
 
 {% block content %}
 <div class="container">
-<h1 class="page-header">{% trans "Nous contacter" %}</h1>
+<h1 class="page-header">{% trans "Mentions légales" %}</h1>
     <div class="row">
 
-        <div class="col-md-6">
-            <form action="" method="post">
-                {% csrf_token %}
-                {% for field in form %}
-                <fieldset class="form-group">
-                    <label>{{ field.label }}</label>
-                    {{ field }}
-                    {% if field.errors %}{{ field.errors }}{% endif %}
-                </fieldset>
-                {% endfor %}
-                <div class="form-group text-center">
-                    <input type="submit" class="btn btn-info" value="{% trans 'Envoyer' %}">
-                </div>
-            </form>
-        </div>
-
         <div class="col-md-offset-1 col-md-5">
-            <h2>{% trans "Autrement" %}</h2>
+            <h2>{% trans "Association Le ResEl" %}</h2>
+ 
+            <p>
+                <b>{% trans "Raison sociale :"%}</b><br/>
+                {% trans "RESEAU DES ELEVES DE L'ECOLE NATIONALE SUPERIEURE DES TELECOMMUNICATIONS DE BRETAGNE "%}
+                <a href="http://www.journal-officiel.gouv.fr/association/index.php?ACTION=Rechercher&HI_PAGE=1&HI_COMPTEUR=0&original_method=get&WHAT=RESEAU+DES+ELEVES+DE+L%27ECOLE+NATIONALE+SUPERIEURE+DES+TELECOMMUNICATIONS+DE+BRETAGNE&JTH_ID=&JAN_BD_CP=&JRE_ID=&JAN_LIEU_DECL=&JTY_ID=&JTY_WALDEC=&JTY_SIREN=&JPA_D_D=&JPA_D_F=&rechercher.x=0&rechercher.y=0">{% trans "(RESEL)"%}</a><br/>
+                <b>{% trans "Le ResEl est une association loi 1901 déclarée comme opérateur de réseau auprès de l'ARCEP"%}</b>
+            </p>
+            <p>
+                <b>{% trans "Siège social :"%}</b><br/>
+                {% trans "Association 'Le ResEl',"%}<br/> 
+                {% trans " 655 Avenue du Technopôle,"%}<br/> 
+                {% trans "29280 Plouzané  - FRANCE"%}<br/> 
+            </p>
+            <p>
+                <b>{% trans "Date de création : "%}</b>
+                {% trans "08/10/2002"%}<br/> 
+            </p>
+            <p>
+                <b>{% trans "Date de publication au JO:"%}</b>
+                {% blocktrans %}
+                gérer et développer les réseaux de transmission de l'information sur les résidences et lieux de vie des élèves des campus de telecom bretagne ; définir, réglementer, mettre en oeuvre les utilisations de ces réseaux en assurant leur cohérence et leur respect des cadres législatifs et réglementaires ; animer ces réseaux à travers les services proposés ; défendre les intérêts propres de ses membres devant tout organisme dont l'activité la concerne ;
+                {% endblocktrans %}
+            </p>
 
-            <p>{% trans "Vous pouvez également nous contacter" %}</p>
-            <ul>
-                <li>{% trans "Par e-mail : " %}<a href="mailto:support@resel.fr">support@resel.fr</a></li>
-                <li>{% trans "Sur IRC sur le réseau " %}<a href="https://www.rezosup.org/">RezoSup</a> channel #ResEl</li>
-            </ul>
-            <h3>{% trans "Les permanences" %} <small><span class="label label-default">{% trans "Campus de Brest uniquement" %}</span></small></h3>
-
-            <p>{% blocktrans %}
-                Nous tenons (hors vacances) des <b>permanences au Foyer Des Élèves
-                de 18h à 19h30 du lundi au vendredi</b>. Un administrateur ResEl pourra venir répondre à vos
-            questions et résoudre vos problèmes concernants la connexion.</p>
-            {% endblocktrans %}
-            <h3>{% trans "Adresse postale" %}</h3>
+            <b>{% trans "Adresse postale" %}</b>
             <p>Association ResEl <br />
                 655, Avenue du Technopôle<br />
                 29280 Plouzané - FRANCE <br />
