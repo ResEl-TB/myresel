@@ -239,13 +239,6 @@ class Contact(View):
         return render(request, self.template_name, {'form': form})
 
 
-class MentionLegales(View):
-    """ Vue appelée pour afficher les mentions légales du site """
-
-    template_name = 'pages/mentions_legales.html'
-
-
-
 @resel_required
 def inscription_zone_info(request):
     """
