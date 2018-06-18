@@ -175,7 +175,6 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'phonenumber_field',
-    'captcha',
     'devices',
     'gestion_personnes',
     'myresel',
