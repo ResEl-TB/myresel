@@ -3,7 +3,7 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class ContactForm(forms.Form):
-    CAPTCHA_ANSWER = ("Paul Fiedel", "Paul Fridel")
+    CAPTCHA_ANSWER = ("Paul Friedel", "Paul Fridel", "Fridel", "Friedel", "Fiedel")
 
     nom = forms.CharField(
         label=_("Votre nom"), widget=forms.TextInput(attrs={"class": "form-control"})
