@@ -411,7 +411,7 @@ iframe {
 }
 
 .home-campus {
-    background: url(/static/images/campus/bgimg.jpg) no-repeat center center;
+    background: linear-gradient(135deg, #56ab2f , #a8e063);
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
@@ -432,20 +432,19 @@ iframe {
 }
 
 .home-campus h2 a:hover, .home-campus .btn-link:hover  {
-    color: #2fb12f;
+    color: #373737;
 }
 .home-campus h2 a:hover {
-    color: #2fb12f;
+    color: #373737;
     text-decoration: none;
 }
 
 .event-bloc {
     margin-top: 15px;
-    border: 1px solid #ddd;
+    border: 2px solid #e0e0e0;
     padding: 20px 20px 10px 30px;
-    background-color: rgba(247, 247, 247, 0.81);
+    background-color: white;
     min-height: 60px;
-    border-radius: 5px;
 }
 
 .event-badge-container {
@@ -453,7 +452,7 @@ iframe {
 }
 
 .event-badge {
-    background-color: #008000;
+    background-color: #78c429;
     color: #FFFFFF;
     border-radius: 4px;
     text-align: center;
@@ -496,8 +495,10 @@ iframe {
 .club-bloc {
     position: relative;
     color: #000000;
+    border: 2px solid #e0e0e0;
+    border-radius: 0px;
     vertical-align: text-bottom;
-    background-color: rgba(247, 247, 247, 0.81);
+    background-color: white;
 }
 
 .club-bloc a:hover {
@@ -529,17 +530,18 @@ iframe {
 }
 
 .club-news {
-    background-color: rgba(247, 247, 247, 0.81);
-    border-radius: 4px;
+    background-color: white;
+    border: 2px solid #e0e0e0;
     padding-top: 5px;
     padding-bottom: 5px;
 }
 
 .club-news-bloc {
     margin-top: 5px;
-    border: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
     padding: 5px 10px 5px 30px;
-    background-color: #FFFFFF;
+    background-color: #f7f7f7;
 }
 
 .club-news-bloc .title {

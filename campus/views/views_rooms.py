@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import permission_required, login_required
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.db.models import Q
-from django.http import Http404
+from django.http import Http404, JsonResponse
 
 import calendar, datetime, json, copy, pytz
 
@@ -173,12 +173,15 @@ def calendar_view(request, room='all', year=timezone.now().year, month=timezone.
         ('Autre', Room.objects.filter(private=False, location__in=['O', 'C'])),
     ]
 
+    form = RoomBookingForm()
+
     context = {
         'calendar': cal,
         'current_date': current_date,
         'rooms': rooms,
         'current_room': room,
-        'current_day': [str(timezone.now().day), str(timezone.now().month), str(timezone.now().year)]
+        'current_day': [str(timezone.now().day), str(timezone.now().month), str(timezone.now().year)],
+        'form': form,
     }
 
     return render(
@@ -246,13 +249,10 @@ class DeleteRoom(DeleteView):
             return HttpResponseRedirect(reverse('campus:rooms:calendar'))
         return super(DeleteRoom, self).dispatch(request, *args, **kwargs)
 
-class BookingView(FormView):
+class BookingView(View):
     """
     View to book an event or edit an event
     """
-    template_name = 'campus/rooms/booking.html'
-    success_url = reverse_lazy('campus:rooms:calendar')
-    form_class = RoomBookingForm
 
     @method_decorator(login_required)
     #@method_decorator(ae_required)
@@ -265,22 +265,21 @@ class BookingView(FormView):
                 return HttpResponseRedirect(reverse('campus:rooms:calendar'))
         return super(BookingView, self).dispatch(request, *args, **kwargs)
 
-    def get_form(self, form_class=None):
-        if form_class is None:
-            form_class = self.get_form_class()
-        return form_class(self.request.POST or None, user=self.request.ldap_user, instance=self.booking,)
-
-    def get_context_data(self, **kwargs):
-        context = super(BookingView, self).get_context_data(**kwargs)
-        context["booking"] = None
-        if self.booking:
-            context["booking"] = self.booking.id
-        return context
-
-    def form_valid(self, form):
-        form.save()
-        messages.success(self.request, _('Opération réussie'))
-        return super(BookingView, self).form_valid(form)
+    def post(self, request, booking=None):
+        if request.is_ajax():
+            instance = None
+            if booking:
+                instance = RoomBooking(pk=booking)
+            form = RoomBookingForm(request.POST, instance=instance)
+            form.user = request.ldap_user
+            if form.is_valid():
+                form.save()
+                return JsonResponse({}, status=200)
+            else:
+                errors = str(form.errors)
+                return JsonResponse({'errors': errors}, status=400)
+        else:
+            return Http404
 
 class DeleteBooking(DeleteView):
     """
@@ -302,6 +301,11 @@ class BookingDetailView(DetailView):
     model = RoomBooking
     template_name = 'campus/rooms/booking_detail.html'
     slug_field = "pk"
+
+    def get_context_data(self, **kwargs):
+        context = super(BookingDetailView, self).get_context_data(**kwargs)
+        context["form"] = RoomBookingForm(instance=context["object"])
+        return(context)
 
 
 class RequestAvailability(View):

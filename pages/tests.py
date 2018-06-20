@@ -19,8 +19,7 @@ class ContactCase(TestCase):
                 'chambre': "I10 14",
                 'mail': "123soleil@fds.sd",
                 'demande': "Test post, please ignore",
-                'captcha_0': 'dummy-value',
-                'captcha_1': 'PASSED',
+                'captcha': 'Paul Fridel',
             },
             HTTP_HOST="10.0.3.99", follow=True
         )
@@ -36,8 +35,7 @@ class ContactCase(TestCase):
                 'chambre': "I10 14",
                 'mail': "123soleil@fds.sd",
                 'demande': "Test post, please ignore",
-                'captcha_0': 'dummy-value',
-                'captcha_1': 'blabla',
+                'captcha': 'Blah blah',
             },
             HTTP_HOST="10.0.3.99", follow=True
         )
@@ -58,6 +56,7 @@ class ContactCase(TestCase):
         form = get_page.context['form']
         data = form.initial
         data['demande'] = "Test post, please ignore"
+        data['captcha'] = "Fridel Paul"
         post_message = self.client.post(
             reverse("contact"), data=data,
             HTTP_HOST="10.0.3.99", follow=True

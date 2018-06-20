@@ -4,7 +4,7 @@ strong {
 }
 
 a, a:hover, a:active, a:visited {
-    color: #8BBF82;
+    color: #65d145;
     text-decoration: none;
     cursor: pointer;
 }
@@ -25,7 +25,7 @@ a, a:hover, a:active, a:visited {
 }
 
 .green {
-    color: #8BBF82 !important;
+    color: #65d145 !important;
 }
 
 .logo {
@@ -54,6 +54,10 @@ a, a:hover, a:active, a:visited {
 
 .description {
     height: 3.2em;
+}
+
+.logo-wrapper {
+    height: 150px;
 }
 
 /* Mobile CSS */

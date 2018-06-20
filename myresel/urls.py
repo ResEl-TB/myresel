@@ -33,7 +33,6 @@ js_info_dict = {
 urlpatterns = [
     url(r'^jsi18n/$', javascript_catalog, js_info_dict, name='javascript-catalog'),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
-    url(r'^captcha/', include('captcha.urls')),
 
     url(r'^lang/setlang/$', unsecure_set_language, name='set_language'),
     url(r'^lang/', include('django.conf.urls.i18n')),
@@ -56,6 +55,7 @@ urlpatterns = [
     url(r'^faq/$', FaqList.as_view(), name='faq'),
     url(r'^faq/upvote/$', faqVote, name='upvote'),
     url(r'^contact/', Contact.as_view(), name='contact'),
+    url(r'^mentions_legales/', TemplateView.as_view(template_name='pages/mentions_legales.html'), name="mentions_legales"),
     url(r'^services/', Services.as_view(), name='services'),
     url(r'^campus/', include('campus.urls', namespace='campus')),
     url(r'^eggdrop/$', eggdrop, name='eggdrop-default'),

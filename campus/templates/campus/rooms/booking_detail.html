@@ -5,6 +5,7 @@
 {% block title %}Événement{% endblock %}
 {% block css %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/campus/clubs.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.datetimepicker.min.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -22,10 +23,11 @@
     <div class="container well" id="content">
         {% if user.is_authenticated %}
         {% if object.user_can_manage or request.user.is_staff or request.ldap_user.is_campus_moderator or request.ldap_user.uid in object.user%}
-        <a class="btn btn-default pull-right" href="{% url "campus:rooms:mod-booking" object.pk %}">Modifier l'événement</a>
+        <button data-toggle="modal" data-target="#addBooking" class="btn btn-success">Modifier l'événement</button>
         {% endif %}
         {% endif %}
-        <h3>{{ object.description }}</h3>
+        <h3>{{ object.name }}</h3>
+        <h4>{{ object.description }}</h4>
         <p>{% trans "De" %} {{ object.start_time|date:"j l H:i:s" }} {% trans "à" %} {{ object.end_time|date:"j l H:i:s" }}</p>
         <p>
             {% for room in object.room.all %}
@@ -42,4 +44,146 @@
         {% endif %}
     </div>
 
+    <!-- Modal for the booking form -->
+    {% if user.is_authenticated %}
+    {% if object.user_can_manage or request.user.is_staff or request.ldap_user.is_campus_moderator or request.ldap_user.uid in object.user%}
+    <div class="modal fade" id="addBooking" role="dialog">
+        <div class="modal-dialog modal-large">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">{% trans "Ajouter une réservation" %}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger" id="booking-errors" role="alert" style="display: none;"></div>
+                    <!-- Beginning of the booking form -->
+                    <form method="POST" class="form-horizontal" id="booking-form" onsubmit="event.preventDefault(); checkAvailability(this);">
+                        {% csrf_token %}
+                        <div class="row remove-margin">
+                            <div class="col-md-6">
+                                <div class="form-group {% if form.name.errors %}has-error{% endif %}">
+                                    <label class="col-sm-2 control-label">Nom</label>
+                                    <div class="col-sm-10">
+                                        <input class="form-control" rows="5" name="name" placeholder="{{ form.name.help_text }}" value="{{ form.name.value|default_if_none:'' }}"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group {% if form.description.errors %}has-error{% endif %}">
+                                    <label class="col-sm-2 control-label">Description</label>
+                                    <div class="col-sm-10">
+                                        <textarea class="form-control" rows="5" name="description" placeholder="{{ form.description.help_text }}">{{ form.description.value|default_if_none:'' }}</textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group {% if form.room.errors %}has-error{% endif %}">
+                                    <label class="col-sm-2 control-label">Salle(s)</label>
+                                    <div class="col-sm-10">
+                                        <select multiple name="room" class="form-control" size="{{ form.room.field.choices|length }}">
+                                        {% for choice_id, choice_label in form.room.field.choices %}
+                                            <option {% if choice_id in form.room.value %}selected{% endif %} class="room-choice"value="{{ choice_id }}">{{ choice_label }}</option>
+                                        {% endfor %}
+                                    </select>
+                                        <p class="small">{% trans 'Maintenez la touche controle pour sélectionner plusieurs salles'%}</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group {% if form.booking_type.errors %}has-error{% endif %}">
+                                    <label class="col-sm-2 control-label">Type</label>
+                                    <div class="col-sm-10 input-group">
+                                        <div class="input-group-addon"><span class="fa fa-tags" ></span></div>
+                                        <select name="booking_type" class="form-control">
+                                            {% for choice_id, choice_label in form.booking_type.field.choices %}
+                                                <option {% if form.booking_type.value == choice_id %}selected{% endif %} value="{{ choice_id }}">{{ choice_label }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group {% if form.start_time.errors %}has-error{% endif %}">
+                                    <label class="col-sm-2 control-label">Début</label>
+                                    <div class="col-sm-10 input-group">
+                                        <div class="input-group-addon"><span class="fa fa-clock-o" ></span></div>
+                                        <input type="text" id="startDate" onChange="addEndDate()" class="form-control datetimepicker" name="start_time" value="{% firstof form.start_time.value|date:'Y-m-d H:i:00' form.start_time.value %}">
+                                    </div>
+                                </div>
+
+                                {# TODO: Auto-add 1h after start date #}
+                                <div class="form-group {% if form.end_time.errors %}has-error{% endif %}">
+                                    <label class="col-sm-2 control-label">Fin</label>
+                                    <div class="col-sm-10 input-group">
+                                        <div class="input-group-addon"><span class="fa fa-clock-o" ></span></div>
+                                        <input type="text" id="endDate" class="form-control datetimepicker" name="end_time" value="{% firstof form.end_time.value|date:'Y-m-d H:i:00' form.end_time.value %}">
+                                    </div>
+                                </div>
+
+                                <div class="form-group {% if form.recurring_rule.errors %}has-error{% endif %}">
+                                    <label class="col-sm-2 control-label">Récurrence</label>
+                                    <div class="col-sm-10 input-group">
+                                        <div class="input-group-addon"><span class="fa fa-circle-o-notch" ></span></div>
+                                        <select name="recurring_rule" class="form-control">
+                                            {% for choice_id, choice_label in form.recurring_rule.field.choices %}
+                                                <option {% if form.recurring_rule.value == choice_id %}selected{% endif %} value="{{ choice_id }}">{{ choice_label }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                {# TODO: hide that when not necessary #}
+                                <div class="form-group {% if form.end_recurring_period.errors %}has-error{% endif %}">
+                                    <label class="col-sm-2 control-label">Fin de récurrence</label>
+                                    <div class="col-sm-10 input-group">
+                                        <div class="input-group-addon"><span class="fa fa-clock-o" ></span></div>
+                                        <input type="text" class="form-control datetimepicker" name="end_recurring_period" value="{% firstof form.end_recurring_period.value|date:'Y-m-d H:i:00' form.end_recurring_period.value %}">
+                                    </div>
+                                </div>
+
+                                {% if form.fields.user %}
+                                    <div class="form-group {% if form.user.errors %}has-error{% endif %}">
+                                        <label class="col-sm-2 control-label">Utilisateur</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control" name="user" value="{{ form.fields.user.value }}">
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" {% if form.displayable.value %}checked{% endif %} name="displayable"> Cochez pour afficher sur le calendrier campus
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-sm-offset-2 col-sm-10">
+                                        <button type="submit" id="booking-submit" class="btn btn-success pull-right">{% trans "Réserver" %}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <!-- End of the booking form -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Annuler" %}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% endif %}
+
+{% endblock %}
+
+{% block javascript %}
+    <script src="{% static 'js/jquery.datetimepicker.full.min.js' %}"></script>
+    <script>
+        checkFormURL = "{% url 'campus:rooms:check-availability' %}";
+        sendFormURL = "{% url 'campus:rooms:mod-booking' object.id %}";
+        id = {{object.id}};
+    </script>
+    <script src="{% static 'js/campus/booking.js' %}"></script>
 {% endblock %}

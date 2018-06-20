@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block titre %}Contact{% endblock %}
+
+{% block content %}
+<div class="container">
+<h1 class="page-header">{% trans "Mentions légales" %}</h1>
+    <div class="row">
+
+        <div class="col-md-offset-1 col-md-5">
+            <h2>{% trans "Association Le ResEl" %}</h2>
+ 
+            <p>
+                <b>{% trans "Raison sociale :"%}</b><br/>
+                {% trans "RESEAU DES ELEVES DE L'ECOLE NATIONALE SUPERIEURE DES TELECOMMUNICATIONS DE BRETAGNE "%}
+                <a href="http://www.journal-officiel.gouv.fr/association/index.php?ACTION=Rechercher&HI_PAGE=1&HI_COMPTEUR=0&original_method=get&WHAT=RESEAU+DES+ELEVES+DE+L%27ECOLE+NATIONALE+SUPERIEURE+DES+TELECOMMUNICATIONS+DE+BRETAGNE&JTH_ID=&JAN_BD_CP=&JRE_ID=&JAN_LIEU_DECL=&JTY_ID=&JTY_WALDEC=&JTY_SIREN=&JPA_D_D=&JPA_D_F=&rechercher.x=0&rechercher.y=0">{% trans "(RESEL)"%}</a><br/>
+                <b>{% trans "Le ResEl est une association loi 1901 déclarée comme opérateur de réseau auprès de l'ARCEP"%}</b>
+            </p>
+            <p>
+                <b>{% trans "Siège social :"%}</b><br/>
+                {% trans "Association 'Le ResEl',"%}<br/> 
+                {% trans " 655 Avenue du Technopôle,"%}<br/> 
+                {% trans "29280 Plouzané  - FRANCE"%}<br/> 
+            </p>
+            <p>
+                <b>{% trans "Date de création : "%}</b>
+                {% trans "08/10/2002"%}<br/> 
+            </p>
+            <p>
+                <b>{% trans "Date de publication au JO:"%}</b>
+                {% blocktrans %}
+                gérer et développer les réseaux de transmission de l'information sur les résidences et lieux de vie des élèves des campus de telecom bretagne ; définir, réglementer, mettre en oeuvre les utilisations de ces réseaux en assurant leur cohérence et leur respect des cadres législatifs et réglementaires ; animer ces réseaux à travers les services proposés ; défendre les intérêts propres de ses membres devant tout organisme dont l'activité la concerne ;
+                {% endblocktrans %}
+            </p>
+
+            <b>{% trans "Adresse postale" %}</b>
+            <p>Association ResEl <br />
+                655, Avenue du Technopôle<br />
+                29280 Plouzané - FRANCE <br />
+            </p>
+        </div>
+    </div> <!-- /.row -->
+</div> <!-- /.container -->
+{% endblock %}
