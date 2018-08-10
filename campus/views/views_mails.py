@@ -113,7 +113,7 @@ def moderate_view(request):
             )
             mail_sympa.send()
 
-            messages.success(request, _("E-mail modéré, n'oubliez pas d'aller faire la double modération sur https://mliste.resel.fr !"))
+            messages.success(request, _("E-mail modéré, n'oubliez pas d'aller faire la double modération sur https://mlistes.resel.fr !"))
             return HttpResponse()
 
     return render(

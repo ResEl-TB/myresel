@@ -690,7 +690,7 @@ msgstr ""
 #: campus/views/views_mails.py:112
 msgid ""
 "E-mail modéré, n'oubliez pas d'aller faire la double modération sur https://"
-"mliste.resel.fr !"
+"mlistes.resel.fr !"
 msgstr ""
 
 #: campus/views/views_rooms.py:49
