@@ -973,3 +973,44 @@ class CampusHomeTestCase(TestCase):
         self.client.login(username="jbvallad", password="blabla")
         r = self.client.get(reverse("campus:home"), HTTP_HOST="10.0.3.94")
         self.assertEqual(r.status_code, 200)
+
+# AE Admin ajax tests
+
+class AEAjaxTestCase(TestCase):
+    def setUp(self):
+        try_delete_user("jdoe")
+
+        user = LdapUser()
+        user.uid = 'jdoe'
+        user.first_name = "John"
+        user.last_name = "Doe"
+        user.user_password = "blah"
+        user.mail = "jogn.doe@resel.fr"
+        user.promo = 2016
+        user.n_adherent = "16156"
+        user.dates_membre = "20160901-20170831"
+        user.nt_password = user.user_password
+        user.save()
+
+        self.client.login(username="jdoe", password="blah")
+
+    def testSimpleAEMemberSearch(self):
+        r = self.client.get(
+            reverse("campus:ae-admin:search-members"),
+            {'filter': 'john'},
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            HTTP_HOST="10.0.3.94"
+        )
+        self.assertTrue(len(r.json()['results']) == 1)
+        self.assertFalse(r.json().get('error', False))
+
+    def testSimpleAEMemberEmptySearch(self):
+        r = self.client.get(
+            reverse("campus:ae-admin:search-members"),
+            {'filter': ''},
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            HTTP_HOST="10.0.3.94"
+        )
+        print(r.json())
+        self.assertFalse(r.json().get('results', False))
+        self.assertTrue(r.json()['error'])

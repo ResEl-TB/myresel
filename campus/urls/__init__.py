@@ -11,4 +11,5 @@ urlpatterns = [
     url(r'^who/', include('campus.whoswho.urls', namespace='who')),
     url(r'^clubs/', include('campus.urls.urls_clubs', namespace='clubs')),
     url(r'^gestion/', include('campus.urls.urls_gestion', namespace='gestion')),
+    url(r'^ae-admin/', include('campus.urls.urls_ae_admin', namespace='ae-admin')),
 ]
