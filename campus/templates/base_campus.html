@@ -104,6 +104,9 @@
                                    <a href="{% url "campus:gestion:modo" %}"><i class="fa fa-beer fa-fw"></i> Gérer les modérateurs campus</a>
                                 </li>
                             {% endif %}
+                            <li>
+                               <a href="{% url "campus:ae-admin:home" %}"><i class="fa fa-sliders fa-fw"></i> {% trans "Administration AE" %}</a>
+                            </li>
                             <hr />
                             <li>
                                 <a href="{% url "campus:who:user-home" %}"><i class="fa fa-sliders fa-id-card"></i> Mon profil</a>
