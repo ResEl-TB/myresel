@@ -25,21 +25,29 @@
 <script src="{% static 'js/vendors/vue.js' %}"></script>
 <script src="{% static 'js/vendors/vue-router.js' %}"></script>
 <script src="{% static 'js/vendors/file-saver.js' %}"></script>
+{% include "campus/ae-admin/export-csv.html" %}
+{% include "campus/ae-admin/add-member.html" %}
 <script type="text/javascript">
 
   ///////////////////////////////////////////////
   //////////    Home Menu components    /////////
   ///////////////////////////////////////////////
+
   section_links = [
     {
       id: 1,
-      title: "Ajouter un membre à l'AE",
+      title: "{% trans 'Ajouter un membre à l\'AE' %}",
       glyphicon: "glyphicon-plus",
       url: "add-member"
     },
-    {id: 1,
-      title: "Importer/Exporter",
+    {id: 2,
+      title: "{% trans 'Exporter vers un tableur' %}",
       glyphicon: "glyphicon-download",
+      url: "ie-member"
+    },
+    {id: 3,
+      title: "{% trans 'Importer depuis un tableur' %}",
+      glyphicon: "glyphicon-upload",
       url: "ie-member"
     }
   ]
@@ -86,221 +94,6 @@
     `
   })
 
-  ///////////////////////////////////////////////
-  ////////    Add AE member components    ///////
-  ///////////////////////////////////////////////
-
-  // The root template for adding a new member
-  const AddMember = Vue.component('add-member', {
-    props: [],
-    delimiters: ['[[', ']]'],
-    template:
-    `
-      <div class="well">
-        <div class="row">
-          <div class="col-md-1">
-            <go-back-button></go-back-button>
-          </div>
-          <div class="col-md-10 text-center">
-            <h3>Ajout d'un membre à l'AE</h3>
-          </div>
-        </div>
-        <div class="row">
-          <search-school-users></search-school-users>
-        </div>
-      </div>
-    `
-  })
-
-  const SearchUsers = Vue.component('search-school-users', {
-    props: [],
-    delimiters: ['[[', ']]'],
-    data(){
-      return {
-        search_results: [],
-        filter: '',
-      };
-    },
-    methods:{
-      getUsers: function(){
-        $.ajax({
-          url: "{% url 'campus:ae-admin:search-user' %}",
-          method: "GET",
-          data: {filter: this.filter},
-          success: function(data){
-            console.log(data)
-          }
-        })
-      }
-    },
-    template:
-    `
-      <div class="col-md-12">
-        <form v-on:submit.prevent="getUsers">
-          <div class="form-group">
-            <label>{% trans "Rechercher dans l'annuaire de l'école :" %}</label>
-            <div class="input-group">
-              <span class="input-group-addon">
-                <span class="fa fa-search"></span>
-              </span>
-              <input class="form-control" v-model="filter" type="text"></input>
-            </div>
-          </div>
-        </form>
-      </div>
-    `
-  })
-
-  ///////////////////////////////////////////////
-  ///////////    Import/Export CSV    ///////////
-  ///////////////////////////////////////////////
-
-  // The root template exporting and importing a list of members
-  const ImportExportMember = Vue.component('ie-member', {
-    props: [],
-    delimiters: ['[[', ']]'],
-    template:
-    `
-      <div class="well">
-        <div class="row">
-          <div class="col-md-1">
-            <go-back-button></go-back-button>
-          </div>
-          <div class="col-md-10 text-center">
-            <h3>Import/Export vers un Tableur</h3>
-          </div>
-        </div>
-        <div class="row">
-          <search-members></search-members>
-        </div>
-      </div>
-    `
-  })
-
-  // Search form for AE members
-  const SearchAEMember = Vue.component('search-members', {
-    props: [],
-    delimiters: ['[[', ']]'],
-    data(){
-      return {
-        search_results: [],
-        filter: '',
-        error: '',
-        searching: false,
-        header_content: [
-          {size: 2, text: ""}, // offset
-          {size: 1, text: "{% trans 'UID' %}"},
-          {size: 2, text: "{% trans 'Nom complet' %}"},
-          {size: 2, text: "{% trans 'N° Adherent' %}"},
-          {size: 4, text: "{% trans 'Dernière adhésion' %}"},
-        ],
-        modal_title: '',
-      };
-    },
-    methods:{
-      getUsers: function(){
-        this.error = '';
-        this.search_results = [];
-        this.searching = true,
-        $.ajax({
-          url: "{% url 'campus:ae-admin:search-members' %}",
-          method: "GET",
-          data: {filter: this.filter},
-
-          success: function(data){
-            if(data["error"]){
-              this.error = data['error']
-            }else{
-              this.search_results = data['results'];
-            }
-          }.bind(this),
-
-          error: function(data){
-            this.error = "Something when wrong";
-          }.bind(this),
-
-          complete: function(){
-            this.searching = false;
-          }.bind(this)
-        })
-      },
-      createCSV: function(){
-        csv_lines = [`UID,Prenom,Nom,Numero d'Adherent,Date debut,Date fin`];
-        for(let result of this.search_results){
-          csv_lines.push([
-            result.uid,
-            result.first_name,
-            result.last_name,
-            result.n_adherent,
-            result.start,
-            result.end,
-          ].join(','));
-        }
-        csv = csv_lines.join('\n');
-        download('export.csv', csv)
-      }
-    },
-    template:
-    `
-      <div class="col-md-12">
-        <div v-if="error" class="alert alert-danger text-center">[[error]]</div>
-        <form v-on:submit.prevent="getUsers">
-          <div class="form-group">
-            <label>{% trans "Rechercher des membres de l'AE :" %}</label>
-            <div class="input-group">
-              <span class="input-group-addon">
-                <span class="fa fa-search"></span>
-              </span>
-              <input class="form-control" v-model="filter" type="text"></input>
-            </div>
-          </div>
-        </form>
-        <button v-if="search_results.length > 0"
-        v-on:click="createCSV" class="btn btn-success pull-right">
-          {% trans 'Exporter' %}
-        </button>
-        <search-spinner v-if="searching"></search-spinner>
-        <h3 v-if="search_results.length > 0">
-          <strong>{% trans 'Résultats :' %}</strong>
-        </h3>
-        <btable-header
-          v-if="search_results.length > 0"
-          v-bind:elements="header_content"
-        ></btable-header>
-        <search-member-result
-          v-for="result in search_results"
-          v-bind:result="result"
-          v-bind:key="result.uid"
-        >
-        </search-member-result>
-      </div>
-    `
-  })
-
-  // A result of the member research
-  const SearchMemberResult = Vue.component('search-member-result', {
-    props: ['result'],
-    delimiters: ['[[', ']]'],
-    template:
-    `
-      <div class="row text-center search-result">
-        <div class="col-md-1 col-md-offset-2">
-          [[result.uid]]
-        </div>
-        <div class="col-md-2">
-          [[result.first_name]] [[result.last_name]]
-        </div>
-        <div class="col-md-2">
-          [[result.n_adherent]]
-        </div>
-        <div class="col-md-4">
-          [[result.start.substring(6,8)]]/[[result.start.substring(4,6)]]/[[result.start.substring(0,4)]]
-          -
-          [[result.end.substring(6,8)]]/[[result.end.substring(4,6)]]/[[result.end.substring(0,4)]]
-        </div>
-      </div>
-    `
-  })
   ///////////////////////////////////////////////
   ////////    Various stuff components    ///////
   ///////////////////////////////////////////////

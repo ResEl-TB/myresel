@@ -1,0 +1,79 @@
+{% load staticfiles %}
+{% load i18n %}
+
+<script type="text/javascript">
+
+  ///////////////////////////////////////////////
+  ////////    Add AE member components    ///////
+  ///////////////////////////////////////////////
+
+  // The root template for adding a new member
+  const AddMember = Vue.component('add-member', {
+    props: [],
+    delimiters: ['[[', ']]'],
+    template:
+    `
+      <div class="well">
+        <div class="row">
+          <div class="col-md-1">
+            <go-back-button></go-back-button>
+          </div>
+          <div class="col-md-10 text-center">
+            <h3>Ajout d'un membre à l'AE</h3>
+          </div>
+        </div>
+        <div class="row">
+          <search-school-users></search-school-users>
+        </div>
+      </div>
+    `
+  })
+
+  const SearchUsers = Vue.component('search-school-users', {
+    props: [],
+    delimiters: ['[[', ']]'],
+    data(){
+      return {
+        search_results: [],
+        filter: '',
+      };
+    },
+    methods:{
+      getUsers: function(){
+        $.ajax({
+          url: "{% url 'campus:ae-admin:search-user' %}",
+          method: "GET",
+          data: {filter: this.filter},
+          success: function(data){
+            console.log(data)
+          }
+        })
+      }
+    },
+    template:
+    `
+      <div class="col-md-12">
+        <form v-on:submit.prevent="getUsers">
+          <div class="form-group">
+            <label>{% trans "Rechercher dans l'annuaire de l'école :" %}</label>
+            <div class="input-group">
+              <span class="input-group-addon">
+                <span class="fa fa-search"></span>
+              </span>
+              <input class="form-control" v-model="filter" type="text"></input>
+            </div>
+          </div>
+        </form>
+      </div>
+    `
+  })
+
+  const AddMemberForm = Vue.component('add-member-form', {
+    props: [],
+    delimiters: ['[[', ']]'],
+    template:
+    `
+      <div>Bla</div>
+    `
+  })
+</script>
