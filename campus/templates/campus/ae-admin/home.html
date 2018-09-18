@@ -24,6 +24,7 @@
 {% block javascript %}
 <script src="{% static 'js/vendors/vue.js' %}"></script>
 <script src="{% static 'js/vendors/vue-router.js' %}"></script>
+<script src="{% static 'js/vendors/file-saver.js' %}"></script>
 <script type="text/javascript">
 
   ///////////////////////////////////////////////
@@ -186,11 +187,20 @@
         filter: '',
         error: '',
         searching: false,
+        header_content: [
+          {size: 2, text: ""}, // offset
+          {size: 1, text: "{% trans 'UID' %}"},
+          {size: 2, text: "{% trans 'Nom complet' %}"},
+          {size: 2, text: "{% trans 'N° Adherent' %}"},
+          {size: 4, text: "{% trans 'Dernière adhésion' %}"},
+        ],
+        modal_title: '',
       };
     },
     methods:{
       getUsers: function(){
         this.error = '';
+        this.search_results = [];
         this.searching = true,
         $.ajax({
           url: "{% url 'campus:ae-admin:search-members' %}",
@@ -201,7 +211,7 @@
             if(data["error"]){
               this.error = data['error']
             }else{
-              console.log(data);
+              this.search_results = data['results'];
             }
           }.bind(this),
 
@@ -213,6 +223,21 @@
             this.searching = false;
           }.bind(this)
         })
+      },
+      createCSV: function(){
+        csv_lines = [`UID,Prenom,Nom,Numero d'Adherent,Date debut,Date fin`];
+        for(let result of this.search_results){
+          csv_lines.push([
+            result.uid,
+            result.first_name,
+            result.last_name,
+            result.n_adherent,
+            result.start,
+            result.end,
+          ].join(','));
+        }
+        csv = csv_lines.join('\n');
+        download('export.csv', csv)
       }
     },
     template:
@@ -230,11 +255,52 @@
             </div>
           </div>
         </form>
+        <button v-if="search_results.length > 0"
+        v-on:click="createCSV" class="btn btn-success pull-right">
+          {% trans 'Exporter' %}
+        </button>
         <search-spinner v-if="searching"></search-spinner>
+        <h3 v-if="search_results.length > 0">
+          <strong>{% trans 'Résultats :' %}</strong>
+        </h3>
+        <btable-header
+          v-if="search_results.length > 0"
+          v-bind:elements="header_content"
+        ></btable-header>
+        <search-member-result
+          v-for="result in search_results"
+          v-bind:result="result"
+          v-bind:key="result.uid"
+        >
+        </search-member-result>
       </div>
     `
   })
 
+  // A result of the member research
+  const SearchMemberResult = Vue.component('search-member-result', {
+    props: ['result'],
+    delimiters: ['[[', ']]'],
+    template:
+    `
+      <div class="row text-center search-result">
+        <div class="col-md-1 col-md-offset-2">
+          [[result.uid]]
+        </div>
+        <div class="col-md-2">
+          [[result.first_name]] [[result.last_name]]
+        </div>
+        <div class="col-md-2">
+          [[result.n_adherent]]
+        </div>
+        <div class="col-md-4">
+          [[result.start.substring(6,8)]]/[[result.start.substring(4,6)]]/[[result.start.substring(0,4)]]
+          -
+          [[result.end.substring(6,8)]]/[[result.end.substring(4,6)]]/[[result.end.substring(0,4)]]
+        </div>
+      </div>
+    `
+  })
   ///////////////////////////////////////////////
   ////////    Various stuff components    ///////
   ///////////////////////////////////////////////
@@ -270,6 +336,21 @@
     `
   })
 
+  // A table header for tables made with bootstrap grid system
+  const BootstrapTableHeader = Vue.component('btable-header', {
+    props: ['elements'],
+    delimiters: ['[[', ']]'],
+    template:
+    `
+      <div class="row text-center search-header search-result">
+        <div v-for="element in elements">
+        <div class="header-title" v-bind:class="'col-md-'+element.size">
+          <strong>[[element.text]]</strong>
+        </div>
+        </div>
+      </div>
+    `
+  })
   // The router for the app
   const router = new VueRouter({
     routes: [
