@@ -26,6 +26,7 @@
 <script src="{% static 'js/vendors/vue-router.js' %}"></script>
 <script src="{% static 'js/vendors/file-saver.js' %}"></script>
 {% include "campus/ae-admin/export-csv.html" %}
+{% include "campus/ae-admin/import-csv.html" %}
 {% include "campus/ae-admin/add-member.html" %}
 <script type="text/javascript">
 
@@ -43,12 +44,12 @@
     {id: 2,
       title: "{% trans 'Exporter vers un tableur' %}",
       glyphicon: "glyphicon-download",
-      url: "ie-member"
+      url: "export-member"
     },
     {id: 3,
       title: "{% trans 'Importer depuis un tableur' %}",
       glyphicon: "glyphicon-upload",
-      url: "ie-member"
+      url: "import-member"
     }
   ]
 
@@ -160,9 +161,15 @@
         props: true,
       },
       {
-        path: '/ie-member',
-        name: 'ie-member',
-        component: ImportExportMember,
+        path: '/export-member',
+        name: 'export-member',
+        component: ExportMembers,
+        props: true,
+      },
+      {
+        path: '/import-member',
+        name: 'import-member',
+        component: ImportMembers,
         props: true,
       }
     ]

@@ -1,5 +1,5 @@
 #app {
-  min-height: 90vh;
+  min-height: 75vh;
 }
 
 .link-icon {
@@ -30,6 +30,8 @@
 }
 
 .search-header {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
   background-color: #f7f7f7;
   margin-top: 20px;
   min-height: 50px;
@@ -38,6 +40,40 @@
 
 .search-header .header-title {
   padding: 6px !important;
+}
+
+#csv-form {
+  margin-top: 2%;
+  margin-bottom: : 2%;
+  display: block;
+  height: 3em;
+}
+
+#fake-csv-input {
+  color: #676767;
+  background-color: #f7f7f7;
+  font-weight: bold;
+  font-size: 1em;
+  padding-top: 0.75em;
+  text-align: center;
+  border-radius: 3px;
+  height: 3em;
+  max-width: 12em;
+  margin: auto;
+}
+
+#csv-input {
+  z-index: 100;
+  cursor: pointer;
+  opacity: 0;
+  height: 3em;
+  max-width: 12em;
+  margin: auto;
+  transform: translateY(-40px);
+}
+
+.margin {
+  margin: 20px;
 }
 
 /* Animations */

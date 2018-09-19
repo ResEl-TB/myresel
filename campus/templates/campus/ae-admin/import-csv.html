@@ -1,0 +1,149 @@
+{% load i18n %}
+{% load staticfiles %}
+
+<script type="text/javascript">
+
+  ///////////////////////////////////////////////
+  //////////////   Import CSV    ///////////////
+  ///////////////////////////////////////////////
+  const ImportMembers = Vue.component('import-member', {
+    props: [],
+    delimiters: ['[[',']]'],
+    template:
+    `
+      <div class="well">
+        <div class="row">
+          <div class="col-md-1">
+            <go-back-button></go-back-button>
+          </div>
+          <div class="col-md-10 text-center">
+            <h3>{% trans 'Importer depuis un Tableur' %}</h3>
+          </div>
+        </div>
+        <import-csv-button></import-csv-button>
+      </div>
+    `
+  })
+
+  const ImportCSVButton = Vue.component('import-csv-button', {
+    props: [],
+    delimiters: ['[[',']]'],
+    data: function(){
+      return({
+        processing: false,
+        results: [],
+        ignored: 0,
+      })
+    },
+    methods: {
+      get_csv: function(e){
+        $('#fake-csv-input').html("{% trans 'Analyse en cours ...' %}");
+        this.processing = true;
+        file = e.target.files[0];
+
+        if(file && ['application/vnd.ms-excel', 'text/csv'].includes(file.type))
+        {
+          reader = new FileReader();
+          reader.onload = function(f){
+            this.process_csv(f.target.result);
+          }.bind(this)
+          reader.readAsText(file);
+        }
+        else
+        {
+          $('#fake-csv-input').html("{% trans 'Aucun CSV détecté' %}")
+          this.processing = false;
+        }
+      },
+
+      process_csv: function(csv) {
+        this.ignored = 0;
+        this.results = [];
+        lines = csv.split("\n");
+        lines.splice(0,1);
+        for(let line of lines){
+          var el = line.split(',');
+          if(el.length == 6){
+            this.results.push({
+              uid: el[0],
+              first_name: el[1],
+              last_name: el[2],
+              n_adherent: el[3],
+              start: el[4],
+              end: el[5],
+            });
+          }
+          else {
+            this.ignored += 1;
+          }
+        }
+        this.processing = false;
+        if(this.results.length > 0){
+          $('#fake-csv-input').html('Importer un CSV');
+        }else{
+          $('#fake-csv-input').html('Aucune ligne valide');
+        }
+      }
+    },
+    template:
+    `
+      <div class="row">
+        <form id="csv-form">
+          <div id="fake-csv-input">{% trans 'Importer un CSV'%}</div>
+          <input type="file" id="csv-input" v-on:change="get_csv">
+        </form>
+        <search-spinner v-if="processing"></search-spinner>
+        <import-results
+          v-if="results.length > 0"
+          v-bind:results="results"
+          v-bind:ignored="ignored"
+        ></import-results>
+      </div>
+    `
+  })
+
+  const ImportResults = Vue.component('import-results', {
+    props: ['results', 'ignored'],
+    delimiters: ['[[',']]'],
+    data: function() {
+      return({
+        header_content: [
+          {size: 2, text: ""}, // offset
+          {size: 1, text: "{% trans 'UID' %}"},
+          {size: 2, text: "{% trans 'Nom complet' %}"},
+          {size: 2, text: "{% trans 'N° Adherent' %}"},
+          {size: 4, text: "{% trans 'Dernière adhésion' %}"},
+        ],
+      })
+    },
+    methods: {
+      send_results: function(results){
+        if(results.length > 0){
+          console.log("go !")
+        }
+      }
+    },
+    template:
+    `
+      <div class="margin">
+        <h3>[[ignored]] {% trans 'ligne(s) ignorée(s).' %}</h3>
+        <strong>
+          {% trans 'Note: La première ligne est toujours ignorée.' %}
+        </strong>
+        <btable-header
+          v-bind:elements="header_content"
+        ></btable-header>
+        <search-member-result
+          v-for="result in results"
+          v-bind:result="result"
+          v-bind:key="result.uid"
+        >
+        </search-member-result>
+        <h4 class="text-center">[[results.length]] {%trans 'entrées'%}</h4>
+        <button class="btn btn-success pull-right" v-on:click="send_results(results)">
+          Je valide ces modifications
+        </button>
+      </div>
+    `
+  })
+</script>
