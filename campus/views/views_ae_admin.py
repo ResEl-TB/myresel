@@ -5,7 +5,11 @@ from django.http import Http404, JsonResponse
 from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
 from gestion_personnes.models import LdapUser
+from django.core.exceptions import ObjectDoesNotExist
+
 from fonctions import ldap
+
+import re
 
 #TODO: AUTH + TESTS !!!!!
 
@@ -72,3 +76,45 @@ class GetMembers(View):
                 )
         else:
             raise Http404("Not found")
+
+class EditFromCSV(View):
+    """
+    Ajax view editing existing member after dumping a csv file from the client
+    """
+
+    def checkDate(self, date):
+        """
+        Checks the validity of a dates
+        """
+        try:
+            y,m,d = [int(date[0:4]),int(date[4:6]),int(date[6:8])]
+            if(1970<y and 0<m<13 and 0<d<32 and len(date) == 8):
+                is_okay = True
+            else:
+                is_okay = False
+        except Exception:
+            is_okay = False
+        return is_okay
+
+    def post(self, request):
+        uid = request.POST.get('uid', '')
+
+        try:
+            user = LdapUser.get(pk=uid)
+        except ObjectDoesNotExist:
+            return JsonResponse({"error": 1})
+
+        if(user.n_adherent):
+            # This wont catch every invalid dates but it should be enough
+            # To avoid common mistakes
+            start = request.POST.get('start', '').strip()
+            end = request.POST.get('end', '').strip()
+            if not (self.checkDate(start) and self.checkDate(end)):
+                return JsonResponse({"error": 2})
+
+            user.dates_membre[-1] = '-'.join([start,end])
+            user.save()
+        else:
+            return JsonResponse({"error": 1})
+
+        return JsonResponse({"success": True})

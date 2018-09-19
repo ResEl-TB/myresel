@@ -988,7 +988,7 @@ class AEAjaxTestCase(TestCase):
         user.mail = "jogn.doe@resel.fr"
         user.promo = 2016
         user.n_adherent = "16156"
-        user.dates_membre = "20160901-20170831"
+        user.dates_membre = ["20160901-20170831"]
         user.nt_password = user.user_password
         user.save()
 
@@ -1001,8 +1001,10 @@ class AEAjaxTestCase(TestCase):
             HTTP_X_REQUESTED_WITH='XMLHttpRequest',
             HTTP_HOST="10.0.3.94"
         )
-        self.assertTrue(len(r.json()['results']) == 1)
+        self.assertTrue(r.status_code == 200)
         self.assertFalse(r.json().get('error', False))
+        self.assertTrue(len(r.json()['results']) == 1)
+
 
     def testSimpleAEMemberEmptySearch(self):
         r = self.client.get(
@@ -1011,6 +1013,73 @@ class AEAjaxTestCase(TestCase):
             HTTP_X_REQUESTED_WITH='XMLHttpRequest',
             HTTP_HOST="10.0.3.94"
         )
-        print(r.json())
+        self.assertEqual(r.status_code, 200)
         self.assertFalse(r.json().get('results', False))
-        self.assertTrue(r.json()['error'])
+        self.assertTrue(r.json().get('error', False))
+
+    def testSimpleCSVImport(self):
+        user = LdapUser.get(pk='jdoe')
+        r = self.client.post(
+            reverse("campus:ae-admin:import-from-csv"),
+            {
+                'uid': 'jdoe',
+                'start': '20160901',
+                'end': '20170820',
+                'first_name': "John",
+                'last_name': "Doe",
+                'n_adherent': "16156",
+            },
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            HTTP_HOST="10.0.3.94"
+        )
+        user_updated = LdapUser.get(pk='jdoe')
+        self.assertEqual(r.status_code, 200)
+        self.assertFalse(r.json().get('error', False))
+        self.assertNotEqual(user_updated.dates_membre[-1], user.dates_membre[-1])
+
+    def testInvalidDatesCSVImport(self):
+        user = LdapUser.get(pk='jdoe')
+        # Some invalid dates that the system is supposed to catch
+        invalid_start_dates = [
+            '201609011', #Too long
+            '2016090',   #Too short
+            '00000901',  #Invalid year
+            '20161301',  #Invalid month
+            '20160932',  #Invalid day
+            '20160a011'  #Invalid caracter
+        ]
+        for start in invalid_start_dates:
+            r = self.client.post(
+                reverse("campus:ae-admin:import-from-csv"),
+                {
+                    'uid': 'jdoe',
+                    'start': start,
+                    'end': '20170810',
+                    'first_name': "John",
+                    'last_name': "Doe",
+                    'n_adherent': "16156",
+                },
+                HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+                HTTP_HOST="10.0.3.94"
+            )
+            user_updated = LdapUser.get(pk='jdoe')
+            self.assertEqual(r.status_code, 200)
+            self.assertTrue(r.json().get('error', False))
+            self.assertEqual(user_updated.dates_membre[-1], user.dates_membre[-1])
+
+    def testInvalidUserCSVImport(self):
+        r = self.client.post(
+            reverse("campus:ae-admin:import-from-csv"),
+            {
+                'uid': 'jdoeeeeeee',
+                'start': '20160901',
+                'end': '20170820',
+                'first_name': "John",
+                'last_name': "Doe",
+                'n_adherent': "16156",
+            },
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            HTTP_HOST="10.0.3.94"
+        )
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue(r.json().get('error', False))

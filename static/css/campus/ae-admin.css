@@ -76,6 +76,38 @@
   margin: 20px;
 }
 
+#error-details {
+  margin-top: 2em;
+}
+
+#error-details span{
+  border: 1px solid rgb(226, 226, 226);
+  font-weight: bold;
+  display: inline-block;
+  padding: 5px;
+  border-radius: 3px;
+}
+
+.err-uid {
+  background-color: rgba(203, 136, 57, 0.1);
+}
+
+.err-date {
+  background-color: rgba(57, 181, 203, 0.1);
+}
+
+.err-ok {
+  background-color: rgba(57, 203, 61, 0.1);
+}
+
+.err-unknown {
+  background-color: rgba(255, 0, 0, 0.2);
+}
+
+.err-value {
+  background-color: rgba(160, 57, 203, 0.1);
+}
+
 /* Animations */
 
 .fade-enter-active {

@@ -120,9 +120,10 @@
           v-bind:elements="header_content"
         ></btable-header>
         <search-member-result
-          v-for="result in search_results"
-          v-bind:result="result"
-          v-bind:key="result.uid"
+          v-for="result, key in search_results"
+          :result="result"
+          :id="key"
+          :key="key"
         >
         </search-member-result>
       </div>
@@ -131,11 +132,11 @@
 
   // A result of the member research
   const SearchMemberResult = Vue.component('search-member-result', {
-    props: ['result'],
+    props: ['result', 'id'],
     delimiters: ['[[', ']]'],
     template:
     `
-      <div class="row text-center search-result">
+      <div class="row text-center search-result" v-bind:id="'res-'+id">
         <div class="col-md-1 col-md-offset-2">
           [[result.uid]]
         </div>
