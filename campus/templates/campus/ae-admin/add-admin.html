@@ -34,6 +34,7 @@
     data: function(){
       return({
         success: false,
+        loading: false,
         error: '',
       })
     },
@@ -41,6 +42,7 @@
       add_admin: function(){
         setup_CSRF();
         this.success = false;
+        this.loading = true;
         this.error = "";
         $.ajax({
           url: "{% url 'campus:ae-admin:add-admin'%}",
@@ -58,6 +60,10 @@
 
           error: function(data) {
             this.error = "{% trans 'Erreur inconnue'%}"
+          }.bind(this),
+
+          complete: function(){
+            this.loading = false;
           }.bind(this)
         })
       }
@@ -70,6 +76,7 @@
           <div v-if="success" class="alert alert-success">
             {% trans 'Administrateur ajouté !' %}
           </div>
+          <search-spinner v-if='loading'></search-spinner>
           <form v-on:submit.prevent="add_admin">
             <div class="form-group">
               <label>{% trans "Rechercher un utilisateur (autocompletion) :" %}</label>
