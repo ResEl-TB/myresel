@@ -105,8 +105,6 @@ class EditFromCSV(View):
             return JsonResponse({"error": 1})
 
         if(user.n_adherent):
-            # This wont catch every invalid dates but it should be enough
-            # To avoid common mistakes
             start = request.POST.get('start', '').strip()
             end = request.POST.get('end', '').strip()
             if not (self.checkDate(start) and self.checkDate(end)):

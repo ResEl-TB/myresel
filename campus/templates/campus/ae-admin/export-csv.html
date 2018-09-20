@@ -14,17 +14,10 @@
     template:
     `
       <div class="well">
-        <div class="row">
-          <div class="col-md-1">
-            <go-back-button></go-back-button>
-          </div>
-          <div class="col-md-10 text-center">
-            <h3>{% trans 'Exporter vers un Tableur' %}</h3>
-          </div>
-        </div>
-        <div class="row">
-          <search-members></search-members>
-        </div>
+        <section-title
+          :title="'{% trans 'Exporter vers un Tableur' %}'"
+          :component="'search-members'"
+        ></section-title>
       </div>
     `
   })
@@ -94,38 +87,41 @@
     },
     template:
     `
-      <div class="col-md-12">
-        <div v-if="error" class="alert alert-danger text-center">[[error]]</div>
-        <form v-on:submit.prevent="getUsers">
-          <div class="form-group">
-            <label>{% trans "Rechercher des membres de l'AE :" %}</label>
-            <div class="input-group">
-              <span class="input-group-addon">
-                <span class="fa fa-search"></span>
-              </span>
-              <input class="form-control" v-model="filter" type="text"></input>
+      <div class="row">
+        <div class="col-md-12">
+          <div v-if="error" class="alert alert-danger text-center">[[error]]</div>
+          <form v-on:submit.prevent="getUsers">
+            <div class="form-group">
+              <label>{% trans "Rechercher des membres de l'AE :" %}</label>
+              <div class="input-group">
+                <span class="input-group-addon">
+                  <span class="fa fa-search"></span>
+                </span>
+                <input class="form-control" v-model="filter" type="text"></input>
+              </div>
             </div>
-          </div>
-        </form>
-        <button v-if="search_results.length > 0"
-        v-on:click="createCSV" class="btn btn-success pull-right">
-          {% trans 'Exporter' %}
-        </button>
-        <search-spinner v-if="searching"></search-spinner>
-        <h3 v-if="search_results.length > 0">
-          <strong>{% trans 'Résultats :' %}</strong>
-        </h3>
-        <btable-header
-          v-if="search_results.length > 0"
-          v-bind:elements="header_content"
-        ></btable-header>
-        <search-member-result
-          v-for="result, key in search_results"
-          :result="result"
-          :id="key"
-          :key="key"
-        >
-        </search-member-result>
+          </form>
+          <button v-if="search_results.length > 0"
+          v-on:click="createCSV" class="btn btn-success pull-right">
+            {% trans 'Exporter' %}
+          </button>
+          <search-spinner v-if="searching"></search-spinner>
+          <h3 v-if="search_results.length > 0">
+            <strong>{% trans 'Résultats :' %}</strong>
+          </h3>
+          <btable-header
+            v-if="search_results.length > 0"
+            v-bind:elements="header_content"
+          ></btable-header>
+          <search-member-result
+            v-for="result, key in search_results"
+            :result="result"
+            :id="key"
+            :key="key"
+          >
+          </search-member-result>
+          <table-footer v-if="search_results.length > 0"></table-footer>
+        </div>
       </div>
     `
   })
@@ -146,10 +142,13 @@
         <div class="col-md-2">
           [[result.n_adherent]]
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4" v-if="result.start.length == 8 && result.end.length == 8">
           [[result.start.substring(6,8)]]/[[result.start.substring(4,6)]]/[[result.start.substring(0,4)]]
           -
           [[result.end.substring(6,8)]]/[[result.end.substring(4,6)]]/[[result.end.substring(0,4)]]
+        </div>
+        <div class="col-md-4" v-else>
+          {% trans 'Date invalide'%}
         </div>
       </div>
     `

@@ -12,15 +12,10 @@
     template:
     `
       <div class="well">
-        <div class="row">
-          <div class="col-md-1">
-            <go-back-button></go-back-button>
-          </div>
-          <div class="col-md-10 text-center">
-            <h3>{% trans 'Importer depuis un Tableur' %}</h3>
-          </div>
-        </div>
-        <import-csv-button></import-csv-button>
+        <section-title
+          :title="'{% trans 'Importer depuis un Tableur' %}'"
+          :component="'import-csv-button'"
+        ></section-title>
       </div>
     `
   })
@@ -64,7 +59,7 @@
         nextID = 0;
         for(let line of lines){
           var el = line.split(',');
-          if(el.length == 6){
+          if(el.length == number_of_fields){
             this.results.push({
               id: nextID,
               uid: el[0],
@@ -72,7 +67,7 @@
               last_name: el[2],
               n_adherent: el[3],
               start: el[4],
-              end: el[5],
+              end: el[5].replace(/\s/gi, ''),
             });
             nextID++;
           }
@@ -185,6 +180,7 @@
           v-bind:key="result.id"
         >
         </search-member-result>
+        <table-footer></table-footer>
         <h4 class="text-center">[[results.length]] {%trans 'entrées'%}</h4>
         <button class="btn btn-success pull-right" v-on:click="send_results(results)">
           Je valide ces modifications

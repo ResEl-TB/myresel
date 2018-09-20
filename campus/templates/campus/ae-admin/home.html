@@ -31,6 +31,9 @@
 {% include "campus/ae-admin/add-member.html" %}
 <script type="text/javascript">
 
+  // The number of fields expected in the search results
+  var number_of_fields = 6;
+
   ///////////////////////////////////////////////
   //////////    Home Menu components    /////////
   ///////////////////////////////////////////////
@@ -39,7 +42,7 @@
     {
       id: 1,
       title: "{% trans 'Ajouter un membre à l\'AE' %}",
-      glyphicon: "glyphicon-plus",
+      glyphicon: "glyphicon-plus-sign",
       url: "add-member"
     },
     {id: 2,
@@ -50,6 +53,11 @@
     {id: 3,
       title: "{% trans 'Importer depuis un tableur' %}",
       glyphicon: "glyphicon-upload",
+      url: "import-member"
+    },
+    {id: 4,
+      title: "{% trans 'Ajouter un administrateur AE' %}",
+      glyphicon: "glyphicon-dashboard",
       url: "import-member"
     }
   ]
@@ -100,6 +108,25 @@
   ////////    Various stuff components    ///////
   ///////////////////////////////////////////////
 
+  const SectionTitle = Vue.component('section-title', {
+    props: ['title', 'component'],
+    delimiters: ['[[', ']]'],
+    template:
+    `
+      <div>
+        <div class="row">
+          <div class="col-md-1">
+            <go-back-button></go-back-button>
+          </div>
+          <div class="col-md-10 text-center">
+            <h3>[[title]]</h3>
+          </div>
+        </div>
+        <component :is="component"></component>
+      </div>
+    `
+  })
+
   // A loading spinner
   const SearchSpinner = Vue.component('search-spinner', {
     props: [],
@@ -137,13 +164,22 @@
     delimiters: ['[[', ']]'],
     template:
     `
-      <div class="row text-center search-header search-result">
+      <div class="row text-center table-header search-result">
         <div v-for="element in elements">
         <div class="header-title" v-bind:class="'col-md-'+element.size">
           <strong>[[element.text]]</strong>
         </div>
         </div>
       </div>
+    `
+  })
+
+  // Table footer, just for decoration purpose
+  const TableHeader = Vue.component('table-footer', {
+    props: [],
+    template:
+    `
+      <div class="table-footer search-result row"></div>
     `
   })
   // The router for the app
