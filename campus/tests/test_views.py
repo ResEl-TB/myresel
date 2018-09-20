@@ -1083,3 +1083,42 @@ class AEAjaxTestCase(TestCase):
         )
         self.assertEqual(r.status_code, 200)
         self.assertTrue(r.json().get('error', False))
+
+    def testSimpleAEAdminAddition(self):
+        user = LdapUser.get(pk='jdoe')
+        user.ae_admin = False
+        user.save()
+        r = self.client.post(
+            reverse("campus:ae-admin:add-admin"),
+            {'uid': 'jdoe'},
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            HTTP_HOST="10.0.3.94"
+        )
+        user_updated = LdapUser.get(pk='jdoe')
+        self.assertTrue(r.status_code == 200)
+        self.assertFalse(r.json().get('error', False))
+        self.assertTrue(user_updated.ae_admin)
+
+    def testInvalidAEAdminAddition(self):
+        r = self.client.post(
+            reverse("campus:ae-admin:add-admin"),
+            {'uid': 'jdoooooooooe'},
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            HTTP_HOST="10.0.3.94"
+        )
+        self.assertTrue(r.status_code == 200)
+        self.assertTrue(r.json().get('error', False))
+
+    def testAlreadyAEAdminAddition(self):
+        user = LdapUser.get(pk='jdoe')
+        user.ae_admin = True
+        user.save()
+        r = self.client.post(
+            reverse("campus:ae-admin:add-admin"),
+            {'uid': 'jdoe'},
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            HTTP_HOST="10.0.3.94"
+        )
+        user_updated = LdapUser.get(pk='jdoe')
+        self.assertTrue(r.status_code == 200)
+        self.assertTrue(r.json().get('error', False))
