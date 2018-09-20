@@ -116,3 +116,21 @@ class EditFromCSV(View):
             return JsonResponse({"error": 1})
 
         return JsonResponse({"success": True})
+
+class AddAdmin(View):
+
+    def post(self, request):
+        uid = request.POST.get('uid', '')
+
+        try:
+            user = LdapUser.get(pk=uid)
+        except ObjectDoesNotExist:
+            return JsonResponse({"error": _('Utilisateur introuvable')})
+
+        if(user.ae_admin):
+            return JsonResponse({"error": _('Cet utilisateur est déjà admin')})
+        else:
+            user.ae_admin = True
+            user.save()
+
+        return JsonResponse({'success': 'true'})

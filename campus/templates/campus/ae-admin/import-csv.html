@@ -125,14 +125,7 @@
     methods: {
       send_results: function(results){
         if(results.length > 0){
-          var csrftoken = getCookie('csrftoken');
-          $.ajaxSetup({
-              beforeSend: function(xhr, settings) {
-                if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
-                  xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-                }
-              }
-          });
+          setup_CSRF();
           for(let result of results){
             $.ajax({
               url: "{% url 'campus:ae-admin:import-from-csv' %}",

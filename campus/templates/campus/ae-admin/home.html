@@ -5,6 +5,7 @@
 {% block title %}{% trans "Admin AE" %}{% endblock %}
 {% block css %}
   <link rel="stylesheet" type="text/css" href="{% static 'css/campus/ae-admin.css' %}">
+  <link href="{% static 'jquery/jquery-ui.min.css' %}" rel="Stylesheet"></link>
 {% endblock %}
 
 {% block content %}
@@ -22,6 +23,7 @@
 {% endblock %}
 
 {% block javascript %}
+<script src="{% static 'jquery/jquery-ui.min.js' %}"></script>
 <script src="{% static 'js/vendors/vue.js' %}"></script>
 <script src="{% static 'js/vendors/vue-router.js' %}"></script>
 <script src="{% static 'js/tools/file-saver.js' %}"></script>
@@ -29,10 +31,21 @@
 {% include "campus/ae-admin/export-csv.html" %}
 {% include "campus/ae-admin/import-csv.html" %}
 {% include "campus/ae-admin/add-member.html" %}
+{% include "campus/ae-admin/add-admin.html" %}
 <script type="text/javascript">
 
   // The number of fields expected in the search results
   var number_of_fields = 6;
+
+  function setup_CSRF(){
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+          if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+          }
+        }
+    });
+  }
 
   ///////////////////////////////////////////////
   //////////    Home Menu components    /////////
@@ -58,7 +71,8 @@
     {id: 4,
       title: "{% trans 'Ajouter un administrateur AE' %}",
       glyphicon: "glyphicon-dashboard",
-      url: "import-member"
+      url: "add-admin"
+    },
     }
   ]
 
@@ -207,6 +221,12 @@
         path: '/import-member',
         name: 'import-member',
         component: ImportMembers,
+        props: true,
+      },
+      {
+        path: '/add-admin',
+        name: 'add-admin',
+        component: AddAdmin,
         props: true,
       }
     ]
