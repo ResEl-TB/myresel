@@ -77,6 +77,22 @@ class GetMembers(View):
         else:
             raise Http404("Not found")
 
+class GetAdmins(View):
+
+    def get(self, request):
+        if request.is_ajax():
+            aeAdmins = LdapUser.filter(**{"ae_admin": "TRUE"})
+            admins = []
+            for admin in aeAdmins:
+                admins.append({
+                    'uid': admin.uid,
+                    'first_name': admin.first_name,
+                    'last_name': admin.last_name
+                })
+            return JsonResponse({'results': admins})
+        else:
+            raise Http404("Not found")
+
 class EditFromCSV(View):
     """
     Ajax view editing existing member after dumping a csv file from the client
@@ -131,6 +147,28 @@ class AddAdmin(View):
             return JsonResponse({"error": _('Cet utilisateur est déjà admin')})
         else:
             user.ae_admin = True
+            user.save()
+
+        return JsonResponse({'success': 'true'})
+
+class DeleteAdmin(View):
+
+    def post(self, request):
+        uid = request.POST.get('uid', '')
+
+        try:
+            user = LdapUser.get(pk=uid)
+        except ObjectDoesNotExist:
+            return JsonResponse({"error": _('Utilisateur introuvable')})
+
+        if(not user.ae_admin):
+            return JsonResponse({"error": _('Cet utilisateur n\'est pas admin')})
+
+        if(user.uid == request.user.username):
+            return JsonResponse({"error": _('Vous ne pouvez pas vous supprimer\
+            de la liste')})
+        else:
+            user.ae_admin = False
             user.save()
 
         return JsonResponse({'success': 'true'})

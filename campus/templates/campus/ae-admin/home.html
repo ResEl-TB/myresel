@@ -32,6 +32,7 @@
 {% include "campus/ae-admin/import-csv.html" %}
 {% include "campus/ae-admin/add-member.html" %}
 {% include "campus/ae-admin/add-admin.html" %}
+{% include "campus/ae-admin/delete-admin.html" %}
 <script type="text/javascript">
 
   // The number of fields expected in the search results
@@ -55,7 +56,7 @@
     {
       id: 1,
       title: "{% trans 'Ajouter un membre à l\'AE' %}",
-      glyphicon: "glyphicon-plus-sign",
+      glyphicon: "glyphicon-remove-circle rotate-45",
       url: "add-member"
     },
     {id: 2,
@@ -73,6 +74,10 @@
       glyphicon: "glyphicon-dashboard",
       url: "add-admin"
     },
+    {id: 4,
+      title: "{% trans 'Supprimer un administrateur AE' %}",
+      glyphicon: "glyphicon-remove-circle",
+      url: "del-admin"
     }
   ]
 
@@ -227,6 +232,12 @@
         path: '/add-admin',
         name: 'add-admin',
         component: AddAdmin,
+        props: true,
+      },
+      {
+        path: '/del-admin',
+        name: 'del-admin',
+        component: DeleteAdmin,
         props: true,
       }
     ]

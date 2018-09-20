@@ -116,6 +116,11 @@
   background-color: rgba(160, 57, 203, 0.1);
 }
 
+.trash-red {
+  color: rgb(255, 0, 0);
+  cursor: pointer;
+}
+
 /* Animations */
 
 .fade-enter-active {
@@ -164,19 +169,4 @@
 .ui-state-focus {
   background-color: #f6f6f6 !important;
   border-color: inherit !important;
-}
-
-@keyframes slide-in-top {
-  0% {transform: translateY(-20px);}
-  100% {transform: translateY(0px);}
-}
-
-@keyframes fade-in {
-  0% {opacity: 0;}
-  100% {opacity: 1;}
-}
-
-@keyframes fade-slide-in-top {
-  0% {transform: translateY(-20px);opacity: 0;}
-  100% {transform: translateY(0px);opacity: 1;}
 }

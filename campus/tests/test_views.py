@@ -979,6 +979,7 @@ class CampusHomeTestCase(TestCase):
 class AEAjaxTestCase(TestCase):
     def setUp(self):
         try_delete_user("jdoe")
+        try_delete_user("jbvallad")
 
         user = LdapUser()
         user.uid = 'jdoe'
@@ -992,7 +993,10 @@ class AEAjaxTestCase(TestCase):
         user.nt_password = user.user_password
         user.save()
 
-        self.client.login(username="jdoe", password="blah")
+        user = create_full_user(uid="jbvallad", pwd="blabla")
+        user.ae_admin = True
+        user.save()
+        self.client.login(username="jbvallad", password="blabla")
 
     def testSimpleAEMemberSearch(self):
         r = self.client.get(
@@ -1122,3 +1126,53 @@ class AEAjaxTestCase(TestCase):
         user_updated = LdapUser.get(pk='jdoe')
         self.assertTrue(r.status_code == 200)
         self.assertTrue(r.json().get('error', False))
+
+    def testSimpleAdminRemoval(self):
+        user = LdapUser.get(pk='jdoe')
+        user.ae_admin = True
+        user.save()
+        r = self.client.post(
+            reverse("campus:ae-admin:delete-admin"),
+            {'uid': 'jdoe'},
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            HTTP_HOST="10.0.3.94"
+        )
+        user_updated = LdapUser.get(pk='jdoe')
+        self.assertTrue(r.status_code == 200)
+        self.assertFalse(r.json().get('error', False))
+        self.assertFalse(user_updated.ae_admin)
+
+    def testInvalidAdminRemoval(self):
+        user = LdapUser.get(pk='jdoe')
+        user.ae_admin = False
+        user.save()
+        r = self.client.post(
+            reverse("campus:ae-admin:delete-admin"),
+            {'uid': 'jdoe'},
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            HTTP_HOST="10.0.3.94"
+        )
+        self.assertTrue(r.status_code == 200)
+        self.assertTrue(r.json().get('error', False))
+
+    def testInvalidAdminRemovalSelf(self):
+        r = self.client.post(
+            reverse("campus:ae-admin:delete-admin"),
+            {'uid': 'jbvallad'},
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            HTTP_HOST="10.0.3.94"
+        )
+        self.assertTrue(r.status_code == 200)
+        self.assertTrue(r.json().get('error', False))
+
+    def testGetAdmins(self):
+        user = LdapUser.get(pk='jdoe')
+        user.ae_admin = True
+        user.save()
+        r = self.client.get(
+            reverse("campus:ae-admin:get-admins"),
+            {'uid': 'jdoe'},
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            HTTP_HOST="10.0.3.94"
+        )
+        self.assertTrue('jdoe' in [u['uid'] for u in r.json().get('results', [])]);

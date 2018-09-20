@@ -313,3 +313,23 @@ textarea{
         display:inline
     }
 }
+
+/* Animations */
+.fade-in {
+  animation: fade-in 0.3s ease
+}
+
+@keyframes fade-in {
+  0%{opacity: 0}
+  100%{opacity: 1}
+}
+
+@keyframes slide-in-top {
+  0% {transform: translateY(-20px);}
+  100% {transform: translateY(0px);}
+}
+
+@keyframes fade-slide-in-top {
+  0% {transform: translateY(-20px);opacity: 0;}
+  100% {transform: translateY(0px);opacity: 1;}
+}
