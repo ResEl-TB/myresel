@@ -96,6 +96,10 @@
   border-radius: 3px;
 }
 
+#search-ldap {
+  margin-top: 20px;
+}
+
 .err-uid {
   background-color: rgba(203, 136, 57, 0.1);
 }
@@ -119,6 +123,11 @@
 .trash-red {
   color: rgb(255, 0, 0);
   cursor: pointer;
+}
+
+.search-type-selector {
+  margin-top: 2%;
+  margin-bottom: 2%;
 }
 
 /* Animations */

@@ -32,13 +32,6 @@
         filter: '',
         error: '',
         searching: false,
-        header_content: [
-          {size: 2, text: ""}, // offset
-          {size: 1, text: "{% trans 'UID' %}"},
-          {size: 2, text: "{% trans 'Nom complet' %}"},
-          {size: 2, text: "{% trans 'N° Adherent' %}"},
-          {size: 4, text: "{% trans 'Dernière adhésion' %}"},
-        ],
         modal_title: '',
       };
     },
@@ -76,6 +69,10 @@
             result.uid,
             result.first_name,
             result.last_name,
+            result.training,
+            result.campus,
+            result.payment,
+            result.payment_value,
             result.n_adherent,
             result.start,
             result.end,
@@ -111,44 +108,14 @@
           </h3>
           <btable-header
             v-if="search_results.length > 0"
-            v-bind:elements="header_content"
           ></btable-header>
           <search-member-result
             v-for="result, key in search_results"
             :result="result"
-            :id="key"
             :key="key"
           >
           </search-member-result>
           <table-footer v-if="search_results.length > 0"></table-footer>
-        </div>
-      </div>
-    `
-  })
-
-  // A result of the member research
-  const SearchMemberResult = Vue.component('search-member-result', {
-    props: ['result', 'id'],
-    delimiters: ['[[', ']]'],
-    template:
-    `
-      <div class="row text-center search-result" v-bind:id="'res-'+id">
-        <div class="col-md-1 col-md-offset-2">
-          [[result.uid]]
-        </div>
-        <div class="col-md-2">
-          [[result.first_name]] [[result.last_name]]
-        </div>
-        <div class="col-md-2">
-          [[result.n_adherent]]
-        </div>
-        <div class="col-md-4" v-if="result.start.length == 8 && result.end.length == 8">
-          [[result.start.substring(6,8)]]/[[result.start.substring(4,6)]]/[[result.start.substring(0,4)]]
-          -
-          [[result.end.substring(6,8)]]/[[result.end.substring(4,6)]]/[[result.end.substring(0,4)]]
-        </div>
-        <div class="col-md-4" v-else>
-          {% trans 'Date invalide'%}
         </div>
       </div>
     `

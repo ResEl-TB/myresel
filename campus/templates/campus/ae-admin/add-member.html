@@ -15,32 +15,78 @@
     `
       <div class="well">
         <section-title
-          :title='"{% trans "Ajouter un membre AE" %}"''
-          :component="'search-school-users'"
+          :title='"{% trans "Ajouter/Éditer un membre AE" %}"''
+          :component="'search-users'"
         ></section-title>
       </div>
     `
   })
 
-  const SearchUsers = Vue.component('search-school-users', {
+  const SearchUsers = Vue.component('search-users', {
     props: [],
     delimiters: ['[[', ']]'],
     data(){
       return {
         search_results: [],
+        loading: false,
+        loaded_from_school: false,
         filter: '',
+        focused_user: null,
       };
+    },
+    mounted: function(){
+      $(function() {
+        $('#toggle-ldap').bootstrapToggle({
+          on: 'ResEl',
+          off: '{% trans "École" %}'
+        });
+      })
     },
     methods:{
       getUsers: function(){
+        var ldap = !$('#toggle-ldap').prop('checked')?'school':'resel';
+        this.loading = true;
         $.ajax({
           url: "{% url 'campus:ae-admin:search-user' %}",
           method: "GET",
-          data: {filter: this.filter},
+          data: {filter: this.filter, ldap: ldap},
+
           success: function(data){
-            console.log(data)
-          }
+            this.search_results = [];
+            this.loaded_from_school = data.school_ldap;
+            if(data.school_ldap){
+              console.log("soon");
+            }else{
+              for(let user of data['results']){
+                this.search_results.push({
+                  "uid": user.uid,
+                  "first_name": user.first_name,
+                  "last_name": user.last_name,
+                  "training": user.training,
+                  "campus": user.campus,
+                  "payment": user.payment,
+                  "payment_value": user.payment_value,
+                  "n_adherent": user.n_adherent,
+                  "start":user.start,
+                  "end":user.end,
+                })
+              }
+            }
+          }.bind(this),
+
+          complete: function(){
+            this.loading = false;
+          }.bind(this)
         })
+      },
+      openModal: function(user){
+        this.focused_user = user;
+        console.log(this.focused_user)
+        if(this.loaded_from_school){
+          console.log("soon");
+        }else{
+          $('#edit-member-modal').modal('show')
+        }
       }
     },
     template:
@@ -49,8 +95,10 @@
         <div class="col-md-12">
           <form v-on:submit.prevent="getUsers">
             <div class="form-group">
-              <label>{% trans "Rechercher dans l'annuaire de l'école :" %}</label>
-              <div class="input-group">
+              <label>{% trans "Rechercher dans l'annuaire " %}</label>
+              <input type="checkbox" id="toggle-ldap" checked data-toggle="toggle"
+              data-offstyle="danger" data-size="small">
+              <div class="input-group" id="search-ldap">
                 <span class="input-group-addon">
                   <span class="fa fa-search"></span>
                 </span>
@@ -58,17 +106,44 @@
               </div>
             </div>
           </form>
+          <search-spinner v-if="loading"></search-spinner>
+          <btable-header
+            v-if="search_results.length > 0"
+          ></btable-header>
+          <search-member-result
+            v-for="result, key in search_results"
+            :result="result"
+            :key="key"
+            v-on:userClicked="openModal($event)"
+          ></search-member-result>
+          <table-footer v-if="search_results.length > 0"></table-footer>
+        </div>
+        <edit-member-modal
+          :user="focused_user"
+        ></edit-member-modal>
+      </div>
+    `
+  })
+
+  const Modal = Vue.component('edit-member-modal', {
+    props: ['user'],
+    delimiters: ['[[', ']]'],
+    template:
+    `
+      <div class="modal fade" id="edit-member-modal">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4>{% trans "Edition d'un membre de l'AE" %}</h4>
+            </div>
+            <div class="modal-body">
+              [[user]]
+            </div>
+          </div>
         </div>
       </div>
     `
   })
 
-  const AddMemberForm = Vue.component('add-member-form', {
-    props: [],
-    delimiters: ['[[', ']]'],
-    template:
-    `
-      <div>Bla</div>
-    `
-  })
 </script>

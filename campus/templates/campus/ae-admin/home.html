@@ -6,6 +6,7 @@
 {% block css %}
   <link rel="stylesheet" type="text/css" href="{% static 'css/campus/ae-admin.css' %}">
   <link href="{% static 'jquery/jquery-ui.min.css' %}" rel="Stylesheet"></link>
+  <link href="{% static 'css/vendors/bootstrap-toggle.min.css' %}" rel="Stylesheet"></link>
 {% endblock %}
 
 {% block content %}
@@ -24,6 +25,7 @@
 
 {% block javascript %}
 <script src="{% static 'jquery/jquery-ui.min.js' %}"></script>
+<script src="{% static 'js/vendors/bootstrap-toggle.min.js'%}"></script>
 <script src="{% static 'js/vendors/vue.js' %}"></script>
 <script src="{% static 'js/vendors/vue-router.js' %}"></script>
 <script src="{% static 'js/tools/file-saver.js' %}"></script>
@@ -55,7 +57,7 @@
   section_links = [
     {
       id: 1,
-      title: "{% trans 'Ajouter un membre à l\'AE' %}",
+      title: "{% trans 'Ajouter/Éditer un membre de l\'AE' %}",
       glyphicon: "glyphicon-remove-circle rotate-45",
       url: "add-member"
     },
@@ -179,8 +181,20 @@
 
   // A table header for tables made with bootstrap grid system
   const BootstrapTableHeader = Vue.component('btable-header', {
-    props: ['elements'],
+    props: [],
     delimiters: ['[[', ']]'],
+    data: function(){
+      return({elements: [
+        {size: 1, text: "{% trans 'UID' %}"},
+        {size: 2, text: "{% trans 'Nom complet' %}"},
+        {size: 1, text: "{% trans 'Formation' %}"},
+        {size: 1, text: "{% trans 'Campus' %}"},
+        {size: 1, text: "{% trans 'N° Adherent' %}"},
+        {size: 1, text: "{% trans 'Type de Paiement' %}"},
+        {size: 1, text: "{% trans 'Paiement' %}"},
+        {size: 4, text: "{% trans 'Dernière adhésion' %}"},
+      ]})
+    },
     template:
     `
       <div class="row text-center table-header search-result">
@@ -193,6 +207,48 @@
     `
   })
 
+  // A result of the member research
+  const SearchMemberResult = Vue.component('search-member-result', {
+    props: ['result'],
+    delimiters: ['[[', ']]'],
+    template:
+    `
+      <div class="row text-center search-result" v-bind:id="'res-'+$vnode.key">
+      <span v-on:click="$emit('userClicked', result)">
+        <div class="col-md-1">
+          [[result.uid]]
+        </div>
+        <div class="col-md-2">
+          [[result.first_name]] [[result.last_name]]
+        </div>
+        <div class="col-md-1">
+          [[result.training]]
+        </div>
+        <div class="col-md-1">
+          [[result.campus]]
+        </div>
+        <div class="col-md-1">
+          [[result.n_adherent]]
+        </div>
+        <div class="col-md-1">
+          [[result.payment]]
+        </div>
+        <div class="col-md-1">
+          [[result.payment_value]]
+        </div>
+        <div class="col-md-4" v-if="result.start.length == 8 && result.end.length == 8">
+          [[result.start.substring(6,8)]]/[[result.start.substring(4,6)]]/[[result.start.substring(0,4)]]
+          -
+          [[result.end.substring(6,8)]]/[[result.end.substring(4,6)]]/[[result.end.substring(0,4)]]
+        </div>
+        <div class="col-md-4" v-else>
+          {% trans 'Date invalide'%}
+        </div>
+      </span>
+      </div>
+    `
+  })
+
   // Table footer, just for decoration purpose
   const TableHeader = Vue.component('table-footer', {
     props: [],
@@ -201,6 +257,7 @@
       <div class="table-footer search-result row"></div>
     `
   })
+
   // The router for the app
   const router = new VueRouter({
     routes: [

@@ -21,26 +21,63 @@ class AdminHome(View):
         return render(request, self.template_name, {})
 
 # WIP
+
+def ldapUserToDict(user):
+    if user.dates_membre:
+        dates = user.dates_membre[-1].split('-')
+    else:
+        dates = ['','']
+    return({
+        "uid": user.uid,
+        "first_name": user.first_name,
+        "last_name": user.last_name,
+        "training": user.formation,
+        "campus": user.campus,
+        "payment": user.mode_paiement,
+        "payment_value": user.ae_cotiz,
+        "n_adherent": user.n_adherent,
+        "start": dates[0],
+        "end": dates[1],
+    })
+
 class GetUsers(View):
     """
     Ajax view searching for users in the school LDAP.
     It also matches corresponding users in our LDAP
     """
 
+    search_keys = ['first_name', 'last_name', 'mail', 'promo', 'uid']
+
     def get(self, request):
-        if request.is_ajax():
-            res = ldap.search_ecole(
-                """(|
-                    (uid=*{0}*)
-                    (gidnumber={0})
-                    (gecos=*{0}*)
-                    (mail=*{0}*)
-                    (registeredaddress=*{0}*)
-                    (uidnumber={0})
-                )""".format("TODO")
-            )
-            print(res)
-            return JsonResponse({"test": "test"})
+        filter = request.GET.get('filter', '')
+        which_ldap = request.GET.get('ldap', 'resel')
+        print(filter, which_ldap)
+        if request.is_ajax() and filter != '':
+            if which_ldap == 'school':
+                res = ldap.search_ecole(
+                    """(|
+                        (uid=*{0}*)
+                        (gidnumber={0})
+                        (gecos=*{0}*)
+                        (mail=*{0}*)
+                        (registeredaddress=*{0}*)
+                        (uidnumber={0})
+                    )""".format(filter)
+                )
+                if not res:
+                    res = []
+            else:
+                res = []
+                uids = []
+                for key in self.search_keys:
+                    users = LdapUser.filter(**{key+"__contains": filter})
+                    for user in users:
+                        if user.uid not in uids:
+                            uids.append(user.uid)
+                            res.append(ldapUserToDict(user))
+            return JsonResponse({
+                "results": res, "from_school_ldap": which_ldap == 'school'
+            })
         else:
             raise Http404("Not found")
 
@@ -60,15 +97,7 @@ class GetMembers(View):
                 ae_members = []
                 for user in users:
                     if(user.n_adherent and user.uid not in [u["uid"] for u in ae_members]):
-                        dates = user.dates_membre[-1].split('-')
-                        ae_members.append({
-                            "uid": user.uid,
-                            "first_name": user.first_name,
-                            "last_name": user.last_name,
-                            "n_adherent": user.n_adherent,
-                            "start": dates[0],
-                            "end": dates[1],
-                        })
+                        ae_members.append(ldapUserToDict(user))
                 return JsonResponse({"results": ae_members})
             else:
                 return JsonResponse(
@@ -114,7 +143,6 @@ class EditFromCSV(View):
 
     def post(self, request):
         uid = request.POST.get('uid', '')
-
         try:
             user = LdapUser.get(pk=uid)
         except ObjectDoesNotExist:
@@ -134,7 +162,9 @@ class EditFromCSV(View):
         return JsonResponse({"success": True})
 
 class AddAdmin(View):
-
+    """
+    Ajax view to add a new admin
+    """
     def post(self, request):
         uid = request.POST.get('uid', '')
 
@@ -152,7 +182,9 @@ class AddAdmin(View):
         return JsonResponse({'success': 'true'})
 
 class DeleteAdmin(View):
-
+    """
+    Ajax view to remove an admin
+    """
     def post(self, request):
         uid = request.POST.get('uid', '')
 

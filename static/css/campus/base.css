@@ -217,7 +217,7 @@ body {
 .modal-header {
   color: white;
   text-align: center;
-  background: url(/static/images/campus/modal-bg.png) no-repeat center center fixed;
+  background: url(/static/images/campus/modal-bg.png) center fixed;
 }
 
 .dell-user, .dell-user:hover {

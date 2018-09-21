@@ -109,13 +109,6 @@
     delimiters: ['[[',']]'],
     data: function() {
       return({
-        header_content: [
-          {size: 2, text: ""}, // offset
-          {size: 1, text: "{% trans 'UID' %}"},
-          {size: 2, text: "{% trans 'Nom complet' %}"},
-          {size: 2, text: "{% trans 'N° Adherent' %}"},
-          {size: 4, text: "{% trans 'Dernière adhésion' %}"},
-        ],
         err_classes: {
           "1": 'err err-uid',
           "2": 'err err-date',
@@ -163,13 +156,10 @@
           <span class="err-ok">{% trans 'Tout est bon' %}</span>
           <span>{% trans 'En attente' %}</span>
         </p>
-        <btable-header
-          v-bind:elements="header_content"
-        ></btable-header>
+        <btable-header></btable-header>
         <search-member-result
           v-for="result in results"
           v-bind:result="result"
-          v-bind:id="result.id"
           v-bind:key="result.id"
         >
         </search-member-result>

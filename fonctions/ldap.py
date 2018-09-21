@@ -58,8 +58,13 @@ def search_ecole(query):
         Server(settings.LDAP_ECOLE, use_ssl=True),
         auto_bind=True
     )
-    if l.search(settings.LDAP_ECOLE_DN, query, attributes=ALL_ATTRIBUTES):
-        res = l.entries
+
+    attr = ('uid', 'sn', 'displayName', 'mail','title', 'givenName', 'l')
+    if l.search(settings.LDAP_ECOLE_DN, query, attributes=attr):
+        data = []
+        for entry in l.entries:
+            data.append(entry.entry_to_json())
+        res = data
     l.unbind()
     return res
 
