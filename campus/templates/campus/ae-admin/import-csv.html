@@ -6,6 +6,7 @@
   ///////////////////////////////////////////////
   //////////////   Import CSV    ///////////////
   ///////////////////////////////////////////////
+  
   const ImportMembers = Vue.component('import-member', {
     props: [],
     delimiters: ['[[',']]'],
@@ -89,7 +90,6 @@
         }else{
           $('#fake-csv-input').html('Aucune ligne valide');
         }
-        console.log("aa")
         $('#csv-input').val("");
       }
     },
@@ -118,6 +118,7 @@
         err_classes: {
           "1": 'err err-uid',
           "2": 'err err-date',
+          "3": 'err err-value',
         }
       })
     },
