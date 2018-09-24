@@ -59,7 +59,8 @@ def search_ecole(query):
         auto_bind=True
     )
 
-    attr = ('uid', 'sn', 'displayName', 'mail','title', 'givenName', 'l')
+    attr = ('uid', 'sn', 'displayName', 'mail','title', 'givenName', 'l',
+            'gidNumber')
     if l.search(settings.LDAP_ECOLE_DN, query, attributes=attr):
         data = []
         for entry in l.entries:

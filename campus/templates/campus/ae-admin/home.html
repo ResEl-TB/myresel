@@ -7,6 +7,7 @@
   <link rel="stylesheet" type="text/css" href="{% static 'css/campus/ae-admin.css' %}">
   <link href="{% static 'jquery/jquery-ui.min.css' %}" rel="Stylesheet"></link>
   <link href="{% static 'css/vendors/bootstrap-toggle.min.css' %}" rel="Stylesheet"></link>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.datetimepicker.min.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -25,6 +26,7 @@
 
 {% block javascript %}
 <script src="{% static 'jquery/jquery-ui.min.js' %}"></script>
+<script src="{% static 'js/jquery.datetimepicker.full.min.js' %}"></script>
 <script src="{% static 'js/vendors/bootstrap-toggle.min.js'%}"></script>
 <script src="{% static 'js/vendors/vue.js' %}"></script>
 <script src="{% static 'js/vendors/vue-router.js' %}"></script>
@@ -57,7 +59,7 @@
   section_links = [
     {
       id: 1,
-      title: "{% trans 'Ajouter/Éditer un membre de l\'AE' %}",
+      title: "{% trans 'Ajouter/Éditer un membre AE' %}",
       glyphicon: "glyphicon-remove-circle rotate-45",
       url: "add-member"
     },
@@ -91,17 +93,30 @@
         section_links: section_links
       }
     },
+    computed : {
+      section_links_chuncks: function(){
+        links = [];
+        for(var i = 0, j = this.section_links.length; i<=j; i += 1){
+          links.push(this.section_links.splice(0, 4));
+        }
+        return links
+      }
+    },
     delimiters: ['[[', ']]'],
     template:
     `
-      <div class="row">
-        <section-link
-          v-for = "link in section_links"
-          v-bind:title = "link.title"
-          v-bind:glyphicon = "link.glyphicon"
-          v-bind:url = link.url
-          v-bind:key = "link.id"
-        ></section-link>
+      <div>
+        <span v-for="links in section_links_chuncks">
+          <div class="row">
+            <section-link
+              v-for="link in links"
+              v-bind:title = "link.title"
+              v-bind:glyphicon = "link.glyphicon"
+              v-bind:url = link.url
+              v-bind:key = "link.id"
+            ></section-link>
+          </div>
+        </span>
       </div>
     `
   })

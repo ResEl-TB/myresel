@@ -220,6 +220,11 @@ body {
   background: url(/static/images/campus/modal-bg.png) center fixed;
 }
 
+.close {
+  color: white !important;
+  opacity: 1 !important;
+}
+
 .dell-user, .dell-user:hover {
   color: red;
 }

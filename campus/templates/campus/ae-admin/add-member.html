@@ -31,7 +31,18 @@
         loading: false,
         loaded_from_school: false,
         filter: '',
-        focused_user: null,
+        focused_user: {
+          "uid": "",
+          "first_name": "",
+          "last_name": "",
+          "training": "",
+          "campus": "",
+          "payment": "",
+          "payment_value": "",
+          "n_adherent": "",
+          "start":"",
+          "end":"",
+        },
       };
     },
     mounted: function(){
@@ -53,9 +64,48 @@
 
           success: function(data){
             this.search_results = [];
-            this.loaded_from_school = data.school_ldap;
-            if(data.school_ldap){
-              console.log("soon");
+            this.loaded_from_school = data.from_school_ldap;
+            if(this.loaded_from_school){
+              for(let user of data['results']){
+                user = JSON.parse(user).attributes;
+                training = String(user.title).split(' ')
+                switch (true) {
+                  case training.indexOf("IG") != -1:
+                    training = "FIG"
+                    break;
+                  case training.indexOf("FIP") != -1:
+                    training = "FIP"
+                    break;
+                  case training.indexOf("FISE") != -1:
+                    training = "FISE"
+                    break;
+                  case training.indexOf("FIL") != -1:
+                    training = "FIL"
+                    break;
+                  case training.indexOf("Master") != -1:
+                    training = "Master"
+                    break;
+                  case training.indexOf("Doctorant") != -1:
+                    training = "Doctorant"
+                    break;
+                  default:
+                    training = "Autre"
+                }
+                this.search_results.push({
+                  "uid": String(user.uid),
+                  "first_name": String(user.givenName),
+                  "last_name": String(user.sn),
+                  "promo": String(user.gidNumber),
+                  "mail": String(user.mail),
+                  "training": training,
+                  "campus": String(user.l),
+                  "payment": "",
+                  "payment_value": "",
+                  "n_adherent": "",
+                  "start": "",
+                  "end": "",
+                })
+              }
             }else{
               for(let user of data['results']){
                 this.search_results.push({
@@ -67,8 +117,8 @@
                   "payment": user.payment,
                   "payment_value": user.payment_value,
                   "n_adherent": user.n_adherent,
-                  "start":user.start,
-                  "end":user.end,
+                  "start": user.start,
+                  "end": user.end,
                 })
               }
             }
@@ -81,9 +131,8 @@
       },
       openModal: function(user){
         this.focused_user = user;
-        console.log(this.focused_user)
         if(this.loaded_from_school){
-          console.log("soon");
+          $('#add-member-modal').modal('show')
         }else{
           $('#edit-member-modal').modal('show')
         }
@@ -120,25 +169,280 @@
         </div>
         <edit-member-modal
           :user="focused_user"
+          v-on:userUpdated="getUsers"
         ></edit-member-modal>
+        <add-member-modal
+          :user="focused_user"
+        ></add-member-modal>
       </div>
     `
   })
 
-  const Modal = Vue.component('edit-member-modal', {
+  // TODO: Improve the following components
+
+  const EditUserModal = Vue.component('edit-member-modal', {
     props: ['user'],
     delimiters: ['[[', ']]'],
+    data: function(){
+      return({
+        error: '',
+        success: false,
+      })
+    },
+    mounted: function(){
+      $("#start").datepicker({ dateFormat: 'yymmdd' });
+      $("#end").datepicker({ dateFormat: 'yymmdd' });
+    },
+    methods: {
+      sendForm: function(){
+        this.error = '';
+        this.success = '';
+
+        var btn = $('#sendEditFormBtn');
+        var btnContent = btn.html();
+        btn.html('<span class="fa fa-spinner fa-spin"></span>');
+
+        var form = $('#editUserForm').serializeArray();
+
+        setup_CSRF();
+        $.ajax({
+          url: "{% url 'campus:ae-admin:edit-user'%}",
+          method: 'POST',
+          async: true,
+          data: form,
+
+          success: function(data){
+            if(data['error']){
+              switch (data['error']) {
+                case 1:
+                  this.error = "{% trans 'Utilisater introuvable'%}"
+                  break;
+                case 2:
+                  this.error = "{% trans 'Date invalide'%}"
+                  break;
+                default:
+                  this.error = "{% trans 'Erreur inconnue'%}" // Shouldn't trigger
+              }
+            }else{
+              this.$emit('userUpdated');
+              this.success = true;
+            }
+          }.bind(this),
+
+          error: function(data){
+            this.error = "{% trans 'Erreur inconnue' %}"
+          }.bind(this),
+
+          complete: function(){
+            btn.html(btnContent);
+          }
+        })
+      }
+    },
     template:
     `
       <div class="modal fade" id="edit-member-modal">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
               <h4>{% trans "Edition d'un membre de l'AE" %}</h4>
             </div>
             <div class="modal-body">
-              [[user]]
+              <div v-if="success" class="alert alert-success">
+                {% trans 'Utilisateur mis à jour !'%}
+              </div>
+              <div v-if="error != ''" class="alert alert-danger">
+                [[error]]
+              </div>
+              <form v-on:submit.prevent="sendForm" id="editUserForm">
+                <div class="form-group">
+                  <label>{%trans 'UID :'%}</label>
+                  <input name='uid' class="form-control" readonly v-model="user.uid"></input>
+                </div>
+                <div class="form-group">
+                  <label>{%trans 'N° Adherent :'%}</label>
+                  <input name='n_adherent' class="form-control" v-model="user.n_adherent"></input>
+                </div>
+                <div class="form-group">
+                  <label>{%trans 'Type de paiement :'%}</label>
+                  <select name='payment' class="form-control" v-model="user.payment">
+                    <option value="Lydia">Lydia</option>
+                    <option value="CB">CB</option>
+                    <option value="Chèque">Chèque</option>
+                    <option value="Espèces">Espèces</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>{%trans 'Montant payé :'%}</label>
+                  <input name='payment_value' class="form-control" v-model="user.payment_value"></input>
+                </div>
+                <div class="form-group">
+                  <label>{%trans 'Début de l\'adhesion :'%}</label>
+                  <input class="form-control datetimepicker" id="start" name="start" v-model="user.start"></input>
+                </div>
+                <div class="form-group">
+                  <label>{%trans 'Fin de l\'adhesion :'%}</label>
+                  <input class="form-control datetimepicker" id="end" name="end" v-model="user.end"></input>
+                </div>
+                <button class='btn btn-success' id="sendEditFormBtn">
+                  {% trans 'Envoyer'%}
+                </button>
+              </form>
+            </div>
+            <div class="modal-footer">
+            </div>
+          </div>
+        </div>
+      </div>
+    `
+  })
+
+  const AddUserModal = Vue.component('add-member-modal', {
+    props: ['user'],
+    delimiters: ['[[', ']]'],
+    data: function(){
+      return({
+        error: '',
+        success: false,
+      })
+    },
+    mounted: function(){
+      $("#new_user_start").datepicker({ dateFormat: 'yymmdd' });
+      $("#new_user_end").datepicker({ dateFormat: 'yymmdd' });
+    },
+    methods: {
+      sendForm: function(){
+        this.error = '';
+        this.success = '';
+
+        var btn = $('#sendAddFormBtn');
+        var btnContent = btn.html();
+        btn.html('<span class="fa fa-spinner fa-spin"></span>');
+
+        var form = $('#addUserForm').serializeArray();
+
+        setup_CSRF();
+        $.ajax({
+          url: "{% url 'campus:ae-admin:add-user'%}",
+          method: 'POST',
+          async: true,
+          data: form,
+
+          success: function(data){
+            if(data['error']){
+              switch (data['error']) {
+                case 1:
+                  this.error = "{% trans 'Utilisater introuvable'%}"
+                  break;
+                case 2:
+                  this.error = "{% trans 'Date invalide'%}"
+                  break;
+                case 3:
+                  this.error = "{% trans 'Merci de renseigner tous les champs avec une étoile rouge' %}"
+                  break;
+                default:
+                  this.error = "{% trans 'Erreur inconnue'%}" // Shouldn't trigger
+              }
+            }else{
+              this.success = true;
+            }
+          }.bind(this),
+
+          error: function(data){
+            this.error = "{% trans 'Erreur inconnue' %}"
+          }.bind(this),
+
+          complete: function(){
+            btn.html(btnContent);
+          }
+        })
+      }
+    },
+    template:
+    `
+      <div class="modal fade" id="add-member-modal">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4>{% trans "Ajout d'un membre à l'AE" %}</h4>
+            </div>
+            <div class="modal-body">
+              <div v-if="success" class="alert alert-success">
+                {% trans 'Utilisateur ajouté !'%}
+              </div>
+              <div v-if="error != ''" class="alert alert-danger">
+                [[error]]
+              </div>
+              <form v-on:submit.prevent="sendForm" id="addUserForm">
+                <div class="form-group">
+                  <label class="mendatory-field">{%trans 'Nom :'%}</label>
+                  <input name='last_name' class="form-control" v-model="user.last_name"></input>
+                </div>
+                <div class="form-group">
+                  <label class="mendatory-field">{%trans 'Prénom :'%}</label>
+                  <input name='first_name' class="form-control" v-model="user.first_name"></input>
+                </div>
+                <div class="form-group">
+                  <label class="mendatory-field">{%trans 'Promo :'%}</label>
+                  <input name='promo' class="form-control" v-model="user.promo"></input>
+                </div>
+                <div class="form-group">
+                  <label class="mendatory-field">{%trans 'E-mail :'%}</label>
+                  <input name='email' class="form-control" v-model="user.mail"></input>
+                </div>
+                <div class="form-group">
+                  <label class="mendatory-field">{%trans 'Formation :'%}</label>
+                  <select name='training' class="form-control" v-model="user.training">
+                    <option value="FIG">FIG</option>
+                    <option value="FIP">FIP</option>
+                    <option value="FISE">FISE</option>
+                    <option value="FIL">FIL</option>
+                    <option value="Master">Master</option>
+                    <option value="Doctorant">Doctorant</option>
+                    <option value="Autre">Autre</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="mendatory-field">{%trans 'Campus :'%}</label>
+                  <select name='campus' class="form-control" v-model="user.campus">
+                    <option value="Brest">Brest</option>
+                    <option value="Rennes">Rennes</option>
+                    <option value="Nantes">Nantes</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="mendatory-field">{%trans 'N° Adherent :'%}</label>
+                  <input name='n_adherent' class="form-control" v-model="user.n_adherent"></input>
+                </div>
+                <div class="form-group">
+                  <label>{%trans 'Type de paiement :'%}</label>
+                  <select name='payment' class="form-control" v-model="user.payment">
+                    <option value="Lydia">Lydia</option>
+                    <option value="CB">CB</option>
+                    <option value="Chèque">Chèque</option>
+                    <option value="Espèces">Espèces</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>{%trans 'Montant payé :'%}</label>
+                  <input name='payment_value' class="form-control" v-model="user.payment_value"></input>
+                </div>
+                <div class="form-group">
+                  <label class="mendatory-field">{%trans 'Début de l\'adhesion :'%}</label>
+                  <input class="form-control datetimepicker" id="new_user_start" name="start" v-model="user.start"></input>
+                </div>
+                <div class="form-group">
+                  <label class="mendatory-field">{%trans 'Fin de l\'adhesion :'%}</label>
+                  <input class="form-control datetimepicker" id="new_user_end" name="end" v-model="user.end"></input>
+                </div>
+                <button class='btn btn-success' id="sendAddFormBtn">
+                  {% trans 'Envoyer'%}
+                </button>
+              </form>
+            </div>
+            <div class="modal-footer">
             </div>
           </div>
         </div>

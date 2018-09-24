@@ -121,7 +121,7 @@
           setup_CSRF();
           for(let result of results){
             $.ajax({
-              url: "{% url 'campus:ae-admin:import-from-csv' %}",
+              url: "{% url 'campus:ae-admin:edit-user' %}",
               method: "POST",
               async: true,
               data: result,

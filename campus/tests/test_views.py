@@ -1007,7 +1007,7 @@ class AEAjaxTestCase(TestCase):
         )
         self.assertTrue(r.status_code == 200)
         self.assertFalse(r.json().get('error', False))
-        self.assertTrue(len(r.json()['results']) == 1)
+        self.assertTrue(len(r.json()['results']) >= 1)
 
 
     def testSimpleAEMemberEmptySearch(self):
@@ -1024,7 +1024,7 @@ class AEAjaxTestCase(TestCase):
     def testSimpleCSVImport(self):
         user = LdapUser.get(pk='jdoe')
         r = self.client.post(
-            reverse("campus:ae-admin:import-from-csv"),
+            reverse("campus:ae-admin:edit-user"),
             {
                 'uid': 'jdoe',
                 'start': '20160901',
@@ -1054,7 +1054,7 @@ class AEAjaxTestCase(TestCase):
         ]
         for start in invalid_start_dates:
             r = self.client.post(
-                reverse("campus:ae-admin:import-from-csv"),
+                reverse("campus:ae-admin:edit-user"),
                 {
                     'uid': 'jdoe',
                     'start': start,
@@ -1073,7 +1073,7 @@ class AEAjaxTestCase(TestCase):
 
     def testInvalidUserCSVImport(self):
         r = self.client.post(
-            reverse("campus:ae-admin:import-from-csv"),
+            reverse("campus:ae-admin:edit-user"),
             {
                 'uid': 'jdoeeeeeee',
                 'start': '20160901',
@@ -1176,3 +1176,51 @@ class AEAjaxTestCase(TestCase):
             HTTP_HOST="10.0.3.94"
         )
         self.assertTrue('jdoe' in [u['uid'] for u in r.json().get('results', [])]);
+
+    def testSimpleUserAddition(self):
+        try_delete_user("mx")
+        r = self.client.post(
+            reverse("campus:ae-admin:add-user"),
+            {
+                'first_name': "monsieur",
+                'last_name': "x",
+                'promo': "2019",
+                'email': 'jdoe@imt-atlantique.fr',
+                'training': 'FIG',
+                'campus': 'Brest',
+                'start': '20160901',
+                'end': '20170820',
+                'n_adherent': "16156",
+            },
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            HTTP_HOST="10.0.3.94"
+        )
+        self.assertEqual(r.status_code, 200)
+        self.assertFalse(r.json().get('error', False))
+        try:
+            LdapUser.get(pk="mx")
+        except ObjectDoesNotExist:
+            self.fail("User not created !")
+
+    def testUserAdditionMissingAttributes(self):
+        data = {
+            'first_name': "monsieur",
+            'last_name': "x",
+            'promo': "2019",
+            'email': 'jdoe@imt-atlantique.fr',
+            'training': 'FIG',
+            'campus': 'Brest',
+            'start': '20160901',
+            'end': '20170820',
+            'n_adherent': "16156",
+        }
+        for i in range(len(data.keys())):
+            data[list(data)[i]] = "";
+            r = self.client.post(
+                reverse("campus:ae-admin:add-user"),
+                data,
+                HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+                HTTP_HOST="10.0.3.94"
+            )
+            self.assertEqual(r.status_code, 200)
+            self.assertTrue(r.json().get('error', False))

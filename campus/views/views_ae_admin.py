@@ -7,7 +7,10 @@ from django.utils.translation import ugettext_lazy as _
 from gestion_personnes.models import LdapUser
 from django.core.exceptions import ObjectDoesNotExist
 
+from gestion_personnes.forms import InscriptionForm
+
 from fonctions import ldap
+from datetime import datetime
 
 import re
 
@@ -51,7 +54,6 @@ class GetUsers(View):
     def get(self, request):
         filter = request.GET.get('filter', '')
         which_ldap = request.GET.get('ldap', 'resel')
-        print(filter, which_ldap)
         if request.is_ajax() and filter != '':
             if which_ldap == 'school':
                 res = ldap.search_ecole(
@@ -122,24 +124,64 @@ class GetAdmins(View):
         else:
             raise Http404("Not found")
 
-class EditFromCSV(View):
+def checkDate(date):
     """
-    Ajax view editing existing member after dumping a csv file from the client
+    Checks the validity of a date
+    """
+    try:
+        y,m,d = [int(date[0:4]),int(date[4:6]),int(date[6:8])]
+        if(1970<y and 0<m<13 and 0<d<32 and len(date) == 8):
+            is_okay = True
+        else:
+            is_okay = False
+    except Exception:
+        is_okay = False
+    return is_okay
+
+class AddUser(View):
+    """
+    Ajax view adding a new member.
+    Very basic verifications, we assume the admin knows what he is doing.
     """
 
-    def checkDate(self, date):
-        """
-        Checks the validity of a dates
-        """
-        try:
-            y,m,d = [int(date[0:4]),int(date[4:6]),int(date[6:8])]
-            if(1970<y and 0<m<13 and 0<d<32 and len(date) == 8):
-                is_okay = True
-            else:
-                is_okay = False
-        except Exception:
-            is_okay = False
-        return is_okay
+    def post(self, request):
+        user = LdapUser()
+
+        start = request.POST.get('start', '').strip()
+        end = request.POST.get('end', '').strip()
+        if not (checkDate(start) and checkDate(end)):
+            return JsonResponse({"error": 2})
+
+        user.first_name = request.POST.get('first_name', '')
+        user.last_name = request.POST.get('last_name', '')
+
+        if(user.first_name == '' or user.last_name == ''):
+            return JsonResponse({"error": 3})
+
+        user.uid = InscriptionForm.get_free_uid(user.first_name, user.last_name)
+        user.promo = request.POST.get('promo', '')
+        user.mail = request.POST.get('email', '')
+        user.formation = request.POST.get('training', '')
+        user.campus = request.POST.get('campus', '')
+        user.n_adherent = request.POST.get('n_adherent', '')
+
+        if(not user.promo or not user.mail or not user.mail or \
+           not user.formation or not user.campus or not user.n_adherent):
+            return JsonResponse({"error": 3})
+
+        user.mode_paiement = request.POST.get('payment', '')
+        user.ae_cotiz = request.POST.get('payment_value', '')
+        user.dates_membre = ['-'.join([start,end])]
+        user.inscr_date = datetime.now()
+
+        user.save()
+
+        return JsonResponse({"success": True})
+
+class EditUser(View):
+    """
+    Ajax view editing existing member
+    """
 
     def post(self, request):
         uid = request.POST.get('uid', '')
@@ -148,13 +190,27 @@ class EditFromCSV(View):
         except ObjectDoesNotExist:
             return JsonResponse({"error": 1})
 
-        if(user.n_adherent):
+        # The user is a member or is being added
+        if(user.n_adherent or request.POST.get('n_adherent', '') != ''):
             start = request.POST.get('start', '').strip()
             end = request.POST.get('end', '').strip()
-            if not (self.checkDate(start) and self.checkDate(end)):
+            if not (checkDate(start) and checkDate(end)):
                 return JsonResponse({"error": 2})
 
-            user.dates_membre[-1] = '-'.join([start,end])
+            # If new n_adherent => new set of dates
+            if(user.n_adherent != request.POST.get('n_adherent', '') and\
+               user.n_adherent != ''):
+                user.dates_membre.append('-'.join([start,end]))
+            else:
+                try:
+                    user.dates_membre[-1] = '-'.join([start,end])
+                except IndexError:
+                    user.dates_membre = ['-'.join([start,end])]
+
+            #Update the fields
+            user.n_adherent = request.POST.get('n_adherent', '')
+            user.mode_paiement = request.POST.get('payment', '')
+            user.ae_cotiz = request.POST.get('payment_value', '')
             user.save()
         else:
             return JsonResponse({"error": 1})
