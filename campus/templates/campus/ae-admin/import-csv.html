@@ -65,9 +65,13 @@
               uid: el[0],
               first_name: el[1],
               last_name: el[2],
-              n_adherent: el[3],
-              start: el[4],
-              end: el[5].replace(/\s/gi, ''),
+              training: el[3],
+              campus: el[4],
+              n_adherent: el[5],
+              payment: el[6],
+              payment_value: el[7],
+              start: el[8],
+              end: el[9].replace(/\s/gi, ''),
             });
             nextID++;
           }
@@ -85,6 +89,8 @@
         }else{
           $('#fake-csv-input').html('Aucune ligne valide');
         }
+        console.log("aa")
+        $('#csv-input').val("");
       }
     },
     template:

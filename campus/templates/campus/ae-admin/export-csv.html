@@ -63,7 +63,7 @@
         })
       },
       createCSV: function(){
-        csv_lines = [`UID,Prenom,Nom,Numero d'Adherent,Date debut,Date fin`];
+        csv_lines = [`UID,Prenom,Nom,Formation,Campus,Numero d'Adherent,Type de Paiement,Paiment,Date debut,Date fin`];
         for(let result of this.search_results){
           csv_lines.push([
             result.uid,
@@ -71,9 +71,9 @@
             result.last_name,
             result.training,
             result.campus,
+            result.n_adherent,
             result.payment,
             result.payment_value,
-            result.n_adherent,
             result.start,
             result.end,
           ].join(','));
