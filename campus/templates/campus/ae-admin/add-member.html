@@ -169,7 +169,6 @@
         </div>
         <edit-member-modal
           :user="focused_user"
-          v-on:userUpdated="getUsers"
         ></edit-member-modal>
         <add-member-modal
           :user="focused_user"
@@ -224,7 +223,6 @@
                   this.error = "{% trans 'Erreur inconnue'%}" // Shouldn't trigger
               }
             }else{
-              this.$emit('userUpdated');
               this.success = true;
             }
           }.bind(this),
