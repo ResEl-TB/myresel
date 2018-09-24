@@ -78,7 +78,7 @@
       glyphicon: "glyphicon-dashboard",
       url: "add-admin"
     },
-    {id: 4,
+    {id: 5,
       title: "{% trans 'Supprimer un administrateur AE' %}",
       glyphicon: "glyphicon-remove-circle",
       url: "del-admin"
@@ -96,8 +96,8 @@
     computed : {
       section_links_chuncks: function(){
         links = [];
-        for(var i = 0, j = this.section_links.length; i<=j; i += 1){
-          links.push(this.section_links.splice(0, 4));
+        for(var i = 0, j = this.section_links.length; i<=j; i += 4){
+          links.push(this.section_links.slice(i, i+4));
         }
         return links
       }
