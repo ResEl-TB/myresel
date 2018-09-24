@@ -35,15 +35,37 @@
         modal_title: '',
       };
     },
+    mounted: function(){
+      $(function() {
+        $('#toggle-former-current').bootstrapToggle({
+          on: '{% trans "Anciens adhérents" %}',
+          off: '{% trans "Adhérents actuels" %}',
+          width: 200
+        });
+        $('#toggle-special-search').bootstrapToggle({
+          on: '{% trans "Non" %}',
+          off: '{% trans "Oui" %}',
+          width: null
+        });
+      })
+    },
     methods:{
       getUsers: function(){
         this.error = '';
         this.search_results = [];
-        this.searching = true,
+        this.searching = true;
+
+        // Add data for specific researches
+        var data = {filter: this.filter}
+        data.special = !$('#toggle-special-search').prop('checked');
+        if(data.special){
+          data.search_type =
+          $('#toggle-former-current').prop('checked')?'former':'current';
+        }
         $.ajax({
           url: "{% url 'campus:ae-admin:search-members' %}",
           method: "GET",
-          data: {filter: this.filter},
+          data: data,
 
           success: function(data){
             if(data["error"]){
@@ -63,8 +85,9 @@
         })
       },
       createCSV: function(){
-        csv_lines = [`UID,Prenom,Nom,Formation,Campus,Numero d'Adherent,Type de Paiement,Paiment,Date debut,Date fin`];
+        csv_lines = [`UID,Prenom,Nom,Formation,Campus,Numero d'Adherent,Type de Paiement(CB/Chèque/Lydia/Espèces),Paiment,Date debut,Date fin`];
         for(let result of this.search_results){
+          console.log(result.payment)
           csv_lines.push([
             result.uid,
             result.first_name,
@@ -88,6 +111,12 @@
         <div class="col-md-12">
           <div v-if="error" class="alert alert-danger text-center">[[error]]</div>
           <form v-on:submit.prevent="getUsers">
+            {% trans 'Je veux rechercher uniquement dans les' %}
+            <input type="checkbox" id="toggle-former-current" checked data-toggle="toggle"
+data-offstyle="default" data-onstyle="default" data-size="small"> ?
+            <input type="checkbox" id="toggle-special-search" checked data-toggle="toggle"
+data-offstyle="danger" data-size="small">
+            <hr />
             <div class="form-group">
               <label>{% trans "Rechercher des membres de l'AE :" %}</label>
               <div class="input-group">

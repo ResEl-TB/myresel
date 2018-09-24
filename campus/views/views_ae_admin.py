@@ -10,7 +10,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from gestion_personnes.forms import InscriptionForm
 
 from fonctions import ldap
-from datetime import datetime
+from datetime import datetime, date
 
 import re
 
@@ -100,6 +100,27 @@ class GetMembers(View):
                 for user in users:
                     if(user.n_adherent and user.uid not in [u["uid"] for u in ae_members]):
                         ae_members.append(ldapUserToDict(user))
+
+                # If the user requested an additional filter
+                if(request.GET.get('special', 'false') == 'true'):
+                    print(request.GET)
+                    # Default to current just in case, uses less data
+                    type = request.GET.get('search_type', 'current')
+                    now = date.today()
+
+                    i = 0
+                    while i < len(ae_members):
+                        print(i, len(ae_members))
+                        end = ae_members[i]['end']
+                        end = date(int(end[0:4]), int(end[4:6]), int(end[6:8]))
+                        if(type == 'former' and end > now):
+                            ae_members.pop(i)
+                            i-=1
+                        elif(type == 'current' and end <= now):
+                            ae_members.pop(i)
+                            i-=1
+                        i+=1
+
                 return JsonResponse({"results": ae_members})
             else:
                 return JsonResponse(
