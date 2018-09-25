@@ -388,7 +388,7 @@ class StatusPageXhr(View):
         services = cache.get('icinga_services')
         if services is not None:
             return services
-        with open('myresel/icinga_status.yml', 'r') as doc:
+        with open('myresel/icinga_status.yml', 'rb') as doc:
             services = yaml.load(doc)
             cache.set('icinga_services',
                       services,
@@ -431,7 +431,7 @@ class StatusPageXhr(View):
             logger.error("Could not load icinga, "
                          "loading default configuration instead: %s " % err)
             result = {}
-            with open('myresel/icinga_dummy_resp.yml', 'r') as dummy_resp:
+            with open('myresel/icinga_dummy_resp.yml', 'rb') as dummy_resp:
                 result = yaml.load(dummy_resp)
         StatusPageXhr.calc_scores(services, result)
         cache.set('icinga_services_status',
