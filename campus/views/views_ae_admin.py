@@ -89,43 +89,44 @@ class GetMembers(View):
     """
     search_keys = ['first_name', 'last_name', 'mail', 'promo']
 
+    def applySpecialFilter(self, ae_members, type):
+        now = date.today()
+
+        i = 0
+        while i < len(ae_members):
+            end = ae_members[i]['end']
+            if checkDate(end):
+                end = date(int(end[0:4]), int(end[4:6]), int(end[6:8]))
+                if(type == 'former' and end > now):
+                    ae_members.pop(i)
+                    i-=1
+                elif(type == 'current' and end <= now):
+                    ae_members.pop(i)
+                    i-=1
+            i+=1
+        return ae_members
+
     def get(self, request):
         if request.is_ajax():
             filter = request.GET.get('filter', '')
-            if filter:
+            if not filter:
+                users = LdapUser.all()
+            else:
                 users = []
                 for key in self.search_keys:
                     users += LdapUser.filter(**{key+"__contains": filter})
-                ae_members = []
-                for user in users:
-                    if(user.n_adherent and user.uid not in [u["uid"] for u in ae_members]):
-                        ae_members.append(ldapUserToDict(user))
+            ae_members = []
+            for user in users:
+                if(user.n_adherent and user.uid not in [u["uid"] for u in ae_members]):
+                    ae_members.append(ldapUserToDict(user))
 
-                # If the user requested an additional filter
-                if(request.GET.get('special', 'false') == 'true'):
-                    print(request.GET)
-                    # Default to current just in case, uses less data
-                    type = request.GET.get('search_type', 'current')
-                    now = date.today()
+            # If the user requested an additional filter
+            if(request.GET.get('special', 'false') == 'true'):
+                # Default to current just in case, uses less data
+                type = request.GET.get('search_type', 'current')
+                ae_members = self.applySpecialFilter(ae_members, type)
 
-                    i = 0
-                    while i < len(ae_members):
-                        print(i, len(ae_members))
-                        end = ae_members[i]['end']
-                        end = date(int(end[0:4]), int(end[4:6]), int(end[6:8]))
-                        if(type == 'former' and end > now):
-                            ae_members.pop(i)
-                            i-=1
-                        elif(type == 'current' and end <= now):
-                            ae_members.pop(i)
-                            i-=1
-                        i+=1
-
-                return JsonResponse({"results": ae_members})
-            else:
-                return JsonResponse(
-                    {"error": _("La recherche ne peux pas être vide")},
-                )
+            return JsonResponse({"results": ae_members})
         else:
             raise Http404("Not found")
 
@@ -147,7 +148,7 @@ class GetAdmins(View):
 
 def checkDate(date):
     """
-    Checks the validity of a date
+    Checks the validity of a date from the dates_member LDAP field
     """
     try:
         y,m,d = [int(date[0:4]),int(date[4:6]),int(date[6:8])]

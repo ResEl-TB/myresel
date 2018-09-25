@@ -155,6 +155,10 @@
               </div>
             </div>
           </form>
+          <strong>
+            <span class="fa fa-lightbulb-o"></span>
+            {% trans "Cliquez sur un résultat pour ouvrir le formulaire." %}
+          </strong>
           <search-spinner v-if="loading"></search-spinner>
           <btable-header
             v-if="search_results.length > 0"

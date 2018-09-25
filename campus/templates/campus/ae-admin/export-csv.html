@@ -127,6 +127,10 @@ data-offstyle="danger" data-size="small">
               </div>
             </div>
           </form>
+          <strong>
+            <span class="fa fa-lightbulb-o"></span>
+            {% trans "Laisser vide pour récupérer tous les résultats." %}
+          </strong>
           <button v-if="search_results.length > 0"
           v-on:click="createCSV" class="btn btn-success pull-right">
             {% trans 'Exporter' %}
