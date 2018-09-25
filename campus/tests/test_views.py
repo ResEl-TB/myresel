@@ -1018,8 +1018,33 @@ class AEAjaxTestCase(TestCase):
             HTTP_HOST="10.0.3.94"
         )
         self.assertEqual(r.status_code, 200)
-        self.assertFalse(r.json().get('results', False))
-        self.assertTrue(r.json().get('error', False))
+        self.assertTrue(r.json().get('results', False))
+
+    def testAEMemberSpecialSearchFormer(self):
+        user = LdapUser.get(pk='jdoe')
+        user.dates_membre = ["20160901-20160831"]
+        user.save()
+        r = self.client.get(
+            reverse("campus:ae-admin:search-members"),
+            {'filter': 'john', 'special': 'true', 'search_type': 'former'},
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            HTTP_HOST="10.0.3.94"
+        )
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue('jdoe' in (el['uid'] for el in r.json().get('results', [])))
+
+    def testAEMemberSpecialSearchCurrent(self):
+        user = LdapUser.get(pk='jdoe')
+        user.dates_membre = ["20160901-20160831"]
+        user.save()
+        r = self.client.get(
+            reverse("campus:ae-admin:search-members"),
+            {'filter': 'john', 'special': 'true', 'search_type': 'current'},
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            HTTP_HOST="10.0.3.94"
+        )
+        self.assertEqual(r.status_code, 200)
+        self.assertFalse('jdoe' in (el['uid'] for el in r.json().get('results', [])))
 
     def testSimpleCSVImport(self):
         user = LdapUser.get(pk='jdoe')
