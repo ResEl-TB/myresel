@@ -120,6 +120,11 @@
   background-color: rgba(160, 57, 203, 0.1);
 }
 
+.mendatory-field::after {
+  content: "*";
+  color: red;
+}
+
 .trash-red {
   color: rgb(255, 0, 0);
   cursor: pointer;

@@ -445,6 +445,12 @@
               </form>
             </div>
             <div class="modal-footer">
+              <div v-if="success" class="alert alert-success text-center">
+                {% trans 'Utilisateur ajouté !'%}
+              </div>
+              <div v-if="error != ''" class="alert alert-danger text-center">
+                [[error]]
+              </div>
             </div>
           </div>
         </div>
