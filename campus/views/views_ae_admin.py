@@ -13,6 +13,7 @@ from gestion_personnes.forms import InscriptionForm
 from fonctions.decorators import ae_admin_required
 
 from fonctions import ldap
+from ldapback.backends.ldap.base import Ldap
 from datetime import datetime, date
 
 import re
@@ -70,7 +71,7 @@ class GetUsers(View):
                         (mail=*{0}*)
                         (registeredaddress=*{0}*)
                         (uidnumber={0})
-                    )""".format(ldap.sanitize(search_filter))
+                    )""".format(Ldap.sanitize(search_filter))
                 )
                 if not res:
                     res = []
