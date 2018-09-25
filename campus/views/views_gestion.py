@@ -9,8 +9,10 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext as _
 
+from fonctions.decorators import ae_admin_required
 
 @method_decorator(login_required, name="dispatch")
+@method_decorator(ae_admin_required, name="dispatch")
 class ManageCampusModo(View):
 
     template_name = 'campus/gestion/manage_modo.html'
@@ -29,6 +31,7 @@ class ManageCampusModo(View):
 
 
 @method_decorator(login_required, name="dispatch")
+@method_decorator(ae_admin_required, name="dispatch")
 class AddCampusModo(View):
 
     template_name = 'campus/gestion/manage_modo.html'
@@ -54,6 +57,7 @@ class AddCampusModo(View):
 
 
 @method_decorator(login_required, name="dispatch")
+@method_decorator(ae_admin_required, name="dispatch")
 class RemoveCampusModo(View):
 
     template_name = 'campus/gestion/manage_modo.html'

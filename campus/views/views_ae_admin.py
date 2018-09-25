@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from django.views.generic import View
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 from django.http import Http404, JsonResponse
 from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
@@ -8,6 +10,7 @@ from gestion_personnes.models import LdapUser
 from django.core.exceptions import ObjectDoesNotExist
 
 from gestion_personnes.forms import InscriptionForm
+from fonctions.decorators import ae_admin_required
 
 from fonctions import ldap
 from datetime import datetime, date
@@ -16,6 +19,8 @@ import re
 
 #TODO: AUTH + TESTS !!!!!
 
+@method_decorator(login_required, name="dispatch")
+@method_decorator(ae_admin_required, name="dispatch")
 class AdminHome(View):
 
     template_name = 'campus/ae-admin/home.html'
@@ -23,7 +28,6 @@ class AdminHome(View):
     def get(self, request):
         return render(request, self.template_name, {})
 
-# WIP
 
 def ldapUserToDict(user):
     if user.dates_membre:
@@ -43,6 +47,8 @@ def ldapUserToDict(user):
         "end": dates[1],
     })
 
+@method_decorator(login_required, name="dispatch")
+@method_decorator(ae_admin_required, name="dispatch")
 class GetUsers(View):
     """
     Ajax view searching for users in the school LDAP.
@@ -83,6 +89,8 @@ class GetUsers(View):
         else:
             raise Http404("Not found")
 
+@method_decorator(login_required, name="dispatch")
+@method_decorator(ae_admin_required, name="dispatch")
 class GetMembers(View):
     """
     Ajax view searching for and returning a list of AE members.
@@ -130,6 +138,8 @@ class GetMembers(View):
         else:
             raise Http404("Not found")
 
+@method_decorator(login_required, name="dispatch")
+@method_decorator(ae_admin_required, name="dispatch")
 class GetAdmins(View):
 
     def get(self, request):
@@ -160,6 +170,8 @@ def checkDate(date):
         is_okay = False
     return is_okay
 
+@method_decorator(login_required, name="dispatch")
+@method_decorator(ae_admin_required, name="dispatch")
 class AddUser(View):
     """
     Ajax view adding a new member.
@@ -200,6 +212,8 @@ class AddUser(View):
 
         return JsonResponse({"success": True})
 
+@method_decorator(login_required, name="dispatch")
+@method_decorator(ae_admin_required, name="dispatch")
 class EditUser(View):
     """
     Ajax view editing existing member
@@ -239,6 +253,8 @@ class EditUser(View):
 
         return JsonResponse({"success": True})
 
+@method_decorator(login_required, name="dispatch")
+@method_decorator(ae_admin_required, name="dispatch")
 class AddAdmin(View):
     """
     Ajax view to add a new admin
@@ -259,6 +275,8 @@ class AddAdmin(View):
 
         return JsonResponse({'success': 'true'})
 
+@method_decorator(login_required, name="dispatch")
+@method_decorator(ae_admin_required, name="dispatch")
 class DeleteAdmin(View):
     """
     Ajax view to remove an admin
