@@ -62,13 +62,13 @@
           method: "GET",
           data: {filter: this.filter, ldap: ldap},
 
-          success: function(data){
+          success: function(ldap_results){
             this.search_results = [];
-            this.loaded_from_school = data.from_school_ldap;
+            this.loaded_from_school = ldap_results.from_school_ldap;
             if(this.loaded_from_school){
-              for(let user of data['results']){
+              for(let user of ldap_results['results']){
                 user = JSON.parse(user).attributes;
-                training = String(user.title).split(' ')
+                training = String(user.title).toLowerCase().split(' ')
                 switch (true) {
                   case training.indexOf("IG") != -1:
                     training = "FIG"
@@ -107,7 +107,7 @@
                 })
               }
             }else{
-              for(let user of data['results']){
+              for(let user of ldap_results['results']){
                 this.search_results.push({
                   "uid": user.uid,
                   "first_name": user.first_name,

@@ -128,7 +128,7 @@ def correct_vlan(function=None, redirect_to='home'):
             if network.is_resel_ip(ip) and not re.match(r'^172.22.22[4-5]', ip) and request.META['VLAN'] == '995':
                 messages.error(request, _("Votre machine est déjà inscrite. Veuillez vous connecter sur le réseau Wi-Fi ResEl Secure."))
                 return HttpResponseRedirect(reverse(redirect_to))
-            
+
             return view_func(request, *args, **kwargs)
 
         _view.__name__ = view_func.__name__
@@ -143,7 +143,7 @@ def correct_vlan(function=None, redirect_to='home'):
         return _dec(function)
 
 def ae_required(function, redirect_to='campus:rooms:calendar'):
-    """ 
+    """
     Checks if the user is a valid ae member
     """
 
@@ -168,7 +168,7 @@ def ae_required(function, redirect_to='campus:rooms:calendar'):
 
 def ae_admin_required(function, redirect_to='campus:home'):
     """
-    Cehck if the user has ae_admin attribute
+    Check if the user has ae_admin attribute
     """
     def _dec(view_func):
         @wraps(view_func, assigned=available_attrs(view_func))

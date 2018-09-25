@@ -87,7 +87,6 @@
       createCSV: function(){
         csv_lines = [`UID,Prenom,Nom,Formation,Campus,Numero d'Adherent,Type de Paiement(CB/Chèque/Lydia/Espèces),Paiment,Date debut,Date fin`];
         for(let result of this.search_results){
-          console.log(result.payment)
           csv_lines.push([
             result.uid,
             result.first_name,
@@ -102,7 +101,7 @@
           ].join(','));
         }
         csv = csv_lines.join('\n');
-        download('export.csv', csv)
+        download('export.csv', csv, 'text/csv')
       }
     },
     template:

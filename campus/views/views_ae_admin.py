@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from django.views.generic import View
+from django.views.generic import View, TemplateView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, JsonResponse
@@ -17,23 +17,23 @@ from datetime import datetime, date
 
 import re
 
-#TODO: AUTH + TESTS !!!!!
+# Error codes for the frontend
+USER_NOT_FOUND = 1
+INVALID_DATES = 2
+MISSING_FIELD = 3
 
 @method_decorator(login_required, name="dispatch")
 @method_decorator(ae_admin_required, name="dispatch")
-class AdminHome(View):
+class AdminHome(TemplateView):
 
     template_name = 'campus/ae-admin/home.html'
 
-    def get(self, request):
-        return render(request, self.template_name, {})
 
-
-def ldapUserToDict(user):
+def ae_user_to_dict(user):
+    ae_dates = ['', '']
     if user.dates_membre:
-        dates = user.dates_membre[-1].split('-')
-    else:
-        dates = ['','']
+        ae_dates = user.dates_membre[-1].split('-')
+
     return({
         "uid": user.uid,
         "first_name": user.first_name,
@@ -43,8 +43,8 @@ def ldapUserToDict(user):
         "payment": user.mode_paiement,
         "payment_value": user.ae_cotiz,
         "n_adherent": user.n_adherent,
-        "start": dates[0],
-        "end": dates[1],
+        "start": ae_dates[0],
+        "end": ae_dates[1],
     })
 
 @method_decorator(login_required, name="dispatch")
@@ -58,9 +58,9 @@ class GetUsers(View):
     search_keys = ['first_name', 'last_name', 'mail', 'promo', 'uid']
 
     def get(self, request):
-        filter = request.GET.get('filter', '')
+        search_filter = request.GET.get('filter', '')
         which_ldap = request.GET.get('ldap', 'resel')
-        if request.is_ajax() and filter != '':
+        if request.is_ajax() and search_filter != '':
             if which_ldap == 'school':
                 res = ldap.search_ecole(
                     """(|
@@ -70,7 +70,7 @@ class GetUsers(View):
                         (mail=*{0}*)
                         (registeredaddress=*{0}*)
                         (uidnumber={0})
-                    )""".format(filter)
+                    )""".format(ldap.sanitize(search_filter))
                 )
                 if not res:
                     res = []
@@ -78,11 +78,11 @@ class GetUsers(View):
                 res = []
                 uids = []
                 for key in self.search_keys:
-                    users = LdapUser.filter(**{key+"__contains": filter})
+                    users = LdapUser.filter(**{key+"__contains": search_filter})
                     for user in users:
                         if user.uid not in uids:
                             uids.append(user.uid)
-                            res.append(ldapUserToDict(user))
+                            res.append(ae_user_to_dict(user))
             return JsonResponse({
                 "results": res, "from_school_ldap": which_ldap == 'school'
             })
@@ -97,7 +97,7 @@ class GetMembers(View):
     """
     search_keys = ['first_name', 'last_name', 'mail', 'promo']
 
-    def applySpecialFilter(self, ae_members, type):
+    def applySpecialFilter(self, ae_members, filter_type):
         now = date.today()
 
         i = 0
@@ -105,34 +105,36 @@ class GetMembers(View):
             end = ae_members[i]['end']
             if checkDate(end):
                 end = date(int(end[0:4]), int(end[4:6]), int(end[6:8]))
-                if(type == 'former' and end > now):
+                if(filter_type == 'former' and end > now):
                     ae_members.pop(i)
-                    i-=1
-                elif(type == 'current' and end <= now):
+                elif(filter_type == 'current' and end <= now):
                     ae_members.pop(i)
-                    i-=1
-            i+=1
+                else:
+                    i+=1
+            else:
+                i+=1
         return ae_members
 
     def get(self, request):
         if request.is_ajax():
-            filter = request.GET.get('filter', '')
-            if not filter:
+            search_filter = request.GET.get('filter', '')
+            if not search_filter:
+                #TODO: Improve this line for filtered requests
                 users = LdapUser.all()
             else:
                 users = []
                 for key in self.search_keys:
-                    users += LdapUser.filter(**{key+"__contains": filter})
+                    users += LdapUser.filter(**{key+"__contains": search_filter})
             ae_members = []
             for user in users:
                 if(user.n_adherent and user.uid not in [u["uid"] for u in ae_members]):
-                    ae_members.append(ldapUserToDict(user))
+                    ae_members.append(ae_user_to_dict(user))
 
             # If the user requested an additional filter
             if(request.GET.get('special', 'false') == 'true'):
                 # Default to current just in case, uses less data
-                type = request.GET.get('search_type', 'current')
-                ae_members = self.applySpecialFilter(ae_members, type)
+                filter_type = request.GET.get('search_type', 'current')
+                ae_members = self.applySpecialFilter(ae_members, filter_type)
 
             return JsonResponse({"results": ae_members})
         else:
@@ -144,9 +146,9 @@ class GetAdmins(View):
 
     def get(self, request):
         if request.is_ajax():
-            aeAdmins = LdapUser.filter(**{"ae_admin": "TRUE"})
+            ae_admins = LdapUser.filter(**{"ae_admin": "TRUE"})
             admins = []
-            for admin in aeAdmins:
+            for admin in ae_admins:
                 admins.append({
                     'uid': admin.uid,
                     'first_name': admin.first_name,
@@ -184,13 +186,13 @@ class AddUser(View):
         start = request.POST.get('start', '').strip()
         end = request.POST.get('end', '').strip()
         if not (checkDate(start) and checkDate(end)):
-            return JsonResponse({"error": 2})
+            return JsonResponse({"error": INVALID_DATES})
 
         user.first_name = request.POST.get('first_name', '')
         user.last_name = request.POST.get('last_name', '')
 
         if(user.first_name == '' or user.last_name == ''):
-            return JsonResponse({"error": 3})
+            return JsonResponse({"error": MISSING_FIELD})
 
         user.uid = InscriptionForm.get_free_uid(user.first_name, user.last_name)
         user.promo = request.POST.get('promo', '')
@@ -201,7 +203,7 @@ class AddUser(View):
 
         if(not user.promo or not user.mail or not user.mail or \
            not user.formation or not user.campus or not user.n_adherent):
-            return JsonResponse({"error": 3})
+            return JsonResponse({"error": MISSING_FIELD})
 
         user.mode_paiement = request.POST.get('payment', '')
         user.ae_cotiz = request.POST.get('payment_value', '')
@@ -224,14 +226,14 @@ class EditUser(View):
         try:
             user = LdapUser.get(pk=uid)
         except ObjectDoesNotExist:
-            return JsonResponse({"error": 1})
+            return JsonResponse({"error": USER_NOT_FOUND})
 
         # The user is a member or is being added
         if(user.n_adherent or request.POST.get('n_adherent', '') != ''):
             start = request.POST.get('start', '').strip()
             end = request.POST.get('end', '').strip()
             if not (checkDate(start) and checkDate(end)):
-                return JsonResponse({"error": 2})
+                return JsonResponse({"error": INVALID_DATES})
 
             # If new n_adherent => new set of dates
             if(user.n_adherent != request.POST.get('n_adherent', '') and\
@@ -249,7 +251,7 @@ class EditUser(View):
             user.ae_cotiz = request.POST.get('payment_value', '')
             user.save()
         else:
-            return JsonResponse({"error": 1})
+            return JsonResponse({"error": USER_NOT_FOUND})
 
         return JsonResponse({"success": True})
 
@@ -281,22 +283,26 @@ class DeleteAdmin(View):
     """
     Ajax view to remove an admin
     """
+    # TODO: Maybe switch to delete method ?
     def post(self, request):
-        uid = request.POST.get('uid', '')
+        if request.is_ajax():
+            uid = request.POST.get('uid', '')
 
-        try:
-            user = LdapUser.get(pk=uid)
-        except ObjectDoesNotExist:
-            return JsonResponse({"error": _('Utilisateur introuvable')})
+            try:
+                user = LdapUser.get(pk=uid)
+            except ObjectDoesNotExist:
+                return JsonResponse({"error": _('Utilisateur introuvable')})
 
-        if(not user.ae_admin):
-            return JsonResponse({"error": _('Cet utilisateur n\'est pas admin')})
+            if(not user.ae_admin):
+                return JsonResponse({"error": _('Cet utilisateur n\'est pas admin')})
 
-        if(user.uid == request.user.username):
-            return JsonResponse({"error": _('Vous ne pouvez pas vous supprimer\
-            de la liste')})
+            if(user.uid == request.user.username):
+                return JsonResponse({"error": _('Vous ne pouvez pas vous supprimer\
+                de la liste')})
+            else:
+                user.ae_admin = False
+                user.save()
+
+            return JsonResponse({'success': 'true'})
         else:
-            user.ae_admin = False
-            user.save()
-
-        return JsonResponse({'success': 'true'})
+            raise Http404
