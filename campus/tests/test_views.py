@@ -998,6 +998,26 @@ class AEAjaxTestCase(TestCase):
         user.save()
         self.client.login(username="jbvallad", password="blabla")
 
+    def testSimpleLoadAEAdmin(self):
+        r = self.client.get(
+            reverse("campus:ae-admin:home"),
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            HTTP_HOST="10.0.3.94"
+        )
+        self.assertTrue(r.status_code == 200)
+
+    def testPlebsCannotAccess(self):
+        user = LdapUser.get(pk="jdoe")
+        user.ae_admin = False
+        user.save()
+        self.client.login(username="jdoe", password="blah")
+        r = self.client.get(
+            reverse("campus:ae-admin:home"),
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            HTTP_HOST="10.0.3.94"
+        )
+        self.assertTrue(r.status_code == 302)
+
     def testSimpleAEMemberSearch(self):
         r = self.client.get(
             reverse("campus:ae-admin:search-members"),
