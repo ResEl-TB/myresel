@@ -154,12 +154,17 @@
                 <input class="form-control" v-model="filter" type="text"></input>
               </div>
             </div>
+            <div class="text-right">
+              <button class="btn btn-default margin-bottom">
+                <span class="fa fa-search"></span> Rechercher
+              </button>
+            </div>
           </form>
-          <strong>
+          <search-spinner v-if="loading"></search-spinner>
+          <strong v-if="search_results.length > 0">
             <span class="fa fa-lightbulb-o"></span>
             {% trans "Cliquez sur un résultat pour ouvrir le formulaire." %}
           </strong>
-          <search-spinner v-if="loading"></search-spinner>
           <btable-header
             v-if="search_results.length > 0"
           ></btable-header>

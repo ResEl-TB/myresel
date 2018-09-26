@@ -93,6 +93,10 @@
   margin: 20px;
 }
 
+.margin-bottom {
+  margin-bottom: 15px;
+}
+
 #error-details {
   margin-top: 2em;
 }
