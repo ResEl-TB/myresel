@@ -29,6 +29,15 @@
   border-top: 0px;
 }
 
+.clickable {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.clickable:hover {
+  background-color: rgb(249, 249, 249);
+}
+
 .table-header {
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;

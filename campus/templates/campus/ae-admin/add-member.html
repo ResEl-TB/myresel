@@ -164,6 +164,7 @@
             v-if="search_results.length > 0"
           ></btable-header>
           <search-member-result
+            class="clickable"
             v-for="result, key in search_results"
             :result="result"
             :key="key"
