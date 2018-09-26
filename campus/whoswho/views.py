@@ -214,7 +214,7 @@ class RequestUser(View):
             res = LdapUser.filter(uid__contains=what)
             res += LdapUser.filter(first_name__contains=what)
             res += LdapUser.filter(last_name__contains=what)
-            res = list(dict((obj.first_name, obj) for obj in res).values())[:20]
+            res = list(dict((obj.uid, obj) for obj in res).values())[:20]
             results = []
             if res:
                 for user in res:
@@ -227,7 +227,6 @@ class RequestUser(View):
                     }
                     user_json['value'] = user.uid
                     results.append(user_json)
-
             data = json.dumps(results)
             mimetype = 'application/json'
             return HttpResponse(data, mimetype)

@@ -1,0 +1,187 @@
+{% load i18n %}
+{% load staticfiles %}
+
+<script type="text/javascript">
+
+  ///////////////////////////////////////////////
+  //////////////   Import CSV    ///////////////
+  ///////////////////////////////////////////////
+
+  const ImportMembers = Vue.component('import-member', {
+    props: [],
+    delimiters: ['[[',']]'],
+    template:
+    `
+      <div class="well">
+        <section-title
+          :title="'{% trans 'Importer depuis un Tableur' %}'"
+          :component="'import-csv-button'"
+        ></section-title>
+      </div>
+    `
+  })
+
+  const ImportCSVButton = Vue.component('import-csv-button', {
+    props: [],
+    delimiters: ['[[',']]'],
+    data: function(){
+      return({
+        processing: false,
+        results: [],
+        ignored: 0,
+      })
+    },
+    methods: {
+      get_csv: function(e){
+        $('#fake-csv-input').html("{% trans 'Analyse en cours ...' %}");
+        this.processing = true;
+        file = e.target.files[0];
+
+        if(file && ['application/vnd.ms-excel', 'text/csv'].includes(file.type))
+        {
+          reader = new FileReader();
+          reader.onload = function(f){
+            this.process_csv(f.target.result);
+          }.bind(this)
+          reader.readAsText(file);
+        }
+        else
+        {
+          $('#fake-csv-input').html("{% trans 'Aucun CSV détecté' %}")
+          this.processing = false;
+        }
+      },
+
+      process_csv: function(csv) {
+        this.ignored = 0;
+        this.results = [];
+        lines = csv.split("\n");
+        lines.splice(0,1);
+        nextID = 0;
+        for(let line of lines){
+          var el = line.split(',');
+          if(el.length == number_of_fields){
+            this.results.push({
+              id: nextID,
+              uid: el[0],
+              first_name: el[1],
+              last_name: el[2],
+              training: el[3],
+              campus: el[4],
+              n_adherent: el[5],
+              payment: el[6],
+              payment_value: el[7],
+              start: el[8],
+              end: el[9].replace(/\s/gi, ''),
+            });
+            nextID++;
+          }
+          else {
+            this.ignored += 1;
+          }
+        }
+        this.processing = false;
+        if(this.results.length > 0){
+          var old_results = $('.err');
+          $.each(old_results, function(index, value){
+            old_results[index].className = 'row text-center search-result';
+          })
+          $('#fake-csv-input').html('Importer un CSV');
+        }else{
+          $('#fake-csv-input').html('Aucune ligne valide');
+        }
+        $('#csv-input').val("");
+      }
+    },
+    template:
+    `
+      <div class="row">
+        <p class="text-center">
+          {% trans 'Le fichier doit être au format .csv (séparateur: virgules) avec les colonnes suivantes :' %}<br/>
+          <strong>
+          {% trans "UID | Nom | Prénom | Formation | Campus | Numéro d'adhérent | Type de paiement | Montant du paiement | Date début | Date fin" %}
+          </strong>
+        </p>
+        <form id="csv-form">
+          <div id="fake-csv-input">{% trans 'Importer un CSV'%}</div>
+          <input type="file" id="csv-input" v-on:change="get_csv">
+        </form>
+        <search-spinner v-if="processing"></search-spinner>
+        <import-results
+          v-if="results.length > 0"
+          v-bind:results="results"
+          v-bind:ignored="ignored"
+        ></import-results>
+      </div>
+    `
+  })
+
+  const ImportResults = Vue.component('import-results', {
+    props: ['results', 'ignored'],
+    delimiters: ['[[',']]'],
+    data: function() {
+      return({
+        err_classes: {
+          "1": 'err err-uid',
+          "2": 'err err-date',
+          "3": 'err err-value',
+        }
+      })
+    },
+    methods: {
+      send_results: function(results){
+        if(results.length > 0){
+          setup_CSRF();
+          for(let result of results){
+            $.ajax({
+              url: "{% url 'campus:ae-admin:edit-user' %}",
+              method: "POST",
+              async: true,
+              data: result,
+              success: function(data){
+                if(data['error']){
+                  $('#res-'+result.id).addClass(this.err_classes[data['error']]);
+                }else{
+                  $('#res-'+result.id).addClass('err err-ok');
+                }
+              }.bind(this),
+              error: function(data){
+                $('#res-'+result.id).addClass('err err-unknown');
+              }
+            })
+          }
+        }
+      }
+    },
+    template:
+    `
+      <div class="margin">
+        <h3>[[ignored]] {% trans 'ligne(s) ignorée(s).' %}</h3>
+        <strong>
+          {% trans 'Note: La première ligne est toujours ignorée.' %}
+        </strong>
+        <p id="error-details">
+          {% trans 'Légende:' %}
+          <span class="err-uid">{% trans 'Utilisateur introuvable' %}</span>
+          <span class="err-date">{% trans 'Date invalide' %}</span>
+          <span class="err-value">{% trans 'Autre valeur invalide' %}</span>
+          <span class="err-unknown">{% trans 'Erreur inconnue' %}</span>
+          <span class="err-ok">{% trans 'Tout est bon' %}</span>
+          <span>{% trans 'En attente' %}</span>
+        </p>
+        <btable-header></btable-header>
+        <search-member-result
+          v-for="result in results"
+          v-bind:result="result"
+          v-bind:key="result.id"
+        >
+        </search-member-result>
+        <table-footer></table-footer>
+        <h4 class="text-center">[[results.length]] {%trans 'entrées'%}</h4>
+        <button class="btn btn-success pull-right" v-on:click="send_results(results)">
+          Je valide ces modifications
+        </button>
+      </div>
+    `
+  })
+</script>

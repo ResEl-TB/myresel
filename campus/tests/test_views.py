@@ -973,3 +973,299 @@ class CampusHomeTestCase(TestCase):
         self.client.login(username="jbvallad", password="blabla")
         r = self.client.get(reverse("campus:home"), HTTP_HOST="10.0.3.94")
         self.assertEqual(r.status_code, 200)
+
+# AE Admin ajax tests
+
+class AEAjaxTestCase(TestCase):
+    def setUp(self):
+        try_delete_user("jdoe")
+        try_delete_user("jbvallad")
+
+        user = LdapUser()
+        user.uid = 'jdoe'
+        user.first_name = "John"
+        user.last_name = "Doe"
+        user.user_password = "blah"
+        user.mail = "jogn.doe@resel.fr"
+        user.promo = 2016
+        user.n_adherent = "16156"
+        user.dates_membre = ["20160901-20170831"]
+        user.nt_password = user.user_password
+        user.save()
+
+        user = create_full_user(uid="jbvallad", pwd="blabla")
+        user.ae_admin = True
+        user.save()
+        self.client.login(username="jbvallad", password="blabla")
+
+    def testSimpleLoadAEAdmin(self):
+        r = self.client.get(
+            reverse("campus:ae-admin:home"),
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            HTTP_HOST="10.0.3.94"
+        )
+        self.assertTrue(r.status_code == 200)
+
+    def testPlebsCannotAccess(self):
+        user = LdapUser.get(pk="jdoe")
+        user.ae_admin = False
+        user.save()
+        self.client.login(username="jdoe", password="blah")
+        r = self.client.get(
+            reverse("campus:ae-admin:home"),
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            HTTP_HOST="10.0.3.94"
+        )
+        self.assertTrue(r.status_code == 302)
+
+    def testSimpleAEMemberSearch(self):
+        r = self.client.get(
+            reverse("campus:ae-admin:search-members"),
+            {'filter': 'john'},
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            HTTP_HOST="10.0.3.94"
+        )
+        self.assertTrue(r.status_code == 200)
+        self.assertFalse(r.json().get('error', False))
+        self.assertTrue(len(r.json()['results']) >= 1)
+
+
+    def testSimpleAEMemberEmptySearch(self):
+        r = self.client.get(
+            reverse("campus:ae-admin:search-members"),
+            {'filter': ''},
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            HTTP_HOST="10.0.3.94"
+        )
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue(r.json().get('results', False))
+
+    def testAEMemberSpecialSearchFormer(self):
+        user = LdapUser.get(pk='jdoe')
+        user.dates_membre = ["20160901-20160831"]
+        user.save()
+        r = self.client.get(
+            reverse("campus:ae-admin:search-members"),
+            {'filter': 'john', 'special': 'true', 'search_type': 'former'},
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            HTTP_HOST="10.0.3.94"
+        )
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue('jdoe' in (el['uid'] for el in r.json().get('results', [])))
+
+    def testAEMemberSpecialSearchCurrent(self):
+        user = LdapUser.get(pk='jdoe')
+        user.dates_membre = ["20160901-20160831"]
+        user.save()
+        r = self.client.get(
+            reverse("campus:ae-admin:search-members"),
+            {'filter': 'john', 'special': 'true', 'search_type': 'current'},
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            HTTP_HOST="10.0.3.94"
+        )
+        self.assertEqual(r.status_code, 200)
+        self.assertFalse('jdoe' in (el['uid'] for el in r.json().get('results', [])))
+
+    def testSimpleCSVImport(self):
+        user = LdapUser.get(pk='jdoe')
+        r = self.client.post(
+            reverse("campus:ae-admin:edit-user"),
+            {
+                'uid': 'jdoe',
+                'start': '20160901',
+                'end': '20170820',
+                'first_name': "John",
+                'last_name': "Doe",
+                'n_adherent': "16156",
+            },
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            HTTP_HOST="10.0.3.94"
+        )
+        user_updated = LdapUser.get(pk='jdoe')
+        self.assertEqual(r.status_code, 200)
+        self.assertFalse(r.json().get('error', False))
+        self.assertNotEqual(user_updated.dates_membre[-1], user.dates_membre[-1])
+
+    def testInvalidDatesCSVImport(self):
+        user = LdapUser.get(pk='jdoe')
+        # Some invalid dates that the system is supposed to catch
+        invalid_start_dates = [
+            '201609011', #Too long
+            '2016090',   #Too short
+            '00000901',  #Invalid year
+            '20161301',  #Invalid month
+            '20160932',  #Invalid day
+            '20160a011'  #Invalid caracter
+        ]
+        for start in invalid_start_dates:
+            r = self.client.post(
+                reverse("campus:ae-admin:edit-user"),
+                {
+                    'uid': 'jdoe',
+                    'start': start,
+                    'end': '20170810',
+                    'first_name': "John",
+                    'last_name': "Doe",
+                    'n_adherent': "16156",
+                },
+                HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+                HTTP_HOST="10.0.3.94"
+            )
+            user_updated = LdapUser.get(pk='jdoe')
+            self.assertEqual(r.status_code, 200)
+            self.assertTrue(r.json().get('error', False))
+            self.assertEqual(user_updated.dates_membre[-1], user.dates_membre[-1])
+
+    def testInvalidUserCSVImport(self):
+        r = self.client.post(
+            reverse("campus:ae-admin:edit-user"),
+            {
+                'uid': 'jdoeeeeeee',
+                'start': '20160901',
+                'end': '20170820',
+                'first_name': "John",
+                'last_name': "Doe",
+                'n_adherent': "16156",
+            },
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            HTTP_HOST="10.0.3.94"
+        )
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue(r.json().get('error', False))
+
+    def testSimpleAEAdminAddition(self):
+        user = LdapUser.get(pk='jdoe')
+        user.ae_admin = False
+        user.save()
+        r = self.client.post(
+            reverse("campus:ae-admin:add-admin"),
+            {'uid': 'jdoe'},
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            HTTP_HOST="10.0.3.94"
+        )
+        user_updated = LdapUser.get(pk='jdoe')
+        self.assertTrue(r.status_code == 200)
+        self.assertFalse(r.json().get('error', False))
+        self.assertTrue(user_updated.ae_admin)
+
+    def testInvalidAEAdminAddition(self):
+        r = self.client.post(
+            reverse("campus:ae-admin:add-admin"),
+            {'uid': 'jdoooooooooe'},
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            HTTP_HOST="10.0.3.94"
+        )
+        self.assertTrue(r.status_code == 200)
+        self.assertTrue(r.json().get('error', False))
+
+    def testAlreadyAEAdminAddition(self):
+        user = LdapUser.get(pk='jdoe')
+        user.ae_admin = True
+        user.save()
+        r = self.client.post(
+            reverse("campus:ae-admin:add-admin"),
+            {'uid': 'jdoe'},
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            HTTP_HOST="10.0.3.94"
+        )
+        user_updated = LdapUser.get(pk='jdoe')
+        self.assertTrue(r.status_code == 200)
+        self.assertTrue(r.json().get('error', False))
+
+    def testSimpleAdminRemoval(self):
+        user = LdapUser.get(pk='jdoe')
+        user.ae_admin = True
+        user.save()
+        r = self.client.post(
+            reverse("campus:ae-admin:delete-admin"),
+            {'uid': 'jdoe'},
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            HTTP_HOST="10.0.3.94"
+        )
+        user_updated = LdapUser.get(pk='jdoe')
+        self.assertTrue(r.status_code == 200)
+        self.assertFalse(r.json().get('error', False))
+        self.assertFalse(user_updated.ae_admin)
+
+    def testInvalidAdminRemoval(self):
+        user = LdapUser.get(pk='jdoe')
+        user.ae_admin = False
+        user.save()
+        r = self.client.post(
+            reverse("campus:ae-admin:delete-admin"),
+            {'uid': 'jdoe'},
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            HTTP_HOST="10.0.3.94"
+        )
+        self.assertTrue(r.status_code == 200)
+        self.assertTrue(r.json().get('error', False))
+
+    def testInvalidAdminRemovalSelf(self):
+        r = self.client.post(
+            reverse("campus:ae-admin:delete-admin"),
+            {'uid': 'jbvallad'},
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            HTTP_HOST="10.0.3.94"
+        )
+        self.assertTrue(r.status_code == 200)
+        self.assertTrue(r.json().get('error', False))
+
+    def testGetAdmins(self):
+        user = LdapUser.get(pk='jdoe')
+        user.ae_admin = True
+        user.save()
+        r = self.client.get(
+            reverse("campus:ae-admin:get-admins"),
+            {'uid': 'jdoe'},
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            HTTP_HOST="10.0.3.94"
+        )
+        self.assertTrue('jdoe' in [u['uid'] for u in r.json().get('results', [])]);
+
+    def testSimpleUserAddition(self):
+        try_delete_user("mx")
+        r = self.client.post(
+            reverse("campus:ae-admin:add-user"),
+            {
+                'first_name': "monsieur",
+                'last_name': "x",
+                'promo': "2019",
+                'email': 'jdoe@imt-atlantique.fr',
+                'training': 'FIG',
+                'campus': 'Brest',
+                'start': '20160901',
+                'end': '20170820',
+                'n_adherent': "16156",
+            },
+            HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+            HTTP_HOST="10.0.3.94"
+        )
+        self.assertEqual(r.status_code, 200)
+        self.assertFalse(r.json().get('error', False))
+        try:
+            LdapUser.get(pk="mx")
+        except ObjectDoesNotExist:
+            self.fail("User not created !")
+
+    def testUserAdditionMissingAttributes(self):
+        data = {
+            'first_name': "monsieur",
+            'last_name': "x",
+            'promo': "2019",
+            'email': 'jdoe@imt-atlantique.fr',
+            'training': 'FIG',
+            'campus': 'Brest',
+            'start': '20160901',
+            'end': '20170820',
+            'n_adherent': "16156",
+        }
+        for i in range(len(data.keys())):
+            data[list(data)[i]] = "";
+            r = self.client.post(
+                reverse("campus:ae-admin:add-user"),
+                data,
+                HTTP_X_REQUESTED_WITH='XMLHttpRequest',
+                HTTP_HOST="10.0.3.94"
+            )
+            self.assertEqual(r.status_code, 200)
+            self.assertTrue(r.json().get('error', False))

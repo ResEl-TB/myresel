@@ -1,0 +1,328 @@
+{% extends "base_campus.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block title %}{% trans "Admin AE" %}{% endblock %}
+{% block css %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/campus/ae-admin.css' %}">
+  <link href="{% static 'jquery/jquery-ui.min.css' %}" rel="Stylesheet"></link>
+  <link href="{% static 'css/vendors/bootstrap-toggle.min.css' %}" rel="Stylesheet"></link>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.datetimepicker.min.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container" id="app">
+  <div class="row">
+    <div class="col-md-12">
+      <h1 class="text-center title"> {% trans "Administration AE" %}</h1>
+      <hr/>
+    </div>
+  </div>
+  <transition name="fade">
+    <router-view></router-view>
+  </transition>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script src="{% static 'jquery/jquery-ui.min.js' %}"></script>
+<script src="{% static 'js/jquery.datetimepicker.full.min.js' %}"></script>
+<script src="{% static 'js/vendors/bootstrap-toggle.min.js'%}"></script>
+<script src="{% static 'js/vendors/vue.js' %}"></script>
+<script src="{% static 'js/vendors/vue-router.js' %}"></script>
+<script src="{% static 'js/tools/file-saver.js' %}"></script>
+<script src="{% static 'js/tools/getCookie.js' %}"></script>
+{% include "campus/ae-admin/export-csv.html" %}
+{% include "campus/ae-admin/import-csv.html" %}
+{% include "campus/ae-admin/add-member.html" %}
+{% include "campus/ae-admin/add-admin.html" %}
+{% include "campus/ae-admin/delete-admin.html" %}
+<script type="text/javascript">
+
+  // The number of fields expected in the search results
+  var number_of_fields = 10;
+
+  function setup_CSRF(){
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+          if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+          }
+        }
+    });
+  }
+
+  ///////////////////////////////////////////////
+  //////////    Home Menu components    /////////
+  ///////////////////////////////////////////////
+
+  section_links = [
+    {
+      id: 1,
+      title: "{% trans 'Ajouter/Éditer un membre AE' %}",
+      glyphicon: "glyphicon-remove-circle rotate-45",
+      url: "add-member"
+    },
+    {id: 2,
+      title: "{% trans 'Exporter vers un tableur' %}",
+      glyphicon: "glyphicon-download",
+      url: "export-member"
+    },
+    {id: 3,
+      title: "{% trans 'Importer depuis un tableur' %}",
+      glyphicon: "glyphicon-upload",
+      url: "import-member"
+    },
+    {id: 4,
+      title: "{% trans 'Ajouter un administrateur AE' %}",
+      glyphicon: "glyphicon-dashboard",
+      url: "add-admin"
+    },
+    {id: 5,
+      title: "{% trans 'Supprimer un administrateur AE' %}",
+      glyphicon: "glyphicon-remove-circle",
+      url: "del-admin"
+    }
+  ]
+
+  // The list of links to a section of the admin panel
+  const SectionLinks = Vue.component('section-links', {
+    props: [],
+    data: function () {
+      return {
+        section_links: section_links
+      }
+    },
+    computed : {
+      section_links_chuncks: function(){
+        links = [];
+        for(var i = 0, j = this.section_links.length; i<=j; i += 4){
+          links.push(this.section_links.slice(i, i+4));
+        }
+        return links
+      }
+    },
+    delimiters: ['[[', ']]'],
+    template:
+    `
+      <div>
+        <span v-for="links in section_links_chuncks">
+          <div class="row">
+            <section-link
+              v-for="link in links"
+              v-bind:title = "link.title"
+              v-bind:glyphicon = "link.glyphicon"
+              v-bind:url = link.url
+              v-bind:key = "link.id"
+            ></section-link>
+          </div>
+        </span>
+      </div>
+    `
+  })
+
+  // A link to a section of the admin panel
+  const SectionLink = Vue.component('section-link', {
+    props: ['title', 'glyphicon', 'url'],
+    delimiters: ['[[', ']]'],
+    template:
+    `
+      <router-link :to=url>
+        <div class="col-md-3 section-link">
+          <div class="col-md-12 well text-center">
+            <p>
+              <strong>[[ title ]]</strong>
+            </p>
+            <div class="link-icon glyphicon" v-bind:class=glyphicon></div>
+          </div>
+        </div>
+      </router-link>
+    `
+  })
+
+  ///////////////////////////////////////////////
+  ////////    Various stuff components    ///////
+  ///////////////////////////////////////////////
+
+  const SectionTitle = Vue.component('section-title', {
+    props: ['title', 'component'],
+    delimiters: ['[[', ']]'],
+    template:
+    `
+      <div>
+        <div class="row">
+          <div class="col-md-1">
+            <go-back-button></go-back-button>
+          </div>
+          <div class="col-md-10 text-center">
+            <h3>[[title]]</h3>
+          </div>
+        </div>
+        <component :is="component"></component>
+      </div>
+    `
+  })
+
+  // A loading spinner
+  const SearchSpinner = Vue.component('search-spinner', {
+    props: [],
+    template:
+    `
+      <div class="text-center loading">
+        <span class="fa fa-refresh fa-spin"></span>
+      </div>
+    `
+  })
+
+  // Button to go back in the router history
+  const GoBackButton = Vue.component('go-back-button', {
+    props: [],
+    delimiters: ['[[', ']]'],
+    methods: {
+      goBack () {
+        window.history.length > 1
+          ? this.$router.go(-1)
+          : this.$router.push('/')
+      },
+    },
+    template:
+    `
+      <button class="btn btn-default" v-on:click="goBack">
+        <span class="fa fa-chevron-left"></span>
+        Back
+      </button>
+    `
+  })
+
+  // A table header for tables made with bootstrap grid system
+  const BootstrapTableHeader = Vue.component('btable-header', {
+    props: [],
+    delimiters: ['[[', ']]'],
+    data: function(){
+      return({elements: [
+        {size: 1, text: "{% trans 'UID' %}"},
+        {size: 2, text: "{% trans 'Nom complet' %}"},
+        {size: 1, text: "{% trans 'Formation' %}"},
+        {size: 1, text: "{% trans 'Campus' %}"},
+        {size: 1, text: "{% trans 'N° Adherent' %}"},
+        {size: 1, text: "{% trans 'Type de Paiement' %}"},
+        {size: 1, text: "{% trans 'Paiement' %}"},
+        {size: 4, text: "{% trans 'Dernière adhésion' %}"},
+      ]})
+    },
+    template:
+    `
+      <div class="row text-center table-header search-result">
+        <div v-for="element in elements">
+        <div class="header-title" v-bind:class="'col-md-'+element.size">
+          <strong>[[element.text]]</strong>
+        </div>
+        </div>
+      </div>
+    `
+  })
+
+  // A result of the member research
+  const SearchMemberResult = Vue.component('search-member-result', {
+    props: ['result'],
+    delimiters: ['[[', ']]'],
+    template:
+    `
+      <div class="row text-center search-result" v-bind:id="'res-'+$vnode.key">
+      <span v-on:click="$emit('userClicked', result)">
+        <div class="col-md-1">
+          [[result.uid]]
+        </div>
+        <div class="col-md-2">
+          [[result.first_name]] [[result.last_name]]
+        </div>
+        <div class="col-md-1">
+          [[result.training]]
+        </div>
+        <div class="col-md-1">
+          [[result.campus]]
+        </div>
+        <div class="col-md-1">
+          [[result.n_adherent]]
+        </div>
+        <div class="col-md-1">
+          [[result.payment]]
+        </div>
+        <div class="col-md-1">
+          [[result.payment_value]]
+        </div>
+        <div class="col-md-4" v-if="result.start.length == 8 && result.end.length == 8">
+          [[result.start.substring(6,8)]]/[[result.start.substring(4,6)]]/[[result.start.substring(0,4)]]
+          -
+          [[result.end.substring(6,8)]]/[[result.end.substring(4,6)]]/[[result.end.substring(0,4)]]
+        </div>
+        <div class="col-md-4" v-else>
+          {% trans 'Date invalide'%}
+        </div>
+      </span>
+      </div>
+    `
+  })
+
+  // Table footer, just for decoration purpose
+  const TableHeader = Vue.component('table-footer', {
+    props: [],
+    template:
+    `
+      <div class="table-footer search-result row"></div>
+    `
+  })
+
+  // The router for the app
+  const router = new VueRouter({
+    routes: [
+      {
+        path: '/home',
+        name: 'home',
+        component: SectionLinks,
+        props: true,
+      },
+      {
+        path: '/add-member',
+        name: 'add-member',
+        component: AddMember,
+        props: true,
+      },
+      {
+        path: '/export-member',
+        name: 'export-member',
+        component: ExportMembers,
+        props: true,
+      },
+      {
+        path: '/import-member',
+        name: 'import-member',
+        component: ImportMembers,
+        props: true,
+      },
+      {
+        path: '/add-admin',
+        name: 'add-admin',
+        component: AddAdmin,
+        props: true,
+      },
+      {
+        path: '/del-admin',
+        name: 'del-admin',
+        component: DeleteAdmin,
+        props: true,
+      }
+    ]
+  })
+
+  const app = new Vue({
+    router,
+    delimiters: ['[[', ']]'],
+    data: {},
+    mounted: function(){
+      router.push({ name: 'home'})
+    }
+  }).$mount('#app')
+
+</script>
+{% endblock %}

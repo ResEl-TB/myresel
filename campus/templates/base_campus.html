@@ -99,10 +99,15 @@
                                    <a href="{% url "campus:mails:moderate" %}"><i class="fa fa-eye fa-fw"></i> Modération mails campus</a>
                                 </li>
                             {% endif %}
-                            {% if request.user.is_staff %}
+                            {% if request.user.is_staff or request.ldap_user.ae_admin %}
                                 <li>
                                    <a href="{% url "campus:gestion:modo" %}"><i class="fa fa-beer fa-fw"></i> Gérer les modérateurs campus</a>
                                 </li>
+                            {% endif %}
+                            {% if request.user.is_staff or request.ldap_user.ae_admin %}
+                            <li>
+                               <a href="{% url "campus:ae-admin:home" %}"><i class="fa fa-sliders fa-fw"></i> {% trans "Administration AE" %}</a>
+                            </li>
                             {% endif %}
                             <hr />
                             <li>
@@ -113,7 +118,7 @@
                                 <a href="{% url "home" %}"><i class="fa fa-sliders fa-fw"></i> Paramètres ResEl</a>
                             </li>
                             <li>
-                                <a href="{% url "logout" %}"><i class="fa fa-sign-out fa-fw"></i> Déconnexion</a>
+                                <a href="{% url "logout" %}?next={% url 'campus:home'%}"><i class="fa fa-sign-out fa-fw"></i> Déconnexion</a>
                             </li>
                         </ul>
                     </li>

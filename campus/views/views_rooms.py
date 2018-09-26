@@ -19,7 +19,7 @@ from myresel.settings import TIME_ZONE
 
 from campus.forms import RoomBookingForm, AddRoomForm
 from campus.models import RoomBooking, Room, StudentOrganisation
-from fonctions.decorators import ae_required
+from fonctions.decorators import ae_required, ae_admin_required
 
 class UserNotAuthenticatedException(Exception):
     pass
@@ -200,11 +200,8 @@ class AddRoom(FormView):
     form_class = AddRoomForm
 
     @method_decorator(login_required)
+    @method_decorator(ae_admin_required)
     def dispatch(self, request, *args, **kwargs):
-        """if not request.user.is_staff:
-            messages.error(self.request, _("Vous n'avez pas accès à cette page"))
-            return HttpResponseRedirect(reverse('campus:rooms:calendar'))
-        return super(AddRoom, self).dispatch(request, *args, **kwargs)"""
         self.room = None
         if self.kwargs.get('room', None):
             self.room = get_object_or_404(Room, id=self.kwargs["room"])
@@ -220,6 +217,7 @@ class AddRoom(FormView):
         messages.success(self.request, _('Opération réussie'))
         return super(AddRoom, self).form_valid(form)
 
+@method_decorator(ae_admin_required, name="dispatch")
 class ManageRooms(ListView):
     """
     View used to manage rooms
@@ -228,26 +226,13 @@ class ManageRooms(ListView):
     template_name = 'campus/rooms/room_management.html'
     model = Room
 
-    @method_decorator(login_required)
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_staff:
-            messages.error(self.request, _("Vous n'avez pas accès à cette page"))
-            return HttpResponseRedirect(reverse('campus:rooms:calendar'))
-        return super(ManageRooms, self).dispatch(request, *args, **kwargs)
-
+@method_decorator(ae_admin_required, name="dispatch")
 class DeleteRoom(DeleteView):
     """
     View used to remove a rooms
     """
     model = Room
     success_url = reverse_lazy('campus:rooms:manage-rooms')
-
-    @method_decorator(login_required)
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.is_staff:
-            messages.error(self.request, _("Vous n'avez pas accès à cette page"))
-            return HttpResponseRedirect(reverse('campus:rooms:calendar'))
-        return super(DeleteRoom, self).dispatch(request, *args, **kwargs)
 
 class BookingView(View):
     """
