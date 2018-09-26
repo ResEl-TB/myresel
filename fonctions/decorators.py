@@ -173,6 +173,11 @@ def ae_admin_required(function, redirect_to='campus:home'):
     def _dec(view_func):
         @wraps(view_func, assigned=available_attrs(view_func))
         def _view(request, *args, **kwargs):
+            if (not request.user.is_authenticated):
+                return HttpResponseRedirect(
+                    reverse("login")+"?next="+request.path
+                )
+
             if (not request.ldap_user.ae_admin) and (not request.user.is_staff):
                 messages.error(request, _('Vous n\'êtes pas admin de l\'AE.'))
                 return HttpResponseRedirect(reverse(redirect_to))

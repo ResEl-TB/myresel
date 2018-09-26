@@ -11,7 +11,6 @@ from django.utils.translation import ugettext as _
 
 from fonctions.decorators import ae_admin_required
 
-@method_decorator(login_required, name="dispatch")
 @method_decorator(ae_admin_required, name="dispatch")
 class ManageCampusModo(View):
 
@@ -30,7 +29,6 @@ class ManageCampusModo(View):
         return render(request, self.template_name, context)
 
 
-@method_decorator(login_required, name="dispatch")
 @method_decorator(ae_admin_required, name="dispatch")
 class AddCampusModo(View):
 
@@ -56,7 +54,6 @@ class AddCampusModo(View):
         return redirect(reverse('campus:gestion:modo'))
 
 
-@method_decorator(login_required, name="dispatch")
 @method_decorator(ae_admin_required, name="dispatch")
 class RemoveCampusModo(View):
 

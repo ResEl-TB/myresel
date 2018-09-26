@@ -217,7 +217,6 @@ class AddRoom(FormView):
         messages.success(self.request, _('Opération réussie'))
         return super(AddRoom, self).form_valid(form)
 
-@method_decorator(login_required, name="dispatch")
 @method_decorator(ae_admin_required, name="dispatch")
 class ManageRooms(ListView):
     """
@@ -227,7 +226,6 @@ class ManageRooms(ListView):
     template_name = 'campus/rooms/room_management.html'
     model = Room
 
-@method_decorator(login_required, name="dispatch")
 @method_decorator(ae_admin_required, name="dispatch")
 class DeleteRoom(DeleteView):
     """

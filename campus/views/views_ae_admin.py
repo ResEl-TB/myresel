@@ -23,7 +23,6 @@ USER_NOT_FOUND = 1
 INVALID_DATES = 2
 MISSING_FIELD = 3
 
-@method_decorator(login_required, name="dispatch")
 @method_decorator(ae_admin_required, name="dispatch")
 class AdminHome(TemplateView):
 
@@ -48,7 +47,6 @@ def ae_user_to_dict(user):
         "end": ae_dates[1],
     })
 
-@method_decorator(login_required, name="dispatch")
 @method_decorator(ae_admin_required, name="dispatch")
 class GetUsers(View):
     """
@@ -90,7 +88,6 @@ class GetUsers(View):
         else:
             raise Http404("Not found")
 
-@method_decorator(login_required, name="dispatch")
 @method_decorator(ae_admin_required, name="dispatch")
 class GetMembers(View):
     """
@@ -141,7 +138,6 @@ class GetMembers(View):
         else:
             raise Http404("Not found")
 
-@method_decorator(login_required, name="dispatch")
 @method_decorator(ae_admin_required, name="dispatch")
 class GetAdmins(View):
 
@@ -173,7 +169,6 @@ def checkDate(date):
         is_okay = False
     return is_okay
 
-@method_decorator(login_required, name="dispatch")
 @method_decorator(ae_admin_required, name="dispatch")
 class AddUser(View):
     """
@@ -215,7 +210,6 @@ class AddUser(View):
 
         return JsonResponse({"success": True})
 
-@method_decorator(login_required, name="dispatch")
 @method_decorator(ae_admin_required, name="dispatch")
 class EditUser(View):
     """
@@ -256,7 +250,6 @@ class EditUser(View):
 
         return JsonResponse({"success": True})
 
-@method_decorator(login_required, name="dispatch")
 @method_decorator(ae_admin_required, name="dispatch")
 class AddAdmin(View):
     """
@@ -278,7 +271,6 @@ class AddAdmin(View):
 
         return JsonResponse({'success': 'true'})
 
-@method_decorator(login_required, name="dispatch")
 @method_decorator(ae_admin_required, name="dispatch")
 class DeleteAdmin(View):
     """
