@@ -230,18 +230,24 @@ class EditUser(View):
             if not (checkDate(start) and checkDate(end)):
                 return JsonResponse({"error": INVALID_DATES})
 
-            # If new n_adherent => new set of dates
-            # Second condition avoids an issue with the ldap:
+            ae_dates = '-'.join([start,end])
+
+            # Avoids an issue with the ldap:
             # You can't have the same set of dates twice
+            if ae_dates in user.dates_membre:
+                date_index = user.dates_membre.index(ae_dates)
+                user.dates_membre.pop(date_index)
+
+            # If new n_adherent => new set of dates
             if(user.n_adherent != request.POST.get('n_adherent', '') and\
-               '-'.join([start,end]) not in user.dates_membre and \
                user.n_adherent != ''):
-               user.dates_membre.append('-'.join([start,end]))
+                user.dates_membre.append(ae_dates)
             else:
                 try:
-                    user.dates_membre[-1] = '-'.join([start,end])
+                    user.dates_membre[-1] = ae_dates
+
                 except IndexError:
-                    user.dates_membre = ['-'.join([start,end])]
+                    user.dates_membre = [ae_dates]
 
             #Update the fields
             user.n_adherent = request.POST.get('n_adherent', '')
