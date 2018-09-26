@@ -96,6 +96,12 @@
     template:
     `
       <div class="row">
+        <p class="text-center">
+          {% trans 'Le fichier doit être au format .csv (séparateur: virgules) avec les colonnes suivantes :' %}<br/>
+          <strong>
+          {% trans "UID | Nom | Prénom | Formation | Campus | Numéro d'adhérent | Type de paiement | Montant du paiement | Date début | Date fin" %}
+          </strong>
+        </p>
         <form id="csv-form">
           <div id="fake-csv-input">{% trans 'Importer un CSV'%}</div>
           <input type="file" id="csv-input" v-on:change="get_csv">
