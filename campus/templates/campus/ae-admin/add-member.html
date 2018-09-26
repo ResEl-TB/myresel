@@ -193,8 +193,18 @@
       })
     },
     mounted: function(){
-      $("#start").datepicker({ dateFormat: 'yymmdd' });
-      $("#end").datepicker({ dateFormat: 'yymmdd' });
+      $("#start").datepicker({
+         dateFormat: 'yymmdd' ,
+        onSelect: function(date) {
+          this.user.start = date;
+        }.bind(this)
+      });
+      $("#end").datepicker({
+         dateFormat: 'yymmdd' ,
+        onSelect: function(date) {
+          this.user.end = date;
+        }.bind(this)
+      });
     },
     methods: {
       sendForm: function(){
@@ -310,8 +320,18 @@
       })
     },
     mounted: function(){
-      $("#new_user_start").datepicker({ dateFormat: 'yymmdd' });
-      $("#new_user_end").datepicker({ dateFormat: 'yymmdd' });
+      $("#new_user_start").datepicker({
+         dateFormat: 'yymmdd' ,
+        onSelect: function(date) {
+          this.user.start = date;
+        }.bind(this)
+      });
+      $("#new_user_end").datepicker({
+         dateFormat: 'yymmdd' ,
+        onSelect: function(date) {
+          this.user.end = date;
+        }.bind(this)
+      });
     },
     methods: {
       sendForm: function(){
