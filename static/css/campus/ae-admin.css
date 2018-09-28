@@ -178,22 +178,3 @@
 .rotate-45 {
   transform: rotateZ(45deg);
 }
-
- /* Jquery UI stuff */
-
-.ui-autocomplete {
-  animation: fade-in 0.2s ease;
-}
-
-.ui-autocomplete-loading {
-  background-color: rgba(208, 208, 208, 0.25) !important;
-}
-
-.ui-menu-item {
-  background-color: white !important;
-}
-
-.ui-state-focus {
-  background-color: #f6f6f6 !important;
-  border-color: inherit !important;
-}
