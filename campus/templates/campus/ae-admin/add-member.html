@@ -70,22 +70,22 @@
                 user = JSON.parse(user).attributes;
                 training = String(user.title).toLowerCase().split(' ')
                 switch (true) {
-                  case training.indexOf("IG") != -1:
+                  case training.indexOf("ig") != -1:
                     training = "FIG"
                     break;
-                  case training.indexOf("FIP") != -1:
+                  case training.indexOf("fip") != -1:
                     training = "FIP"
                     break;
-                  case training.indexOf("FISE") != -1:
+                  case training.indexOf("fise") != -1:
                     training = "FISE"
                     break;
-                  case training.indexOf("FIL") != -1:
+                  case training.indexOf("fil") != -1:
                     training = "FIL"
                     break;
-                  case training.indexOf("Master") != -1:
+                  case training.indexOf("master") != -1:
                     training = "Master"
                     break;
-                  case training.indexOf("Doctorant") != -1:
+                  case training.indexOf("doctorant") != -1:
                     training = "Doctorant"
                     break;
                   default:

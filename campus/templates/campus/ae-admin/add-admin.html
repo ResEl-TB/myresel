@@ -28,13 +28,16 @@
         $('#search-user').autocomplete({
             source: "{% url 'campus:who:request-user' %}",
             minLength: 3,
+            search: function() {this.loading_autocomplete = true}.bind(this),
+            response: function() {this.loading_autocomplete = false}.bind(this),
         });
-      });
+      }.bind(this));
     },
     data: function(){
       return({
         success: false,
         loading: false,
+        loading_autocomplete: false,
         error: '',
       })
     },
@@ -78,11 +81,12 @@
           </div>
           <search-spinner v-if='loading'></search-spinner>
           <form v-on:submit.prevent="add_admin">
-            <div class="form-group">
+            <div class="form-group has-feedback">
               <label>{% trans "Rechercher un utilisateur (autocompletion) :" %}</label>
               <div class="input-group">
                 <span class="input-group-addon">
-                  <span class="fa fa-search"></span>
+                  <span class="fa fa-spinner fa-spin" v-if="loading_autocomplete"></span>
+                  <span class="fa fa-search" v-else></span>
                 </span>
                 <input class="form-control" type="text" id="search-user"></input>
               </div>

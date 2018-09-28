@@ -54,7 +54,7 @@ class GetUsers(View):
     It also matches corresponding users in our LDAP
     """
 
-    search_keys = ['first_name', 'last_name', 'mail', 'promo', 'uid']
+    search_keys = ['first_name', 'last_name', 'promo', 'uid']
 
     def get(self, request):
         search_filter = request.GET.get('filter', '')
@@ -66,8 +66,6 @@ class GetUsers(View):
                         (uid=*{0}*)
                         (gidnumber={0})
                         (gecos=*{0}*)
-                        (mail=*{0}*)
-                        (registeredaddress=*{0}*)
                         (uidnumber={0})
                     )""".format(Ldap.sanitize(search_filter))
                 )
@@ -93,7 +91,7 @@ class GetMembers(View):
     """
     Ajax view searching for and returning a list of AE members.
     """
-    search_keys = ['first_name', 'last_name', 'mail', 'promo']
+    search_keys = ['first_name', 'last_name', 'promo']
 
     def applySpecialFilter(self, ae_members, filter_type):
         now = date.today()
@@ -117,16 +115,22 @@ class GetMembers(View):
         if request.is_ajax():
             search_filter = request.GET.get('filter', '')
             if not search_filter:
-                #TODO: Improve this line for filtered requests
-                users = LdapUser.all()
+                # Small hack
+                # TODO: Create a real param to check that the field exists
+                users = LdapUser.filter(**{"n_adherent"+"__startswith":""})
             else:
                 users = []
                 for key in self.search_keys:
-                    users += LdapUser.filter(**{key+"__contains": search_filter})
+                    users += LdapUser.filter(**{
+                        "n_adherent"+"__startswith":"",
+                        key+"__contains": search_filter
+                    })
+            uids = []
             ae_members = []
             for user in users:
-                if(user.n_adherent and user.uid not in [u["uid"] for u in ae_members]):
+                if(user.uid not in uids):
                     ae_members.append(ae_user_to_dict(user))
+                    uids.append(user.uid)
 
             # If the user requested an additional filter
             if(request.GET.get('special', 'false') == 'true'):
