@@ -1,0 +1,180 @@
+#app {
+  min-height: 75vh;
+}
+
+.link-icon {
+  font-size: 3em;
+}
+
+.section-link {
+  color: rgb(54, 54, 54) !important;
+}
+
+.loading {
+  font-size: 3em;
+  color: #65d145 !important;
+  animation: fade-slide-in-top 0.3s ease;
+}
+
+.loading .fa-spin {
+  animation-timing-function: cubic-bezier(.49,.04,.8,1) !important;
+  animation-duration: 1s !important;
+}
+
+.search-result {
+  margin-left: 5px;
+  margin-right: 5px;
+  padding: 10px;
+  border: 1px solid #dbdbdb;
+  border-top: 0px;
+}
+
+.clickable {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.clickable:hover {
+  background-color: rgb(249, 249, 249);
+}
+
+.table-header {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  background-color: #f7f7f7;
+  margin-top: 20px;
+  min-height: 50px;
+  border-top: 1px solid #dbdbdb;
+}
+
+.table-header .header-title {
+  padding: 6px !important;
+}
+
+.table-footer {
+  height: 10px;
+  padding: 0 !important;
+  background-color: #f7f7f7;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+#csv-form {
+  margin-top: 2%;
+  margin-bottom: : 2%;
+  display: block;
+  height: 3em;
+}
+
+#fake-csv-input {
+  color: #676767;
+  background-color: #f7f7f7;
+  font-weight: bold;
+  font-size: 1em;
+  padding-top: 0.75em;
+  text-align: center;
+  border-radius: 3px;
+  height: 3em;
+  max-width: 12em;
+  margin: auto;
+}
+
+#csv-input {
+  z-index: 100;
+  cursor: pointer;
+  opacity: 0;
+  height: 3em;
+  max-width: 12em;
+  margin: auto;
+  transform: translateY(-40px);
+}
+
+.margin {
+  margin: 20px;
+}
+
+.margin-bottom {
+  margin-bottom: 15px;
+}
+
+#error-details {
+  margin-top: 2em;
+}
+
+#error-details span{
+  border: 1px solid rgb(226, 226, 226);
+  font-weight: bold;
+  display: inline-block;
+  padding: 5px;
+  border-radius: 3px;
+}
+
+#search-ldap {
+  margin-top: 20px;
+}
+
+.err-uid {
+  background-color: rgba(203, 136, 57, 0.1);
+}
+
+.err-date {
+  background-color: rgba(57, 181, 203, 0.1);
+}
+
+.err-ok {
+  background-color: rgba(57, 203, 61, 0.1);
+}
+
+.err-unknown {
+  background-color: rgba(255, 0, 0, 0.2);
+}
+
+.err-value {
+  background-color: rgba(160, 57, 203, 0.1);
+}
+
+.mendatory-field::after {
+  content: "*";
+  color: red;
+}
+
+.trash-red {
+  color: rgb(255, 0, 0);
+  cursor: pointer;
+}
+
+.search-type-selector {
+  margin-top: 2%;
+  margin-bottom: 2%;
+}
+
+/* Animations */
+
+.fade-enter-active {
+  transition: opacity .4s ease;
+}
+
+.fade-leave-active {
+  transition: none .4s ease;
+}
+
+.fade-enter {
+  opacity: 0;
+}
+
+.fade-leave-active {
+  display: none;
+}
+
+.child-view {
+  position: absolute;
+  transition: all .4s ease;
+}
+
+.alert {
+  animation: fade-slide-in-top 0.3s ease;
+}
+
+.rotate-45 {
+  transform: rotateZ(45deg);
+}

@@ -1,0 +1,103 @@
+{% load i18n %}
+{% load staticfiles %}
+
+<script type="text/javascript">
+
+  ///////////////////////////////////////////////
+  //////////    Add Admin components    /////////
+  ///////////////////////////////////////////////
+
+  const AddAdmin = Vue.component('add-admin', {
+    props: [],
+    template:
+    `
+      <div class="well">
+        <section-title
+          :title="'{% trans 'Ajouter un admin' %}'"
+          :component="'search-add-admin'"
+        ></section-title>
+      </div>
+    `
+  })
+
+  const SearchAddUser = Vue.component('search-add-admin',{
+    props: [],
+    delimiters: ['[[',']]'],
+    mounted: function(){
+      jQuery(document).ready(function ($) {
+        $('#search-user').autocomplete({
+            source: "{% url 'campus:who:request-user' %}",
+            minLength: 3,
+            search: function() {this.loading_autocomplete = true}.bind(this),
+            response: function() {this.loading_autocomplete = false}.bind(this),
+        });
+      }.bind(this));
+    },
+    data: function(){
+      return({
+        success: false,
+        loading: false,
+        loading_autocomplete: false,
+        error: '',
+      })
+    },
+    methods: {
+      add_admin: function(){
+        setup_CSRF();
+        this.success = false;
+        this.loading = true;
+        this.error = "";
+        $.ajax({
+          url: "{% url 'campus:ae-admin:add-admin'%}",
+          method: 'POST',
+          async: true,
+          data: {uid: $('#search-user').val()},
+
+          success: function(data) {
+            if(data['error']){
+              this.error = data['error'];
+            }else{
+              this.success = true;
+            }
+          }.bind(this),
+
+          error: function(data) {
+            this.error = "{% trans 'Erreur inconnue'%}"
+          }.bind(this),
+
+          complete: function(){
+            this.loading = false;
+          }.bind(this)
+        })
+      }
+    },
+    template:
+    `
+      <div class="row">
+        <div class="col-md-12">
+          <div v-if="error != ''" class="alert alert-danger">[[error]]</div>
+          <div v-if="success" class="alert alert-success">
+            {% trans 'Administrateur ajouté !' %}
+          </div>
+          <search-spinner v-if='loading'></search-spinner>
+          <form v-on:submit.prevent="add_admin">
+            <div class="form-group has-feedback">
+              <label>{% trans "Rechercher un utilisateur (autocompletion) :" %}</label>
+              <div class="input-group">
+                <span class="input-group-addon">
+                  <span class="fa fa-spinner fa-spin" v-if="loading_autocomplete"></span>
+                  <span class="fa fa-search" v-else></span>
+                </span>
+                <input class="form-control" type="text" id="search-user"></input>
+              </div>
+            </div>
+            <div class="text-right">
+              <button class="btn btn-default margin-bottom">Ajouter</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    `
+  })
+
+</script>

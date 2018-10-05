@@ -1,0 +1,128 @@
+{% load i18n %}
+{% load staticfiles %}
+
+<script type="text/javascript">
+
+  ///////////////////////////////////////////////
+  //////////    Add Admin components    /////////
+  ///////////////////////////////////////////////
+
+  const DeleteAdmin = Vue.component('del-admin', {
+    props: [],
+    template:
+    `
+      <div class="well">
+        <section-title
+          :title="'{% trans 'Supprimer un admin AE' %}'"
+          :component="'list-del-admins'"
+        ></section-title>
+      </div>
+    `
+  })
+
+  // Retrieve and display the admins
+  const ListDelAdmins = Vue.component('list-del-admins', {
+    props: [],
+    delimiters: ['[[', ']]'],
+    data: function(){
+      return({
+        admins: [],
+        loading: true,
+        error: '',
+        success: false,
+      })
+    },
+    mounted: function(){
+      $.ajax({
+        url: "{% url 'campus:ae-admin:get-admins' %}",
+        method: 'GET',
+        async: true,
+
+        success: function(data){
+          this.admins = data['results'];
+        }.bind(this),
+
+        error: function(data){
+          this.error = "{% trans 'Impossible de récupérer la liste des admins.'%}";
+        }.bind(this),
+
+        complete: function(){
+          this.loading = false;
+        }.bind(this)
+
+      })
+    },
+    methods:{
+      deleteAdmin: function(uid, key){
+        setup_CSRF();
+        this.success = false;
+        this.error = '';
+        this.loading = true;
+        $.ajax({
+          url: "{% url 'campus:ae-admin:delete-admin'%}",
+          method: 'POST',
+          async: true,
+          data: {uid: uid},
+
+          success: function(data) {
+            if(data['error']){
+              this.error = data['error'];
+            }else{
+              this.admins.splice(key, 1);
+              this.success = true;
+            }
+          }.bind(this),
+
+          error: function(data) {
+            this.error = "{% trans 'Erreur inconnue'%}"
+          }.bind(this),
+
+          complete: function(){
+            this.loading = false;
+          }.bind(this)
+        })
+      }
+    },
+    template:
+    `
+      <div class="row">
+        <div class="col-md-12">
+          <h4>Liste des admins:</h4>
+          <search-spinner v-if="loading"></search-spinner>
+          <div class="alert alert-success" v-if='success'>
+            {% trans 'Admin supprimé !'%}
+          </div>
+          <div class="alert alert-danger" v-if='error'>
+            [[error]]
+          </div>
+          <div class='row fade-in' v-if='admins.length > 0'>
+            <hr/>
+            <del-admin-details
+              v-for="admin, key in admins"
+              :admin="admin"
+              :key="key"
+              v-on:delete-admin="deleteAdmin"
+            ></del-admin-details>
+          </div>
+        </div>
+      </div>
+    `
+  })
+
+  // An admin to display
+  const DeleteAdminDetails = Vue.component('del-admin-details', {
+    props: ['admin'],
+    delimiters: ['[[', ']]'],
+    template:
+    `
+      <div class="col-md-4 text-center">
+        <strong>[[admin.first_name]] [[admin.last_name]]</strong> ([[admin.uid]])
+        <span class="fa fa-trash trash-red"
+          v-on:click="$emit('delete-admin', admin.uid, $vnode.key)"
+          v-if="admin.uid != '{{ldapuser.uid}}'"
+        ></span>
+      </div>
+    `
+  })
+
+</script>

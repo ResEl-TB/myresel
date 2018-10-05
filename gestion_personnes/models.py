@@ -70,6 +70,8 @@ class LdapUser(ldapback.models.LdapModel):
     ae_nature = LdapCharField(db_column='aeNature', object_classes=['aePerson'])
     n_adherent = LdapCharField(db_column='nAdherent', object_classes=['aePerson'])
     dates_membre = LdapListField(db_column='datesMembre', object_classes=['aePerson'])
+    mode_paiement = LdapCharField(db_column='aeModePaiement', object_classes=['aePerson'])
+    ae_admin = LdapBooleanField(db_column='aeAdmin', object_classes=['aePerson'])
     # TODO: other fields
 
     # mailPerson
