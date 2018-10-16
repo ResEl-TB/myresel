@@ -12,8 +12,6 @@ from campus.models.mails_models import Mail
 
 from campus.whoswho.views import ListBirthdays
 
-from myresel.settings import HOME_RSS_LINK
-
 class Home(View):
 
     template_name = "campus/home.html"
@@ -30,14 +28,10 @@ class Home(View):
         birthdays = ListBirthdays.get_today_birthdays()
         campus_mails = Mail.objects.order_by('-date').filter(moderated=True).all()[:4]
 
-        python_wiki_rss_url = HOME_RSS_LINK
-        feed = feedparser.parse( python_wiki_rss_url )
-
         context = {
             'events': events,
             'birthdays': birthdays,
             'campus_mails': campus_mails,
-            'historicstuff': feed['items'],
         }
 
         return render(request, self.template_name, context)
