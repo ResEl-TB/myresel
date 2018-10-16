@@ -411,3 +411,12 @@ a:hover {
         opacity: 1.0;
     }
 }
+
+/* Mobile */
+
+@media (max-width: 991px) {
+  .remove-r-padding {
+      padding-right: 0px !important;
+      padding-left: 0px !important;
+  }
+}
