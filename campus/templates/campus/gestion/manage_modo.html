@@ -11,41 +11,45 @@
 
 {% block content %}
 <div class="container">
-    <div class="row margin-bottom">
-            {% csrf_token %}
-            <button class="btn btn-danger" data-toggle="modal" data-target="#addModo" type="submit">{% trans "Ajouter un modo" %}</button>
-    </div>
-</div>
-<div class="container well">
-    <div class="row caption">
-        <div class="col-md-3 text-center">
-            <strong>Modérateur</strong>
-        </div>
-        <div class="col-md-4 text-center">
-            <strong>Email</strong>
-        </div>
-        <div class="col-md-2 col-md-offset-3 text-center">
-            <strong>Supprimer</strong>
-        </div>
-    </div>
-    {% for modo in modos %}
-    <div class="row margin-top">
-        <div class="col-md-3 text-center">
-            {{modo.first_name}}
-            {{modo.last_name|upper}}
-        </div>
-        <div class="col-md-4 text-center">
-            <a href="mailto:{{modo.mail}}">{{modo.mail}}</a>
-        </div>
-        <div class="col-md-2 col-md-offset-3 text-center">
-            <form action="{% url 'campus:gestion:delmodo' %}" method="post">
-                {% csrf_token %}
-                <input type="hidden" name="uid" value="{{ modo.uid }}" />
-                <button class="btn btn-danger" type="submit"><span class="fa fa-ban"></span></button>
-            </form>
-        </div>
-    </div>
-    {% endfor %}
+  <div class="row margin-bottom">
+      <div class="col-md-2 col-md-offset-5 text-center">
+        <button class="btn btn-danger" data-toggle="modal" data-target="#addModo" type="submit">
+          <span class="fa fa-plus-square"></span>
+          {% trans "Ajouter un modérateur campus" %}
+        </button>
+      </div>
+  </div>
+  <div class="well">
+      <div class="row caption">
+          <div class="col-md-3 text-center">
+              <strong>Modérateur</strong>
+          </div>
+          <div class="col-md-4 text-center">
+              <strong>Email</strong>
+          </div>
+          <div class="col-md-2 col-md-offset-3 text-center">
+              <strong>Supprimer</strong>
+          </div>
+      </div>
+      {% for modo in modos %}
+      <div class="row margin-top">
+          <div class="col-md-3 text-center">
+              {{modo.first_name}}
+              {{modo.last_name|upper}}
+          </div>
+          <div class="col-md-4 text-center">
+              <a href="mailto:{{modo.mail}}">{{modo.mail}}</a>
+          </div>
+          <div class="col-md-2 col-md-offset-3 text-center">
+              <form action="{% url 'campus:gestion:delmodo' %}" method="post">
+                  {% csrf_token %}
+                  <input type="hidden" name="uid" value="{{ modo.uid }}" />
+                  <button class="btn btn-danger" type="submit"><span class="fa fa-ban"></span></button>
+              </form>
+          </div>
+      </div>
+      {% endfor %}
+  </div>
 </div>
 <div class="modal fade" id="addModo" role="dialog">
     <div class="modal-dialog">
