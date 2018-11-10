@@ -2,30 +2,32 @@
 
 exclusions:
   - apt
+  - disks
 
 campuses:
   - name: brest
     enabled: true
     connections:
-      - start: adista
+      - start: blue-services
         end: network-edge
       - start: internet-access
-        end: zahia
-      - start: zahia
+        end: matahari
+      - start: matahari
         end: kuma
       - start: kuma
         end: network-access
     services:
       internet-access:
-        - name: adista
-          title: Adista
-          text: La connexion Adista est la connexion principale du ResEl
+        - name: blue-services
+          title: blue-services
+          text: La connexion Blue Services est la connexion principale du ResEl
           icon: fa-cloud
           essential: true
           level: 2
           _hosts:
             - zahia
             - matahari
+          _hosts_failover: true  # true if the hosts act as failovers, false by default
         - name: renater
           title: Connexion Renater
           text: La connexion Renater est la connexion de secours du ResEl 
@@ -137,7 +139,6 @@ campuses:
           level: 1
           _hosts:
             - lena
-            - maia
         - name: monitoring
           title: Monitoring
           text: Les services de monitoring permettent aux administrateurs de
