@@ -139,7 +139,6 @@ campuses:
           level: 1
           _hosts:
             - lena
-            - maia
         - name: monitoring
           title: Monitoring
           text: Les services de monitoring permettent aux administrateurs de
