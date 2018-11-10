@@ -2,6 +2,7 @@
 
 exclusions:
   - apt
+  - disks
 
 campuses:
   - name: brest
