@@ -311,30 +311,42 @@ class StatusPageXhr(View):
 
     @staticmethod
     def set_service_status(icinga_rsp, service, excl):
-        max_score = 0
+        service_score = 0
         lvl = service.get('level', 1)  # Default to warning
+        hosts_max_score = {}
 
         if service.get('_hosts', None) is None:
             service['status_text'] = 'Pas de métriques'
             service['status'] = 'default'
             return -1
 
+
         for icn_service in icinga_rsp['results']:
-            if icn_service['joins']['host']['name'] in service.get('_hosts', []) \
+            host = icn_service['joins']['host']['name']
+            if host in service.get('_hosts', []) \
                     and icn_service['attrs']['name'] not in excl:
-                max_score = max(max_score, icn_service['attrs']['state'])
+                hosts_max_score[host] = max(
+                    hosts_max_score.get(host, 0),
+                    icn_service['attrs']['state'],
+                )
+
+        if hosts_max_score:
+            if service.get('_hosts_failover', False):
+                service_score = min(hosts_max_score.values())
+            else:
+                service_score = max(hosts_max_score.values())
 
         StatusPageXhr.cleanup(service)
-        if max_score == 0:
+        if service_score == 0:
             service['status_text'] = 'Système nominal'
             service['status'] = 'success'
-        elif max_score == 1:
+        elif service_score == 1:
             service['status_text'] = 'Incidents mineurs'
             service['status'] = 'warning'
         else:
             service['status_text'] = 'Incidents majeurs'
             service['status'] = 'danger'
-        return lvl * max_score
+        return lvl * service_score
 
     @staticmethod
     def calc_scores(services, result):

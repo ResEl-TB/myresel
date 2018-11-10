@@ -27,6 +27,7 @@ campuses:
           _hosts:
             - zahia
             - matahari
+          _hosts_failover: true  # true if the hosts act as failovers, false by default
         - name: renater
           title: Connexion Renater
           text: La connexion Renater est la connexion de secours du ResEl 
