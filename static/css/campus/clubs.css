@@ -46,9 +46,10 @@ a, a:hover, a:active, a:visited {
 }
 
 .club-name {
+  margin-top: 1em;;
   text-align: center;
   font-weight: bold;
-  font-size: 1.1em;
+  font-size: 1.3em;
   height: 3em;
 }
 
@@ -58,6 +59,11 @@ a, a:hover, a:active, a:visited {
 
 .logo-wrapper {
     height: 150px;
+}
+
+.member-badge {
+  color: #65d145;
+  font-size: 1.3em;
 }
 
 /* Mobile CSS */

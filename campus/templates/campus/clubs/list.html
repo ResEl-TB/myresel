@@ -38,9 +38,14 @@
                         <p><a href="{{ asso.website }}"><span class="fa fa-globe"></span> {% if asso.website %}{{ asso.website }}{% else %}{% trans "non renseigné" %}{% endif %}</a></p>
                         <hr />
                         <span class="actions">
-                            <a href="{% url 'campus:clubs:club_detail' asso.cn %}"><span class="fa fa-info-circle"></span></a>
+                            <a href="{% url 'campus:clubs:club_detail' asso.cn %}" class="label label-success"><span class="fa fa-info-circle"></span> {% trans "info" %}</a>
                             {% if request.user.is_authenticated %}
-                            {% if request.ldap_user.pk in asso.members %}<span class="label pull-right label-success"><span class="fa fa-check"></span> membre</span>{% endif %}
+                            {% if request.ldap_user.is_campus_moderator or request.ldap_user.pk in asso.prezs or request.user.is_staff %}
+                            <a href="{% url 'campus:clubs:edit' asso.cn%}" class="label label-success"><span class="fa fa-pencil-square"></span> {% trans "éditer" %}</a>
+                            {% endif %}
+                            {% if request.ldap_user.pk in asso.members %}
+                            <span class="pull-right member-badge fa fa-check-circle-o" data-toggle="tooltip" data-placement="right" title="{% trans 'Vous êtes membre' %}"></span>
+                            {% endif %}
                             {% endif %}
                         </span>
                     </div>
@@ -78,10 +83,15 @@
                     <p><a href="{{ club.website }}"><span class="fa fa-globe"></span> {% if club.website %}{{ club.website }}{% else %}{% trans "non renseigné" %}{% endif %}</a></p>
                     <hr />
                     <span class="actions">
-                        <a href="{% url 'campus:clubs:club_detail' club.cn %}"><span class="fa fa-info-circle"></span></a>
-                            {% if request.user.is_authenticated %}
-                            {% if request.ldap_user.pk in club.members %}<span class="label pull-right label-success"><span class="fa fa-check"></span> membre</span>{% endif %}
-                            {% endif %}
+                        <a href="{% url 'campus:clubs:club_detail' club.cn %}" class="label label-success"><span class="fa fa-info-circle"></span> {% trans "info" %}</a>
+                        {% if request.user.is_authenticated %}
+                        {% if request.ldap_user.is_campus_moderator or request.ldap_user.pk in club.prezs or request.user.is_staff %}
+                        <a href="{% url 'campus:clubs:edit' club.cn%}" class="label label-success"><span class="fa fa-pencil-square"></span> {% trans "éditer" %}</a>
+                        {% endif %}
+                        {% if request.ldap_user.pk in club.members %}
+                        <span class="pull-right member-badge fa fa-check-circle-o" data-toggle="tooltip" data-placement="right" title="{% trans 'Vous êtes membre' %}"></span>
+                        {% endif %}
+                        {% endif %}
                     </span>
                 </div>
             </div>
@@ -94,7 +104,7 @@
         {% endfor %}
     </div>
     <div class="col-md-12 entries-container">
-        <h1 class="text-center well name">{% trans 'Listes' %}</h1>
+        <h1 class="text-center well name">{% trans 'Listes de campagne' %}</h1>
         {% for list in lists %}
         {% if forloop.counter|add:-1|divisibleby:4 %}
         <div class="row assos-card mobile-centered">
@@ -120,14 +130,19 @@
                             <p><a href="{{ list.website }}"><span class="fa fa-globe"></span> {% if list.website %}{{ list.website }}{% else %}{% trans "non renseigné" %}{% endif %}</a></p>
                             <hr />
                             <span class="actions">
-                                <a href="{% url 'campus:clubs:club_detail' list.cn %}"><span class="fa fa-info-circle"></span></a>
-                                    {% if request.user.is_authenticated %}
-                                    {% if request.ldap_user.pk in list.members %}<span class="label pull-right label-success"><span class="fa fa-check"></span> membre</span>{% endif %}
-                                    {% endif %}
-                                </span>
-                            </div>
+                                <a href="{% url 'campus:clubs:club_detail' list.cn %}" class="label label-success"><span class="fa fa-info-circle"></span> {% trans "info" %}</a>
+                                {% if request.user.is_authenticated %}
+                                {% if request.ldap_user.is_campus_moderator or request.ldap_user.pk in list.prezs or request.user.is_staff %}
+                                <a href="{% url 'campus:clubs:edit' list.cn%}" class="label label-success"><span class="fa fa-pencil-square"></span> {% trans "éditer" %}</a>
+                                {% endif %}
+                                {% if request.ldap_user.pk in list.members %}
+                                <span class="pull-right member-badge fa fa-check-circle-o" data-toggle="tooltip" data-placement="right" title="{% trans 'Vous êtes membre' %}"></span>
+                                {% endif %}
+                                {% endif %}
+                            </span>
                         </div>
                     </div>
+                  </div>
                 </div>
                 {% if forloop.counter|divisibleby:4 or forloop.last%}
             </div>
@@ -146,5 +161,10 @@
 $(document).ready(function() {
     $("img").unveil();
 });
+
+// Tooltip for member badge
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
 </script>
 {% endblock %}

@@ -101,7 +101,6 @@ INSCRIPTION_ZONE_ALLOWED_URLNAMESPACE = [
 #
 
 NUMBER_NEWS_IN_HOME = 4
-HOME_RSS_LINK = "http://www.history.com/this-day-in-history/rss"
 FREE_DURATION = timedelta(days=3*7)
 
 # Cookies settings

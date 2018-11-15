@@ -16,8 +16,8 @@ a:hover {
 }
 
 .event {
-    animation: fade-from-left 1s;
-    margin-top:4px;
+    animation: fade-from-bottom 1s;
+    margin-top: 20px;
 }
 
 .mail {
@@ -32,7 +32,6 @@ a:hover {
 
 .sender {
     margin-top: 16px;
-    margin-bottom: -16px;
     font-size: .9em;
 }
 
@@ -137,6 +136,10 @@ a:hover {
     padding-right: 0;
 }
 
+.remove-r-padding {
+    padding-right: 0px !important;
+}
+
 .row-eq-height {
   display: -webkit-box;
   display: -webkit-flex;
@@ -156,90 +159,90 @@ a:hover {
 }
 
 .I {
-  animation: I-animation 12s infinite;
+  animation: I-animation 15s infinite;
   grid-column: 1 / 2;
   grid-row: 1 / 2;
   width: 0;
   height: 0;
   border-style: solid;
   border-width: 0px 0 100px 100px;
-  border-color: transparent transparent transparent #64fffd;
+  border-color: transparent transparent transparent #ffffff;
 }
 
 .M1 {
-  animation: M1-animation 12s infinite;
+  animation: M1-animation 15s infinite;
   grid-column: 3;
   grid-row: 1;
   width: 0;
   height: 0;
   border-style: solid;
   border-width: 50px 0 0px 50px;
-  border-color: transparent transparent transparent #64fffd;
+  border-color: transparent transparent transparent #ffffff;
 }
 
 .M2 {
-  animation: M2-animation 12s infinite;
+  animation: M2-animation 15s infinite;
   grid-column: 3;
   grid-row: 2;
-  background-color: #64fffd;
+  background-color: #ffffff;
 }
 
 .M3 {
-  animation: M3-animation 12s infinite;
+  animation: M3-animation 15s infinite;
   grid-column: 4;
   grid-row: 2;
-  background-color: #64fffd;
+  background-color: #ffffff;
 }
 
 .M4 {
-  animation: M4-animation 12s infinite;
+  animation: M4-animation 15s infinite;
   grid-column: 4;
   grid-row: 1;
   width: 0;
   height: 0;
   border-style: solid;
   border-width: 0 0 50px 50px;
-  border-color: transparent transparent #64fffd transparent ;
+  border-color: transparent transparent #ffffff transparent ;
 }
 
 .T1 {
-  animation: T1-animation 12s infinite;
+  animation: T1-animation 15s infinite;
   grid-column: 5;
   grid-row: 1;
   width: 0;
   height: 0;
   border-style: solid;
   border-width: 0 0 50px 50px;
-  border-color: transparent transparent #64fffd transparent ;
+  border-color: transparent transparent #ffffff transparent ;
 }
 
 .T2 {
-  animation: T2-animation 12s infinite;
+  animation: T2-animation 15s infinite;
   grid-column: 6;
   grid-row: 1;
-  background-color: #64fffd;
+  background-color: #ffffff;
 }
 
 .T3 {
-  animation: T3-animation 12s infinite;
+  animation: T3-animation 15s infinite;
   grid-column: 7;
   grid-row: 1;
   width: 0;
   height: 0;
   border-style: solid;
   border-width: 50px 50px 0 0;
-  border-color: #64fffd transparent transparent transparent ;
+  border-color: #ffffff transparent transparent transparent ;
 }
 
 .T4 {
-  animation: T4-animation 12s infinite;
+  animation: T4-animation 15s infinite;
   grid-column: 6;
   grid-row: 2;
   width: 0;
   height: 0;
   border-style: solid;
   border-width: 50px 50px 0 0;
-  border-color: #64fffd transparent transparent transparent ;
+  border-color: #ffffff transparent transparent transparent ;
 }
 
 @keyframes I-animation {
@@ -257,7 +260,7 @@ a:hover {
 }
 
 @keyframes M1-animation {
-    35%{
+    50%{
         transform: rotateY(50deg) rotateX(20deg);
     }
 
@@ -271,7 +274,7 @@ a:hover {
 }
 
 @keyframes M2-animation {
-    35%{
+    50%{
         transform: rotateY(40deg) rotateZ(60deg);
     }
 
@@ -407,4 +410,13 @@ a:hover {
     100% {
         opacity: 1.0;
     }
+}
+
+/* Mobile */
+
+@media (max-width: 991px) {
+  .remove-r-padding {
+      padding-right: 0px !important;
+      padding-left: 0px !important;
+  }
 }

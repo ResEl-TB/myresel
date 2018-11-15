@@ -101,17 +101,17 @@
                             {% endif %}
                             {% if request.user.is_staff or request.ldap_user.ae_admin %}
                                 <li>
-                                   <a href="{% url "campus:gestion:modo" %}"><i class="fa fa-beer fa-fw"></i> Gérer les modérateurs campus</a>
+                                   <a href="{% url "campus:gestion:modo" %}"><i class="fa fa-gavel fa-fw"></i> Gérer les modérateurs campus</a>
                                 </li>
                             {% endif %}
                             {% if request.user.is_staff or request.ldap_user.ae_admin %}
                             <li>
-                               <a href="{% url "campus:ae-admin:home" %}"><i class="fa fa-sliders fa-fw"></i> {% trans "Administration AE" %}</a>
+                               <a href="{% url "campus:ae-admin:home" %}"><i class="fa fa-cogs fa-fw"></i> {% trans "Administration AE" %}</a>
                             </li>
                             {% endif %}
                             <hr />
                             <li>
-                                <a href="{% url "campus:who:user-home" %}"><i class="fa fa-sliders fa-id-card"></i> Mon profil</a>
+                                <a href="{% url "campus:who:user-home" %}"><i class="fa fa-sliders fa-id-card"></i> Mon profil Campus</a>
                             </li>
                             <li>
                             <li>
