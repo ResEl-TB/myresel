@@ -139,7 +139,7 @@ class AddDeviceView(View):
                 ))
                 return render(request, self.template_name, {'form': form})
             device.save()
-            network.update_all()  # TODO: Move that to something async
+            network.update_all()  # Warning, this command is long see implementation for more details
 
             mail_admins(
                 "[Inscription {}] 172.22.{} - {} [{}] par {}".format(settings.CURRENT_CAMPUS,
