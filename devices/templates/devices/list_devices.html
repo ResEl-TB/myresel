@@ -62,7 +62,8 @@
         <div class="container article"><a name="bandwidth">
                 <h1>Consomation de bande passante</h1></a>
             <div class="embed-responsive graph">
-                <iframe id="graph" src="https://graph.resel.fr/dashboard-solo/db/qos?panelId=2&from=now-13h&to=now&var-uid={{ request.ldap_user.uid }}" width="450" height="200" frameborder="0"></iframe>
+                <iframe id="graph" src="https://graph.resel.fr/dashboard-solo/db/qos?panelId=2&from=now-13h&to=now&var-uid={{ request.ldap_user.uid }}" width="450" height="200" frameborder="0" style="visibility: hidden; position: absolute; top: 0px;"
+  onload="this.style.position=''; this.style.visibility=''; this.style.top='';"></iframe>
             </div>
             <div class="btn-group">
             <button class="btn btn-default active hdur" x-act="now-13h">12h</button>
