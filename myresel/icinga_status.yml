@@ -19,13 +19,13 @@ campuses:
     services:
       internet-access:
         - name: blue-services
-          title: blue-services
+          title: Blue Services
           text: La connexion Blue Services est la connexion principale du ResEl
           icon: fa-cloud
           essential: true
           level: 2
           _hosts:
-            - zahia
+            # - zahia  # Temporarly disabled for ResEl reasons
             - matahari
           _hosts_failover: true  # true if the hosts act as failovers, false by default
         - name: renater
