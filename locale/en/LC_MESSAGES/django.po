@@ -1728,7 +1728,6 @@ msgid "Votre adresse mail"
 msgstr "Your email address"
 
 #: pages/forms.py:15
-#, fuzzy
 #| msgid "Votre demande"
 msgid "Votre message"
 msgstr "Your message"
@@ -1742,7 +1741,6 @@ msgid "Envoyer"
 msgstr "Send"
 
 #: pages/templates/pages/contact.html:28
-#, fuzzy
 #| msgid "Autre"
 msgid "Autrement"
 msgstr "Otherwise"
@@ -1782,7 +1780,6 @@ msgid ""
 msgstr ""
 
 #: pages/templates/pages/contact.html:42
-#, fuzzy
 #| msgid "Addresse postale complète"
 msgid "Adresse postale"
 msgstr "Postal address"
@@ -1812,7 +1809,6 @@ msgid "Cette réponse m'a été utile"
 msgstr ""
 
 #: pages/templates/pages/faq.html:38
-#, fuzzy
 #| msgid "Pas de news à l'horizon"
 msgid "Pas de question à l'horizon"
 msgstr "No question in sight"
@@ -1822,7 +1818,6 @@ msgid "Accueil"
 msgstr "Homepage"
 
 #: pages/templates/pages/home/home.html:17
-#, fuzzy
 #| msgid "Le Réseau des Élèves de Télécom Bretagne"
 msgid "Le Réseau des Élèves de l'IMT Atlantique"
 msgstr "IMT-Atlantique students' network"
@@ -1832,7 +1827,6 @@ msgid "Le fournisseur d'accès associatif par les teubreux pour les teubreux"
 msgstr ""
 
 #: pages/templates/pages/home/home.html:45
-#, fuzzy
 #| msgid "Vous profiterez des nombreux services du ResEl"
 msgid "Connectez-vous pour bénéficier de tous les services du ResEl"
 msgstr "Log in to enjoy all our services"
@@ -1847,19 +1841,16 @@ msgid "Les services du ResEl"
 msgstr "ResEl services"
 
 #: pages/templates/pages/home/home.html:113
-#, fuzzy
 #| msgid "Et plein d'autres services"
 msgid "Et plein d'autres"
 msgstr "And more"
 
 #: pages/templates/pages/home/home.html:123
-#, fuzzy
 #| msgid "Les dernières nouvelles"
 msgid "Les dernières nouvelles ResEl"
 msgstr "Latest news"
 
 #: pages/templates/pages/home/home.html:136
-#, fuzzy
 #| msgid "Pas de news à l'horizon"
 msgid "Pas de nouvelles à l'horizon"
 msgstr "No fresh news in sight"
@@ -1869,13 +1860,11 @@ msgid "Voir l'intégralité des nouvelles"
 msgstr ""
 
 #: pages/templates/pages/home/home.html:152
-#, fuzzy
 #| msgid "Nouveau sur le campus ?"
 msgid "En ce moment sur le campus"
 msgstr "Currently on the campus"
 
 #: pages/templates/pages/home/home.html:174
-#, fuzzy
 #| msgid "Pas de news à l'horizon"
 msgid "Pas d'événements à l'horizon"
 msgstr "No event in sight"
@@ -1893,7 +1882,6 @@ msgid "Les derniers mails campus"
 msgstr ""
 
 #: pages/templates/pages/home/home.html:206
-#, fuzzy
 #| msgid "Pas de news à l'horizon"
 msgid "Pas de mail campus à l'horizon"
 msgstr "No email in sight"
