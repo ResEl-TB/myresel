@@ -31,21 +31,21 @@ msgstr "You cannot manage this room"
 
 #: campus/forms.py:157
 msgid "L'adresse email semble être invalide"
-msgstr ""
+msgstr "The email adress seems unavailable"
 
 #: campus/forms.py:168
 #, python-format
 msgid "Le club suivant n'existe pas: %s"
-msgstr ""
+msgstr "The following club doesn't exist: %s"
 
 #: campus/forms.py:170
 #, python-format
 msgid "Le club suivant n'est pas un nom valide: %s"
-msgstr ""
+msgstr "The following club isn't a correct name: %s"
 
 #: campus/forms.py:199
 msgid "Sélectionner ce que vous souhaitez créer"
-msgstr ""
+msgstr "Select wht you want to create"
 
 #: campus/forms.py:205 campus/forms.py:208
 #: campus/templates/campus/rooms/room_management.html:16
@@ -62,15 +62,15 @@ msgstr "Name"
 
 #: campus/forms.py:214
 msgid "Nom court; ex: tennis pour les Club tennis"
-msgstr ""
+msgstr "Short names; e.g. : tennis for the tennis Club"
 
 #: campus/forms.py:217
 msgid "Nom court"
-msgstr ""
+msgstr "Short name"
 
 #: campus/forms.py:223
-msgid "Présentation du l'organisation"
-msgstr ""
+msgid "Présentation de l'organisation"
+msgstr "Presentation of the organisation"
 
 #: campus/forms.py:227
 #| msgid "Inscription"
@@ -84,19 +84,19 @@ msgstr "Mailing list address"
 
 #: campus/forms.py:243
 msgid "Mailing liste"
-msgstr ""
+msgstr "Mailing list"
 
 #: campus/forms.py:250
 msgid "Site web"
-msgstr ""
+msgstr "Web site"
 
 #: campus/forms.py:260
 msgid "Année de campagne"
-msgstr ""
+msgstr "Campaign's year"
 
 #: campus/forms.py:262
 msgid "Année de Campagne"
-msgstr ""
+msgstr "Campaign's year"
 
 #: campus/forms.py:269
 #| msgid "Veuillez sélectionner un campus"
@@ -107,16 +107,18 @@ msgstr "Please select a valid choice"
 msgid ""
 "Ce nom existe déjà, assurez vous de créer un club/asso qui n'existe pas déjà"
 msgstr ""
+"The name already exist, plaese create a club/an association which doesn't already exist"
 
 #: campus/forms.py:277
 msgid ""
-"Le nom court ne doit pas contenir d'espace est n'est contitué que de lettres "
+"Le nom court ne doit pas contenir d'espace et n'est contitué que de lettres "
 "et de chiffres"
 msgstr ""
+"The short name shouldn't contain spaces, but only letters"
 
 #: campus/forms.py:283
 msgid "Merci de renseigner un logo pour votre association/liste"
-msgstr ""
+msgstr "Please submit a logo for your association/list"
 
 #: campus/forms.py:289
 #, fuzzy
@@ -132,7 +134,7 @@ msgstr "Please select a valid email address"
 
 #: campus/forms.py:301
 msgid "Veuillez entrer une année de campagne valide"
-msgstr ""
+msgstr "Please enter a valid campaign's year"
 
 #: campus/forms.py:376 gestion_personnes/forms.py:25
 #: gestion_personnes/forms.py:129
@@ -146,11 +148,11 @@ msgstr "Choose a building"
 
 #: campus/forms.py:394
 msgid "Supprimer ma photo"
-msgstr ""
+msgstr "Delete my picture"
 
 #: campus/forms.py:401
 msgid "Rendre publiques les details de mon profil"
-msgstr ""
+msgstr "Make all my profil's details public"
 
 #: campus/forms.py:431
 #, fuzzy
@@ -160,11 +162,11 @@ msgstr "Your search"
 
 #: campus/forms.py:437
 msgid "Recherche stricte"
-msgstr ""
+msgstr "Strict search"
 
 #: campus/models/rooms_models.py:16
 msgid "salle"
-msgstr ""
+msgstr "room"
 
 #: campus/models/rooms_models.py:19
 #: campus/templates/campus/rooms/room_management.html:41
@@ -180,7 +182,7 @@ msgstr "School"
 
 #: campus/models/rooms_models.py:21
 msgid "Extérieur"
-msgstr ""
+msgstr "Outside"
 
 #: campus/models/rooms_models.py:22
 #: campus/templates/campus/rooms/room_management.html:44
@@ -216,15 +218,15 @@ msgstr "Room name"
 
 #: campus/models/rooms_models.py:40
 msgid "mailing-list à contacter pour réserver cette salle"
-msgstr ""
+msgstr "mailing-list to contact to reserve this room"
 
 #: campus/models/rooms_models.py:44
 msgid "indique si la salle est privée ou non"
-msgstr ""
+msgstr "write whether the room is private or not"
 
 #: campus/models/rooms_models.py:46
 msgid "Salle privée / club"
-msgstr ""
+msgstr "Private/club room"
 
 #: campus/models/rooms_models.py:51
 msgid ""
