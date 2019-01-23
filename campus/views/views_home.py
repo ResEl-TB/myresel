@@ -1,6 +1,8 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.views.generic import View
 from django.utils import timezone
+from django.utils.decorators import method_decorator
 
 from django.db.models import Q
 
@@ -10,13 +12,10 @@ from campus.models.mails_models import Mail
 
 from campus.whoswho.views import ListBirthdays
 
+@method_decorator(login_required, name="dispatch")
 class Home(View):
 
     template_name = "campus/home.html"
-
-    #@method_decorator(login_required)
-    #def dispatch(self, *args, **kwargs):
-    #    return super(Home, self).dispatch(self, *args, **kwargs)
 
     def get(self, request, *args, **kwargs):
         events = RoomBooking.objects.order_by('start_time').filter(
