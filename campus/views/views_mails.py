@@ -148,6 +148,7 @@ def rejectView(request, mail):
 
         return HttpResponse()
 
+@login_required
 def display_mail(request, mail):
     try:
         m = Mail.objects.get(pk=mail)
