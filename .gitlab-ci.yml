@@ -12,6 +12,7 @@ stages:
   - deploy
 
 variables:
+  CI_DEBUG_TRACE: "true"
   MYSQL_HOST: mysql-mysql-server
   MYSQL_USER: resel
   MYSQL_PASSWORD: blah
