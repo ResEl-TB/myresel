@@ -10,15 +10,16 @@ ENV LANG fr_FR.UTF-8
 ENV LANGUAGE fr_FR.UTF-8
 
 # Python
-RUN apt-get -qq upgrade && apt-get -qq install build-essential python-software-properties python3 python3-dev python3-pip vim libssl-dev libmysqlclient-dev gcc mysql-client
-RUN easy_install3 -U pip
+COPY .install/scripts/install_essentials.sh install_essentials.sh
+RUN chmod +x install_essentials.sh
+RUN ./install_essentials.sh
 
 COPY requirements.txt requirements.txt
-RUN pip3 install -qUr requirements.txt
+RUN pip3 install -qr requirements.txt
 
 # LDAP
 RUN apt-get -qq upgrade && apt-get -qq install slapd ldap-utils libldap2-dev libsasl2-dev libssl-dev ldapvi
 
 # Latex
-RUN apt-get -qq upgrade && apt-get -qq install texlive-latex-extra
-RUN apt-get -qq upgrade && apt-get -qq install libjpeg-dev gettext
+# RUN apt-get -qq upgrade && apt-get -qq install texlive-latex-extra
+# RUN apt-get -qq upgrade && apt-get -qq install libjpeg-dev gettext

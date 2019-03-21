@@ -37,7 +37,7 @@
         this.processing = true;
         file = e.target.files[0];
 
-        if(file && ['application/vnd.ms-excel', 'text/csv'].includes(file.type))
+        if(file && ['application/vnd.ms-excel', 'text/csv', ''].includes(file.type))
         {
           reader = new FileReader();
           reader.onload = function(f){
