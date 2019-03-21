@@ -64,7 +64,7 @@ class RemoveCampusModo(View):
             raise Http404
         return super(RemoveCampusModo, self).dispatch(request)
 
-    def post(self, request, *args, **kwargsé):
+    def post(self, request, *args, **kwargs):
         uid = request.POST.get('uid', None)
         if uid:
             LdapGroup.get(pk='campusmodo').remove_member(uid)
