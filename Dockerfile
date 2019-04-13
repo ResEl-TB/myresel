@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM debian:stretch
 
 MAINTAINER nicolas@vuillermet.bzh
 
@@ -25,8 +25,12 @@ RUN apt-get -qq upgrade && apt-get -qq install expect ldap-utils libldap2-dev li
 #RUN spawn apt-get -qq install slapd
 #RUN expect “Mot de passe de l'administrateur :” { send “$LDAPPASSWD\n” }
 #RUN interact
+#RUN echo "$LDAPPASSWD" | apt-get -qq install slapd
 
-RUN echo "$LDAPPASSWD" | apt-get -qq install slapd
+COPY .install/scripts/install_slapd.sh install_slapd.sh
+RUN chmod +x install_slapd.sh
+RUN ./install_slapd.sh $LDAPPASSWD
+
 
 # Latex
 # RUN apt-get -qq upgrade && apt-get -qq install texlive-latex-extra
