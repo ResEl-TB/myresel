@@ -1,6 +1,7 @@
-FROM docker.resel.fr/debian:v1
+FROM debian:stretch
+ARG LDAPPASSWD
 
-MAINTAINER loic.carr@resel.fr
+MAINTAINER nicolas@vuillermet.bzh
 
 RUN apt-get -qq update
 
@@ -18,7 +19,11 @@ COPY requirements.txt requirements.txt
 RUN pip3 install -qr requirements.txt
 
 # LDAP
-RUN apt-get -qq upgrade && apt-get -qq install slapd ldap-utils libldap2-dev libsasl2-dev libssl-dev ldapvi
+RUN apt-get -qq upgrade && apt-get -qq install expect ldap-utils libldap2-dev libsasl2-dev libssl-dev ldapvi
+
+COPY .install/scripts/install_slapd.sh install_slapd.sh
+RUN chmod +x install_slapd.sh
+RUN ./install_slapd.sh $LDAPPASSWD
 
 # Latex
 # RUN apt-get -qq upgrade && apt-get -qq install texlive-latex-extra
