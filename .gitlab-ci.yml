@@ -2,8 +2,32 @@
 # TODO: do not delete migrations
 
 variables:
- IMAGE: docker.resel.fr/myresel:latest
+ IMAGE: docker.resel.fr/myresel:latest  # Custom image made for the ResEl
+  
+ MYSQL_HOST: mysql-mysql-server
+ MYSQL_USER: resel
+ MYSQL_PASSWORD: blah
+ MYSQL_DATABASE: resel
+ MYSQL_ROOT_PASSWORD: blah
+ MYSQL_ROOT_HOST: '%'
 
+ REDIS_HOST: redis
+
+ MYSQL_QOS_DATABASE: qos
+ MYSQL_QOS_HOST: mysql-mysql-server
+ MYSQL_QOS_USER: root
+ MYSQL_QOS_PASSWORD: blah
+  
+ ROOTDIR: ./
+ CONFDIR: myresel/
+ ETCDIR: .install/etc/
+ LIBDIR: .install/lib/
+ LDAP_PASSWORD: blah
+
+ LAPUTEX_HOST: http:\/\/laputex.adm.resel.fr\/
+ #LAPUTEX_PWD in gitlab secrets 
+
+ DEBIAN_FRONTEND: noninteractive
 
 stages:
   - docker_build
@@ -41,37 +65,10 @@ Push docker image:
 #   changes:
 #     - Dockerfile
 
-
-image: $IMAGE  # Custom image made for the ResEl
+image: $IMAGE 
 services:
   - redis:latest
   - mysql/mysql-server:5.5
-
-variables:
-  MYSQL_HOST: mysql-mysql-server
-  MYSQL_USER: resel
-  MYSQL_PASSWORD: blah
-  MYSQL_DATABASE: resel
-  MYSQL_ROOT_PASSWORD: blah
-  MYSQL_ROOT_HOST: '%'
-
-  REDIS_HOST: redis
-
-  MYSQL_QOS_DATABASE: qos
-  MYSQL_QOS_HOST: mysql-mysql-server
-  MYSQL_QOS_USER: root
-  MYSQL_QOS_PASSWORD: blah
-  
-  ROOTDIR: ./
-  CONFDIR: myresel/
-  ETCDIR: .install/etc/
-  LIBDIR: .install/lib/
-  LDAP_PASSWORD: blah
-
-  LAPUTEX_HOST: http:\/\/laputex.adm.resel.fr\/
-# LAPUTEX_PWD in gitlab secrets 
-
-  DEBIAN_FRONTEND: noninteractive
 
 before_script:
   - source .install/scripts/install_essentials.sh no-upgrade
