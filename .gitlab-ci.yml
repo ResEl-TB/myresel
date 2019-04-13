@@ -23,9 +23,9 @@ Build docker image:
   script:
     - docker build -t $image:$CI_COMMIT_SHA .
     - docker push $image:$CI_COMMIT_SHA
-  only:
-   changes:
-     - Dockerfile
+#  only:
+#   changes:
+#     - Dockerfile
 
 
 Push docker image:
@@ -38,9 +38,9 @@ Push docker image:
     - docker pull $image:$CI_COMMIT_SHA
     - docker tag $image:$CI_COMMIT_SHA $IMAGE:latest
     - docker push $image:latest
-  only:
-   changes:
-     - Dockerfile
+#  only:
+#   changes:
+#     - Dockerfile
 
 variables:
   MYSQL_HOST: mysql-mysql-server
