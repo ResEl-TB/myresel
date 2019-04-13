@@ -21,8 +21,8 @@ Build docker image:
   before_script: &before_script
     - docker login $DOCKER_REGISTRY -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD
   script:
-    - docker build -t $IMAGE:$CI_COMMIT_SHA .
-    - docker push $IMAGE:$CI_COMMIT_SHA
+    - docker build -t $image:$CI_COMMIT_SHA .
+    - docker push $image:$CI_COMMIT_SHA
   only:
    changes:
      - Dockerfile
@@ -35,9 +35,9 @@ Push docker image:
   image: docker:stable
   before_script: *before_script
   script:
-    - docker pull $IMAGE:$CI_COMMIT_SHA
-    - docker tag $IMAGE:$CI_COMMIT_SHA $IMAGE:latest
-    - docker push $IMAGE:latest
+    - docker pull $image:$CI_COMMIT_SHA
+    - docker tag $image:$CI_COMMIT_SHA $IMAGE:latest
+    - docker push $image:latest
   only:
    changes:
      - Dockerfile
