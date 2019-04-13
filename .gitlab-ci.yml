@@ -2,7 +2,7 @@
 # TODO: do not delete migrations
 
 variables:
- IMAGE: docker.resel.fr/myresel:latest  # Custom image made for the ResEl
+ IMAGE: docker.resel.fr/myresel  # Custom image made for the ResEl
   
  MYSQL_HOST: mysql-mysql-server
  MYSQL_USER: resel
@@ -65,7 +65,7 @@ Push docker image:
 #   changes:
 #     - Dockerfile
 
-image: $IMAGE 
+image: $IMAGE:latest
 services:
   - redis:latest
   - mysql/mysql-server:5.5
