@@ -23,7 +23,7 @@ RUN apt-get -qq upgrade && apt-get -qq install expect ldap-utils libldap2-dev li
 RUN #!/usr/bin/expect
 RUN set timeout 2
 RUN spawn apt-get -qq install slapd
-RUN expect “Mot de passe de l'administrateur :” { send “kUpQusBpQtm60TFy\n” }
+RUN expect “Mot de passe de l'administrateur :” { send “$LDAPPASSWD\n” }
 RUN interact
 
 # Latex
