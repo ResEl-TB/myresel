@@ -1,4 +1,4 @@
-FROM debian:latest
+FROM debian:jessie
 
 MAINTAINER loic.carr@resel.fr
 
