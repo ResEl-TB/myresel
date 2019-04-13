@@ -1,4 +1,4 @@
-FROM docker.resel.fr/debian:v1
+FROM debian:latest
 
 MAINTAINER loic.carr@resel.fr
 
