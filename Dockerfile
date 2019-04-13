@@ -2,10 +2,9 @@ FROM debian:jessie
 
 MAINTAINER nicolas@vuillermet.bzh
 
-#RUN apt-get -qq update
+RUN apt-get -qq update
 
-#RUN apt-get -qq upgrade && 
-RUN apt-get install -qq locales locales-all
+RUN apt-get -qq upgrade && apt-get install -qq locales locales-all
 ENV LC_ALL fr_FR.UTF-8
 ENV LANG fr_FR.UTF-8
 ENV LANGUAGE fr_FR.UTF-8
