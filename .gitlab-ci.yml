@@ -1,41 +1,74 @@
 # TODO: refactor configuration (username, pass...)
 # TODO: do not delete migrations
 
-image: docker.resel.fr/web:latest  # Custom image made for the ResEl
-services:
-  - redis:latest
-  - mysql/mysql-server:5.5
+variables:
+ IMAGE: docker.resel.fr/myresel  # Custom image made for the ResEl
+  
+ MYSQL_HOST: mysql-mysql-server
+ MYSQL_USER: resel
+ MYSQL_PASSWORD: blah
+ MYSQL_DATABASE: resel
+ MYSQL_ROOT_PASSWORD: blah
+ MYSQL_ROOT_HOST: '%'
+
+ REDIS_HOST: redis
+
+ MYSQL_QOS_DATABASE: qos
+ MYSQL_QOS_HOST: mysql-mysql-server
+ MYSQL_QOS_USER: root
+ MYSQL_QOS_PASSWORD: blah
+  
+ ROOTDIR: ./
+ CONFDIR: myresel/
+ ETCDIR: .install/etc/
+ LIBDIR: .install/lib/
+ LDAP_PASSWORD: blah
+
+ LAPUTEX_HOST: http:\/\/laputex.adm.resel.fr\/
+ #LAPUTEX_PWD in gitlab secrets 
+
+ DEBIAN_FRONTEND: noninteractive
 
 stages:
+  - docker_build
+  - docker_push
   - configure
   - test
   - deploy
-
-variables:
-  MYSQL_HOST: mysql-mysql-server
-  MYSQL_USER: resel
-  MYSQL_PASSWORD: blah
-  MYSQL_DATABASE: resel
-  MYSQL_ROOT_PASSWORD: blah
-  MYSQL_ROOT_HOST: '%'
-
-  REDIS_HOST: redis
-
-  MYSQL_QOS_DATABASE: qos
-  MYSQL_QOS_HOST: mysql-mysql-server
-  MYSQL_QOS_USER: root
-  MYSQL_QOS_PASSWORD: blah
   
-  ROOTDIR: ./
-  CONFDIR: myresel/
-  ETCDIR: .install/etc/
-  LIBDIR: .install/lib/
-  LDAP_PASSWORD: blah
+Build docker image:
+  stage: docker_build
+  services: 
+    - docker:dind
+  image: docker:stable
+  before_script: &before_script
+    - docker login $DOCKER_REGISTRY -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD
+  script:
+    - docker build -t $IMAGE:$CI_COMMIT_SHA --build-arg LDAPPASSWD=$LDAP_PASSWORD .
+    - docker push $IMAGE:$CI_COMMIT_SHA
+  only:
+   changes:
+     - Dockerfile
 
-  LAPUTEX_HOST: http:\/\/laputex.adm.resel.fr\/
-# LAPUTEX_PWD in gitlab secrets 
 
-  DEBIAN_FRONTEND: noninteractive
+Push docker image:
+  stage: docker_push
+  services:
+    - docker:dind
+  image: docker:stable
+  before_script: *before_script
+  script:
+    - docker pull $IMAGE:$CI_COMMIT_SHA
+    - docker tag $IMAGE:$CI_COMMIT_SHA $IMAGE:latest
+    - docker push $IMAGE:latest
+  only:
+   changes:
+     - Dockerfile
+
+image: $IMAGE:latest
+services:
+  - redis:latest
+  - mysql/mysql-server:5.5
 
 before_script:
   - source .install/scripts/install_essentials.sh no-upgrade
