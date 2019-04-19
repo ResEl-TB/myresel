@@ -39,19 +39,10 @@ campuses:
             - zahia
             - matahari
       network-edge:
-        - name: zahia
-          title: Firewall Zahia
-          text: Zahia est le firewall principal à Brest. Il permet de
-            contrôler l'accès à Internet.
-          icon: fa-server
-          essential: true
-          level: 2
-          _hosts:
-            - zahia
         - name: matahari
           title: Firewall Matahari
-          text: Matahari est le firewall de secours à Brest. Au cas où
-            Zahia tombe en panne.
+          text: Matahari est le firewall principal à Brest. Il permet de
+            contrôler l'accès à Internet.
           icon: fa-server
           essential: true
           level: 1
