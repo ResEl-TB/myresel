@@ -35,27 +35,27 @@ def get_mac(ip):
 
     redis_pref = 'mac__'
     # First check if the ip is referenced in the redis server
-    try:
-        r = redis.Redis(
-            host=settings.REDIS_HOST,
-            port=settings.REDIS_PORT,
-            password=settings.REDIS_PASSWORD,
-            db=settings.REDIS_DB
-        )
+    #try:
+    #    r = redis.Redis(
+    #        host=settings.REDIS_HOST,
+    #        port=settings.REDIS_PORT,
+    #        password=settings.REDIS_PASSWORD,
+    #        db=settings.REDIS_DB
+    #    )
 
-        mac = r.get('%s%s' % (redis_pref, ip))
-        if mac is not None:
-            return mac.decode('utf-8')
-        else:
-            logger.warning(
-                'ip address %s not find in redis server, is the network watcher ok?' % ip,
-                extra={'ip_address': ip, 'message_code': 'IP_NOT_FIND_REDIS'}
-            )
-    except redis.exceptions.ConnectionError as e:
-        logger.error(
-            'Redis Server Unavailable : %s' % str(e),
-            extra={'message_code': 'REDIS_CONNECTION_ERROR'},
-        )
+    #    mac = r.get('%s%s' % (redis_pref, ip))
+    #    if mac is not None:
+    #        return mac.decode('utf-8')
+    #    else:
+    #        logger.warning(
+    #            'ip address %s not find in redis server, is the network watcher ok?' % ip,
+    #            extra={'ip_address': ip, 'message_code': 'IP_NOT_FIND_REDIS'}
+    #        )
+    #except redis.exceptions.ConnectionError as e:
+    #    logger.error(
+    #        'Redis Server Unavailable : %s' % str(e),
+    #        extra={'message_code': 'REDIS_CONNECTION_ERROR'},
+    #    )
 
     # FIXME: I don't know how to test that very well, and indeed during
     # local tests, a fake mac is sent. One day we will have a good enough
