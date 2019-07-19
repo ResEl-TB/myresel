@@ -25,7 +25,7 @@ class ContactForm(forms.Form):
     )
     uid = forms.CharField(label="", widget=forms.HiddenInput(), required=False)
     captcha = forms.CharField(
-        label=_("Quel est le nom du directeur de l'IMT-Atlantique (captcha)"),
+        label=_("Quel est le nom du directeur d'IMT Atlantique (captcha)"),
         widget=forms.TextInput(attrs={"class": "form-control"}),
     )
 
