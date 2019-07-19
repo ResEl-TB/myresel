@@ -1821,7 +1821,7 @@ msgstr "Homepage"
 
 #: pages/templates/pages/home/home.html:17
 #| msgid "Le Réseau des Élèves de Télécom Bretagne"
-msgid "Le Réseau des Élèves de l'IMT Atlantique"
+msgid "Le Réseau des Élèves d'IMT Atlantique"
 msgstr "IMT-Atlantique students' network"
 
 #: pages/templates/pages/home/home.html:18
@@ -1989,7 +1989,7 @@ msgstr "Off campus"
 #: pages/templates/pages/home/home_logged.html:96
 #, fuzzy
 #| msgid "Vous êtes actuellement hors du campus de Télécom Bretagne."
-msgid "Vous êtes actuellement hors du campus de l'IMT Atlantique."
+msgid "Vous êtes actuellement hors du campus d'IMT Atlantique."
 msgstr "You are currently off IMT Atlantique campus"
 
 #: pages/templates/pages/home/home_logged.html:97
@@ -2367,7 +2367,7 @@ msgid "IMT Atlantique"
 msgstr "IMT Atlantique"
 
 #: templates/base.html:224
-msgid "Associations de l'IMT Atlantique"
+msgid "Associations d'IMT Atlantique"
 msgstr "IMT Atlantique associations"
 
 #: templates/base.html:225
