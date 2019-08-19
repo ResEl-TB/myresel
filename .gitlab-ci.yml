@@ -24,7 +24,7 @@ variables:
  LIBDIR: .install/lib/
  LDAP_PASSWORD: blah
 
- LAPUTEX_HOST: http:\/\/laputex.adm.resel.fr\/
+ LAPUTEX_HOST: http:\/\/laputex\/
  #LAPUTEX_PWD in gitlab secrets 
 
  DEBIAN_FRONTEND: noninteractive
@@ -117,7 +117,7 @@ deploy to staging:
     - bash -c 'ssh-add <(echo "${STAGING_DEPLOY_KEY}")'
   stage: deploy
   script:
-    - ssh -o "StrictHostKeyChecking=no" -T deploy@flea.adm
+    - ssh -o "StrictHostKeyChecking=no" -T deploy@flea
   only:
     - master
   environment:
@@ -132,7 +132,7 @@ deploy to brest:
     - bash -c 'ssh-add <(echo "${SKYNET_DEPLOY_KEY}")'
   stage: deploy
   script:
-    - ssh -o "StrictHostKeyChecking=no" -T deploy@skynet.adm
+    - ssh -o "StrictHostKeyChecking=no" -T deploy@skynet
   only:
     - deploy
   environment:
@@ -147,7 +147,7 @@ deploy to rennes:
     - bash -c 'ssh-add <(echo "${DOUBIDOU_DEPLOY_KEY}")'
   stage: deploy
   script:
-    - ssh -o "StrictHostKeyChecking=no" -T deploy@doubidou.adm
+    - ssh -o "StrictHostKeyChecking=no" -T deploy@doubidou
   only:
     - deploy
   environment:
