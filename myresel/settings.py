@@ -354,7 +354,7 @@ PROD_LOGGING_CONF = {
         'logstash': {
             'level': 'DEBUG',
             'class': 'logstash.LogstashHandler',
-            'host': 'orion.adm.resel.fr',
+            'host': 'orion',
             'port': 5959,  # Default value: 5959
             'version': 1,
             'message_type': 'django',

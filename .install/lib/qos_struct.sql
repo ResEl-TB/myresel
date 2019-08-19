@@ -2,7 +2,7 @@
 -- version 3.4.11.1deb2+deb7u6
 -- http://www.phpmyadmin.net
 --
--- Host: maia.adm.resel.fr
+-- Host: maia
 -- Generation Time: Nov 26, 2016 at 01:57 PM
 -- Server version: 5.5.53
 -- PHP Version: 5.4.45-0+deb7u5
