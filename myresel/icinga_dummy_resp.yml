@@ -55,7 +55,7 @@ results:
     state: 1
   joins:
     host:
-      address: dgsi.adm.resel.fr
+      address: dgsi
       name: cacti.resel.fr
   meta: {}
   name: cacti.resel.fr!http
@@ -67,7 +67,7 @@ results:
     state: 1
   joins:
     host:
-      address: dgsi.adm.resel.fr
+      address: dgsi
       name: cacti.resel.fr
   meta: {}
   name: cacti.resel.fr!http_reverse
@@ -187,7 +187,7 @@ results:
     state: 2
   joins:
     host:
-      address: lena.adm.resel.fr
+      address: lena
       name: lena
   meta: {}
   name: lena!mysql
@@ -199,7 +199,7 @@ results:
     state: 2
   joins:
     host:
-      address: lena.adm.resel.fr
+      address: lena
       name: lena
   meta: {}
   name: lena!postgres
@@ -235,7 +235,7 @@ results:
     state: 2
   joins:
     host:
-      address: maia.adm.resel.fr
+      address: maia
       name: maia
   meta: {}
   name: maia!apt
@@ -247,7 +247,7 @@ results:
     state: 1
   joins:
     host:
-      address: dgsi.adm.resel.fr
+      address: dgsi
       name: munin.resel.fr
   meta: {}
   name: munin.resel.fr!http
@@ -283,7 +283,7 @@ results:
     state: 2
   joins:
     host:
-      address: sonic.adm.resel.fr
+      address: sonic
       name: proxmox-rennes.resel.fr
   meta: {}
   name: proxmox-rennes.resel.fr!http
@@ -379,7 +379,7 @@ results:
     state: 2
   joins:
     host:
-      address: vegeta.adm.resel.fr
+      address: vegeta
       name: tv.resel.fr
   meta: {}
   name: tv.resel.fr!http
@@ -391,7 +391,7 @@ results:
     state: 2
   joins:
     host:
-      address: vegeta.adm.resel.fr
+      address: vegeta
       name: tv.resel.fr
   meta: {}
   name: tv.resel.fr!http_reverse
