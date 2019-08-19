@@ -31,7 +31,7 @@ SERVER_EMAIL = 'skynet@resel.fr'
 TREASURER_EMAIL = 'tresorier@resel.fr'
 SUPPORT_EMAIL = 'support@resel.fr'
 
-EMAIL_HOST = 'pegase.adm.resel.fr'
+EMAIL_HOST = 'pegase'
 EMAIL_SUBJECT_PREFIX = '[resel.fr]'
 
 
@@ -100,7 +100,7 @@ INVOICE_STORE_PATH = 'invoices'
 
 # LaPuTeX CONF
 
-LAPUTEX_HOST = "http://laputex.adm.resel.fr/"
+LAPUTEX_HOST = "http://laputex/"
 LAPUTEX_DOC_URL = LAPUTEX_HOST+"beta/documents/"
 LAPUTEX_TOKEN = "your token here"
 LAPUTEX_WAITING_TIME = 5    # In seconds
