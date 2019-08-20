@@ -182,6 +182,7 @@ def calendar_view(request, room='all', year=timezone.now().year, month=timezone.
         'current_room': room,
         'current_day': [str(timezone.now().day), str(timezone.now().month), str(timezone.now().year)],
         'form': form,
+        'user': request.user,
     }
 
     return render(

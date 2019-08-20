@@ -178,7 +178,6 @@ class Pay(View):
                         "transaction_name": transaction_full_name,
                         "uid": user.uid,
                         "ip": request.network_data['ip'],
-                        "is_registered": request.network_data['is_registered'],
                         "end_internet": user.end_cotiz,
                         'message_code': 'STRIPE_FIREWALL_ERROR',
                     })
