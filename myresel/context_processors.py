@@ -1,4 +1,3 @@
-from devices.models import LdapDevice
 from gestion_personnes.models import LdapUser
 from pages.views import StatusPageXhr
 
@@ -35,8 +34,6 @@ def resel_context(request):
     # elif request.network_data['zone'] != "Internet":
     #     try:
     #         # FIXME: here 2 requests to the Ldap each time...
-    #         device = LdapDevice.get(request.network_data['ip'])
-    #         owner_short_uid = device.owner.split(",")[0][4:]
     #         user = LdapUser.get(uid=owner_short_uid)
     #         context['has_paid_cotiz'] = user.need_to_pay()
     #     except:

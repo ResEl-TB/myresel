@@ -4,7 +4,7 @@ from django.test import TestCase
 from myresel import settings
 
 from fonctions.generic import hash_passwd, compare_passwd
-from fonctions.network import get_network_zone, is_resel_ip, update_all, get_campus, NetworkError, get_mac
+from fonctions.network import get_network_zone, is_resel_ip, update_all, get_campus, NetworkError
 
 
 class FunctionTests(TestCase):
@@ -102,20 +102,3 @@ class FunctionTests(TestCase):
             password=settings.REDIS_PASSWORD,
             db=settings.REDIS_DB
         )
-
-    def test_get_mac_ip(self):
-        # Create fake adresses:
-        r = self.create_redis_conn()
-        r.set('mac__172.22.200.123', '34:64:4c:ab:22:96')
-        r.set('mac__172.23.200.100', '35:ac:80:a4:12:00')
-
-        # Commented since Redis disabled
-        #self.assertEqual('34:64:4c:ab:22:96', get_mac('172.22.200.123'))
-        #self.assertEqual('35:ac:80:a4:12:00', get_mac('172.23.200.100'))
-
-    def test_get_mac_ip_no_redis(self):
-        r = self.create_redis_conn()
-        r.delete('mac__172.22.200.123', '34:64:4c:ab:22:96')
-        r.delete('mac__172.23.200.100', '35:ac:80:a4:12:00')
-
-        self.assertEqual(settings.DEBUG_SETTINGS['mac'], get_mac('172.22.209.115'))

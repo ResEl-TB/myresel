@@ -29,7 +29,6 @@ from django.core.cache import cache
 
 from fonctions import network, decorators
 from fonctions.decorators import resel_required
-from devices.models import LdapDevice
 from gestion_personnes.models import LdapUser, UserMetaData
 from pages.forms import ContactForm
 from pages.models import News, Faq
@@ -61,7 +60,6 @@ class Home(View):
     interior_template = 'pages/home/home_int.html'
     logged_template = 'pages/home/home_logged.html'
 
-    @method_decorator(decorators.correct_vlan)
     def dispatch(self, *args, **kwargs):
         return super(Home, self).dispatch(*args, **kwargs)
 
@@ -115,15 +113,6 @@ class Home(View):
             user_meta = UserMetaData.objects.get_or_create(uid=request.ldap_user.uid)
             args_for_response['user_meta'] = user_meta
             # Check his end fees date
-            if is_in_resel:
-                try:
-                    mac = network.get_mac(request.network_data['ip'])
-                    device = LdapDevice.get(mac_address=mac)
-                    args_for_response['device'] = device
-                    args_for_response['not_user_device'] = device.owner != request.ldap_user.pk
-                    args_for_response['is_registered'] = True
-                except ObjectDoesNotExist:
-                    args_for_response['is_registered'] = False
             template_for_response = self.logged_template
             args_for_response['end_fee'] = end_fee
 
@@ -238,48 +227,6 @@ class Contact(View):
             return HttpResponseRedirect(reverse('home'))
         return render(request, self.template_name, {'form': form})
 
-
-@resel_required
-def inscription_zone_info(request):
-    """
-    View which explains the users on how to register to the ResEl
-
-    If the device is not registered show the information
-    If the device is simply not active, it redirect the user to the
-    reactivation view
-    :param request:
-    :return: HttpResponse
-    """
-    is_registered = False
-    is_active = False
-
-    campus = network.get_campus(request.network_data['ip'])
-    mac = network.get_mac(request.network_data['ip'])
-    vlan = request.network_data['vlan']
-    is_logged_in = request.user.is_authenticated()
-
-    try:
-        device = LdapDevice.get(mac_address=mac)
-        is_registered = True
-        is_active = device.get_status(current_campus=campus) == 'active'
-        if not is_active:
-            return HttpResponseRedirect(reverse("gestion-machines:reactivation"))
-    except ObjectDoesNotExist:
-        logger.info("The device with the mac %s was not found in the LDAP" % mac,
-                extra={
-                    'campus': campus,
-                    'vlan': vlan,
-                    'is_logged_in': is_logged_in,
-                    'device_mac': mac,
-                    'message_code': 'UNKNOWN_MAC'
-                }
-        )
-
-    return render(
-        request,
-        'pages/inscription_zone_info.html',
-        {'vlan': vlan, 'is_logged_in': is_logged_in, 'is_registered': is_registered, 'is_active': is_active}
-    )
 
 class FaqList(ListView):
     """ Vue appelée pour afficher les F.A.Q. au niveau du ResEl """
