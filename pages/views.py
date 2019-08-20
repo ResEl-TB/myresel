@@ -113,8 +113,6 @@ class Home(View):
             user_meta = UserMetaData.objects.get_or_create(uid=request.ldap_user.uid)
             args_for_response['user_meta'] = user_meta
             # Check his end fees date
-            if is_in_resel:
-                args_for_response['is_registered'] = False
             template_for_response = self.logged_template
             args_for_response['end_fee'] = end_fee
 

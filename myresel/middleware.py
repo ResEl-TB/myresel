@@ -80,21 +80,8 @@ class NetworkConfiguration(object):
         request.network_data['ip_suffix'] = ip_suffix
         request.network_data['host'] = request.META['HTTP_HOST']
         request.network_data['zone'] = zone
-        request.network_data['is_registered'] = 'unknown'
         request.network_data['is_logged_in'] = request.user.is_authenticated()
         request.network_data['is_resel'] = network.is_resel_ip(ip)
-
-        # If the device in `user` or `inscription` zone, we can retrieve its mac address
-        if "user" in zone or "inscription" in zone:
-            try:
-                 request.network_data['is_registered'] = ldap.get_status(ip)  # TODO: possible bug
-            except LDAPSocketOpenError:
-                request.network_data['is_registered'] = True
-                messages.error(request, 'Base de données non joignable. Certaines fonctionnalités ne fonctionneront pas')
-                logger.error(
-                    "LDAP Unavailable",
-                    extra={'message_code': 'LDAP_CONNECTION_ERROR'},
-                )
 
         response = self.get_response(request)
         return response
