@@ -18,8 +18,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.generic import FormView, View
 
 from fonctions import ldap
-from fonctions.decorators import resel_required, unknown_machine
-from devices.forms import AddDeviceForm
+from fonctions.decorators import resel_required
 from gestion_personnes.async_tasks import send_mails
 from gestion_personnes.models import LdapUser, UserMetaData
 from .forms import InscriptionForm, ModPasswdForm, CGUForm, InvalidUID, PersonnalInfoForm, ResetPwdSendForm, \
@@ -40,7 +39,6 @@ class Inscription(View):
     form_class = InscriptionForm
 
     @method_decorator(resel_required)
-    @method_decorator(unknown_machine)
     def dispatch(self, *args, **kwargs):
         return super(Inscription, self).dispatch(*args, **kwargs)
 
@@ -87,7 +85,6 @@ class InscriptionCGU(View):
         return None
 
     @method_decorator(resel_required)
-    @method_decorator(unknown_machine)
     def dispatch(self, request, *args, **kwargs):
         redirect = self.check_session()
         if redirect:
@@ -120,8 +117,7 @@ class InscriptionCGU(View):
             send_mails.delay(user)
 
             self.request.session['logup_user'] = None
-            register_form = AddDeviceForm()
-            return render(self.request, self.finalize_template, {'username': user.uid, 'register_form': register_form})
+            return render(self.request, self.finalize_template, {'username': user.uid})
         return render(request, self.cgu_template, {'form': form})
 
 

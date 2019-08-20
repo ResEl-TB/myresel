@@ -26,17 +26,6 @@
                 <p><strong>{% trans "Conservez très précieusement ces informations" %}</strong>, {%  trans "elles vous seront nécessaires afin de vous connecter à tous les services du ResEl." %}</p>
             </div>
         </div>
-
-        <div class="row text-center">
-            <p>{% trans "Afin de pouvoir accéder à internet vous devez enregistrer votre ordinateur" %}</p>
-            <form id="slowform" action="{% url "gestion-machines:ajout" %}" method="post" >
-                {% csrf_token %}
-                <button id="sender" type="submit" class="btn btn-info btn-lg" >
-                    <span class="fa fa-arrow-right"></span> {% trans "Inscrire ma machine" %}
-                </button>
-                <div id="waiter" class="hide"> <span class=" btn btn-info btn-lg " disabled="disabled"><span class="fa fa-spin fa-cog"></span> {% trans "Inscription veuillez patienter..." %}</span></div>
-            </form>
-        </div>
         <div class="row text-right">
             <a href="{% url 'home' %}" class="btn btn-lg btn-link">{% trans "Revenir à l'accueil" %}</a>
         </div>

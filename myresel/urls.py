@@ -20,7 +20,7 @@ from django.contrib.auth import views as auth_views
 from django.views.generic import RedirectView
 from django.views.generic import TemplateView
 from django.views.i18n import javascript_catalog
-from pages.views import Home, Contact, NewsListe, inscription_zone_info, FaqList, faqVote, NewsDetail, Services, \
+from pages.views import Home, Contact, NewsListe, FaqList, faqVote, NewsDetail, Services, \
     unsecure_set_language, NewsRSS, NewsAtom, StatusPageXhr, eggdrop, Television
 
 from myresel import settings
@@ -42,7 +42,6 @@ urlpatterns = [
     url(r'^gestion/django-rq/', include('django_rq.urls')),
     url(r'^gestion/', admin.site.urls),
 
-    url(r'^machines/', include('devices.urls', namespace='gestion-machines')),
     url(r'^personnes/', include('gestion_personnes.urls', namespace='gestion-personnes')),
     url(r'^paiement/', include('tresorerie.urls', namespace='tresorerie')),
     url(r'^tarifs/', RedirectView.as_view(pattern_name="tresorerie:prices", permanent=False)),
@@ -62,9 +61,6 @@ urlpatterns = [
     url(r'^eggdrop/(?P<channel>\w+)/$', eggdrop, name='eggdrop-channel'),
     url(r'^eggdrop/(?P<channel>\w+)/(?P<year>\d{4})/(?P<month>\d{1,2})/(?P<day>\d{1,2})/$', eggdrop, name='eggdrop-date'),
 
-    # Subcription related urls and log spamming workarounds
-    url(r'^inscription_zone/', inscription_zone_info, name="inscription-zone"),
-    url(r'^generate_204/', RedirectView.as_view(pattern_name="inscription-zone", permanent=False), name="generate_204"),
     url(r'^favicon.ico', RedirectView.as_view(url='/static/images/icons/favicon-96x96.png', permanent=False), name="favicon"),
 
     url(r'^tv', Television.as_view(), name="tv-index"),
