@@ -77,26 +77,6 @@ LOGIN_URL = '/login'
 
 LOGIN_REDIRECT_URL = '/'
 
-# Inscription zone
-
-INSCRIPTION_ZONE_FALLBACK_URLNAME = 'inscription-zone'
-
-INSCRIPTION_ZONE_ALLOWED_URLNAME = [
-    # 'home',
-    'login',
-    'logout',
-    'contact',
-    'set_language',
-    INSCRIPTION_ZONE_FALLBACK_URLNAME
-]
-
-INSCRIPTION_ZONE_ALLOWED_URLNAMESPACE = [
-    'gestion-machines',
-    'gestion-personnes',
-    'tresorerie',
-]
-
-#
 ## Various settings
 #
 
@@ -174,7 +154,6 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'phonenumber_field',
-    'devices',
     'gestion_personnes',
     'myresel',
     'tresorerie',

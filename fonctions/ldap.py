@@ -8,7 +8,7 @@ from ldap3 import Server, Connection, MODIFY_REPLACE, ALL_ATTRIBUTES
 
 from fonctions import generic
 from .generic import hash_passwd
-from .network import get_campus, get_mac, update_all
+from .network import get_campus, update_all
 
 logger = logging.getLogger("default")
 
@@ -68,42 +68,6 @@ def search_ecole(query):
         res = data
     l.unbind()
     return res
-
-def get_status(ip):
-    """ Fonction pour trouver le status d'une machine :
-        - active
-        - inactive
-        - mauvais campus
-        - inexistante
-
-    Cette fonction va d'abord rechercher la mac associée à l'ip, puis faire
-    la recherche ldap associée. Cela permet une plus grande réactivitée,
-    en particulier quand le bail DHCP n'est pas à jour.
-    :param: ip adresse de la machine à vérifier
-    :return: string
-    """
-    # TODO: viruses computers
-    # Identification du campus
-    campus = get_campus(ip)
-
-    # Récupération de l'adresse mac associée à l'IP
-    mac = get_mac(ip)  # TODO: use something else than re-requesting the network, which is slow
-
-    res = search(settings.LDAP_DN_MACHINES, '(&(macaddress=%s))' % mac, ['zone'])
-    if res:
-        if 'inactive' in [z.lower() for z in res[0].zone]:
-            # Machine inactive, on renvoit le status 'inactif'
-            return 'inactive'
-
-        elif campus.lower() in [z.lower() for z in res[0].zone]:
-            return 'active'
-
-        else:
-            # Computer in the wrong campus
-            return 'disabled'
-
-    # Computer not in the ldap
-    return 'unknown'
 
 
 def ip_in_ldap(ip_suff):

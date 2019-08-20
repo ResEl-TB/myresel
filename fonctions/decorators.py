@@ -47,36 +47,6 @@ def resel_required(function=None, redirect_to='home'):
         return _dec(function)
 
 
-def unknown_machine(function=None, redirect_to='home'):
-    """ Vérifie que la machine de l'user est inconnue.
-
-    Ce décorateur s'assure que la machine de l'user est bien inconnue dans le LDAP.
-    Si ce n'est pas le cas, il est redirigé vers l'adresse spécifiée dans
-    'redirect_to', sinon vers la page de news.
-    """
-
-    def _dec(view_func):
-        def _view(request, *args, **kwargs):
-            mac = network.get_mac(request.network_data['ip'])
-
-            if ldap.search(settings.LDAP_DN_MACHINES, '(&(macaddress=%s))' % mac):
-                messages.error(request, _("Votre machine est déjà connue par notre réseau. Par conséquent, vous n'avez pas besoin d'accéder à cette page."))
-                return HttpResponseRedirect(reverse(redirect_to))
-            else:
-                return view_func(request, *args, **kwargs)
-
-        _view.__name__ = view_func.__name__
-        _view.__dict__ = view_func.__dict__
-        _view.__doc__ = view_func.__doc__
-
-        return _view
-
-    if function is None:
-        return _dec
-    else:
-        return _dec(function)
-
-
 def need_to_pay(function=None, redirect_to='home'):
     """ Vérifie que l'utilisateur n'a pas payé son accès Internet.
 

@@ -10,26 +10,15 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 
 from fonctions.generic import hash_to_ntpass, compare_passwd
-from devices.models import LdapDevice
 from gestion_personnes.models import LdapUser, UserMetaData
 from gestion_personnes.tests import try_delete_user, create_full_user
 from gestion_personnes.views import MailResEl
 from myresel import settings
 
 
-def try_delete_device(mac):
-    try:
-        device_s = LdapDevice.get(mac_address=mac)
-        device_s.delete()
-        return True
-    except ObjectDoesNotExist:
-        return False
-
-
 class InscriptionCase(TestCase):
     def setUp(self):
         try_delete_user("lcarr")
-        try_delete_device(settings.DEBUG_SETTINGS['mac'])
 
     def test_simple(self):
         response = self.client.get(reverse("gestion-personnes:inscription"),
@@ -98,38 +87,10 @@ class InscriptionCase(TestCase):
         self.assertEqual(200, response.status_code)
         self.assertTemplateUsed(response, "pages/home/home.html")
 
-    def test_already_known_device(self):
-        user = LdapUser()
-        user.uid = 'lcarr'
-        user.first_name = "Loïc"
-        user.last_name = "Carr"
-        user.user_password = "blah"
-        user.nt_password = user.user_password
-        user.save()
-
-        device = LdapDevice()
-        device.hostname = "testhostname243"
-        device.owner = user.pk
-        device.ip = "42.42"
-        device.mac_address = settings.DEBUG_SETTINGS['mac']
-        device.activate("Brest")
-        device.save()
-
-        response = self.client.get(reverse("gestion-personnes:inscription"),
-                                   HTTP_HOST="10.0.3.95", follow=True)
-        self.assertEqual(200, response.status_code)
-        self.assertTemplateUsed(response, "pages/inscription_zone_info.html")
-
-        response2 = self.client.get(reverse("gestion-personnes:inscription"),
-                                    HTTP_HOST="10.0.3.199", follow=True)
-        self.assertEqual(200, response2.status_code)
-        self.assertTemplateUsed(response2, "pages/inscription_zone_info.html")
-
 
 class ModPasswdCase(TestCase):
     def setUp(self):
         try_delete_user("lcarr")
-        try_delete_device(settings.DEBUG_SETTINGS['mac'])
 
         user = LdapUser()
         user.uid = 'lcarr'
@@ -201,7 +162,6 @@ class ModPasswdCase(TestCase):
 class TestPersonalInfo(TestCase):
     def setUp(self):
         try_delete_user("lcarr")
-        try_delete_device(settings.DEBUG_SETTINGS['mac'])
 
         user = LdapUser()
         user.uid = 'lcarr'
