@@ -106,7 +106,7 @@ django test suite:
 python linting:
   stage: test
   script:
-    - pylint --rcfile=.pylintrc campus devices fonctions gestion_personnes ldapback myresel pages tresorerie wiki || exit $((35 & $?))
+    - pylint --rcfile=.pylintrc campus fonctions gestion_personnes ldapback myresel pages tresorerie wiki || exit $((35 & $?))
   allow_failure: false
 
 deploy to staging:
