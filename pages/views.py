@@ -61,7 +61,6 @@ class Home(View):
     interior_template = 'pages/home/home_int.html'
     logged_template = 'pages/home/home_logged.html'
 
-    @method_decorator(decorators.correct_vlan)
     def dispatch(self, *args, **kwargs):
         return super(Home, self).dispatch(*args, **kwargs)
 
@@ -255,7 +254,6 @@ def inscription_zone_info(request):
 
     campus = network.get_campus(request.network_data['ip'])
     mac = network.get_mac(request.network_data['ip'])
-    vlan = request.network_data['vlan']
     is_logged_in = request.user.is_authenticated()
 
     try:
@@ -268,7 +266,6 @@ def inscription_zone_info(request):
         logger.info("The device with the mac %s was not found in the LDAP" % mac,
                 extra={
                     'campus': campus,
-                    'vlan': vlan,
                     'is_logged_in': is_logged_in,
                     'device_mac': mac,
                     'message_code': 'UNKNOWN_MAC'
@@ -278,7 +275,7 @@ def inscription_zone_info(request):
     return render(
         request,
         'pages/inscription_zone_info.html',
-        {'vlan': vlan, 'is_logged_in': is_logged_in, 'is_registered': is_registered, 'is_active': is_active}
+        {'is_logged_in': is_logged_in, 'is_registered': is_registered, 'is_active': is_active}
     )
 
 class FaqList(ListView):
