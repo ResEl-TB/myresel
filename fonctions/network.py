@@ -36,9 +36,9 @@ def get_campus(ip_str: str) -> str:
     except ValueError as e:
         raise NetworkError(str(e))
 
-    if ip in settings.NET_BREST:
+    if ip in settings.NET_BREST or ip in settings.NET_BREST_OLD:
         return 'Brest'
-    elif ip in settings.NET_RENNES:
+    elif ip in settings.NET_RENNES or ip in settings.NET_RENNES_OLD:
         return 'Rennes'
     else:
         raise NetworkError("The ip %s is not on any campus" % ip)
@@ -93,21 +93,9 @@ def get_network_zone(ip_str: str) -> str:
     except ValueError as e:
         raise NetworkError(str(e))
 
-    if ip in settings.NET_BREST_INSCR:
-        return "Brest-inscription"
-    elif ip in settings.NET_BREST_INSCR_999:
-        return "Brest-inscription-999"
-    elif ip in settings.NET_BREST_USERS:
-        return "Brest-user"
-    elif ip in settings.NET_BREST:
+    if ip in settings.NET_BREST or ip in settings.NET_BREST_OLD:
         return "Brest-other"
-    if ip in settings.NET_RENNES_INSCR:
-        return "Rennes-inscription"
-    elif ip in settings.NET_RENNES_INSCR_999:
-        return "Rennes-inscription-999"
-    elif ip in settings.NET_RENNES_USERS:
-        return "Rennes-user"
-    elif ip in settings.NET_RENNES:
+    elif ip in settings.NET_RENNES or ip in settings.NET_RENNES_OLD:
         return "Rennes-other"
     return "Internet"
 
