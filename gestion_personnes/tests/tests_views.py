@@ -81,12 +81,6 @@ class InscriptionCase(TestCase):
         # get_worker().work(burst=True)
         # self.assertEqual(3, len(mail.outbox))
 
-    def test_simple_wrong_network(self):
-        response = self.client.get(reverse("gestion-personnes:inscription"),
-                                   HTTP_HOST="10.0.3.94", follow=True)
-        self.assertEqual(200, response.status_code)
-        self.assertTemplateUsed(response, "pages/home/home.html")
-
 
 class ModPasswdCase(TestCase):
     def setUp(self):

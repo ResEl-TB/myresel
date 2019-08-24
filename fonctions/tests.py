@@ -17,54 +17,6 @@ class FunctionTests(TestCase):
         self.assertTrue(compare_passwd("blah", h))
         self.assertFalse(compare_passwd("blohs", h))
 
-    def test_get_network_zone(self):
-        # Oui, je me suis fait chier à tout taper :/
-
-        self.assertEqual("Brest-inscription", get_network_zone("172.22.224.1"))
-        self.assertEqual("Brest-inscription", get_network_zone("172.22.224.254"))
-        self.assertEqual("Brest-inscription", get_network_zone("172.22.225.3"))
-        self.assertEqual("Brest-inscription", get_network_zone("172.22.225.234"))
-
-        self.assertEqual("Brest-inscription-999", get_network_zone("172.22.226.1"))
-        self.assertEqual("Brest-inscription-999", get_network_zone("172.22.226.254"))
-        self.assertEqual("Brest-inscription-999", get_network_zone("172.22.227.23"))
-        self.assertEqual("Brest-inscription-999", get_network_zone("172.22.227.234"))
-
-        self.assertEqual("Brest-user", get_network_zone("172.22.200.1"))
-        self.assertEqual("Brest-user", get_network_zone("172.22.200.1"))
-        self.assertEqual("Brest-user", get_network_zone("172.22.210.54"))
-        self.assertEqual("Brest-user", get_network_zone("172.22.222.234"))
-        self.assertEqual("Brest-user", get_network_zone("172.22.223.234"))
-
-        self.assertEqual("Brest-other", get_network_zone("172.22.2.234"))
-        self.assertEqual("Brest-other", get_network_zone("172.22.0.123"))
-        self.assertEqual("Brest-other", get_network_zone("172.22.42.142"))
-
-
-        self.assertEqual("Rennes-inscription", get_network_zone("172.23.224.1"))
-        self.assertEqual("Rennes-inscription", get_network_zone("172.23.224.254"))
-        self.assertEqual("Rennes-inscription", get_network_zone("172.23.225.3"))
-        self.assertEqual("Rennes-inscription", get_network_zone("172.23.225.234"))
-
-        self.assertEqual("Rennes-inscription-999", get_network_zone("172.23.226.1"))
-        self.assertEqual("Rennes-inscription-999", get_network_zone("172.23.226.254"))
-        self.assertEqual("Rennes-inscription-999", get_network_zone("172.23.227.23"))
-        self.assertEqual("Rennes-inscription-999", get_network_zone("172.23.227.234"))
-
-        self.assertEqual("Rennes-user", get_network_zone("172.23.200.1"))
-        self.assertEqual("Rennes-user", get_network_zone("172.23.200.1"))
-        self.assertEqual("Rennes-user", get_network_zone("172.23.210.54"))
-        self.assertEqual("Rennes-user", get_network_zone("172.23.222.234"))
-        self.assertEqual("Rennes-user", get_network_zone("172.23.223.234"))
-
-        self.assertEqual("Rennes-other", get_network_zone("172.23.2.234"))
-        self.assertEqual("Rennes-other", get_network_zone("172.23.0.123"))
-        self.assertEqual("Rennes-other", get_network_zone("172.23.42.142"))
-
-        self.assertEqual("Internet", get_network_zone("8.8.8.8"))
-        self.assertEqual("Internet", get_network_zone("123.142.253.174"))
-        self.assertRaises(NetworkError, get_network_zone, ip_str="168.2.324.197")
-
     def test_is_resel_ip(self):
         self.assertTrue(is_resel_ip("172.22.2.123"))
         self.assertTrue(is_resel_ip("172.22.220.214"))
