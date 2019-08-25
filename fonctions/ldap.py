@@ -8,7 +8,7 @@ from ldap3 import Server, Connection, MODIFY_REPLACE, ALL_ATTRIBUTES
 
 from fonctions import generic
 from .generic import hash_passwd
-from .network import get_campus, update_all
+from .network import update_all
 
 logger = logging.getLogger("default")
 

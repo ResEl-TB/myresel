@@ -34,57 +34,45 @@
                     </div>
                 </div>
 
-                {% if is_resel %}
-                    {% if not is_registered %}
+                <div class="col-md-6 col-md-offset-2">
+                    <div class="row">
+                        {% if is_resel %}
                         {# In the netwok but not saved #}
-                        <div class="col-md-6 col-md-offset-2">
-                            <div class="row">
-                                <div class="col-sm-4 computer-icon hidden-xs"><span class="fa fa-fw fa-laptop"></span></div>
-                                <div class="col-sm-7">
-                                    <h3>{% trans "Machine non enregistrée" %}</h3>
-                                    <div>{% trans "Afin de pouvoir bénéficier des services du Resel, vous devez enregistrer votre machine sur le réseau." %}</div>
+                            <div class="col-sm-3 computer-icon">
+                            {% if subnet == 'FREE' %}
+                                <span class="fa fa-money"></span>
+                            {% elif subnet == 'REGN' %}
+                                <span class="fa fa-minus-circle"></span>
+                            {% elif subnet == 'USER' %}
+                                <span class="fa fa-rocket"></span>
+                            {% elif subnet == 'SERV' %}
+                                <span class="fa fa-cog"></span>
+                            {% endif %}
+                            </div>
+                            <div class="col-xs-7">
+                                <h3>{% trans "Bienvenue sur le campus de"%} {{zone}}</h3>
+                                <div>
+                                {% if subnet == 'FREE' %}
+                                    {% trans "Vous vous trouvez sur la zone gratuite. Le débit est fortement réduit, mais devrait permettre de consulter vos mails et divers services légers." %}
+                                {% elif subnet == 'REGN' %}
+                                    {% trans "Vous vous trouvez sur la zone d'inscription. Pour vous connecter à Internet, veuillez utiliser un autre réseau." %}
+                                {% elif subnet == 'USER' %}
+                                    {% trans "Vous êtes correctement connecté au réseau étudiant." %}
+                                {% elif subnet == 'SERV' %}
+                                    {% trans "Vous êtes connecté depuis un serveur interne. Merci de n'utiliser cet accès qu'à des fins de tests." %}
+                                {% endif %}
                                 </div>
                             </div>
-                        </div>
-                    {% elif not_user_device %}
-                        {# The current device is not associated with the account #}
-                        <div class="col-md-6 col-md-offset-2">
-                            <div class="row">
-                                <div class="col-sm-4 computer-icon hidden-xs"><span class="fa fa-fw fa-laptop"></span></div>
-                                <div class="col-sm-7">
-                                    <div><h3>{% trans "Mauvais appareil" %}</div>
-                                    <div>{% blocktrans %}
-                                        Vous êtes connecté sur un appareil qui ne vous appartient pas.
-                                        Vous ne pouvez donc pas l'administrer.
-                                        {% endblocktrans %}</div>
-                                    <small>{% trans "Nous vous rappellons votre compte ResEl est strictement personnel et ne doit en aucun cas être partagé." %}</small>
-                                </div>
-                            </div>
-                        </div>
-                    {% else %}
-                        {# In the netwok and saved #}
-                        <div class="col-md-6 col-md-offset-2">
-                            <div class="row">
-                                <div class="col-sm-4 computer-icon hidden-xs"><span class="fa fa-fw fa-laptop"></span></div>
-                                <div class="col-sm-7">
-                                    <br />
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
-                {% else %}
-                    {# Not in the network #}
-                    <div class="col-md-6 col-md-offset-2">
-                        <div class="row">
-                            <div class="col-xs-5 col-sm-3 computer-icon"><span class="fa fa-fw fa-globe"></span></div>
+                        {% else %}
+                        {# Not in the network #}
+                            <div class="col-sm-3 computer-icon"><span class="fa fa-globe"></span></div>
                             <div class="col-xs-7">
                                 <h3>{% trans "Hors campus" %}</h3>
-                                <div>{% trans "Vous êtes actuellement hors du campus d'IMT Atlantique." %}</div>
-                                <small>{% trans "Vos actions sont limitées" %}</small>
+                                <div>{% trans "Vous êtes actuellement hors des campus d'IMT Atlantique." %}</div>
                             </div>
-                        </div>
+                        {% endif %}
                     </div>
-                {% endif %}
+                </div>
                 <div class="col-sm-3 col-sm-offset-3 hidden-xs hidden-sm"><hr /></div>
                 {% if need_to_pay == 'success' %}
                     <div class="col-md-6 col-md-offset-2 payement-block">

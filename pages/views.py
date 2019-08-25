@@ -73,7 +73,7 @@ class Home(View):
         # Load services
         try:
             services = Category.objects.get(name='Services')
-            services = services.get_articles_and_links('user' in network.get_network_zone(ip))[:2]
+            services = services.get_articles_and_links(request.network_data['subnet'] == 'USER')[:2]
         except Category.DoesNotExist:
             services = []
         args_for_response['services'] = services
@@ -101,11 +101,6 @@ class Home(View):
         # Load some campus mails
         args_for_response['campus_mails'] = Mail.objects.order_by('-date').filter(moderated=True).all()[:settings.NUMBER_NEWS_IN_HOME]
 
-        # Automatically active the computer if it is known
-        # Change campus automatically
-        is_in_resel = network.is_resel_ip(ip)
-        args_for_response['ip_in_resel'] = is_in_resel
-
         if request.user.is_authenticated():
             end_fee = request.ldap_user.end_cotiz if request.ldap_user.end_cotiz else False
 
@@ -116,7 +111,7 @@ class Home(View):
             template_for_response = self.logged_template
             args_for_response['end_fee'] = end_fee
 
-        elif network.is_resel_ip(ip):
+        elif request.network_data['is_logged_in']:
             template_for_response = self.interior_template
 
         return render(request, template_for_response, args_for_response)
@@ -171,7 +166,7 @@ class Services(ListView):
         ip = self.request.network_data['ip']
         try:
             services = Category.objects.get(name='Services')
-            services = services.get_articles_and_links('user' in network.get_network_zone(ip))
+            services = services.get_articles_and_links(request.network_data['subnet'] == 'USER')
         except Category.DoesNotExist:
             services = []
         return(services)
