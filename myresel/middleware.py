@@ -74,7 +74,10 @@ class NetworkConfiguration(object):
         else:
             ip = request.META['REMOTE_ADDR']
         ip = ip.split(' ')[-1]  # HOT fix to handle some bugs during port fowarding
-        raw_zone = request.META['ZONE'].split('-')
+        if 'ZONE' in request.META:
+            raw_zone = request.META['ZONE'].split('-')
+        else:
+            raw_zone = ['EXT']
         raw_zone.append(None)
         request.network_data['ip'] = ip
         request.network_data['host'] = request.META['HTTP_HOST']
