@@ -166,7 +166,7 @@ class Services(ListView):
         ip = self.request.network_data['ip']
         try:
             services = Category.objects.get(name='Services')
-            services = services.get_articles_and_links(request.network_data['subnet'] == 'USER')
+            services = services.get_articles_and_links(self.request.network_data['subnet'] == 'USER')
         except Category.DoesNotExist:
             services = []
         return(services)
