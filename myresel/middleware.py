@@ -74,14 +74,17 @@ class NetworkConfiguration(object):
         else:
             ip = request.META['REMOTE_ADDR']
         ip = ip.split(' ')[-1]  # HOT fix to handle some bugs during port fowarding
-        ip_suffix = ip.split(".")[2:]
-        zone = network.get_network_zone(ip)
+        if 'ZONE' in request.META:
+            raw_zone = request.META['ZONE'].split('-')
+        else:
+            raw_zone = ['EXT']
+        raw_zone.append(None)
         request.network_data['ip'] = ip
-        request.network_data['ip_suffix'] = ip_suffix
         request.network_data['host'] = request.META['HTTP_HOST']
-        request.network_data['zone'] = zone
+        request.network_data['zone'] = raw_zone[0]
+        request.network_data['subnet'] = raw_zone[1]
         request.network_data['is_logged_in'] = request.user.is_authenticated()
-        request.network_data['is_resel'] = network.is_resel_ip(ip)
+        request.network_data['is_resel'] = raw_zone[0] != 'EXT'
 
         response = self.get_response(request)
         return response

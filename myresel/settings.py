@@ -25,26 +25,6 @@ MAIN_HOST_RENNES = 'rennes.resel.fr'
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__name__))
 
-#
-# NETWORKS DEFINITIONS
-#
-NET_BREST = ip_network("172.22.0.0/16")
-NET_RENNES = ip_network("172.23.0.0/16")
-
-NET_BREST_USERS = ip_network("172.22.192.0/19")
-NET_BREST_INSCR = ip_network("172.22.224.0/23")
-NET_BREST_INSCR_999 = ip_network("172.22.226.0/23")
-NET_BREST_GUEST = ip_network("172.22.228.0/23")  # Not used 2017-02-06
-NET_BREST_ADM = ip_network("172.22.2.0/23")
-NET_BREST_SW = ip_network("172.22.0.0/23")
-
-NET_RENNES_USERS = ip_network("172.23.192.0/19")
-NET_RENNES_INSCR = ip_network("172.23.224.0/23")
-NET_RENNES_INSCR_999 = ip_network("172.23.226.0/23")
-NET_RENNES_GUEST = ip_network("172.23.228.0/23")  # Not used 2017-02-06
-NET_RENNES_ADM = ip_network("172.23.2.0/23")
-NET_RENNES_SW = ip_network("172.23.0.0/23")
-
 # Number of available ip to insert into the Redis buffer
 # The bigger the better but it may be slower
 BUFFERED_AV_IPS = 100

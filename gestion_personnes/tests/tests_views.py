@@ -22,12 +22,12 @@ class InscriptionCase(TestCase):
 
     def test_simple(self):
         response = self.client.get(reverse("gestion-personnes:inscription"),
-                                   HTTP_HOST="10.0.3.95")
+                                   HTTP_HOST="10.0.3.95", ZONE="Brest-any")
         self.assertEqual(200, response.status_code)
         self.assertTemplateUsed(response, "gestion_personnes/inscription.html")
 
         response = self.client.get(reverse("gestion-personnes:inscription"),
-                                   HTTP_HOST="10.0.3.199")
+                                   HTTP_HOST="10.0.3.199", ZONE="Brest-any")
         self.assertEqual(200, response.status_code)
         self.assertTemplateUsed(response, "gestion_personnes/inscription.html")
 
@@ -36,7 +36,7 @@ class InscriptionCase(TestCase):
         try_delete_user(user.uid)
 
         response = self.client.get(reverse("gestion-personnes:inscription"),
-                                   HTTP_HOST="10.0.3.95")
+                                   HTTP_HOST="10.0.3.95", ZONE="Brest-any")
         self.assertEqual(200, response.status_code)
         self.assertTemplateUsed(response, "gestion_personnes/inscription.html")
 
@@ -55,7 +55,7 @@ class InscriptionCase(TestCase):
                 'phone': user.mobile,
                 'certify_truth': 'certify_truth',
             },
-            HTTP_HOST="10.0.3.95", follow=True)
+            HTTP_HOST="10.0.3.95", ZONE="Brest-any", follow=True)
         self.assertEqual(200, r.status_code)
         self.assertTemplateUsed(r, 'gestion_personnes/cgu.html')
 
@@ -64,7 +64,7 @@ class InscriptionCase(TestCase):
             data={
                 'have_read': 'have_read'
             },
-            HTTP_HOST="10.0.3.95", follow=True)
+            HTTP_HOST="10.0.3.95", ZONE="Brest-any", follow=True)
         self.assertEqual(200, r.status_code)
         self.assertTemplateUsed(r, 'gestion_personnes/finalize_signup.html')
         self.assertContains(r, user.uid)
@@ -80,12 +80,6 @@ class InscriptionCase(TestCase):
         # TODO: find a way to check if emails are sent...
         # get_worker().work(burst=True)
         # self.assertEqual(3, len(mail.outbox))
-
-    def test_simple_wrong_network(self):
-        response = self.client.get(reverse("gestion-personnes:inscription"),
-                                   HTTP_HOST="10.0.3.94", follow=True)
-        self.assertEqual(200, response.status_code)
-        self.assertTemplateUsed(response, "pages/home/home.html")
 
 
 class ModPasswdCase(TestCase):
