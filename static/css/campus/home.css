@@ -23,6 +23,7 @@ a:hover {
 .mail {
     animation: fade-from-bottom 1s;
     margin-top: 4px;
+    word-wrap: break-word;
 }
 
 .mail-content {
