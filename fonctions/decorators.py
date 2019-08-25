@@ -29,7 +29,7 @@ def resel_required(function=None, redirect_to='home'):
             else:
                 ip = request.META['REMOTE_ADDR']
 
-            if request.network_data['is_logged_in']:
+            if request.network_data['is_resel']:
                 return view_func(request, *args, **kwargs)
             else:
                 messages.error(request, _("Vous devez vous trouver sur le réseau du ResEl pour accéder à cette page."))
