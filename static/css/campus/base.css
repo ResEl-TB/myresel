@@ -108,7 +108,7 @@ body {
 
 /* Page style */
 
-nav + .container {
+body > .container, body > .wrapper, #content {
   margin-top: 75px;
 }
 
