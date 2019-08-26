@@ -2,7 +2,7 @@
 # TODO: do not delete migrations
 
 variables:
- IMAGE: docker.resel.fr/myresel  # Custom image made for the ResEl
+ IMAGE: $DOCKER_REGISTRY/applications-utilisateurs/myresel  # Custom image made for the ResEl
   
  MYSQL_HOST: mysql-mysql-server
  MYSQL_USER: resel
