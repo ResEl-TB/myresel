@@ -38,7 +38,7 @@
                     <div class="row">
                         {% if is_resel %}
                         {# In the netwok but not saved #}
-                            <div class="col-sm-3 computer-icon">
+                            <div class="hidden-xs col-sm-3 computer-icon">
                             {% if subnet == 'FREE' %}
                                 <span class="fa fa-money"></span>
                             {% elif subnet == 'REGN' %}
@@ -49,7 +49,7 @@
                                 <span class="fa fa-cog"></span>
                             {% endif %}
                             </div>
-                            <div class="col-xs-7">
+                            <div class="col-sm-7">
                                 <h3>{% trans "Bienvenue sur le campus de"%} {{zone}}</h3>
                                 <div>
                                 {% if subnet == 'FREE' %}
@@ -65,8 +65,8 @@
                             </div>
                         {% else %}
                         {# Not in the network #}
-                            <div class="col-sm-3 computer-icon"><span class="fa fa-globe"></span></div>
-                            <div class="col-xs-7">
+                            <div class="hidden-xs col-sm-3 computer-icon"><span class="fa fa-globe"></span></div>
+                            <div class="col-sm-7">
                                 <h3>{% trans "Hors campus" %}</h3>
                                 <div>{% trans "Vous êtes actuellement hors des campus d'IMT Atlantique." %}</div>
                             </div>

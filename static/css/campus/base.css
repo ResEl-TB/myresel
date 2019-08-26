@@ -39,6 +39,7 @@ body {
 .title {
     color: #FFFFFF;
 }
+
 .navbar {
     background-color: white;
     border: none;
@@ -46,19 +47,23 @@ body {
     font-family: 'Roboto', 'sans-serif';
     font-size: 1.0em;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    position: fixed;
+    width: 100%;
+    z-index: 10;
+    top: 0;
 }
 
 .navbar-header .navbar-toggle.collapsed {
     background-color: transparent !important;
-    border-color: #65d145;
+    border-color: #5ea149;
 }
 
 .navbar-header .navbar-toggle.collapsed .icon-bar {
-    background-color: #65d145;
+    background-color: #5ea149;
 }
 
 .navbar-header .navbar-toggle {
-    background-color: #65d145 !important;
+    background-color: #5ea149 !important;
     border-color: white;
 }
 
@@ -75,7 +80,7 @@ body {
 .dropdown-menu > li > a,
 .navbar .navbar-nav > li > a {
     background-color: transparent;
-    color: #65d145 !important;
+    color: #5ea149 !important;
     font-weight: bold;
 }
 
@@ -85,19 +90,31 @@ body {
 .navbar-default .navbar-nav > .open > a:focus,
 .navbar-default .navbar-nav > .open > a:hover {
     color: white !important;
-    background-color: #65d145;
+    background-color: #5ea149;
 }
 
 .dropdown-menu {
     border-radius: 0px;
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: #fff;
+    border-radius: 0 0 10px 10px;
 }
 
 .well {
     border-radius: 0px;
     background-color: white;
-    border: 2px solid #dbdbdb;
     box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+
+/* Page style */
+
+nav + .container {
+  margin-top: 75px;
+}
+
+.carousel-control {
+  text-shadow: none;
+  color: #aaa !important;
 }
 
 /* Style for calendar.html */
@@ -115,7 +132,7 @@ body {
 /* Form Style */
 
 .form-control:focus {
-  box-shadow: 1px 0px 5px #65d145;
+  box-shadow: 1px 0px 5px #5ea149;
   border-color: #a6d69e;
 }
 
@@ -142,7 +159,7 @@ body {
     box-shadow: -2px -2px 4px rgba(0, 0, 0, 0.2);
     background-color: white;
     padding-top: 15px;
-    color: #65d145;
+    color: #5ea149;
 }
 
 .footer .row {
@@ -151,7 +168,7 @@ body {
 }
 
 .footer a{
-    color: #65d145;
+    color: #5ea149;
 }
 
 .footer ul {
@@ -176,7 +193,7 @@ body {
 .ui-state-focus {
    background: #cbf9c2 !important;
    color: inherit !important;
-   border-color: #65d145 !important;
+   border-color: #5ea149 !important;
 }
 
 .ui-autocomplete-input {
@@ -195,19 +212,19 @@ body {
 .ui-widget-header, .ui-state-highlight, .ui-state-hover {
   background: #95db87 !important;
   color: inherit !important;
-  border-color: #65d145 !important;
+  border-color: #5ea149 !important;
 }
 
 .ui-state-hover{
   background: #cbf9c2 !important;
   color: inherit !important;
-  border-color: #65d145 !important;
+  border-color: #5ea149 !important;
 }
 
 .ui-widget-content .ui-state-active {
   background: #95db87 !important;
   color: inherit !important;
-  border-color: #65d145 !important;
+  border-color: #5ea149 !important;
 }
 
 .modal-content {
@@ -239,7 +256,7 @@ button.dell-user {
 
 button.add-user, button.add-user:hover {
   padding: 0;
-  color: #65d145;
+  color: #5ea149;
 }
 
 .noncolored-a, .noncolored-a:hover, .noncolored-a:visited, .noncolored-a:focus{
