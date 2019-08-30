@@ -36,20 +36,20 @@ class CreateCampusMail(TestCase):
 
     def test_load_create_simple_email(self):
         r = self.client.get(reverse("campus:mails:send"),
-                            HTTP_HOST="10.0.3.94", follow=True)
+                            ZONE="Brest-any", HTTP_HOST="10.0.3.94", follow=True)
         self.assertEqual(200, r.status_code)
 
     @skip("View not ready, crsf error")  # TODO: don't forget to reactivate the test
     def test_create_simple_email(self):
         r = self.client.get(reverse("campus:mails:send"),
-                        HTTP_HOST="10.0.3.94", follow=True)
+                        ZONE="Brest-any", HTTP_HOST="10.0.3.94", follow=True)
 
         self.assertEqual(200, r.status_code)
         self.assertTemplateUsed(r, "campus/mails/send_mail.html")
 
         r = self.client.post(
             reverse("campus:mails:send"),
-            HTTP_HOST="10.0.3.94", follow=True,
+            ZONE="Brest-any", HTTP_HOST="10.0.3.94", follow=True,
             data={
                 "sender": "loic.carr@resel.fr",
                 "subject": "fuu",
@@ -142,14 +142,14 @@ class ClubHomeTestCase(TestCase):
 
     def testLoadWithoutUser(self):
         r = self.client.get(reverse("campus:clubs:list"),
-                                   HTTP_HOST="10.0.3.94")
+                                   ZONE="Brest-any", HTTP_HOST="10.0.3.94")
         self.assertEqual(200, r.status_code)
         self.assertTemplateUsed(r, "campus/clubs/list.html")
 
     def testLoadWithUser(self):
         self.client.login(username="jbvallad", password="blabla")
         r = self.client.get(reverse("campus:clubs:list"),
-                                    HTTP_HOST="10.0.3.94")
+                                    ZONE="Brest-any", HTTP_HOST="10.0.3.94")
         self.assertEqual(200, r.status_code)
 
 class DetailTestCase(TestCase):
@@ -162,14 +162,14 @@ class DetailTestCase(TestCase):
 
     def testLoadWithoutUser(self):
         r = self.client.get(reverse("campus:clubs:club_detail", kwargs={"pk":"tenniscn"}),
-                                   HTTP_HOST="10.0.3.94")
+                                   ZONE="Brest-any", HTTP_HOST="10.0.3.94")
         self.assertEqual(200, r.status_code)
         self.assertTemplateUsed(r, "campus/clubs/detail.html")
 
     def testLoadWithUser(self):
         self.client.login(username="jbvallad", password="blabla")
         r = self.client.get(reverse("campus:clubs:club_detail", kwargs={"pk":"tenniscn"}),
-                                    HTTP_HOST="10.0.3.94")
+                                    ZONE="Brest-any", HTTP_HOST="10.0.3.94")
         self.assertEqual(200, r.status_code)
 
 class MyClubTestCase(TestCase):
@@ -187,13 +187,13 @@ class MyClubTestCase(TestCase):
             data={
                 'what': "Tennis",
             },
-            HTTP_HOST="10.0.3.94",
+            ZONE="Brest-any", HTTP_HOST="10.0.3.94",
             follow = True
         )
 
     def testSimpleLoad(self):
         self.client.login(username="jbvallad", password="blabla")
-        r = self.client.get(reverse("campus:clubs:my-clubs"), HTTP_HOST="10.0.3.94")
+        r = self.client.get(reverse("campus:clubs:my-clubs"), ZONE="Brest-any", HTTP_HOST="10.0.3.94")
         self.assertTemplateUsed(r, "campus/clubs/list.html")
 
 class NewClubTestCase(TestCase):
@@ -269,13 +269,13 @@ class AddPersonTestCase(TestCase):
 
     def testAddSelf(self):
         r = self.client.post(reverse("campus:clubs:add-person", kwargs={'pk':self.cn}),
-                                    HTTP_HOST="10.0.3.94", HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+                                    ZONE="Brest-any", HTTP_HOST="10.0.3.94", HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertTrue(LdapUser.get(uid="jbvallad").pk in StudentOrganisation.get(cn=self.cn).members)
 
     def testAddSomeone(self):
         r = self.client.post(reverse("campus:clubs:add-person", kwargs={'pk':self.cn}),
                                     data={"id_user":"bvallad"},
-                                    HTTP_HOST="10.0.3.94", HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+                                    ZONE="Brest-any", HTTP_HOST="10.0.3.94", HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertTrue(LdapUser.get(uid="bvallad").pk in StudentOrganisation.get(cn=self.cn).members)
 
 class RemovePersonTestCase(TestCase):
@@ -310,7 +310,7 @@ class RemovePersonTestCase(TestCase):
         # We just make sure that there is something to remove
         self.assertTrue(LdapUser.get(uid="vallad").pk in StudentOrganisation.get(cn=self.cn).members)
         r=self.client.post(reverse("campus:clubs:remove-person", kwargs={"pk":self.cn}),
-                                    HTTP_HOST="10.0.3.94", HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+                                    ZONE="Brest-any", HTTP_HOST="10.0.3.94", HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertFalse(LdapUser.get(uid="vallad").pk in StudentOrganisation.get(cn=self.cn).members)
         self.assertEqual(1, len(mail.outbox))
 
@@ -318,7 +318,7 @@ class RemovePersonTestCase(TestCase):
         self.client.login(username="jbvallad", password="blabla")
         self.assertTrue(LdapUser.get(uid="bvallad").pk in StudentOrganisation.get(cn=self.cn).members)
         r=self.client.post(reverse("campus:clubs:remove-person", kwargs={"pk":self.cn}),
-                                    data={"id_user":"bvallad"}, HTTP_HOST="10.0.3.94",
+                                    data={"id_user":"bvallad"}, ZONE="Brest-any", HTTP_HOST="10.0.3.94",
                                     HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertFalse(LdapUser.get(uid="bvallad").pk in StudentOrganisation.get(cn=self.cn).members)
         self.assertEqual(1, len(mail.outbox))
@@ -357,7 +357,7 @@ class AddPrezTestCase(TestCase):
 
         r = self.client.post(reverse("campus:clubs:add-prez", kwargs={'pk': self.cn}),
                                     data={"id_user": "bvallad"},
-                                    HTTP_HOST="10.0.3.94",
+                                    ZONE="Brest-any", HTTP_HOST="10.0.3.94",
                                     follow=True,
                                     HTTP_REFERER=reverse('campus:clubs:list'))
 
@@ -369,7 +369,7 @@ class AddPrezTestCase(TestCase):
         self.assertFalse(LdapUser.get(uid="jbvallad").pk in StudentOrganisation.get(cn=self.cn).prezs)
         r = self.client.post(reverse("campus:clubs:add-prez", kwargs={'pk': self.cn}),
                                     data={"id_user": "jbvallad"},
-                                    HTTP_HOST="10.0.3.94",
+                                    ZONE="Brest-any", HTTP_HOST="10.0.3.94",
                                     follow=True,
                                     HTTP_REFERER=reverse('campus:clubs:list'))
 
@@ -381,7 +381,7 @@ class AddPrezTestCase(TestCase):
         self.assertFalse(LdapUser.get(uid="allad").pk in StudentOrganisation.get(cn=self.cn).prezs)
         r = self.client.post(reverse("campus:clubs:add-prez", kwargs={'pk': self.cn}),
                                     data={"id_user": "allad"},
-                                    HTTP_HOST="10.0.3.94",
+                                    ZONE="Brest-any", HTTP_HOST="10.0.3.94",
                                     follow=True,
                                     HTTP_REFERER=reverse('campus:clubs:list'))
 
@@ -404,7 +404,7 @@ class DeleteClubTestCase(TestCase):
         r = self.client.post(
             reverse("campus:clubs:delete",
                     kwargs={'pk':'tenniscn'}),
-                    HTTP_HOST="10.0.3.94",
+                    ZONE="Brest-any", HTTP_HOST="10.0.3.94",
                     follow=True
             )
 
@@ -519,7 +519,7 @@ class CalendarTestCase(TestCase):
         createBooking(datetime(self.year,9,1,18,0,0), datetime(self.year,9,1,19,0,0))
 
         self.client.login(username="jbvallad", password="blabla")
-        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": "9"}), HTTP_HOST="10.0.3.94")
+        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": "9"}), ZONE="Brest-any", HTTP_HOST="10.0.3.94")
 
         #Check if our event is at the right time and only at the right day
         for day in r.context["calendar"][0]:
@@ -538,7 +538,7 @@ class CalendarTestCase(TestCase):
         createBooking(datetime(self.year,9,1,15,0,0), datetime(self.year,9,1,16,0,0), recurring_rule = "DAILY", end_recurring_period = datetime(self.year,9,30,18,0,0))
 
         self.client.login(username="jbvallad", password="blabla")
-        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": "9"}), HTTP_HOST="10.0.3.94")
+        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": "9"}), ZONE="Brest-any", HTTP_HOST="10.0.3.94")
 
         #Check if our event is here everyday at the right time
         for week in r.context["calendar"]:
@@ -553,7 +553,7 @@ class CalendarTestCase(TestCase):
         createBooking(datetime(self.year,9,1,10,0,0), datetime(self.year,9,1,12,0,0), recurring_rule = "WEEKLY", end_recurring_period = datetime(self.year,9,30,18,0,0))
 
         self.client.login(username="jbvallad", password="blabla")
-        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": "9"}), HTTP_HOST="10.0.3.94")
+        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": "9"}), ZONE="Brest-any", HTTP_HOST="10.0.3.94")
 
         #Check if our event is here every week at the right time and only the right days
         for week in r.context["calendar"]:
@@ -575,7 +575,7 @@ class CalendarTestCase(TestCase):
         #Check if our event is here every month at the right time and only the right days
         #i is the current month
         for i in range(9,12):
-            r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": i}), HTTP_HOST="10.0.3.94")
+            r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": i}), ZONE="Brest-any", HTTP_HOST="10.0.3.94")
             for week in r.context["calendar"]:
                 for day in week:
                     if day[0]:
@@ -594,7 +594,7 @@ class CalendarTestCase(TestCase):
 
         self.client.login(username="jbvallad", password="blabla")
 
-        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": 9}), HTTP_HOST="10.0.3.94")
+        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": 9}), ZONE="Brest-any", HTTP_HOST="10.0.3.94")
         for day in r.context["calendar"][-1:][0]:
             if day[0]:
                 if day[0].day in [29,30]:
@@ -604,7 +604,7 @@ class CalendarTestCase(TestCase):
                 else:
                     self.assertFalse(day[1])
 
-        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": 10}), HTTP_HOST="10.0.3.94")
+        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": 10}), ZONE="Brest-any", HTTP_HOST="10.0.3.94")
         for day in r.context["calendar"][-1:][0]:
             if day[0]:
                 if day[0].day in [1,2]:
@@ -620,7 +620,7 @@ class CalendarTestCase(TestCase):
 
         self.client.login(username="jbvallad", password="blabla")
 
-        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": 12}), HTTP_HOST="10.0.3.94")
+        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": 12}), ZONE="Brest-any", HTTP_HOST="10.0.3.94")
         for day in r.context["calendar"][-1:][0]:
             if day[0]:
                 if day[0].day in [29,30,31]:
@@ -630,7 +630,7 @@ class CalendarTestCase(TestCase):
                 else:
                     self.assertFalse(day[1])
 
-        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year+1, "month": 1}), HTTP_HOST="10.0.3.94")
+        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year+1, "month": 1}), ZONE="Brest-any", HTTP_HOST="10.0.3.94")
         for day in r.context["calendar"][-1:][0]:
             if day[0]:
                 if day[0].day in [1,2]:
@@ -645,7 +645,7 @@ class CalendarTestCase(TestCase):
         createBooking(datetime(self.year,9,1,20,0,0), datetime(self.year,9,5,21,0,0), recurring_rule = "NONE")
 
         self.client.login(username="jbvallad", password="blabla")
-        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": "9"}), HTTP_HOST="10.0.3.94")
+        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": "9"}), ZONE="Brest-any", HTTP_HOST="10.0.3.94")
 
         #Check if our event is here for multiple days
         for week in r.context["calendar"][:2]:
@@ -665,7 +665,7 @@ class CalendarTestCase(TestCase):
         self.client.login(username="jbvallad", password="blabla")
 
         #Checks if our event is here on both month
-        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": "9"}), HTTP_HOST="10.0.3.94")
+        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": "9"}), ZONE="Brest-any", HTTP_HOST="10.0.3.94")
         for day in r.context["calendar"][-1:][0]:
             if day[0]:
                 if day[0].day in [29,30]:
@@ -675,7 +675,7 @@ class CalendarTestCase(TestCase):
                 else:
                     self.assertFalse(day[1])
 
-        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": "10"}), HTTP_HOST="10.0.3.94")
+        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": "10"}), ZONE="Brest-any", HTTP_HOST="10.0.3.94")
         for day in r.context["calendar"][:1][0]:
             if day[0]:
                 if day[0].day in [1,2]:
@@ -693,7 +693,7 @@ class CalendarTestCase(TestCase):
 
         #Checks if our event is present for the right days, especialy
         #for the month between the two others
-        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": "9"}), HTTP_HOST="10.0.3.94")
+        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": "9"}), ZONE="Brest-any", HTTP_HOST="10.0.3.94")
         for week in r.context["calendar"]:
             for day in week:
                 if day[0]:
@@ -704,7 +704,7 @@ class CalendarTestCase(TestCase):
                     else:
                         self.assertFalse(day[1])
 
-        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": "10"}), HTTP_HOST="10.0.3.94")
+        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": "10"}), ZONE="Brest-any", HTTP_HOST="10.0.3.94")
         for week in r.context["calendar"]:
             for day in week:
                 if day[0]:
@@ -712,7 +712,7 @@ class CalendarTestCase(TestCase):
                     self.assertTrue(day[1][0].start_time.hour) == timezone.make_aware(datetime(self.year,9,1,20,0,0)).astimezone(pytz.utc).hour
                     self.assertTrue(day[1][0].end_time.hour) == timezone.make_aware(datetime(self.year,9,1,21,0,0)).astimezone(pytz.utc).hour
 
-        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": "11"}), HTTP_HOST="11.0.3.94")
+        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": "11"}), ZONE="Brest-any", HTTP_HOST="11.0.3.94")
         for week in r.context["calendar"]:
             for day in week:
                 if day[0]:
@@ -730,7 +730,7 @@ class CalendarTestCase(TestCase):
         self.client.login(username="jbvallad", password="blabla")
 
         #Checks if our event is here on both month from both years
-        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": "12"}), HTTP_HOST="10.0.3.94")
+        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year, "month": "12"}), ZONE="Brest-any", HTTP_HOST="10.0.3.94")
         for day in r.context["calendar"][-1:][0]:
             if day[0]:
                 if day[0].day in [29,30,31]:
@@ -740,7 +740,7 @@ class CalendarTestCase(TestCase):
                 else:
                     self.assertFalse(day[1])
 
-        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year+1, "month": "1"}), HTTP_HOST="10.0.3.94")
+        r = self.client.get(reverse("campus:rooms:calendar-month", kwargs={"year": self.year+1, "month": "1"}), ZONE="Brest-any", HTTP_HOST="10.0.3.94")
         for day in r.context["calendar"][:1][0]:
             if day[0]:
                 if day[0].day in [1,2]:
@@ -780,7 +780,7 @@ class BookingFormTestCase(TestCase):
         booking = createBooking(datetime(self.year,9,1,18,0,0), datetime(self.year,9,1,19,0,0))
 
         self.client.login(username="jbvallad", password="blabla")
-        r = self.client.get(reverse("campus:rooms:mod-booking", kwargs={'booking': booking.id}), HTTP_HOST="10.0.3.94")
+        r = self.client.get(reverse("campus:rooms:mod-booking", kwargs={'booking': booking.id}), ZONE="Brest-any", HTTP_HOST="10.0.3.94")
 
         self.assertTemplateUsed(r, 'campus/rooms/booking.html')
 
@@ -789,7 +789,7 @@ class BookingFormTestCase(TestCase):
         booking = createBooking(datetime(self.year,1,1,18,0,0), datetime(self.year,1,1,19,0,0))
 
         self.client.login(username="bvallad", password="blabla")
-        r = self.client.get(reverse("campus:rooms:mod-booking", kwargs={'booking': booking.id}), HTTP_HOST="10.0.3.94")
+        r = self.client.get(reverse("campus:rooms:mod-booking", kwargs={'booking': booking.id}), ZONE="Brest-any", HTTP_HOST="10.0.3.94")
         self.assertEqual(r.status_code, 302)
         self.assertTemplateNotUsed(r, 'calendar.html')
 
@@ -932,7 +932,7 @@ class EventDetailTestCase(TestCase):
         booking = createBooking(datetime(self.year,9,1,18,0,0), datetime(self.year,9,1,19,0,0))
 
         self.client.login(username="jbvallad", password="blabla")
-        r = self.client.get(reverse("campus:rooms:booking-detail", kwargs={'slug': booking.id}), HTTP_HOST="10.0.3.94")
+        r = self.client.get(reverse("campus:rooms:booking-detail", kwargs={'slug': booking.id}), ZONE="Brest-any", HTTP_HOST="10.0.3.94")
         self.assertEqual(r.status_code, 200)
 
 class DeleteEventTestCase(TestCase):
@@ -952,14 +952,14 @@ class DeleteEventTestCase(TestCase):
         booking = createBooking(datetime(self.year,9,1,18,0,0), datetime(self.year,9,1,19,0,0))
 
         self.client.login(username="jbvallad", password="blabla")
-        r = self.client.post(reverse("campus:rooms:delete-booking", kwargs={'pk': booking.id}), HTTP_HOST="10.0.3.94")
+        r = self.client.post(reverse("campus:rooms:delete-booking", kwargs={'pk': booking.id}), ZONE="Brest-any", HTTP_HOST="10.0.3.94")
         self.assertFalse(RoomBooking.objects.all().filter(id=booking.id))
 
     def testForbidenDeletion(self):
         booking = createBooking(datetime(self.year,9,1,18,0,0), datetime(self.year,9,1,19,0,0))
 
         self.client.login(username="vallad", password="blabla")
-        r = self.client.post(reverse("campus:rooms:delete-booking", kwargs={'pk': booking.id}), HTTP_HOST="10.0.3.94")
+        r = self.client.post(reverse("campus:rooms:delete-booking", kwargs={'pk': booking.id}), ZONE="Brest-any", HTTP_HOST="10.0.3.94")
         self.assertTrue(RoomBooking.objects.all().filter(id=booking.id))
 
 class CampusHomeTestCase(TestCase):
@@ -971,7 +971,7 @@ class CampusHomeTestCase(TestCase):
 
     def testSimpleLoad(self):
         self.client.login(username="jbvallad", password="blabla")
-        r = self.client.get(reverse("campus:home"), HTTP_HOST="10.0.3.94")
+        r = self.client.get(reverse("campus:home"), ZONE="Brest-any", HTTP_HOST="10.0.3.94")
         self.assertEqual(r.status_code, 200)
 
 # AE Admin ajax tests
@@ -1002,7 +1002,7 @@ class AEAjaxTestCase(TestCase):
         r = self.client.get(
             reverse("campus:ae-admin:home"),
             HTTP_X_REQUESTED_WITH='XMLHttpRequest',
-            HTTP_HOST="10.0.3.94"
+            ZONE="Brest-any", HTTP_HOST="10.0.3.94"
         )
         self.assertTrue(r.status_code == 200)
 
@@ -1014,7 +1014,7 @@ class AEAjaxTestCase(TestCase):
         r = self.client.get(
             reverse("campus:ae-admin:home"),
             HTTP_X_REQUESTED_WITH='XMLHttpRequest',
-            HTTP_HOST="10.0.3.94"
+            ZONE="Brest-any", HTTP_HOST="10.0.3.94"
         )
         self.assertTrue(r.status_code == 302)
 
@@ -1023,7 +1023,7 @@ class AEAjaxTestCase(TestCase):
             reverse("campus:ae-admin:search-members"),
             {'filter': 'john'},
             HTTP_X_REQUESTED_WITH='XMLHttpRequest',
-            HTTP_HOST="10.0.3.94"
+            ZONE="Brest-any", HTTP_HOST="10.0.3.94"
         )
         self.assertTrue(r.status_code == 200)
         self.assertFalse(r.json().get('error', False))
@@ -1035,7 +1035,7 @@ class AEAjaxTestCase(TestCase):
             reverse("campus:ae-admin:search-members"),
             {'filter': ''},
             HTTP_X_REQUESTED_WITH='XMLHttpRequest',
-            HTTP_HOST="10.0.3.94"
+            ZONE="Brest-any", HTTP_HOST="10.0.3.94"
         )
         self.assertEqual(r.status_code, 200)
         self.assertTrue(r.json().get('results', False))
@@ -1048,7 +1048,7 @@ class AEAjaxTestCase(TestCase):
             reverse("campus:ae-admin:search-members"),
             {'filter': 'john', 'special': 'true', 'search_type': 'former'},
             HTTP_X_REQUESTED_WITH='XMLHttpRequest',
-            HTTP_HOST="10.0.3.94"
+            ZONE="Brest-any", HTTP_HOST="10.0.3.94"
         )
         self.assertEqual(r.status_code, 200)
         self.assertTrue('jdoe' in (el['uid'] for el in r.json().get('results', [])))
@@ -1061,7 +1061,7 @@ class AEAjaxTestCase(TestCase):
             reverse("campus:ae-admin:search-members"),
             {'filter': 'john', 'special': 'true', 'search_type': 'current'},
             HTTP_X_REQUESTED_WITH='XMLHttpRequest',
-            HTTP_HOST="10.0.3.94"
+            ZONE="Brest-any", HTTP_HOST="10.0.3.94"
         )
         self.assertEqual(r.status_code, 200)
         self.assertFalse('jdoe' in (el['uid'] for el in r.json().get('results', [])))
@@ -1079,7 +1079,7 @@ class AEAjaxTestCase(TestCase):
                 'n_adherent': "16156",
             },
             HTTP_X_REQUESTED_WITH='XMLHttpRequest',
-            HTTP_HOST="10.0.3.94"
+            ZONE="Brest-any", HTTP_HOST="10.0.3.94"
         )
         user_updated = LdapUser.get(pk='jdoe')
         self.assertEqual(r.status_code, 200)
@@ -1109,7 +1109,7 @@ class AEAjaxTestCase(TestCase):
                     'n_adherent': "16156",
                 },
                 HTTP_X_REQUESTED_WITH='XMLHttpRequest',
-                HTTP_HOST="10.0.3.94"
+                ZONE="Brest-any", HTTP_HOST="10.0.3.94"
             )
             user_updated = LdapUser.get(pk='jdoe')
             self.assertEqual(r.status_code, 200)
@@ -1128,7 +1128,7 @@ class AEAjaxTestCase(TestCase):
                 'n_adherent': "16156",
             },
             HTTP_X_REQUESTED_WITH='XMLHttpRequest',
-            HTTP_HOST="10.0.3.94"
+            ZONE="Brest-any", HTTP_HOST="10.0.3.94"
         )
         self.assertEqual(r.status_code, 200)
         self.assertTrue(r.json().get('error', False))
@@ -1141,7 +1141,7 @@ class AEAjaxTestCase(TestCase):
             reverse("campus:ae-admin:add-admin"),
             {'uid': 'jdoe'},
             HTTP_X_REQUESTED_WITH='XMLHttpRequest',
-            HTTP_HOST="10.0.3.94"
+            ZONE="Brest-any", HTTP_HOST="10.0.3.94"
         )
         user_updated = LdapUser.get(pk='jdoe')
         self.assertTrue(r.status_code == 200)
@@ -1153,7 +1153,7 @@ class AEAjaxTestCase(TestCase):
             reverse("campus:ae-admin:add-admin"),
             {'uid': 'jdoooooooooe'},
             HTTP_X_REQUESTED_WITH='XMLHttpRequest',
-            HTTP_HOST="10.0.3.94"
+            ZONE="Brest-any", HTTP_HOST="10.0.3.94"
         )
         self.assertTrue(r.status_code == 200)
         self.assertTrue(r.json().get('error', False))
@@ -1166,7 +1166,7 @@ class AEAjaxTestCase(TestCase):
             reverse("campus:ae-admin:add-admin"),
             {'uid': 'jdoe'},
             HTTP_X_REQUESTED_WITH='XMLHttpRequest',
-            HTTP_HOST="10.0.3.94"
+            ZONE="Brest-any", HTTP_HOST="10.0.3.94"
         )
         user_updated = LdapUser.get(pk='jdoe')
         self.assertTrue(r.status_code == 200)
@@ -1180,7 +1180,7 @@ class AEAjaxTestCase(TestCase):
             reverse("campus:ae-admin:delete-admin"),
             {'uid': 'jdoe'},
             HTTP_X_REQUESTED_WITH='XMLHttpRequest',
-            HTTP_HOST="10.0.3.94"
+            ZONE="Brest-any", HTTP_HOST="10.0.3.94"
         )
         user_updated = LdapUser.get(pk='jdoe')
         self.assertTrue(r.status_code == 200)
@@ -1195,7 +1195,7 @@ class AEAjaxTestCase(TestCase):
             reverse("campus:ae-admin:delete-admin"),
             {'uid': 'jdoe'},
             HTTP_X_REQUESTED_WITH='XMLHttpRequest',
-            HTTP_HOST="10.0.3.94"
+            ZONE="Brest-any", HTTP_HOST="10.0.3.94"
         )
         self.assertTrue(r.status_code == 200)
         self.assertTrue(r.json().get('error', False))
@@ -1205,7 +1205,7 @@ class AEAjaxTestCase(TestCase):
             reverse("campus:ae-admin:delete-admin"),
             {'uid': 'jbvallad'},
             HTTP_X_REQUESTED_WITH='XMLHttpRequest',
-            HTTP_HOST="10.0.3.94"
+            ZONE="Brest-any", HTTP_HOST="10.0.3.94"
         )
         self.assertTrue(r.status_code == 200)
         self.assertTrue(r.json().get('error', False))
@@ -1218,7 +1218,7 @@ class AEAjaxTestCase(TestCase):
             reverse("campus:ae-admin:get-admins"),
             {'uid': 'jdoe'},
             HTTP_X_REQUESTED_WITH='XMLHttpRequest',
-            HTTP_HOST="10.0.3.94"
+            ZONE="Brest-any", HTTP_HOST="10.0.3.94"
         )
         self.assertTrue('jdoe' in [u['uid'] for u in r.json().get('results', [])]);
 
@@ -1238,7 +1238,7 @@ class AEAjaxTestCase(TestCase):
                 'n_adherent': "16156",
             },
             HTTP_X_REQUESTED_WITH='XMLHttpRequest',
-            HTTP_HOST="10.0.3.94"
+            ZONE="Brest-any", HTTP_HOST="10.0.3.94"
         )
         self.assertEqual(r.status_code, 200)
         self.assertFalse(r.json().get('error', False))
@@ -1265,7 +1265,7 @@ class AEAjaxTestCase(TestCase):
                 reverse("campus:ae-admin:add-user"),
                 data,
                 HTTP_X_REQUESTED_WITH='XMLHttpRequest',
-                HTTP_HOST="10.0.3.94"
+                ZONE="Brest-any", HTTP_HOST="10.0.3.94"
             )
             self.assertEqual(r.status_code, 200)
             self.assertTrue(r.json().get('error', False))
