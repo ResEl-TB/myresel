@@ -57,6 +57,19 @@ LOGIN_URL = '/login'
 
 LOGIN_REDIRECT_URL = '/'
 
+## Registration subnet
+INSCRIPTION_ZONE_FALLBACK_URLNAME = 'inscription-zone'
+INSCRIPTION_ZONE_ALLOWED_URLNAME = [
+    'login',
+    'logout',
+    'contact',
+    'set_language',
+    INSCRIPTION_ZONE_FALLBACK_URLNAME]
+INSCRIPTION_ZONE_ALLOWED_URLNAMESPACE = [
+    'gestion-machines',
+    'gestion-personnes',
+    'tresorerie']
+
 ## Various settings
 #
 

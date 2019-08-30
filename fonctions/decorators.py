@@ -24,11 +24,6 @@ def resel_required(function=None, redirect_to='home'):
 
     def _dec(view_func):
         def _view(request, *args, **kwargs):
-            if 'HTTP_X_FORWARDED_FOR' in request.META:
-                ip = request.META['HTTP_X_FORWARDED_FOR']
-            else:
-                ip = request.META['REMOTE_ADDR']
-
             if request.network_data['is_resel']:
                 return view_func(request, *args, **kwargs)
             else:

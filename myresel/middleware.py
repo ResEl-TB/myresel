@@ -89,6 +89,45 @@ class NetworkConfiguration(object):
         response = self.get_response(request)
         return response
 
+class InscriptionNetworkHandler(object):
+    """
+    Before the request is sent to the website, we need to handle if the user
+    is in a registration network
+    """
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def deport(self):
+        try:
+            path_url = resolve(self.request.path).url_name
+            path_namespaces = resolve(self.request.path).namespaces
+
+            test_urlname = [m == path_url for m in settings.INSCRIPTION_ZONE_ALLOWED_URLNAME]
+            test_urlnamespace = [m in path_namespaces for m in settings.INSCRIPTION_ZONE_ALLOWED_URLNAMESPACE]
+
+            if not (any(test_urlname) or any(test_urlnamespace)):
+                return HttpResponseRedirect(reverse(settings.INSCRIPTION_ZONE_FALLBACK_URLNAME))
+        except Resolver404:  # It's a 404
+            return HttpResponseRedirect(reverse(settings.INSCRIPTION_ZONE_FALLBACK_URLNAME))
+        return None
+
+    def __call__(self, request):
+        self.request = request
+
+        #ip = request.network_data['ip']
+        subnet = request.network_data['subnet']
+        #host = request.network_data['host']
+        #zone = request.network_data['zone']
+        #is_registered = request.network_data['is_registered']
+        is_logged_in = request.network_data['is_logged_in']
+
+        if not is_logged_in and (subnet == 'REGN' or subnet == 'EXPN'):
+            redirect = self.deport()
+            if redirect:
+                return redirect
+
+        response = self.get_response(request)
+
 class SimulateProductionNetwork(object):
     """
     Simulate a production environment for the Vagrant env
