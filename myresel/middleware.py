@@ -127,6 +127,7 @@ class InscriptionNetworkHandler(object):
                 return redirect
 
         response = self.get_response(request)
+        return response
 
 class SimulateProductionNetwork(object):
     """
