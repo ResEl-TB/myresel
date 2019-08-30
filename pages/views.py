@@ -222,6 +222,15 @@ class Contact(View):
             return HttpResponseRedirect(reverse('home'))
         return render(request, self.template_name, {'form': form})
 
+@resel_required
+def inscription_zone_info(request):
+    if request.network_data['is_logged_in']:
+        return HttpResponseRedirect(reverse('home'))
+    return render(
+        request,
+        'pages/inscription_zone_info.html',
+        {}
+    )
 
 class FaqList(ListView):
     """ Vue appelée pour afficher les F.A.Q. au niveau du ResEl """
