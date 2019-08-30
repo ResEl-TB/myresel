@@ -18,7 +18,7 @@
             </div>
 
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-4 col-md-offset-0 col-sm-9 col-sm-offset-3">
                     <h3>{% trans "Mes services" %}</h3>
                     <div class="services-group">
                         <div><a href="{% url 'campus:clubs:my-clubs' %}"><span class="fa fa-group fa-fw"></span> {% trans "Gérer mes clubs et associations" %}</a> <span class="label label-default"></span></div>
@@ -41,7 +41,7 @@
                             <div class="hidden-xs col-sm-3 computer-icon">
                             {% if subnet == 'FREE' %}
                                 <span class="fa fa-money"></span>
-                            {% elif subnet == 'REGN' %}
+                            {% elif subnet == 'REGN' or subnet == 'EXPN' %}
                                 <span class="fa fa-minus-circle"></span>
                             {% elif subnet == 'USER' %}
                                 <span class="fa fa-rocket"></span>
@@ -56,6 +56,8 @@
                                     {% trans "Vous vous trouvez sur la zone gratuite. Le débit est fortement réduit, mais devrait permettre de consulter vos mails et divers services légers." %}
                                 {% elif subnet == 'REGN' %}
                                     {% trans "Vous vous trouvez sur la zone d'inscription. Pour vous connecter à Internet, veuillez utiliser un autre réseau." %}
+                                {% elif subnet == 'EXPN' %}
+                                    {% trans "Vous vous trouvez sur la zone de renouvellement. Pour vous connecter à Internet, veuillez acquitter les frais d'accès." %}
                                 {% elif subnet == 'USER' %}
                                     {% trans "Vous êtes correctement connecté au réseau étudiant." %}
                                 {% elif subnet == 'SERV' %}
