@@ -16,76 +16,73 @@
 </head>
 {# TODO: DONT SHOW ERROR, it is a normal behavior #}
 <body>
-{% if is_active %} {# Computer known #}
-    {% if zone == "EXPN" %}
-        <div class="page-title">
-            <h2>{% trans "Votre abonnement est arrivé à expiration"%}</h2>
-        </div>
-        <div class="main-content">
-            <div class="container page-content text-center">
-                <div class="row">
-                    <div class="col-sm-offset-3 col-sm-6">
-                        {% blocktrans %}
-                            <p>
-                                Votre abonnement est terminé. Merci d'effectuer un paiement
-                                pour continuer à profiter de notre connexion.
-                            </p>
-                        {% endblocktrans %}
-                    </div>
-                </div>
-                <div class="row page-content">
-                    <a href="{% url 'paiement' %}" class="btn btn-lg ">{% trans "Rendez-moi ma connexion !"%}</a>
+{% if subnet == "EXPN" %}
+    <div class="page-title">
+        <h2 class="container">{% trans "Votre abonnement est arrivé à expiration"%}</h2>
+    </div>
+    <div class="main-content">
+        <div class="container page-content">
+            <div class="row">
+                <div class="col-sm-offset-3 col-sm-6 text-justify">
+                    {% blocktrans %}
+                        <p>
+                            Votre abonnement est terminé. Merci d'effectuer un paiement
+                            pour continuer à profiter de notre connexion.
+                        </p>
+                    {% endblocktrans %}
                 </div>
             </div>
-        </div>
-    {% elif vlan == "REGN" %}
-        <div class="page-title">
-            <h2 class="container">{% trans "Vous êtes sur la zone d'inscription"%}</h2>
-        </div>
-        <div class="main-content">
-            <div class="container page-content text-center">
-                <div class="row">
-                    <div class="col-sm-offset-3 col-sm-6">
-                        {% blocktrans %}
-                            <p>
-                                Vous êtes connecté au réseau d'inscription.
-                            </p>
-                            <p>
-                                Si vous n'avez pas de compte ResEl, vous êtes au bon endroit ! Vous pouvez cliquer sur le bouton ci-dessous.
-                                Il est impossible d'avoir accès à internet depuis ce réseau Wi-Fi pour des raisons de sécurité.<br/>
-                                Veuillez vous connecter sur le réseau Wi-Fi <strong>ResEl Secure</strong> si vous disposez déjà d'un compte.
-                            </p>
-                        {% endblocktrans %}
-                    </div>
-                </div>
-                <div class="row">
-                    <a href="{% url 'gestion-personnes:inscription' %}" class="btn btn-lg ">{% trans "Créer un compte"%}</a>
-                </div>
-            </div>
-        </div>
-    {% endif %}
-    <div class="contact-zone">
-        <div class="container text-right">
-            <a href="#">Le ResEl</a> - {# Maybe put a way to explain what is the ResEl #}
-            <a href="{% url "contact" %}">nous contacter</a>
-            -
-            <div class="dropup">
-                <a href="" class="dropdown-toggle" data-toggle="dropdown">{% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE | upper }}</a>
-                <div class="dropdown-menu dropdown-menu-right">
-                    {% get_available_languages as LANGUAGES %}
-                    {% get_language_info_list for LANGUAGES as languages %}
-                    <form action="{% url 'set_language' %}" method="post">
-                        {% csrf_token %}
-                        <input name="next" type="hidden" value="{% url 'inscription-zone' %}"/>
-                        {% for language in languages %}
-                            <button class="btn btn-link" name="language" type="submit" value="{{ language.code }}">{{ language.name_local|title }}</button>
-                        {% endfor %}
-                    </form>
-                </div>
+            <div class="row page-content text-center">
+                <a href="{% url 'tresorerie:home' %}" class="btn btn-lg ">{% trans "Rendez-moi ma connexion !"%}</a>
             </div>
         </div>
     </div>
-
+{% elif subnet == "REGN" %}
+    <div class="page-title">
+        <h2 class="container">{% trans "Zone d'inscription"%}</h2>
+    </div>
+    <div class="main-content">
+        <div class="container page-content">
+            <div class="row">
+                <div class="col-sm-offset-3 col-sm-6 text-justify">
+                    {% blocktrans %}
+                        <h2>
+                            Bienvenue sur le réseau d'inscription
+                        </h2>
+                        <p>
+                            Si vous n'avez pas de compte ResEl, vous êtes au bon endroit ! Vous pouvez cliquer sur le bouton ci-dessous.<br>
+                            Il est impossible d'avoir accès à internet depuis ce réseau Wi-Fi pour des raisons de sécurité. Veuillez vous connecter sur le réseau Wi-Fi <strong>ResEl Secure</strong> si vous disposez déjà d'un compte.
+                        </p>
+                    {% endblocktrans %}
+                </div>
+            </div>
+            <div class="row text-center">
+                <a href="{% url 'gestion-personnes:inscription' %}" class="btn btn-lg ">{% trans "Créer un compte"%}</a>
+            </div>
+        </div>
+    </div>
+{% endif %}
+<div class="contact-zone">
+    <div class="container text-right">
+        <a href="#">Le ResEl</a> - {# Maybe put a way to explain what is the ResEl #}
+        <a href="{% url "contact" %}">nous contacter</a>
+        -
+        <div class="dropup">
+            <a href="" class="dropdown-toggle" data-toggle="dropdown">{% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE | upper }}</a>
+            <div class="dropdown-menu dropdown-menu-right">
+                {% get_available_languages as LANGUAGES %}
+                {% get_language_info_list for LANGUAGES as languages %}
+                <form action="{% url 'set_language' %}" method="post">
+                    {% csrf_token %}
+                    <input name="next" type="hidden" value="{% url 'inscription-zone' %}"/>
+                    {% for language in languages %}
+                        <button class="btn btn-link" name="language" type="submit" value="{{ language.code }}">{{ language.name_local|title }}</button>
+                    {% endfor %}
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- jQuery -->
 <script src="{% static 'jquery/jquery.min.js' %}"></script>
 

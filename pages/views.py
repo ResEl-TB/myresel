@@ -224,6 +224,8 @@ class Contact(View):
 
 @resel_required
 def inscription_zone_info(request):
+    if request.network_data['is_logged_in']:
+        return HttpResponseRedirect(reverse('home'))
     return render(
         request,
         'pages/inscription_zone_info.html',

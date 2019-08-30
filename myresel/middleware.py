@@ -121,7 +121,7 @@ class InscriptionNetworkHandler(object):
         #is_registered = request.network_data['is_registered']
         is_logged_in = request.network_data['is_logged_in']
 
-        if not is_logged_in and (subnet == 'REGN' or subnet == 'EXPN'):
+        if not is_logged_in and (subnet == 'EXPN' or subnet == 'REGN'):
             redirect = self.deport()
             if redirect:
                 return redirect
