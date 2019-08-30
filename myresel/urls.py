@@ -20,7 +20,7 @@ from django.contrib.auth import views as auth_views
 from django.views.generic import RedirectView
 from django.views.generic import TemplateView
 from django.views.i18n import javascript_catalog
-from pages.views import Home, Contact, NewsListe, FaqList, faqVote, NewsDetail, Services, \
+from pages.views import Home, Contact, NewsListe, inscription_zone_info, FaqList, faqVote, NewsDetail, Services, \
     unsecure_set_language, NewsRSS, NewsAtom, StatusPageXhr, eggdrop, Television
 
 from myresel import settings

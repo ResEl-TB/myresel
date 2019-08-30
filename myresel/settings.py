@@ -170,6 +170,7 @@ MIDDLEWARE = [
     'myresel.middleware.SimulateProductionNetwork',
     'myresel.middleware.IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAResElAdminSoCheckTheLdapBeforeMiddleware',
     'myresel.middleware.NetworkConfiguration',
+    'myresel.middleware.InscriptionNetworkHandler',
 ]
 
 ROOT_URLCONF = 'myresel.urls'
