@@ -11,8 +11,8 @@ campuses:
       - start: blue-services
         end: network-edge
       - start: internet-access
-        end: matahari
-      - start: matahari
+        end: kim
+      - start: kim
         end: kuma
       - start: kuma
         end: network-access
@@ -26,7 +26,7 @@ campuses:
           level: 2
           _hosts:
             # - zahia  # Temporarly disabled for ResEl reasons
-            - matahari
+            - kim
           _hosts_failover: true  # true if the hosts act as failovers, false by default
         - name: renater
           title: Connexion Renater
@@ -37,17 +37,17 @@ campuses:
           level: 1
           _hosts:
             - zahia
-            - matahari
+            - kim
       network-edge:
-        - name: matahari
-          title: Firewall Matahari
-          text: Matahari est le firewall principal à Brest. Il permet de
+        - name: kim
+          title: Firewall Kim
+          text: Kim est le firewall principal à Brest. Il permet de
             contrôler l'accès à Internet.
           icon: fa-server
           essential: true
           level: 1
           _hosts:
-            - matahari
+            - kim
       network-core:
         - name: kuma
           title: Routeur de coeur
@@ -103,7 +103,7 @@ campuses:
           essential: true
           level: 1
           _hosts:
-            - saymyname
+            - 10.5.18.1
         - name: dhcp
           title: DHCP principal
           text: Le DHCP principal permet de transmettre les adresses
@@ -112,7 +112,7 @@ campuses:
           essential: true
           level: 2
           _hosts:
-            - saymyname
+            - 10.3.13.3
         - name: ldap
           title: LDAP
           text: Le LDAP est la base de données principale au ResEl.
@@ -138,7 +138,7 @@ campuses:
           essential: false
           level: 0
           _hosts:
-            - dgsi
+            #- dgsi
             - eris
         - name: web
           title: Sites web
@@ -176,7 +176,7 @@ campuses:
           essential: true
           level: 1
           _hosts:
-            - luigi
+            #- luigi
             - toad
         - name: garbage
           title: Garbage
@@ -286,9 +286,9 @@ campuses:
           _hosts:
            - elric
            - elric1
-           - ap-i9-01
-           - ap-i9-02
-           - ap-i9-03
+           #- ap-i9-01
+           #- ap-i9-02
+           #- ap-i9-03
         - name: i10
           title: Bâtiment I10
           text: Switch d'accès au I10 et bornes Wi-Fi du I10
