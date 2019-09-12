@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block titre %}{% trans "Mes machines" %}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">{% trans "Mes machines" %}</h1>
+                <p class="text-right">
+                    <a href="{% url 'gestion-machines:ajout-manuel' %}" class="btn btn-info">{% trans "Ajouter une machine" %}</a>
+                </p>
+                {% for m in devices %}
+                    {% if forloop.first %}
+                        <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th><i class="fa fa-server fa-fw" aria-hidden="true"></i> {% trans "Adresse MAC" %}</th>
+                            <th><i class="fa fa-info fa-fw" aria-hidden="true"></i> {% trans "Authentification" %}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                    {% endif %}
+
+                <tr>
+                    <td>{{ m.pretty_mac }}</td>
+                    <td>
+                        <span class="label label-info">{{ m.auth_type }}</span>
+                    </td>
+                </tr>
+                {% if forloop.last %}
+                    </tbody>
+                    </table>
+                {% endif %}
+                {% empty %}
+                    <p>{% blocktrans %}Aucune machine n'est attachée à votre compte.{% endblocktrans %}</p>
+                {% endfor %}
+
+
+            </div> <!-- /.col-lg-12 -->
+
+        </div> <!-- /.row -->
+    
+    <div class="home-fragment">
+        <div class="container article"><a name="bandwidth">
+                <h1>Consomation de bande passante</h1></a>
+            <div class="embed-responsive graph">
+                <iframe id="graph" src="https://graph.resel.fr/dashboard-solo/db/qos?panelId=2&from=now-13h&to=now&var-uid={{ request.ldap_user.uid }}" width="450" height="200" frameborder="0" style="visibility: hidden; position: absolute; top: 0px;"
+  onload="this.style.position=''; this.style.visibility=''; this.style.top='';"></iframe>
+            </div>
+            <div class="btn-group">
+            <button class="btn btn-default active hdur" x-act="now-13h">12h</button>
+            <button class="btn btn-default hdur" x-act="now-25h" >24h</button>
+            <button class="btn btn-default hdur" x-act="now-1w">1 semaine</button>
+            <button class="btn btn-default hdur" x-act="now-1M">1 mois</button>
+            <button class="btn btn-default hdur" x-act="now-6M">6 mois</button>
+            </div>
+        </div>
+    </div>
+    </div> <!-- /.container -->
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        jQuery(document).ready(function($) {
+            $(".clickable").click(function() {
+                window.document.location = $(this).data("href");
+            });
+        });
+        $(".hdur").click(function() {
+            $('#graph').attr('src', "https://graph.resel.fr/dashboard-solo/db/qos?panelId=2&from=" + $(this).attr("x-act") + "&to=now&var-uid={{ request.ldap_user.uid }}");
+            $(".hdur").removeClass("active");
+            $(this).addClass("active");
+        });
+    </script>
+{% endblock %}

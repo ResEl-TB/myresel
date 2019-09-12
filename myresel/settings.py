@@ -147,6 +147,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'phonenumber_field',
+    'devices',
     'gestion_personnes',
     'myresel',
     'tresorerie',
