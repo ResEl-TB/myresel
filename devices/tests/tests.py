@@ -5,6 +5,7 @@ from django.test import TestCase
 
 from devices.forms import ManualDeviceAddForm
 from devices.models import LdapDevice
+from myresel.settings import LDAP_DN_MACHINES
 
 
 def new_dummy_device(owner="lcarr", auth_type='802.1X', mac="0000000000"):
@@ -23,7 +24,7 @@ def try_delete_device(mac):
     :param pk: pk of the device to delete
     :return: True if the device was indeed deleted, False otherwise
     """
-    pk = 'macAddress=%s,' % mac + settings.LDAP_DN_MACHINES
+    pk = 'macAddress=%s,' % mac + LDAP_DN_MACHINES
     try:
         device_s = LdapDevice.get(pk=pk)
         device_s.delete()
