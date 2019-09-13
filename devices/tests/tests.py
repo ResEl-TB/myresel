@@ -23,8 +23,9 @@ def try_delete_device(mac):
     :param pk: pk of the device to delete
     :return: True if the device was indeed deleted, False otherwise
     """
+    pk = 'macAddress=%s,' % mac + settings.LDAP_DN_MACHINES
     try:
-        device_s = LdapDevice.get(macAddress=mac)
+        device_s = LdapDevice.get(pk=pk)
         device_s.delete()
         return True
     except ObjectDoesNotExist:
@@ -39,7 +40,7 @@ class LdapDeviceTestCase(TestCase):
         self.assertEqual("uid=camme,ou=people,dc=maisel,dc=enst-bretagne,dc=fr", device.owner)
 
     def test_device_save(self):
-        try_delete_device("testsimpledevicelcarr")
+        try_delete_device("122334455667")
 
         device = LdapDevice()
         device.set_owner("lcarr")
@@ -58,7 +59,7 @@ class LdapDeviceTestCase(TestCase):
 class AjoutManuelFormTestCase(TestCase):
     def setUp(self):
         self.device = new_dummy_device(mac="00:00:00:00:01:00")
-        try_delete_device(self.device.mac_address)
+        try_delete_device("000000000100")
         self.device.save()
 
     def test_simple(self):
