@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block titre %}{% trans "Demande d'enregistrement de machine" %}{% endblock %}
+
+
+{% block css %}
+    <link href="{% static 'css/manual_add_device.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="page-header">{% trans "Demande d'enregistrement manuel de machine" %}</h1>
+        <div class="row">
+            <div class="col-sm-offset-1 col-sm-10">
+                {% blocktrans %}
+                    <div class="alert alert-warning" style="font-size: 1.3em">
+                        <strong><span class="fa fa-warning"></span> Important : </strong>
+                        <strong>expliquer clairement</strong> pourquoi cette machine n'a pas pu être ajoutée via le système automatique (ancien téléphone, console de jeu...), dans le cas contraire,
+                        <strong>les administrateurs ResEl se donneront le droit de refuser l'ajout de la machine au compte</strong>.
+                    </div>
+                {% endblocktrans %}
+            </div>
+            <div class="col-sm-offset-3 col-sm-6">
+                <form action="" method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <fieldset class="form-group">
+                            <label>{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.errors %}{{ field.errors }}{% endif %}
+                        </fieldset>
+                    {% endfor %}
+                    <div class="form-group text-center">
+                        <input type="submit" class="btn btn-info" value="{% trans 'Envoyer votre demande' %}">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        $(".close-btn").on("click", function (e) {
+            $("#warning-overlay").fadeOut();
+        });
+        $(".close").on("click", function (e) {
+            $("#warning-overlay").fadeOut();
+        });
+    </script>
+{%  endblock %}
