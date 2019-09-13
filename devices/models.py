@@ -25,4 +25,4 @@ class LdapDevice(ldapback.models.LdapModel):
         return ':'.join(a+b for a,b in zip(s[::2], s[1::2]))
 
     def set_owner(self, owner_uid):
-        P_DN_MACHINES
+        self.owner = 'uid=%s,' % str(owner_uid) + settings.LDAP_DN_PEOPLE
