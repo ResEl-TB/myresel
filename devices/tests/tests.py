@@ -24,9 +24,8 @@ def try_delete_device(mac):
     :param pk: pk of the device to delete
     :return: True if the device was indeed deleted, False otherwise
     """
-    pk = 'macAddress=%s,' % mac + LDAP_DN_MACHINES
     try:
-        device_s = LdapDevice.get(pk=pk)
+        device_s = LdapDevice.get(pk=mac)
         device_s.delete()
         return True
     except ObjectDoesNotExist:
@@ -50,7 +49,7 @@ class LdapDeviceTestCase(TestCase):
 
         device.save()
 
-        device_s = LdapDevice.get(pk=device.hostname)
+        device_s = LdapDevice.get(pk=device.mac_address)
         self.assertIsInstance(device_s, LdapDevice)
         self.assertEqual(device.owner, device_s.owner)
         self.assertEqual(device.mac_address, device_s.mac_address)
