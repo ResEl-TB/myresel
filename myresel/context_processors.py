@@ -1,3 +1,4 @@
+from devices.models import LdapDevice
 from gestion_personnes.models import LdapUser
 from pages.views import StatusPageXhr
 

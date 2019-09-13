@@ -41,6 +41,19 @@ entryCSN: 20041013193524.000000Z#00004f#000#000000
 subschemaSubentry: cn=Subschema
 hasSubordinates: TRUE
 
+dn: ou=devices,dc=resel,dc=enst-bretagne,dc=fr
+ou: devices
+objectClass: organizationalUnit
+creatorsName: cn=admin,dc=maisel,dc=enst-bretagne,dc=fr
+createTimestamp: 20190913120000Z
+modifiersName: cn=admin,dc=maisel,dc=enst-bretagne,dc=fr
+modifyTimestamp: 20190913120000Z
+structuralObjectClass: organizationalUnit
+entryUUID: c5e8c698-b19a-1028-9fd3-eda77459ad13
+entryCSN: 20190913120000.000000Z#000001#000#000000
+subschemaSubentry: cn=Subschema
+hasSubordinates: TRUE
+
 dn: ou=reseau,dc=resel,dc=enst-bretagne,dc=fr
 ou: reseau
 objectClass: organizationalUnit

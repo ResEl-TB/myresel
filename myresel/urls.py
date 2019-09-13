@@ -42,6 +42,7 @@ urlpatterns = [
     url(r'^gestion/django-rq/', include('django_rq.urls')),
     url(r'^gestion/', admin.site.urls),
 
+    url(r'^machines/', include('devices.urls', namespace='gestion-machines')),
     url(r'^personnes/', include('gestion_personnes.urls', namespace='gestion-personnes')),
     url(r'^paiement/', include('tresorerie.urls', namespace='tresorerie')),
     url(r'^tarifs/', RedirectView.as_view(pattern_name="tresorerie:prices", permanent=False)),
