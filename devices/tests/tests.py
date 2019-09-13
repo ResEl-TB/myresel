@@ -16,7 +16,7 @@ def new_dummy_device(owner="lcarr", auth_type='802.1X', mac="0000000000"):
     return device
 
 
-def try_delete_device(pk):
+def try_delete_device(mac):
     """
     Try to delete a device
 
@@ -24,7 +24,7 @@ def try_delete_device(pk):
     :return: True if the device was indeed deleted, False otherwise
     """
     try:
-        device_s = LdapDevice.get(pk=pk)
+        device_s = LdapDevice.get(macAddress=mac)
         device_s.delete()
         return True
     except ObjectDoesNotExist:
