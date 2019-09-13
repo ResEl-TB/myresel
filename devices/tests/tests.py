@@ -59,7 +59,7 @@ class LdapDeviceTestCase(TestCase):
 
 class AjoutManuelFormTestCase(TestCase):
     def setUp(self):
-        self.device = new_dummy_device(mac="00:00:00:00:01:00")
+        self.device = new_dummy_device(mac="000000000100")
         try_delete_device("000000000100")
         self.device.save()
 

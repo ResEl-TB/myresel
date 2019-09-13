@@ -53,11 +53,9 @@ class ManualAddCase(TestCase):
     def test_double_add(self):
         # Creating ldap form
         device = LdapDevice()
-        device.hostname = "pcamanoury012"
         device.set_owner(self.owner)
-        device.ip = "200.222"
-        device.mac_address = '01:12:23:34:45:56'
-        device.zones = ["Brest", "User"]
+        device.mac_address = '011223344556'
+        device.auth_type = '802.1X'
         device.save()
 
         r = self.client.post(reverse("gestion-machines:ajout-manuel"),
