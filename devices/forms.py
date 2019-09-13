@@ -24,23 +24,20 @@ class ManualDeviceAddForm(forms.Form):
         mac = mac.lower()
         if not re.match(r'^([a-f0-9]{2}[:\-]){5}[a-f0-9]{2}$', mac):
             raise forms.ValidationError(_("Adresse MAC non valide"), code='invalid')
+        mac_addr = mac.replace(':', '').replace('-', '')
         try:
-            device = LdapDevice.get(mac_address=mac)
+            device = LdapDevice.get(pk=mac_addr)
             mail_admins(
-                "[Transfert {}]Tentative changement compte machine [{}] {}, ".format(settings.CURRENT_CAMPUS,
-                                                                                      device.mac_address,
-                                                                                      device.hostname),
+                "[Transfert] Tentative de changement de compte",
                 "Un utilisateur (quelconque) a tenté de transférer une machine d'un autre utilisateur vers "
                 "son compte. Cette personne va très probablement se manifester sur le support afin de transférer "
                 "la machine vers son compte."
-                "\n\n HOSTNAME: {}"
-                "\n MAC: {}"
-                "\n IP: {}"
+                "\n\n MAC: {}"
                 "\n UID PROPRIO: {}"
                 "\n\n /!\\ Le partage de compte est interdit selon le règlement intérieur /!\\"
                 "\n\n ----------"
                 "\n Message généré par le site ResEl"
-                    .format(device.hostname, device.mac_address, device.ip, device.owner)
+                    .format(device.mac_address, device.owner)
 
             )
             # Send an email to notify the admins that the device is already saved
