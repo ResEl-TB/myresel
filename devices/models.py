@@ -16,7 +16,7 @@ class LdapDevice(ldapback.models.LdapModel):
     object_classes = ['reselDevice']
 
     owner = LdapCharField(db_column='uidproprio', object_classes=object_classes, required=True)
-    mac_address = LdapCharField(db_column='macAddress', object_classes=object_classes, required=True)
+    mac_address = LdapCharField(db_column='macAddress', object_classes=object_classes, required=True, pk=True)
     auth_type = LdapCharField(db_column='authType', object_classes=object_classes, required=True)
     last_date = LdapCharField(db_column='lastdate', object_classes=object_classes)
 
@@ -25,4 +25,4 @@ class LdapDevice(ldapback.models.LdapModel):
         return ':'.join(a+b for a,b in zip(s[::2], s[1::2]))
 
     def set_owner(self, owner_uid):
-        self.owner = 'uid=%s,' % str(owner_uid) + settings.LDAP_DN_PEOPLE
+        P_DN_MACHINES
