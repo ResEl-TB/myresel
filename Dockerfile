@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM debian:buster
 ARG LDAPPASSWD
 
 MAINTAINER nicolas@vuillermet.bzh
