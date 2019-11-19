@@ -16,7 +16,8 @@ RUN chmod +x install_essentials.sh
 RUN ./install_essentials.sh
 
 COPY requirements.txt requirements.txt
-RUN pip3 install --default-timeout=100 -qr requirements.txt
+RUN pip3 install --upgrade pip
+RUN pip3 install --default-timeout=1000 -qr requirements.txt
 
 # LDAP
 RUN apt-get -qq upgrade && apt-get -qq install expect ldap-utils libldap2-dev libsasl2-dev libssl-dev ldapvi
