@@ -39,7 +39,7 @@ stages:
 Build docker image:
   stage: docker_build
   services: 
-    - docker:18-dind
+    - docker:dind
   image: docker:stable
   before_script: &before_script
     - docker login $DOCKER_REGISTRY -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD
@@ -54,7 +54,7 @@ Build docker image:
 Push docker image:
   stage: docker_push
   services:
-    - docker:18-dind
+    - docker:dind
   image: docker:stable
   before_script: *before_script
   script:
