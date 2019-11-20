@@ -17,6 +17,7 @@ RUN ./install_essentials.sh
 
 COPY requirements.txt requirements.txt
 RUN pip3 install --upgrade pip
+RUN dig files.pythonhosted.org && traceroute files.pythonhosted.org && ping files.pythonhosted.org -c 5
 RUN pip3 install --default-timeout=120 -qr requirements.txt
 
 # LDAP
