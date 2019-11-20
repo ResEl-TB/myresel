@@ -75,7 +75,7 @@ Push docker image:
 
 image: $IMAGE:latest
 services:
-  - redis:latest
+  - redis:stretch
   - mysql/mysql-server:5.5
 
 before_script:
