@@ -39,12 +39,8 @@ stages:
 Build docker image:
   stage: docker_build
   services: 
-    - docker:dind
+    - docker:18-dind
   image: docker:stable
-  variables:
-    DOCKER_HOST: tcp://docker:2375/
-    DOCKER_DRIVER: overlay2
-    DOCKER_TLS_CERTDIR: ''
   before_script: &before_script
     - docker login $DOCKER_REGISTRY -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD
   script:
@@ -58,12 +54,8 @@ Build docker image:
 Push docker image:
   stage: docker_push
   services:
-    - docker:dind
+    - docker:18-dind
   image: docker:stable
-  variables:
-    DOCKER_HOST: tcp://docker:2375/
-    DOCKER_DRIVER: overlay2
-    DOCKER_TLS_CERTDIR: ''
   before_script: *before_script
   script:
     - docker pull $IMAGE:$CI_COMMIT_SHA
@@ -75,12 +67,12 @@ Push docker image:
 
 image: $IMAGE:latest
 services:
-  - redis:stretch
+  - redis:latest
   - mysql/mysql-server:5.5
 
 before_script:
   - source .install/scripts/install_essentials.sh no-upgrade
-  - apt-get install -qq default-mysql-client
+  - apt-get install -qq mysql-client
   - echo "CREATE DATABASE ${MYSQL_QOS_DATABASE}" | mysql -u${MYSQL_QOS_USER} -p${MYSQL_QOS_PASSWORD} -h ${MYSQL_QOS_HOST}
   - source .install/scripts/install_openldap.sh
 #  - source .install/scripts/install_latex.sh

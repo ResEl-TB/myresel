@@ -1,4 +1,4 @@
-FROM debian:buster
+FROM debian:stretch
 ARG LDAPPASSWD
 
 MAINTAINER nicolas@vuillermet.bzh
@@ -16,8 +16,7 @@ RUN chmod +x install_essentials.sh
 RUN ./install_essentials.sh
 
 COPY requirements.txt requirements.txt
-RUN pip3 install --upgrade pip
-RUN pip3 install --default-timeout=120 -qr requirements.txt
+RUN pip3 install -qr requirements.txt
 
 # LDAP
 RUN apt-get -qq upgrade && apt-get -qq install expect ldap-utils libldap2-dev libsasl2-dev libssl-dev ldapvi
