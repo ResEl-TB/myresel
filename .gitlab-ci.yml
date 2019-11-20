@@ -41,6 +41,10 @@ Build docker image:
   services: 
     - docker:dind
   image: docker:stable
+  variables:
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ''
   before_script: &before_script
     - docker login $DOCKER_REGISTRY -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD
   script:
@@ -56,6 +60,10 @@ Push docker image:
   services:
     - docker:dind
   image: docker:stable
+  variables:
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ''
   before_script: *before_script
   script:
     - docker pull $IMAGE:$CI_COMMIT_SHA
