@@ -9,7 +9,7 @@ wheel==0.29.0
 django-phonenumber-field==1.3.0
 mysqlclient==1.4.5
 Pillow==4.1.0
-django-python3-ldap==0.9.14
+django-python3-ldap==0.11.2
 uWSGI==2.0.15
 redis
 rq
