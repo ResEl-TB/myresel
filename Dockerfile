@@ -15,11 +15,14 @@ COPY .install/scripts/install_essentials.sh install_essentials.sh
 RUN chmod +x install_essentials.sh
 RUN ./install_essentials.sh
 
+RUN RUN apt -qq update && apt -qq upgrade
+
 COPY requirements.txt requirements.txt
+RUN pip3 install --upgrade pip
 RUN pip3 install -qr requirements.txt
 
 # LDAP
-RUN apt-get -qq upgrade && apt-get -qq install expect ldap-utils libldap2-dev libsasl2-dev libssl-dev ldapvi
+RUN apt-get -qq install expect ldap-utils libldap2-dev libsasl2-dev libssl-dev ldapvi
 
 COPY .install/scripts/install_slapd.sh install_slapd.sh
 RUN chmod +x install_slapd.sh
