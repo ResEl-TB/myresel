@@ -143,6 +143,7 @@ deploy to brest:
 
 deploy to rennes:
   services: []
+  allow_failure: true
   before_script:
     - apt-get install -qq openssh-client
     - eval $(ssh-agent -s)
