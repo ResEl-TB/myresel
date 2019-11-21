@@ -15,7 +15,7 @@ COPY .install/scripts/install_essentials.sh install_essentials.sh
 RUN chmod +x install_essentials.sh
 RUN ./install_essentials.sh
 
-RUN RUN apt -qq update && apt -qq upgrade
+RUN apt -qq update && apt -qq upgrade
 
 COPY requirements.txt requirements.txt
 RUN pip3 install --upgrade pip
