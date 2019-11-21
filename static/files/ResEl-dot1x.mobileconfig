@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>PayloadContent</key>
+	<array>
+		<dict>
+			<key>AutoJoin</key>
+			<false/>
+			<key>CaptiveBypass</key>
+			<false/>
+			<key>EAPClientConfiguration</key>
+			<dict>
+				<key>AcceptEAPTypes</key>
+				<array>
+					<integer>25</integer>
+				</array>
+				<key>OneTimeUserPassword</key>
+				<false/>
+				<key>TLSMaximumVersion</key>
+				<string>1.0</string>
+				<key>TLSMinimumVersion</key>
+				<string>1.0</string>
+				<key>TLSTrustedServerNames</key>
+				<array/>
+			</dict>
+			<key>EncryptionType</key>
+			<string>Any</string>
+			<key>HIDDEN_NETWORK</key>
+			<false/>
+			<key>IsHotspot</key>
+			<false/>
+			<key>PayloadDescription</key>
+			<string>Configure les réglages Wi-Fi</string>
+			<key>PayloadDisplayName</key>
+			<string>ResEl dot1x</string>
+			<key>PayloadIdentifier</key>
+			<string>com.apple.wifi.managed.7BBBDBAC-9591-4B72-B0A5-16CE04F3118F</string>
+			<key>PayloadType</key>
+			<string>com.apple.wifi.managed</string>
+			<key>PayloadUUID</key>
+			<string>7BBBDBAC-9591-4B72-B0A5-16CE04F3118F</string>
+			<key>PayloadVersion</key>
+			<integer>1</integer>
+			<key>ProxyType</key>
+			<string>None</string>
+			<key>SSID_STR</key>
+			<string>Ethernet</string>
+		</dict>
+	</array>
+	<key>PayloadDisplayName</key>
+	<string>ResEl</string>
+	<key>PayloadIdentifier</key>
+	<string>ResEl-Dot1x</string>
+	<key>PayloadOrganization</key>
+	<string>ResEl</string>
+	<key>PayloadRemovalDisallowed</key>
+	<false/>
+	<key>PayloadType</key>
+	<string>Configuration</string>
+	<key>PayloadUUID</key>
+	<string>3A3A491A-4F76-4B0F-904C-BE4DCA580EE5</string>
+	<key>PayloadVersion</key>
+	<integer>1</integer>
+</dict>
+</plist>
