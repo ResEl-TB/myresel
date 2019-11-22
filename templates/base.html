@@ -281,6 +281,21 @@
 <!-- jQuery -->
 <script src="{% static 'jquery/jquery.min.js' %}"></script>
 
+<button class="open-zammad-chat">Chat Support ResEl</button>
+
+<script src="https://support.resel.fr/assets/chat/chat.min.js"></script>
+<script>
+$(function() {
+  new ZammadChat({
+    title: 'Support ResEl',
+    fontSize: '12px',
+    flat: true,
+    chatId: 1,
+    show: false
+  });
+});
+</script>
+
 <!-- Bootstrap Core JavaScript -->
 <script src="{% static 'boostrap/js/bootstrap.min.js' %}"></script>
 
