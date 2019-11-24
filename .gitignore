@@ -37,3 +37,4 @@ media/eggdrop/
 
 .coverage
 /node_modules
+/venv/

@@ -2270,7 +2270,7 @@ msgid "Page non trouvée"
 msgstr "Page not found"
 
 #: templates/404.html:15
-msgid "La page que vous cherchez n'existe pas."
+msgid "La page que vous cherchez n'existe pas. Elle a peut être été supprimée"
 msgstr "The page you are looking for does not exist."
 
 #: templates/500.html:5 templates/500.html:11
