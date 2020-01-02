@@ -49,6 +49,7 @@ Build docker image:
   only:
    changes:
      - Dockerfile
+  retry: 2
 
 
 Push docker image:
@@ -64,6 +65,7 @@ Push docker image:
   only:
    changes:
      - Dockerfile
+  retry: 2
 
 image: $IMAGE:latest
 services:
@@ -125,6 +127,7 @@ deploy to staging:
   environment:
     name: staging flea
     url: https://dev.resel.fr/
+  retry: 2
 
 deploy to brest:
   services: []
@@ -140,19 +143,21 @@ deploy to brest:
   environment:
     name: skynet
     url: https://resel.fr/
+  retry: 2
 
-deploy to rennes:
-  services: []
-  allow_failure: true
-  before_script:
-    - apt-get install -qq openssh-client
-    - eval $(ssh-agent -s)
-    - bash -c 'ssh-add <(echo "${DOUBIDOU_DEPLOY_KEY}")'
-  stage: deploy
-  script:
-    - ssh -o "StrictHostKeyChecking=no" -T deploy@doubidou
-  only:
-    - deploy
-  environment:
-    name: doubidou
-    url: https://rennes.resel.fr/
+#deploy to rennes:
+#  services: []
+#  allow_failure: true
+#  before_script:
+#    - apt-get install -qq openssh-client
+#    - eval $(ssh-agent -s)
+#    - bash -c 'ssh-add <(echo "${DOUBIDOU_DEPLOY_KEY}")'
+#  stage: deploy
+#  script:
+#    - ssh -o "StrictHostKeyChecking=no" -T deploy@doubidou
+#  only:
+#    - deploy
+#  environment:
+#    name: doubidou
+#    url: https://rennes.resel.fr/
+#  retry: 2
