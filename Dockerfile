@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM debian:stretch-backports
 ARG LDAPPASSWD
 
 MAINTAINER nicolas@vuillermet.bzh
