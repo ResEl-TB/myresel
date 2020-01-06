@@ -45,10 +45,11 @@ Build docker image:
     - docker login $DOCKER_REGISTRY -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD
   script:
     - docker build -t $IMAGE:$CI_COMMIT_SHA --build-arg LDAPPASSWD=$LDAP_PASSWORD .
-    - docker push $IMAGE:$CI_COMMIT_SHA
+    - docker push $IMAGE:$CI_COMMIT_SHA --max-concurrent-uploads=1
   only:
    changes:
      - Dockerfile
+  retry: 2
 
 
 Push docker image:
@@ -60,10 +61,11 @@ Push docker image:
   script:
     - docker pull $IMAGE:$CI_COMMIT_SHA
     - docker tag $IMAGE:$CI_COMMIT_SHA $IMAGE:latest
-    - docker push $IMAGE:latest
+    - docker push $IMAGE:latest --max-concurrent-uploads=1
   only:
    changes:
      - Dockerfile
+  retry: 2
 
 image: $IMAGE:latest
 services:
@@ -125,6 +127,7 @@ deploy to staging:
   environment:
     name: staging flea
     url: https://dev.resel.fr/
+  retry: 2
 
 deploy to brest:
   services: []
@@ -140,6 +143,7 @@ deploy to brest:
   environment:
     name: skynet
     url: https://resel.fr/
+  retry: 2
 
 deploy to rennes:
   services: []
@@ -156,3 +160,4 @@ deploy to rennes:
   environment:
     name: doubidou
     url: https://rennes.resel.fr/
+  retry: 2
