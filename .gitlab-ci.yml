@@ -3,6 +3,7 @@
 
 variables:
  IMAGE: $DOCKER_REGISTRY/applications-utilisateurs/myresel  # Custom image made for the ResEl
+ DOCKER_DRIVER: overlay
   
  MYSQL_HOST: mysql-mysql-server
  MYSQL_USER: resel
@@ -39,7 +40,7 @@ stages:
 Build docker image:
   stage: docker_build
   services: 
-    - docker:18-dind
+    - docker:18.09.7-dind
   image: docker:stable
   before_script: &before_script
     - docker login $DOCKER_REGISTRY -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD
@@ -49,12 +50,13 @@ Build docker image:
   only:
    changes:
      - Dockerfile
+  retry: 2
 
 
 Push docker image:
   stage: docker_push
   services:
-    - docker:18-dind
+    - docker:18.09.7-dind
   image: docker:stable
   before_script: *before_script
   script:
@@ -64,6 +66,7 @@ Push docker image:
   only:
    changes:
      - Dockerfile
+  retry: 2
 
 image: $IMAGE:latest
 services:
@@ -125,6 +128,7 @@ deploy to staging:
   environment:
     name: staging flea
     url: https://dev.resel.fr/
+  retry: 2
 
 deploy to brest:
   services: []
@@ -140,6 +144,7 @@ deploy to brest:
   environment:
     name: skynet
     url: https://resel.fr/
+  retry: 2
 
 deploy to rennes:
   services: []
@@ -156,3 +161,4 @@ deploy to rennes:
   environment:
     name: doubidou
     url: https://rennes.resel.fr/
+  retry: 2
