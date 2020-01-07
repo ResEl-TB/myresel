@@ -7,7 +7,8 @@ ENV LC_ALL fr_FR.UTF-8
 ENV LANG fr_FR.UTF-8
 ENV LANGUAGE fr_FR.UTF-8
 
-RUN apt -qq install software-properties-common; \
+RUN apt -qq update; \
+    apt -qq install software-properties-common; \
     echo /dev/null >> /etc/apt/sources.list; \
     add-apt-repository "deb http://deb.debian.org/debian/ stretch main"; \
     add-apt-repository "deb http://security.debian.org/ stretch/updates main"; \
