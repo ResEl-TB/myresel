@@ -1,4 +1,4 @@
-FROM debian:stretch-backports
+FROM debian:stretch
 ARG LDAPPASSWD
 
 MAINTAINER nicolas@vuillermet.bzh
@@ -11,6 +11,12 @@ ENV LANG fr_FR.UTF-8
 ENV LANGUAGE fr_FR.UTF-8
 
 # Python
+RUN apt install software-properties-common; \
+    echo /dev/null >> /etc/apt/sources.list; \
+    add-apt-repository "deb http://deb.debian.org/debian/ stretch main"; \
+    add-apt-repository "deb http://security.debian.org/ stretch/updates main"; \
+    add-apt-repository "deb http://deb.debian.org/debian/ stretch-updates main";
+
 COPY .install/scripts/install_essentials.sh install_essentials.sh
 RUN chmod +x install_essentials.sh
 RUN ./install_essentials.sh
