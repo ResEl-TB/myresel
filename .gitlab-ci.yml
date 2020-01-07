@@ -3,6 +3,7 @@
 
 variables:
  IMAGE: $DOCKER_REGISTRY/applications-utilisateurs/myresel  # Custom image made for the ResEl
+ DOCKER_DRIVER: overlay
   
  MYSQL_HOST: mysql-mysql-server
  MYSQL_USER: resel
