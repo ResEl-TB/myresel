@@ -10,24 +10,24 @@ ENV LANGUAGE fr_FR.UTF-8
 RUN apt -qq update; \
     apt install -qq software-properties-common -y; \
     echo /dev/null >> /etc/apt/sources.list; \
-    add-apt-repository "deb http://deb.debian.org/debian/ stretch main"; \
-    add-apt-repository "deb http://security.debian.org/ stretch/updates main"; \
-    add-apt-repository "deb http://deb.debian.org/debian/ stretch-updates main";
+    add-apt-repository "deb [arch=amd64] http://deb.debian.org/debian/ stretch main"; \
+    add-apt-repository "deb [arch=amd64] http://security.debian.org/ stretch/updates main"; \
+    add-apt-repository "deb [arch=amd64] http://deb.debian.org/debian/ stretch-updates main";
 
 
-RUN apt -qq update && apt -qq upgrade && apt install -qq locales locales-all
+RUN apt -qq update && apt -qq upgrade -y && apt install -qq locales locales-all -y
 
 COPY .install/scripts/install_essentials.sh install_essentials.sh
 RUN chmod +x install_essentials.sh && ./install_essentials.sh
 
-RUN apt -qq update && apt -qq upgrade
+RUN apt -qq update && apt -qq upgrade -y
 
 COPY requirements.txt requirements.txt
 RUN pip3 install --upgrade pip
 RUN pip3 install -qr requirements.txt
 
 # LDAP
-RUN apt-get -qq install expect ldap-utils libldap2-dev libsasl2-dev libssl-dev ldapvi
+RUN apt -qq install expect ldap-utils libldap2-dev libsasl2-dev libssl-dev ldapvi -y
 
 COPY .install/scripts/install_slapd.sh install_slapd.sh
 RUN chmod +x install_slapd.sh && ./install_slapd.sh $LDAPPASSWD
