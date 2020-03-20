@@ -1,27 +1,52 @@
 body
 {
-	background: #222;
-	margin: 0;
-    --h: calc(91.25vh);
+    background: #222;
+    margin: 0;
+}
+
+#container
+{
+    margin: 0;
+    --h: 91.25vh;
     height: 100vh;
     width: 100vw;
 }
 
-body.expanded
+#container.fullscreen
+{
+    --h: 91.25vh;
+}
+
+#container.detailed
 {
     --h: 80.75vh;
 }
 
-body.fullscreen
+#container.fullscreen.detailed
 {
-	background: #000;
-	cursor: none;
+    --h: 80.75vh;
+}
+
+#container.expanded
+{
+    background: #000;
+    cursor: none;
     --h: 100vh;
 }
 
-body.fullscreen #channels
+#container.expanded #channels
 {
     bottom: -8.75vh;
+}
+
+#container.expanded #nav, #container.fullscreen #nav
+{
+    top: -5vh;
+}
+
+#container.expanded #video, #container.fullscreen #video
+{
+    top: 0;
 }
 
 #loading
@@ -49,7 +74,7 @@ body.fullscreen #channels
 
 @keyframes spinner
 {
-	0%   {top: -5vw;}
+    0%   {top: -5vw;}
     75%  {top: -5vw;}
     100% {top: 0;}
 }
@@ -68,7 +93,7 @@ body.fullscreen #channels
     height: 6.84vw;
     left: 32.5vw;
     animation: logo 1.5s;
-	top: calc(50% - 5.92vw);
+    top: calc(50% - 5.92vw);
 }
 
 #resel
@@ -104,15 +129,15 @@ body.fullscreen #channels
 
 .done
 {
-	opacity: 0;
-	transition: opacity 1s;
+    opacity: 0;
+    transition: opacity 1s;
 }
 
 video {
     position: absolute;
     top: 0;
     height: 100%;
-	width: 100%;
+    width: 100%;
 }
 
 section
@@ -132,11 +157,11 @@ section
     height: var(--h);
     width: calc(var(--h) * 16 / 9);
     left: calc(50% - var(--h) * 8 / 9);
+    /*! top: 5vh; */
 }
 
 #overlay
 {
-
     font-family: 'Lato', sans serif;
     color: #fff;
     background: linear-gradient(315deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.85) 60%, rgba(0,0,0,0.85) 100%);
@@ -147,9 +172,9 @@ section
     padding: var(--bp);
     transition: opacity .25s ease-in;
     opacity: 1;
-	position: absolute;
-	z-index: 1;
-	overflow: hidden;
+    position: absolute;
+    z-index: 1;
+    overflow: hidden;
 }
 
 #overlay *
@@ -159,7 +184,7 @@ section
 
 #overlay-title
 {
-	margin-bottom: calc(-0.1 * var(--h));
+    margin-bottom: calc(-0.1 * var(--h));
     font-weight: bold;
     font-size: calc(0.08 * var(--h));
     white-space: nowrap;
@@ -170,14 +195,14 @@ section
 
 #overlay-title.overflow:hover
 {
-	position: absolute;
+    position: absolute;
     transform: translateX(calc(var(--h) * 16 / 9 - 2 * var(--bp) - 100%));
     transition: transform 2s;
 }
 
 #overlay #separator
 {
-	margin-top: calc(0.1 * var(--h) + var(--bp));
+    margin-top: calc(0.1 * var(--h) + var(--bp));
     background: #fff;
     height: calc(0.005 * var(--h));
     width: calc(50% + var(--bp));
@@ -206,6 +231,9 @@ section
 #overlay-subtitle
 {
     font-size: var(--bp);
+    min-height: calc(7vh - var(--bp));
+    text-align: left;
+    margin-top: .6vh;
 }
 
 #overlay-description
@@ -314,8 +342,8 @@ input[type=range]::-ms-thumb
 
 #sound *
 {
-	opacity: 1;
-	transition: all .25s ease-in;
+    opacity: 1;
+    transition: all .25s ease-in;
 }
 
 .hidden
@@ -342,9 +370,9 @@ input[type=range]::-ms-thumb
 
 #sound-container:hover #volume
 {
-	width: 15vh;
-	opacity: 1;
-	left: 4vh;
+    width: 15vh;
+    opacity: 1;
+    left: 4vh;
 }
 
 #videobar
@@ -377,7 +405,7 @@ input[type=range]::-ms-thumb
     margin: 0;
 }
 
-#videobar .progressbar
+#container #videobar .progressbar
 {
     top: 0;
     position: relative;
@@ -394,8 +422,8 @@ input[type=range]::-ms-thumb
     height: 0;
     top: 1.75vh;
     position: absolute;
-	cursor: pointer;
-	transition: all .25s ease-in;
+    cursor: pointer;
+    transition: all .25s ease-in;
 }
 
 .playpause-container
@@ -408,7 +436,7 @@ input[type=range]::-ms-thumb
 
 #videobar #play-pause
 {
-	border: .95vh solid #fff;
+    border: .95vh solid #fff;
     float: left;
     position: relative;
 }
@@ -439,40 +467,40 @@ input[type=range]::-ms-thumb
     overflow: hidden;
     border-top-left-radius: 0.35vh;
     border-top-right-radius: 0.35vh;
-	transition: height .15s ease-in, bottom .15s ease-in;
+    transition: height .15s ease-in, bottom .15s ease-in;
     padding-top: 1.25vh;
     height: 7.5vh;
-	z-index: 2;
+    z-index: 2;
 }
 
-body.expanded #channels
+#container.detailed #channels
 {
-	height: 18vh;
-	background: linear-gradient(to right, #fff 25%, #f8f8f8, #fff 75%);
+    height: 18vh;
+    background: linear-gradient(to right, #fff 25%, #f8f8f8, #fff 75%);
 }
 
 .channel
 {
-	color: inherit;
+    color: inherit;
     border-radius: 1vh/7vh;
     display: inline-block;
     cursor: pointer;
-	outline: 0;
-	left: 0;
-	transition: border-radius .15s ease-in;
-	padding: 0.7vh;
-	margin-left: 0.35vh;
-	margin-right: 0.35vh;
-	width: 18.6vh;
-	height: 4.85vh;
-	margin-top: 0.25vh;
+    outline: 0;
+    left: 0;
+    transition: border-radius .15s ease-in;
+    padding: 0.7vh;
+    margin-left: 0.35vh;
+    margin-right: 0.35vh;
+    width: 18.6vh;
+    height: 4.85vh;
+    margin-top: 0.25vh;
 }
 
-body:not(.expanded) .channel:hover, body:not(.expanded) .channel:focus, body:not(.expanded) .channel.active {
+#container:not(.detailed) .channel:hover, #container:not(.detailed) .channel:focus, #container:not(.detailed) .channel.active {
     background: #eee;
 }
 
-body:not(.expanded) .channel.active {
+#container:not(.detailed) .channel.active {
     pointer-events: none;
 }
 
@@ -481,7 +509,7 @@ body:not(.expanded) .channel.active {
     box-shadow: 0 0.25vh 0.6vh #aaa;
 }
 
-body:not(.expanded) .flip
+#container:not(.detailed) .flip
 {
     perspective: 10vh;
     float: left;
@@ -494,12 +522,12 @@ body:not(.expanded) .flip
     left: -0.7vh;
 }
 
-body:not(.expanded) .channel:not(.active):hover .flip
+#container:not(.detailed) .channel:not(.active):hover .flip
 {
 	box-shadow: .3vh .1vh .4vh -.2vh rgba(0,0,0,.25);
 }
 
-body:not(.expanded) .channel:not(.active) .flip:hover
+#container:not(.detailed) .channel:not(.active) .flip:hover
 {
   background-color: #ddd;
 }
@@ -529,7 +557,7 @@ body:not(.expanded) .channel:not(.active) .flip:hover
     width: 100%;
 }
 
-body:not(.expanded) .channel:not(.active):hover .card
+#container:not(.detailed) .channel:not(.active):hover .card
 {
   transform: rotateX(180deg);
 }
@@ -555,7 +583,7 @@ body:not(.expanded) .channel:not(.active):hover .card
     left: -0.7vh;
 }
 
-body:not(.expanded) .channel-more
+#container:not(.detailed) .channel-more
 {
     transform: rotateY(180deg);
 }
@@ -599,17 +627,17 @@ body:not(.expanded) .channel-more
     left: 0.45vh;
 }
 
-body.expanded .channel:not(.selected)
+#container.detailed .channel:not(.selected)
 {
   display: none;
 }
 
-body.expanded .scrollbar-x
+#container.detailed .scrollbar-x
 {
   display: none;
 }
 
-body.expanded .channel.selected
+#container.detailed .channel.selected
 {
     position: absolute;
 	cursor: default;
@@ -623,7 +651,7 @@ body.expanded .channel.selected
     width: 15vh;
 }
 
-body.expanded .program
+#container.detailed .program
 {
 	--pw: calc(33.33333vw - 21.2vh);
     left: 18vh;
@@ -635,18 +663,18 @@ body.expanded .program
 	cursor: pointer;
 }
 
-body.expanded .program-title
+#container.detailed .program-title
 {
     font-size: 2.25vh;
 }
 
-body.expanded .progressbar
+#container.detailed .progressbar
 {
     top: 3.7vh;
     height: 0.6vh;
 }
 
-body.expanded .duration
+#container.detailed .duration
 {
     font-size: 1.4vh;
 }
@@ -691,7 +719,7 @@ body.expanded .duration
     top: 2.5vh;
 }
 
-.channel.active .progressbar, body:not(.expanded) .channel:hover .progressbar, body:not(.expanded) .channel:focus .progressbar
+.channel.active .progressbar, #container:not(.detailed) .channel:hover .progressbar, #container:not(.detailed) .channel:focus .progressbar
 {
     background: #fbb;
     height: 0.5vh;
@@ -745,11 +773,10 @@ body.expanded .duration
 .subtitle
 {
     font-size: 1.75vh;
-    display: inline-block;
-    vertical-align: middle;
-    line-height: normal;
+    display: inline;
     text-align: justify;
     text-align-last: center;
+    line-height: 2vh;
 }
 
 .channel .right
@@ -787,7 +814,39 @@ body.expanded .duration
     vertical-align: middle;
 }
 
-body.fullscreen #overlay
+#container.expanded #overlay
 {
     opacity: 0 !important;
+}
+
+.channel.selected .middle .details {
+  line-height: normal;
+  display: inline-block;
+  vertical-align: middle;
+  margin-top: -1vh;
+}
+.channel.selected .middle .details .rating {
+  height: 4vh;
+  margin-top: 1vh;
+}
+.channel.selected .middle .details .rating img {
+  width: 100%;
+  height: 4vh;
+  line-height: 4vh;
+  font-size: 1.6vh;
+  display: inline-block;
+  margin-bottom: 2vh;
+  max-width: 11vh;
+}
+#overlay-rating {
+  float: right;
+  margin: 0;
+  margin-left: 2vh;
+  line-height: 5vh;
+}
+#overlay-rating img
+{
+    height: 6vh;
+    max-width: 12vh;
+    margin: 0;
 }
