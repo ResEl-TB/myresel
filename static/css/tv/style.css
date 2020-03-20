@@ -231,6 +231,9 @@ section
 #overlay-subtitle
 {
     font-size: var(--bp);
+    min-height: calc(7vh - var(--bp));
+    text-align: left;
+    margin-top: .6vh;
 }
 
 #overlay-description
@@ -770,11 +773,10 @@ input[type=range]::-ms-thumb
 .subtitle
 {
     font-size: 1.75vh;
-    display: inline-block;
-    vertical-align: middle;
-    line-height: normal;
+    display: inline;
     text-align: justify;
     text-align-last: center;
+    line-height: 2vh;
 }
 
 .channel .right
@@ -817,80 +819,34 @@ input[type=range]::-ms-thumb
     opacity: 0 !important;
 }
 
-.nav-element
-{
-    float: left;
-    line-height: 5vh;
-    font-family: Lato;
-    color: #e00;
-    text-decoration: none;
-    height: 100%;
+.channel.selected .middle .details {
+  line-height: normal;
+  display: inline-block;
+  vertical-align: middle;
+  margin-top: -1vh;
 }
-
-#nav
-{
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 5vh;
-    box-shadow: 0 0 20px #000;
-    font-size: 1.75vh;
-    background: linear-gradient(#fff, #eee);
-    transition: all .15s ease-in;
-    z-index: 2;
+.channel.selected .middle .details .rating {
+  height: 4vh;
+  margin-top: 1vh;
 }
-
-.nav-element.right
-{
-    float: right;
+.channel.selected .middle .details .rating img {
+  width: 100%;
+  height: 4vh;
+  line-height: 4vh;
+  font-size: 1.6vh;
+  display: inline-block;
+  margin-bottom: 2vh;
+  max-width: 11vh;
 }
-
-.nav-fill
-{
-    width: 100%;
-    background: transparent;
-    height: 5vh;
-    transform: skew(-30deg);
-    transition: all .25s ease;
+#overlay-rating {
+  float: right;
+  margin: 0;
+  margin-left: 2vh;
+  line-height: 5vh;
 }
-
-.nav-fill.first
+#overlay-rating img
 {
-    border-top: 5vh solid transparent;
-    border-right: 2.8867513459vh solid transparent;
-    width: calc(100% - 1.4433756730vh);
-    transform: none;
-    height: 0;
-    background: transparent !important;
-}
-
-.nav-fill.last
-{
-    border-bottom: 5vh solid transparent;
-    border-left: 2.8867513459vh solid transparent;
-    width: calc(100% - 1.4433756730vh);
-    transform: none;
-    height: 0;
-    background: transparent !important;
-    margin-left: -1.4433756730vh;
-}
-
-.nav-fill:hover
-{
-    background: #e4e4e4;
-    border-top-color: #e4e4e4;
-    border-bottom-color: #e4e4e4;
-}
-
-.nav-fill:hover + span
-{
-    color: #d00;
-}
-
-.nav-element > span
-{
-    position: relative;
-    top: -5vh;
-    padding: 0 2vh;
-    pointer-events: none;
+    height: 6vh;
+    max-width: 12vh;
+    margin: 0;
 }

@@ -183,6 +183,7 @@ class ResElTV extends HTMLElement {
           <div id="overlay-page" class="container-y" scrollable-y>
             <div class="wrapper-sb">
               <div class="content-y">
+                <div id="overlay-rating"></div>
                 <div id="overlay-subtitle"></div>
                 <div id="overlay-description"></div>
                 <div id="overlay-time"></div>
@@ -266,8 +267,6 @@ class ResElTV extends HTMLElement {
     /** Whether the player has been fully initialized. */
     this.init = false;
 	
-    this.imagePath = 'https://resel.fr/static/images/tv/';
-    
     /** The Dash.js video player. */
     this.player = dashjs.MediaPlayer().create();
     this.player.initialize(this.videoDiv.querySelector("video"));
@@ -327,7 +326,7 @@ class ResElTV extends HTMLElement {
     {
       for (var channel of data)
       {
-        this.channelsDiv.insertAdjacentHTML('beforeend', `<div tabindex="0" class="channel" data-lcn="${channel.lcn}"><div class="flip"><div class="card"><div class="channel-logo" style="background-image: url('${this.imagePath}${channel.sid}.png');"></div><div class="channel-more"><div class="more-button"></div></div></div></div><div class="program"><div class="program-title"></div><div class="progressbar"><div class="progress"></div></div><div class="duration"></div></div><div class="middle"><div class="subtitle"></div><div class="time"></div></div><div class="right"><div class="description"><p></p></div></div></div>`);
+        this.channelsDiv.insertAdjacentHTML('beforeend', `<div tabindex="0" class="channel" data-lcn="${channel.lcn}"><div class="flip"><div class="card"><div class="channel-logo" style="background-image: url('https://resel.fr/static/images/tv/channels/${channel.sid}.png');"></div><div class="channel-more"><div class="more-button"></div></div></div></div><div class="program"><div class="program-title"></div><div class="progressbar"><div class="progress"></div></div><div class="duration"></div></div><div class="middle"><div class="details"><div class="subtitle"></div><div class="rating"></div></div><div class="time"></div></div><div class="right"><div class="description"><p></p></div></div></div>`);
         channel.channelDiv = this.channelsDiv.lastChild;
         channel.channelDiv.onclick = this.switchChannel(channel);
         channel.channelDiv.querySelector(".description").onclick = e => {e.stopPropagation()};
@@ -392,7 +391,14 @@ class ResElTV extends HTMLElement {
   {
     var overlayTitle = this.shadow.getElementById("overlay-title");
     overlayTitle.innerHTML = channel.channelDiv.querySelector(".program-title").innerHTML;
-    this.shadow.getElementById("overlay-subtitle").innerHTML = channel.channelDiv.querySelector(".subtitle").innerHTML;
+    let subtitle = channel.channelDiv.querySelector(".subtitle").innerHTML;
+    let subtitleDiv = this.shadow.getElementById("overlay-subtitle");
+    subtitleDiv.innerHTML = subtitle;
+    if (subtitle)
+      subtitleDiv.style.display = "block";
+    else
+      subtitleDiv.style.display = "none";
+    this.shadow.getElementById("overlay-rating").innerHTML = channel.channelDiv.querySelector(".rating").innerHTML;
     this.shadow.getElementById("overlay-description").innerHTML = channel.channelDiv.querySelector(".description p").innerHTML;
     this.shadow.getElementById("overlay-time").innerHTML = channel.channelDiv.querySelector(".time").innerHTML;
     this.shadow.getElementById("overlay-progress").style.width = channel.channelDiv.querySelector(".progress").style.width;
@@ -548,7 +554,7 @@ class ResElTV extends HTMLElement {
 
   softUpdate()
   {
-    this.currentTime = Math.round((new Date).getTime()/1000);
+    this.currentTime = Math.round((new Date()).getTime()/1000);
     var channels_length = this.channels.length;
     for (let i = 0; i < channels_length; i++)
     {
@@ -561,7 +567,7 @@ class ResElTV extends HTMLElement {
   /** Updates the programs' time trackers and replaces old programs with the ones currently being broadcast. */
   update()
   {
-    this.currentTime = Math.round((new Date).getTime()/1000);
+    this.currentTime = Math.round((new Date()).getTime()/1000);
     ajaxGet(`https://tvapi.resel.fr/v0/programs?timestamp=${this.currentTime}`, (data =>
     {
       for (let i = 0; i < this.channels.length; i++)
@@ -572,9 +578,16 @@ class ResElTV extends HTMLElement {
         var titleDiv = channel.channelDiv.querySelector(".program-title");
         titleDiv.innerHTML = channel.currentProgram.title || "Indisponible";
         channel.channelDiv.querySelector(".duration").innerHTML = displayDuration(channel.currentProgram.start, channel.currentProgram.end);
-        channel.channelDiv.querySelector(".subtitle").innerHTML = channel.currentProgram.subtitle || "Indisponible";
+        channel.channelDiv.querySelector(".subtitle").innerHTML = channel.currentProgram.subtitle || "";
+        let rating = channel.currentProgram.rating;
+        let ratingDiv = channel.channelDiv.querySelector(".rating");
+        if (rating && rating.value)
+          ratingDiv.innerHTML = `<img alt="${rating.value}" src="https://resel.fr/static/images/tv/ratings/${rating.system}/${rating.value}.svg">`;
+        else
+          while (ratingDiv.firstChild)
+            ratingDiv.removeChild(ratingDiv.lastChild);
         channel.channelDiv.querySelector(".time").innerHTML = displayRange(channel.currentProgram.start, channel.currentProgram.end);
-        channel.channelDiv.querySelector(".description p").innerHTML = channel.currentProgram.desc || "Indisponible";
+        channel.channelDiv.querySelector(".description p").innerHTML = channel.currentProgram.description || "Description indisponible";
         channel.channelDiv.onclick = this.switchChannel(channel);
         if (overflows(titleDiv))
           channel.channelDiv.classList.add("overflow");
