@@ -271,14 +271,14 @@ input[type=range]::-webkit-slider-runnable-track
 
 input[type=range]::-webkit-slider-thumb
 {
-    border: 0.5vh solid #ff0000;
+    border: 0.65vh solid #ff0000;
     height: 0.45vh;
     width: .45vh;
     border-radius: 1vh;
     background: #ff0000;
     cursor: pointer;
     -webkit-appearance: none;
-    margin-top: 0px;
+    margin-top: -.35vh;
 }
 
 input[type=range]::-moz-range-track
@@ -335,9 +335,13 @@ input[type=range]::-ms-thumb
     height: 100%;
     padding: 0;
     opacity: 0;
-    transition: all .25s ease-in;
     width: 2vh;
     left: 1vh;
+    background: transparent;
+    transition-property: opacity, width, left;
+    transition-timing-function: ease-in;
+    transition-duration: .25s;
+    transition-delay: 0s, 0s, .25s;
 }
 
 #sound *
@@ -373,6 +377,10 @@ input[type=range]::-ms-thumb
     width: 15vh;
     opacity: 1;
     left: 4vh;
+    transition-property: opacity, width;
+    transition-duration: .25s;
+    transition-timing-function: ease-in;
+    transition-delay: 0s;
 }
 
 #videobar
@@ -388,6 +396,7 @@ input[type=range]::-ms-thumb
     box-sizing: border-box;
     margin: 0;
     overflow: hidden;
+    display: none;
 }
 
 #duration-indicator

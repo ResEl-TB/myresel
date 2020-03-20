@@ -178,13 +178,13 @@ class ResElTV extends HTMLElement {
     </div>
       <div id="video">
         <div id="overlay">
-          <div id="overlay-title"></div>
+          <div id="overlay-title">Bienvenue sur ResEl TV</div>
           <div id="separator"></div>
           <div id="overlay-page" class="container-y" scrollable-y>
             <div class="wrapper-sb">
               <div class="content-y">
                 <div id="overlay-rating"></div>
-                <div id="overlay-subtitle"></div>
+                <div id="overlay-subtitle">Veuillez sélectionner une chaîne ci-dessous pour commencer.</div>
                 <div id="overlay-description"></div>
                 <div id="overlay-time"></div>
               </div>
@@ -224,11 +224,11 @@ class ResElTV extends HTMLElement {
 
     const styleSheet = document.createElement('link');
     styleSheet.rel = 'stylesheet';
-    styleSheet.href = 'style.css';
+    styleSheet.href = '/static/css/tv/style.css';
     
     const scrollbarStyleSheet = document.createElement('link');
     scrollbarStyleSheet.rel = 'stylesheet';
-    scrollbarStyleSheet.href = 'scrollbar.css';
+    scrollbarStyleSheet.href = '/static/css/tv/scrollbar.css';
 
     shadow.appendChild(styleSheet);
     shadow.appendChild(scrollbarStyleSheet);
@@ -284,11 +284,13 @@ class ResElTV extends HTMLElement {
       this.interacting--;
     };
 
-    this.shadow.getElementById('videobar').onmouseover = () => {
+    this.videobar = this.shadow.getElementById('videobar');
+    
+    this.videobar.onmouseover = () => {
       this.interacting++;
     };
 
-    this.shadow.getElementById('videobar').onmouseout = () => {
+    this.videobar.onmouseout = () => {
       this.interacting--;
     };
 
@@ -313,8 +315,8 @@ class ResElTV extends HTMLElement {
     this.container.onmouseup = timer;
     this.container.onmousedown = timer;
 
-    var playPauseButton = this.shadow.getElementById("play-pause");
-    playPauseButton.onclick = () => {this.playPause(playPauseButton)};
+    this.playPauseButton = this.shadow.getElementById("play-pause");
+    this.playPauseButton.onclick = (() => {this.playPause(this.playPauseButton)}).bind(this);
     var volumeSlider = this.shadow.getElementById("volume");
     volumeSlider.oninput = this.updateVolume(volumeSlider);
     volumeSlider.onchange = this.updateVolume(volumeSlider);
@@ -326,7 +328,7 @@ class ResElTV extends HTMLElement {
     {
       for (var channel of data)
       {
-        this.channelsDiv.insertAdjacentHTML('beforeend', `<div tabindex="0" class="channel" data-lcn="${channel.lcn}"><div class="flip"><div class="card"><div class="channel-logo" style="background-image: url('https://resel.fr/static/images/tv/channels/${channel.sid}.png');"></div><div class="channel-more"><div class="more-button"></div></div></div></div><div class="program"><div class="program-title"></div><div class="progressbar"><div class="progress"></div></div><div class="duration"></div></div><div class="middle"><div class="details"><div class="subtitle"></div><div class="rating"></div></div><div class="time"></div></div><div class="right"><div class="description"><p></p></div></div></div>`);
+        this.channelsDiv.insertAdjacentHTML('beforeend', `<div tabindex="0" class="channel" data-lcn="${channel.lcn}"><div class="flip"><div class="card"><div class="channel-logo" style="background-image: url('/static/images/tv/channels/${channel.sid}.png');"></div><div class="channel-more"><div class="more-button"></div></div></div></div><div class="program"><div class="program-title"></div><div class="progressbar"><div class="progress"></div></div><div class="duration"></div></div><div class="middle"><div class="details"><div class="subtitle"></div><div class="rating"></div></div><div class="time"></div></div><div class="right"><div class="description"><p></p></div></div></div>`);
         channel.channelDiv = this.channelsDiv.lastChild;
         channel.channelDiv.onclick = this.switchChannel(channel);
         channel.channelDiv.querySelector(".description").onclick = e => {e.stopPropagation()};
@@ -336,8 +338,8 @@ class ResElTV extends HTMLElement {
         this.channels.push(channel);
       }
       
-      this.switchChannel(this.channels[0])();
-      this.init = true;
+//      this.switchChannel(this.channels[0])();
+//      this.init = true;
       this.update();
     
       this.loadingDiv.classList.add("done");
@@ -409,6 +411,12 @@ class ResElTV extends HTMLElement {
       overlayTitle.classList.remove("overflow");
   }
 
+  finishInitialization()
+  {
+    this.init = true;
+    this.videobar.style.display = 'block';
+  }
+  
   /**
    * Switches to another channel.
    *
@@ -421,6 +429,8 @@ class ResElTV extends HTMLElement {
       this.container.classList.remove("detailed");
       if (this.init)
         this.currentChannel.channelDiv.classList.remove("active");
+      else
+          this.finishInitialization();
       channel.channelDiv.classList.remove("selected");
       channel.channelDiv.classList.add("active");
       this.currentChannel = channel;
@@ -433,6 +443,8 @@ class ResElTV extends HTMLElement {
       this.player.attachSource(`https://tnt.resel.fr/play/dash/${channel.sid}/index.mpd`);
       if (this.init)
         this.updateOverlay(channel);
+      this.playing = true;
+      this.playPauseButton.classList.remove("paused");
       window.dispatchEvent(new Event("update"));
     }).bind(this);
   }
@@ -486,10 +498,13 @@ class ResElTV extends HTMLElement {
   /** Switches to the :ref:`expanded_state`. */
   expand()
   {
-    this.mouseTimer = null;
-    this.container.classList.add("expanded");
-    // this.container.className = "expanded";
-    this.state = 2;
+    if (this.init && this.playing)
+    {
+      this.mouseTimer = null;
+      this.container.classList.add("expanded");
+      // this.container.className = "expanded";
+      this.state = 2;
+    }
   }
 
   /**
@@ -540,13 +555,13 @@ class ResElTV extends HTMLElement {
   {
     if (this.playing)
     {
-      //this.player.pause();
+      this.player.pause();
       this.playing = false;
       elem.classList.add("paused");
     }
     else
     {
-      //this.player.play();
+      this.player.play();
       this.playing = true;
       elem.classList.remove("paused");
     }
@@ -559,9 +574,11 @@ class ResElTV extends HTMLElement {
     for (let i = 0; i < channels_length; i++)
     {
       const channel = this.channels[i];
-      channel.channelDiv.querySelector(".progress").style.width = `${channel.currentProgram.start ? Math.min(100 * (this.currentTime - channel.currentProgram.start) / (channel.currentProgram.end - channel.currentProgram.start), 100) : 0}%`;
+      if (channel.currentProgram)
+        channel.channelDiv.querySelector(".progress").style.width = `${channel.currentProgram.start ? Math.min(100 * (this.currentTime - channel.currentProgram.start) / (channel.currentProgram.end - channel.currentProgram.start), 100) : 0}%`;
     }
-    this.updateOverlay(this.currentChannel);
+    if (this.init)
+      this.updateOverlay(this.currentChannel);
   }
   
   /** Updates the programs' time trackers and replaces old programs with the ones currently being broadcast. */
@@ -582,7 +599,7 @@ class ResElTV extends HTMLElement {
         let rating = channel.currentProgram.rating;
         let ratingDiv = channel.channelDiv.querySelector(".rating");
         if (rating && rating.value)
-          ratingDiv.innerHTML = `<img alt="${rating.value}" src="https://resel.fr/static/images/tv/ratings/${rating.system}/${rating.value}.svg">`;
+          ratingDiv.innerHTML = `<img alt="${rating.value}" src="/static/images/tv/ratings/${rating.system}/${rating.value}.svg">`;
         else
           while (ratingDiv.firstChild)
             ratingDiv.removeChild(ratingDiv.lastChild);
@@ -594,7 +611,8 @@ class ResElTV extends HTMLElement {
         else
           channel.channelDiv.classList.remove("overflow");
         channel.channelDiv.querySelector(".progress").style.width = `${channel.currentProgram.start ? Math.min(100 * (this.currentTime - channel.currentProgram.start) / (channel.currentProgram.end - channel.currentProgram.start), 100) : 0}%`;
-        this.updateOverlay(this.currentChannel);
+        if (this.init)
+          this.updateOverlay(this.currentChannel);
         window.dispatchEvent(new Event("update"));
       }
     }));
