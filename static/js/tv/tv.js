@@ -143,6 +143,24 @@ function Channel(name, lcn, sid)
 }
 
 
+function erf(x)
+{
+  if (x >= 2) return 1;
+  if (x <= -2) return -1;
+  var m = 1.00;
+  var s = 1.00;
+  var sum = x * 1.0;
+  for(var i = 1; i < 20; i++){
+    m *= i;
+    s *= -1;
+    sum += (s * Math.pow(x, 2.0 * i + 1.0)) / (m * (2.0 * i + 1.0));
+  }  
+  return Math.min(Math.max(2 * sum / Math.sqrt(3.14159265358979), -1), 1);
+}
+
+function sratio(x) { return (erf(5*(2*(x+0.5) % 2)-5)-(2*(x+0.5) % 2))/2+x; }
+
+
 class ResElTV extends HTMLElement {
   constructor()
   {
@@ -176,6 +194,16 @@ class ResElTV extends HTMLElement {
       <div id="loader-container"><div id="loader"></div></div>
     </div>
     </div>
+      <div id="epg-switch"></div>
+      <div id="guide">
+        <div id="date"></div>
+        <div id="hours-tracker"></div>
+        <div style="margin-top: 3.5vh;">
+          <div id="channel-names"></div>
+          <div id="channels-guide"></div>
+          <div id="time-tracker"></div>
+        </div>
+      </div>
       <div id="video">
         <div id="overlay">
           <div id="overlay-title">Bienvenue sur ResEl TV</div>
@@ -284,7 +312,7 @@ class ResElTV extends HTMLElement {
       this.interacting--;
     };
 
-    this.videobar = this.shadow.getElementById('videobar');
+    this.videobar = shadow.getElementById('videobar');
     
     this.videobar.onmouseover = () => {
       this.interacting++;
@@ -303,7 +331,6 @@ class ResElTV extends HTMLElement {
       if (this.state == 2)
       {
         this.container.classList.remove("expanded");
-        // this.container.className = "";
         this.state = 0;
       }
     
@@ -315,15 +342,41 @@ class ResElTV extends HTMLElement {
     this.container.onmouseup = timer;
     this.container.onmousedown = timer;
 
-    this.playPauseButton = this.shadow.getElementById("play-pause");
+    this.playPauseButton = shadow.getElementById("play-pause");
     this.playPauseButton.onclick = (() => {this.playPause(this.playPauseButton)}).bind(this);
-    var volumeSlider = this.shadow.getElementById("volume");
+    var volumeSlider = shadow.getElementById("volume");
     volumeSlider.oninput = this.updateVolume(volumeSlider);
     volumeSlider.onchange = this.updateVolume(volumeSlider);
     volumeSlider.onmousedown = () => {if (volumeSlider.value > 0) this.previousVolume = volumeSlider.value};
-    this.shadow.getElementById("sound").onclick = () => {this.switchVolume()};
-    this.shadow.getElementById("fullscreen").onclick = () => {this.fullScreen().bind(this)};
+    shadow.getElementById("sound").onclick = () => {this.switchVolume()};
+    shadow.getElementById("fullscreen").onclick = () => {this.fullScreen()};
     
+    this.dateDiv = shadow.getElementById('date');
+    this.trackerDiv = shadow.getElementById('hours-tracker');
+    this.channelNamesDiv = shadow.getElementById('channel-names');
+    this.channelsGuideDiv = shadow.getElementById('channels-guide');
+    
+    this.channelsGuideDiv.onscroll = (() =>
+    {
+      var w = this.shadow.getElementById("date").clientWidth;
+      const refRect = this.dateDiv.getBoundingClientRect();
+      const refX = refRect.x + refRect.width;
+      const elements = this.shadow.querySelectorAll('.last-of-day');
+      let i;
+      for (i = 0; i < elements.length; i++)
+      {
+        const rect = elements[i].getBoundingClientRect();
+        if (rect.x + rect.width > refX)
+          break;
+      }
+      this.dateDiv.firstChild.style.marginLeft = `-${i*100}%`;
+      this.shadow.getElementById("channel-names").scrollTop = this.channelsGuideDiv.scrollTop;
+      this.shadow.getElementById("hours-tracker").scrollLeft = this.channelsGuideDiv.scrollLeft;
+    }).bind(this);
+    
+    this.epg = false;
+    shadow.getElementById('epg-switch').onclick = () => {this.switchEpg()};
+
     ajaxGet('https://tvapi.resel.fr/v0/channels', (data =>
     {
       for (var channel of data)
@@ -337,9 +390,7 @@ class ResElTV extends HTMLElement {
         
         this.channels.push(channel);
       }
-      
-//      this.switchChannel(this.channels[0])();
-//      this.init = true;
+
       this.update();
     
       this.loadingDiv.classList.add("done");
@@ -384,6 +435,92 @@ class ResElTV extends HTMLElement {
     }
   }
 
+  switchEpg()
+  {
+    if (this.epg)
+    {
+      this.epg = false;
+      this.container.classList.remove('guide');
+      while (this.dateDiv.firstChild)
+        this.dateDiv.removeChild(this.dateDiv.lastChild);
+      while (this.trackerDiv.firstChild)
+        this.trackerDiv.removeChild(this.trackerDiv.lastChild);
+      while (this.channelNamesDiv.firstChild)
+        this.channelNamesDiv.removeChild(this.channelNamesDiv.lastChild);
+      while (this.channelsGuideDiv.firstChild)
+        this.channelsGuideDiv.removeChild(this.channelsGuideDiv.lastChild);
+    }
+    else
+    {
+      this.epg = true;
+      this.container.classList.add('guide');
+      let now = new Date();
+      let yesterday = new Date(now);
+      yesterday.setHours(0, 0, 0, 0);
+      yesterday.setDate(yesterday.getDate()-1);
+      let threedays = new Date(yesterday);
+      threedays.setDate(yesterday.getDate()+4);
+      let date = new Date(yesterday);
+      let previousDay = yesterday.getDay();
+      ajaxGet(`https://tvapi.resel.fr/v0/epg?start=${yesterday.getTime()/1000}&end=${threedays.getTime()/1000}`, (data =>
+      {
+        for (let i = 0; i < 4; i++)
+        {
+          const element = document.createElement('span');
+          const dateString = Intl.DateTimeFormat(undefined, { weekday: 'long', month: 'numeric', day: 'numeric' }).format(date);
+          element.innerHTML = dateString.charAt(0).toUpperCase() + dateString.slice(1);
+          this.dateDiv.appendChild(element);
+          date.setDate(date.getDate()+1);
+        }
+        date.setDate(date.getDate()-4);
+        while (date.getTime() < threedays.getTime())
+        {
+          const element = document.createElement('div');
+          element.classList.add('time-indicator');
+          if (date.getDay() != previousDay)
+          {
+            this.trackerDiv.lastChild.classList.add('last-of-day');
+            previousDay = date.getDay();
+          }
+          element.innerHTML = `${displayTime(date.getTime()/1000)}`;
+          this.trackerDiv.appendChild(element);
+          date.setTime(date.getTime() + (3600000));
+        }
+        for (let channel of this.channels)
+        {
+          const element = document.createElement('div');
+          element.className = 'channel-name';
+          element.innerHTML = channel.name;
+          this.channelNamesDiv.appendChild(element);
+          const guide = document.createElement('div');
+          guide.className = 'channel-guide';
+          if (data[channel.sid])
+          {
+            for (let program of data[channel.sid])
+            {
+              const programDiv = document.createElement('div');
+              programDiv.classList.add('channel-program');
+              const duration = program.end - program.start;
+              if (duration < 300)
+                programDiv.classList.add('tiny');
+              else if (duration <= 600)
+                programDiv.classList.add('small');
+              else if (duration >= 1500 && program.icon)
+                programDiv.classList.add('big');
+              programDiv.style.left = `${(program.start - yesterday.getTime()/1000)/60}vh`;
+              programDiv.style.width = `${(program.end - program.start)/60}vh`;
+              programDiv.innerHTML = `<div class="image" style="background-image: url(https://tvapi.resel.fr/images/${program.icon})"></div><div class="duration">${displayRange(program.start, program.end)}</div><div class="title">${program.title}</div>`;
+              guide.appendChild(programDiv);
+            }
+          }
+          this.channelsGuideDiv.appendChild(guide);
+        }
+        this.channelsGuideDiv.scrollLeft = window.innerHeight * (now.getTime() - yesterday.getTime()) / 6000000 - this.channelsGuideDiv.offsetWidth / 2;
+        this.channelsGuideDiv.dispatchEvent(new CustomEvent('scroll'))
+      }));
+    }
+  }
+  
   /**
    * Updates the overlay with data regarding the given channel.
    *
@@ -502,7 +639,6 @@ class ResElTV extends HTMLElement {
     {
       this.mouseTimer = null;
       this.container.classList.add("expanded");
-      // this.container.className = "expanded";
       this.state = 2;
     }
   }

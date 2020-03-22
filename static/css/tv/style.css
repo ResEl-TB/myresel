@@ -27,18 +27,22 @@ body
     --h: 80.75vh;
 }
 
-#container.expanded
+#container.expanded:not(.guide)
+{
+    cursor: none;
+}
+#container.expanded, #container.guide
 {
     background: #000;
-    cursor: none;
     --h: 100vh;
 }
-
-#container.expanded #channels
+#container.expanded #channels, #container.guide #channels
 {
     bottom: -8.75vh;
 }
-
+#container.detailed.guide #channels {
+    bottom: -19.25vh;
+}
 #container.expanded #nav, #container.fullscreen #nav
 {
     top: -5vh;
@@ -47,6 +51,10 @@ body
 #container.expanded #video, #container.fullscreen #video
 {
     top: 0;
+}
+#container.guide #video
+{
+    filter: blur(10vh) brightness(0.7);
 }
 
 #loading
@@ -741,7 +749,7 @@ input[type=range]::-ms-thumb
     height: 100%;
 }
 
-.duration
+.program .duration
 {
     transition: all .2s ease-in;
     font-size: 1.2vh;
@@ -823,7 +831,7 @@ input[type=range]::-ms-thumb
     vertical-align: middle;
 }
 
-#container.expanded #overlay
+#container.expanded #overlay, #container.guide #overlay
 {
     opacity: 0 !important;
 }
@@ -858,4 +866,266 @@ input[type=range]::-ms-thumb
     height: 6vh;
     max-width: 12vh;
     margin: 0;
+}
+#guide {
+  position: absolute;
+  z-index: 2;
+  color: #fff;
+  font-size: 2.5vh;
+  float: left;
+  line-height: 8vh;
+  font-family: Noto Sans;
+  white-space: nowrap;
+  height: 100%;
+  padding: 5vh;
+  box-sizing: border-box;
+  display: none;
+}
+#epg-switch {
+    height: 5vh;
+    width: 22vh;
+    position: absolute;
+    top: 1vh;
+    right: 1vh;
+    background: #ccc4;
+    border-radius: 2.5vh;
+    opacity: 0.7;
+    cursor: pointer;
+    z-index: 3;
+}
+#container.guide #epg-switch {
+    width: 5vh;
+}
+#container.expanded:not(.guide) #epg-switch {
+    display: none;
+}
+#container #epg-switch:after {
+}
+#container #epg-switch:before {
+    content: 'Grille des programmes';
+    position: absolute;
+    top: 0;
+    left: 0;
+    color: #fff;
+    font-size: 1.8vh;
+    text-align: center;
+    width: 100%;
+    font-family: Lato;
+    font-weight: bold;
+    line-height: 5vh;
+    text-shadow: 0 1px 3px #0008;
+}
+#container.guide #epg-switch:after {
+    content: '';
+    height: 2.6vh;
+    width: 0.6vh;
+    background: #fff;
+    display: block;
+    transform: rotate(135deg);
+    top: 1.2vh;
+    position: absolute;
+    left: 2.2vh;
+}
+#container.guide #epg-switch:before {
+    content: '';
+    height: 2.6vh;
+    width: 0.6vh;
+    background: #fff;
+    display: block;
+    transform: rotate(45deg);
+    top: 1.2vh;
+    position: absolute;
+    left: 2.2vh;
+}
+#container.guide #guide {
+    display: block;
+}
+.channel-name {
+  width: 20vh;
+  background: rgba(255, 255, 255, .05);
+  text-align: center;
+  position: sticky;
+}
+.channel-name:last-child {
+  margin-bottom: 100vh;
+}
+.channel-guide > * {
+  padding: 0 1vh;
+  box-sizing: border-box;
+  transition: all .2s ease-in;
+  overflow: hidden;
+  position: absolute;
+  font-size: 2vh;
+  border-right: .15vh solid #fff2;
+  height: 8vh;
+  border-left: .15vh solid #fff2;
+}
+.channel-guide:nth-child(2n+1) .channel-program {
+  background: rgba(255, 255, 255, .05);
+}
+.channel-guide {
+  height: 8vh;
+  width: 5760vh;
+  overflow: hidden;
+  position: relative;
+}
+.channel-guide:nth-child(2n) .channel-program:hover {
+  background: rgba(255, 255, 255, .145);
+}
+.channel-guide:nth-child(2n+1) .channel-program:hover {
+  background: rgba(255, 255, 255, .1);
+}
+.channel-program:hover {
+  box-shadow: 0 .5vh 2vh rgba(0, 0, 0, .2);
+}
+#time-tracker {
+  height: 3.5vh;
+  font-size: 2vh;
+  text-align: center;
+  top: 0;
+  line-height: 3.5vh;
+  text-align: left;
+  overflow: hidden;
+  width: calc(100vw - 10vh);
+}
+#channel-names {
+  overflow: hidden;
+  height: 86.5vh;
+  position: absolute;
+  box-shadow: 2.5vh 0 5vh -2.5vh black;
+  z-index: 1;
+  /*! padding-bottom: 100vh; */
+}
+.time-filler {
+  width: 33vh;
+}
+.time-indicator {
+  line-height: 2.9vh;
+  width: 7vh;
+  background: rgba(255, 255, 255, .2);
+  height: 2.5vh;
+  top: -0.3vh;
+  position: relative;
+  margin-right: 53vh;
+}
+.time-indicator:last-child {
+  margin-right: 58.5vh;
+}
+.time-indicator::after {
+  content: '';
+  position: absolute;
+  top: 2.5vh;
+  border-top: solid 1vh rgba(255, 255, 255, 0.2);
+  border-left: solid 3.5vh transparent;
+  border-right: solid 3.5vh transparent;
+  left: 0;
+}
+#date {
+  width: 20vh;
+  height: 3.5vh;
+  background: rgba(255, 255, 255, .05);
+  position: absolute;
+  left: 5vh;
+  text-align: center;
+  line-height: 3.5vh;
+  font-size: 2vh;
+  overflow: hidden;
+}
+#date span
+{
+    width: 100%;
+    display: inline-block;
+    transition: margin-left .2s ease-in-out;
+}
+#channels-guide {
+  height: 86.5vh;
+  overflow: auto;
+  width: calc(100vw - 30vh);
+  position: absolute;
+  left: 25vh;
+}
+#hours-tracker > * {
+  display: inline-block;
+  text-align: center;
+}
+#hours-tracker {
+  position: relative;
+  left: 20vh;
+  overflow: hidden;
+  text-align: left;
+  float: left;
+  height: 3.5vh;
+  line-height: 3.5vh;
+  font-size: 1.8vh;
+  width: calc(100vw - 30vh);
+  filter: drop-shadow(0 .5vh .5vh black);
+}
+#hours-tracker > :first-child {
+    margin-left: -3.5vh;
+    visibility: hidden;
+}
+.channel-name:nth-child(2n+1) {
+  background: rgba(255, 255, 255, 0.1);
+}
+.channel-program.selected {
+  box-shadow: inset 0 0 5vh 5vh rgba(255, 255, 255, .2);
+}
+.channel-program.selected:hover {
+  box-shadow: inset 0 0 5vh 5vh rgba(255, 255, 255, .2), 0 .5vh 2vh rgba(0, 0, 0, .2);
+}
+.channel-program .duration {
+  font-size: 1.3vh;
+  line-height: 1.3vh;
+  position: relative;
+  top: 1.7vh;
+}
+.channel-program.small .duration {
+  display: none;
+}
+.channel-program.big .duration {
+  left: 11vh;
+}
+.channel-program .title {
+  font-size: 2vh;
+  line-height: 3vh;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: relative;
+  width: 100%;
+  top: 2.5vh;
+}
+.channel-program.small .title {
+  display: none;
+}
+.channel-program.big .title {
+  left: 11vh;
+  width: calc(100% - 10vh);
+}
+.channel-program.small:before, .channel-program.tiny:before {
+    content: '···';
+    text-align: center;
+    width: 100%;
+    display: block;
+    font-size: 4vh;
+}
+.channel-program.tiny:before {
+    content: '·';
+    font-size: 4vh;
+}
+.channel-program .image {
+    margin-top: 1vh;
+    display: inline-block;
+    position: absolute;
+    width: 10vh;
+    height: 6vh;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    backface-visibility: hidden;
+}
+.channel-program:not(.big) .image {
+  display: none;
+}
+.channel-program.small, .channel-program.tiny {
+  padding: 0;
 }
