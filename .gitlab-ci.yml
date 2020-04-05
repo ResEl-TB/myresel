@@ -2,7 +2,7 @@
 # TODO: do not delete migrations
 
 variables:
- IMAGE: $DOCKER_REGISTRY/applications-utilisateurs/myresel  # Custom image made for the ResEl
+ IMAGE: $CI_REGISTRY_IMAGE
  DOCKER_DRIVER: overlay
   
  MYSQL_HOST: mysql-mysql-server
@@ -40,10 +40,10 @@ stages:
 Build docker image:
   stage: docker_build
   services: 
-    - docker:18.09.7-dind
+    - $RUNNER_IMAGE
   image: docker:stable
   before_script: &before_script
-    - docker login $DOCKER_REGISTRY -u $DOCKER_REGISTRY_USER -p $DOCKER_REGISTRY_PASSWORD
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
     - docker build -t $IMAGE:$CI_COMMIT_SHA --build-arg LDAPPASSWD=$LDAP_PASSWORD .
     - docker push $IMAGE:$CI_COMMIT_SHA
@@ -56,7 +56,7 @@ Build docker image:
 Push docker image:
   stage: docker_push
   services:
-    - docker:18.09.7-dind
+    - $RUNNER_IMAGE
   image: docker:stable
   before_script: *before_script
   script:
