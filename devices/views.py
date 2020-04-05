@@ -19,7 +19,7 @@ from fonctions import ldap, network
 from fonctions.decorators import resel_required
 from devices.models import LdapDevice
 from gestion_personnes.models import LdapUser
-from .forms import ManualDeviceAddForm
+from .forms import EditDeviceForm, ManualDeviceAddForm
 
 logger = logging.getLogger("default")
 
@@ -56,11 +56,10 @@ class ListDevicesView(ListView):
 
 @method_decorator(login_required, name="dispatch")
 class EditDeviceView(View):
-    """ Vue appelée pour modifier le nom et l'alias de sa machine """
+    """ Vue appelée pour modifier le nom de sa machine """
 
     template_name = 'devices/edit_device.html'
-    #form_class = AddDeviceForm
-    form_class = None
+    form_class = EditDeviceForm
 
     @staticmethod
     def get_user_and_machine(username, mac):
@@ -81,76 +80,67 @@ class EditDeviceView(View):
         mac = self.kwargs.get('mac', '')
 
         try:
-            ldap_user, machine = self.get_user_and_machine(request.ldap_user.uid, mac)
+            ldap_user, machine = self.get_user_and_machine(request.user.username, mac)
         except ObjectDoesNotExist:
             logger.warning("Tentative de modification d'une machine qui n'existe pas"
                            "\n\nuid: {uid}"
-                           "\nmac: {mac}".format(
-                uid=request.user.username,
-                mac=mac),
-                           extra={"uid": request.user.username, "mac": mac},
-            )
+                           "\nmac: {mac}".format(uid=request.user.username, mac=mac),
+                           extra={"uid": request.user.username, "mac": mac})
             messages.error(request, _("Cette machine n'existe pas ou ne vous appartient pas."))
             return HttpResponseRedirect(reverse('gestion-machines:liste'))
 
-        #if machine.aliases:
-        #    proposed_alias = machine.aliases[0]
-        #else:
-        #    proposed_alias = ldap.get_free_alias(str(request.user.username))
-
-        form = self.form_class({'alias': 'NOTHING'})
+        form = self.form_class({'host': machine.host,
+                                'default': machine.default_host()})
         return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
+        mac = self.kwargs.get('mac', '')
+
+        try:
+            ldap_user, machine = self.get_user_and_machine(request.user.username, mac)
+        except ObjectDoesNotExist:
+            logger.warning("Tentative de modification d'une machine qui n'existe pas"
+                           "\n\nuid: {uid}"
+                           "\nmac: {mac}"
+                           "\nnew host: {host}".format(uid=request.user.username, mac=mac,
+                                                       host=host),
+                           extra={"uid": request.user.username, "mac": mac})
+            messages.error(request, _("Cette machine n'existe pas ou ne vous appartient pas."))
+            return HttpResponseRedirect(reverse('gestion-machines:liste'))
+
+        post_data = request.POST.dict()
+        post_data['default'] = machine.default_host()
+        form = self.form_class(post_data)
 
         if form.is_valid():
-            alias = form.cleaned_data['alias']
-            hostname = self.kwargs.get('host', '')
-            try:
-                ldap_user, machine = self.get_user_and_machine(request.user.username, hostname)
-            except ObjectDoesNotExist:
-                logger.warning("Tentative de modification d'une machine qui n'existe pas"
-                               "\n\nuid: {uid}"
-                               "\nhostname: {hostname}"
-                               "\nnew alias: {alias}".format(
-                    uid=request.user.username,
-                    alias=alias,
-                    hostname=hostname),
-                               extra={"uid": request.user.username, "new_alias": alias, "device_hostname": hostname}
-                )
-                messages.error(request, _("Cette machine n'existe pas ou ne vous appartient pas."))
-                return HttpResponseRedirect(reverse('gestion-machines:liste'))
-            if machine.aliases:
-                machine.aliases[0] = alias
-            else:
-                machine.aliases = [alias]
+            host = form.cleaned_data['host']
+            machine.host = host
 
             try:
                 machine.save()
-                messages.success(request, _("L'alias de la machine a bien été modifié."))
+                messages.success(request, _("Le nom de la machine a bien été modifié."))
                 return HttpResponseRedirect(reverse('gestion-machines:liste'))
             except SaveError as e:
                 messages.error(
                     request,
                     _("Une erreur s'est produite lors de l'enregistrement."
-                    " Veuillez re-essayer plus tard"))
+                    " Veuillez réessayer plus tard"))
                 logger.error(
-                        "ERROR_SAVING_ALIAS: "
-                        "Erreur lors du changement de l'alias de la machine."
+                        "ERROR_SAVING_HOST: "
+                        "Erreur lors du changement du nom de la machine."
                         "uid: {uid} "
-                        "hostname: {hostname} "
-                        "new alias: {alias} "
+                        "mac: {mac} "
+                        "new host: {host} "
                         "error: {error}".format(
                             uid=request.user.username,
-                            alias=alias,
-                            hostname=hostname,
+                            mac=mac,
+                            host=host,
                             error=e,),
                         extra={
-                            "message_code": "ERROR_SAVING_ALIAS",
+                            "message_code": "ERROR_SAVING_HOST",
                             "uid": request.user.username,
-                            "new_alias": alias,
-                            "device_hostname": hostname,
+                            "mac": mac,
+                            "new_host": host,
                             "error": e,
                         }
                 )

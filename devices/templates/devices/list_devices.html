@@ -16,18 +16,36 @@
                         <table class="table table-hover">
                         <thead>
                         <tr>
+                            <th><i class="fa fa-desktop fa-fw" aria-hidden="true"></i> {% trans "Nom de la machine" %}</th>
                             <th><i class="fa fa-server fa-fw" aria-hidden="true"></i> {% trans "Adresse MAC" %}</th>
                             <th><i class="fa fa-info fa-fw" aria-hidden="true"></i> {% trans "Authentification" %}</th>
+                            <th><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> {% trans "Dernière authentification" %}</th>
                         </tr>
                         </thead>
                         <tbody>
                     {% endif %}
 
-                <tr>
+                <tr style="cursor: pointer;" class="clickable" data-href="{% url 'gestion-machines:modifier' m.mac_address %}">
+                    <td>
+                    {% with host=m.get_host %}
+                    {% if host %}
+                        {{ host }}
+                    {% else %}
+                        {% trans "Machine sans nom" %}
+                    {% endif %}
+                    {% endwith %}
+                    </td>
                     <td>{{ m.pretty_mac }}</td>
                     <td>
                         <span class="label label-info">{{ m.auth_type }}</span>
                     </td>
+                    <td>
+                    {% if m.last_date %}
+                        {{ m.last_date }}
+                    {% else %}
+                        {% trans "Inconnue" %}
+                    {% endif %}
+		    </td>
                 </tr>
                 {% if forloop.last %}
                     </tbody>
