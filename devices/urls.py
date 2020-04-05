@@ -20,5 +20,5 @@ from .views import ManualAddDeviceView, ListDevicesView, EditDeviceView
 urlpatterns = [
     url(r'^ajout-manuel$', ManualAddDeviceView.as_view(), name='ajout-manuel'),
     url(r'^liste$', ListDevicesView.as_view(), name='liste'),
-    #url(r'^modifier/(?P<mac>[A-Za-z0-9-]{2,})$', EditDeviceView.as_view(), name='modifier'),
+    url(r'^modifier/(?P<mac>[A-Za-z0-9-]{2,})$', EditDeviceView.as_view(), name='modifier'),
 ]
