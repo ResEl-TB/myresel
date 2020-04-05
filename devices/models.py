@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import logging
 import requests
 import time
 
@@ -6,6 +7,8 @@ import ldapback
 from ldapback.models.fields import LdapCharField, LdapListField, LdapDatetimeField
 from myresel import settings
 from myresel.settings import LDAP_DN_MACHINES
+
+logger = logging.getLogger("default")
 
 
 class LdapDevice(ldapback.models.LdapModel):
@@ -33,9 +36,14 @@ class LdapDevice(ldapback.models.LdapModel):
         for ip in settings.DHCP_API:
             try:
                 resp = requests.get(url='http://%s/v0/leases?state=active&mac=%s' % (ip, self.mac_address))
+                leases = resp.json()
             except requests.exceptions.RequestException:
+                logger.warning("L'API %s ne répond pas" % ip, extra={"ip": ip})
                 continue
-            leases = resp.json()
+            except ValueError:
+                logger.warning("L'appel à l'API %s a retourné un contenu incorrect" % ip,
+                               extra={"ip": ip})
+                continue
             if leases and 'client-hostname' in leases[-1]:
                 return leases[-1]['client-hostname']
         return None

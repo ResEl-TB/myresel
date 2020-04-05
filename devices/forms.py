@@ -29,32 +29,34 @@ class EditDeviceForm(forms.Form):
     def clean_host(self):
         host = self.cleaned_data['host']
 
-        if len(host) != 0:
-            if len(host) < 5:
-                raise forms.ValidationError(_("Nom trop court (au moins 5 caractères)"), code='TOO SHORT')
-            if len(host) > 20:
-                raise forms.ValidationError(_("Nom trop long (au plus 20 caractères)"), code='TOO LONG')
+        if len(host) == 0:
+            return host
 
-            # Custom slugification
-            host_sl = unicodedata.normalize('NFKD', host).encode('ascii', 'ignore').decode('ascii')
-            host_sl = re.sub(r'[^\w\s_\-]', '', host_sl).strip()
-            host_sl = re.sub(r'[_\-\s]+', '-', host_sl)
+        if len(host) < 5:
+            raise forms.ValidationError(_("Nom trop court (au moins 5 caractères)"), code='TOO SHORT')
+        if len(host) > 20:
+            raise forms.ValidationError(_("Nom trop long (au plus 20 caractères)"), code='TOO LONG')
 
-            if len(host_sl) < 5:
-                raise forms.ValidationError(
-                    _("Nom non conforme, seuls les lettres, chiffres et tirets sont acceptés."),
-                    code='INVALID NAME'
-                )
+        # Custom slugification
+        host_sl = unicodedata.normalize('NFKD', host).encode('ascii', 'ignore').decode('ascii')
+        host_sl = re.sub(r'[^\w\s_\-]', '', host_sl).strip()
+        host_sl = re.sub(r'[_\-\s]+', '-', host_sl)
 
-            if host_sl != host:
-                self.data = self.data.copy()  # Weak hack to modify data
-                self.data['host'] = host_sl
-                raise forms.ValidationError(
-                    _("Nom non conforme, nous vous proposons celui-ci à la place."),
-                    code='INVALID NAME'
-                )
+        if len(host_sl) < 5:
+            raise forms.ValidationError(
+                _("Nom non conforme, seuls les lettres, chiffres et tirets sont acceptés."),
+                code='INVALID NAME'
+            )
 
-        return host
+        if host_sl != host:
+            self.data = self.data.copy()  # Weak hack to modify data
+            self.data['host'] = host_sl
+            raise forms.ValidationError(
+                _("Nom non conforme, nous vous proposons celui-ci à la place."),
+                code='INVALID NAME'
+            )
+
+        return host_sl
 
 
 class ManualDeviceAddForm(forms.Form):
