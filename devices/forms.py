@@ -1,16 +1,62 @@
 import re
+import unicodedata
 
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import EmailMessage
 from django.core.mail import mail_admins
-from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 
 from fonctions import ldap
-from fonctions.ldap import get_free_alias
 from devices.models import LdapDevice
+
+
+class EditDeviceForm(forms.Form):
+    host = forms.CharField(label=_("Nom de la machine"), required=False)
+
+    def __init__(self, dic):
+        default = dic.pop('default')
+        super().__init__(dic)
+        if default:
+            par = ' (%s)' % default
+        else:
+            par = ''
+        widget = forms.TextInput(attrs={'class': 'form-control',
+                                        'placeholder': _("Nom automatique") + par})
+        self.fields['host'].widget = widget
+
+    def clean_host(self):
+        host = self.cleaned_data['host']
+
+        if len(host) == 0:
+            return host
+
+        if len(host) < 5:
+            raise forms.ValidationError(_("Nom trop court (au moins 5 caractères)"), code='TOO SHORT')
+        if len(host) > 20:
+            raise forms.ValidationError(_("Nom trop long (au plus 20 caractères)"), code='TOO LONG')
+
+        # Custom slugification
+        host_sl = unicodedata.normalize('NFKD', host).encode('ascii', 'ignore').decode('ascii')
+        host_sl = re.sub(r'[^\w\s_\-]', '', host_sl).strip()
+        host_sl = re.sub(r'[_\-\s]+', '-', host_sl)
+
+        if len(host_sl) < 5:
+            raise forms.ValidationError(
+                _("Nom non conforme, seuls les lettres, chiffres et tirets sont acceptés."),
+                code='INVALID NAME'
+            )
+
+        if host_sl != host:
+            self.data = self.data.copy()  # Weak hack to modify data
+            self.data['host'] = host_sl
+            raise forms.ValidationError(
+                _("Nom non conforme, nous vous proposons celui-ci à la place."),
+                code='INVALID NAME'
+            )
+
+        return host_sl
 
 
 class ManualDeviceAddForm(forms.Form):
