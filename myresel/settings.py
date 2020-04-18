@@ -79,6 +79,15 @@ FREE_DURATION = timedelta(days=3*7)
 # Cookies settings
 SESSION_COOKIE_AGE = 365 * 24 * 60 * 60
 
+# Warp 10 configuration
+GRAFANA_URL = 'https://graph.resel.fr/'
+IGNORED_HEADERS = ['connection', 'keep-alive', 'proxy-authenticate', 'proxy-authorization', 'te',
+                   'trailers', 'transfer-encoding', 'upgrade', 'content-encoding', 'content-length']
+WARP10_ENDPOINT = 'http://elliot.intra.resel.fr:8080/api/v0/exec'
+WARP10_PRELUDE = ' '.join(['<% "{}" %> "!{}" DEF'.format(WARP10_TOKENS[token], token)
+                           for token in WARP10_TOKENS]) + ' @secure/init\n'
+WARP10_INTERLUDE = '"{}" SECUREKEY {{}} !FETCH "" SECUREKEY'.format(WARP10_SECRET)
+
 # Authentication
 
 AUTHENTICATION_BACKENDS = (
