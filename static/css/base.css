@@ -420,6 +420,35 @@ body {
     padding-bottom: 40%;
 }
 
+.graph + .btn-group {
+    transform: translate(-50%);
+    left: 50%;
+    margin-bottom: 25px;
+}
+
+#devices tr td:last-child {
+    width: 300px;
+}
+
+#devices iframe {
+    pointer-events: none;
+    transform: scale(0.75);
+    transform-origin: top left;
+}
+
+#devices td {
+    line-height: 50px;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+#devices td > div {
+    height: 50px;
+    padding: 0;
+    overflow: hidden;
+    width: 300px;
+}
+
 @media screen and (max-width: 765px) {
     .graph {
         padding-bottom: 60%;

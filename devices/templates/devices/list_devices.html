@@ -13,13 +13,14 @@
                 </p>
                 {% for m in devices %}
                     {% if forloop.first %}
-                        <table class="table table-hover">
+                        <table class="table table-hover" id="devices">
                         <thead>
                         <tr>
                             <th><i class="fa fa-desktop fa-fw" aria-hidden="true"></i> {% trans "Nom de la machine" %}</th>
                             <th><i class="fa fa-server fa-fw" aria-hidden="true"></i> {% trans "Adresse MAC" %}</th>
                             <th><i class="fa fa-info fa-fw" aria-hidden="true"></i> {% trans "Authentification" %}</th>
                             <th><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> {% trans "Dernière authentification" %}</th>
+                            <th><i class="fa fa-area-chart fa-fw" aria-hidden="true"></i> {% trans "Consommation" %}</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -46,6 +47,9 @@
                         {% trans "Inconnue" %}
                     {% endif %}
 		    </td>
+                    <td>
+                        <div><iframe src="{% url 'grafana-proxy' 'd-solo/kOBp8vqWk/mon-netflow-une-machine' %}?orgId=2&panelId=2&var-mac={{ m.mac_address }}&theme=light" width="400" height="80" frameborder="0" style="visibility: hidden; position: absolute; top: 0px;" onload="this.style.position=''; this.style.visibility=''; this.style.top='';"></iframe></div>
+                    </td>
                 </tr>
                 {% if forloop.last %}
                     </tbody>
@@ -64,12 +68,11 @@
         <div class="container article"><a name="bandwidth">
                 <h1>Consomation de bande passante</h1></a>
             <div class="embed-responsive graph">
-                <iframe id="graph" src="https://graph.resel.fr/dashboard-solo/db/qos?panelId=2&from=now-13h&to=now&var-uid={{ request.ldap_user.uid }}" width="450" height="200" frameborder="0" style="visibility: hidden; position: absolute; top: 0px;"
-  onload="this.style.position=''; this.style.visibility=''; this.style.top='';"></iframe>
+                <iframe id="graph" src="{% url 'grafana-proxy' 'd-solo/72_JgN3Wz/mon-netflow' %}?orgId=2&panelId=2&theme=light" width="450" height="200" frameborder="0" style="visibility: hidden; position: absolute; top: 0px;" onload="this.style.position=''; this.style.visibility=''; this.style.top='';"></iframe>
             </div>
             <div class="btn-group">
-            <button class="btn btn-default active hdur" x-act="now-13h">12h</button>
-            <button class="btn btn-default hdur" x-act="now-25h" >24h</button>
+            <button class="btn btn-default hdur" x-act="now-12h">12h</button>
+            <button class="btn btn-default active hdur" x-act="now-24h" >24h</button>
             <button class="btn btn-default hdur" x-act="now-1w">1 semaine</button>
             <button class="btn btn-default hdur" x-act="now-1M">1 mois</button>
             <button class="btn btn-default hdur" x-act="now-6M">6 mois</button>
@@ -87,7 +90,7 @@
             });
         });
         $(".hdur").click(function() {
-            $('#graph').attr('src', "https://graph.resel.fr/dashboard-solo/db/qos?panelId=2&from=" + $(this).attr("x-act") + "&to=now&var-uid={{ request.ldap_user.uid }}");
+            $('#graph').attr('src', "{% url 'grafana-proxy' 'd-solo/72_JgN3Wz/mon-netflow' %}?orgId=2&panelId=2&theme=light&from=" + $(this).attr("x-act") + "&to=now");
             $(".hdur").removeClass("active");
             $(this).addClass("active");
         });
