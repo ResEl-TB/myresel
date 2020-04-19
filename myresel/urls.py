@@ -21,7 +21,7 @@ from django.views.generic import RedirectView
 from django.views.generic import TemplateView
 from django.views.i18n import javascript_catalog
 from pages.views import Home, Contact, NewsListe, inscription_zone_info, FaqList, faqVote, NewsDetail, Services, \
-    unsecure_set_language, NewsRSS, NewsAtom, StatusPageXhr, eggdrop, Television
+    unsecure_set_language, NewsRSS, NewsAtom, StatusPageXhr, eggdrop, Television, graph_api, grafana_proxy
 
 from myresel import settings
 
@@ -72,6 +72,9 @@ urlpatterns = [
     url(r'^become/$', TemplateView.as_view(template_name='pages/become_admin.html'), name='become-admin'),
     url(r'^status/$', TemplateView.as_view(template_name='pages/network_status.html'), name='network-status'),
     url(r'^wp-login.php$', TemplateView.as_view(template_name='418.html'), name='418'),
+
+    url(r'^graph/api/v0/exec$', graph_api, name='graph-api'),
+    url(r'^graph/(?P<path>.*)$', grafana_proxy, name='grafana-proxy'),
 
     # FIXME: For the moment we keep the API here, in the future we might make that
     # cleaner

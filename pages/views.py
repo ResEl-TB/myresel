@@ -10,10 +10,11 @@ import requests
 
 from django.conf import settings
 from django.contrib import messages
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponse, Http404
+from django.http import (HttpResponseRedirect, HttpResponse, Http404, HttpResponseServerError,
+                         HttpResponseBadRequest)
 from django.shortcuts import render, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -409,6 +410,40 @@ class StatusPageXhr(View):
         services = self.get_services()
         services_status = self.load_services_status(services)
         return HttpResponse(json.dumps(services_status), content_type='application/json')
+
+
+@csrf_exempt
+def graph_api(request):
+    if request.method != 'POST':
+        return HttpResponseRedirect(reverse('home'))
+    body = request.body.decode()
+    if '!FETCH' in body and not request.user.is_authenticated:
+        raise PermissionDenied()
+    fetcher = settings.WARP10_INTERLUDE.format('{{ "owner" "{}" }}'.format(request.user.username))
+    body = settings.WARP10_PRELUDE + body.replace('!FETCH', fetcher)
+    try:
+        resp = requests.post(url=settings.WARP10_ENDPOINT, data=body)
+    except requests.exceptions.RequestException:
+        return HttpResponseServerError()
+    response = HttpResponse(resp.content, status=resp.status_code)
+    for header in resp.headers:
+        if header.lower() not in settings.IGNORED_HEADERS:
+            response[header] = resp.headers[header]
+    return response
+
+
+def grafana_proxy(request, path):
+    if request.method != 'GET':
+        return HttpResponseBadRequest()
+    try:
+        resp = requests.get(settings.GRAFANA_URL + path, params = request.GET)
+    except requests.exceptions.RequestException:
+        return HttpResponse(status=502)
+    response = HttpResponse(resp.content, status=resp.status_code)
+    for header in resp.headers:
+        if header.lower() not in settings.IGNORED_HEADERS:
+            response[header] = resp.headers[header]
+    return response
 
 
 @login_required
