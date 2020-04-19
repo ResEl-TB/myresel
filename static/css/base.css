@@ -449,8 +449,23 @@ body {
     width: 300px;
 }
 
+.home-fragment .container {
+    width: 100%;
+}
+
 @media screen and (max-width: 765px) {
     .graph {
         padding-bottom: 60%;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    #devices td {
+        line-height: 1.42857143;
+        padding: 8px;
+    }
+
+    #devices tr td:last-child, #devices tr th:last-child {
+        display: none;
     }
 }
