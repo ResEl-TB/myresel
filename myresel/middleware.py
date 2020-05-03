@@ -45,18 +45,20 @@ class IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAResElAdmi
     def __init__(self, get_response):
         self.get_response = get_response
 
-    def __call__(self, request):
-        if request.user.is_authenticated():
-            try:
-                request.ldap_user = LdapUser.get(pk=request.user.username)
-            except ObjectDoesNotExist:
-                logout(request)
+    def process_view(self, request, view_func, view_args, view_kwargs):
+        if not hasattr(view_func, '_bypass_authentication'):
+            if request.user.is_authenticated():
+                try:
+                    request.ldap_user = LdapUser.get(pk=request.user.username)
+                except ObjectDoesNotExist:
+                    logout(request)
 
-        if self.is_staff(request.user):
-            self.make_user_staff(username=request.user.username)
-        response = self.get_response(request)
-        # After the request: Do nothing
-        return response
+            if self.is_staff(request.user):
+                self.make_user_staff(username=request.user.username)
+        return None
+
+    def __call__(self, request):
+        return self.get_response(request)
 
 
 class NetworkConfiguration(object):
@@ -67,7 +69,7 @@ class NetworkConfiguration(object):
     def __init__(self, get_response):
         self.get_response = get_response
 
-    def __call__(self, request):
+    def process_view(self, request, view_func, view_args, view_kwargs):
         request.network_data = {}
         if 'HTTP_X_FORWARDED_FOR' in request.META:
             ip = request.META['HTTP_X_FORWARDED_FOR']
@@ -85,9 +87,11 @@ class NetworkConfiguration(object):
         request.network_data['subnet'] = raw_zone[1]
         request.network_data['is_logged_in'] = request.user.is_authenticated()
         request.network_data['is_resel'] = raw_zone[0] != 'EXT'
+        return None
 
-        response = self.get_response(request)
-        return response
+    def __call__(self, request):
+        return self.get_response(request)
+
 
 class InscriptionNetworkHandler(object):
     """
@@ -111,7 +115,7 @@ class InscriptionNetworkHandler(object):
             return HttpResponseRedirect(reverse(settings.INSCRIPTION_ZONE_FALLBACK_URLNAME))
         return None
 
-    def __call__(self, request):
+    def process_view(self, request, view_func, view_args, view_kwargs):
         self.request = request
 
         #ip = request.network_data['ip']
@@ -125,9 +129,11 @@ class InscriptionNetworkHandler(object):
             redirect = self.deport()
             if redirect:
                 return redirect
+        return None
 
-        response = self.get_response(request)
-        return response
+    def __call__(self, request):
+        return self.get_response(request)
+
 
 class SimulateProductionNetwork(object):
     """
@@ -139,7 +145,7 @@ class SimulateProductionNetwork(object):
             raise MiddlewareNotUsed("Only used in developement environment")
         self.get_response = get_response
 
-    def __call__(self, request):
+    def process_view(self, request, view_func, view_args, view_kwargs):
         host = request.META["HTTP_HOST"].split(":")[0]
 
         try:
@@ -148,5 +154,5 @@ class SimulateProductionNetwork(object):
             client_fake_ip = '10.0.0.1'
         request.META["REMOTE_ADDR"] = client_fake_ip
 
-        response = self.get_response(request)
-        return response
+    def __call__(self, request):
+        return self.get_response(request)

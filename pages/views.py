@@ -29,7 +29,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 
 from fonctions import network, decorators
-from fonctions.decorators import resel_required
+from fonctions.decorators import resel_required, bypass_authentication
 from gestion_personnes.models import LdapUser, UserMetaData
 from pages.forms import ContactForm
 from pages.models import News, Faq
@@ -432,6 +432,7 @@ def graph_api(request):
     return response
 
 
+@bypass_authentication
 def grafana_proxy(request, path):
     if request.method != 'GET':
         return HttpResponseBadRequest()
@@ -443,6 +444,8 @@ def grafana_proxy(request, path):
     for header in resp.headers:
         if header.lower() not in settings.IGNORED_HEADERS:
             response[header] = resp.headers[header]
+    if path.split('.')[-1] in ['css', 'js'] and len(request.GET) == 0:
+        response['Cache-Control'] = 'public, max-age=31536000, immutable'
     return response
 
 

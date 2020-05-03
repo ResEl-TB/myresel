@@ -117,3 +117,17 @@ def ae_admin_required(function, redirect_to='campus:home'):
             return view_func(request, *args, **kwargs)
         return _view
     return _dec(function)
+
+
+def bypass_authentication(view_func):
+    """ Désactive l'authentification pour une requête
+
+    Ce décorateur permet le chargement rapide sans authentification des pages
+    pour lesquelles le site agit comme un reverse proxy.
+    """
+
+    def _dec(*args, **kwargs):
+        return view_func(*args, **kwargs)
+
+    _dec._bypass_authentication = True
+    return _dec
