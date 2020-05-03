@@ -226,18 +226,18 @@
     </div>
     <div class="home-fragment">
         <div id="graph"  class="container article">
-          <h1>Bande passante générale <a href="{% url 'grafana-proxy' 'd/2NnLEI3Wk/netflow' %}?orgId=2&var-_campus=All&kiosk=tv" aria-label="Plus d'info sur la bande passante"><small><i class="fa fa-fw fa-plus"></i></small></a></h1>
+          <h1>Bande passante générale <a href="/graph/d/2NnLEI3Wk/netflow?orgId=2&var-_campus=All&kiosk=tv" aria-label="Plus d'info sur la bande passante"><small><i class="fa fa-fw fa-plus"></i></small></a></h1>
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="graph-brest">
                     <div class="embed-responsive graph">
-                        <iframe title="graph Brest" src="{% url 'grafana-proxy' 'd-solo/2NnLEI3Wk/netflow' %}?orgId=2&panelId=4&var-campus=Brest&theme=light" width="450" height="200" frameborder="0" style="visibility: hidden; position: absolute; top: 0px;"
+                        <iframe title="graph Brest" src="/graph/d-solo/2NnLEI3Wk/netflow?orgId=2&panelId=4&var-campus=Brest&theme=light" width="450" height="200" frameborder="0" style="visibility: hidden; position: absolute; top: 0px;"
   onload="this.style.position=''; this.style.visibility=''; this.style.top='';"></iframe>
                     </div>
                 </div>
 
                 <div role="tabpanel" class="tab-pane fade" id="graph-rennes">
                     <div class="embed-responsive graph" >
-                        <iframe id="iframe-rennes" title="graph Rennes" src="{% url 'grafana-proxy' 'd-solo/2NnLEI3Wk/netflow' %}?orgId=2&panelId=4&var-campus=Rennes&theme=light" width="450" height="200" frameborder="0" style="visibility: hidden; position: absolute; top: 0px;"
+                        <iframe id="iframe-rennes" title="graph Rennes" src="/graph/d-solo/2NnLEI3Wk/netflow?orgId=2&panelId=4&var-campus=Rennes&theme=light" width="450" height="200" frameborder="0" style="visibility: hidden; position: absolute; top: 0px;"
   onload="this.style.position=''; this.style.visibility=''; this.style.top='';"></iframe>
                     </div>
                 </div>
