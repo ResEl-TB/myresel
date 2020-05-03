@@ -14,6 +14,7 @@ from gestion_personnes.tests import try_delete_user, create_full_user
 from myresel import middleware
 from fonctions import ldap
 
+
 class AdminMiddlewareTestCase(TestCase):
 
     def setUp(self):
@@ -42,6 +43,7 @@ class AdminMiddlewareTestCase(TestCase):
         self.request.user.username = self.admin_uid
 
         self.assertEqual(self.cm(self.request), None)
+        self.assertEqual(self.cm.process_view(self.request, lambda x:None, [], {}), None)
         self.request.user = User.objects.get(username=self.request.user.username)
         self.assertEqual(self.request.user.is_staff, 1)
         self.assertEqual(self.request.user.is_superuser, 1)
@@ -50,6 +52,7 @@ class AdminMiddlewareTestCase(TestCase):
         self.request.user.username = self.user.uid
 
         self.assertEqual(self.cm(self.request), None)
+        self.assertEqual(self.cm.process_view(self.request, lambda x:None, [], {}), None)
         self.assertEqual(self.request.user.is_staff, 0)
         self.assertEqual(self.request.user.is_superuser, 0)
 
