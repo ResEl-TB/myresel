@@ -432,20 +432,6 @@ def graph_api(request):
     return response
 
 
-def grafana_proxy(request, path):
-    if request.method != 'GET':
-        return HttpResponseBadRequest()
-    try:
-        resp = requests.get(settings.GRAFANA_URL + path, params = request.GET)
-    except requests.exceptions.RequestException:
-        return HttpResponse(status=502)
-    response = HttpResponse(resp.content, status=resp.status_code)
-    for header in resp.headers:
-        if header.lower() not in settings.IGNORED_HEADERS:
-            response[header] = resp.headers[header]
-    return response
-
-
 @login_required
 def eggdrop(request, channel=None, year=None, month=None, day=None):
     """Page with the irc logs"""
