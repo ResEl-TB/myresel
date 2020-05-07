@@ -48,7 +48,7 @@
                     {% endif %}
 		    </td>
                     <td>
-                        <div><iframe src="{% url 'grafana-proxy' 'd-solo/kOBp8vqWk/mon-netflow-une-machine' %}?orgId=2&panelId=2&var-mac={{ m.mac_address }}&theme=light" width="400" height="80" frameborder="0" style="visibility: hidden; position: absolute; top: 0px;" onload="this.style.position=''; this.style.visibility=''; this.style.top='';"></iframe></div>
+                        <div><iframe src="/graph/d-solo/my-device-netflow?panelId=2&var-mac={{ m.mac_address }}&theme=light" width="400" height="80" frameborder="0" style="visibility: hidden; position: absolute; top: 0px;" onload="this.style.position=''; this.style.visibility=''; this.style.top='';"></iframe></div>
                     </td>
                 </tr>
                 {% if forloop.last %}
@@ -68,7 +68,7 @@
         <div class="container article"><a name="bandwidth">
                 <h1>Consomation de bande passante</h1></a>
             <div class="embed-responsive graph">
-                <iframe id="graph" src="{% url 'grafana-proxy' 'd-solo/72_JgN3Wz/mon-netflow' %}?orgId=2&panelId=2&theme=light" width="450" height="200" frameborder="0" style="visibility: hidden; position: absolute; top: 0px;" onload="this.style.position=''; this.style.visibility=''; this.style.top='';"></iframe>
+                <iframe id="graph" src="/graph/d-solo/my-netflow?panelId=2&theme=light" width="450" height="200" frameborder="0" style="visibility: hidden; position: absolute; top: 0px;" onload="this.style.position=''; this.style.visibility=''; this.style.top='';"></iframe>
             </div>
             <div class="btn-group">
             <button class="btn btn-default hdur" x-act="now-12h">12h</button>
@@ -90,7 +90,7 @@
             });
         });
         $(".hdur").click(function() {
-            $('#graph').attr('src', "{% url 'grafana-proxy' 'd-solo/72_JgN3Wz/mon-netflow' %}?orgId=2&panelId=2&theme=light&from=" + $(this).attr("x-act") + "&to=now");
+            $('#graph').attr('src', "/graph/d-solo/my-netflow?panelId=2&theme=light&from=" + $(this).attr("x-act") + "&to=now");
             $(".hdur").removeClass("active");
             $(this).addClass("active");
         });
