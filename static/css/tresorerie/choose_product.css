@@ -24,6 +24,10 @@
     margin-top: 10px;
 }
 
+.panel-default .pay-btn {
+  margin-top: 35px;
+}
+
 .stripe {
     margin-top: 10px;
 }

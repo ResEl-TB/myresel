@@ -43,7 +43,7 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="panel panel-primary panel-product">
-                    <div class="panel-heading">{% trans "Accès au ResEl Normal" %}</div>
+                    <div class="panel-heading">{% trans "Accès au ResEl" %}</div>
                     <div class="panel-body">
                         <div class="service-list">
                             <div>{% trans "Services inclus :" %}</div>
@@ -70,36 +70,6 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="panel panel-primary panel-product">
-                    <div class="panel-heading">{% trans "Accès au ResEl FIP" %}</div>
-                    <div class="panel-body">
-                        <div class="service-list">
-                            <div>{% trans "Services inclus :" %}</div>
-                            <div class="service"><strong>Internet Haut Débit</strong></div>
-                            <div class="service">Télévision sur Internet</div>
-                            <div class="service">Garbage</div>
-                            <div class="service">Mails ResEl</div>
-                            <div class="service">Gestion des clubs</div>
-                            <div class="service">Et bien plus...</div>
-                        </div>
-                        <hr />
-                        <span class="price">{{ adhesion.display_price|floatformat }}€ de cotisation à l'association</span>
-                        <div class="price"><span class="fa fa-plus fa-fw"></span></div>
-                        <div class="row text-center">
-                        </div>
-                        <div class="pay-btn btn-group">
-                            <div class="row">
-                                <div class="col-lg-4"><a class="btn btn-info" href="{% url 'tresorerie:pay' one_year_FIP.id %}">Je choisis <br />1 an pour {{ one_year_FIP.display_price|floatformat }}€</a></div>
-                                <div class="col-lg-4"><a class="btn btn-info" href="{% url 'tresorerie:pay' six_month_FIP.id %}">Je choisis <br />6 mois pour {{ six_month_FIP.display_price|floatformat }}€</a></div>
-                                <div class="col-lg-4"><a class="btn btn-info" href="{% url 'tresorerie:pay' one_month_FIP.id %}">Je choisis <br />1 mois pour {{ one_month_FIP.display_price|floatformat }}€</a></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6 col-md-offset-3">
                 <div class="panel panel-default panel-product">
                     <div class="panel-heading">{% trans "Adhésion simple" %}</div>
                     <div class="panel-body">
