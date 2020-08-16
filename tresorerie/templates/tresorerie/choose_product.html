@@ -66,15 +66,6 @@
                                 <div class="col-lg-4"><a class="btn btn-info" href="{% url 'tresorerie:pay' one_month.id %}">Je choisis <br />1 mois pour {{ one_month.display_price|floatformat }}€</a></div>
                             </div>
                         </div>
-                        <p class="alt-link">
-                            <button type="button" class="btn btn-link" data-trigger="focus" data-placement="top" data-toggle="popover" data-content="Si vous n'êtes pas enregistré dans la bonne formation, vous pouvez demander à changer votre fiche auprès de nous. Passez à une de nos permanences au foyer avec votre carte étudiant et nous ferons le nécéssaire.">
-                                {% if formation == "FIG" %}
-                                    {% trans "Vous êtes étudiant en FIP ?" %}
-                                {% else %}
-                                    {% trans "Vous n'êtes pas étudiant en FIP ?" %}
-                                {% endif %}
-                            </button>
-                        </p>
                     </div>
                 </div>
             </div>
