@@ -74,7 +74,7 @@ INSCRIPTION_ZONE_ALLOWED_URLNAMESPACE = [
 #
 
 NUMBER_NEWS_IN_HOME = 4
-FREE_DURATION = timedelta(days=3*7)
+FREE_DURATION = timedelta(days=7)
 
 # Cookies settings
 SESSION_COOKIE_AGE = 365 * 24 * 60 * 60
