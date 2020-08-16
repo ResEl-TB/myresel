@@ -40,7 +40,7 @@
             <div class="col-md-3 col-md-offset-1">
                 <div class="back"><a href="{% url 'tresorerie:historique' %}"><span class="fa fa-fw fa-long-arrow-left"></span> {% trans "Retour " %}</a></div>
                 <div class="back">{% if invoice_path %}<a href="{% get_media_prefix %}{{ invoice_path }}">{% trans "Télécharger le reçu" %} <span class="fa fa-fw fa-download"></span> </a>{% else %}{% trans "Reçu en génération" %} <span class="fa fa-fw fa-hourglass"></span>{% endif %}</div>
-                <p>{% trans "Le ResEl ne fourni pas de facture, vous pouvez cependant demander un reçu aux administrateurs si vous en avez besoin" %}</p>
+                <p>{% trans "Le ResEl ne fournit pas de facture, vous pouvez cependant demander un reçu aux administrateurs si vous en avez besoin" %}</p>
             </div> <!-- /.row -->
         </div> <!-- /.container -->
 {% endblock %}
