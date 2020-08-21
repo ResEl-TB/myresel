@@ -6,6 +6,7 @@
 
 {% block css %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/tresorerie/choose_product.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/tresorerie/modal.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'css/htlatex.css' %}"/>
 {% endblock %}
 
@@ -49,23 +50,13 @@
                 <div class="total text-center">
                     <div class="total-text" >{% trans "Total :" %} {{ transaction.total|floatformat }}€</div>
 
-                    <form action="" method="post">
+                    <form action="" method="post" id="payment-done">
                         {% csrf_token %}
-                        <input type="hidden" name="uuid" value="{{ transaction.uuid }}">
                         <div class="stripe">
                             <button
                                     id="pay"
                                     type="submit"
                                     class="btn btn-success btn-lg"
-                                    data-key="{{ stripe_public_key }}"
-                                    data-currency="eur"
-                                    data-name="Association ResEl"
-                                    data-description="{{ transaction.full_name }}"
-                                    data-amount="{{ transaction.total_stripe }}"
-                                    data-image="{% static 'images/tresorerie/marketplace.png' %}"
-                                    data-locale="fr"
-                                    data-email="{{ user.mail }}"
-                                    data-allow-remember-me="false"
                             ><span class="fa fa-fw fa-credit-card"></span> {% trans 'Payer par carte' %}</button>
                         </div>
                         <br>
@@ -110,35 +101,48 @@
             </div>
         </div>
     </div>
+
+    <div class="completed-view payment-modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Votre paiement a été validé</h3>
+                </div>
+                <div class="modal-body">Veuillez patienter pendant que nous vous redirigeons…</div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 
 {% block javascript %}
-    <script type="text/javascript" src="https://checkout.stripe.com/checkout.js"></script>
+    <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
     <script>
+    {% include 'tresorerie/modal.js' %}
+    </script>
+    <script>
+        window.elementsModal.create();
+        //window.elementsModal.toggleElementsModalVisibility();
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         });
         var $button;
+        //let pending = true;
         $(document).ready(function () {
-            $(':submit').on('click', function(event) {
-                event.preventDefault();
-                $button = $(this);
-                $('#cguModal').modal('show');
+            $('#pay').on('click', function(event) {
+        //        if (pending)
+        //        {
+                    event.preventDefault();
+                    $button = $(this);
+                    $('#cguModal').modal('show');
+        //        }
             });
 
             $('#acceptCGU').on('click', function ( e ){
                 $('#cguModal').modal('hide');
-
-                $form = $button.parents('form');
-                var opts = $.extend({}, $button.data(), {
-                    token: function(result) {
-                        $form.append($('<input>').attr({ type: 'hidden', name: 'stripeToken', value: result.id })).submit();
-                        $('#pay').addClass('disabled');
-                        $("#pay").html('<span class="fa fa-spin fa-spinner"></span> {% trans 'Chargement' %}');
-                    }
-                });
-                StripeCheckout.open(opts);
+        //        pending = false;
+                window.elementsModal.toggleElementsModalVisibility();
             });
         });
     </script>

@@ -7,6 +7,7 @@ from urllib.parse import quote_plus
 import django_rq
 import logging
 import stripe
+import json
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -95,7 +96,7 @@ class Pay(View):
 
     def get(self, request, *args, **kwargs):
         """
-        Create a recap of the choosed product and make a payement
+        Create a recap of the chosen product and make a payment
         :param request:
         :param args:
         :param kwargs:
@@ -140,28 +141,39 @@ class Pay(View):
         transaction.total = sum(product.prix for product in products) / 100
         transaction.total_stripe = sum(product.prix for product in products)
         transaction.full_name = ' + '.join(p.nom for p in products)
+        customer = StripeCustomer.retrieve_or_create(request.ldap_user)
+
+        payment_intent = stripe.PaymentIntent.create(
+            amount=transaction.total_stripe,
+            currency="eur",
+            description=transaction.full_name,
+            customer=customer.id,
+        )
+
         c = {
             'main_product': main_product,
             'products': products,
             'transaction': transaction,
             'user': request.ldap_user,
-            'stripe_public_key': settings.STRIPE_PUBLIC_KEY,
+            'public_key': settings.STRIPE_PUBLIC_KEY,
+            'payment_intent': json.dumps(payment_intent)
         }
 
         request.session['transaction_uuid'] = str(transaction.uuid)
         request.session['transaction_total_stripe'] = transaction.total_stripe
         request.session['transaction_full_name'] = transaction.full_name
+        request.session['payment_intent'] = payment_intent.id
 
         request.session['products_id'] = [p.id for p in products]
         return render(request, self.template_name, c)
 
     def post(self, request, *args, **kwargs):
-        stripe.api_key = settings.STRIPE_API_KEY
         user = request.ldap_user
 
         transaction_uuid = uuid.UUID(request.session['transaction_uuid'])
         transaction_total = request.session['transaction_total_stripe']
         transaction_full_name = request.session['transaction_full_name']
+        payment_intent = stripe.PaymentIntent.retrieve(request.session['payment_intent'])
         products_id = request.session['products_id']
         main_product_id = self.kwargs["product_id"]
         products = []
@@ -169,10 +181,9 @@ class Pay(View):
             products.append(Product.objects.get(pk=pk))
 
         try:
-            token = request.POST['stripeToken']
             given_uuid = uuid.UUID(request.POST['uuid'])
         except MultiValueDictKeyError as e:
-            logger.error("Un %s n'a pas pu payer : Stripe.js ne s'est pas chargé. Erreur: %s" % (user.uid, e),
+            logger.error("%s a tenté de contourner le paiement. Erreur: %s" % (user.uid, e),
                     extra={
                         "transaction_uuid": transaction_uuid,
                         "transaction_name": transaction_full_name,
@@ -181,15 +192,9 @@ class Pay(View):
                         "end_internet": user.end_cotiz,
                         'message_code': 'STRIPE_FIREWALL_ERROR',
                     })
-            messages.error(request, _("Il semblerait que nous n'avons pas réussi à contacter le système de paiement. "
-                                      "Si le problème se reproduit vous pouvez le contouner soit en essayant de payer"
-                                      " depuis une connexion exterieur (depuis l'école ou en 4G), soit en contactant "
-                                      "directemnt un administrateur."))
+            messages.error(request, _("Il semblerait que vous ayez tenté de contourner le "
+                                      "paiement. Cette action a été signalée."))
             return HttpResponseRedirect(reverse('tresorerie:pay', kwargs={'product_id': main_product_id}))
-
-        customer = StripeCustomer.retrieve_or_create(user)
-        customer.source = token
-        customer.save()
 
         adhere = 'A' in (p.type_produit for p in products)
 
@@ -203,24 +208,12 @@ class Pay(View):
                     'message_code': 'INVALID_TRANSACTION_UUID',
                 }
             )
-            messages.error(request, _("Une erreur s'est produite lors de la commande. Les administrateurs en ont été informés"))
+            messages.error(request, _("Une erreur s'est produite lors de la commande. Veuillez contacter un administrateur."))
             return HttpResponseRedirect(reverse('tresorerie:pay', kwargs={'product_id': main_product_id}))
 
-        if adhere and user.is_member():
-            logger.warning(
-                "L'utilisateur %s a tenté de payer à nouveau une cotisation, une magouille s'est produite" % user.uid,
-                extra={"uid": user.uid, 'message_code': 'PAID_TWICE',}
-            )
-            messages.error(request, _("Vous êtes déjà membre de l'association, vous n'avez pas besoin de payer à nouveau la cotisation."))
-            return HttpResponseRedirect(reverse('tresorerie:pay', kwargs={'product_id': main_product_id}))
+        payment_status = payment_intent.status
 
-        try:
-            charge = stripe.Charge.create(
-                amount=transaction_total,
-                currency="eur",
-                description=transaction_full_name,
-                customer=customer.id,
-            )
+        if payment_status == 'succeeded':
 
             # TODO: move everything here somewhere more appropriate
             # Update the user internet access
@@ -245,7 +238,7 @@ class Pay(View):
             transaction.moyen = "CB"
             transaction.utilisateur = user.uid
             transaction.total = transaction_total / 100
-            transaction.stripe_id = charge.id
+            transaction.stripe_id = payment_intent.id
             transaction.save()  # Because a UUID is needed before adding products
             for p in products:
                 # pylint: disable=no-member
@@ -282,7 +275,7 @@ class Pay(View):
                     "uid": request.ldap_user.uid,
                     "transaction_uuid": transaction.uuid,
                     "transaction_stripe_id": transaction.stripe_id,
-                    'message_code': 'SUCCESFUL_PAYMENT',
+                    'message_code': 'SUCCESSFUL_PAYMENT',
                 }
             )
             messages.success(request, _("Vous venez de payer votre accès au ResEl, vous devriez recevoir sous peu un email avec votre facture."))
@@ -334,47 +327,28 @@ class Pay(View):
 
             return HttpResponseRedirect(reverse('tresorerie:historique'))
 
-        except stripe.error.CardError as e:
-            code = e.json_body['error']['code']
+        else:
             ERRORS = {
-                'invalid_number': _("Votre numéro de carte n'est pas valide"),
-                'invalid_expiry_month': _("Le mois d'expiration de votre carte n'est pas valide"),
-                'invalid_expiry_year': _("L'année d'expiration de votre carte n'est pas valide"),
-                'invalid_cvc': _("Le cryptogramme de votre carte n'est pas valide"),
-                'incorrect_number': _("Votre numéro de carte est incorrect"),
-                'expired_card': _("Votre carte a expiré"),
-                'incorrect_cvc': _("Le cryptogramme de votre carte est incorrect"),
-                'card_declined': _("Votre carte a été refusée"),
-                'processing_error': _("Une erreur est survenue dans le traitement de votre demande")
+                'requires_source': _("Le paiement n'a pas été effectué"),
+                'requires_payment_method': _("Le paiement n'a pas été effectué"),
+                'requires_confirmation': _("Le paiement n'a pas été confirmé"),
+                'requires_source_action': _("Le paiement n'a pas été authentifié"),
+                'requires_action': _("Le paiement n'a pas été authentifié"),
+                'processing': _("Le paiement est en attente. Veuillez contacter un administrateur dans une heure."),
+                'requires_capture': _("Une erreur est survenue. Veuillez contacter un administrateur."),
+                'canceled': _("Le paiement a été annulé"),
             }
+
             logger.error(
-                "Carte de crédit non valide, erreur : %s, uid : %s" % (ERRORS[code], request.ldap_user.uid),
+                "Paiement échoué, erreur : %s, uid : %s" % (payment_status,
+                                                            request.ldap_user.uid),
                 extra={
-                    "error_code": ERRORS[code],
+                    "error_code": payment_status,
                     "uid": request.ldap_user.uid,
                     'message_code': 'STRIPE_PAYMENT_ERROR',
                 }
             )
-            messages.error(request, ERRORS[code])
-            return HttpResponseRedirect(reverse('tresorerie:pay', kwargs={'product_id': main_product_id}))
-
-        except stripe.error.RateLimitError as e:
-            # Too many requests made to the API too quickly
-            logger.error(
-                "Trop de paiements Stripe simultanés",
-                extra={'message_code': 'STRIPE_RATE_LIMIT'},
-            )
-            messages.error(request, _("Nous recevons actuellement trop de paiements simultanés, veuillez ré-essayer plus tard"))
-            return HttpResponseRedirect(reverse('tresorerie:pay', kwargs={'product_id': main_product_id}))
-
-        except stripe.error.APIConnectionError as e:
-            # Network communication with Stripe failed
-            logger.error(
-                "Serveur Stripe non joignable",
-                extra={'message_code': 'STRIPE_CONNECTION_ERROR'},
-            )
-            messages.error(request, _(
-                "Impossible de contacter le serveur de paiement pour le moment, veuillez ré-essayer plus tard"))
+            messages.error(request, ERRORS[payment_status])
             return HttpResponseRedirect(reverse('tresorerie:pay', kwargs={'product_id': main_product_id}))
 
 
