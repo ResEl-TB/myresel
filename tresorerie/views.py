@@ -210,7 +210,7 @@ class Pay(View):
         if given_uuid != transaction_uuid:
             # TODO: show error message
             logger.warning(
-                "L'uuid d'une transaction n'est pas correcte. donné : %s attendue : %s" % (given_uuid, transaction_uuid),
+                "L'uuid d'une transaction n'est pas correct. donné : %s attendu : %s" % (given_uuid, transaction_uuid),
                 extra={
                     "given_uuid": given_uuid,
                     "transaction_uuid": transaction_uuid,
