@@ -451,11 +451,6 @@
   function stripePaymentHandler() {
     toggleElementsModalVisibility();
     document.body.classList.add("proceed");
-    var tempInput = document.createElement("input");
-    tempInput.type = "hidden";
-    tempInput.name = "uuid";
-    tempInput.value = "{{ transaction.uuid }}";
-    document.getElementById("payment-done").appendChild(tempInput);
     document.getElementById("payment-done").submit();
   }
 

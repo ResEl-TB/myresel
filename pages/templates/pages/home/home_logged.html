@@ -55,9 +55,9 @@
                                 {% if subnet == 'FREE' %}
                                     {% trans "Vous vous trouvez sur la zone gratuite. Le débit est fortement réduit, mais devrait permettre de consulter vos mails et divers services légers." %}
                                 {% elif subnet == 'REGN' %}
-                                    {% trans "Vous vous trouvez sur la zone d'inscription. Pour vous connecter à Internet, veuillez utiliser un autre réseau." %}
+                                    {% trans "Vous vous trouvez sur la zone d'inscription. Pour vous connecter à Internet ou payer vos frais d'accès, veuillez utiliser un autre réseau." %}
                                 {% elif subnet == 'EXPN' %}
-                                    {% trans "Vous vous trouvez sur la zone de renouvellement. Pour vous connecter à Internet, veuillez acquitter les frais d'accès." %}
+                                    {% trans "Vous vous trouvez sur la zone de renouvellement. Pour vous connecter à Internet, veuillez vous acquitter des frais d'accès." %}
                                 {% elif subnet == 'USER' %}
                                     {% trans "Vous êtes correctement connecté au réseau étudiant." %}
                                 {% elif subnet == 'SERV' %}
@@ -106,7 +106,17 @@
                                     <div class=""><span class="fa fa-fw fa-circle danger" ></span> {% trans "Cotisation à l'association non payée" %}</div>
                                 {% endif %}
                                 <div><span class="fa fa-fw fa-circle warning"></span> {% trans "Internet jusqu'au" %} {{ end_fee|date:"j F Y" }}</div>
-                                <a href="{% url 'tresorerie:home' %}" class="btn btn-default btn-lg">{%  trans "Effectuer un paiement"%}</a>
+                                <div class="pay-btn-container"
+                                {% if subnet == 'REGN' %}
+                                    data-trigger="hover" data-placement="top" data-toggle="popover" data-content="{% trans "Veuillez vous connecter au réseau ResEl Secure pour procéder au paiement" %}"
+                                {% endif %}>
+                                    <a href="{% url 'tresorerie:home' %}" class="btn btn-default btn-lg
+                                    {% if subnet == 'REGN' %}
+                                        disabled
+                                    {% endif %}">
+                                        {% trans "Effectuer un paiement"%}
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -123,8 +133,17 @@
                                 {% endif %}
                                 <div><span class="fa fa-fw fa-circle danger"></span> {% trans "Accès internet expiré le" %} {{ end_fee|date:"j F Y" }}</div>
                                                             <div class="warning">{% trans "Votre abonnement au Resel a expiré, pour pouvoir à nouveau utiliser nos services vous devez régulariser votre situation." %}</div>
-
-                                <a href="{% url 'tresorerie:home' %}" class="btn btn-default btn-lg ">{%  trans "Effectuer un paiement"%}</a>
+                                <div class="pay-btn-container"
+                                {% if subnet == 'REGN' %}
+                                    data-trigger="hover" data-placement="top" data-toggle="popover" data-content="{% trans "Veuillez vous connecter au réseau ResEl Secure pour procéder au paiement" %}"
+                                {% endif %}>
+                                    <a href="{% url 'tresorerie:home' %}" class="btn btn-default btn-lg
+                                    {% if subnet == 'REGN' %}
+                                        disabled
+                                    {% endif %}">
+                                        {% trans "Effectuer un paiement"%}
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -142,4 +161,12 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascript %}
+    <script>
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        })
+    </script>
 {% endblock %}

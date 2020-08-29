@@ -80,7 +80,7 @@
 .payment-modal .banner {
   background-color: black;
   text-align: center;
-  background: url(http://localhost/payment.png);
+  background: url(/static/images/tresorerie/payment.png);
   padding: 20px;
   background-size: cover;
   background-position: center;

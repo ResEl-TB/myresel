@@ -11,7 +11,7 @@ import json
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404
@@ -22,7 +22,7 @@ from django.views.generic import DetailView, View, ListView
 
 import tresorerie.async_tasks as async_tasks
 from fonctions import generic
-from fonctions.decorators import need_to_pay
+from fonctions.decorators import need_to_pay, not_on_regn
 from tresorerie.models import Transaction, Product, StripeCustomer
 
 logger = logging.getLogger("default")
@@ -36,6 +36,7 @@ class ChooseProduct(View):
     template_name = 'tresorerie/choose_product.html'
 
     @method_decorator(login_required)
+    @method_decorator(not_on_regn)
     @method_decorator(need_to_pay)
     def dispatch(self, *args, **kwargs):
         return super(ChooseProduct, self).dispatch(*args, **kwargs)
@@ -90,6 +91,7 @@ class Pay(View):
     template_name = 'tresorerie/recap.html'
 
     @method_decorator(login_required)
+    @method_decorator(not_on_regn)
     @method_decorator(need_to_pay)
     def dispatch(self, *args, **kwargs):
         return super(Pay, self).dispatch(*args, **kwargs)
@@ -177,6 +179,13 @@ class Pay(View):
         products_id = request.session['products_id']
         main_product_id = self.kwargs["product_id"]
         products = []
+
+        try:
+            Transaction.objects.get(uuid=transaction_uuid)
+            return HttpResponseRedirect(reverse('tresorerie:historique'))
+        except ObjectDoesNotExist as e:
+            pass
+
         for pk in products_id:
             products.append(Product.objects.get(pk=pk))
 
@@ -201,7 +210,7 @@ class Pay(View):
         if given_uuid != transaction_uuid:
             # TODO: show error message
             logger.warning(
-                "L'uuid d'une transaction n'est pas correcte. donné : %s attendue : %s" % (given_uuid, transaction_uuid),
+                "L'uuid d'une transaction n'est pas correct. donné : %s attendu : %s" % (given_uuid, transaction_uuid),
                 extra={
                     "given_uuid": given_uuid,
                     "transaction_uuid": transaction_uuid,
