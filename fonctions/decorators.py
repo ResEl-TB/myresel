@@ -74,6 +74,34 @@ def need_to_pay(function=None, redirect_to='home'):
     else:
         return _dec(function)
 
+
+def not_on_regn(function=None, redirect_to='home'):
+    """ Vérifie que l'utilisateur n'est pas sur le réseau d'inscription
+
+    Ce décorateur s'assure que l'utilisateur n'est pas sur le réseau d'inscription.
+    Si ce n'est pas le cas, il est redirigé vers la page spécifiée dans 'redirect_to'
+    ou à défaut vers la page de news.
+    """
+
+    def _dec(view_func):
+        def _view(request, *args, **kwargs):
+            if request.network_data['subnet'] == 'REGN':
+                messages.error(request, _('Veuillez vous connecter au réseau ResEl Secure pour '
+                                          'effectuer votre paiement.'))
+                return HttpResponseRedirect(reverse(redirect_to))
+            return view_func(request, *args, **kwargs)
+        _view.__name__ = view_func.__name__
+        _view.__dict__ = view_func.__dict__
+        _view.__doc__ = view_func.__doc__
+
+        return _view
+
+    if function is None:
+        return _dec
+    else:
+        return _dec(function)
+
+
 def ae_required(function, redirect_to='campus:rooms:calendar'):
     """
     Checks if the user is a valid ae member
