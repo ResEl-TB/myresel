@@ -123,26 +123,28 @@
     </script>
     <script>
         window.elementsModal.create();
-        //window.elementsModal.toggleElementsModalVisibility();
         $(function () {
             $('[data-toggle="tooltip"]').tooltip()
         });
         var $button;
-        //let pending = true;
         $(document).ready(function () {
             $('#pay').on('click', function(event) {
-        //        if (pending)
-        //        {
-                    event.preventDefault();
-                    $button = $(this);
-                    $('#cguModal').modal('show');
-        //        }
+                event.preventDefault();
+                $button = $(this);
+                $('#cguModal').modal('show');
             });
 
             $('#acceptCGU').on('click', function ( e ){
                 $('#cguModal').modal('hide');
-        //        pending = false;
                 window.elementsModal.toggleElementsModalVisibility();
+                if (!document.getElementById('uuid')) {
+                    var tempInput = document.createElement("input");
+                    tempInput.id = "uuid";
+                    tempInput.type = "hidden";
+                    tempInput.name = "uuid";
+                    tempInput.value = "{{ transaction.uuid }}";
+                    document.getElementById("payment-done").appendChild(tempInput);
+                }
             });
         });
     </script>
