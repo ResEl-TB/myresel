@@ -40,8 +40,9 @@ stages:
 Build docker image:
   stage: docker_build
   services: 
-    - $RUNNER_IMAGE
-  image: docker:stable
+    - name: $RUNNER_IMAGE
+      alias: docker
+  image: $DOCKER_IMAGE
   before_script: &before_script
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
@@ -57,8 +58,9 @@ Build docker image:
 Push docker image:
   stage: docker_push
   services:
-    - $RUNNER_IMAGE
-  image: docker:stable
+    - name: $RUNNER_IMAGE
+      alias: docker
+  image: $DOCKER_IMAGE
   before_script: *before_script
   script:
     - docker pull $IMAGE:$CI_COMMIT_SHA
@@ -154,20 +156,20 @@ deploy to brest:
   tags:
     - admin
 
-deploy to rennes:
-  services: []
-  allow_failure: true
-  before_script:
-    - apt-get install -qq openssh-client
-    - eval $(ssh-agent -s)
-    - bash -c 'ssh-add <(echo "${DOUBIDOU_DEPLOY_KEY}")'
-  stage: deploy
-  script:
-    - ssh -o "StrictHostKeyChecking=no" -T deploy@doubidou
-  only:
-    - deploy
-  environment:
-    name: doubidou
-    url: https://rennes.resel.fr/
-  tags:
-    - admin
+#deploy to rennes:
+#  services: []
+#  allow_failure: true
+#  before_script:
+#    - apt-get install -qq openssh-client
+#    - eval $(ssh-agent -s)
+#    - bash -c 'ssh-add <(echo "${DOUBIDOU_DEPLOY_KEY}")'
+#  stage: deploy
+#  script:
+#    - ssh -o "StrictHostKeyChecking=no" -T deploy@doubidou
+#  only:
+#    - deploy
+#  environment:
+#    name: doubidou
+#    url: https://rennes.resel.fr/
+#  tags:
+#    - admin
