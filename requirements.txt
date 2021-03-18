@@ -8,7 +8,7 @@ stripe==2.48.0
 wheel==0.29.0
 django-phonenumber-field==1.3.0
 mysqlclient==1.3.12
-Pillow==4.1.0
+Pillow==8.1.1
 django-python3-ldap==0.9.14
 uWSGI==2.0.15
 redis
