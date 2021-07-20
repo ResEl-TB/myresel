@@ -12,7 +12,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.mail import EmailMessage
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import (HttpResponseRedirect, HttpResponse, Http404, HttpResponseServerError,
                          HttpResponseBadRequest)
 from django.shortcuts import render, get_object_or_404
@@ -102,7 +102,7 @@ class Home(View):
         # Load some campus mails
         args_for_response['campus_mails'] = Mail.objects.order_by('-date').filter(moderated=True).all()[:settings.NUMBER_NEWS_IN_HOME]
 
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             end_fee = request.ldap_user.end_cotiz if request.ldap_user.end_cotiz else False
 
             # Check email validation:

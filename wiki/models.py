@@ -1,7 +1,7 @@
 import operator
 
 from ckeditor_uploader.fields import RichTextUploadingField
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models
 from django.template.defaultfilters import slugify
 

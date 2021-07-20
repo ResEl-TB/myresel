@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist, MiddlewareNotUsed
-from django.core.urlresolvers import resolve, Resolver404, reverse
+from django.urls import resolve, Resolver404, reverse
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
 from django.utils.translation import ugettext_lazy as _
 
@@ -37,7 +37,7 @@ class IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAResElAdmi
         """
         # TODO: move this code to the new backend
         return (
-            user.is_authenticated() and
+            user.is_authenticated and
             not (user.is_staff and user.is_superuser) and
             ldap.search(settings.LDAP_OU_ADMIN, '(&(uid=%s))' % user.username)
         )
@@ -46,7 +46,7 @@ class IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAResElAdmi
         self.get_response = get_response
 
     def __call__(self, request):
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             try:
                 request.ldap_user = LdapUser.get(pk=request.user.username)
             except ObjectDoesNotExist:
@@ -83,7 +83,7 @@ class NetworkConfiguration(object):
         request.network_data['host'] = request.META['HTTP_HOST']
         request.network_data['zone'] = raw_zone[0]
         request.network_data['subnet'] = raw_zone[1]
-        request.network_data['is_logged_in'] = request.user.is_authenticated()
+        request.network_data['is_logged_in'] = request.user.is_authenticated
         request.network_data['is_resel'] = raw_zone[0] != 'EXT'
 
         response = self.get_response(request)

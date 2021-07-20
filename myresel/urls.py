@@ -19,26 +19,25 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.views.generic import RedirectView
 from django.views.generic import TemplateView
-from django.views.i18n import javascript_catalog
+from django.views.i18n import JavaScriptCatalog
 from pages.views import Home, Contact, NewsListe, inscription_zone_info, FaqList, faqVote, NewsDetail, Services, \
     unsecure_set_language, NewsRSS, NewsAtom, StatusPageXhr, eggdrop, Television, graph_api
 
 from myresel import settings
-
 
 js_info_dict = {
     'packages': ('tresorerie',),
 }
 
 urlpatterns = [
-    url(r'^jsi18n/$', javascript_catalog, js_info_dict, name='javascript-catalog'),
+    url(r'^jsi18n/$', JavaScriptCatalog.as_view(), js_info_dict, name='javascript-catalog'),
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
 
     url(r'^lang/setlang/$', unsecure_set_language, name='set_language'),
     url(r'^lang/', include('django.conf.urls.i18n')),
 
-    url(r'^login', auth_views.login, name='login'),
-    url(r'^logout', auth_views.logout, {'next_page': '/'}, name='logout'),
+    url(r'^login', auth_views.LoginView.as_view(), name='login'),
+    url(r'^logout', auth_views.LogoutView.as_view(), {'next_page': '/'}, name='logout'),
     url(r'^gestion/django-rq/', include('django_rq.urls')),
     url(r'^gestion/', admin.site.urls),
 

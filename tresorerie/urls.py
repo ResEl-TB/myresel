@@ -5,6 +5,8 @@ from django.conf.urls import url
 
 from .views import *
 
+app_name = 'tresorerie'
+
 urlpatterns = [
     url(r'^$', ChooseProduct.as_view(), name='home'),
     url(r'^tarifs/$', ListProducts.as_view(), name='prices'),

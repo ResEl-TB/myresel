@@ -1,5 +1,5 @@
 from django.core import mail
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import TestCase
 
 from gestion_personnes.tests import try_delete_user, try_delete_old_user, create_full_user

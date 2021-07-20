@@ -2,7 +2,7 @@
 """
 Middlewares for campus module
 """
-from django.core.urlresolvers import resolve
+from django.urls import resolve
 
 from campus.models import StudentOrganisation, RoomAdmin, Room
 

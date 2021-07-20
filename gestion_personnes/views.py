@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.urlresolvers import reverse, reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.core.mail import EmailMessage
 
 from django.http import HttpResponseForbidden, HttpResponseRedirect

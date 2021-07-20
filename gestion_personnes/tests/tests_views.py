@@ -6,7 +6,7 @@ import datetime
 
 from django.core import mail
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import TestCase
 
 from fonctions.generic import hash_to_ntpass, compare_passwd

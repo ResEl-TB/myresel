@@ -5,7 +5,7 @@ from functools import wraps
 
 from django.conf import settings
 from django.contrib import messages
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.utils.decorators import available_attrs
 from django.utils.translation import ugettext_lazy as _

@@ -25,7 +25,7 @@ def resel_context(request):
     context['need_to_pay'] = False
     context['has_paid_cotiz'] = 'success'
     context['i_network_status'], context['i_network_status_text'], context['i_network_status_score'] = get_network_status()
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         user = LdapUser.get(pk=request.user.username)
         context['need_to_pay'] = user.need_to_pay()
         context['ldapuser'] = user

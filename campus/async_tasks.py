@@ -3,7 +3,7 @@
 Declare all the async jobs for the campus module
 """
 from django.core.mail import EmailMessage
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from django_rq import job
 

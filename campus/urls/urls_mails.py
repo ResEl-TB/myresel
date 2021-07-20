@@ -3,6 +3,8 @@ from django.views.generic import RedirectView
 
 from campus.views import send_email_view, moderate_view, rejectView, display_mail
 
+app_name = 'campus_mails'
+
 urlpatterns = [
     # url(r'^$', RedirectView.as_view(url="https://campus.resel.fr/?page=mailCampus/info", permanent=False), name='send'),
     url(r'^$', send_email_view, name='send'),
