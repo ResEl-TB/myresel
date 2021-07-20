@@ -18,7 +18,7 @@ variables:
  MYSQL_QOS_HOST: mysql-mysql-server
  MYSQL_QOS_USER: root
  MYSQL_QOS_PASSWORD: blah
-  
+
  ROOTDIR: ./
  CONFDIR: myresel/
  ETCDIR: .install/etc/
@@ -26,7 +26,7 @@ variables:
  LDAP_PASSWORD: blah
 
  LAPUTEX_HOST: http:\/\/laputex\/
- #LAPUTEX_PWD in gitlab secrets 
+ #LAPUTEX_PWD in gitlab secrets
 
  DEBIAN_FRONTEND: noninteractive
 
@@ -36,11 +36,12 @@ stages:
   - configure
   - test
   - deploy
-  
+
 Build docker image:
   stage: docker_build
-  services: 
-    - $RUNNER_IMAGE
+  services:
+    - name: $RUNNER_IMAGE
+      alias: docker
   image: docker:stable
   before_script: &before_script
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
@@ -57,7 +58,8 @@ Build docker image:
 Push docker image:
   stage: docker_push
   services:
-    - $RUNNER_IMAGE
+    - name: $RUNNER_IMAGE
+      alias: docker
   image: docker:stable
   before_script: *before_script
   script:

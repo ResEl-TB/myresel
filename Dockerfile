@@ -1,6 +1,6 @@
 FROM debian:stretch
 ARG LDAPPASSWD
-
+# thissss is usellessyaaaagaaa
 MAINTAINER nicolas@vuillermet.bzh
 
 ENV LC_ALL fr_FR.UTF-8
