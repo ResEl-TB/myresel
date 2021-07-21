@@ -65,6 +65,8 @@ class Ldap(object):
         :param karg:
         :return:
         """
+        if (len(args) == 0):
+            return '(!(objectClass=organizationalUnit))'
         query = "(&"
         for name, prefix, match, value in args:
             if prefix != "":

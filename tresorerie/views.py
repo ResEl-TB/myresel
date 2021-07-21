@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import uuid
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timezone
+from dateutil.relativedelta import relativedelta
 from urllib.parse import quote_plus
 
 import django_rq
@@ -237,8 +238,8 @@ class Pay(View):
             if user.end_cotiz is None:
                 user.end_cotiz = datetime.now()
 
-            offset = max(user.end_cotiz, datetime.now())
-            user.end_cotiz = offset + timedelta(days=month_numbers*30)
+            start = max(user.end_cotiz, datetime.now(timezone.utc))
+            user.end_cotiz = start + relativedelta(months=month_numbers)
             user.save()
 
             # Insert the transaction in the database

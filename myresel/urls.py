@@ -88,8 +88,3 @@ if settings.DEBUG:
     import debug_toolbar
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += [url(r'^__debug__/', include(debug_toolbar.urls))]
-
-handler400 = 'myresel.error_views.bad_request'
-handler403 = 'myresel.error_views.permission_denied'
-handler404 = 'myresel.error_views.page_not_found'
-handler500 = 'myresel.error_views.server_error'

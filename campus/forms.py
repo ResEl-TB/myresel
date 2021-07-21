@@ -13,7 +13,7 @@ from gestion_personnes.models import LdapUser
 from gestion_personnes.forms import PersonnalInfoForm
 
 
-from ldap3 import LDAPException
+from ldap3.core.exceptions import LDAPException
 from fonctions import ldap
 
 import datetime
@@ -84,7 +84,7 @@ class RoomBookingForm(ModelForm):
         #    m.room.add(meeting)
         #for room in rooms:
         #    m.room.add(room)
-        m.room = self.cleaned_data['room']
+        m.room.set(self.cleaned_data['room'])
         m.notify_mailing_list()
         return m
 

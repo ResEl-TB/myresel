@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 
-from ldap3 import LDAPSocketOpenError
+from ldap3.core.exceptions import LDAPSocketOpenError
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import logout

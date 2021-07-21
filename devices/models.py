@@ -17,7 +17,6 @@ class LdapDevice(ldapback.models.LdapModel):
     """
 
     base_dn = LDAP_DN_MACHINES
-    object_classes = LdapListField(db_column='objectClass')
 
     owner = LdapCharField(db_column='uidproprio', object_classes=['reselDevice'], required=True)
     mac_address = LdapCharField(db_column='macAddress', object_classes=['reselDevice'], required=True, pk=True)

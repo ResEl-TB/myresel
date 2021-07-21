@@ -13,7 +13,6 @@ class StudentOrganisation(ldapback.models.LdapModel):
     """
 
     base_dn = LDAP_OU_CLUBS
-    object_classes = LdapListField(db_column='objectClass')
 
     cn = LdapCharField(db_column='cn', object_classes=['studentOrganisation'], pk=True)
     name = LdapCharField(db_column='orgaName', object_classes=['studentOrganisation', 'tbClub'])

@@ -11,7 +11,6 @@ from fonctions.generic import hash_passwd, hash_to_ntpass
 
 
 class LdapField(object):
-    __wrap__ = str
     def __init__(self, db_column=None, object_classes=None, required=False, pk=False):
         if db_column is None:
             raise AttributeError("No db_column given")
@@ -36,7 +35,7 @@ class LdapField(object):
         if isinstance(obj, self.__class__):
             ldap_str = ""
         else:
-            ldap_str = str(obj)
+            ldap_str = obj if isinstance(obj, bytes) else str(obj)
 
         if self.required and ldap_str == "":
             raise ValueError("Field %s is cannot be empty" % self.__class__)
@@ -50,7 +49,10 @@ class LdapField(object):
         :param obj:
         :return:
         """
-        return str(obj)
+        try:
+            return obj.raw_values
+        except:
+            return [b'']
 
     def calc_diff(self, old, new):
         """
@@ -79,7 +81,9 @@ class LdapField(object):
 
 
 class LdapCharField(LdapField):
-    pass
+    @classmethod
+    def from_ldap(cls, obj):
+        return super().from_ldap(obj)[0].decode()
 
 class LdapBooleanField(LdapField):
     def to_ldap(self, obj):
@@ -91,7 +95,7 @@ class LdapBooleanField(LdapField):
 
     @classmethod
     def from_ldap(cls, obj):
-        str_value = super().from_ldap(obj).lower()
+        str_value = super().from_ldap(obj)[0].decode().lower()
         if str_value == 'true':
             return True
         elif str_value == 'false':
@@ -99,12 +103,12 @@ class LdapBooleanField(LdapField):
         else:
             return ""
 
-class LdapPasswordField(LdapCharField):
+class LdapPasswordField(LdapField):
     hash_method = "ssha"
 
     def to_ldap(self, obj):
         pwd_hash = super().to_ldap(obj)
-        if pwd_hash.lower().startswith("{" + self.hash_method + "}"):  # TODO: NOT BEAU, but we need a hotfix
+        if isinstance(pwd_hash, bytes):
             ldap_str = pwd_hash
         else:
             ldap_str = hash_passwd(pwd_hash)
@@ -112,17 +116,17 @@ class LdapPasswordField(LdapCharField):
 
     @classmethod
     def from_ldap(cls, obj):
-        pwd_hash = super().from_ldap(obj)
+        pwd_hash = super().from_ldap(obj)[0]
         return pwd_hash
 
 
-class LdapNtPasswordField(LdapCharField):
+class LdapNtPasswordField(LdapField):
     hash_method = "NT"
 
     def to_ldap(self, obj):
         pwd = super().to_ldap(obj)
 
-        if pwd.startswith("{" + self.hash_method + "}"):  # TODO: NOT BEAU, but we need a hotfix
+        if isinstance(pwd, bytes):
             ldap_str = pwd[len(self.hash_method) + 1:]
         else:
             ldap_str = hash_to_ntpass(pwd)
@@ -131,7 +135,7 @@ class LdapNtPasswordField(LdapCharField):
 
     @classmethod
     def from_ldap(cls, obj):
-        pwd_hash = super().from_ldap(obj)
+        pwd_hash = super().from_ldap(obj)[0].decode()
         return "{" + cls.hash_method + "}" + pwd_hash
 
 class LdapListField(LdapField):
@@ -153,22 +157,20 @@ class LdapListField(LdapField):
     @classmethod
     def from_ldap(cls, obj):
         lst = super().from_ldap(obj)
-        if lst == "":
+        if lst == [b'']:
             return []
-        return [o for o in obj]
+        return [o.decode() for o in lst]
 
 
 class LdapDatetimeField(LdapField):
     """
     A ldap field that is a wrapper of the python datetime field
     """
-    __wrap__ = datetime
-
     def to_ldap(self, obj):
         ldap_value = ""
         if isinstance(obj, self.__class__):
             ldap_value = ""
-        elif obj == None:
+        elif obj is None:
             ldap_value = ""
         else:
             ldap_value = obj.strftime('%Y%m%d%H%M%S') + 'Z'
@@ -180,7 +182,7 @@ class LdapDatetimeField(LdapField):
 
     @classmethod
     def from_ldap(cls, obj):
-        obj = super().from_ldap(obj)
-        if obj == "":
+        obj = super().from_ldap(obj)[0].decode()
+        if obj == '':
             return None
-        return datetime.strptime(obj, '%Y%m%d%H%M%SZ')
+        return datetime.strptime(obj, '%Y%m%d%H%M%S%z')

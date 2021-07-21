@@ -15,7 +15,7 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
 from django.views.generic import View
 
-from ldap3 import LDAPException
+from ldap3.core.exceptions import LDAPException
 
 from campus.forms import MajPersonnalInfo, SearchSomeone
 
