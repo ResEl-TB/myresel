@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 # Configure root password
-echo "mysql-server mysql-server/root_password password ${MYSQL_PASSWORD}" | debconf-set-selections
-echo "mysql-server mysql-server/root_password_again password ${MYSQL_PASSWORD}" | debconf-set-selections
+echo "mysql-community-server mysql-community-server/root-pass password ${MYSQL_PASSWORD}" | debconf-set-selections
+echo "mysql-community-server mysql-community-server/re-root-pass password ${MYSQL_PASSWORD}" | debconf-set-selections
 apt-get -qq install mysql-server
 service mysql start
 
