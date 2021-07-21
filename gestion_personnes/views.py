@@ -20,7 +20,7 @@ from django.views.generic import FormView, View
 from fonctions import ldap
 from fonctions.decorators import resel_required
 from gestion_personnes.async_tasks import send_mails
-from gestion_personnes.models import LdapUser, UserMetaData
+from gestion_personnes.models import LdapUser, LdapOldUser, UserMetaData
 from .forms import InscriptionForm, ModPasswdForm, CGUForm, InvalidUID, PersonnalInfoForm, ResetPwdSendForm, \
     ResetPwdForm, SendUidForm, RoutingMailForm
 
@@ -331,7 +331,8 @@ class MailResEl(View):
         else:
             uid_num = ""
         address = '%s%s@resel.fr' % (handle, uid_num)
-        bearer = LdapUser.filter(object_classes='mailPerson', mail_local_address=address)
+        bearer = LdapUser.filter(object_class='mailPerson', mail_local_address=address)
+        bearer += LdapOldUser.filter(object_class='mailPerson', mail_local_address=address)
 
 
         if len(bearer) == 0:
@@ -339,7 +340,7 @@ class MailResEl(View):
             handle = unicodedata.normalize(
                 'NFKD',
                 handle + str(uid_num)
-            ).encode('ASCII','ignore').lower()
+            ).encode('ASCII','ignore').lower().decode()
         else:
             handle = None
 
@@ -369,7 +370,7 @@ class MailResEl(View):
         else:
             template_name = 'gestion_personnes/mail_resel_new.html'
             mail_proposed_address = self.build_address(user.uid, user.first_name, user.last_name)
-            mail_proposed_address += b'@resel.fr'
+            mail_proposed_address += '@resel.fr'
 
             return render(request, template_name, {'user': user,
             'mail_proposed_address': mail_proposed_address})
@@ -386,9 +387,9 @@ class MailResEl(View):
             handle = self.build_address(user.uid, user.first_name, user.last_name)
 
             if handle:
-                mail_address = handle + b'@resel.fr'
+                mail_address = handle + '@resel.fr'
 
-                bearer = LdapUser.filter(object_classes='mailPerson', mail_local_address=str(mail_address))
+                bearer = LdapUser.filter(object_class='mailPerson', mail_local_address=mail_address)
 
                 if len(bearer) != 0:
                     messages.error(request,
@@ -413,8 +414,8 @@ class MailResEl(View):
                         'Votre nouvelle boîte mail vient d\'être créée.\n' +
                         'Cordialement, \n L\'équipe ResEl',
                     from_email='secretaire@resel.fr',
-                    reply_to=('support@resel.fr',),
-                    to=mail_address)
+                    reply_to=['support@resel.fr'],
+                    to=[mail_address])
 
                 creation_mail.send()
 
