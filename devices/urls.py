@@ -17,6 +17,8 @@ from django.conf.urls import url
 
 from .views import ManualAddDeviceView, ListDevicesView, EditDeviceView
 
+app_name = 'devices'
+
 urlpatterns = [
     url(r'^ajout-manuel$', ManualAddDeviceView.as_view(), name='ajout-manuel'),
     url(r'^liste$', ListDevicesView.as_view(), name='liste'),

@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.views.generic import View
 from django.http import Http404
 from gestion_personnes.models import LdapGroup, LdapUser

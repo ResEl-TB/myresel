@@ -7,7 +7,7 @@ Inspired by: http://blog.namis.me/2012/05/13/writing-unit-tests-for-django-middl
 from unittest.mock import Mock
 
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import TestCase
 
 from gestion_personnes.tests import try_delete_user, create_full_user

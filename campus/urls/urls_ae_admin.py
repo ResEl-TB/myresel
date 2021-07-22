@@ -5,6 +5,8 @@ from django.conf.urls import url
 from campus.views.views_ae_admin import AdminHome, GetUsers, GetMembers, \
 EditUser, AddAdmin, GetAdmins, DeleteAdmin, AddUser
 
+app_name = 'campus_ae_admin'
+
 urlpatterns = [
     url(r'^$', AdminHome.as_view(), name='home'),
     url(r'^search-user$', GetUsers.as_view(), name='search-user'),

@@ -1,7 +1,5 @@
-FROM debian:stretch
+FROM debian:buster
 ARG LDAPPASSWD
-
-MAINTAINER nicolas@vuillermet.bzh
 
 ENV LC_ALL fr_FR.UTF-8
 ENV LANG fr_FR.UTF-8
@@ -10,9 +8,9 @@ ENV LANGUAGE fr_FR.UTF-8
 RUN apt -qq update; \
     apt install -qq software-properties-common -y; \
     echo "" > /etc/apt/sources.list; \
-    add-apt-repository "deb [arch=amd64] http://deb.debian.org/debian/ stretch main"; \
-    add-apt-repository "deb [arch=amd64] http://security.debian.org/ stretch/updates main"; \
-    add-apt-repository "deb [arch=amd64] http://deb.debian.org/debian/ stretch-updates main"; \
+    add-apt-repository "deb [arch=amd64] http://deb.debian.org/debian/ buster main"; \
+    add-apt-repository "deb [arch=amd64] http://security.debian.org/ buster/updates main"; \
+    add-apt-repository "deb [arch=amd64] http://deb.debian.org/debian/ buster-updates main"; \
     cat /etc/apt/sources.list
 
 

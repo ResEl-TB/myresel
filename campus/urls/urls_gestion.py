@@ -4,6 +4,8 @@ from django.conf.urls import url
 
 from campus.views.views_gestion import ManageCampusModo, AddCampusModo, RemoveCampusModo
 
+app_name = 'campus_gestion'
+
 urlpatterns = [
     url(r'^modo/$', ManageCampusModo.as_view(), name='modo'),
     url(r'^del-modo/$', RemoveCampusModo.as_view(), name='delmodo'),

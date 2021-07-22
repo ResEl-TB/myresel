@@ -18,7 +18,7 @@ variables:
  MYSQL_QOS_HOST: mysql-mysql-server
  MYSQL_QOS_USER: root
  MYSQL_QOS_PASSWORD: blah
-  
+
  ROOTDIR: ./
  CONFDIR: myresel/
  ETCDIR: .install/etc/
@@ -26,7 +26,7 @@ variables:
  LDAP_PASSWORD: blah
 
  LAPUTEX_HOST: http:\/\/laputex\/
- #LAPUTEX_PWD in gitlab secrets 
+ #LAPUTEX_PWD in gitlab secrets
 
  DEBIAN_FRONTEND: noninteractive
 
@@ -36,11 +36,12 @@ stages:
   - configure
   - test
   - deploy
-  
+
 Build docker image:
   stage: docker_build
-  services: 
-    - $RUNNER_IMAGE
+  services:
+    - name: $RUNNER_IMAGE
+      alias: docker
   image: docker:stable
   before_script: &before_script
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
@@ -57,7 +58,8 @@ Build docker image:
 Push docker image:
   stage: docker_push
   services:
-    - $RUNNER_IMAGE
+    - name: $RUNNER_IMAGE
+      alias: docker
   image: docker:stable
   before_script: *before_script
   script:
@@ -73,12 +75,12 @@ Push docker image:
 image: $IMAGE:latest
 services:
   - redis:stretch
-  - mysql/mysql-server:5.5
+  - mysql/mysql-server:5.7
 
 before_script:
 #  - source .install/scripts/install_essentials.sh no-upgrade
   - source .install/scripts/install_essentials.sh
-  - apt-get install -qq mysql-client
+  - apt-get install -qq default-mysql-client
   - echo "CREATE DATABASE ${MYSQL_QOS_DATABASE}" | mysql -u${MYSQL_QOS_USER} -p${MYSQL_QOS_PASSWORD} -h ${MYSQL_QOS_HOST}
   - source .install/scripts/install_openldap.sh
 #  - source .install/scripts/install_latex.sh
@@ -115,7 +117,7 @@ django test suite:
 python linting:
   stage: test
   script:
-    - pylint --rcfile=.pylintrc campus fonctions gestion_personnes ldapback myresel pages tresorerie wiki || exit $((35 & $?))
+    - pylint --rcfile=.pylintrc --django-settings-module=myresel.settings campus fonctions gestion_personnes ldapback myresel pages tresorerie wiki || exit $((35 & $?))
   allow_failure: false
   tags:
     - admin

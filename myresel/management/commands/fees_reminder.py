@@ -1,7 +1,7 @@
 """Command to create email reminders"""
 import logging
 from itertools import chain
-from datetime import datetime, timedelta, date, time
+from datetime import timedelta
 
 import redis
 from django.core.management.base import BaseCommand
@@ -9,6 +9,7 @@ from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from myresel import settings
 from gestion_personnes.models import LdapUser
+from fonctions.generic import today as today_
 
 # pylint: disable=invalid-name
 logger = logging.getLogger("default")
@@ -45,8 +46,8 @@ class Command(BaseCommand):
     def get_user_day(day):
         one_day = timedelta(days=1)
         targeted_users = LdapUser.filter(
-            end_cotiz__ge=day.strftime('%Y%m%d%H%M%SZ'),
-            end_cotiz__lt=(day+one_day).strftime('%Y%m%d%H%M%SZ'))
+            end_cotiz__ge=day.strftime('%Y%m%d%H%M%S%z'),
+            end_cotiz__lt=(day+one_day).strftime('%Y%m%d%H%M%S%z'))
         return targeted_users
 
     @staticmethod
@@ -135,7 +136,7 @@ class Command(BaseCommand):
             return
         self.new_redis()
 
-        today = datetime.combine(date.today(), time())
+        today = today_()
         reminder_days = [today + timedelta(days=delta)
                          for delta in settings.REMINDERS_DAYS]
 

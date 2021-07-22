@@ -8,20 +8,22 @@ from PIL import Image
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext as _
 from django.views.generic import View
 
-from ldap3 import LDAPException
+from ldap3.core.exceptions import LDAPException
 
 from campus.forms import MajPersonnalInfo, SearchSomeone
 
 from gestion_personnes.async_tasks import send_mails
 from gestion_personnes.models import LdapUser, UserMetaData
 from campus.models.clubs_models import StudentOrganisation
+
+from fonctions.generic import today
 
 from myresel.settings import MEDIA_ROOT
 
@@ -330,12 +332,12 @@ class ListBirthdays(View):
 
     @staticmethod
     def get_today_birthdays():
-        #Since the Ldpa don't understand requests without years or something,
-        #we have to select people that are between 15 and 30 y/o:
+        #Since the LDAP don't understand requests without years or something,
+        #we have to select people that are between 15 and 35 y/o:
         users = []
-        todayDate = datetime.date.today().strftime('%Y%m%d%H%M%SZ')
+        todayDate = today().strftime('%Y%m%d%H%M%S%z')
         todayYear, todayDate = int(todayDate[0:4]), todayDate[4:]
-        for year in range(todayYear - 30, todayYear - 16):
+        for year in range(todayYear - 35, todayYear - 15):
             try:
                 users += LdapUser.filter(birth_date=str(year)+todayDate)
             except LDAPException as e:

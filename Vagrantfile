@@ -2,7 +2,7 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "debian/contrib-jessie64"
+  config.vm.box = "generic/debian10"
   config.vm.synced_folder ".", "/myresel", :mount_options => ["dmode=777","fmode=700"]
 
   config.vm.define "default", primary: true do |default|

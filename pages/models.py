@@ -10,7 +10,7 @@ class News(models.Model):
 
     title = models.CharField(max_length=100)
     content = RichTextField()
-    author = models.ForeignKey(User, null=True, blank=True, editable=False)
+    author = models.ForeignKey(User, null=True, blank=True, editable=False, on_delete=models.DO_NOTHING)
     date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
@@ -19,7 +19,7 @@ class News(models.Model):
 class Faq(models.Model):
     question_text = models.CharField(max_length=200)
     response = RichTextField()
-    author = models.ForeignKey(User, null=True, blank=True, editable=False)
+    author = models.ForeignKey(User, null=True, blank=True, editable=False, on_delete=models.DO_NOTHING)
     date = models.DateTimeField(auto_now=True)
     vote = models.IntegerField(default=0)
 

@@ -44,7 +44,7 @@ class LdapUserTestCase(TestCase):
         try_delete_user(user.uid)
 
     def test_only_ResEl(self):
-        now = datetime.now()
+        now = datetime.now().astimezone()
         now.replace(microsecond=0)
         user = LdapUser()
         user.uid = "amanoury"

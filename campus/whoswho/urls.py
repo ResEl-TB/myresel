@@ -5,6 +5,8 @@ pages URL Conf
 from django.conf.urls import url
 from .views import RequestUser, UserDetails, AddPerson, UserHome, SearchUsers, RemovePerson, ListBirthdays
 
+app_name = 'campus_whoswho'
+
 urlpatterns = [
     url(r'^request-user$', RequestUser.as_view(), name='request-user'),
     url(r'^search$', SearchUsers.as_view(), name='search-user'),

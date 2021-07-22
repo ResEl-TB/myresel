@@ -4,6 +4,8 @@ from django.conf.urls import url, include
 
 from campus.views.views_home import Home
 
+app_name = 'campus'
+
 urlpatterns = [
     url(r'^$', Home.as_view(), name='home'),
     url(r'^salles/', include('campus.urls.urls_rooms', namespace='rooms')),

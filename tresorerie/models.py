@@ -68,6 +68,7 @@ class Check(models.Model):
 
     transaction = models.ForeignKey(
         'Transaction',
+        on_delete=models.DO_NOTHING,
     )
 
     def __str__(self):

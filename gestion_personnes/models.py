@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 
 from django.conf import settings
 from django.core.mail import EmailMessage
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models
 
 import ldapback
@@ -24,7 +24,6 @@ class LdapUser(ldapback.models.LdapModel):
     """
     base_dn = LDAP_DN_PEOPLE
     #object_classes = ['genericPerson', 'enstbPerson', 'reselPerson', 'maiselPerson', 'aePerson', 'mailPerson']
-    object_classes = LdapListField(db_column='objectClass')
 
     # genericPerson
     uid = LdapCharField(db_column='uid', object_classes=['genericPerson'], pk=True)
@@ -96,7 +95,7 @@ class LdapUser(ldapback.models.LdapModel):
     def need_to_pay(self):
         if not self.end_cotiz:
             return 'danger'
-        now = datetime.now()
+        now = datetime.now().astimezone()
         if self.end_cotiz < now:
             return 'danger'
         elif self.end_cotiz < (now + timedelta(days=25)):

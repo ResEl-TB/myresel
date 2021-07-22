@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime, timedelta
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import TestCase
 
 from fonctions.generic import current_year
@@ -104,7 +104,7 @@ class HomeViewCaseMeta(type):
             # Check in database if everything is correct:
             user_s = LdapUser.get(pk=self.user.uid)
             self.assertIn(str(current_year()), user_s.cotiz)
-            self.assertLessEqual(datetime.now() + timedelta(days=29), user_s.end_cotiz)
+            self.assertLessEqual(datetime.now().astimezone() + timedelta(days=27), user_s.end_cotiz)
 
         return fn
 

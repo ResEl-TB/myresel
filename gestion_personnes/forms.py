@@ -4,7 +4,7 @@ import re
 from django import forms
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.core.mail import EmailMessage
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.validators import MaxLengthValidator, MinLengthValidator, EmailValidator
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _

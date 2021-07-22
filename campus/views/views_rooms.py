@@ -8,7 +8,7 @@ from django.contrib import messages
 from django.utils import timezone
 from django.contrib.auth.decorators import permission_required, login_required
 from django.http import HttpResponse, HttpResponseRedirect
-from django.core.urlresolvers import reverse, reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.db.models import Q
 from django.http import Http404, JsonResponse
 
@@ -46,7 +46,7 @@ def construct_query(request, start_date, end_date, room='all'):
     if room == 'all':
         q_rooms &= Q(displayable=True)
     else:
-        if not request.user.is_authenticated():
+        if not request.user.is_authenticated:
             raise UserNotAuthenticatedException(_('Vous devez être connecté pour accéder à cette page'))
 
         if not room.user_can_access(request.ldap_user):
@@ -159,7 +159,7 @@ def calendar_view(request, room='all', year=timezone.now().year, month=timezone.
             cal.append(week_events)
 
     # Getting all the rooms
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         queryset = Q()
         for club in StudentOrganisation.filter(members__contains='uid=%s' % request.ldap_user.uid):
             queryset |= Q(clubs__contains=club.cn)

@@ -7,7 +7,7 @@ from datetime import date, datetime
 
 from django.core import mail
 from django.test import TestCase
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.exceptions import ObjectDoesNotExist
 
 from gestion_personnes.models import LdapUser, LdapGroup

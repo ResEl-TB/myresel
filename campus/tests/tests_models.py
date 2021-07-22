@@ -77,32 +77,32 @@ class RoomTestCase(TestCase):
         booking.description = 'Config de switchs'
         booking.user = 'mrobin'
         booking.booking_type = 'training'
-        booking.start_time = parse_datetime('2016-12-01 10:00:00')
-        booking.end_time = parse_datetime('2016-12-01 11:00:00')
+        booking.start_time = parse_datetime('2016-12-01T10:00:00Z')
+        booking.end_time = parse_datetime('2016-12-01T11:00:00Z')
         booking.save()
         booking.room.add(room)
 
         # Room should be free
         self.assertTrue(
             room.is_free(
-                parse_datetime('2016-12-01 9:00:00'),
-                parse_datetime('2016-12-01 9:30:00')
+                parse_datetime('2016-12-01T09:00:00Z'),
+                parse_datetime('2016-12-01T09:30:00Z')
             )
         )
 
         # Room should be occupied
         self.assertFalse(
             room.is_free(
-                parse_datetime('2016-12-01 9:15:00'), 
-                parse_datetime('2016-12-01 10:30:00')
+                parse_datetime('2016-12-01T09:15:00Z'),
+                parse_datetime('2016-12-01T10:30:00Z')
             )
         )
 
         # Room should be occupied
         self.assertFalse(
             room.is_free(
-                parse_datetime('2016-12-01 10:15:00'),
-                parse_datetime('2016-12-01 10:30:00')
+                parse_datetime('2016-12-01T10:15:00Z'),
+                parse_datetime('2016-12-01T10:30:00Z')
             )
         )
 
@@ -113,23 +113,23 @@ class RoomTestCase(TestCase):
         booking.description = 'Config de switchs'
         booking.user = 'jhomassel'
         booking.booking_type = 'training'
-        booking.start_time = parse_datetime('2016-11-01 10:00:00')
-        booking.end_time = parse_datetime('2016-11-03 11:00:00')
+        booking.start_time = parse_datetime('2016-11-01T10:00:00Z')
+        booking.end_time = parse_datetime('2016-11-03T11:00:00Z')
         booking.save()
         booking.room.add(room)
 
         # Room should be free
         self.assertTrue(
             room.is_free(
-                parse_datetime('2016-11-03 12:00:00'),
-                parse_datetime('2016-11-03 13:00:00')
+                parse_datetime('2016-11-03T12:00:00Z'),
+                parse_datetime('2016-11-03T13:00:00Z')
             )
         )
 
         # Room should be occupied
         self.assertFalse(
             room.is_free(
-                parse_datetime('2016-11-02 9:15:00'),
-                parse_datetime('2016-11-02 10:30:00')
+                parse_datetime('2016-11-02T09:15:00Z'),
+                parse_datetime('2016-11-02T10:30:00Z')
             )
         )

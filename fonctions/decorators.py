@@ -5,7 +5,7 @@ from functools import wraps
 
 from django.conf import settings
 from django.contrib import messages
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.utils.decorators import available_attrs
 from django.utils.translation import ugettext_lazy as _
@@ -23,16 +23,13 @@ def resel_required(function=None, redirect_to='home'):
     """
 
     def _dec(view_func):
+        @wraps(view_func, assigned=available_attrs(view_func))
         def _view(request, *args, **kwargs):
             if request.network_data['is_resel']:
                 return view_func(request, *args, **kwargs)
             else:
                 messages.error(request, _("Vous devez vous trouver sur le réseau du ResEl pour accéder à cette page."))
                 return HttpResponseRedirect(reverse(redirect_to))
-
-        _view.__name__ = view_func.__name__
-        _view.__dict__ = view_func.__dict__
-        _view.__doc__ = view_func.__doc__
 
         return _view
 
@@ -51,6 +48,7 @@ def need_to_pay(function=None, redirect_to='home'):
     """
 
     def _dec(view_func):
+        @wraps(view_func, assigned=available_attrs(view_func))
         def _view(request, *args, **kwargs):
             try:
                 if not request.ldap_user:
@@ -63,9 +61,6 @@ def need_to_pay(function=None, redirect_to='home'):
                 return HttpResponseRedirect(reverse(redirect_to))
 
             return view_func(request, *args, **kwargs)
-        _view.__name__ = view_func.__name__
-        _view.__dict__ = view_func.__dict__
-        _view.__doc__ = view_func.__doc__
 
         return _view
 
@@ -84,15 +79,13 @@ def not_on_regn(function=None, redirect_to='home'):
     """
 
     def _dec(view_func):
+        @wraps(view_func, assigned=available_attrs(view_func))
         def _view(request, *args, **kwargs):
             if request.network_data['subnet'] == 'REGN':
                 messages.error(request, _('Veuillez vous connecter au réseau ResEl Secure pour '
                                           'effectuer votre paiement.'))
                 return HttpResponseRedirect(reverse(redirect_to))
             return view_func(request, *args, **kwargs)
-        _view.__name__ = view_func.__name__
-        _view.__dict__ = view_func.__dict__
-        _view.__doc__ = view_func.__doc__
 
         return _view
 

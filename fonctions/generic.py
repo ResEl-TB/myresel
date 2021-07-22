@@ -4,7 +4,7 @@ import binascii
 import hashlib
 import os
 from base64 import encodestring, decodebytes, encodebytes
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, time, date
 
 
 def current_year():
@@ -18,6 +18,10 @@ def current_year():
 
     return year
 
+def today():
+    """ Returns the current day's date"""
+    return datetime.combine(date.today(), time()).astimezone()
+
 def hash_passwd(password):
     """ Fourni un hash du passwd utilisateur pour le stocker dans le LDAP """
 
@@ -28,11 +32,16 @@ def hash_passwd(password):
 
 
 def compare_passwd(passwd, hsh):
-    salt = decodebytes(bytes(hsh[6:], 'utf-8'))
-    salt = salt[-4:]
-    h = hashlib.sha1(passwd.encode('utf-8'))
+    if isinstance(hsh, str):
+        hsh = hsh.encode('utf-8')
+    digest_salt = decodebytes(hsh[6:])
+    salt = digest_salt[-4:]
+    digest = digest_salt[:-4]
+    if isinstance(passwd, str):
+        passwd = passwd.encode('utf-8')
+    h = hashlib.sha1(passwd)
     h.update(salt)
-    return "{SSHA}" + str(encodestring(h.digest() + salt)).split("'")[1].split('\\')[0] == hsh
+    return h.digest() == digest
 
 
 def hash_to_ntpass(password):

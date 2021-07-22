@@ -19,6 +19,8 @@ from gestion_personnes.views import ResetPwd, CheckEmail
 from .views import Inscription, ModPasswd, InscriptionCGU, Settings
 from .views import PersonalInfo, ResetPwdSend, SendUid, MailResEl, DeleteMailResEl, RedirectMailResEl, Webmail
 
+app_name = 'gestion_personnes'
+
 urlpatterns = [
     url(r'^inscription$', Inscription.as_view(), name='inscription'),
     url(r'^cgu$', InscriptionCGU.as_view(), name='cgu'),

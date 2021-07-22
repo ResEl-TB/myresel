@@ -280,6 +280,7 @@ class RoomAdmin(models.Model):
     user = models.ForeignKey(
         User,
         verbose_name='utilisateur',
+        on_delete=models.DO_NOTHING,
     )
 
     rooms = models.ManyToManyField(

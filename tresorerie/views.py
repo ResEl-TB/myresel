@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import uuid
 import os
-from datetime import datetime, timedelta
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 from urllib.parse import quote_plus
 
 import django_rq
@@ -12,7 +13,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404
 from django.utils.datastructures import MultiValueDictKeyError
@@ -235,10 +236,10 @@ class Pay(View):
 
             # For users who don't have an end_cotiz field
             if user.end_cotiz is None:
-                user.end_cotiz = datetime.now()
+                user.end_cotiz = datetime.now().astimezone()
 
-            offset = max(user.end_cotiz, datetime.now())
-            user.end_cotiz = offset + timedelta(days=month_numbers*30)
+            start = max(user.end_cotiz, datetime.now().astimezone())
+            user.end_cotiz = start + relativedelta(months=month_numbers)
             user.save()
 
             # Insert the transaction in the database

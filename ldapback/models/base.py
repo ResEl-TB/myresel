@@ -2,7 +2,8 @@
 import inspect
 
 from django.core.exceptions import ObjectDoesNotExist
-from ldap3 import ALL_ATTRIBUTES, MODIFY_REPLACE, LDAPAttributeError, ALL_OPERATIONAL_ATTRIBUTES
+from ldap3 import ALL_ATTRIBUTES, MODIFY_REPLACE, ALL_OPERATIONAL_ATTRIBUTES
+from ldap3.core.exceptions import LDAPAttributeError, LDAPCursorError
 
 from ldapback.backends.ldap.base import Ldap
 from ldapback.models.fields import LdapField
@@ -61,21 +62,32 @@ class LdapModel(object):
         return cls._search(*new_args)
 
     @classmethod
-    def all(cls):
+    def all(cls, dn=None, object_classes=None):
         """
         Return all entries in base_dn
         :return:
         """
         ldap = Ldap()
 
-        search_results = ldap.search(cls.base_dn, '(!(objectClass=organizationalUnit))', attr=[ALL_ATTRIBUTES, ALL_OPERATIONAL_ATTRIBUTES])
+        if not dn:
+            dn = cls.base_dn
+
+        if not object_classes:
+            object_classes = cls.object_classes
+
+        search_results = ldap.search(dn, Ldap.build_search_query(*(('objectClass', "", "=", object_class) for object_class in object_classes)), attr=[ALL_ATTRIBUTES, ALL_OPERATIONAL_ATTRIBUTES])
         if search_results is None:
             return []
 
         results = []
         for result_line in search_results:
-            results.append(cls._to_object(result_line))
+            result = cls._to_object(result_line, dn)
+            result.base_dn = dn
+            results.append(result)
         return results
+
+    def fetch(self):
+        return self.all(self.base_dn, self.object_classes)
 
     @classmethod
     def _search(cls, *args):
@@ -91,6 +103,8 @@ class LdapModel(object):
             arg = arg_values[0]
             if arg == "pk":
                 arg = cls.get_pk_field()[1].db_column  # TODO : THIS IS MOCHE, redéfinition de args pour quelque chose de sémentiquement différent
+            elif arg in ["objectclass", "objectClass", "object_class"]:
+                arg = "objectclass"
             else:
                 arg = getattr(cls, arg).db_column
             search_args.append((
@@ -109,15 +123,20 @@ class LdapModel(object):
         return results
 
     @classmethod
-    def _to_object(cls, line):
+    def _to_object(cls, line, base_dn=None):
         model = cls()
         attributes = cls.get_fields()
+
+        if base_dn:
+            model.base_dn = base_dn
+
+        model.object_classes = list(line.objectclass) if hasattr(line, 'objectclass') else []
 
         for field_name, field in attributes:
             column_name = field.db_column
             try:
                 retrieved_value = field.from_ldap(getattr(line, column_name))
-            except LDAPAttributeError:
+            except (LDAPAttributeError, LDAPCursorError):
                 retrieved_value = field.from_ldap("")
             setattr(model, field_name, retrieved_value)
             if field.is_pk:

@@ -4,6 +4,8 @@ from campus.views.views_clubs import list_clubs, NewClub, SearchClub, EditClub, 
                                      DeleteClub, AddPersonToClub, RemovePersonFromClub, \
                                      AddPrezToClub, MyClubs, ClubDetail, RequestClubs, AddMailToClub
 
+app_name = 'campus_clubs'
+
 urlpatterns = [
     url(r'^$', list_clubs, name='list'),
     url(r'^new$', NewClub.as_view(), name='new'),
