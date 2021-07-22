@@ -1,6 +1,8 @@
 # coding=utf-8
 from ldap3 import Connection, Server
 
+from django.core.exceptions import ObjectDoesNotExist
+
 from myresel import settings
 
 
@@ -117,8 +119,10 @@ class Ldap(object):
         """
         pk = model.pk
         conn = self._new_connection()
-        conn.delete(pk)
+        v = conn.delete(pk)
         conn.unbind()
+        if not v:
+            raise ObjectDoesNotExist('Could not delete a non-existing object')
 
     @staticmethod
     def sanitize(input_str):

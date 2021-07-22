@@ -2,7 +2,7 @@
 import json
 import uuid
 import re
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 
 from django.conf import settings
 from django.core.mail import EmailMessage
@@ -95,7 +95,7 @@ class LdapUser(ldapback.models.LdapModel):
     def need_to_pay(self):
         if not self.end_cotiz:
             return 'danger'
-        now = datetime.now(timezone.utc)
+        now = datetime.now().astimezone()
         if self.end_cotiz < now:
             return 'danger'
         elif self.end_cotiz < (now + timedelta(days=25)):

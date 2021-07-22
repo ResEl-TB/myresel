@@ -99,10 +99,10 @@ class InscriptionCGU(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             user = LdapUser.from_json(self.request.session['logup_user'])
-            user.inscr_date = datetime.now()
+            user.inscr_date = datetime.now().astimezone()
 
             # Add 3 free weeks :
-            user.end_cotiz = datetime.now() + FREE_DURATION  # That does not survive the json parser
+            user.end_cotiz = datetime.now().astimezone() + FREE_DURATION  # That does not survive the json parser
             user.save()
 
             user_meta, __ = UserMetaData.objects.get_or_create(uid=user.uid)

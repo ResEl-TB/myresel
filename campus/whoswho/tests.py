@@ -33,7 +33,7 @@ class HomeTestCase(TestCase):
                 'building' : user.building,
                 'room' : user.room_number,
                 'address' : user.postal_address,
-                'birth_date' : user.birth_date,
+                'birth_date' : user.birth_date or '',
                 'is_public' : user.is_public,
             },
             HTTP_HOST="10.0.3.94",

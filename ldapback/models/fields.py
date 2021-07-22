@@ -173,7 +173,8 @@ class LdapDatetimeField(LdapField):
         elif obj is None:
             ldap_value = ""
         else:
-            ldap_value = obj.strftime('%Y%m%d%H%M%S') + 'Z'
+            ldap_value = obj.strftime('%Y%m%d%H%M%S')
+            ldap_value += obj.strftime('%z') or 'Z'
 
         if self.required and len(ldap_value) == 0:
             raise ValueError("Field %s is cannot be empty" % self.__class__)

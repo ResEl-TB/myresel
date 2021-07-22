@@ -163,7 +163,7 @@ class TestPersonalInfo(TestCase):
         user.last_name = "Carr"
         user.user_password = "blah"
         user.promo = "2018"
-        user.inscr_date = datetime.datetime.now()
+        user.inscr_date = datetime.datetime.now().astimezone()
         user.nt_password = user.user_password
         user.save()
 
@@ -355,7 +355,7 @@ class MailResElViewCase(TestCase):
         # Create a fake user
         mv = MailResEl()
         h = mv.build_address(self.user.uid, self.user.first_name, self.user.last_name)
-        self.user.mail_local_address = h + b"@resel.fr"
+        self.user.mail_local_address = h + '@resel.fr'
         self.user.mail_dir = self.user.uid + '/Maildir/'
         self.user.mail_del_date = None
         self.user.home_directory = '/var/mail/virtual/' + self.user.uid
@@ -372,7 +372,7 @@ class MailResElViewCase(TestCase):
     def test_build_address(self):
         # TODO : do a bit more tests
         mv = MailResEl()
-        self.assertEqual(b"loic.carr", mv.build_address("lcarr", "Loïc", "Carr"))
+        self.assertEqual("loic.carr", mv.build_address("lcarr", "Loïc", "Carr"))
 
 class DeleteMailResElViewCase(TestCase):
     def setUp(self):
@@ -382,7 +382,7 @@ class DeleteMailResElViewCase(TestCase):
         # Create a fake user
         mv = MailResEl()
         h = mv.build_address(self.user.uid, self.user.first_name, self.user.last_name)
-        self.user.mail_local_address = h + b"@resel.fr"
+        self.user.mail_local_address = h + '@resel.fr'
         self.user.mail_dir = self.user.uid + '/Maildir/'
         self.user.mail_del_date = None
         self.user.home_directory = '/var/mail/virtual/' + self.user.uid
@@ -400,7 +400,7 @@ class DeleteMailResElViewCase(TestCase):
         r = self.client.post(
             reverse("gestion-personnes:delete-mail"),
             data={
-                "delete_field": self.user.mail_local_address.decode("utf-8"),
+                "delete_field": self.user.mail_local_address,
             },
             HTTP_HOST="10.0.3.99", follow=True)
 
@@ -421,7 +421,7 @@ class RedirectMailResElViewCase(TestCase):
         # Fake mailPerson
         mv = MailResEl()
         h = mv.build_address(self.user.uid, self.user.first_name, self.user.last_name)
-        self.user.mail_local_address = h + b"@resel.fr"
+        self.user.mail_local_address = h + '@resel.fr'
         self.user.mail_dir = self.user.uid + '/Maildir/'
         self.user.mail_del_date = None
         self.user.home_directory = '/var/mail/virtual/' + self.user.uid

@@ -208,7 +208,7 @@ class AddUser(View):
         user.mode_paiement = request.POST.get('payment', '')
         user.ae_cotiz = request.POST.get('payment_value', '')
         user.dates_membre = ['-'.join([start,end])]
-        user.inscr_date = datetime.now()
+        user.inscr_date = datetime.now().astimezone()
 
         user.save()
 

@@ -1,7 +1,7 @@
 import redis
 from unittest import skipUnless
 from io import StringIO
-from datetime import datetime, timedelta, date, time
+from datetime import datetime, timedelta
 from django.core import mail
 from django.core.management import call_command
 from django.test import TestCase
@@ -9,6 +9,7 @@ from django.conf import settings
 
 from gestion_personnes.tests import create_full_user, try_delete_user
 from myresel.management.commands import fees_reminder
+from fonctions.generic import today
 
 class FeesReminderTest(TestCase):
     def _create_date_user(self, fees_expire_in):
@@ -33,8 +34,8 @@ class FeesReminderTest(TestCase):
     def setUp(self):
         self.margin = 5
         REMINDERS_DAYS = settings.REMINDERS_DAYS
-        self.now = datetime.now()
-        self.today =  datetime.combine(date.today(), time())
+        self.now = datetime.now().astimezone()
+        self.today = today()
 
         self.reminded_users = [self._create_date_user(d) for d in REMINDERS_DAYS]
         self.not_reminded_users = [

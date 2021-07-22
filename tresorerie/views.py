@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import uuid
 import os
-from datetime import datetime, timezone
+from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from urllib.parse import quote_plus
 
@@ -236,9 +236,9 @@ class Pay(View):
 
             # For users who don't have an end_cotiz field
             if user.end_cotiz is None:
-                user.end_cotiz = datetime.now()
+                user.end_cotiz = datetime.now().astimezone()
 
-            start = max(user.end_cotiz, datetime.now(timezone.utc))
+            start = max(user.end_cotiz, datetime.now().astimezone())
             user.end_cotiz = start + relativedelta(months=month_numbers)
             user.save()
 

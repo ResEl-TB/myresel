@@ -130,7 +130,7 @@ class LdapModel(object):
         if base_dn:
             model.base_dn = base_dn
 
-        model.object_classes = list(line.objectclass)
+        model.object_classes = list(line.objectclass) if hasattr(line, 'objectclass') else []
 
         for field_name, field in attributes:
             column_name = field.db_column
