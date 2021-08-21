@@ -419,8 +419,7 @@ def graph_api(request):
     body = request.body.decode()
     if '!FETCH' in body and not request.user.is_authenticated:
         raise PermissionDenied()
-    fetcher = settings.WARP10_INTERLUDE.format('{{ "owner" "{}" }}'.format(request.user.username))
-    body = settings.WARP10_PRELUDE + body.replace('!FETCH', fetcher)
+    body = settings.WARP10_PRELUDE.format(request.user.username) + body
     try:
         resp = requests.post(url=settings.WARP10_ENDPOINT, data=body)
     except requests.exceptions.RequestException:
