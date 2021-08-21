@@ -27,7 +27,7 @@ class StudentOrganisation(ldapback.models.LdapModel):
 
 
     def __str__(self):
-        return self.name
+        return str(self.name)
 
 class Association(StudentOrganisation):
     """

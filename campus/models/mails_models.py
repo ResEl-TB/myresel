@@ -39,6 +39,6 @@ class Mail(models.Model):
         auto_now_add=True,
         editable=False,
     )
-    
+
     def __str__(self):
         return self.subject
