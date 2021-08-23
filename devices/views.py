@@ -89,8 +89,8 @@ class EditDeviceView(View):
             messages.error(request, _("Cette machine n'existe pas ou ne vous appartient pas."))
             return HttpResponseRedirect(reverse('gestion-machines:liste'))
 
-        form = self.form_class({'host': machine.host,
-                                'default': machine.default_host()})
+        form = self.form_class({'alias': machine.host_alias,
+                                'default': machine.host})
         return render(request, self.template_name, {'form': form})
 
     def post(self, request, *args, **kwargs):
@@ -101,20 +101,18 @@ class EditDeviceView(View):
         except ObjectDoesNotExist:
             logger.warning("Tentative de modification d'une machine qui n'existe pas"
                            "\n\nuid: {uid}"
-                           "\nmac: {mac}"
-                           "\nnew host: {host}".format(uid=request.user.username, mac=mac,
-                                                       host=host),
+                           "\nmac: {mac}".format(uid=request.user.username, mac=mac),
                            extra={"uid": request.user.username, "mac": mac})
             messages.error(request, _("Cette machine n'existe pas ou ne vous appartient pas."))
             return HttpResponseRedirect(reverse('gestion-machines:liste'))
 
         post_data = request.POST.dict()
-        post_data['default'] = machine.default_host()
+        post_data['default'] = machine.host
         form = self.form_class(post_data)
 
         if form.is_valid():
-            host = form.cleaned_data['host']
-            machine.host = host
+            alias = form.cleaned_data['alias']
+            machine.host_alias = alias
 
             try:
                 machine.save()
@@ -130,17 +128,17 @@ class EditDeviceView(View):
                         "Erreur lors du changement du nom de la machine."
                         "uid: {uid} "
                         "mac: {mac} "
-                        "new host: {host} "
+                        "new host: {alias} "
                         "error: {error}".format(
                             uid=request.user.username,
                             mac=mac,
-                            host=host,
+                            alias=alias,
                             error=e,),
                         extra={
                             "message_code": "ERROR_SAVING_HOST",
                             "uid": request.user.username,
                             "mac": mac,
-                            "new_host": host,
+                            "new_host": alias,
                             "error": e,
                         }
                 )
