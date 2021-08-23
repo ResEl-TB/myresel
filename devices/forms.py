@@ -13,7 +13,7 @@ from devices.models import LdapDevice
 
 
 class EditDeviceForm(forms.Form):
-    host = forms.CharField(label=_("Nom de la machine"), required=False)
+    alias = forms.CharField(label=_("Nom de la machine"), required=False)
 
     def __init__(self, dic):
         default = dic.pop('default')
@@ -24,39 +24,39 @@ class EditDeviceForm(forms.Form):
             par = ''
         widget = forms.TextInput(attrs={'class': 'form-control',
                                         'placeholder': _("Nom automatique") + par})
-        self.fields['host'].widget = widget
+        self.fields['alias'].widget = widget
 
-    def clean_host(self):
-        host = self.cleaned_data['host']
+    def clean_alias(self):
+        alias = self.cleaned_data['alias']
 
-        if len(host) == 0:
-            return host
+        if len(alias) == 0:
+            return alias
 
-        if len(host) < 5:
-            raise forms.ValidationError(_("Nom trop court (au moins 5 caractères)"), code='TOO SHORT')
-        if len(host) > 20:
+        if len(alias) < 3:
+            raise forms.ValidationError(_("Nom trop court (au moins 3 caractères)"), code='TOO SHORT')
+        if len(alias) > 20:
             raise forms.ValidationError(_("Nom trop long (au plus 20 caractères)"), code='TOO LONG')
 
         # Custom slugification
-        host_sl = unicodedata.normalize('NFKD', host).encode('ascii', 'ignore').decode('ascii')
-        host_sl = re.sub(r'[^\w\s_\-]', '', host_sl).strip()
-        host_sl = re.sub(r'[_\-\s]+', '-', host_sl)
+        alias_sl = unicodedata.normalize('NFKD', alias).encode('ascii', 'ignore').decode('ascii')
+        alias_sl = re.sub(r'[^\w\s_\-]', '', alias_sl).strip()
+        alias_sl = re.sub(r'[_\-\s]+', '-', alias_sl)
 
-        if len(host_sl) < 5:
+        if len(alias_sl) < 3:
             raise forms.ValidationError(
                 _("Nom non conforme, seuls les lettres, chiffres et tirets sont acceptés."),
                 code='INVALID NAME'
             )
 
-        if host_sl != host:
+        if alias_sl != alias:
             self.data = self.data.copy()  # Weak hack to modify data
-            self.data['host'] = host_sl
+            self.data['alias'] = alias_sl
             raise forms.ValidationError(
                 _("Nom non conforme, nous vous proposons celui-ci à la place."),
                 code='INVALID NAME'
             )
 
-        return host_sl
+        return alias_sl
 
 
 class ManualDeviceAddForm(forms.Form):

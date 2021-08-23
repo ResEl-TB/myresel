@@ -87,11 +87,6 @@ REDIS_DB = 0
 REDIS_PASSWORD = ""
 
 
-# DHCP API
-
-DHCP_API = []
-
-
 # WARP 10 KEYS
 
 WARP10_TOKENS = {}
