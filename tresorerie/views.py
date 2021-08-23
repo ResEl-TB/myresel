@@ -390,7 +390,7 @@ class TransactionDetailView(DetailView):
 
         if transaction.utilisateur != self.request.ldap_user.uid:
             # 404 because the user should not even know if the object exists
-            raise Http404(_("No transaction found"))
+            raise Http404(_("Aucune transaction trouvée"))
         return transaction
 
     def get_context_data(self, **kwargs):

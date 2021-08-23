@@ -61,8 +61,8 @@
                 </ul>
                 <h3>{% trans "Vous désirez vous connecter ?" %}</h3>
                 <ul>
-                    <li><a href="{% static "files/guide_connexion_BREST_2016.pdf" %}">{% trans "Guide connexion campus de Brest" %}</a></li>
-                    <li><a href="{% static "files/guide_connexion_RENNES_2016.pdf" %}">{% trans "Guide connexion campus de Rennes" %}</a></li>
+                    <li><a href="{% static "files/"|add:request.LANGUAGE_CODE|add:"/Flyer.pdf" %}">{% trans "Flyer de connexion" %}</a></li>
+                    <li><a href="{% static "files/"|add:request.LANGUAGE_CODE|add:"/Guide.pdf" %}">{% trans "Guide de connexion filaire" %}</a></li>
                 </ul>
             </div>
         </div>

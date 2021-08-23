@@ -171,7 +171,7 @@ class AddRoomForm(ModelForm):
                 except ObjectDoesNotExist:
                     raise ValidationError(message=_("Le club suivant n'existe pas: %s"%(club,)), code="CLUB DOES NOT EXIST")
                 if not re.match(r'^[a-z0-9-]+', club):
-                    raise ValidationError(message=_("Le club suivant n'est pas un nom valide: %s"%(club,)), code="BAD CLUB")
+                    raise ValidationError(message=_("Le club suivant n'a pas un nom valide: %s"%(club,)), code="BAD CLUB")
         return(";".join(clubs))
 
 
@@ -215,7 +215,7 @@ class ClubManagementForm(Form):
     cn = CharField(  # cn
         widget=TextInput(attrs={
             'class': 'form-control',
-            'placeholder': _("Nom court; ex: tennis pour les Club tennis"),
+            'placeholder': _("Nom court (p. ex. : tennis pour le Club de tennis)"),
         }),
         validators=[MaxLengthValidator(50)],
         label=_("Nom court"),
@@ -263,7 +263,7 @@ class ClubManagementForm(Form):
             'class': 'form-control',
             'placeholder': _("Année de campagne"),
         }),
-        label=_('Année de Campagne'),
+        label=_('Année de campagne'),
         required=False,
     )
 
@@ -278,7 +278,7 @@ class ClubManagementForm(Form):
         if StudentOrganisation.filter(cn=cn):
             raise ValidationError(_("Ce nom existe déjà, assurez vous de créer un club/asso qui n'existe pas déjà"), code="CN EXISTS")
         elif not re.match(r'^[a-z0-9-]+$', cn):
-            raise ValidationError(message=_("Le nom court ne doit pas contenir d'espace est n'est contitué que de lettres et de chiffres"))
+            raise ValidationError(message=_("Le nom court ne doit être composé que de lettres et de chiffres sans espaces"))
         return cn
 
     def clean_logo(self):
@@ -296,7 +296,7 @@ class ClubManagementForm(Form):
     def clean_email(self):
         email = self.cleaned_data['email'].lower().strip()
         if not re.match(r'^[a-z1-9-_.+]+\@[a-z1-9-]+\.[a-z0-9-]+', email) and email != "":
-            raise ValidationError(message=_("Veuillez rentrer une adresse mail valide"), code="BAD EMAIL")
+            raise ValidationError(message=_("Veuillez saisir une adresse mail valide"), code="BAD EMAIL")
         return email
 
     def clean_campagneYear(self):
@@ -383,7 +383,7 @@ class MajPersonnalInfo(PersonnalInfoForm):
     BUILDINGS_BREST = [('I%d' % i, 'I%d' % i) for i in range(1, 13)]
     BUILDINGS_RENNES = [('S1', 'Studios'), ('C1', 'Chambres')]
 
-    BUILDINGS = [(0, _("Sélectionnez un Bâtiment"))]
+    BUILDINGS = [(0, _("Sélectionnez un bâtiment"))]
     BUILDINGS += BUILDINGS_BREST
     BUILDINGS += BUILDINGS_RENNES
 
@@ -398,13 +398,13 @@ class MajPersonnalInfo(PersonnalInfoForm):
     remove_photo = forms.BooleanField(
         widget = forms.CheckboxInput(),
         label = _("Supprimer ma photo"),
-        label_suffix = _(''),
+        label_suffix = '',
         required = False,
     )
 
     is_public = forms.BooleanField(
         widget = forms.CheckboxInput(),
-        label = _("Rendre publiques les details de mon profil"),
+        label = _("Rendre publics les details de mon profil"),
         label_suffix = '',
         initial = False,
         required = False,

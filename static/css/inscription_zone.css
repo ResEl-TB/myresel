@@ -16,8 +16,8 @@ html, body {
 
 .btn {
     background: none;
-    color: #F79420;
-    border-color: #F79420;
+    color: #FFB300;
+    border-color: #FFB300;
     margin: 20px;
 }
 
@@ -28,7 +28,7 @@ html, body {
 }
 
 a, a:visited {
-    color: #F79420;
+    color: #FFB300;
 }
 
 a:hover, a:active, a:focus{
@@ -64,7 +64,7 @@ a:hover, a:active, a:focus{
 
 
 strong {
-    color: #F79420
+    color: #FFB300
 }
 
 .dropup {

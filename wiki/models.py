@@ -78,7 +78,7 @@ class Article(models.Model):
     date_creation = models.DateField(auto_now_add=True)
     date_last_edit = models.DateField(auto_now=True)
     glyphicon_name = models.CharField(max_length=64, blank=True)
-    icon = models.ImageField(upload_to='image/service_icons', blank=True, default='static/images/icons/placeholder.png')
+    icon = models.ImageField(upload_to='image/service_icons', blank=True, default='../static/images/icons/placeholder.png')
     slug = models.SlugField(max_length=255, blank=True, unique=True)
 
     def save(self, *args, **kwargs):
@@ -112,7 +112,7 @@ class Link(models.Model):
     url = models.URLField()
     fa_icon_name = models.CharField(max_length=64, blank=True)
     glyphicon_name = models.CharField(max_length=64, blank=True)
-    icon = models.ImageField(upload_to='image/service_icons', blank=True, default='static/images/icons/placeholder.png')
+    icon = models.ImageField(upload_to='image/service_icons', blank=True, default='../static/images/icons/placeholder.png')
     slug = models.SlugField(max_length=255, blank=True, unique=True)
 
     def save(self, *args, **kwargs):

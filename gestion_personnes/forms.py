@@ -26,13 +26,13 @@ class PersonnalInfoForm(forms.Form):
     BUILDINGS_BREST = [('I%d' % i, 'I%d' % i) for i in range(1, 13)]
     BUILDINGS_RENNES = [('S1', 'Studios'), ('C1', 'Chambres')]
 
-    BUILDINGS = [(0, _("Sélectionnez un Bâtiment"))]
+    BUILDINGS = [(0, _("Sélectionnez un bâtiment"))]
     BUILDINGS += BUILDINGS_BREST
     BUILDINGS += BUILDINGS_RENNES
 
     FORMATIONS = [
         (0, _('Indiquez votre formation')),
-        ('FIG', _('Ingénieur généraliste (FIG)')),
+        ('FIG', _('Ingénieur généraliste (FIG/FISE)')),
         ('FIP', _('Ingénieur par alternance (FIP)')),
         ('Master', _('Master spécialisé')),
         ('Autre', _('Autre'))
@@ -130,13 +130,13 @@ class InscriptionForm(forms.Form):
     BUILDINGS_BREST = [('I%d' % i, 'I%d' % i) for i in range(1, 13)]
     BUILDINGS_RENNES = [('S1', 'Studios'), ('C1', 'Chambres')]
 
-    BUILDINGS = [(0, _("Sélectionnez un Bâtiment"))]
+    BUILDINGS = [(0, _("Sélectionnez un bâtiment"))]
     BUILDINGS += BUILDINGS_BREST
     BUILDINGS += BUILDINGS_RENNES
 
     FORMATIONS = [
         (0, _('Indiquez votre formation')),
-        ('FIG', _('Ingénieur généraliste (FIG)')),
+        ('FIG', _('Ingénieur généraliste (FIG/FISE)')),
         ('FIP', _('Ingénieur par alternance (FIP)')),
         ('Master', _('Master spécialisé')),
         ('Autre', _('Autre'))
