@@ -191,7 +191,7 @@ class SearchUsers(View):
             else:
                 messages.info(request, _("La recherche n'a rien retourné"))
         else:
-            messages.error(request, _("Le contenue de la recherche ne peut être vide."))
+            messages.error(request, _("Le contenu de la recherche ne peut être vide."))
         return HttpResponseRedirect(reverse('campus:who:user-home'))
 
 class RequestUser(View):

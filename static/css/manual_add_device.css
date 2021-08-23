@@ -34,8 +34,8 @@
 }
 #warning-overlay .btn {
     background: none;
-    color: #F79420;
-    border-color: #F79420;
+    color: #FFB300;
+    border-color: #FFB300;
     margin: 20px;
 }
 
@@ -46,7 +46,7 @@
 }
 
 #warning-overlay a, #warning-overlay a:visited {
-    color: #F79420;
+    color: #FFB300;
 }
 
 #warning-overlay a:hover, #warning-overlay a:active, #warning-overlay a:focus{
@@ -82,7 +82,7 @@ hr {
 
 
 #warning-overlay strong {
-    color: #F79420
+    color: #FFB300
 }
 
 .dropup {

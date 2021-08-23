@@ -5,10 +5,9 @@
 #
 msgid ""
 msgstr ""
-
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-20 17:49+0200\n"
+"POT-Creation-Date: 2021-08-23 07:43+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,150 +16,136 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: campus/forms.py:113
-msgid "La date de fin est avant la date de début de l'évènement"
-msgstr "The end date is before the starting date"
-
 #: campus/forms.py:116
-msgid "La date de fin de la récurrence est invalide"
-msgstr "The end of reccuring date is invalid"
+msgid "La date de fin est avant la date de début de l'évènement"
+msgstr "The end date is before the start date of the event"
 
-#: campus/forms.py:121 campus/forms.py:125
+#: campus/forms.py:119
+msgid "La date de fin de la récurrence est invalide"
+msgstr "The end date of the recurrence is invalid"
+
+#: campus/forms.py:124 campus/forms.py:128
 msgid "Vous ne pouvez pas gérer cette salle"
 msgstr "You cannot manage this room"
 
-#: campus/forms.py:157
+#: campus/forms.py:161
 msgid "L'adresse email semble être invalide"
-msgstr "The email adress seems unavailable"
+msgstr "The email address seems invalid"
 
-#: campus/forms.py:168
+#: campus/forms.py:172
 #, python-format
 msgid "Le club suivant n'existe pas: %s"
 msgstr "The following club doesn't exist: %s"
 
-#: campus/forms.py:170
+#: campus/forms.py:174
 #, python-format
-msgid "Le club suivant n'est pas un nom valide: %s"
-msgstr "The following club isn't a correct name: %s"
+msgid "Le club suivant n'a pas un nom valide: %s"
+msgstr "The following club doesn't have a valid name: %s"
 
-#: campus/forms.py:199
+#: campus/forms.py:203
 msgid "Sélectionner ce que vous souhaitez créer"
-msgstr "Select wht you want to create"
+msgstr "Select what you want to create"
 
-#: campus/forms.py:205 campus/forms.py:208
-#: campus/templates/campus/rooms/room_management.html:16
-#: campus/templates/campus/whoswho/userHome.html:39
-#: campus/templates/campus/whoswho/userHome.html:41
-#: campus/templates/campus/whoswho/userHome.html:47
-#: devices/templates/devices/list_devices.html:19
+#: campus/forms.py:209 campus/forms.py:212
+#: campus/templates/campus/rooms/room_management.html:28
+#: campus/templates/campus/whoswho/userHome.html:43
+#: campus/templates/campus/whoswho/userHome.html:45
+#: campus/templates/campus/whoswho/userHome.html:51
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:25
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:27
-#: tresorerie/templates/tresorerie/recap.html:18
+#: tresorerie/templates/tresorerie/recap.html:22
 #: tresorerie/templates/tresorerie/transaction_detail.html:16
 msgid "Nom"
 msgstr "Name"
 
-#: campus/forms.py:214
-msgid "Nom court; ex: tennis pour les Club tennis"
-msgstr "Short names; e.g. : tennis for the tennis Club"
+#: campus/forms.py:218
+msgid "Nom court (p. ex. : tennis pour le Club de tennis)"
+msgstr "Short name (e.g.: tennis for the Tennis club)"
 
-#: campus/forms.py:217
+#: campus/forms.py:221
 msgid "Nom court"
 msgstr "Short name"
 
-#: campus/forms.py:223
-msgid "Présentation de l'organisation"
+#: campus/forms.py:227
+msgid "Présentation du l'organisation"
 msgstr "Presentation of the organisation"
 
-#: campus/forms.py:227
-#| msgid "Inscription"
+#: campus/forms.py:231
 msgid "Description"
 msgstr "Description"
 
-#: campus/forms.py:240
-#| msgid "Adresse MAC de la machine"
+#: campus/forms.py:244
 msgid "Adresse de la mailing liste "
 msgstr "Mailing list address"
 
-#: campus/forms.py:243
+#: campus/forms.py:247
 msgid "Mailing liste"
 msgstr "Mailing list"
 
-#: campus/forms.py:250
+#: campus/forms.py:254
 msgid "Site web"
 msgstr "Web site"
 
-#: campus/forms.py:260
+#: campus/forms.py:264 campus/forms.py:266
 msgid "Année de campagne"
 msgstr "Campaign's year"
 
-#: campus/forms.py:262
-msgid "Année de Campagne"
-msgstr "Campaign's year"
-
-#: campus/forms.py:269
-#| msgid "Veuillez sélectionner un campus"
+#: campus/forms.py:273
 msgid "Merci de sélectionner un choix valide"
 msgstr "Please select a valid choice"
 
-#: campus/forms.py:275
+#: campus/forms.py:279
 msgid ""
 "Ce nom existe déjà, assurez vous de créer un club/asso qui n'existe pas déjà"
 msgstr ""
-"The name already exist, plaese create a club/an association which doesn't already exist"
+"This name already exists, plaese create a club/association which doesn't "
+"already exist"
 
-#: campus/forms.py:277
+#: campus/forms.py:281
 msgid ""
-"Le nom court ne doit pas contenir d'espace et n'est contitué que de lettres "
-"et de chiffres"
+"Le nom court ne doit être composé que de lettres et de chiffres sans espaces"
 msgstr ""
-"The short name shouldn't contain spaces, but only letters"
+"The short name must be composed only of letters and numbers without spaces"
 
-#: campus/forms.py:283
+#: campus/forms.py:287
 msgid "Merci de renseigner un logo pour votre association/liste"
 msgstr "Please submit a logo for your association/list"
 
-#: campus/forms.py:289
-#, fuzzy
-#| msgid "Veuillez saisir votre addresse postale"
+#: campus/forms.py:293
 msgid "Veuillez rentrer une adresse web valide"
-msgstr "Please select a valid url"
+msgstr "Please select a valid web address"
 
-#: campus/forms.py:295
-#, fuzzy
-#| msgid "Veuillez saisir votre addresse postale"
-msgid "Veuillez rentrer une adresse mail valide"
-msgstr "Please select a valid email address"
+#: campus/forms.py:299
+msgid "Veuillez saisir une adresse mail valide"
+msgstr "Please enter a valid email address"
 
-#: campus/forms.py:301
+#: campus/forms.py:305
 msgid "Veuillez entrer une année de campagne valide"
-msgstr "Please enter a valid campaign's year"
+msgstr "Please enter a valid campaign year"
 
-#: campus/forms.py:376 gestion_personnes/forms.py:25
+#: campus/forms.py:382 gestion_personnes/forms.py:25
 #: gestion_personnes/forms.py:129
 msgid "Je n'habite pas à la Maisel"
 msgstr "I don't live at the Maisel"
 
-#: campus/forms.py:380 gestion_personnes/forms.py:29
+#: campus/forms.py:386 gestion_personnes/forms.py:29
 #: gestion_personnes/forms.py:133
-msgid "Sélectionnez un Bâtiment"
+msgid "Sélectionnez un bâtiment"
 msgstr "Choose a building"
 
-#: campus/forms.py:394
+#: campus/forms.py:400
 msgid "Supprimer ma photo"
 msgstr "Delete my picture"
 
-#: campus/forms.py:401
-msgid "Rendre publiques les details de mon profil"
+#: campus/forms.py:407
+msgid "Rendre publics les details de mon profil"
 msgstr "Make all my profil's details public"
 
-#: campus/forms.py:431
-#, fuzzy
-#| msgid "Votre chambre"
+#: campus/forms.py:437
 msgid "Votre recherche"
 msgstr "Your search"
 
-#: campus/forms.py:437
+#: campus/forms.py:443
 msgid "Recherche stricte"
 msgstr "Strict search"
 
@@ -169,14 +154,13 @@ msgid "salle"
 msgstr "room"
 
 #: campus/models/rooms_models.py:19
-#: campus/templates/campus/rooms/room_management.html:41
-#, fuzzy
-#| msgid "Envoyer"
+#: campus/templates/campus/rooms/room_management.html:53
 msgid "Foyer"
 msgstr "Foyer"
 
 #: campus/models/rooms_models.py:20
-#: campus/templates/campus/rooms/room_management.html:42
+#: campus/templates/campus/ae-admin/add-member.html:52
+#: campus/templates/campus/rooms/room_management.html:54
 msgid "École"
 msgstr "School"
 
@@ -185,34 +169,29 @@ msgid "Extérieur"
 msgstr "Outside"
 
 #: campus/models/rooms_models.py:22
-#: campus/templates/campus/rooms/room_management.html:44
-#: campus/templates/campus/whoswho/userHome.html:78
+#: campus/templates/campus/ae-admin/home.html:206
+#: campus/templates/campus/rooms/room_management.html:56
+#: campus/templates/campus/whoswho/userHome.html:82
 #: gestion_personnes/forms.py:52 gestion_personnes/forms.py:196
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:64
-#: templates/base.html:88 templates/base.html:213
+#: templates/base.html:116
 msgid "Campus"
 msgstr "Campus"
 
 #: campus/models/rooms_models.py:28
 msgid "emplacement de la salle"
-msgstr "Room location"
+msgstr "room location"
 
 #: campus/models/rooms_models.py:29
-#: campus/templates/campus/rooms/room_management.html:19
-#, fuzzy
-#| msgid "Paiement"
+#: campus/templates/campus/rooms/room_management.html:31
 msgid "Emplacement"
 msgstr "Location"
 
 #: campus/models/rooms_models.py:34
-#, fuzzy
-#| msgid "Nom de famille"
 msgid "nom de la salle"
 msgstr "room name"
 
 #: campus/models/rooms_models.py:35
-#, fuzzy
-#| msgid "Nom de famille"
 msgid "Nom de la salle"
 msgstr "Room name"
 
@@ -222,7 +201,7 @@ msgstr "mailing-list to contact to reserve this room"
 
 #: campus/models/rooms_models.py:44
 msgid "indique si la salle est privée ou non"
-msgstr "write whether the room is private or not"
+msgstr "indicates whether the room is private or not"
 
 #: campus/models/rooms_models.py:46
 msgid "Salle privée / club"
@@ -231,299 +210,791 @@ msgstr "Private/club room"
 #: campus/models/rooms_models.py:51
 msgid ""
 "indique à quel(s) club(s) appartient la salle, séparés par un point virgule ;"
-msgstr ""
+msgstr "indicates to which club(s) the room belongs, split by a colon ;"
 
-#: campus/models/rooms_models.py:120
-#, fuzzy
-#| msgid "Désignation"
+#: campus/models/rooms_models.py:122
 msgid "réservation"
-msgstr "Booking"
-
-#: campus/models/rooms_models.py:125
-msgid "Soirée"
-msgstr ""
-
-#: campus/models/rooms_models.py:126
-msgid "Activité de club"
-msgstr ""
+msgstr "booking"
 
 #: campus/models/rooms_models.py:127
-msgid "Réunion"
-msgstr ""
+msgid "Soirée"
+msgstr "Party"
 
 #: campus/models/rooms_models.py:128
-#: campus/templates/campus/whoswho/userDetails.html:31
-#: gestion_personnes/templates/gestion_personnes/personal_info.html:37
-#: gestion_personnes/templates/gestion_personnes/personal_info.html:39
-#, fuzzy
-#| msgid "Information"
-msgid "Formation"
-msgstr "Formation"
+msgid "Activité de club"
+msgstr "Club activity"
 
 #: campus/models/rooms_models.py:129
+msgid "Réunion"
+msgstr "Meeting"
+
+#: campus/models/rooms_models.py:130
+#: campus/templates/campus/ae-admin/home.html:205
+#: campus/templates/campus/whoswho/userDetails.html:36
+#: gestion_personnes/templates/gestion_personnes/personal_info.html:37
+#: gestion_personnes/templates/gestion_personnes/personal_info.html:39
+msgid "Formation"
+msgstr "Curriculum"
+
+#: campus/models/rooms_models.py:131
 msgid "Évènement"
 msgstr "Event"
 
-#: campus/models/rooms_models.py:130
+#: campus/models/rooms_models.py:132
 msgid "Sport"
 msgstr "Sport"
 
-#: campus/models/rooms_models.py:131
+#: campus/models/rooms_models.py:133
 msgid "Art et culture"
 msgstr "Art and culture"
 
-#: campus/models/rooms_models.py:132
+#: campus/models/rooms_models.py:134
 msgid "Sortie"
-msgstr ""
+msgstr "Trip"
 
-#: campus/models/rooms_models.py:133 gestion_personnes/forms.py:38
+#: campus/models/rooms_models.py:135 gestion_personnes/forms.py:38
 #: gestion_personnes/forms.py:142
 msgid "Autre"
 msgstr "Other"
 
-#: campus/models/rooms_models.py:134
+#: campus/models/rooms_models.py:136
 msgid "Ne pas afficher sur le calendrier"
 msgstr "Don't show on the calendar"
 
-#: campus/models/rooms_models.py:138
+#: campus/models/rooms_models.py:140
 msgid "Pas de récurrence"
-msgstr "Not reccuring"
+msgstr "Not recurring"
 
-#: campus/models/rooms_models.py:139
+#: campus/models/rooms_models.py:141
 msgid "Quotidien"
 msgstr "Daily"
 
-#: campus/models/rooms_models.py:140
+#: campus/models/rooms_models.py:142
 msgid "Hebdomadaire"
 msgstr "Weekly"
 
-#: campus/models/rooms_models.py:141
+#: campus/models/rooms_models.py:143
 msgid "Mensuel"
 msgstr "Monthly"
 
-#: campus/models/rooms_models.py:142
+#: campus/models/rooms_models.py:144
 msgid "Annuel"
 msgstr "Annualy"
 
-#: campus/models/rooms_models.py:146
+#: campus/models/rooms_models.py:148
 msgid "Non validé"
 msgstr "Not validated"
 
-#: campus/models/rooms_models.py:147
+#: campus/models/rooms_models.py:149
 msgid "Validé"
 msgstr "Validated"
 
-#: campus/models/rooms_models.py:148
+#: campus/models/rooms_models.py:150
 msgid "Refusé"
 msgstr "Refused"
 
-#: campus/models/rooms_models.py:149
+#: campus/models/rooms_models.py:151
 msgid "Supprimé"
 msgstr "Deleted"
 
-#: campus/models/rooms_models.py:153
-#, fuzzy
-#| msgid "Description de l'équipement à ajouter"
-msgid "description de l'évènement"
-msgstr "Event description"
-
-#: campus/models/rooms_models.py:159
-msgid "indique dans quelle salle se déroule l'évènement"
-msgstr "indicate in which room the event is"
+#: campus/models/rooms_models.py:155
+msgid "nom de l'évènement"
+msgstr "name of the event"
 
 #: campus/models/rooms_models.py:160
+msgid "description de l'évènement"
+msgstr "event description"
+
+#: campus/models/rooms_models.py:166
+msgid "indique dans quelle salle se déroule l'évènement"
+msgstr "indicates in which room the event takes place"
+
+#: campus/models/rooms_models.py:167
 msgid "Salle(s)"
 msgstr "Room(s)"
 
-#: campus/models/rooms_models.py:165
+#: campus/models/rooms_models.py:172
 msgid "début de l'évènement"
 msgstr "start of the event"
 
-#: campus/models/rooms_models.py:166
+#: campus/models/rooms_models.py:173
 msgid "Début de l'evènement"
 msgstr "Start of the event"
 
-#: campus/models/rooms_models.py:171
+#: campus/models/rooms_models.py:178
 msgid "fin de l'évènement"
 msgstr "end of the event"
 
-#: campus/models/rooms_models.py:172
+#: campus/models/rooms_models.py:179
 msgid "Fin de l'évènement"
 msgstr "End of the event"
 
-#: campus/models/rooms_models.py:177
+#: campus/models/rooms_models.py:184
 msgid "utilisateur ayant fait la demande de réservation"
-msgstr ""
+msgstr "user who made the reservation request"
 
-#: campus/models/rooms_models.py:178
-#, fuzzy
-#| msgid "Utilisateur :"
+#: campus/models/rooms_models.py:185
 msgid "Utilisateur"
 msgstr "User"
 
-#: campus/models/rooms_models.py:184
-msgid "type d'évènement"
-msgstr "Event type"
-
-#: campus/models/rooms_models.py:189
-msgid "affiche ou non cet évènement sur le calendrier"
-msgstr ""
-
 #: campus/models/rooms_models.py:191
-msgid "Affichable"
-msgstr "Displayble"
+msgid "type d'évènement"
+msgstr "event type"
 
 #: campus/models/rooms_models.py:196
+msgid "affiche ou non cet évènement sur le calendrier"
+msgstr "displays or not this event on the calendar"
+
+#: campus/models/rooms_models.py:198
+msgid "Affichable"
+msgstr "Displayable"
+
+#: campus/models/rooms_models.py:203
 msgid "Type de recurrence"
-msgstr "Reccurence type"
+msgstr "Recurrence type"
 
-#: campus/models/rooms_models.py:202
+#: campus/models/rooms_models.py:209
 msgid "fin de la récurrence"
-msgstr ""
-
-#: campus/models/rooms_models.py:204
-msgid "Cette date est ignorée pour les événements uniques."
-msgstr ""
+msgstr "end of the recurrence"
 
 #: campus/models/rooms_models.py:211
-#: devices/templates/devices/list_devices.html:23
+msgid "Cette date est ignorée pour les événements uniques."
+msgstr "This date is ignored for single events."
+
+#: campus/models/rooms_models.py:218
 msgid "Statut"
 msgstr "Status"
 
-#: campus/templates/campus/clubs/detail.html:39
-msgid "Aucun président renseigné"
-msgstr ""
+#: campus/templates/base_campus.html:109
+#: campus/templates/campus/ae-admin/home.html:17
+msgid "Administration AE"
+msgstr "AE Administration"
 
-#: campus/templates/campus/clubs/detail.html:50
+#: campus/templates/campus/ae-admin/add-admin.html:16
+msgid "Ajouter un admin"
+msgstr "Add an admin"
+
+#: campus/templates/campus/ae-admin/add-admin.html:65
+#: campus/templates/campus/ae-admin/add-member.html:243
+#: campus/templates/campus/ae-admin/add-member.html:251
+#: campus/templates/campus/ae-admin/add-member.html:373
+#: campus/templates/campus/ae-admin/add-member.html:381
+#: campus/templates/campus/ae-admin/delete-admin.html:77
+#: campus/templates/campus/ae-admin/import-csv.html:168
+msgid "Erreur inconnue"
+msgstr "Unknown error"
+
+#: campus/templates/campus/ae-admin/add-admin.html:80
+msgid "Administrateur ajouté !"
+msgstr "Administrator added!"
+
+#: campus/templates/campus/ae-admin/add-admin.html:85
+msgid "Rechercher un utilisateur (autocompletion) :"
+msgstr "Search for a user (autocompletion):"
+
+#: campus/templates/campus/ae-admin/add-member.html:18
+#: campus/templates/campus/ae-admin/home.html:62
+msgid "Ajouter/Éditer un membre AE"
+msgstr "Add/Edit an AE member"
+
+#: campus/templates/campus/ae-admin/add-member.html:147
+msgid "Rechercher dans l'annuaire "
+msgstr "Search in the directory"
+
+#: campus/templates/campus/ae-admin/add-member.html:166
+msgid "Cliquez sur un résultat pour ouvrir le formulaire."
+msgstr "Click on a result to open the form."
+
+#: campus/templates/campus/ae-admin/add-member.html:237
+#: campus/templates/campus/ae-admin/add-member.html:364
+#: campus/templates/campus/ae-admin/import-csv.html:165
+#: campus/views/views_ae_admin.py:277 campus/views/views_ae_admin.py:300
+msgid "Utilisateur introuvable"
+msgstr "User not found"
+
+#: campus/templates/campus/ae-admin/add-member.html:240
+#: campus/templates/campus/ae-admin/add-member.html:367
+#: campus/templates/campus/ae-admin/home.html:260
+#: campus/templates/campus/ae-admin/import-csv.html:166
+msgid "Date invalide"
+msgstr "Invalid date"
+
+#: campus/templates/campus/ae-admin/add-member.html:267
+msgid "Edition d'un membre de l'AE"
+msgstr "Edition of an AE member"
+
+#: campus/templates/campus/ae-admin/add-member.html:271
+msgid "Utilisateur mis à jour !"
+msgstr "User updated!"
+
+#: campus/templates/campus/ae-admin/add-member.html:278
+msgid "UID :"
+msgstr "UID:"
+
+#: campus/templates/campus/ae-admin/add-member.html:282
+#: campus/templates/campus/ae-admin/add-member.html:444
+msgid "N° Adherent :"
+msgstr "Membership N°:"
+
+#: campus/templates/campus/ae-admin/add-member.html:286
+#: campus/templates/campus/ae-admin/add-member.html:448
+msgid "Type de paiement :"
+msgstr "Payment type:"
+
+#: campus/templates/campus/ae-admin/add-member.html:295
+#: campus/templates/campus/ae-admin/add-member.html:457
+msgid "Montant payé :"
+msgstr "Amount paid:"
+
+#: campus/templates/campus/ae-admin/add-member.html:299
+#: campus/templates/campus/ae-admin/add-member.html:461
+msgid "Début de l\\"
+msgstr "Start of the "
+
+#: campus/templates/campus/ae-admin/add-member.html:303
+#: campus/templates/campus/ae-admin/add-member.html:465
+msgid "Fin de l\\"
+msgstr "End of the "
+
+#: campus/templates/campus/ae-admin/add-member.html:307
+#: campus/templates/campus/ae-admin/add-member.html:469
+#: pages/templates/pages/contact.html:22
+msgid "Envoyer"
+msgstr "Send"
+
+#: campus/templates/campus/ae-admin/add-member.html:370
+msgid "Merci de renseigner tous les champs avec une étoile rouge"
+msgstr "Please fill in all the fields with a red star"
+
+#: campus/templates/campus/ae-admin/add-member.html:397
+msgid "Ajout d'un membre à l'AE"
+msgstr "Add an AE member"
+
+#: campus/templates/campus/ae-admin/add-member.html:401
+#: campus/templates/campus/ae-admin/add-member.html:475
+msgid "Utilisateur ajouté !"
+msgstr "User added!"
+
+#: campus/templates/campus/ae-admin/add-member.html:408
+msgid "Nom :"
+msgstr "Last name:"
+
+#: campus/templates/campus/ae-admin/add-member.html:412
+msgid "Prénom :"
+msgstr "First name:"
+
+#: campus/templates/campus/ae-admin/add-member.html:416
+msgid "Promo :"
+msgstr "Year group:"
+
+#: campus/templates/campus/ae-admin/add-member.html:420
+msgid "E-mail :"
+msgstr "Email:"
+
+#: campus/templates/campus/ae-admin/add-member.html:424
+msgid "Formation :"
+msgstr "Curriculum:"
+
+#: campus/templates/campus/ae-admin/add-member.html:436
+msgid "Campus :"
+msgstr "Campus:"
+
+#: campus/templates/campus/ae-admin/delete-admin.html:16
+msgid "Supprimer un admin AE"
+msgstr "Delete an AE admin"
+
+#: campus/templates/campus/ae-admin/delete-admin.html:46
+msgid "Impossible de récupérer la liste des admins."
+msgstr "Impossible to get the admin list."
+
+#: campus/templates/campus/ae-admin/delete-admin.html:93
+msgid "Admin supprimé !"
+msgstr "Admin deleted!"
+
+#: campus/templates/campus/ae-admin/export-csv.html:18
+msgid "Exporter vers un Tableur"
+msgstr "Export to a spreadsheet"
+
+#: campus/templates/campus/ae-admin/export-csv.html:41
+msgid "Anciens adhérents"
+msgstr "Former members"
+
+#: campus/templates/campus/ae-admin/export-csv.html:42
+msgid "Adhérents actuels"
+msgstr "Current members"
+
+#: campus/templates/campus/ae-admin/export-csv.html:46
+msgid "Non"
+msgstr "Name"
+
+#: campus/templates/campus/ae-admin/export-csv.html:47
+msgid "Oui"
+msgstr "Yes"
+
+#: campus/templates/campus/ae-admin/export-csv.html:113
+msgid "Je veux exporter uniquement les"
+msgstr "I only want to export the"
+
+#: campus/templates/campus/ae-admin/export-csv.html:120
+msgid "Rechercher des membres de l'AE :"
+msgstr "Search for AE members"
+
+#: campus/templates/campus/ae-admin/export-csv.html:129
+msgid "Laisser vide pour récupérer tous les membres."
+msgstr "Leave empty to retrieve all ithe members."
+
+#: campus/templates/campus/ae-admin/export-csv.html:141
+msgid "Exporter"
+msgstr "Export"
+
+#: campus/templates/campus/ae-admin/export-csv.html:145
+msgid "Résultats :"
+msgstr "Results:"
+
+#: campus/templates/campus/ae-admin/home.html:5
+msgid "Admin AE"
+msgstr "AE admin"
+
+#: campus/templates/campus/ae-admin/home.html:67
+msgid "Exporter vers un tableur"
+msgstr "Export to a spreadsheet"
+
+#: campus/templates/campus/ae-admin/home.html:72
+msgid "Importer depuis un tableur"
+msgstr "Import from a spreadsheet"
+
+#: campus/templates/campus/ae-admin/home.html:77
+msgid "Ajouter un administrateur AE"
+msgstr "Add an AE administrator"
+
+#: campus/templates/campus/ae-admin/home.html:82
+msgid "Supprimer un administrateur AE"
+msgstr "Remove an AE administrator"
+
+#: campus/templates/campus/ae-admin/home.html:203
+msgid "UID"
+msgstr "UID"
+
+#: campus/templates/campus/ae-admin/home.html:204
+msgid "Nom complet"
+msgstr "Full name"
+
+#: campus/templates/campus/ae-admin/home.html:207
+msgid "N° Adherent"
+msgstr "Membership N°"
+
+#: campus/templates/campus/ae-admin/home.html:208
+msgid "Type de Paiement"
+msgstr "Payment type"
+
+#: campus/templates/campus/ae-admin/home.html:209
+#: tresorerie/templates/tresorerie/choose_product.html:5
+#: tresorerie/templates/tresorerie/home.html:5
+#: tresorerie/templates/tresorerie/recap.html:5
+msgid "Paiement"
+msgstr "Payment"
+
+#: campus/templates/campus/ae-admin/home.html:210
+msgid "Dernière adhésion"
+msgstr "Last membership"
+
+#: campus/templates/campus/ae-admin/import-csv.html:17
+msgid "Importer depuis un Tableur"
+msgstr "Import from a spreadsheet"
+
+#: campus/templates/campus/ae-admin/import-csv.html:36
+msgid "Analyse en cours ..."
+msgstr "Ongoing analysis..."
+
+#: campus/templates/campus/ae-admin/import-csv.html:50
+msgid "Aucun CSV détecté"
+msgstr "No CSV detected"
+
+#: campus/templates/campus/ae-admin/import-csv.html:100
+msgid ""
+"Le fichier doit être au format .csv (séparateur: virgules) avec les colonnes "
+"suivantes :"
+msgstr ""
+"The file must be a .csv file (separator: commas) with the following columns:"
+
+#: campus/templates/campus/ae-admin/import-csv.html:102
+msgid ""
+"UID | Nom | Prénom | Formation | Campus | Numéro d'adhérent | Type de "
+"paiement | Montant du paiement | Date début | Date fin"
+msgstr ""
+"UID | Last name | First name | Curriculum | Campus | Membership number | "
+"Payment type | Payment amount | Start date | End date"
+
+#: campus/templates/campus/ae-admin/import-csv.html:106
+msgid "Importer un CSV"
+msgstr "Import a CSV"
+
+#: campus/templates/campus/ae-admin/import-csv.html:159
+msgid "ligne(s) ignorée(s)."
+msgstr "line(s) ignored."
+
+#: campus/templates/campus/ae-admin/import-csv.html:161
+msgid "Note: La première ligne est toujours ignorée."
+msgstr "Note: The first line is always ignored"
+
+#: campus/templates/campus/ae-admin/import-csv.html:164
+msgid "Légende:"
+msgstr "Legend:"
+
+#: campus/templates/campus/ae-admin/import-csv.html:167
+msgid "Autre valeur invalide"
+msgstr "Other value invalid"
+
+#: campus/templates/campus/ae-admin/import-csv.html:169
+msgid "Tout est bon"
+msgstr "All good"
+
+#: campus/templates/campus/ae-admin/import-csv.html:170
+msgid "En attente"
+msgstr "Waiting"
+
+#: campus/templates/campus/ae-admin/import-csv.html:180
+msgid "entrées"
+msgstr "entries"
+
+#: campus/templates/campus/clubs/detail.html:6
+msgid "Mes clubs"
+msgstr "My clubs"
+
+#: campus/templates/campus/clubs/detail.html:25
+msgid "M'inscrire"
+msgstr "Join"
+
+#: campus/templates/campus/clubs/detail.html:29
+msgid "Me désinscrire"
+msgstr "Leave"
+
+#: campus/templates/campus/clubs/detail.html:56
+msgid "Président :"
+msgstr "President:"
+
+#: campus/templates/campus/clubs/detail.html:62
+msgid "Aucun président renseigné"
+msgstr "No president found"
+
+#: campus/templates/campus/clubs/detail.html:65
+msgid "Description :"
+msgstr "Description:"
+
+#: campus/templates/campus/clubs/detail.html:66
+msgid "Mailing List :"
+msgstr "Mailing List:"
+
+#: campus/templates/campus/clubs/detail.html:67
+msgid "Site Web :"
+msgstr "Web site:"
+
+#: campus/templates/campus/clubs/detail.html:70
+#: campus/templates/campus/clubs/list.html:44
+#: campus/templates/campus/clubs/list.html:89
+#: campus/templates/campus/clubs/list.html:136
+msgid "éditer"
+msgstr "edit"
+
+#: campus/templates/campus/clubs/detail.html:78
 msgid "Membres"
 msgstr "Members"
 
-#: campus/templates/campus/clubs/detail.html:61
-#: campus/templates/campus/whoswho/userDetails.html:67
-#: campus/templates/campus/whoswho/userDetails.html:87
-#: campus/templates/campus/whoswho/userHome.html:154
-#: campus/templates/campus/whoswho/userHome.html:163
-msgid "Supprimer"
-msgstr "Delete"
+#: campus/templates/campus/clubs/detail.html:103
+msgid "Ajouter un président"
+msgstr "Add a president"
 
-#: campus/templates/campus/clubs/list.html:16
-msgid "Assos"
+#: campus/templates/campus/clubs/detail.html:108
+msgid "Attention, cette action n'est pas sans conséquences."
+msgstr "Beware, this action is not without consequences."
+
+#: campus/templates/campus/clubs/detail.html:109
+msgid "Le président actuel sera destitué"
+msgstr "The current president will be dismissed"
+
+#: campus/templates/campus/clubs/detail.html:110
+msgid "Assurez-vous de renseigner la bonne personne."
+msgstr "Be sure to fill in the right person."
+
+#: campus/templates/campus/clubs/detail.html:111
+msgid "En cas d'erreur"
+msgstr "In case of an error"
+
+#: campus/templates/campus/clubs/detail.html:111
+msgid "contactez un administrateur ResEl"
+msgstr "contact a ResEl Admin"
+
+#: campus/templates/campus/clubs/detail.html:115
+msgid "Entrer la personne à ajouter en tant que président à ce club:"
+msgstr "Enter the person to be added as the president of this club:"
+
+#: campus/templates/campus/clubs/detail.html:122
+#: campus/templates/campus/clubs/new_club.html:70
+#: devices/templates/devices/edit_device.html:21
+msgid "Confirmer"
+msgstr "Confirm"
+
+#: campus/templates/campus/clubs/detail.html:123
+#: campus/templates/campus/clubs/detail.html:146
+#: campus/templates/campus/clubs/detail.html:176
+#: campus/templates/campus/rooms/booking_detail.html:171
+#: campus/templates/campus/rooms/calendar.html:297
+#: campus/templates/campus/whoswho/userDetails.html:147
+#: campus/templates/campus/whoswho/userDetails.html:172
+#: campus/templates/campus/whoswho/userHome.html:234
+#: campus/templates/campus/whoswho/userHome.html:260
+msgid "Annuler"
+msgstr "Cancel"
+
+#: campus/templates/campus/clubs/detail.html:135
+msgid "Ajouter une Personne"
+msgstr "Add a person"
+
+#: campus/templates/campus/clubs/detail.html:138
+msgid "Entrer la personne à ajouter à ce club:"
+msgstr "Enter the person to be added to this club:"
+
+#: campus/templates/campus/clubs/detail.html:145
+#: campus/templates/campus/clubs/detail.html:175
+#: campus/templates/campus/whoswho/userDetails.html:146
+#: campus/templates/campus/whoswho/userDetails.html:171
+#: campus/templates/campus/whoswho/userHome.html:233
+#: campus/templates/campus/whoswho/userHome.html:259
+msgid "Ajouter"
+msgstr "Add"
+
+#: campus/templates/campus/clubs/detail.html:158
+msgid "Inscrire une personne à la mailing liste"
+msgstr "Add a person to the mailing list"
+
+#: campus/templates/campus/clubs/detail.html:163
+msgid ""
+"Attention, cette option, n'est à utilser que pour les membres non inscrits "
+"au ResEl"
+msgstr ""
+"Caution, this option is only to be used for members who are not registered "
+"to the ResEl."
+
+#: campus/templates/campus/clubs/detail.html:164
+msgid ""
+"Ajouter un utilisateur ResEl inscrit déjà automatiquement à la mailing list"
+msgstr "Add a ResEl user already automatically registered to the mailing list"
+
+#: campus/templates/campus/clubs/detail.html:168
+msgid "Entrer l'email à abonner:"
+msgstr "Enter the email to be subscribed:"
+
+#: campus/templates/campus/clubs/detail.html:190
+msgid "Recommencer"
+msgstr "Start again"
+
+#: campus/templates/campus/clubs/detail.html:191
+msgid "Fermer"
+msgstr "Close"
+
+#: campus/templates/campus/clubs/detail.html:239
+#: campus/templates/campus/clubs/detail.html:261
+msgid "Ajout terminé avec succès"
+msgstr "Subscription completed successfully"
+
+#: campus/templates/campus/clubs/list.html:18
+msgid "Associations"
 msgstr "Associations"
 
-#: campus/templates/campus/clubs/list.html:57
+#: campus/templates/campus/clubs/list.html:37
+#: campus/templates/campus/clubs/list.html:38
+#: campus/templates/campus/clubs/list.html:82
+#: campus/templates/campus/clubs/list.html:83
+#: campus/templates/campus/clubs/list.html:129
+#: campus/templates/campus/clubs/list.html:130
+msgid "non renseigné"
+msgstr "unknown"
+
+#: campus/templates/campus/clubs/list.html:41
+#: campus/templates/campus/clubs/list.html:86
+#: campus/templates/campus/clubs/list.html:133
+msgid "info"
+msgstr "info"
+
+#: campus/templates/campus/clubs/list.html:47
+#: campus/templates/campus/clubs/list.html:92
+#: campus/templates/campus/clubs/list.html:139
+msgid "Vous êtes membre"
+msgstr "You are a member"
+
+#: campus/templates/campus/clubs/list.html:58
 msgid "Aucune association trouvée"
-msgstr ""
+msgstr "No association found"
 
 #: campus/templates/campus/clubs/list.html:63
-#: campus/templates/campus/rooms/room_management.html:28
-#: campus/templates/campus/whoswho/userDetails.html:44
+#: campus/templates/campus/rooms/room_management.html:40
+#: campus/templates/campus/whoswho/userDetails.html:100
 msgid "Clubs"
 msgstr "Clubs"
 
-#: campus/templates/campus/clubs/list.html:104
+#: campus/templates/campus/clubs/list.html:103 campus/views/views_clubs.py:371
+#: campus/views/views_clubs.py:491
 msgid "Aucun club trouvé"
 msgstr "No club found"
 
-#: campus/templates/campus/clubs/list.html:110
-msgid "Listes"
-msgstr "Lists"
+#: campus/templates/campus/clubs/list.html:107
+msgid "Listes de campagne"
+msgstr "Campaign list"
 
 #: campus/templates/campus/clubs/list.html:151
 msgid "Aucune liste trouvée"
 msgstr "No list found"
 
-#: campus/templates/campus/clubs/list.html:162
-msgid "Ajouter un président"
-msgstr "Add a president"
-
-#: campus/templates/campus/clubs/list.html:174
-msgid "Entrer la personne à ajouter en tant que président à ce club:"
-msgstr ""
-
-#: campus/templates/campus/clubs/list.html:181
-#: campus/templates/campus/clubs/list.html:204
-#: campus/templates/campus/clubs/list.html:227
-#: campus/templates/campus/whoswho/userDetails.html:124
-#: campus/templates/campus/whoswho/userDetails.html:149
-#: campus/templates/campus/whoswho/userHome.html:219
-#: campus/templates/campus/whoswho/userHome.html:245
-msgid "Ajouter"
-msgstr "Add"
-
-#: campus/templates/campus/clubs/list.html:182
-#: campus/templates/campus/clubs/list.html:205
-#: campus/templates/campus/clubs/list.html:228
-#: campus/templates/campus/whoswho/userDetails.html:125
-#: campus/templates/campus/whoswho/userDetails.html:150
-#: campus/templates/campus/whoswho/userHome.html:220
-#: campus/templates/campus/whoswho/userHome.html:246
-msgid "Annuler"
-msgstr "Cancel"
-
-#: campus/templates/campus/clubs/list.html:194
-msgid "Ajouter une Personne"
-msgstr "Add a person"
-
-#: campus/templates/campus/clubs/list.html:197
-msgid "Entrer la personne à ajouter à ce club:"
-msgstr ""
-
-#: campus/templates/campus/clubs/list.html:217
-msgid "Désinscrire une personne"
-msgstr "Unsubscribe a user"
-
-#: campus/templates/campus/clubs/list.html:220
-msgid "Entrer la personne à ajouter à désinscrire de ce club:"
-msgstr ""
-
-#: campus/templates/campus/clubs/new_club.html:15
-#, fuzzy
-#| msgid "Gérer mes clubs et associations"
+#: campus/templates/campus/clubs/new_club.html:21
 msgid "Editer un club ou une association"
 msgstr "Manage a club or an association"
 
-#: campus/templates/campus/clubs/new_club.html:16
-#, fuzzy
-#| msgid "Gérer mes clubs et associations"
+#: campus/templates/campus/clubs/new_club.html:22
 msgid "Nouveau club ou association"
 msgstr "New club or association"
 
-#: campus/templates/campus/clubs/new_club.html:64
-msgid "Confirmer"
-msgstr "Confirm"
+#: campus/templates/campus/gestion/manage_modo.html:5
+msgid "Gestion des Modérateurs campus"
+msgstr "Campus moderators management"
 
-#: campus/templates/campus/rooms/booking.html:44
+#: campus/templates/campus/gestion/manage_modo.html:18
+#: campus/templates/campus/gestion/manage_modo.html:58
+msgid "Ajouter un modérateur campus"
+msgstr "Add a campus moderator"
+
+#: campus/templates/campus/gestion/manage_modo.html:67
+msgid "Ajouter le modérateur campus"
+msgstr "Add the campus moderator"
+
+#: campus/templates/campus/home.html:27
+msgid "CAMPUS BRESTOIS"
+msgstr "BREST CAMPUS"
+
+#: campus/templates/campus/home.html:34
+msgid "Rédiger un mail"
+msgstr "Write an email"
+
+#: campus/templates/campus/home.html:35
+msgid "Nouvel événement"
+msgstr "New event"
+
+#: campus/templates/campus/home.html:36
+msgid "Nouveau club"
+msgstr "New club"
+
+#: campus/templates/campus/home.html:37
+msgid "Annuaire du campus"
+msgstr "Campus directory"
+
+#: campus/templates/campus/home.html:45
+msgid "DERNIÈRES PUBLICATIONS CAMPUS"
+msgstr "LAST CAMPUS PUBLICATIONS"
+
+#: campus/templates/campus/home.html:57
+#: campus/templates/campus/mails/display.html:19
+msgid "publié par"
+msgstr "published by"
+
+#: campus/templates/campus/home.html:62
+#: pages/templates/pages/home/home.html:213
+msgid "Pas de mail campus à l'horizon"
+msgstr "No email in sight"
+
+#: campus/templates/campus/home.html:68
+msgid "ANNIVERSAIRES"
+msgstr "BIRTHDAYS"
+
+#: campus/templates/campus/home.html:94
+msgid "Aucun anniversaire aujourd'hui"
+msgstr "No birthday today"
+
+#: campus/templates/campus/home.html:111
+msgid "PROCHAINS ÉVÉNEMENTS"
+msgstr "UPCOMING EVENTS"
+
+#: campus/templates/campus/home.html:136
+#: pages/templates/pages/home/home.html:181
+msgid "Pas d'événements à l'horizon"
+msgstr "No event in sight"
+
+#: campus/templates/campus/mails/display.html:5
+msgid "Mails campus"
+msgstr "Campus emails"
+
+#: campus/templates/campus/mails/need_moderation.html:5
+#: campus/templates/campus/mails/need_moderation.html:15
+msgid "Modération des mails campus"
+msgstr "Moderation of campus emails"
+
+#: campus/templates/campus/mails/need_moderation.html:23
+msgid "Expéditeur"
+msgstr "Sender"
+
+#: campus/templates/campus/mails/need_moderation.html:24
+msgid "Sujet"
+msgstr "Subject"
+
+#: campus/templates/campus/mails/need_moderation.html:25
+msgid "Reçu le"
+msgstr "Received"
+
+#: campus/templates/campus/mails/need_moderation.html:26
+msgid "Rejeter"
+msgstr "Reject"
+
+#: campus/templates/campus/rooms/booking_detail.html:20
+msgid "Événement"
+msgstr "Event"
+
+#: campus/templates/campus/rooms/booking_detail.html:31
+msgid "De"
+msgstr "From"
+
+#: campus/templates/campus/rooms/booking_detail.html:31
+msgid "à"
+msgstr "to"
+
+#: campus/templates/campus/rooms/booking_detail.html:54
+#: campus/templates/campus/rooms/calendar.html:180
+msgid "Ajouter une réservation"
+msgstr "Add a booking"
+
+#: campus/templates/campus/rooms/booking_detail.html:85
+#: campus/templates/campus/rooms/calendar.html:211
 msgid "Maintenez la touche controle pour sélectionner plusieurs salles"
-msgstr ""
+msgstr "Hold down the control key to select multiple rooms"
+
+#: campus/templates/campus/rooms/booking_detail.html:162
+#: campus/templates/campus/rooms/calendar.html:288
+msgid "Réserver"
+msgstr "Book"
 
 #: campus/templates/campus/rooms/room_form.html:5
-#, fuzzy
-#| msgid "Ajout de machine"
 msgid "Ajouter une salle"
 msgstr "Add a room"
 
-#: campus/templates/campus/rooms/room_form.html:70
+#: campus/templates/campus/rooms/room_form.html:74
 msgid ""
 "ne pas remplir à la main: utilisez le formulaire ci-dessus (Chercher un club)"
-msgstr ""
+msgstr "do not fill in by hand: use the form above (Find a club)"
 
 #: campus/templates/campus/rooms/room_management.html:6
 msgid "Gérer les salles"
-msgstr "Manage rooms"
+msgstr "Manage the rooms"
 
-#: campus/templates/campus/rooms/room_management.html:22
+#: campus/templates/campus/rooms/room_management.html:34
 msgid "Mailing List"
 msgstr "Mailing List"
 
-#: campus/templates/campus/rooms/room_management.html:25
+#: campus/templates/campus/rooms/room_management.html:37
 msgid "Privée"
 msgstr "Private"
 
-#: campus/templates/campus/rooms/room_management.html:31
+#: campus/templates/campus/rooms/room_management.html:43
 msgid "Administration"
 msgstr "Administration"
 
-#: campus/templates/campus/rooms/room_management.html:43
+#: campus/templates/campus/rooms/room_management.html:55
 msgid "Éxtérieur"
 msgstr "Outside"
 
@@ -531,287 +1002,288 @@ msgstr "Outside"
 msgid "Anniversaires"
 msgstr "Birthdays"
 
-#: campus/templates/campus/whoswho/birthdayList.html:21
+#: campus/templates/campus/whoswho/birthdayList.html:24
 msgid "Aujourd'hui on fête l'anniversaire de:"
-msgstr ""
+msgstr "Today we celebrate the birthday of:"
 
-#: campus/templates/campus/whoswho/searchUsers.html:22
+#: campus/templates/campus/whoswho/searchUsers.html:25
 msgid "Résultats de la recherche"
 msgstr "Search results"
 
-#: campus/templates/campus/whoswho/userDetails.html:30
-#: campus/templates/campus/whoswho/userDetails.html:65
-#: campus/templates/campus/whoswho/userDetails.html:85
+#: campus/templates/campus/whoswho/userDetails.html:35
+#: campus/templates/campus/whoswho/userDetails.html:57
+#: campus/templates/campus/whoswho/userDetails.html:82
 msgid "Promo"
-msgstr "Promo"
+msgstr "Year group"
 
-#: campus/templates/campus/whoswho/userDetails.html:49
-msgid " n'est membre d'aucun club"
-msgstr ""
-
-#: campus/templates/campus/whoswho/userDetails.html:58
+#: campus/templates/campus/whoswho/userDetails.html:50
 msgid "Parrains"
-msgstr "Godfathers"
+msgstr "Sponsors"
 
-#: campus/templates/campus/whoswho/userDetails.html:74
+#: campus/templates/campus/whoswho/userDetails.html:69
 msgid " n'a pas de parrain"
-msgstr " has no godfather"
+msgstr " has no sponsor"
 
-#: campus/templates/campus/whoswho/userDetails.html:78
+#: campus/templates/campus/whoswho/userDetails.html:75
 msgid "Filleuls"
-msgstr ""
+msgstr "Sponsorees"
 
 #: campus/templates/campus/whoswho/userDetails.html:94
 msgid " n'a pas de filleul"
-msgstr ""
+msgstr " has no godchild"
 
-#: campus/templates/campus/whoswho/userDetails.html:114
-#: campus/templates/campus/whoswho/userHome.html:209
+#: campus/templates/campus/whoswho/userDetails.html:119
+msgid " n'est membre d'aucun club"
+msgstr " is not a member of any club"
+
+#: campus/templates/campus/whoswho/userDetails.html:136
+#: campus/templates/campus/whoswho/userHome.html:223
 msgid "Ajouter un filleul"
-msgstr ""
-
-#: campus/templates/campus/whoswho/userDetails.html:117
-#: campus/templates/campus/whoswho/userHome.html:212
-msgid "Entrer le nom du filleul que vous souhaitez ajouter :"
-msgstr ""
+msgstr "Add a godson"
 
 #: campus/templates/campus/whoswho/userDetails.html:139
-#: campus/templates/campus/whoswho/userHome.html:235
-#, fuzzy
-#| msgid "Ajout de machine"
+#: campus/templates/campus/whoswho/userHome.html:226
+msgid "Entrer le nom du filleul que vous souhaitez ajouter :"
+msgstr "Enter the name of the sponsoree you wish to add:"
+
+#: campus/templates/campus/whoswho/userDetails.html:161
+#: campus/templates/campus/whoswho/userHome.html:249
 msgid "Ajouter un parrain"
-msgstr "Add a godfather"
+msgstr "Add a sponsor"
 
-#: campus/templates/campus/whoswho/userDetails.html:142
-#: campus/templates/campus/whoswho/userHome.html:238
+#: campus/templates/campus/whoswho/userDetails.html:164
+#: campus/templates/campus/whoswho/userHome.html:252
 msgid "Entrer le nom du parrain que vous souhaitez ajouter :"
-msgstr ""
+msgstr "Enter the name of the sponsor you wish to add:"
 
-#: campus/templates/campus/whoswho/userHome.html:45
+#: campus/templates/campus/whoswho/userHome.html:49
 #: gestion_personnes/forms.py:156
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:31
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:33
 msgid "Prénom"
 msgstr "First name"
 
-#: campus/templates/campus/whoswho/userHome.html:51
+#: campus/templates/campus/whoswho/userHome.html:55
 msgid "Photo"
 msgstr "Photo"
 
-#: campus/templates/campus/whoswho/userHome.html:71
+#: campus/templates/campus/whoswho/userHome.html:75
 msgid "Email"
 msgstr "Email"
 
-#: campus/templates/campus/whoswho/userHome.html:86
+#: campus/templates/campus/whoswho/userHome.html:90
 #: gestion_personnes/forms.py:60 gestion_personnes/forms.py:204
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:74
 msgid "Bâtiment"
 msgstr "Building"
 
-#: campus/templates/campus/whoswho/userHome.html:93
+#: campus/templates/campus/whoswho/userHome.html:97
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:83
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:93
-#, fuzzy
-#| msgid "N° de Chambre"
 msgid "Chambre"
-msgstr "Room no."
+msgstr "Room"
 
-#: campus/templates/campus/whoswho/userHome.html:101
-#, fuzzy
-#| msgid "Mot de passe"
+#: campus/templates/campus/whoswho/userHome.html:105
 msgid "Date de naissance"
-msgstr "Password"
+msgstr "Date of birth"
 
-#: campus/templates/campus/whoswho/userHome.html:108
-#: tresorerie/templates/tresorerie/recap.html:21
+#: campus/templates/campus/whoswho/userHome.html:112
+#: tresorerie/templates/tresorerie/recap.html:25
 #: tresorerie/templates/tresorerie/transaction_detail.html:19
-#, fuzzy
-#| msgid "Adresse MAC"
 msgid "Adresse"
 msgstr "Address"
 
-#: campus/templates/campus/whoswho/userHome.html:122
+#: campus/templates/campus/whoswho/userHome.html:126
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:117
-#, fuzzy
-#| msgid "Modifier mes informations personnelles"
 msgid "Valider ces informations"
-msgstr "Validate theses informations"
+msgstr "Validate this information"
 
-#: campus/views/views_clubs.py:94 campus/views/views_clubs.py:188
-#: campus/views/views_clubs.py:347 campus/views/views_mails.py:71
+#: campus/views/views_ae_admin.py:280
+msgid "Cet utilisateur est déjà admin"
+msgstr "This user is already an admin"
+
+#: campus/views/views_ae_admin.py:303
+msgid "Cet utilisateur n'est pas admin"
+msgstr "This user is not an admin"
+
+#: campus/views/views_ae_admin.py:306
+msgid "Vous ne pouvez pas vous supprimer                de la liste"
+msgstr "You cannot remove yourself from the list"
+
+#: campus/views/views_clubs.py:71
+msgid "Ce club n'existe pas"
+msgstr "This club doesn't exist"
+
+#: campus/views/views_clubs.py:128 campus/views/views_clubs.py:157
+msgid "Vous n'êtes pas modérateur campus ou président(e) de ce club"
+msgstr "You are not a campus moderator or president of this club"
+
+#: campus/views/views_clubs.py:192 campus/views/views_clubs.py:428
+#: campus/views/views_mails.py:75
 msgid "Vous n'êtes pas modérateur campus"
 msgstr "You are not a campus moderator"
 
-#: campus/views/views_clubs.py:130 campus/views/views_clubs.py:159
-msgid "Vous n'êtes pas modérateur campus ou président(e) de ce club"
-msgstr ""
-
-#: campus/views/views_clubs.py:248
+#: campus/views/views_clubs.py:251
 msgid "Aucun club ne correspond à votre recherche"
-msgstr ""
+msgstr "No club corresponds to your search"
 
-#: campus/views/views_clubs.py:292 campus/views/views_clubs.py:393
+#: campus/views/views_clubs.py:374
 msgid "Vous n'êtes pas modérateur campus ou président de ce club"
-msgstr ""
+msgstr "You are not a campus moderator or president of this club"
 
-#: campus/views/views_clubs.py:304
-#, fuzzy
-#| msgid "Inscription terminée"
-msgid "Inscription terminée avec succès"
-msgstr "Registration completed"
+#: campus/views/views_clubs.py:380
+msgid "L'email semble être invalide, si ce n'est pas le cas contactez nous !"
+msgstr "The email seems invalid, if it is not the case, contact us!"
 
-#: campus/views/views_clubs.py:320
+#: campus/views/views_clubs.py:400
 msgid ""
-"Le système a déjà trouvé le membre correspondant comme étant inscrit, "
-"inscription impossible."
+"Une erreure s'est produite,                 mais ce n'est pas votre faute, "
+"si le problème persiste, contactez nous."
 msgstr ""
+"An error occured, but it is not your fault, if the problem persists, contact "
+"us."
 
-#: campus/views/views_clubs.py:357
+#: campus/views/views_clubs.py:403
+msgid "Inscription terminée avec succès !"
+msgstr "Registration completed successfully!"
+
+#: campus/views/views_clubs.py:441
 msgid "Le président viens d'être ajouté"
-msgstr ""
+msgstr "The president has been added"
 
-#: campus/views/views_clubs.py:359
-msgid "Cette personne est déjà président(e)"
-msgstr ""
+#: campus/views/views_clubs.py:500
+msgid "L'utilisateur n'existe pas"
+msgstr "The user does not exist"
 
-#: campus/views/views_clubs.py:415
-#, fuzzy
-#| msgid "Inscription terminée"
-msgid "Désinscription terminée avec succès"
-msgstr "Registration completed"
-
-#: campus/views/views_clubs.py:417
+#: campus/views/views_clubs.py:512
 msgid ""
-"Le système n'a pas trouvé de personne à désinscrire dans la liste des membres"
+"Cette personne ne fait pas partie du club ou                     alors vous "
+"n'êtes pas autorisé à faire ça"
 msgstr ""
+"This person does not belong to the club or you are not allowed to do that"
 
-#: campus/views/views_mails.py:54
+#: campus/views/views_clubs.py:516
+msgid "Désinscription terminée avec succès"
+msgstr "Unsubscription completed successfully"
+
+#: campus/views/views_gestion.py:51
+msgid ""
+" n'est pas un uid valide ou n'existe pas.                     Pensez à "
+"utiliser l'autocomplétion."
+msgstr ""
+"is not a valid uid or does not exist. Consider using the autocompletion"
+
+#: campus/views/views_mails.py:58
 msgid "Votre mail sera traité par les modérateurs."
-msgstr ""
+msgstr "Your email will be handled by the moderators."
 
-#: campus/views/views_mails.py:112
+#: campus/views/views_mails.py:116
 msgid ""
 "E-mail modéré, n'oubliez pas d'aller faire la double modération sur https://"
 "mlistes.resel.fr !"
 msgstr ""
+"Email moderated, do not forget to double-moderate it on https://mlistes."
+"resel.fr!"
 
-#: campus/views/views_rooms.py:49
-#, fuzzy
-#| msgid ""
-#| "Vous devez vous trouver sur le réseau du ResEl pour accéder à cette page."
+#: campus/views/views_rooms.py:50
 msgid "Vous devez être connecté pour accéder à cette page"
-msgstr "You must be on ResEl network to access that page."
+msgstr "You must be logged in to access this page."
 
-#: campus/views/views_rooms.py:52 campus/views/views_rooms.py:206
-#: campus/views/views_rooms.py:220
-#, fuzzy
-#| msgid "Vous n'êtes pas autorisé à accéder à cette page."
+#: campus/views/views_rooms.py:53
 msgid "Vous n'avez pas accès à cette page"
-msgstr "You are not authorized to access this page."
+msgstr "You do not have access to this page."
 
-#: campus/views/views_rooms.py:192 campus/views/views_rooms.py:250
+#: campus/views/views_rooms.py:218
 msgid "Opération réussie"
-msgstr ""
+msgstr "Operation successful"
 
-#: campus/views/views_rooms.py:239
+#: campus/views/views_rooms.py:250
 msgid "Vous ne pouvez pas modifier cette réservation"
-msgstr ""
+msgstr "You cannot modify this booking"
 
-#: campus/views/views_rooms.py:264
+#: campus/views/views_rooms.py:281
 msgid "Vous ne pouvez pas supprimer cette réservation"
-msgstr ""
+msgstr "You cannot delete this booking"
 
-#: campus/whoswho/views.py:132 gestion_personnes/views.py:195
-#, fuzzy
-#| msgid "Alias déjà utilisé"
+#: campus/whoswho/views.py:134 gestion_personnes/views.py:192
 msgid "Addresse e-mail déjà utilisée"
-msgstr "Nickname is already taken"
-
-#: campus/whoswho/views.py:168
-#, fuzzy
-#| msgid "Vos actions sont limitées"
-msgid "Vos Informations ont été mises à jour"
-msgstr "You won't be able to manage everything"
+msgstr "Email address already taken"
 
 #: campus/whoswho/views.py:170
-#, fuzzy
-#| msgid "Modifier mes informations personnelles"
-msgid "Une ou plusieurs informations sont invalides"
-msgstr "Modify personal information"
+msgid "Vos Informations ont été mises à jour"
+msgstr "Your information has been updated"
 
-#: campus/whoswho/views.py:190
-msgid "La recherche n'a rien retourné"
-msgstr ""
+#: campus/whoswho/views.py:172
+msgid "Une ou plusieurs informations sont invalides"
+msgstr "The information is invalid"
 
 #: campus/whoswho/views.py:192
-msgid "Le contenue de la recherche ne peut être vide."
-msgstr ""
+msgid "La recherche n'a rien retourné"
+msgstr "The search did not return anything"
 
-#: campus/whoswho/views.py:264
-#, fuzzy
-#| msgid "La page que vous cherchez n'existe pas."
+#: campus/whoswho/views.py:194
+msgid "Le contenu de la recherche ne peut être vide."
+msgstr "The search query cannot be empty"
+
+#: campus/whoswho/views.py:265
 msgid "L'utilisateur que vous souhaitez ajouter n'existe pas."
-msgstr "The page you are looking for does not exist."
+msgstr "The user you wish to add does not exist"
 
-#: campus/whoswho/views.py:268
+#: campus/whoswho/views.py:269
 msgid "Vous ne pouvez pas vous ajouter vous même."
-msgstr ""
+msgstr "You cannot add yourself"
 
-#: campus/whoswho/views.py:279
+#: campus/whoswho/views.py:280
 msgid "Votre filleul est correctement enregistré."
-msgstr ""
+msgstr "Your sponsoree is correctly registered"
 
-#: campus/whoswho/views.py:306
-#, fuzzy
-#| msgid "La page que vous cherchez n'existe pas."
+#: campus/whoswho/views.py:307
 msgid "L'utilisateur que vous souhaitez supprimer n'existe pas"
-msgstr "The page you are looking for does not exist."
+msgstr "The user you wish to remove does not exist"
 
-#: campus/whoswho/views.py:317
+#: campus/whoswho/views.py:318
 msgid "La modification a été effectuée avec succès"
-msgstr ""
+msgstr "The modification has been done successfully"
 
-#: devices/forms.py:18
-msgid "Alias de la machine"
-msgstr "Device nickname"
+#: devices/forms.py:16 devices/templates/devices/list_devices.html:19
+msgid "Nom de la machine"
+msgstr "Device name"
 
-#: devices/forms.py:29
-msgid "Alias trop court (au moins 5 caractères)"
-msgstr "Nickname is too short (must be at least 5 characters long)"
+#: devices/forms.py:26
+msgid "Nom automatique"
+msgstr "Automatic name"
 
-#: devices/forms.py:31
-msgid "Alias trop long (au plus 20 caractères)"
-msgstr "Nickname is too long (must be shorter than 20 characters)"
+#: devices/forms.py:36
+msgid "Nom trop court (au moins 3 caractères)"
+msgstr "Name too short (at least 3 characters)"
 
-#: devices/forms.py:41
-msgid "Alias non conforme, seul les lettres, chiffres et - sont acceptés."
-msgstr "Invalid nickname, only letters, digits and - are accepted."
+#: devices/forms.py:38
+msgid "Nom trop long (au plus 20 caractères)"
+msgstr "Name too long (at most 20 characters)"
 
-#: devices/forms.py:50
-msgid "Alias non conforme, nous vous proposons un valide à la place."
-msgstr "Invalid nickname, here's a valid suggestion."
+#: devices/forms.py:47
+msgid "Nom non conforme, seuls les lettres, chiffres et tirets sont acceptés."
+msgstr "Invalid name, only letters, digits and dashes are accepted."
 
 #: devices/forms.py:55
-msgid "Alias déjà utilisé"
-msgstr "Nickname is already taken"
+msgid "Nom non conforme, nous vous proposons celui-ci à la place."
+msgstr "Invalid name, here's a valid suggestion."
 
-#: devices/forms.py:61
+#: devices/forms.py:63
 msgid "Adresse MAC de la machine"
 msgstr "Device MAC address"
 
-#: devices/forms.py:63
-#, fuzzy
-#| msgid "Alias de la machine"
+#: devices/forms.py:65
 msgid "Raison de la demande"
-msgstr "Reason"
+msgstr "Reason for the request"
 
-#: devices/forms.py:70
+#: devices/forms.py:72
 msgid "Adresse MAC non valide"
 msgstr "Invalid MAC address"
 
-#: devices/forms.py:91
+#: devices/forms.py:90
 msgid "Cette machine est déjà enregistrée sur notre réseau."
-msgstr "This device is already registered."
+msgstr "This device is already registered on our network."
 
 #: devices/templates/devices/add_device.html:5
 msgid "Ajout de machine"
@@ -822,8 +1294,6 @@ msgid "Ajouter une machine à votre compte"
 msgstr "Add a device to your account"
 
 #: devices/templates/devices/add_device.html:13
-#, fuzzy
-#| msgid "Nom de la machine"
 msgid "Nouvelle machine"
 msgstr "New device"
 
@@ -834,94 +1304,74 @@ msgid ""
 "                            du ResEl vous devez l'associer à votre compte.\n"
 "                        "
 msgstr ""
+"Your device is new on our network. In order to access the services of the "
+"ResEl, you have to link it to your account."
 
 #: devices/templates/devices/add_device.html:28
-#: gestion_personnes/templates/gestion_personnes/finalize_signup.html:35
 msgid "Inscrire ma machine"
 msgstr "Register my device"
 
 #: devices/templates/devices/add_device.html:29
-#: gestion_personnes/templates/gestion_personnes/finalize_signup.html:37
-#, fuzzy
-#| msgid "Inscription - Finalisation"
 msgid "Inscription veuillez patienter..."
 msgstr "Registration, please wait..."
 
 #: devices/templates/devices/bandwidth.html:5
 #: devices/templates/devices/bandwidth.html:13
-#: pages/templates/pages/home/home_logged.html:25
-#, fuzzy
-#| msgid "Voir ma consommation de bande passante"
 msgid "Consommation de bande passante"
 msgstr "Bandwidth usage"
 
 #: devices/templates/devices/edit_device.html:4
 msgid "Modifier une machine"
-msgstr "Modify my device"
+msgstr "Modify a device"
 
 #: devices/templates/devices/edit_device.html:10
 msgid "Modification de machine"
-msgstr "Modify my device"
-
-#: devices/templates/devices/edit_device.html:21
-#: devices/templates/devices/manual_add_device.html:36
-msgid "Envoyer votre demande"
-msgstr "Send your request"
+msgstr "Device modification"
 
 #: devices/templates/devices/list_devices.html:4
-#: devices/templates/devices/list_devices.html:10 templates/base.html:112
+#: devices/templates/devices/list_devices.html:10 templates/base.html:144
 msgid "Mes machines"
 msgstr "My devices"
 
 #: devices/templates/devices/list_devices.html:12
-#, fuzzy
-#| msgid "Ajout de machine"
 msgid "Ajouter une machine"
 msgstr "Add a device"
 
 #: devices/templates/devices/list_devices.html:20
-msgid "Alias"
-msgstr ""
-
-#: devices/templates/devices/list_devices.html:21
 msgid "Adresse MAC"
 msgstr "MAC address"
 
+#: devices/templates/devices/list_devices.html:21
+msgid "Authentification"
+msgstr "Authentication"
+
 #: devices/templates/devices/list_devices.html:22
-#, fuzzy
-#| msgid "Adresse MAC"
-msgid "Adresse IP"
-msgstr "IP address"
+msgid "Dernière authentification"
+msgstr "Last authentication"
 
-#: devices/templates/devices/list_devices.html:36
-msgid "Activée"
-msgstr ""
+#: devices/templates/devices/list_devices.html:23
+msgid "Consommation"
+msgstr "Usage"
 
-#: devices/templates/devices/list_devices.html:38
-msgid "Inactive"
-msgstr ""
+#: devices/templates/devices/list_devices.html:35
+msgid "Machine sans nom"
+msgstr "Unnamed device"
 
-#: devices/templates/devices/list_devices.html:40
-#, fuzzy
-#| msgid "Hors campus"
-msgid "Mauvais campus"
-msgstr "Wrong campus"
+#: devices/templates/devices/list_devices.html:47
+msgid "Inconnue"
+msgstr "Unknown"
 
-#: devices/templates/devices/list_devices.html:42 templates/base.html:165
-msgid "Erreur"
-msgstr "Error"
-
-#: devices/templates/devices/list_devices.html:54
-msgid "Vous n'avez enregistré aucune machine à votre nom."
-msgstr "You have registered no devices."
+#: devices/templates/devices/list_devices.html:59
+msgid "Aucune machine n'est attachée à votre compte."
+msgstr "No device is linked to your account."
 
 #: devices/templates/devices/manual_add_device.html:5
 msgid "Demande d'enregistrement de machine"
-msgstr ""
+msgstr "Machine registration request"
 
 #: devices/templates/devices/manual_add_device.html:14
 msgid "Demande d'enregistrement manuel de machine"
-msgstr ""
+msgstr "Manual device registration request"
 
 #: devices/templates/devices/manual_add_device.html:17
 msgid ""
@@ -938,91 +1388,1784 @@ msgid ""
 "                    </div>\n"
 "                "
 msgstr ""
+"\n"
+"                    <div class=\"alert alert-warning\" style=\"font-size: "
+"1.3em\">\n"
+"                        <strong><span class=\"fa fa-warning\"></span> "
+"Important : </strong>\n"
+"                        <strong>explain clearly</strong> why this device "
+"could not be added using the automated system (old phone, game console...) , "
+"otherwise <strong>the ResEl administrators may refuse to add the device</"
+"strong>.\n"
+"                    </div>\n"
+"                "
 
-#: devices/views.py:46
-msgid "Votre machine n'a pas besoin d'être ré-activée."
-msgstr "Your device does not need to be reactivated."
+#: devices/templates/devices/manual_add_device.html:36
+msgid "Envoyer votre demande"
+msgstr "Send your request"
 
-#: devices/views.py:62
-#, fuzzy
-#| msgid "Votre machine n'a pas besoin d'être ré-activée."
-msgid "Votre machine vient d'être réactivée."
-msgstr "Your device is reactivated."
-
-#: devices/views.py:117
-msgid ""
-"Votre machine est déjà enregistrée sur notre réseau. Si vous pensez que "
-"c'est une erreur n'hésitez pas à contactez un administrateur."
-msgstr ""
-
-#: devices/views.py:136
-msgid ""
-"Votre machine a bien été ajoutée. Veuillez ré-initialiser votre connexion en "
-"débranchant/rebranchant le câble ou en vous déconnectant/reconnectant au Wi-"
-"Fi ResEl Secure."
-msgstr ""
-"Your device has been registered successfully. Please reset your connection "
-"by unplugging/plugging your Ethernet cable or disconnect/reconnect to the Wi-"
-"Fi hostpot named \"ResEl Secure\"."
-
-#: devices/views.py:152
+#: devices/views.py:37
 msgid ""
 "Votre demande a été envoyée aux administrateurs. L'un d'eux vous contactera "
 "d'ici peu de temps."
-msgstr "Your request has been sent. An admin will contact you soon."
+msgstr "Your request has been sent. An administrator will contact you soon."
 
-#: devices/views.py:208 devices/views.py:237
-#, fuzzy
-#| msgid "Cette machine ne vous appartient pas."
+#: devices/views.py:89 devices/views.py:106
 msgid "Cette machine n'existe pas ou ne vous appartient pas."
 msgstr "This device does not exit or does not belong to you."
 
-#: devices/views.py:245
-msgid "L'alias de la machine a bien été modifié."
-msgstr "Device nickname has been modified successfully."
+#: devices/views.py:119
+msgid "Le nom de la machine a bien été modifié."
+msgstr "The name of the device has been modified successfully."
 
-#: fonctions/decorators.py:35
+#: devices/views.py:124
+msgid ""
+"Une erreur s'est produite lors de l'enregistrement. Veuillez réessayer plus "
+"tard"
+msgstr "An error occured while saving the changes. Please retry later."
+
+#: env/lib/python3.7/site-packages/ckeditor_uploader/forms.py:6
+msgid "Search files"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:5
+msgid "Select an image to embed"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:27
+msgid "Browse for the image you want, then click 'Embed Image' to continue..."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:29
+msgid ""
+"No images found. Upload images using the 'Image Button' dialog's 'Upload' "
+"tab."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:50
+msgid "Images in: "
+msgstr ""
+
+#: env/lib/python3.7/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:62
+#: env/lib/python3.7/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:80
+msgid "Embed Image"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:146
+msgid "Play Slideshow"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:147
+msgid "Pause Slideshow"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:148
+msgid "&lsaquo; Previous Photo"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:149
+msgid "Next Photo &rsaquo;"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:150
+msgid "Next &rsaquo;"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:151
+msgid "&lsaquo; Prev"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/_termui_impl.py:495
+#, python-brace-format
+msgid "{editor}: Editing failed"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/_termui_impl.py:499
+#, python-brace-format
+msgid "{editor}: Editing failed: {e}"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/_unicodefun.py:20
+msgid ""
+"Click will abort further execution because Python was configured to use "
+"ASCII as encoding for the environment. Consult https://click.palletsprojects."
+"com/unicode-support/ for mitigation steps."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/_unicodefun.py:56
+msgid ""
+"Additional information: on this system no suitable UTF-8 locales were "
+"discovered. This most likely requires resolving by reconfiguring the locale "
+"system."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/_unicodefun.py:65
+msgid ""
+"This system supports the C.UTF-8 locale which is recommended. You might be "
+"able to resolve your issue by exporting the following environment variables:"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/_unicodefun.py:75
+#, python-brace-format
+msgid ""
+"This system lists some UTF-8 supporting locales that you can pick from. The "
+"following suitable locales were discovered: {locales}"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/_unicodefun.py:93
+msgid ""
+"Click discovered that you exported a UTF-8 locale but the locale system "
+"could not pick up from it because it does not exist. The exported locale is "
+"{locale!r} but it is not supported."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/core.py:1104
+msgid "Aborted!"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/core.py:1288
+#: env/lib/python3.7/site-packages/click/decorators.py:435
+msgid "Show this message and exit."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/core.py:1317
+#: env/lib/python3.7/site-packages/click/core.py:1343
+#, python-brace-format
+msgid "(Deprecated) {text}"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/core.py:1360
+msgid "Options"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/core.py:1384
+#, python-brace-format
+msgid "Got unexpected extra argument ({args})"
+msgid_plural "Got unexpected extra arguments ({args})"
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/click/core.py:1399
+msgid "DeprecationWarning: The command {name!r} is deprecated."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/core.py:1616
+#, fuzzy
+#| msgid "Commentaires"
+msgid "Commands"
+msgstr "Comments"
+
+#: env/lib/python3.7/site-packages/click/core.py:1648
+msgid "Missing command."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/core.py:1726
+msgid "No such command {name!r}."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/core.py:2274
+msgid "Value must be an iterable."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/core.py:2294
+#, python-brace-format
+msgid "Takes {nargs} values but 1 was given."
+msgid_plural "Takes {nargs} values but {len} were given."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/click/core.py:2718
+#, python-brace-format
+msgid "env var: {var}"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/core.py:2741
+msgid "(dynamic)"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/core.py:2751
+#, python-brace-format
+msgid "default: {default}"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/core.py:2760
+msgid "required"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/decorators.py:339
+#, python-format
+msgid "%(prog)s, version %(version)s"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/decorators.py:404
+msgid "Show the version and exit."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/exceptions.py:43
+#: env/lib/python3.7/site-packages/click/exceptions.py:79
+#, fuzzy, python-brace-format
+#| msgid "Votre message"
+msgid "Error: {message}"
+msgstr "Your message"
+
+#: env/lib/python3.7/site-packages/click/exceptions.py:71
+#, python-brace-format
+msgid "Try '{command} {option}' for help."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/exceptions.py:120
+#, python-brace-format
+msgid "Invalid value: {message}"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/exceptions.py:122
+#, python-brace-format
+msgid "Invalid value for {param_hint}: {message}"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/exceptions.py:178
+msgid "Missing argument"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/exceptions.py:180
+msgid "Missing option"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/exceptions.py:182
+msgid "Missing parameter"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/exceptions.py:184
+#, python-brace-format
+msgid "Missing {param_type}"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/exceptions.py:191
+#, python-brace-format
+msgid "Missing parameter: {param_name}"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/exceptions.py:211
+#, python-brace-format
+msgid "No such option: {name}"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/exceptions.py:223
+#, python-brace-format
+msgid "Did you mean {possibility}?"
+msgid_plural "(Possible options: {possibilities})"
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/click/exceptions.py:261
+msgid "unknown error"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/exceptions.py:268
+msgid "Could not open file {filename!r}: {message}"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/parser.py:231
+msgid "Argument {name!r} takes {nargs} values."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/parser.py:413
+msgid "Option {name!r} does not take a value."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/parser.py:474
+msgid "Option {name!r} requires an argument."
+msgid_plural "Option {name!r} requires {nargs} arguments."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/click/shell_completion.py:314
+msgid "Shell completion is not supported for Bash versions older than 4.4."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/shell_completion.py:320
+msgid "Couldn't detect Bash version, shell completion is not supported."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/termui.py:161
+msgid "Repeat for confirmation"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/termui.py:178
+msgid "Error: The value you entered was invalid."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/termui.py:180
+#, fuzzy, python-brace-format
+#| msgid "Votre message"
+msgid "Error: {e.message}"
+msgstr "Your message"
+
+#: env/lib/python3.7/site-packages/click/termui.py:191
+msgid "Error: The two entered values do not match."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/termui.py:245
+msgid "Error: invalid input"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/termui.py:796
+msgid "Press any key to continue..."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/types.py:258
+#, python-brace-format
+msgid ""
+"Choose from:\n"
+"\t{choices}"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/types.py:290
+msgid "{value!r} is not {choice}."
+msgid_plural "{value!r} is not one of {choices}."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/click/types.py:380
+msgid "{value!r} does not match the format {format}."
+msgid_plural "{value!r} does not match the formats {formats}."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/click/types.py:402
+msgid "{value!r} is not a valid {number_type}."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/types.py:458
+#, python-brace-format
+msgid "{value} is not in the range {range}."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/types.py:599
+msgid "{value!r} is not a valid boolean."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/types.py:623
+msgid "{value!r} is not a valid UUID."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/types.py:801
+msgid "file"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/types.py:803
+msgid "directory"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/types.py:805
+msgid "path"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/types.py:851
+msgid "{name} {filename!r} does not exist."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/types.py:860
+msgid "{name} {filename!r} is a file."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/types.py:868
+msgid "{name} {filename!r} is a directory."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/types.py:876
+msgid "{name} {filename!r} is not writable."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/types.py:884
+msgid "{name} {filename!r} is not readable."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/click/types.py:951
+#, python-brace-format
+msgid "{len_type} values are required, but {len_value} was given."
+msgid_plural "{len_type} values are required, but {len_value} were given."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/django/contrib/messages/apps.py:7
+msgid "Messages"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/contrib/sitemaps/apps.py:7
+msgid "Site Maps"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/contrib/staticfiles/apps.py:9
+msgid "Static Files"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/contrib/syndication/apps.py:7
+msgid "Syndication"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/paginator.py:45
+msgid "That page number is not an integer"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/paginator.py:47
+msgid "That page number is less than 1"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/paginator.py:52
+msgid "That page contains no results"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:31
+msgid "Enter a valid value."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:102
+#: env/lib/python3.7/site-packages/django/forms/fields.py:658
+msgid "Enter a valid URL."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:157
+msgid "Enter a valid integer."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:168
+msgid "Enter a valid email address."
+msgstr ""
+
+#. Translators: "letters" means latin letters: a-z and A-Z.
+#: env/lib/python3.7/site-packages/django/core/validators.py:242
+msgid ""
+"Enter a valid 'slug' consisting of letters, numbers, underscores or hyphens."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:249
+msgid ""
+"Enter a valid 'slug' consisting of Unicode letters, numbers, underscores, or "
+"hyphens."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:258
+#: env/lib/python3.7/site-packages/django/core/validators.py:268
+#: env/lib/python3.7/site-packages/django/core/validators.py:290
+msgid "Enter a valid IPv4 address."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:275
+#: env/lib/python3.7/site-packages/django/core/validators.py:291
+msgid "Enter a valid IPv6 address."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:285
+#: env/lib/python3.7/site-packages/django/core/validators.py:289
+msgid "Enter a valid IPv4 or IPv6 address."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:319
+msgid "Enter only digits separated by commas."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:325
+#, python-format
+msgid "Ensure this value is %(limit_value)s (it is %(show_value)s)."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:357
+#, python-format
+msgid "Ensure this value is less than or equal to %(limit_value)s."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:366
+#, python-format
+msgid "Ensure this value is greater than or equal to %(limit_value)s."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:376
+#, python-format
+msgid ""
+"Ensure this value has at least %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this value has at least %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:391
+#, python-format
+msgid ""
+"Ensure this value has at most %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this value has at most %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:410
+#: env/lib/python3.7/site-packages/django/forms/fields.py:290
+#: env/lib/python3.7/site-packages/django/forms/fields.py:325
+msgid "Enter a number."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:412
+#, python-format
+msgid "Ensure that there are no more than %(max)s digit in total."
+msgid_plural "Ensure that there are no more than %(max)s digits in total."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:417
+#, python-format
+msgid "Ensure that there are no more than %(max)s decimal place."
+msgid_plural "Ensure that there are no more than %(max)s decimal places."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:422
+#, python-format
+msgid ""
+"Ensure that there are no more than %(max)s digit before the decimal point."
+msgid_plural ""
+"Ensure that there are no more than %(max)s digits before the decimal point."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:484
+#, python-format
+msgid ""
+"File extension '%(extension)s' is not allowed. Allowed extensions are: "
+"'%(allowed_extensions)s'."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/core/validators.py:536
+msgid "Null characters are not allowed."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/base.py:1165
+#: env/lib/python3.7/site-packages/django/forms/models.py:756
+msgid "and"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/base.py:1167
+#, python-format
+msgid "%(model_name)s with this %(field_labels)s already exists."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:104
+#, python-format
+msgid "Value %(value)r is not a valid choice."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:105
+msgid "This field cannot be null."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:106
+msgid "This field cannot be blank."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:107
+#, python-format
+msgid "%(model_name)s with this %(field_label)s already exists."
+msgstr ""
+
+#. Translators: The 'lookup_type' is one of 'date', 'year' or 'month'.
+#. Eg: "Title must be unique for pub_date year"
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:111
+#, python-format
+msgid ""
+"%(field_label)s must be unique for %(date_field_label)s %(lookup_type)s."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:128
+#, python-format
+msgid "Field of type: %(field_type)s"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:905
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1772
+msgid "Integer"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:909
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1770
+#, python-format
+msgid "'%(value)s' value must be an integer."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:984
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1850
+msgid "Big (8 byte) integer"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:996
+#, python-format
+msgid "'%(value)s' value must be either True or False."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:997
+#, python-format
+msgid "'%(value)s' value must be either True, False, or None."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:999
+msgid "Boolean (Either True or False)"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1040
+#, python-format
+msgid "String (up to %(max_length)s)"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1104
+msgid "Comma-separated integers"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1153
+#, python-format
+msgid ""
+"'%(value)s' value has an invalid date format. It must be in YYYY-MM-DD "
+"format."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1155
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1298
+#, python-format
+msgid ""
+"'%(value)s' value has the correct format (YYYY-MM-DD) but it is an invalid "
+"date."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1158
+msgid "Date (without time)"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1296
+#, python-format
+msgid ""
+"'%(value)s' value has an invalid format. It must be in YYYY-MM-DD HH:MM[:ss[."
+"uuuuuu]][TZ] format."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1300
+#, python-format
+msgid ""
+"'%(value)s' value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]]"
+"[TZ]) but it is an invalid date/time."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1304
+msgid "Date (with time)"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1452
+#, python-format
+msgid "'%(value)s' value must be a decimal number."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1454
+msgid "Decimal number"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1593
+#, python-format
+msgid ""
+"'%(value)s' value has an invalid format. It must be in [DD] [HH:[MM:]]ss[."
+"uuuuuu] format."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1596
+#, fuzzy
+#| msgid "Information"
+msgid "Duration"
+msgstr "Formation"
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1646
+#, fuzzy
+#| msgid "Ma boîte mail ResEl"
+msgid "Email address"
+msgstr "ResEl email"
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1669
+msgid "File path"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1735
+#, python-format
+msgid "'%(value)s' value must be a float."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1737
+msgid "Floating point number"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1866
+msgid "IPv4 address"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1897
+msgid "IP address"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1977
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1978
+#, python-format
+msgid "'%(value)s' value must be either None, True or False."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1980
+msgid "Boolean (Either True, False or None)"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2015
+msgid "Positive integer"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2028
+msgid "Positive small integer"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2042
+#, python-format
+msgid "Slug (up to %(max_length)s)"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2074
+msgid "Small integer"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2081
+msgid "Text"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2109
+#, python-format
+msgid ""
+"'%(value)s' value has an invalid format. It must be in HH:MM[:ss[.uuuuuu]] "
+"format."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2111
+#, python-format
+msgid ""
+"'%(value)s' value has the correct format (HH:MM[:ss[.uuuuuu]]) but it is an "
+"invalid time."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2114
+msgid "Time"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2240
+msgid "URL"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2262
+msgid "Raw binary data"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2312
+#, python-format
+msgid "'%(value)s' is not a valid UUID."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2314
+msgid "Universally unique identifier"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/files.py:222
+msgid "File"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/files.py:362
+msgid "Image"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/related.py:778
+#, python-format
+msgid "%(model)s instance with %(field)s %(value)r does not exist."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/related.py:780
+msgid "Foreign Key (type determined by related field)"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/related.py:1007
+msgid "One-to-one relationship"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/related.py:1057
+#, python-format
+msgid "%(from)s-%(to)s relationship"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/related.py:1058
+#, python-format
+msgid "%(from)s-%(to)s relationships"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/db/models/fields/related.py:1100
+msgid "Many-to-many relationship"
+msgstr ""
+
+#. Translators: If found as last label character, these punctuation
+#. characters will prevent the default label_suffix to be appended to the label
+#: env/lib/python3.7/site-packages/django/forms/boundfield.py:146
+msgid ":?.!"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:53
+msgid "This field is required."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:245
+msgid "Enter a whole number."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:396
+#: env/lib/python3.7/site-packages/django/forms/fields.py:1126
+msgid "Enter a valid date."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:420
+#: env/lib/python3.7/site-packages/django/forms/fields.py:1127
+msgid "Enter a valid time."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:442
+msgid "Enter a valid date/time."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:471
+msgid "Enter a valid duration."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:472
+#, python-brace-format
+msgid "The number of days must be between {min_days} and {max_days}."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:532
+msgid "No file was submitted. Check the encoding type on the form."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:533
+msgid "No file was submitted."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:534
+msgid "The submitted file is empty."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:536
+#, python-format
+msgid "Ensure this filename has at most %(max)d character (it has %(length)d)."
+msgid_plural ""
+"Ensure this filename has at most %(max)d characters (it has %(length)d)."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:539
+msgid "Please either submit a file or check the clear checkbox, not both."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:600
+msgid ""
+"Upload a valid image. The file you uploaded was either not an image or a "
+"corrupted image."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:762
+#: env/lib/python3.7/site-packages/django/forms/fields.py:852
+#: env/lib/python3.7/site-packages/django/forms/models.py:1270
+#, python-format
+msgid "Select a valid choice. %(value)s is not one of the available choices."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:853
+#: env/lib/python3.7/site-packages/django/forms/fields.py:968
+#: env/lib/python3.7/site-packages/django/forms/models.py:1269
+msgid "Enter a list of values."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:969
+msgid "Enter a complete value."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/fields.py:1185
+msgid "Enter a valid UUID."
+msgstr ""
+
+#. Translators: This is the default suffix added to form field labels
+#: env/lib/python3.7/site-packages/django/forms/forms.py:86
+msgid ":"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/forms.py:212
+#, python-format
+msgid "(Hidden field %(name)s) %(error)s"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/formsets.py:91
+msgid "ManagementForm data is missing or has been tampered with"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/formsets.py:338
+#, python-format
+msgid "Please submit %d or fewer forms."
+msgid_plural "Please submit %d or fewer forms."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/django/forms/formsets.py:345
+#, python-format
+msgid "Please submit %d or more forms."
+msgid_plural "Please submit %d or more forms."
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/django/forms/formsets.py:371
+#: env/lib/python3.7/site-packages/django/forms/formsets.py:373
+msgid "Order"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/formsets.py:375
+msgid "Delete"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/models.py:751
+#, python-format
+msgid "Please correct the duplicate data for %(field)s."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/models.py:755
+#, python-format
+msgid "Please correct the duplicate data for %(field)s, which must be unique."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/models.py:761
+#, python-format
+msgid ""
+"Please correct the duplicate data for %(field_name)s which must be unique "
+"for the %(lookup)s in %(date_field)s."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/models.py:770
+msgid "Please correct the duplicate values below."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/models.py:1091
+msgid "The inline value did not match the parent instance."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/models.py:1158
+msgid "Select a valid choice. That choice is not one of the available choices."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/models.py:1272
+#, python-format
+msgid "\"%(pk)s\" is not a valid value."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/utils.py:162
+#, python-format
+msgid ""
+"%(datetime)s couldn't be interpreted in time zone %(current_timezone)s; it "
+"may be ambiguous or it may not exist."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/widgets.py:395
+msgid "Clear"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/widgets.py:396
+msgid "Currently"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/widgets.py:397
+msgid "Change"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/widgets.py:709
+msgid "Unknown"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/widgets.py:710
+msgid "Yes"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/forms/widgets.py:711
+#, fuzzy
+#| msgid "Nom"
+msgid "No"
+msgstr "Name"
+
+#: env/lib/python3.7/site-packages/django/template/defaultfilters.py:788
+msgid "yes,no,maybe"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/template/defaultfilters.py:817
+#: env/lib/python3.7/site-packages/django/template/defaultfilters.py:834
+#, python-format
+msgid "%(size)d byte"
+msgid_plural "%(size)d bytes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/django/template/defaultfilters.py:836
+#, python-format
+msgid "%s KB"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/template/defaultfilters.py:838
+#, python-format
+msgid "%s MB"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/template/defaultfilters.py:840
+#, python-format
+msgid "%s GB"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/template/defaultfilters.py:842
+#, python-format
+msgid "%s TB"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/template/defaultfilters.py:844
+#, python-format
+msgid "%s PB"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dateformat.py:62
+msgid "p.m."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dateformat.py:63
+msgid "a.m."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dateformat.py:68
+msgid "PM"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dateformat.py:69
+msgid "AM"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dateformat.py:150
+msgid "midnight"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dateformat.py:152
+msgid "noon"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:6
+msgid "Monday"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:6
+msgid "Tuesday"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:6
+msgid "Wednesday"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:6
+msgid "Thursday"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:6
+msgid "Friday"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:7
+msgid "Saturday"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:7
+msgid "Sunday"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:10
+#, fuzzy
+#| msgid "Moyen"
+msgid "Mon"
+msgstr "average"
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:10
+msgid "Tue"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:10
+msgid "Wed"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:10
+msgid "Thu"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:10
+msgid "Fri"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:11
+#, fuzzy
+#| msgid "Statut"
+msgid "Sat"
+msgstr "Status"
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:11
+msgid "Sun"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:14
+msgid "January"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:14
+msgid "February"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:14
+msgid "March"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:14
+msgid "April"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:14
+msgid "May"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:14
+msgid "June"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:15
+msgid "July"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:15
+msgid "August"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:15
+msgid "September"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:15
+msgid "October"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:15
+msgid "November"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:16
+msgid "December"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:19
+msgid "jan"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:19
+msgid "feb"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:19
+msgid "mar"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:19
+msgid "apr"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:19
+msgid "may"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:19
+msgid "jun"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:20
+msgid "jul"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:20
+msgid "aug"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:20
+msgid "sep"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:20
+#, fuzzy
+#| msgid "Correct"
+msgid "oct"
+msgstr "ok"
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:20
+msgid "nov"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:20
+msgid "dec"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:23
+msgctxt "abbrev. month"
+msgid "Jan."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:24
+msgctxt "abbrev. month"
+msgid "Feb."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:25
+msgctxt "abbrev. month"
+msgid "March"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:26
+msgctxt "abbrev. month"
+msgid "April"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:27
+msgctxt "abbrev. month"
+msgid "May"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:28
+msgctxt "abbrev. month"
+msgid "June"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:29
+msgctxt "abbrev. month"
+msgid "July"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:30
+msgctxt "abbrev. month"
+msgid "Aug."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:31
+msgctxt "abbrev. month"
+msgid "Sept."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:32
+msgctxt "abbrev. month"
+msgid "Oct."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:33
+msgctxt "abbrev. month"
+msgid "Nov."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:34
+msgctxt "abbrev. month"
+msgid "Dec."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:37
+msgctxt "alt. month"
+msgid "January"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:38
+msgctxt "alt. month"
+msgid "February"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:39
+msgctxt "alt. month"
+msgid "March"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:40
+msgctxt "alt. month"
+msgid "April"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:41
+msgctxt "alt. month"
+msgid "May"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:42
+msgctxt "alt. month"
+msgid "June"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:43
+msgctxt "alt. month"
+msgid "July"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:44
+msgctxt "alt. month"
+msgid "August"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:45
+msgctxt "alt. month"
+msgid "September"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:46
+msgctxt "alt. month"
+msgid "October"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:47
+msgctxt "alt. month"
+msgid "November"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/dates.py:48
+msgctxt "alt. month"
+msgid "December"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/ipv6.py:8
+msgid "This is not a valid IPv6 address."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/text.py:68
+#, python-format
+msgctxt "String to return when truncating text"
+msgid "%(truncated_text)s…"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/text.py:237
+msgid "or"
+msgstr ""
+
+#. Translators: This string is used as a separator between list elements
+#: env/lib/python3.7/site-packages/django/utils/text.py:256
+#: env/lib/python3.7/site-packages/django/utils/timesince.py:83
+msgid ", "
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/utils/timesince.py:9
+#, python-format
+msgid "%d year"
+msgid_plural "%d years"
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/django/utils/timesince.py:10
+#, python-format
+msgid "%d month"
+msgid_plural "%d months"
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/django/utils/timesince.py:11
+#, python-format
+msgid "%d week"
+msgid_plural "%d weeks"
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/django/utils/timesince.py:12
+#, python-format
+msgid "%d day"
+msgid_plural "%d days"
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/django/utils/timesince.py:13
+#, python-format
+msgid "%d hour"
+msgid_plural "%d hours"
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/django/utils/timesince.py:14
+#, python-format
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: env/lib/python3.7/site-packages/django/utils/timesince.py:72
+msgid "0 minutes"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/csrf.py:110
+msgid "Forbidden"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/csrf.py:111
+msgid "CSRF verification failed. Request aborted."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/csrf.py:115
+msgid ""
+"You are seeing this message because this HTTPS site requires a 'Referer "
+"header' to be sent by your Web browser, but none was sent. This header is "
+"required for security reasons, to ensure that your browser is not being "
+"hijacked by third parties."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/csrf.py:120
+msgid ""
+"If you have configured your browser to disable 'Referer' headers, please re-"
+"enable them, at least for this site, or for HTTPS connections, or for 'same-"
+"origin' requests."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/csrf.py:124
+msgid ""
+"If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or "
+"including the 'Referrer-Policy: no-referrer' header, please remove them. The "
+"CSRF protection requires the 'Referer' header to do strict referer checking. "
+"If you're concerned about privacy, use alternatives like <a rel=\"noreferrer"
+"\" ...> for links to third-party sites."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/csrf.py:132
+msgid ""
+"You are seeing this message because this site requires a CSRF cookie when "
+"submitting forms. This cookie is required for security reasons, to ensure "
+"that your browser is not being hijacked by third parties."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/csrf.py:137
+msgid ""
+"If you have configured your browser to disable cookies, please re-enable "
+"them, at least for this site, or for 'same-origin' requests."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/csrf.py:142
+msgid "More information is available with DEBUG=True."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/generic/dates.py:41
+msgid "No year specified"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/generic/dates.py:61
+#: env/lib/python3.7/site-packages/django/views/generic/dates.py:111
+#: env/lib/python3.7/site-packages/django/views/generic/dates.py:208
+msgid "Date out of range"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/generic/dates.py:90
+msgid "No month specified"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/generic/dates.py:142
+msgid "No day specified"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/generic/dates.py:188
+msgid "No week specified"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/generic/dates.py:338
+#: env/lib/python3.7/site-packages/django/views/generic/dates.py:367
+#, python-format
+msgid "No %(verbose_name_plural)s available"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/generic/dates.py:589
+#, python-format
+msgid ""
+"Future %(verbose_name_plural)s not available because %(class_name)s."
+"allow_future is False."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/generic/dates.py:623
+#, python-format
+msgid "Invalid date string '%(datestr)s' given format '%(format)s'"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/generic/detail.py:54
+#, python-format
+msgid "No %(verbose_name)s found matching the query"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/generic/list.py:67
+msgid "Page is not 'last', nor can it be converted to an int."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/generic/list.py:72
+#, python-format
+msgid "Invalid page (%(page_number)s): %(message)s"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/generic/list.py:154
+#, python-format
+msgid "Empty list and '%(class_name)s.allow_empty' is False."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/static.py:40
+msgid "Directory indexes are not allowed here."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/static.py:42
+#, python-format
+msgid "\"%(path)s\" does not exist"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/static.py:80
+#, python-format
+msgid "Index of %(directory)s"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:6
+msgid "Django: the Web framework for perfectionists with deadlines."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:345
+#, python-format
+msgid ""
+"View <a href=\"https://docs.djangoproject.com/en/%(version)s/releases/\" "
+"target=\"_blank\" rel=\"noopener\">release notes</a> for Django %(version)s"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:367
+msgid "The install worked successfully! Congratulations!"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:368
+#, python-format
+msgid ""
+"You are seeing this page because <a href=\"https://docs.djangoproject.com/en/"
+"%(version)s/ref/settings/#debug\" target=\"_blank\" rel=\"noopener"
+"\">DEBUG=True</a> is in your settings file and you have not configured any "
+"URLs."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:383
+msgid "Django Documentation"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:384
+msgid "Topics, references, &amp; how-to's"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:395
+msgid "Tutorial: A Polling App"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:396
+msgid "Get started with Django"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:407
+msgid "Django Community"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:408
+msgid "Connect, get help, or contribute"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/isort/main.py:157
+msgid "show this help message and exit"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/modeltranslation/widgets.py:25
+msgid "None"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/pylint_django/tests/input/func_noerror_gettext_lazy_format.py:7
+#: env/lib/python3.7/site-packages/pylint_django/tests/input/func_noerror_ugettext_lazy_format.py:7
+#, python-brace-format
+msgid "{something}"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/scheduler/admin.py:32
+#, python-format
+msgid "Delete selected %(verbose_name_plural)s"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/scheduler/admin.py:47
+#: env/lib/python3.7/site-packages/scheduler/admin.py:73
+#: env/lib/python3.7/site-packages/scheduler/admin.py:100
+msgid "RQ Settings"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/scheduler/admin.py:50
+#: env/lib/python3.7/site-packages/scheduler/admin.py:76
+#: env/lib/python3.7/site-packages/scheduler/admin.py:103
+msgid "Scheduling"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/scheduler/apps.py:10
+msgid "Django RQ Scheduler"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/scheduler/models.py:22
+msgid "name"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/scheduler/models.py:23
+msgid "callable"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/scheduler/models.py:24
+msgid "enabled"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/scheduler/models.py:25
+msgid "queue"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/scheduler/models.py:27
+msgid "job id"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/scheduler/models.py:29
+#, fuzzy
+#| msgid "Bâtiment"
+msgid "timeout"
+msgstr "Building"
+
+#: env/lib/python3.7/site-packages/scheduler/models.py:31
+msgid ""
+"Timeout specifies the maximum runtime, in seconds, for the job before it'll "
+"be considered 'lost'. Blank uses the default timeout."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/scheduler/models.py:37
+msgid "result ttl"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/scheduler/models.py:38
+msgid ""
+"The TTL value (in seconds) of the job result. -1: Result never expires, you "
+"should delete jobs manually. 0: Result gets deleted immediately. >0: Result "
+"expires after n seconds."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/scheduler/models.py:65
+msgid "Invalid callable, must be importable"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/scheduler/models.py:73
+msgid "Invalid queue, must be one of: {}"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/scheduler/models.py:79
+msgid "is scheduled?"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/scheduler/models.py:130
+msgid "scheduled time"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/scheduler/models.py:142
+msgid "Scheduled Job"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/scheduler/models.py:143
+msgid "Scheduled Jobs"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/scheduler/models.py:150
+msgid "minutes"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/scheduler/models.py:151
+msgid "hours"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/scheduler/models.py:152
+msgid "days"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/scheduler/models.py:153
+msgid "weeks"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/scheduler/models.py:156
+msgid "interval"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/scheduler/models.py:158
+msgid "interval unit"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/scheduler/models.py:160
+#: env/lib/python3.7/site-packages/scheduler/models.py:201
+msgid "repeat"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/scheduler/models.py:189
+msgid "Repeatable Job"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/scheduler/models.py:190
+msgid "Repeatable Jobs"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/scheduler/models.py:198
+msgid "cron string"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/scheduler/models.py:199
+msgid "Define the schedule in a crontab like syntax."
+msgstr ""
+
+#: env/lib/python3.7/site-packages/scheduler/models.py:231
+msgid "Cron Job"
+msgstr ""
+
+#: env/lib/python3.7/site-packages/scheduler/models.py:232
+msgid "Cron Jobs"
+msgstr ""
+
+#: fonctions/decorators.py:31
 msgid ""
 "Vous devez vous trouver sur le réseau du ResEl pour accéder à cette page."
-msgstr "You must be on ResEl network to access that page."
+msgstr "You must be on the ResEl network to access this page."
 
-#: fonctions/decorators.py:63
-msgid ""
-"Votre machine est déjà connue par notre réseau. Par conséquent, vous n'avez "
-"pas besoin d'accéder à cette page."
-msgstr ""
-"Your device is already registered, therefore you do not need to access this "
-"page."
-
-#: fonctions/decorators.py:94
+#: fonctions/decorators.py:57
 msgid "Votre cotisation et vos frais d'accès internet sont à jour."
-msgstr ""
+msgstr "Your membership and internet access fees are up to date."
 
-#: fonctions/decorators.py:129
+#: fonctions/decorators.py:85
 msgid ""
-"Votre machine est déjà inscrite. Veuillez vous connecter sur le réseau Wi-Fi "
-"ResEl Secure."
-msgstr ""
-"Your device is already registered. Please connect to the Wi-Fi network named "
-"\"ResEl Secure\"."
+"Veuillez vous connecter au réseau ResEl Secure pour effectuer votre paiement."
+msgstr "Please log in to the ResEl Secure network to make your payment."
 
-#: fonctions/decorators.py:161
+#: fonctions/decorators.py:114
 msgid ""
-"Vous n'êtes pas membre de l'AE, vous ne pouvez donc pas réserver de salle"
-msgstr ""
+"Vous n'êtes pas membre de l'AE, vous ne pouvez donc pas accéder à cette page."
+msgstr "You are not an AE member, you are not authorized to access this page."
+
+#: fonctions/decorators.py:135
+msgid "Vous n'êtes pas admin de l'AE."
+msgstr "You are not an AE admin"
 
 #: gestion_personnes/async_tasks.py:38
 #: gestion_personnes/templates/gestion_personnes/inscription.html:13
 msgid "Inscription au ResEl"
-msgstr "Subscription to ResEl"
+msgstr "Subscription to the ResEl"
 
 #: gestion_personnes/forms.py:34 gestion_personnes/forms.py:138
 msgid "Indiquez votre formation"
-msgstr "Precise your training"
+msgstr "Fill in your curriculum"
 
 #: gestion_personnes/forms.py:35 gestion_personnes/forms.py:139
-msgid "Ingénieur généraliste (FIG)"
-msgstr "Master of Engineering (FIG)"
+msgid "Ingénieur généraliste (FIG/FISE)"
+msgstr "Master of Engineering (FIG/FISE)"
 
 #: gestion_personnes/forms.py:36 gestion_personnes/forms.py:140
 msgid "Ingénieur par alternance (FIP)"
@@ -1039,11 +3182,11 @@ msgstr "Email address"
 
 #: gestion_personnes/forms.py:69 gestion_personnes/forms.py:213
 msgid "N° de Chambre"
-msgstr "Room no."
+msgstr "Room n°"
 
 #: gestion_personnes/forms.py:78 gestion_personnes/forms.py:222
 msgid "Addresse postale complète"
-msgstr "Full address"
+msgstr "Full postal address"
 
 #: gestion_personnes/forms.py:87 gestion_personnes/forms.py:231
 msgid "Numéro de téléphone"
@@ -1059,11 +3202,11 @@ msgstr "Choose a campus"
 
 #: gestion_personnes/forms.py:108 gestion_personnes/forms.py:264
 msgid "Veuillez sélectionner une formation"
-msgstr "Choose a training"
+msgstr "Choose a curriculum"
 
 #: gestion_personnes/forms.py:119 gestion_personnes/forms.py:282
 msgid "Ce champ est obligatoire"
-msgstr "Mandatory field"
+msgstr "This field is mandatory"
 
 #: gestion_personnes/forms.py:121 gestion_personnes/forms.py:284
 msgid "Veuillez choisir un bâtiment du campus de Brest"
@@ -1091,7 +3234,7 @@ msgstr "Type your password again"
 
 #: gestion_personnes/forms.py:244
 msgid "Nom de famille incorrect"
-msgstr "Invalid surname"
+msgstr "Invalid last name"
 
 #: gestion_personnes/forms.py:250
 msgid "Prénom incorrect"
@@ -1099,7 +3242,7 @@ msgstr "Invalid first name"
 
 #: gestion_personnes/forms.py:271
 msgid "L'addresse email est déjà associée à un compte"
-msgstr "Email address is already used"
+msgstr "This email address is already used"
 
 #: gestion_personnes/forms.py:295 gestion_personnes/forms.py:441
 msgid "Les mots de passes sont différents."
@@ -1109,21 +3252,20 @@ msgstr "Passwords do not match."
 msgid ""
 "En cochant cette case je certifie avoir lu et accepté le règlement intérieur "
 "de l'association."
-msgstr "By checking this box I certify having read and accepted Terms of Use."
+msgstr ""
+"By checking this box I certify having read and accepted the Terms of Use."
 
 #: gestion_personnes/forms.py:378
-#, fuzzy
-#| msgid "Vos identifiants"
 msgid "Identifiant ResEl"
-msgstr "Your login credentials"
+msgstr "ResEl credentials"
 
 #: gestion_personnes/forms.py:388
 msgid "L'identifiant n'existe pas"
-msgstr ""
+msgstr "The ID does not exist"
 
 #: gestion_personnes/forms.py:399
 msgid "Réinitialisation du mot de passe ResEl"
-msgstr ""
+msgstr "Reset the ResEl password"
 
 #: gestion_personnes/forms.py:400
 #, python-format
@@ -1140,12 +3282,21 @@ msgid ""
 "Dans tous les cas, n'hésitez pas à nous contacter à support@resel.fr pour "
 "toute question."
 msgstr ""
+"Hello,\n"
+"\n"
+"You have requested to reset your ResEl password. To confirm it please click "
+"on the following link:\n"
+"%s\n"
+"\n"
+"------------------------\n"
+"\n"
+"If you think you are receiving this email by mistake, please ignore it. In "
+"any case, please feel free to contact us at support@resel.fr should you have "
+"any question."
 
 #: gestion_personnes/forms.py:459
-#, fuzzy
-#| msgid "Mot de passe oublié ?"
 msgid "Mot de passe ResEl réinitialisé"
-msgstr "Password reseted"
+msgstr "ResEl password reset"
 
 #: gestion_personnes/forms.py:460
 msgid ""
@@ -1159,29 +3310,36 @@ msgid ""
 "Si vous pensez que vous recevez cet e-mail par erreur, veuillez l'ignorer. "
 "Dans tous les cas, n'hésitez pas à nous contacter à support@resel.fr"
 msgstr ""
+"Hello,\n"
+"\n"
+"You have requested to reset your ResEl password.\n"
+"We confirm it has been reset.\n"
+"\n"
+"------------------------\n"
+"\n"
+"If you think you are receiving this email by mistake, please ignore it. In "
+"any case, please feel free to contact us at support@resel.fr should you have "
+"any question."
 
 #: gestion_personnes/forms.py:492
-#, fuzzy
-#| msgid "Cette machine n'est pas connue sur notre réseau."
 msgid "Cette addresse e-mail n'est pas enregistrée"
-msgstr "This email was not registered"
+msgstr "This email address was not registered"
 
 #: gestion_personnes/forms.py:500
-#, fuzzy
-#| msgid "Vos identifiants"
 msgid "Identifiants ResEl"
-msgstr "Your login credentials"
+msgstr "ResEl credentials"
 
 #: gestion_personnes/forms.py:501
+#, python-format
 msgid ""
 "Bonjour,\n"
 "\n"
 "Vous venez de demander l'envoi de vos identifiants ResEl, les voici : \n"
-"Nom d'utilisateur : {}\n"
+"Nom d'utilisateur : %(uid)s\n"
 "Mot de passe : ****** (celui que vous avez choisi à l'inscription)\n"
 "\n"
 "Vous pourrez vous connecter à votre tableau de bord en cliquant sur le lien "
-"suiviant : {}\n"
+"suiviant : %(url)s\n"
 "\n"
 "------------------------\n"
 "\n"
@@ -1189,46 +3347,60 @@ msgid ""
 "Dans tous les cas, n'hésitez pas à nous contacter à support@resel.fr pour "
 "toute question."
 msgstr ""
+"Hello,\n"
+"\n"
+"You have just asked for your ResEl credentials to be sent, here they are:\n"
+"User name: %(uid)s\n"
+"Password: ****** (the one you chose at registration)\n"
+"\n"
+"You can connect to your dashboard by clicking the following link: %(url)s\n"
+"\n"
+"------------------------\n"
+"\n"
+"If you think you are receiving this email by mistake, please ignore it. In "
+"any case, please feel free to contact us at support@resel.fr should you have "
+"any question."
 
 #: gestion_personnes/templates/gestion_personnes/cgu.html:5
 msgid "Inscription - CGU"
 msgstr "Registration - ToS"
 
-#: gestion_personnes/templates/gestion_personnes/cgu.html:15
-#: tresorerie/templates/tresorerie/recap.html:92
+#: gestion_personnes/templates/gestion_personnes/cgu.html:16
+#: tresorerie/templates/tresorerie/recap.html:86
 msgid "Règlement intérieur du ResEl"
 msgstr "ResEl Rules of Procedure"
 
-#: gestion_personnes/templates/gestion_personnes/cgu.html:18
+#: gestion_personnes/templates/gestion_personnes/cgu.html:19
 msgid ""
 "Afin de faire partie de l'association du ResEl vous devez lire attentivement "
 "son règlement intérieur et l'accepter."
 msgstr ""
-"To join the ResEl Association you must carefully read Rules of Procedure and "
-"accept them."
+"To join the ResEl Association you must carefully read the Rules of Procedure "
+"and accept them."
 
-#: gestion_personnes/templates/gestion_personnes/cgu.html:482
-#: tresorerie/templates/tresorerie/recap.html:558
+#: gestion_personnes/templates/gestion_personnes/cgu.html:23
+#: tresorerie/templates/tresorerie/recap.html:95
 msgid "Veuillez également lire attentivement"
 msgstr "Please also read carefully"
 
-#: gestion_personnes/templates/gestion_personnes/cgu.html:482
-#: tresorerie/templates/tresorerie/recap.html:558
+#: gestion_personnes/templates/gestion_personnes/cgu.html:23
+#: tresorerie/templates/tresorerie/recap.html:95
 msgid "les statuts"
-msgstr "Status"
+msgstr "the statutes"
 
-#: gestion_personnes/templates/gestion_personnes/cgu.html:482
-#: tresorerie/templates/tresorerie/recap.html:558
+#: gestion_personnes/templates/gestion_personnes/cgu.html:23
+#: tresorerie/templates/tresorerie/recap.html:95
 msgid "de l'association avant de continuer"
-msgstr "of the Association before proceeding"
+msgstr "of the association before proceeding"
 
-#: gestion_personnes/templates/gestion_personnes/cgu.html:497
+#: gestion_personnes/templates/gestion_personnes/cgu.html:38
+#: pages/templates/pages/inscription_zone_info.html:60
 msgid "Créer un compte"
 msgstr "Create an account"
 
 #: gestion_personnes/templates/gestion_personnes/delete_mail.html:4
 msgid "Suppression boîte ResEl"
-msgstr ""
+msgstr "Remove ResEl mail"
 
 #: gestion_personnes/templates/gestion_personnes/finalize_signup.html:5
 msgid "Inscription - Finalisation"
@@ -1240,11 +3412,11 @@ msgstr "Registration completed"
 
 #: gestion_personnes/templates/gestion_personnes/finalize_signup.html:17
 msgid "Vous êtes désormais membre de l'association ResEl"
-msgstr "You are now member of the Association"
+msgstr "You are now a member of the Association"
 
 #: gestion_personnes/templates/gestion_personnes/finalize_signup.html:20
 msgid "Vos identifiants"
-msgstr "Your login credentials"
+msgstr "Your credentials"
 
 #: gestion_personnes/templates/gestion_personnes/finalize_signup.html:22
 msgid "Utilisateur :"
@@ -1266,28 +3438,20 @@ msgstr "Please keep this information safely"
 msgid ""
 "elles vous seront nécessaires afin de vous connecter à tous les services du "
 "ResEl."
-msgstr "it will be required to log in to all ResEl services"
+msgstr "they will be required to log in to all the ResEl services"
 
-#: gestion_personnes/templates/gestion_personnes/finalize_signup.html:31
-msgid ""
-"Afin de pouvoir accéder à internet vous devez enregistrer votre ordinateur"
-msgstr ""
-"To get ResEl services on your device you must register it on the network"
-
-#: gestion_personnes/templates/gestion_personnes/finalize_signup.html:41
+#: gestion_personnes/templates/gestion_personnes/finalize_signup.html:30
 #: gestion_personnes/templates/gestion_personnes/settings.html:19
 msgid "Revenir à l'accueil"
-msgstr "Return to homepage"
+msgstr "Return to the home page"
 
 #: gestion_personnes/templates/gestion_personnes/get_uid_from_email.html:4
-#, fuzzy
-#| msgid "Vos identifiants"
 msgid "Récupération identifiant"
-msgstr ""
+msgstr "ID recovery"
 
 #: gestion_personnes/templates/gestion_personnes/get_uid_from_email.html:8
 msgid "Récupération de votre identifiant ResEl"
-msgstr ""
+msgstr "Recovery of your ResEl ID"
 
 #: gestion_personnes/templates/gestion_personnes/get_uid_from_email.html:10
 msgid ""
@@ -1298,16 +3462,20 @@ msgid ""
 "de passe. Cependant vous pouvez toujours demander à le réinitialiser.</p>\n"
 "            "
 msgstr ""
+"\n"
+"                <p>With your email address, we will be able to send your "
+"ResEl IP.</p>\n"
+"                <p>Note : The ResEl cannot recover your password. However, "
+"you can always ask to reset it.</p>\n"
+"            "
 
 #: gestion_personnes/templates/gestion_personnes/get_uid_from_email.html:20
-#, fuzzy
-#| msgid "Veuillez renseigner votre nouveau mot de passe :"
 msgid "Veuillez renseigner addresse e-mail :"
 msgstr "Type in your email address:"
 
 #: gestion_personnes/templates/gestion_personnes/get_uid_from_email.html:32
 msgid "Envoyer un e-mail avec votre identifiant"
-msgstr ""
+msgstr "Send a mail with your ID"
 
 #: gestion_personnes/templates/gestion_personnes/inscription.html:5
 msgid "Inscription"
@@ -1326,11 +3494,11 @@ msgstr "log in"
 
 #: gestion_personnes/templates/gestion_personnes/inscription.html:25
 msgid "Veuillez renseigner vos informations personnelles"
-msgstr "Please fill in personal information"
+msgstr "Please fill in your personal information"
 
 #: gestion_personnes/templates/gestion_personnes/inscription.html:45
 msgid "Veuillez renseigner vos informations de compte"
-msgstr "Please fill in account information"
+msgstr "Please fill in your account information"
 
 #: gestion_personnes/templates/gestion_personnes/inscription.html:59
 msgid "Password strength"
@@ -1345,7 +3513,7 @@ msgstr "We need your room number and your phone number to contact you"
 
 #: gestion_personnes/templates/gestion_personnes/inscription.html:119
 msgid "Continuer l'inscription"
-msgstr "Continue registration"
+msgstr "Continue the registration"
 
 #: gestion_personnes/templates/gestion_personnes/inscription.html:126
 msgid "En vous inscrivant..."
@@ -1360,30 +3528,26 @@ msgid "Vous profiterez des nombreux services du ResEl"
 msgstr "You will enjoy all our services"
 
 #: gestion_personnes/templates/gestion_personnes/inscription.html:130
-msgid "Vous pourrez participer aux évènements et aux activitées ResEl"
+msgid "Vous pourrez participer aux évènements et aux activités du ResEl"
 msgstr "You will be able to participate in ResEl events and activities"
 
 #: gestion_personnes/templates/gestion_personnes/inscription.html:132
 msgid "Téléchargez :"
-msgstr ""
+msgstr "Download:"
 
 #: gestion_personnes/templates/gestion_personnes/inscription.html:134
 #: templates/registration/login.html:64
-#, fuzzy
-#| msgid "Veuillez choisir un bâtiment du campus de Brest"
-msgid "Guide connexion campus de Brest"
-msgstr "Choose a building in the Brest campus"
+msgid "Flyer de connexion"
+msgstr "Connection flyer"
 
 #: gestion_personnes/templates/gestion_personnes/inscription.html:135
 #: templates/registration/login.html:65
-#, fuzzy
-#| msgid "Veuillez choisir un bâtiment du campus de Rennes"
-msgid "Guide connexion campus de Rennes"
-msgstr "Choose a building in the Rennes Campus"
+msgid "Guide de connexion filaire"
+msgstr "Wired connection guide"
 
 #: gestion_personnes/templates/gestion_personnes/inscription.html:138
-msgid "Un problème pour s'inscrire ?"
-msgstr "Experiencing trouble while registering?"
+msgid "Un problème pour vous inscrire ?"
+msgstr "Encountering problems during the registration?"
 
 #: gestion_personnes/templates/gestion_personnes/inscription.html:139
 msgid "Contactez nous !"
@@ -1403,41 +3567,37 @@ msgstr "weak"
 
 #: gestion_personnes/templates/gestion_personnes/inscription.html:223
 msgid "Moyen"
-msgstr "average"
+msgstr "Average"
 
 #: gestion_personnes/templates/gestion_personnes/inscription.html:233
 msgid "Correct"
-msgstr "ok"
+msgstr "Ok"
 
 #: gestion_personnes/templates/gestion_personnes/inscription.html:243
 msgid "Bon"
-msgstr "good"
+msgstr "Good"
 
 #: gestion_personnes/templates/gestion_personnes/mail_redirect.html:4
 msgid "Redirection adresse ResEl"
-msgstr ""
+msgstr "ResEl address redirection"
 
 #: gestion_personnes/templates/gestion_personnes/mail_resel.html:4
 #: gestion_personnes/templates/gestion_personnes/mail_resel_new.html:4
-#: templates/base.html:115
-#, fuzzy
-#| msgid "Ma boîte mail ResEl"
+#: templates/base.html:147
 msgid "Email ResEl"
 msgstr "ResEl email"
 
 #: gestion_personnes/templates/gestion_personnes/mail_resel.html:8
-#, fuzzy
-#| msgid "Ma boîte mail ResEl"
 msgid "Votre boîte mail "
 msgstr "My ResEl inbox"
 
 #: gestion_personnes/templates/gestion_personnes/mail_resel_new.html:9
 msgid "Création d'une boîte mail @resel.fr"
-msgstr ""
+msgstr "Creation of an @resel.fr mailbox"
 
 #: gestion_personnes/templates/gestion_personnes/mod-passwd.html:4
 msgid "Changement de votre mot de passe"
-msgstr "Changing your password"
+msgstr "Password change"
 
 #: gestion_personnes/templates/gestion_personnes/mod-passwd.html:8
 msgid "Changement de mot de passe"
@@ -1453,8 +3613,8 @@ msgid ""
 msgstr ""
 "\n"
 "<p>You are about to change your ResEl password.</p> As it is also used for "
-"the Wi-Fi connection, you will have to change your Wi-Fi configuration to "
-"take password change into account."
+"the Internet connection, you will have to change your Internet configuration "
+"to take the password change into account."
 
 #: gestion_personnes/templates/gestion_personnes/mod-passwd.html:19
 msgid "Veuillez renseigner votre nouveau mot de passe :"
@@ -1466,51 +3626,41 @@ msgstr "Change my password"
 
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:5
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:17
-#, fuzzy
-#| msgid "Modifier mes informations personnelles"
 msgid "Informations personnelles"
 msgstr "Modify personal information"
 
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:12
-#, fuzzy
-#| msgid "Information"
 msgid "Informations de compte"
 msgstr "Account information"
 
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:19
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:21
-#, fuzzy
-#| msgid "Vos identifiants"
 msgid "Identifiant"
-msgstr "User id"
+msgstr "User ID"
 
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:42
-#, fuzzy
-#| msgid "Information"
 msgid "Informations de contact"
 msgstr "Contact information"
 
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:45
-#: tresorerie/templates/tresorerie/recap.html:20
+#: tresorerie/templates/tresorerie/recap.html:24
 #: tresorerie/templates/tresorerie/transaction_detail.html:18
 msgid "E-mail"
 msgstr "Email"
 
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:54
-#: tresorerie/templates/tresorerie/recap.html:19
+#: tresorerie/templates/tresorerie/recap.html:23
 #: tresorerie/templates/tresorerie/transaction_detail.html:17
-#, fuzzy
-#| msgid "Numéro de téléphone"
 msgid "Téléphone"
 msgstr "Phone number"
 
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:125
 msgid "Retour"
-msgstr ""
+msgstr "Back"
 
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:126
 msgid "Gardez vos informations à jour !"
-msgstr ""
+msgstr "Keep your information up to date!"
 
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:127
 msgid ""
@@ -1520,6 +3670,10 @@ msgid ""
 "problème.\n"
 "                "
 msgstr ""
+"\n"
+"                    It is important to keep your personal information up to "
+"date, we need it to contact you in case of a problem.\n"
+"                "
 
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:130
 msgid ""
@@ -1528,29 +3682,20 @@ msgid ""
 "votre formation. Si vous pensez que les données fournies sont fausses "
 "n'hésitez pas à "
 msgstr ""
+"\n"
+"                    You cannot modify your first and last name, and your "
+"curriculum. If you think some information is wrong, do not hesitate to "
 
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:132
-#, fuzzy
-#| msgid "Nous contacter"
 msgid "nous contacter"
 msgstr "contact us"
 
 #: gestion_personnes/templates/gestion_personnes/reset_pwd_send.html:4
 #: gestion_personnes/templates/gestion_personnes/reset_pwd_send.html:8
-#, fuzzy
-#| msgid "Changement de mot de passe"
 msgid "Réinitialisation de mot de passe"
 msgstr "Password reset"
 
 #: gestion_personnes/templates/gestion_personnes/reset_pwd_send.html:10
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "        <p>Vous êtes sur le point de modifier votre mot de passe ResEl.</"
-#| "p>\n"
-#| "        <p>Gardez en tête qu'il faudra ensuite changer votre "
-#| "configuration Wi-Fi pour utiliser ce nouveau mot de passe</p>\n"
-#| "        "
 msgid ""
 "\n"
 "        <p>Vous êtes sur le point de réinitialiser votre mot de passe ResEl."
@@ -1561,189 +3706,174 @@ msgid ""
 msgstr ""
 "\n"
 "<p>You are about to change your ResEl password.</p> As it is also used for "
-"the Wi-Fi connection, you will have to change your Wi-Fi configuration to "
-"take password change into account."
+"the Internet connection, you will have to change your Internet configuration "
+"to take password change into account."
 
 #: gestion_personnes/templates/gestion_personnes/reset_pwd_send.html:20
-#, fuzzy
-#| msgid "Veuillez renseigner votre nouveau mot de passe :"
 msgid "Veuillez renseigner votre identifiant ResEl :"
 msgstr "Type in your ResEl credentials"
 
 #: gestion_personnes/templates/gestion_personnes/reset_pwd_send.html:33
 msgid "Envoyer un e-mail de réinitialisation"
-msgstr ""
+msgstr "Send a reset email"
 
 #: gestion_personnes/templates/gestion_personnes/settings.html:5
-#, fuzzy
-#| msgid "Paramètres de mon compte"
 msgid "Paramètres de compte"
 msgstr "Account settings"
 
 #: gestion_personnes/templates/gestion_personnes/settings.html:13
-#: templates/base.html:109
-#, fuzzy
-#| msgid "Paramètres de mon compte"
+#: templates/base.html:141
 msgid "Paramètres"
-msgstr "Account settings"
+msgstr "Settings"
 
 #: gestion_personnes/templates/gestion_personnes/settings.html:16
 msgid "Page en cours de contruction..."
-msgstr ""
+msgstr "Page under construction..."
 
 #: gestion_personnes/views.py:56
 msgid ""
 "Une erreur s'est produite lors de la création de vos identifiants. Veuillez "
 "contacter un administeur."
 msgstr ""
-"An error occured while creating login credentials. Please contact an admin."
+"An error occured while creating your credentials. Please contact an admin."
 
-#: gestion_personnes/views.py:148
+#: gestion_personnes/views.py:145
 msgid "Votre mot de passe a été modifié"
 msgstr "Your password has been modified."
 
-#: gestion_personnes/views.py:214
+#: gestion_personnes/views.py:211
 msgid "Vos informations ont bien été mises à jour."
-msgstr ""
+msgstr "Your information have been updated."
 
-#: gestion_personnes/views.py:233
+#: gestion_personnes/views.py:230
 msgid ""
 "Nous venons de vous envoyer un e-mail de réinitialisation que vous devriez "
 "recevoir d'ici peu. Cliquez sur le lien fournit dans l'e-mail pour continuer "
 "la procédure."
 msgstr ""
+"We have just sent you a reset email that you should receive shortly. Click "
+"on the link provided in the e-mail to continue the process."
 
-#: gestion_personnes/views.py:250
+#: gestion_personnes/views.py:247
 msgid ""
 "Nous venons de vous envoyer un e-mail sur votre addresse avec votre "
 "identifiant ResEl."
-msgstr ""
+msgstr "We sent you an email to your address with your ResEl ID."
 
-#: gestion_personnes/views.py:284
+#: gestion_personnes/views.py:281
 msgid ""
 "Nous venez de réinitialiser votre mot de passe. Vous pouvez désormais vous "
 "connecter avec le nouveau mot de passe."
 msgstr ""
+"We have just reset your password. You can now login with the new password."
 
-#: gestion_personnes/views.py:304
+#: gestion_personnes/views.py:301
 msgid ""
 "Votre addresse e-mail a déjà été validée, vous n'avez donc pas besoin de la "
 "valider une seconde fois."
 msgstr ""
+"Your email address has already been validated, you do not need to validate "
+"it a second time."
 
-#: gestion_personnes/views.py:308
+#: gestion_personnes/views.py:305
 msgid ""
 "Nous venons de vous envoyer un e-mail avec un lien que vous devrez suivre "
 "pour valider votre addresse e-mail."
 msgstr ""
+"We sent you an e-mail with a link that you must follow to validate your e-"
+"mail address."
 
-#: gestion_personnes/views.py:314
-#, fuzzy
-#| msgid "Votre adresse mail"
+#: gestion_personnes/views.py:311
 msgid "Votre addresse e-mail est bien validée."
-msgstr "Your email address was validated"
+msgstr "Your email address has been validated"
 
-#: gestion_personnes/views.py:430
+#: gestion_personnes/views.py:428
 msgid "Impossible de créer correctement l'adresse. Contactez support@resel.fr"
-msgstr ""
+msgstr "Unable to create the address. Contact support@resel.fr"
 
-#: gestion_personnes/views.py:435
-#, fuzzy
-#| msgid "Vous avez déjà payé votre cotisation."
+#: gestion_personnes/views.py:433
 msgid "Vous avez déjà une adresse ResEl."
 msgstr "You already have a ResEl email"
 
-#: gestion_personnes/views.py:452
+#: gestion_personnes/views.py:450
 msgid "Cette adresse email n'existe pas ou plus."
-msgstr ""
+msgstr "This email address does not exist"
 
-#: gestion_personnes/views.py:466
+#: gestion_personnes/views.py:464
 msgid "Vous n'avez pas d'adresse."
-msgstr ""
+msgstr "You don't have an address"
 
-#: gestion_personnes/views.py:481
+#: gestion_personnes/views.py:479
 msgid "Votre demande de suppression a bien été enregistrée."
-msgstr ""
+msgstr "Your deletion request has been submitted."
 
-#: gestion_personnes/views.py:484
+#: gestion_personnes/views.py:482
 msgid "L'adresse entrée ne correspond pas à votre adresse email."
-msgstr ""
+msgstr "The address entered does not match your email address."
 
-#: gestion_personnes/views.py:499
+#: gestion_personnes/views.py:497
 msgid "Vous n'avez pas ou plus d'adresse email."
-msgstr ""
+msgstr "You do not have an email address."
 
-#: gestion_personnes/views.py:513
+#: gestion_personnes/views.py:511
 msgid "Vous n'avez pas encore d'adresse email."
-msgstr ""
+msgstr "You do not have an email address yet."
 
-#: gestion_personnes/views.py:530
-#, fuzzy
-#| msgid "L'alias de la machine a bien été modifié."
+#: gestion_personnes/views.py:528
 msgid "La redirection a bien été supprimée."
-msgstr "The alias have been deleted"
+msgstr "The redirection has been deleted"
 
-#: gestion_personnes/views.py:536
-#, fuzzy
-#| msgid "Votre accès a bien été réglé"
+#: gestion_personnes/views.py:534
 msgid "La redirection a bien été créée."
-msgstr "The alias have been created."
+msgstr "The redirection has been created."
 
-#: myresel/middleware.py:192
-msgid ""
-"Vous vous trouvez sur un réseau d'inscription mais ne possédez pas d'IP dans "
-"ce réseau. Veuillez contacter un administrateur."
-msgstr ""
-"You are in the registration subnetwork but you don't have an IP address in "
-"this network. Please contact an admin."
-
-#: myresel/middleware.py:202
-msgid ""
-"Une erreur s'est glissée dans le traitement de votre requête. Si le problème "
-"persiste, contactez un administrateur."
-msgstr ""
-"An error occured while processing your request. If you still encounter this "
-"problem, please contact an admin."
-
-#: myresel/settings.py:124
+#: myresel/settings.py:141
 msgid "Français"
 msgstr "French"
 
-#: myresel/settings.py:125
+#: myresel/settings.py:142
 msgid "Anglais"
 msgstr "English"
 
-#: pages/forms.py:6
+#: pages/forms.py:9
 msgid "Votre nom"
 msgstr "Your name"
 
-#: pages/forms.py:9
+#: pages/forms.py:12
 msgid "Votre chambre"
 msgstr "Your room"
 
-#: pages/forms.py:10
+#: pages/forms.py:15
 msgid "Bâtiment ET chambre"
 msgstr "Building and room number"
 
-#: pages/forms.py:12
+#: pages/forms.py:19
 msgid "Votre adresse mail"
 msgstr "Your email address"
 
-#: pages/forms.py:15
-#| msgid "Votre demande"
+#: pages/forms.py:23
 msgid "Votre message"
 msgstr "Your message"
+
+#: pages/forms.py:28
+msgid "Quel est le nom du directeur d'IMT Atlantique (captcha)"
+msgstr ""
+
+#: pages/forms.py:42
+msgid "Mauvaise résponse au captcha"
+msgstr ""
+
+#: pages/templates/pages/become_admin.html:5
+#, fuzzy
+#| msgid "Devenez Administrateur ResEl !"
+msgid "Devenez adminitrateur ResEl"
+msgstr "Become a ResEl Admin!"
 
 #: pages/templates/pages/contact.html:8
 msgid "Nous contacter"
 msgstr "Contact us"
 
-#: pages/templates/pages/contact.html:22
-msgid "Envoyer"
-msgstr "Send"
-
 #: pages/templates/pages/contact.html:28
-#| msgid "Autre"
 msgid "Autrement"
 msgstr "Otherwise"
 
@@ -1760,8 +3890,6 @@ msgid "Sur IRC sur le réseau "
 msgstr ""
 
 #: pages/templates/pages/contact.html:35
-#, fuzzy
-#| msgid "Les dernières news"
 msgid "Les permanences"
 msgstr ""
 
@@ -1782,9 +3910,19 @@ msgid ""
 msgstr ""
 
 #: pages/templates/pages/contact.html:42
-#| msgid "Addresse postale complète"
+#: pages/templates/pages/mentions_legales.html:37
 msgid "Adresse postale"
 msgstr "Postal address"
+
+#: pages/templates/pages/eggdrop.html:34
+#, fuzzy
+#| msgid "Historique des paiements"
+msgid "Historique IRC ResEL"
+msgstr "Billing history"
+
+#: pages/templates/pages/eggdrop.html:35
+msgid "Vous trouverez ici l'intégralité des discussions ResEl."
+msgstr ""
 
 #: pages/templates/pages/faq.html:18
 msgid "Foire aux questions"
@@ -1811,7 +3949,6 @@ msgid "Cette réponse m'a été utile"
 msgstr ""
 
 #: pages/templates/pages/faq.html:38
-#| msgid "Pas de news à l'horizon"
 msgid "Pas de question à l'horizon"
 msgstr "No question in sight"
 
@@ -1820,7 +3957,6 @@ msgid "Accueil"
 msgstr "Homepage"
 
 #: pages/templates/pages/home/home.html:17
-#| msgid "Le Réseau des Élèves de Télécom Bretagne"
 msgid "Le Réseau des Élèves d'IMT Atlantique"
 msgstr "IMT-Atlantique students' network"
 
@@ -1828,67 +3964,62 @@ msgstr "IMT-Atlantique students' network"
 msgid "Le fournisseur d'accès associatif par les teubreux pour les teubreux"
 msgstr ""
 
-#: pages/templates/pages/home/home.html:45
-#| msgid "Vous profiterez des nombreux services du ResEl"
-msgid "Connectez-vous pour bénéficier de tous les services du ResEl"
-msgstr "Log in to enjoy all our services"
-
-#: pages/templates/pages/home/home.html:48 templates/base.html:129
+#: pages/templates/pages/home/home.html:49 templates/base.html:161
 #: templates/registration/login.html:5 templates/registration/login.html:46
 msgid "Connexion"
 msgstr "Log in"
 
-#: pages/templates/pages/home/home.html:98
+#: pages/templates/pages/home/home.html:54
+#, fuzzy
+#| msgid "Un problème pour s'inscrire ?"
+msgid "Comment s'inscrire ?"
+msgstr "Experiencing trouble while registering?"
+
+#: pages/templates/pages/home/home.html:106
 msgid "Les services du ResEl"
 msgstr "ResEl services"
 
-#: pages/templates/pages/home/home.html:113
-#| msgid "Et plein d'autres services"
+#: pages/templates/pages/home/home.html:120
 msgid "Et plein d'autres"
 msgstr "And more"
 
-#: pages/templates/pages/home/home.html:123
-#| msgid "Les dernières nouvelles"
+#: pages/templates/pages/home/home.html:129
 msgid "Les dernières nouvelles ResEl"
 msgstr "Latest news"
 
-#: pages/templates/pages/home/home.html:136
-#| msgid "Pas de news à l'horizon"
+#: pages/templates/pages/home/home.html:130
+msgid "RSS"
+msgstr ""
+
+#: pages/templates/pages/home/home.html:130
+msgid "Atom"
+msgstr ""
+
+#: pages/templates/pages/home/home.html:143
 msgid "Pas de nouvelles à l'horizon"
 msgstr "No fresh news in sight"
 
-#: pages/templates/pages/home/home.html:138
+#: pages/templates/pages/home/home.html:145
 msgid "Voir l'intégralité des nouvelles"
 msgstr ""
 
-#: pages/templates/pages/home/home.html:152
-#| msgid "Nouveau sur le campus ?"
+#: pages/templates/pages/home/home.html:159
 msgid "En ce moment sur le campus"
 msgstr "Currently on the campus"
 
-#: pages/templates/pages/home/home.html:174
-#| msgid "Pas de news à l'horizon"
-msgid "Pas d'événements à l'horizon"
-msgstr "No event in sight"
-
-#: pages/templates/pages/home/home.html:176
+#: pages/templates/pages/home/home.html:183
 msgid "Voir tous les événements campus"
 msgstr ""
 
-#: pages/templates/pages/home/home.html:180
+#: pages/templates/pages/home/home.html:187
 msgid "Clubs à l'honneur"
 msgstr ""
 
-#: pages/templates/pages/home/home.html:197
+#: pages/templates/pages/home/home.html:204
 msgid "Les derniers mails campus"
 msgstr ""
 
-#: pages/templates/pages/home/home.html:206
-#| msgid "Pas de news à l'horizon"
-msgid "Pas de mail campus à l'horizon"
-msgstr "No email in sight"
-
-#: pages/templates/pages/home/home.html:252
+#: pages/templates/pages/home/home.html:261
 msgid "devenir administrateur ResEl"
 msgstr ""
 
@@ -1901,190 +4032,215 @@ msgid "Mes services"
 msgstr "My services"
 
 #: pages/templates/pages/home/home_logged.html:24
-msgid "Consulter toutes mes machines inscrites"
-msgstr "Review registered devices"
-
-#: pages/templates/pages/home/home_logged.html:28
 msgid "Gérer mes clubs et associations"
 msgstr "Manage my clubs and associations"
 
-#: pages/templates/pages/home/home_logged.html:28
-msgid "Bientôt"
-msgstr ""
-
-#: pages/templates/pages/home/home_logged.html:29
+#: pages/templates/pages/home/home_logged.html:25
 msgid "Ma boîte mail ResEl"
 msgstr "My ResEl inbox"
 
-#: pages/templates/pages/home/home_logged.html:30
+#: pages/templates/pages/home/home_logged.html:26
 msgid "Mes listes de diffusion"
 msgstr "My mailing lists"
 
-#: pages/templates/pages/home/home_logged.html:33
+#: pages/templates/pages/home/home_logged.html:29
 msgid "Modifier mes informations personnelles"
 msgstr "Modify personal information"
 
-#: pages/templates/pages/home/home_logged.html:35
+#: pages/templates/pages/home/home_logged.html:31
 msgid "Paramètres de mon compte"
 msgstr "Account settings"
 
-#: pages/templates/pages/home/home_logged.html:36
+#: pages/templates/pages/home/home_logged.html:32
 msgid "Modifier mon mot de passe"
 msgstr "Modify my password"
 
-#: pages/templates/pages/home/home_logged.html:37
-msgid "Historique de mes factures"
+#: pages/templates/pages/home/home_logged.html:33
+#, fuzzy
+#| msgid "Historique de mes factures"
+msgid "Historique de mes transactions"
 msgstr "Billing history"
 
-#: pages/templates/pages/home/home_logged.html:48
-msgid "Machine non enregistrée"
-msgstr "Device not registered"
+#: pages/templates/pages/home/home_logged.html:53
+#, fuzzy
+#| msgid "En ce moment sur le campus"
+msgid "Bienvenue sur le campus de"
+msgstr "Currently on the campus"
 
-#: pages/templates/pages/home/home_logged.html:49
+#: pages/templates/pages/home/home_logged.html:56
 msgid ""
-"Afin de pouvoir bénéficier des services du Resel, vous devez enregistrer "
-"votre machine sur le réseau."
+"Vous vous trouvez sur la zone gratuite. Le débit est fortement réduit, mais "
+"devrait permettre de consulter vos mails et divers services légers."
 msgstr ""
-"To get Internet access and ResEl services, you must register your device on "
-"the network."
 
-#: pages/templates/pages/home/home_logged.html:50
-msgid "Enregistrer"
-msgstr "Register"
-
-#: pages/templates/pages/home/home_logged.html:50
-msgid "mon ordinateur"
-msgstr "my computer"
+#: pages/templates/pages/home/home_logged.html:58
+msgid ""
+"Vous vous trouvez sur la zone d'inscription. Pour vous connecter à Internet "
+"ou payer vos frais d'accès, veuillez utiliser un autre réseau."
+msgstr ""
 
 #: pages/templates/pages/home/home_logged.html:60
-msgid "Mauvais appareil"
-msgstr ""
-
-#: pages/templates/pages/home/home_logged.html:61
 msgid ""
-"\n"
-"                                        Vous êtes connecté sur un appareil "
-"qui ne vous appartient pas.\n"
-"                                        Vous ne pouvez donc pas "
-"l'administrer.\n"
-"                                        "
+"Vous vous trouvez sur la zone de renouvellement. Pour vous connecter à "
+"Internet, veuillez vous acquitter des frais d'accès."
 msgstr ""
 
-#: pages/templates/pages/home/home_logged.html:65
+#: pages/templates/pages/home/home_logged.html:62
+msgid "Vous êtes correctement connecté au réseau étudiant."
+msgstr ""
+
+#: pages/templates/pages/home/home_logged.html:64
 msgid ""
-"Nous vous rappellons votre compte ResEl est strictement personnel et ne doit "
-"en aucun cas être partagé."
+"Vous êtes connecté depuis un serveur interne. Merci de n'utiliser cet accès "
+"qu'à des fins de tests."
 msgstr ""
 
-#: pages/templates/pages/home/home_logged.html:82
-#, fuzzy
-#| msgid "Connexion au ResEl"
-msgid "Connecté au ResEl"
-msgstr "Connection to ResEl network"
-
-#: pages/templates/pages/home/home_logged.html:95
+#: pages/templates/pages/home/home_logged.html:72
 msgid "Hors campus"
 msgstr "Off campus"
 
-#: pages/templates/pages/home/home_logged.html:96
+#: pages/templates/pages/home/home_logged.html:73
 #, fuzzy
 #| msgid "Vous êtes actuellement hors du campus de Télécom Bretagne."
-msgid "Vous êtes actuellement hors du campus d'IMT Atlantique."
+msgid "Vous êtes actuellement hors des campus d'IMT Atlantique."
 msgstr "You are currently off IMT Atlantique campus"
 
-#: pages/templates/pages/home/home_logged.html:97
-msgid "Vos actions sont limitées"
-msgstr "You won't be able to manage everything"
-
-#: pages/templates/pages/home/home_logged.html:110
+#: pages/templates/pages/home/home_logged.html:86
 msgid "Facturation à jour"
 msgstr ""
 
-#: pages/templates/pages/home/home_logged.html:112
-#: pages/templates/pages/home/home_logged.html:128
-#: pages/templates/pages/home/home_logged.html:144
+#: pages/templates/pages/home/home_logged.html:88
+#: pages/templates/pages/home/home_logged.html:104
+#: pages/templates/pages/home/home_logged.html:130
 #, fuzzy
 #| msgid "Adhésion à l'Association"
 msgid "Cotisation à l'association payée"
 msgstr "Subscription to the Association paid"
 
-#: pages/templates/pages/home/home_logged.html:114
-#: pages/templates/pages/home/home_logged.html:130
-#: pages/templates/pages/home/home_logged.html:146
+#: pages/templates/pages/home/home_logged.html:90
+#: pages/templates/pages/home/home_logged.html:106
+#: pages/templates/pages/home/home_logged.html:132
 #, fuzzy
 #| msgid "Adhésion à l'Association"
 msgid "Cotisation à l'association non payée"
 msgstr "Subscription to the Association not paid"
 
-#: pages/templates/pages/home/home_logged.html:116
-#: pages/templates/pages/home/home_logged.html:132
+#: pages/templates/pages/home/home_logged.html:92
+#: pages/templates/pages/home/home_logged.html:108
 #, fuzzy
 #| msgid "Internet"
 msgid "Internet jusqu'au"
 msgstr "Internet until "
 
-#: pages/templates/pages/home/home_logged.html:117
+#: pages/templates/pages/home/home_logged.html:93
 #, fuzzy
 #| msgid "Toutes vos transactions"
 msgid "Consulter mes transactions"
 msgstr "All transactions"
 
-#: pages/templates/pages/home/home_logged.html:126
+#: pages/templates/pages/home/home_logged.html:102
 #, fuzzy
 #| msgid "Attention"
 msgid "Attention abonnement"
 msgstr "Warning membership"
 
-#: pages/templates/pages/home/home_logged.html:133
-#: pages/templates/pages/home/home_logged.html:151
+#: pages/templates/pages/home/home_logged.html:111
+#: pages/templates/pages/home/home_logged.html:138
+#, fuzzy
+#| msgid ""
+#| "Vous devez vous trouver sur le réseau du ResEl pour accéder à cette page."
+msgid ""
+"Veuillez vous connecter au réseau ResEl Secure pour procéder au paiement"
+msgstr "You must be on ResEl network to access that page."
+
+#: pages/templates/pages/home/home_logged.html:117
+#: pages/templates/pages/home/home_logged.html:144
 msgid "Effectuer un paiement"
 msgstr ""
 
-#: pages/templates/pages/home/home_logged.html:142
+#: pages/templates/pages/home/home_logged.html:128
 msgid "Paiement non à jour"
 msgstr ""
 
-#: pages/templates/pages/home/home_logged.html:148
+#: pages/templates/pages/home/home_logged.html:134
 #, fuzzy
 #| msgid "Accès Internet pour 1 an"
 msgid "Accès internet expiré le"
 msgstr "Internet access expire on the"
 
-#: pages/templates/pages/home/home_logged.html:149
+#: pages/templates/pages/home/home_logged.html:135
 msgid ""
 "Votre abonnement au Resel a expiré, pour pouvoir à nouveau utiliser nos "
 "services vous devez régulariser votre situation."
 msgstr ""
 
-#: pages/templates/pages/home/home_logged.html:160
+#: pages/templates/pages/home/home_logged.html:155
 msgid "Pas d'information de facturation"
 msgstr ""
 
-#: pages/templates/pages/inscription_zone_info.html:34
-msgid "Vous venez d'activer votre appareil"
-msgstr "You just activated your device"
+#: pages/templates/pages/how_to_signup.html:9
+#, fuzzy
+#| msgid "Inscription au ResEl"
+msgid "Inscription ResEl"
+msgstr "Subscription to ResEl"
 
-#: pages/templates/pages/inscription_zone_info.html:40
-msgid ""
-"\n"
-"                            <p>\n"
-"                            Votre machine vient d'être activée, pour "
-"finaliser la connexion, il faut réinitialiser la connexion\n"
-"                                en vous déconnectant puis en vous "
-"reconnectant au réseau <strong>ResEl Secure</strong>.\n"
-"                            </p>\n"
-"                            <p>Si le problème persiste, n'hésitez pas à "
-"contacter un administateur.</p>\n"
-"                        "
+#: pages/templates/pages/how_to_signup.html:27
+msgid "Avoir Internet au ResEl ? Rien de plus simple !"
 msgstr ""
 
-#: pages/templates/pages/inscription_zone_info.html:56
-#: pages/templates/pages/inscription_zone_info.html:89
-#: pages/templates/pages/inscription_zone_info.html:112
-msgid "Vous êtes sur la zone d'inscription"
-msgstr "You are in registration subnetwork."
+#: pages/templates/pages/how_to_signup.html:46
+msgid "Vous pouvez également télécharger nos guides de connexion :"
+msgstr ""
 
-#: pages/templates/pages/inscription_zone_info.html:62
+#: pages/templates/pages/how_to_signup.html:50
+#, fuzzy
+#| msgid "Veuillez choisir un bâtiment du campus de Brest"
+msgid "Guide connexion campus de Brest"
+msgstr "Choose a building in the Brest campus"
+
+#: pages/templates/pages/how_to_signup.html:53
+#, fuzzy
+#| msgid "Veuillez choisir un bâtiment du campus de Rennes"
+msgid "Guide connexion campus de Rennes"
+msgstr "Choose a building in the Rennes Campus"
+
+#: pages/templates/pages/inscription_zone_info.html:21
+msgid "Votre abonnement est arrivé à expiration"
+msgstr ""
+
+#: pages/templates/pages/inscription_zone_info.html:27
+#, fuzzy
+#| msgid ""
+#| "\n"
+#| "                        Votre machine est actuellement connectée sur la "
+#| "zone inscription. Dans cette zone, vous n'avez pas accès à internet.\n"
+#| "                        Avant d'avoir internet, passez sur notre site "
+#| "pour inscrire votre machine à votre compte sur notre réseau.\n"
+#| "                    "
+msgid ""
+"\n"
+"                        <p>\n"
+"                            Votre abonnement est terminé. Merci d'effectuer "
+"un paiement\n"
+"                            pour continuer à profiter de notre connexion.\n"
+"                        </p>\n"
+"                    "
+msgstr ""
+"\n"
+"Your device is currently connected to Registration subnetwork. This network "
+"does not have access to the Internet. Register your device to get Internet."
+
+#: pages/templates/pages/inscription_zone_info.html:36
+msgid "Rendez-moi ma connexion !"
+msgstr ""
+
+#: pages/templates/pages/inscription_zone_info.html:42
+#, fuzzy
+#| msgid "Continuer l'inscription"
+msgid "Zone d'inscription"
+msgstr "Continue registration"
+
+#: pages/templates/pages/inscription_zone_info.html:48
 #, fuzzy
 #| msgid ""
 #| "\n"
@@ -2099,17 +4255,18 @@ msgstr "You are in registration subnetwork."
 #| "                        "
 msgid ""
 "\n"
-"                            <p>\n"
-"                                Vous êtes connecté au réseau Wi-Fi "
-"<strong>ResEl Inscription</strong> et votre machine est bien enregistrée.\n"
-"                            </p>\n"
-"                            <p>\n"
-"                                Il est impossible d'avoir accès à internet "
-"depuis ce réseau Wi-Fi pour des raisons de sécurité.<br/>\n"
-"                                Veuillez vous connecter sur le réseau Wi-Fi "
-"<strong>ResEl Secure</strong>.\n"
-"                            </p>\n"
-"                        "
+"                        <h2>\n"
+"                            Bienvenue sur le réseau d'inscription\n"
+"                        </h2>\n"
+"                        <p>\n"
+"                            Si vous n'avez pas de compte ResEl, vous êtes au "
+"bon endroit ! Vous pouvez cliquer sur le bouton ci-dessous.<br>\n"
+"                            Il est impossible d'avoir accès à internet "
+"depuis ce réseau Wi-Fi pour des raisons de sécurité. Veuillez vous connecter "
+"sur le réseau Wi-Fi <strong>ResEl Secure</strong> si vous disposez déjà d'un "
+"compte.\n"
+"                        </p>\n"
+"                    "
 msgstr ""
 "\n"
 "Even though your device has been registered, it is still in Registration sub "
@@ -2117,66 +4274,84 @@ msgstr ""
 "cannot access the Internet using that hotspot.<br> Please connect to \"ResEl "
 "Secure\" Wi-Fi hotspot."
 
-#: pages/templates/pages/inscription_zone_info.html:95
+#: pages/templates/pages/mentions_legales.html:8
+msgid "Mentions légales"
+msgstr ""
+
+#: pages/templates/pages/mentions_legales.html:12
 #, fuzzy
-#| msgid ""
-#| "\n"
-#| "                        Votre machine est actuellement connectée sur la "
-#| "zone inscription. Dans cette zone, vous n'avez pas accès à internet.\n"
-#| "                        Avant d'avoir internet, passez sur notre site "
-#| "pour inscrire votre machine à votre compte sur notre réseau.\n"
-#| "                    "
+#| msgid "Inscription au ResEl"
+msgid "Association Le ResEl"
+msgstr "Subscription to ResEl"
+
+#: pages/templates/pages/mentions_legales.html:15
+msgid "Raison sociale :"
+msgstr ""
+
+#: pages/templates/pages/mentions_legales.html:16
+msgid ""
+"RESEAU DES ELEVES DE L'ECOLE NATIONALE SUPERIEURE DES TELECOMMUNICATIONS DE "
+"BRETAGNE "
+msgstr ""
+
+#: pages/templates/pages/mentions_legales.html:17
+msgid "(RESEL)"
+msgstr ""
+
+#: pages/templates/pages/mentions_legales.html:18
+msgid ""
+"Le ResEl est une association loi 1901 déclarée comme opérateur de réseau "
+"auprès de l'ARCEP"
+msgstr ""
+
+#: pages/templates/pages/mentions_legales.html:21
+msgid "Siège social :"
+msgstr ""
+
+#: pages/templates/pages/mentions_legales.html:22
+#, fuzzy
+#| msgid "Inscription au ResEl"
+msgid "Association 'Le ResEl',"
+msgstr "Subscription to ResEl"
+
+#: pages/templates/pages/mentions_legales.html:23
+msgid " 655 Avenue du Technopôle,"
+msgstr ""
+
+#: pages/templates/pages/mentions_legales.html:24
+msgid "29280 Plouzané  - FRANCE"
+msgstr ""
+
+#: pages/templates/pages/mentions_legales.html:27
+#, fuzzy
+#| msgid "Facture en génération"
+msgid "Date de création : "
+msgstr "loading invoice"
+
+#: pages/templates/pages/mentions_legales.html:28
+msgid "08/10/2002"
+msgstr ""
+
+#: pages/templates/pages/mentions_legales.html:31
+msgid "Date de publication au JO:"
+msgstr ""
+
+#: pages/templates/pages/mentions_legales.html:32
 msgid ""
 "\n"
-"                        <div>\n"
-"                            Votre machine est actuellement connectée sur la "
-"zone inscription. Dans cette zone, vous n'avez pas accès à internet.\n"
-"                        </div>\n"
-"                        <div>\n"
-"                            Avant d'avoir internet, passez sur notre site "
-"pour inscrire votre machine.\n"
-"                        </div>\n"
-"                    "
+"                gérer et développer les réseaux de transmission de "
+"l'information sur les résidences et lieux de vie des élèves des campus de "
+"telecom bretagne ; définir, réglementer, mettre en oeuvre les utilisations "
+"de ces réseaux en assurant leur cohérence et leur respect des cadres "
+"législatifs et réglementaires ; animer ces réseaux à travers les services "
+"proposés ; défendre les intérêts propres de ses membres devant tout "
+"organisme dont l'activité la concerne ;\n"
+"                "
 msgstr ""
-"\n"
-"Your device is currently connected to Registration subnetwork. This network "
-"does not have access to the Internet. Register your device to get Internet."
 
-#: pages/templates/pages/inscription_zone_info.html:106
-msgid "Je fonce !"
-msgstr "Let's do it!"
-
-#: pages/templates/pages/inscription_zone_info.html:118
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "                        Votre machine est actuellement connectée sur la "
-#| "zone inscription. Dans cette zone, vous n'avez pas accès à internet.\n"
-#| "                        Avant d'avoir internet, passez sur notre site "
-#| "pour vous inscrire à notre association.\n"
-#| "                    "
-msgid ""
-"\n"
-"                        Votre machine est actuellement connectée sur la zone "
-"inscription. Dans cette zone, vous n'avez pas accès à internet.\n"
-"                    "
+#: pages/templates/pages/network_status.html:5
+msgid "Statut du réseau"
 msgstr ""
-"\n"
-"Your device is currently connected to Registration subnetwork. This network "
-"does not have access to the Internet."
-"                    "
-
-#: pages/templates/pages/inscription_zone_info.html:124
-#, fuzzy
-#| msgid "Gestion de mon compte ResEl"
-msgid "J'ai un compte ResEl"
-msgstr "I have a ResEl account"
-
-#: pages/templates/pages/inscription_zone_info.html:125
-#, fuzzy
-#| msgid "Pas de compte ?"
-msgid "Je n'ai pas de compte"
-msgstr "I don't have an account"
 
 #: pages/templates/pages/news.html:18
 #, fuzzy
@@ -2192,51 +4367,61 @@ msgstr ""
 msgid "N'hésitez pas non plus à nous trouver sur "
 msgstr ""
 
-#: pages/templates/pages/news.html:30
-msgid "Lire la suite"
+#: pages/templates/pages/news.html:21
+#: pages/templates/pages/piece_of_news.html:19
+msgid "Flux RSS"
+msgstr ""
+
+#: pages/templates/pages/news.html:21
+#: pages/templates/pages/piece_of_news.html:19
+msgid "Flux Atom"
 msgstr ""
 
 #: pages/templates/pages/news.html:31
-#: pages/templates/pages/piece_of_news.html:28
+msgid "Lire la suite"
+msgstr ""
+
+#: pages/templates/pages/news.html:32
+#: pages/templates/pages/piece_of_news.html:29
 #, python-format
 msgid "%(author)s, le %(date)s"
 msgstr "%(author)s, %(date)s"
 
-#: pages/templates/pages/news.html:34
+#: pages/templates/pages/news.html:35
 msgid "Pas de news à l'horizon"
 msgstr "No fresh news in sight"
 
-#: pages/templates/pages/news.html:39
+#: pages/templates/pages/news.html:40
 msgid "Précédente"
 msgstr ""
 
-#: pages/templates/pages/news.html:41
+#: pages/templates/pages/news.html:42
 msgid "Page "
 msgstr ""
 
-#: pages/templates/pages/news.html:41
+#: pages/templates/pages/news.html:42
 msgid "sur"
 msgstr ""
 
-#: pages/templates/pages/news.html:43
+#: pages/templates/pages/news.html:44
 msgid "Suivante"
 msgstr ""
 
-#: pages/templates/pages/piece_of_news.html:19
+#: pages/templates/pages/piece_of_news.html:20
 msgid " Retour"
 msgstr ""
 
-#: pages/templates/pages/service.html:18
+#: pages/views.py:139
 #, fuzzy
-#| msgid "Les services du ResEl"
-msgid "Les services ResEl"
-msgstr "ResEl services"
+#| msgid "Les dernières nouvelles ResEl"
+msgid "Les dernières infos ResEl"
+msgstr "Latest news"
 
-#: pages/templates/pages/service.html:19
-msgid "Retrouvez ici tous les services proposés par le ResEl."
+#: pages/views.py:141
+msgid "Des informations sur l'état du réseau sur les campus de Brest et Rennes"
 msgstr ""
 
-#: pages/views.py:220
+#: pages/views.py:222
 msgid ""
 "Votre demande a bien été envoyée aux administrateurs. L'un d'eux vous "
 "répondra d'ici peu."
@@ -2273,6 +4458,18 @@ msgstr "Page not found"
 msgid "La page que vous cherchez n'existe pas."
 msgstr "The page you are looking for does not exist."
 
+#: templates/418.html:5
+msgid "418"
+msgstr ""
+
+#: templates/418.html:11
+msgid "Une petite soif ?"
+msgstr ""
+
+#: templates/418.html:15
+msgid "<strong>418 :</strong> Je suis une théière"
+msgstr ""
+
 #: templates/500.html:5 templates/500.html:11
 msgid "Erreur interne"
 msgstr "Internal error"
@@ -2283,38 +4480,41 @@ msgid ""
 "persiste, contactez un administrateur."
 msgstr "An error occured. Contact an admin."
 
-#: templates/base.html:66 templates/base.html:81
+#: templates/base.html:55
+msgid "Logo ResEl"
+msgstr ""
+
+#: templates/base.html:81 templates/base.html:108
 msgid "Aucun article"
 msgstr "No articles"
 
-#: templates/base.html:98 templates/base.html:206
+#: templates/base.html:130 templates/base.html:252
 msgid "Contact"
 msgstr "Contact"
 
-#: templates/base.html:118
+#: templates/base.html:150
 msgid "Listes de diffusion"
 msgstr "Mailing lists"
 
-#: templates/base.html:122 templates/registration/logout.html:4
+#: templates/base.html:154
 msgid "Déconnexion"
 msgstr "Log out"
 
-#: templates/base.html:152
+#: templates/base.html:197
 msgid "Votre accès internet a expiré :"
 msgstr "Your Internet access has expired"
 
-#: templates/base.html:152
+#: templates/base.html:197
 #, fuzzy
 #| msgid "Afin de bénéficier des services du ResEl, vous devez vous connecter."
 msgid "Afin de bénéficier des services du ResEl, vous devez "
-msgstr ""
-"To use ResEl services you must "
+msgstr "To use ResEl services you must "
 
-#: templates/base.html:156
+#: templates/base.html:201
 msgid "Votre accès internet va bientôt expirer :"
 msgstr "Your internet access will soon expire: "
 
-#: templates/base.html:156
+#: templates/base.html:201
 #, fuzzy
 #| msgid "Afin de bénéficier des services du ResEl, vous devez vous connecter."
 msgid "Afin de continuer à bénéficier des services du ResEl, vous devez "
@@ -2322,59 +4522,71 @@ msgstr ""
 "To use ResEl services you must sign in using your ResEl account (not your "
 "Télécom Bretagne account)"
 
-#: templates/base.html:170
+#: templates/base.html:210
+msgid "Erreur"
+msgstr "Error"
+
+#: templates/base.html:215
 msgid "Succès"
 msgstr "Success"
 
-#: templates/base.html:175
+#: templates/base.html:220
 msgid "Information"
 msgstr "Information"
 
-#: templates/base.html:180
+#: templates/base.html:225
 msgid "Attention"
 msgstr "Warning"
 
-#: templates/base.html:203
+#: templates/base.html:248
 msgid "Les statuts de l'association"
 msgstr "Association status"
 
-#: templates/base.html:204
+#: templates/base.html:249
 msgid "Le règlement intérieur"
 msgstr "ResEl Rules of Procedure"
 
-#: templates/base.html:205
+#: templates/base.html:250
 msgid "Tarifs et Cotisation"
 msgstr "Prices and member fees"
 
-#: templates/base.html:212
-msgid "Les clubs"
-msgstr "Clubs"
+#: templates/base.html:251
+msgid "Mentions Légales"
+msgstr ""
 
-#: templates/base.html:215
+#: templates/base.html:258
+msgid "État du réseau"
+msgstr ""
+
+#: templates/base.html:260
+msgid "Les clubs et la vie du campus"
+msgstr ""
+
+#: templates/base.html:261
 msgid "Devenez Administrateur ResEl !"
 msgstr "Become a ResEl Admin!"
 
-#: templates/base.html:216
+#: templates/base.html:262
 msgid "Ancien site ResEl"
 msgstr "Former ResEl website"
 
-#: templates/base.html:221
+#: templates/base.html:267
 msgid "Fédérez"
 msgstr "Fédérez"
 
-#: templates/base.html:222
+#: templates/base.html:268
 msgid "IMT Atlantique"
 msgstr "IMT Atlantique"
 
-#: templates/base.html:224
+#: templates/base.html:269
 msgid "Associations d'IMT Atlantique"
 msgstr "IMT Atlantique associations"
 
-#: templates/base.html:225
+#: templates/base.html:270
 msgid "Alumni"
 msgstr "Alumni"
 
-#: templates/base.html:234
+#: templates/base.html:279
 msgid "Code Source"
 msgstr "Source Code"
 
@@ -2444,15 +4656,7 @@ msgstr "And more!"
 msgid "Vous désirez vous connecter ?"
 msgstr "Would you like to log in?"
 
-#: templates/registration/logout.html:9
-msgid "Déconnecté"
-msgstr "Logged out"
-
-#: templates/registration/logout.html:10
-msgid "Merci pour le temps que vous avez accordé à ce site aujourd'hui."
-msgstr "Thank you for browsing ResEl website"
-
-#: tresorerie/async_tasks.py:117 tresorerie/async_tasks.py:144
+#: tresorerie/async_tasks.py:142 tresorerie/async_tasks.py:169
 msgid "Facture ResEl"
 msgstr "Invoice"
 
@@ -2476,23 +4680,17 @@ msgstr ""
 "Hello %s,\n"
 "\n"
 
-#: tresorerie/management/commands/check-payments.py:58 tresorerie/views.py:311
+#: tresorerie/management/commands/check-payments.py:58
 msgid "Votre carte a expiré"
 msgstr "Your credit card has expired"
 
-#: tresorerie/management/commands/check-payments.py:59 tresorerie/views.py:313
+#: tresorerie/management/commands/check-payments.py:59
 msgid "Votre carte a été refusée"
 msgstr "Your credit card has been refused"
 
-#: tresorerie/management/commands/check-payments.py:60 tresorerie/views.py:314
+#: tresorerie/management/commands/check-payments.py:60
 msgid "Une erreur est survenue dans le traitement de votre demande"
 msgstr "An error occured while processing your request"
-
-#: tresorerie/templates/tresorerie/choose_product.html:5
-#: tresorerie/templates/tresorerie/home.html:5
-#: tresorerie/templates/tresorerie/recap.html:5
-msgid "Paiement"
-msgstr "Payment"
 
 #: tresorerie/templates/tresorerie/choose_product.html:11
 #: tresorerie/templates/tresorerie/home.html:13
@@ -2500,14 +4698,14 @@ msgid "Paiement de votre accès internet"
 msgstr "Internet access payment"
 
 #: tresorerie/templates/tresorerie/choose_product.html:46
+#: tresorerie/templates/tresorerie/list_product.html:46
 msgid "Accès au ResEl"
 msgstr ""
 
 #: tresorerie/templates/tresorerie/choose_product.html:49
-#: tresorerie/templates/tresorerie/choose_product.html:87
+#: tresorerie/templates/tresorerie/choose_product.html:78
 #: tresorerie/templates/tresorerie/list_product.html:49
 #: tresorerie/templates/tresorerie/list_product.html:77
-#: tresorerie/templates/tresorerie/list_product.html:107
 msgid "Services inclus :"
 msgstr "Included services:"
 
@@ -2515,22 +4713,14 @@ msgstr "Included services:"
 msgid "déjà payé"
 msgstr "already paid"
 
-#: tresorerie/templates/tresorerie/choose_product.html:72
-msgid "Vous êtes étudiant en FIP ?"
-msgstr "Are a FIP student?"
-
-#: tresorerie/templates/tresorerie/choose_product.html:74
-msgid "Vous n'êtes pas étudiant en FIP ?"
-msgstr "Are not a FIP student?"
-
-#: tresorerie/templates/tresorerie/choose_product.html:84
-#: tresorerie/templates/tresorerie/list_product.html:104
+#: tresorerie/templates/tresorerie/choose_product.html:75
+#: tresorerie/templates/tresorerie/list_product.html:74
 msgid "Adhésion simple"
 msgstr "Simple membership"
 
-#: tresorerie/templates/tresorerie/choose_product.html:110
+#: tresorerie/templates/tresorerie/choose_product.html:101
 #: tresorerie/templates/tresorerie/home.html:33
-#: tresorerie/templates/tresorerie/recap.html:66
+#: tresorerie/templates/tresorerie/recap.html:60
 msgid "Payer par carte"
 msgstr "Pay using credit card"
 
@@ -2616,93 +4806,79 @@ msgstr "Prices"
 msgid "Les tarifs"
 msgstr "Prices"
 
-#: tresorerie/templates/tresorerie/list_product.html:46
-msgid "Accès au ResEl Normal"
-msgstr "Normal ResEl acces"
-
-#: tresorerie/templates/tresorerie/list_product.html:74
-msgid "Accès au ResEl FIP"
-msgstr "FIP ResEl access"
-
-#: tresorerie/templates/tresorerie/recap.html:11
+#: tresorerie/templates/tresorerie/recap.html:15
 msgid "Récapitulatif de la commande"
 msgstr "Order recap"
 
-#: tresorerie/templates/tresorerie/recap.html:17
+#: tresorerie/templates/tresorerie/recap.html:21
 #: tresorerie/templates/tresorerie/transaction_detail.html:15
 msgid "Généralités"
 msgstr "In brief"
 
-#: tresorerie/templates/tresorerie/recap.html:22
+#: tresorerie/templates/tresorerie/recap.html:26
 #: tresorerie/templates/tresorerie/transaction_detail.html:20
 msgid "Identifiant de transaction"
 msgstr "Transaction id"
 
-#: tresorerie/templates/tresorerie/recap.html:23
+#: tresorerie/templates/tresorerie/recap.html:27
 #: tresorerie/templates/tresorerie/transaction_detail.html:21
 msgid "Type de paiement"
 msgstr "Payment type"
 
-#: tresorerie/templates/tresorerie/recap.html:23
+#: tresorerie/templates/tresorerie/recap.html:27
 msgid "Les paiements en espèce et par chèque sont uniquement possible au foyer"
 msgstr "Cash and check payements are only possible at the Foyer des Élèves"
 
-#: tresorerie/templates/tresorerie/recap.html:23
+#: tresorerie/templates/tresorerie/recap.html:27
 #: tresorerie/templates/tresorerie/transaction_detail.html:21
 msgid "Carte Bancaire"
 msgstr "Credit card"
 
-#: tresorerie/templates/tresorerie/recap.html:24
+#: tresorerie/templates/tresorerie/recap.html:28
 #: tresorerie/templates/tresorerie/transaction_detail.html:5
 #: tresorerie/templates/tresorerie/transaction_detail.html:9
 #: tresorerie/templates/tresorerie/transaction_detail.html:22
 msgid "Résumé de la transaction"
 msgstr "Transaction sum up"
 
-#: tresorerie/templates/tresorerie/recap.html:32
+#: tresorerie/templates/tresorerie/recap.html:36
 #: tresorerie/templates/tresorerie/transaction_detail.html:30
 msgid "Durée"
 msgstr "Duration"
 
-#: tresorerie/templates/tresorerie/recap.html:32
+#: tresorerie/templates/tresorerie/recap.html:36
 #: tresorerie/templates/tresorerie/transaction_detail.html:30
 msgid "mois"
 msgstr "month"
 
-#: tresorerie/templates/tresorerie/recap.html:33
+#: tresorerie/templates/tresorerie/recap.html:37
 #: tresorerie/templates/tresorerie/transaction_detail.html:31
 msgid "Prix"
 msgstr "Price"
 
-#: tresorerie/templates/tresorerie/recap.html:44
+#: tresorerie/templates/tresorerie/recap.html:48
 msgid "Retour aux offres"
 msgstr "Back to the offers"
 
-#: tresorerie/templates/tresorerie/recap.html:47
+#: tresorerie/templates/tresorerie/recap.html:51
 msgid "Total :"
 msgstr "Total:"
 
-#: tresorerie/templates/tresorerie/recap.html:79
+#: tresorerie/templates/tresorerie/recap.html:73
 msgid "Besoin d'aide ?"
 msgstr "Need help?"
 
-#: tresorerie/templates/tresorerie/recap.html:95
+#: tresorerie/templates/tresorerie/recap.html:89
 #, fuzzy
 #| msgid ""
 #| "Afin de faire partie de l'association du ResEl vous devez lire "
 #| "attentivement son règlement intérieur et l'accepter."
 msgid ""
-"Afin de valider votre paiement vous devez lire attentivement le règlement "
+"Afin de valider votre paiement, vous devez lire attentivement le règlement "
 "intérieur et l'accepter."
 msgstr ""
 "To validate the payment you must carefully read Rules of Procedure and "
 "accept them."
-
-#: tresorerie/templates/tresorerie/recap.html:592
-#, fuzzy
-#| msgid "Paiement"
-msgid "Chargement"
-msgstr "Loading"
 
 #: tresorerie/templates/tresorerie/transaction_detail.html:21
 msgid ""
@@ -2714,90 +4890,96 @@ msgid "Retour "
 msgstr "Back "
 
 #: tresorerie/templates/tresorerie/transaction_detail.html:42
-msgid "Télécharger la facture "
+#, fuzzy
+#| msgid "Télécharger la facture "
+msgid "Télécharger le reçu"
 msgstr "Download the invoice "
 
 #: tresorerie/templates/tresorerie/transaction_detail.html:42
-msgid "Facture en génération"
+#, fuzzy
+#| msgid "Facture en génération"
+msgid "Reçu en génération"
 msgstr "loading invoice"
 
-#: tresorerie/views.py:109
+#: tresorerie/templates/tresorerie/transaction_detail.html:43
+msgid ""
+"Le ResEl ne fournit pas de facture, vous pouvez cependant demander un reçu "
+"aux administrateurs si vous en avez besoin"
+msgstr ""
+
+#: tresorerie/views.py:113
 #, fuzzy
 #| msgid "Veuillez renseigner vos informations personnelles"
 msgid "Veuillez vérifier que vos informations personnelles soient correctes."
 msgstr "Please check your personal information"
 
-#: tresorerie/views.py:181
+#: tresorerie/views.py:205
 msgid ""
-"Il semblerait que nous n'avons pas réussi à contacter le système de "
-"paiement. Si le problème se reproduit vous pouvez le contouner soit en "
-"essayant de payer depuis une connexion exterieur (depuis l'école ou en 4G), "
-"soit en nous contactant directement."
+"Il semblerait que vous ayez tenté de contourner le paiement. Cette action a "
+"été signalée."
 msgstr ""
 
-#: tresorerie/views.py:200
+#: tresorerie/views.py:221
 #, fuzzy
 #| msgid ""
 #| "Une erreur s'est produite lors de la création de vos identifiants. "
 #| "Veuillez contacter un administeur."
 msgid ""
-"Une erreur s'est produite lors de la commande. Les administrateurs en ont "
-"été informés"
+"Une erreur s'est produite lors de la commande. Veuillez contacter un "
+"administrateur."
 msgstr ""
-"An error occured while validating the invoice. The ResEl administrators have"
-"been informed"
+"An error occured while creating login credentials. Please contact an admin."
 
-#: tresorerie/views.py:208
-msgid ""
-"Vous êtes déjà membre de l'association, vous n'avez pas besoin de payer à "
-"nouveau la cotisation."
-msgstr ""
-
-#: tresorerie/views.py:283
+#: tresorerie/views.py:291
 msgid ""
 "Vous venez de payer votre accès au ResEl, vous devriez recevoir sous peu un "
 "email avec votre facture."
 msgstr ""
 
-#: tresorerie/views.py:306
-msgid "Votre numéro de carte n'est pas valide"
-msgstr "Your card number is invalid"
+#: tresorerie/views.py:342 tresorerie/views.py:343
+msgid "Le paiement n'a pas été effectué"
+msgstr ""
 
-#: tresorerie/views.py:307
-msgid "Le mois d'expiration de votre carte n'est pas valide"
-msgstr "Your card expiration date is not valid"
+#: tresorerie/views.py:344
+#, fuzzy
+#| msgid "Votre mot de passe a été modifié"
+msgid "Le paiement n'a pas été confirmé"
+msgstr "Your password has been modified."
 
-#: tresorerie/views.py:308
-msgid "L'année d'expiration de votre carte n'est pas valide"
-msgstr "Your card expiration date is not valid"
+#: tresorerie/views.py:345 tresorerie/views.py:346
+msgid "Le paiement n'a pas été authentifié"
+msgstr ""
 
-#: tresorerie/views.py:309
-msgid "Le cryptogramme de votre carte n'est pas valide"
-msgstr "The card cryptogram is incorrect"
-
-#: tresorerie/views.py:310
-msgid "Votre numéro de carte est incorrect"
-msgstr "Your card number is incorrect"
-
-#: tresorerie/views.py:312
-msgid "Le cryptogramme de votre carte est incorrect"
-msgstr "The card cryptogram is incorrect"
-
-#: tresorerie/views.py:333
+#: tresorerie/views.py:347
 #, fuzzy
 #| msgid ""
-#| "Impossible de contacter le serveur de paiement pour le moment, veuillez "
-#| "ré-essayer plus tard"
+#| "Cette machine ne semble pas vous appartenir. Veuillez contacter un "
+#| "administrateur afin de la transférer."
 msgid ""
-"Nous recevons actuellement trop de paiements simultanés, veuillez ré-essayer "
-"plus tard"
-msgstr "Unable to contact payment server, please retry later"
+"Le paiement est en attente. Veuillez contacter un administrateur dans une "
+"heure."
+msgstr ""
+"This device doesn't seem to belong to you. Please contact an admin to make "
+"it over."
 
-#: tresorerie/views.py:343
-msgid ""
-"Impossible de contacter le serveur de paiement pour le moment, veuillez ré-"
-"essayer plus tard"
-msgstr "Unable to contact payment server, please retry later"
+#: tresorerie/views.py:348
+#, fuzzy
+#| msgid ""
+#| "Une erreur s'est produite lors de la création de vos identifiants. "
+#| "Veuillez contacter un administeur."
+msgid "Une erreur est survenue. Veuillez contacter un administrateur."
+msgstr ""
+"An error occured while creating login credentials. Please contact an admin."
+
+#: tresorerie/views.py:349
+msgid "Le paiement a été annulé"
+msgstr "The payment has been cancelled"
+
+#: tresorerie/views.py:393
+#, fuzzy
+#| msgid "Aucune association trouvée"
+msgid "Aucune transaction trouvée"
+msgstr "No association found"
 
 #: wiki/templates/wiki/show-article.html:28
 msgid "Publié"
@@ -2809,7 +4991,236 @@ msgstr "Last modification"
 
 #: wiki/templates/wiki/show-category.html:26
 msgid "Aucun article disponible."
-msgstr "No articles are available."
+msgstr "No article is available."
+
+#~ msgid "Déconnecté"
+#~ msgstr "Logged out"
+
+#~ msgid "Merci pour le temps que vous avez accordé à ce site aujourd'hui."
+#~ msgstr "Thank you for browsing ResEl website"
+
+#~ msgid "Ingénieur généraliste (FIG)"
+#~ msgstr "Master of Engineering (FIG)"
+
+#, fuzzy
+#~| msgid "Toutes vos transactions"
+#~ msgid "No transaction found"
+#~ msgstr "All transactions"
+
+#~| msgid "Aucun club trouvé"
+#~ msgid "Aucunne club trouvé"
+#~ msgstr "No club found"
+
+#, fuzzy
+#~| msgid "Utilisateur :"
+#~ msgid "Utilisater introuvable"
+#~ msgstr "Username:"
+
+#~ msgid "Année de Campagne"
+#~ msgstr "Campaign's year"
+
+#~ msgid "Supprimer"
+#~ msgstr "Delete"
+
+#~ msgid "Assos"
+#~ msgstr "Associations"
+
+#~ msgid "Listes"
+#~ msgstr "Lists"
+
+#~ msgid "Désinscrire une personne"
+#~ msgstr "Unsubscribe a user"
+
+#~ msgid "Alias déjà utilisé"
+#~ msgstr "Nickname is already taken"
+
+#, fuzzy
+#~| msgid "Adresse MAC"
+#~ msgid "Adresse IP"
+#~ msgstr "IP address"
+
+#~ msgid "Vous n'avez enregistré aucune machine à votre nom."
+#~ msgstr "You have registered no devices."
+
+#~ msgid "Votre machine n'a pas besoin d'être ré-activée."
+#~ msgstr "Your device does not need to be reactivated."
+
+#, fuzzy
+#~| msgid "Votre machine n'a pas besoin d'être ré-activée."
+#~ msgid "Votre machine vient d'être réactivée."
+#~ msgstr "Your device is reactivated."
+
+#~ msgid ""
+#~ "Votre machine a bien été ajoutée. Veuillez ré-initialiser votre connexion "
+#~ "en débranchant/rebranchant le câble ou en vous déconnectant/reconnectant "
+#~ "au Wi-Fi ResEl Secure."
+#~ msgstr ""
+#~ "Your device has been registered successfully. Please reset your "
+#~ "connection by unplugging/plugging your Ethernet cable or disconnect/"
+#~ "reconnect to the Wi-Fi hostpot named \"ResEl Secure\"."
+
+#~ msgid ""
+#~ "Votre machine est déjà connue par notre réseau. Par conséquent, vous "
+#~ "n'avez pas besoin d'accéder à cette page."
+#~ msgstr ""
+#~ "Your device is already registered, therefore you do not need to access "
+#~ "this page."
+
+#~ msgid ""
+#~ "Votre machine est déjà inscrite. Veuillez vous connecter sur le réseau Wi-"
+#~ "Fi ResEl Secure."
+#~ msgstr ""
+#~ "Your device is already registered. Please connect to the Wi-Fi network "
+#~ "named \"ResEl Secure\"."
+
+#~ msgid ""
+#~ "Afin de pouvoir accéder à internet vous devez enregistrer votre ordinateur"
+#~ msgstr ""
+#~ "To get ResEl services on your device you must register it on the network"
+
+#~ msgid ""
+#~ "Vous vous trouvez sur un réseau d'inscription mais ne possédez pas d'IP "
+#~ "dans ce réseau. Veuillez contacter un administrateur."
+#~ msgstr ""
+#~ "You are in the registration subnetwork but you don't have an IP address "
+#~ "in this network. Please contact an admin."
+
+#~ msgid ""
+#~ "Une erreur s'est glissée dans le traitement de votre requête. Si le "
+#~ "problème persiste, contactez un administrateur."
+#~ msgstr ""
+#~ "An error occured while processing your request. If you still encounter "
+#~ "this problem, please contact an admin."
+
+#~| msgid "Vous profiterez des nombreux services du ResEl"
+#~ msgid "Connectez-vous pour bénéficier de tous les services du ResEl"
+#~ msgstr "Log in to enjoy all our services"
+
+#~ msgid "Consulter toutes mes machines inscrites"
+#~ msgstr "Review registered devices"
+
+#~ msgid "Machine non enregistrée"
+#~ msgstr "Device not registered"
+
+#~ msgid ""
+#~ "Afin de pouvoir bénéficier des services du Resel, vous devez enregistrer "
+#~ "votre machine sur le réseau."
+#~ msgstr ""
+#~ "To get Internet access and ResEl services, you must register your device "
+#~ "on the network."
+
+#~ msgid "Enregistrer"
+#~ msgstr "Register"
+
+#~ msgid "mon ordinateur"
+#~ msgstr "my computer"
+
+#, fuzzy
+#~| msgid "Connexion au ResEl"
+#~ msgid "Connecté au ResEl"
+#~ msgstr "Connection to ResEl network"
+
+#~ msgid "Vos actions sont limitées"
+#~ msgstr "You won't be able to manage everything"
+
+#~ msgid "Vous venez d'activer votre appareil"
+#~ msgstr "You just activated your device"
+
+#~ msgid "Vous êtes sur la zone d'inscription"
+#~ msgstr "You are in registration subnetwork."
+
+#~ msgid "Je fonce !"
+#~ msgstr "Let's do it!"
+
+#, fuzzy
+#~| msgid ""
+#~| "\n"
+#~| "                        Votre machine est actuellement connectée sur la "
+#~| "zone inscription. Dans cette zone, vous n'avez pas accès à internet.\n"
+#~| "                        Avant d'avoir internet, passez sur notre site "
+#~| "pour vous inscrire à notre association.\n"
+#~| "                    "
+#~ msgid ""
+#~ "\n"
+#~ "                        Votre machine est actuellement connectée sur la "
+#~ "zone inscription. Dans cette zone, vous n'avez pas accès à internet.\n"
+#~ "                    "
+#~ msgstr ""
+#~ "\n"
+#~ "Your device is currently connected to Registration subnetwork. This "
+#~ "network does not have access to the Internet.                    "
+
+#, fuzzy
+#~| msgid "Gestion de mon compte ResEl"
+#~ msgid "J'ai un compte ResEl"
+#~ msgstr "I have a ResEl account"
+
+#, fuzzy
+#~| msgid "Pas de compte ?"
+#~ msgid "Je n'ai pas de compte"
+#~ msgstr "I don't have an account"
+
+#, fuzzy
+#~| msgid "Les services du ResEl"
+#~ msgid "Les services ResEl"
+#~ msgstr "ResEl services"
+
+#~ msgid "Vous êtes étudiant en FIP ?"
+#~ msgstr "Are a FIP student?"
+
+#~ msgid "Accès au ResEl Normal"
+#~ msgstr "Normal ResEl acces"
+
+#~ msgid "Accès au ResEl FIP"
+#~ msgstr "FIP ResEl access"
+
+#, fuzzy
+#~| msgid "Paiement"
+#~ msgid "Chargement"
+#~ msgstr "Loading"
+
+#, fuzzy
+#~| msgid ""
+#~| "Une erreur s'est produite lors de la création de vos identifiants. "
+#~| "Veuillez contacter un administeur."
+#~ msgid ""
+#~ "Une erreur s'est produite lors de la commande. Les administrateurs en ont "
+#~ "été informés"
+#~ msgstr ""
+#~ "An error occured while validating the invoice. The ResEl administrators "
+#~ "havebeen informed"
+
+#~ msgid "Votre numéro de carte n'est pas valide"
+#~ msgstr "Your card number is invalid"
+
+#~ msgid "Le mois d'expiration de votre carte n'est pas valide"
+#~ msgstr "Your card expiration date is not valid"
+
+#~ msgid "L'année d'expiration de votre carte n'est pas valide"
+#~ msgstr "Your card expiration date is not valid"
+
+#~ msgid "Le cryptogramme de votre carte n'est pas valide"
+#~ msgstr "The card cryptogram is incorrect"
+
+#~ msgid "Votre numéro de carte est incorrect"
+#~ msgstr "Your card number is incorrect"
+
+#~ msgid "Le cryptogramme de votre carte est incorrect"
+#~ msgstr "The card cryptogram is incorrect"
+
+#, fuzzy
+#~| msgid ""
+#~| "Impossible de contacter le serveur de paiement pour le moment, veuillez "
+#~| "ré-essayer plus tard"
+#~ msgid ""
+#~ "Nous recevons actuellement trop de paiements simultanés, veuillez ré-"
+#~ "essayer plus tard"
+#~ msgstr "Unable to contact payment server, please retry later"
+
+#~ msgid ""
+#~ "Impossible de contacter le serveur de paiement pour le moment, veuillez "
+#~ "ré-essayer plus tard"
+#~ msgstr "Unable to contact payment server, please retry later"
 
 #~ msgid "Longueur d'alias trop courte"
 #~ msgstr "Nickname is too short"
@@ -2882,13 +5293,6 @@ msgstr "No articles are available."
 #~ "Your device had been deactivated. We have reactivated it automatically. "
 #~ "Please reset your connection by unplugging/plugging your Ethernet cable "
 #~ "or disconnect/reconnect to the Wi-Fi network."
-
-#~ msgid ""
-#~ "Cette machine ne semble pas vous appartenir. Veuillez contacter un "
-#~ "administrateur afin de la transférer."
-#~ msgstr ""
-#~ "This device doesn't seem to belong to you. Please contact an admin to "
-#~ "make it over."
 
 #~ msgid "Cette machine est déjà enregistrée comme étant dans le bon campus."
 #~ msgstr ""
@@ -3033,9 +5437,6 @@ msgstr "No articles are available."
 #~ msgid "Prix unitaire"
 #~ msgstr "Unit price"
 
-#~ msgid "Montant à payer"
-#~ msgstr "Amount"
-
 #~ msgid "Délivrée à"
 #~ msgstr "Invoice to"
 
@@ -3050,9 +5451,6 @@ msgstr "No articles are available."
 
 #~ msgid "Moyen de paiement possible"
 #~ msgstr "Means of payment"
-
-#~ msgid "Commentaires"
-#~ msgstr "Comments"
 
 #~ msgid "Vous n'êtes pas inscrit dans notre base de données."
 #~ msgstr "You are not registered in our database."
