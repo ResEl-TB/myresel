@@ -94,7 +94,8 @@
                             </div>
                         </div>
                     </div>
-                {% elif need_to_pay == 'warning' %}
+                {% elif need_to_pay == 'warning' or need_to_pay == 'danger' %}
+                  {% if need_to_pay == 'warning' %}
                     <div class="col-md-6 col-md-offset-2 payement-block">
                         <div class="row">
                             <div class="col-xs-5 col-sm-3 computer-icon warning"><span class="fa fa-fw fa-exclamation hidden-xs"></span></div>
@@ -106,21 +107,7 @@
                                     <div class=""><span class="fa fa-fw fa-circle danger" ></span> {% trans "Cotisation à l'association non payée" %}</div>
                                 {% endif %}
                                 <div><span class="fa fa-fw fa-circle warning"></span> {% trans "Internet jusqu'au" %} {{ end_fee|date:"j F Y" }}</div>
-                                <div class="pay-btn-container"
-                                {% if subnet == 'REGN' %}
-                                    data-trigger="hover" data-placement="top" data-toggle="popover" data-content="{% trans "Veuillez vous connecter au réseau ResEl Secure pour procéder au paiement" %}"
-                                {% endif %}>
-                                    <a href="{% url 'tresorerie:home' %}" class="btn btn-default btn-lg
-                                    {% if subnet == 'REGN' %}
-                                        disabled
-                                    {% endif %}">
-                                        {% trans "Effectuer un paiement"%}
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {% elif need_to_pay == 'danger' %}
+                  {% else %}
                     <div class="col-md-6 col-md-offset-2">
                         <div class="row">
                             <div class="col-xs-5 col-sm-3 computer-icon hidden-xs danger"><span class="fa fa-times"></span></div>
@@ -133,12 +120,15 @@
                                 {% endif %}
                                 <div><span class="fa fa-fw fa-circle danger"></span> {% trans "Accès internet expiré le" %} {{ end_fee|date:"j F Y" }}</div>
                                                             <div class="warning">{% trans "Votre abonnement au Resel a expiré, pour pouvoir à nouveau utiliser nos services vous devez régulariser votre situation." %}</div>
+                  {% endif %}
                                 <div class="pay-btn-container"
                                 {% if subnet == 'REGN' %}
                                     data-trigger="hover" data-placement="top" data-toggle="popover" data-content="{% trans "Veuillez vous connecter au réseau ResEl Secure pour procéder au paiement" %}"
+                                {% elif subnet == 'EXPN' %}
+                                    data-trigger="hover" data-placement="top" data-toggle="popover" data-content="{% trans "Le paiement nécessite une connexion à Internet active. Veuillez utiliser votre 4G ou Eduroam pour procéder au paiement." %}"
                                 {% endif %}>
                                     <a href="{% url 'tresorerie:home' %}" class="btn btn-default btn-lg
-                                    {% if subnet == 'REGN' %}
+                                    {% if subnet == 'REGN' or subnet == 'EXPN' %}
                                         disabled
                                     {% endif %}">
                                         {% trans "Effectuer un paiement"%}
