@@ -23,7 +23,7 @@ from django.views.generic import DetailView, View, ListView
 
 import tresorerie.async_tasks as async_tasks
 from fonctions import generic
-from fonctions.decorators import need_to_pay, not_on_regn
+from fonctions.decorators import need_to_pay, able_to_pay
 from tresorerie.models import Transaction, Product, StripeCustomer
 
 logger = logging.getLogger("default")
@@ -37,7 +37,7 @@ class ChooseProduct(View):
     template_name = 'tresorerie/choose_product.html'
 
     @method_decorator(login_required)
-    @method_decorator(not_on_regn)
+    @method_decorator(able_to_pay)
     @method_decorator(need_to_pay)
     def dispatch(self, *args, **kwargs):
         return super(ChooseProduct, self).dispatch(*args, **kwargs)
@@ -92,7 +92,7 @@ class Pay(View):
     template_name = 'tresorerie/recap.html'
 
     @method_decorator(login_required)
-    @method_decorator(not_on_regn)
+    @method_decorator(able_to_pay)
     @method_decorator(need_to_pay)
     def dispatch(self, *args, **kwargs):
         return super(Pay, self).dispatch(*args, **kwargs)

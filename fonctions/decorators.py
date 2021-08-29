@@ -70,10 +70,10 @@ def need_to_pay(function=None, redirect_to='home'):
         return _dec(function)
 
 
-def not_on_regn(function=None, redirect_to='home'):
-    """ Vérifie que l'utilisateur n'est pas sur le réseau d'inscription
+def able_to_pay(function=None, redirect_to='home'):
+    """ Vérifie que l'utilisateur est sur un réseau sur lequel il peut payer
 
-    Ce décorateur s'assure que l'utilisateur n'est pas sur le réseau d'inscription.
+    Ce décorateur s'assure que l'utilisateur n'est pas sur le réseau d'inscription ou d’expiration.
     Si ce n'est pas le cas, il est redirigé vers la page spécifiée dans 'redirect_to'
     ou à défaut vers la page de news.
     """
@@ -81,9 +81,15 @@ def not_on_regn(function=None, redirect_to='home'):
     def _dec(view_func):
         @wraps(view_func, assigned=available_attrs(view_func))
         def _view(request, *args, **kwargs):
-            if request.network_data['subnet'] == 'REGN':
-                messages.error(request, _('Veuillez vous connecter au réseau ResEl Secure pour '
-                                          'effectuer votre paiement.'))
+            subnet = request.network_data['subnet']
+            if subnet in ['REGN', 'EXPN']:
+                if request.network_data['subnet'] == 'REGN':
+                    messages.error(request, _('Veuillez vous connecter au réseau ResEl Secure pour '
+                                              'effectuer votre paiement.'))
+                else:
+                    messages.error(request, _('Veuillez vous connecter à un réseau connecté à '
+                                              'Internet (4G, Eduroam,…) pour effectuer votre '
+                                              'paiement.'))
                 return HttpResponseRedirect(reverse(redirect_to))
             return view_func(request, *args, **kwargs)
 
