@@ -46,11 +46,8 @@
               {% trans "Vous pouvez également télécharger nos guides de connexion :" %}
             </p>
             <ul>
-              <li><a href="{% static "files/guide_connexion_BREST_2016.pdf" %}">
-                  {% trans "Guide connexion campus de Brest" %}</a>
-              </li>
-              <li><a href="{% static "files/guide_connexion_RENNES_2016.pdf" %}">
-                  {% trans "Guide connexion campus de Rennes" %}</a></li>
+              <li><a href="{% static "files/"|add:request.LANGUAGE_CODE|add:"/Flyer.pdf" %}">{% trans "Flyer de connexion" %}</a></li>
+              <li><a href="{% static "files/"|add:request.LANGUAGE_CODE|add:"/Guide.pdf" %}">{% trans "Guide de connexion filaire" %}</a></li>
             </ul>
             <p>
               Enfin, si vous désirez contribuer à l'amélioration du réseau, de l'association, en apprendre
