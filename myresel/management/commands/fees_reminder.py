@@ -58,12 +58,12 @@ class Command(BaseCommand):
                 "tresorerie/mails/reminder.txt",
                 {'user': user, 'day': day,
                  'days': days, 'reminders': settings.REMINDERS_DAYS})
-            subject = "[ResEl] Vos frais d'accès expirent dans %s jours" % days.days
+            subject = "[ResEl] Votre accès à Internet expire dans %s jours" % days.days
         else:
             content = render_to_string(
                 "tresorerie/mails/expired.txt",
                 {'user': user, 'day': day})
-            subject = "[ResEl] Vos frais d'accès ont expirés"
+            subject = "[ResEl] Votre accès à Internet a expiré"
 
         email = EmailMessage(
             subject=subject,

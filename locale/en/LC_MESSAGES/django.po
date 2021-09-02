@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-23 07:43+0200\n"
+"POT-Creation-Date: 2021-09-02 23:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3140,17 +3140,27 @@ msgstr "You must be on the ResEl network to access this page."
 msgid "Votre cotisation et vos frais d'accès internet sont à jour."
 msgstr "Your membership and internet access fees are up to date."
 
-#: fonctions/decorators.py:85
+#: fonctions/decorators.py:87
 msgid ""
 "Veuillez vous connecter au réseau ResEl Secure pour effectuer votre paiement."
 msgstr "Please log in to the ResEl Secure network to make your payment."
 
-#: fonctions/decorators.py:114
+#: fonctions/decorators.py:90
+#, fuzzy
+#| msgid ""
+#| "Veuillez vous connecter au réseau ResEl Secure pour effectuer votre "
+#| "paiement."
+msgid ""
+"Veuillez vous connecter à un réseau connecté à Internet (4G, Eduroam,…) pour "
+"effectuer votre paiement."
+msgstr "Please log in to the ResEl Secure network to make your payment."
+
+#: fonctions/decorators.py:120
 msgid ""
 "Vous n'êtes pas membre de l'AE, vous ne pouvez donc pas accéder à cette page."
 msgstr "You are not an AE member, you are not authorized to access this page."
 
-#: fonctions/decorators.py:135
+#: fonctions/decorators.py:141
 msgid "Vous n'êtes pas admin de l'AE."
 msgstr "You are not an AE admin"
 
@@ -3536,11 +3546,13 @@ msgid "Téléchargez :"
 msgstr "Download:"
 
 #: gestion_personnes/templates/gestion_personnes/inscription.html:134
+#: pages/templates/pages/how_to_signup.html:49
 #: templates/registration/login.html:64
 msgid "Flyer de connexion"
 msgstr "Connection flyer"
 
 #: gestion_personnes/templates/gestion_personnes/inscription.html:135
+#: pages/templates/pages/how_to_signup.html:50
 #: templates/registration/login.html:65
 msgid "Guide de connexion filaire"
 msgstr "Wired connection guide"
@@ -3593,7 +3605,7 @@ msgstr "My ResEl inbox"
 
 #: gestion_personnes/templates/gestion_personnes/mail_resel_new.html:9
 msgid "Création d'une boîte mail @resel.fr"
-msgstr "Creation of an @resel.fr mailbox"
+msgstr "Creation of a @resel.fr mailbox"
 
 #: gestion_personnes/templates/gestion_personnes/mod-passwd.html:4
 msgid "Changement de votre mot de passe"
@@ -3715,7 +3727,7 @@ msgstr "Type in your ResEl credentials"
 
 #: gestion_personnes/templates/gestion_personnes/reset_pwd_send.html:33
 msgid "Envoyer un e-mail de réinitialisation"
-msgstr "Send a reset email"
+msgstr "Send a password reset email"
 
 #: gestion_personnes/templates/gestion_personnes/settings.html:5
 msgid "Paramètres de compte"
@@ -3751,8 +3763,8 @@ msgid ""
 "recevoir d'ici peu. Cliquez sur le lien fournit dans l'e-mail pour continuer "
 "la procédure."
 msgstr ""
-"We have just sent you a reset email that you should receive shortly. Click "
-"on the link provided in the e-mail to continue the process."
+"We have just sent you a password reset email that you should receive "
+"shortly. Click on the link provided in the email to continue the process."
 
 #: gestion_personnes/views.py:247
 msgid ""
@@ -3780,8 +3792,8 @@ msgid ""
 "Nous venons de vous envoyer un e-mail avec un lien que vous devrez suivre "
 "pour valider votre addresse e-mail."
 msgstr ""
-"We sent you an e-mail with a link that you must follow to validate your e-"
-"mail address."
+"We sent you an e-mail with a link that you must follow to validate your "
+"email address."
 
 #: gestion_personnes/views.py:311
 msgid "Votre addresse e-mail est bien validée."
@@ -3857,15 +3869,13 @@ msgstr "Your message"
 
 #: pages/forms.py:28
 msgid "Quel est le nom du directeur d'IMT Atlantique (captcha)"
-msgstr ""
+msgstr "What is the name of the director of IMT Atlantique (captcha)"
 
 #: pages/forms.py:42
-msgid "Mauvaise résponse au captcha"
-msgstr ""
+msgid "Mauvaise réponse au captcha"
+msgstr "Wrong answer to the captcha"
 
 #: pages/templates/pages/become_admin.html:5
-#, fuzzy
-#| msgid "Devenez Administrateur ResEl !"
 msgid "Devenez adminitrateur ResEl"
 msgstr "Become a ResEl Admin!"
 
@@ -3879,35 +3889,38 @@ msgstr "Otherwise"
 
 #: pages/templates/pages/contact.html:30
 msgid "Vous pouvez également nous contacter"
-msgstr ""
+msgstr "You can also contact us"
 
 #: pages/templates/pages/contact.html:32
 msgid "Par e-mail : "
-msgstr ""
+msgstr "By email:"
 
 #: pages/templates/pages/contact.html:33
 msgid "Sur IRC sur le réseau "
-msgstr ""
+msgstr "On IRC on the network "
 
 #: pages/templates/pages/contact.html:35
 msgid "Les permanences"
-msgstr ""
+msgstr "Meet us in person"
 
 #: pages/templates/pages/contact.html:35
 msgid "Campus de Brest uniquement"
-msgstr ""
+msgstr "Brest campus only"
 
 #: pages/templates/pages/contact.html:37
 msgid ""
 "\n"
-"                Nous tenons (hors vacances) des <b>permanences au Foyer Des "
+"                Nous tenons (hors vacances) des <b>permanences au Foyer des "
 "Élèves\n"
 "                de 18h à 19h30 du lundi au vendredi</b>. Un administrateur "
 "ResEl pourra venir répondre à vos\n"
-"            questions et résoudre vos problèmes concernants la connexion.</"
-"p>\n"
+"            questions et résoudre vos problèmes de connexion.</p>\n"
 "            "
 msgstr ""
+"\n"
+"You can <b>meet us at the Foyer des Élèves</b> (outside school vacations) "
+"<b>from 6pm to 7.30pm from Monday to Friday</b>. A ResEl administrator will "
+"come and answer your questions and solve your connection problems.</p>"
 
 #: pages/templates/pages/contact.html:42
 #: pages/templates/pages/mentions_legales.html:37
@@ -3915,38 +3928,39 @@ msgid "Adresse postale"
 msgstr "Postal address"
 
 #: pages/templates/pages/eggdrop.html:34
-#, fuzzy
-#| msgid "Historique des paiements"
-msgid "Historique IRC ResEL"
-msgstr "Billing history"
+msgid "Historique IRC ResEl"
+msgstr "ResEl IRC history"
 
 #: pages/templates/pages/eggdrop.html:35
 msgid "Vous trouverez ici l'intégralité des discussions ResEl."
-msgstr ""
+msgstr "You can find the whole ResEl discussions here."
 
 #: pages/templates/pages/faq.html:18
 msgid "Foire aux questions"
-msgstr ""
+msgstr "Frequently asked questions"
 
 #: pages/templates/pages/faq.html:19
 msgid ""
 "Vous trouverez ici les réponses aux questions qui nous sont fréquement "
 "posées."
 msgstr ""
+"You will find here the answers to the questions we are frequently asked."
 
 #: pages/templates/pages/faq.html:20
 msgid ""
 "Une question que vous vous posez n'est pas présente ? Vous pensez qu'elle "
 "mérite sa place sur cette page ? "
 msgstr ""
+"Is there a question you have that is not present? Do you think it deserves "
+"its place on this page?"
 
 #: pages/templates/pages/faq.html:20
 msgid "Dites-le nous !"
-msgstr ""
+msgstr "Let us know!"
 
 #: pages/templates/pages/faq.html:34
 msgid "Cette réponse m'a été utile"
-msgstr ""
+msgstr "This answer was helpful"
 
 #: pages/templates/pages/faq.html:38
 msgid "Pas de question à l'horizon"
@@ -3962,7 +3976,7 @@ msgstr "IMT-Atlantique students' network"
 
 #: pages/templates/pages/home/home.html:18
 msgid "Le fournisseur d'accès associatif par les teubreux pour les teubreux"
-msgstr ""
+msgstr "The associative network provider by the students for the students"
 
 #: pages/templates/pages/home/home.html:49 templates/base.html:161
 #: templates/registration/login.html:5 templates/registration/login.html:46
@@ -3970,10 +3984,8 @@ msgid "Connexion"
 msgstr "Log in"
 
 #: pages/templates/pages/home/home.html:54
-#, fuzzy
-#| msgid "Un problème pour s'inscrire ?"
 msgid "Comment s'inscrire ?"
-msgstr "Experiencing trouble while registering?"
+msgstr "How to register?"
 
 #: pages/templates/pages/home/home.html:106
 msgid "Les services du ResEl"
@@ -3989,11 +4001,11 @@ msgstr "Latest news"
 
 #: pages/templates/pages/home/home.html:130
 msgid "RSS"
-msgstr ""
+msgstr "RSS"
 
 #: pages/templates/pages/home/home.html:130
 msgid "Atom"
-msgstr ""
+msgstr "Atom"
 
 #: pages/templates/pages/home/home.html:143
 msgid "Pas de nouvelles à l'horizon"
@@ -4001,7 +4013,7 @@ msgstr "No fresh news in sight"
 
 #: pages/templates/pages/home/home.html:145
 msgid "Voir l'intégralité des nouvelles"
-msgstr ""
+msgstr "See all the news"
 
 #: pages/templates/pages/home/home.html:159
 msgid "En ce moment sur le campus"
@@ -4009,19 +4021,19 @@ msgstr "Currently on the campus"
 
 #: pages/templates/pages/home/home.html:183
 msgid "Voir tous les événements campus"
-msgstr ""
+msgstr "See all the campus events"
 
 #: pages/templates/pages/home/home.html:187
 msgid "Clubs à l'honneur"
-msgstr ""
+msgstr "Featured clubs"
 
 #: pages/templates/pages/home/home.html:204
 msgid "Les derniers mails campus"
-msgstr ""
+msgstr "Last campus mails"
 
 #: pages/templates/pages/home/home.html:261
 msgid "devenir administrateur ResEl"
-msgstr ""
+msgstr "become a ResEl administrator"
 
 #: pages/templates/pages/home/home_logged.html:16
 msgid "Gestion de mon compte ResEl"
@@ -4056,167 +4068,140 @@ msgid "Modifier mon mot de passe"
 msgstr "Modify my password"
 
 #: pages/templates/pages/home/home_logged.html:33
-#, fuzzy
-#| msgid "Historique de mes factures"
 msgid "Historique de mes transactions"
 msgstr "Billing history"
 
 #: pages/templates/pages/home/home_logged.html:53
-#, fuzzy
-#| msgid "En ce moment sur le campus"
 msgid "Bienvenue sur le campus de"
-msgstr "Currently on the campus"
+msgstr "Welcome to the campus of"
 
 #: pages/templates/pages/home/home_logged.html:56
 msgid ""
 "Vous vous trouvez sur la zone gratuite. Le débit est fortement réduit, mais "
 "devrait permettre de consulter vos mails et divers services légers."
 msgstr ""
+"You are on the free zone. The bandwidth is strongly reduced, but should "
+"allow you to consult your mails and various light services."
 
 #: pages/templates/pages/home/home_logged.html:58
 msgid ""
 "Vous vous trouvez sur la zone d'inscription. Pour vous connecter à Internet "
 "ou payer vos frais d'accès, veuillez utiliser un autre réseau."
 msgstr ""
+"You are in the registration area. To connect to the Internet or pay your "
+"access fees, please use another network."
 
 #: pages/templates/pages/home/home_logged.html:60
 msgid ""
 "Vous vous trouvez sur la zone de renouvellement. Pour vous connecter à "
 "Internet, veuillez vous acquitter des frais d'accès."
 msgstr ""
+"You are in the renewal area. To connect to the Internet, please pay your "
+"access fees."
 
 #: pages/templates/pages/home/home_logged.html:62
 msgid "Vous êtes correctement connecté au réseau étudiant."
-msgstr ""
+msgstr "You are correctly connected to the student network."
 
 #: pages/templates/pages/home/home_logged.html:64
 msgid ""
 "Vous êtes connecté depuis un serveur interne. Merci de n'utiliser cet accès "
 "qu'à des fins de tests."
 msgstr ""
+"You are connected from an internal server. Please use this access for "
+"testing purposes only."
 
 #: pages/templates/pages/home/home_logged.html:72
 msgid "Hors campus"
 msgstr "Off campus"
 
 #: pages/templates/pages/home/home_logged.html:73
-#, fuzzy
-#| msgid "Vous êtes actuellement hors du campus de Télécom Bretagne."
 msgid "Vous êtes actuellement hors des campus d'IMT Atlantique."
-msgstr "You are currently off IMT Atlantique campus"
+msgstr "You are currently off the IMT Atlantique campuses."
 
 #: pages/templates/pages/home/home_logged.html:86
 msgid "Facturation à jour"
-msgstr ""
+msgstr "Billing up to date"
 
 #: pages/templates/pages/home/home_logged.html:88
-#: pages/templates/pages/home/home_logged.html:104
-#: pages/templates/pages/home/home_logged.html:130
-#, fuzzy
-#| msgid "Adhésion à l'Association"
+#: pages/templates/pages/home/home_logged.html:105
+#: pages/templates/pages/home/home_logged.html:117
 msgid "Cotisation à l'association payée"
-msgstr "Subscription to the Association paid"
+msgstr "Association membership paid"
 
 #: pages/templates/pages/home/home_logged.html:90
-#: pages/templates/pages/home/home_logged.html:106
-#: pages/templates/pages/home/home_logged.html:132
-#, fuzzy
-#| msgid "Adhésion à l'Association"
+#: pages/templates/pages/home/home_logged.html:107
+#: pages/templates/pages/home/home_logged.html:119
 msgid "Cotisation à l'association non payée"
-msgstr "Subscription to the Association not paid"
+msgstr "Association membership not paid"
 
 #: pages/templates/pages/home/home_logged.html:92
-#: pages/templates/pages/home/home_logged.html:108
-#, fuzzy
-#| msgid "Internet"
+#: pages/templates/pages/home/home_logged.html:109
 msgid "Internet jusqu'au"
 msgstr "Internet until "
 
 #: pages/templates/pages/home/home_logged.html:93
-#, fuzzy
-#| msgid "Toutes vos transactions"
 msgid "Consulter mes transactions"
-msgstr "All transactions"
+msgstr "View my transactions"
 
-#: pages/templates/pages/home/home_logged.html:102
-#, fuzzy
-#| msgid "Attention"
+#: pages/templates/pages/home/home_logged.html:103
 msgid "Attention abonnement"
-msgstr "Warning membership"
+msgstr "Subscription warning"
 
-#: pages/templates/pages/home/home_logged.html:111
-#: pages/templates/pages/home/home_logged.html:138
-#, fuzzy
-#| msgid ""
-#| "Vous devez vous trouver sur le réseau du ResEl pour accéder à cette page."
-msgid ""
-"Veuillez vous connecter au réseau ResEl Secure pour procéder au paiement"
-msgstr "You must be on ResEl network to access that page."
-
-#: pages/templates/pages/home/home_logged.html:117
-#: pages/templates/pages/home/home_logged.html:144
-msgid "Effectuer un paiement"
-msgstr ""
-
-#: pages/templates/pages/home/home_logged.html:128
+#: pages/templates/pages/home/home_logged.html:115
 msgid "Paiement non à jour"
-msgstr ""
+msgstr "Subscription not up to date"
 
-#: pages/templates/pages/home/home_logged.html:134
-#, fuzzy
-#| msgid "Accès Internet pour 1 an"
+#: pages/templates/pages/home/home_logged.html:121
 msgid "Accès internet expiré le"
-msgstr "Internet access expire on the"
+msgstr "Internet access expired on"
 
-#: pages/templates/pages/home/home_logged.html:135
+#: pages/templates/pages/home/home_logged.html:122
 msgid ""
-"Votre abonnement au Resel a expiré, pour pouvoir à nouveau utiliser nos "
+"Votre abonnement au ResEl a expiré, pour pouvoir à nouveau utiliser nos "
 "services vous devez régulariser votre situation."
 msgstr ""
+"Your ResEl subscription has expired, to be able to use our services again "
+"you must settle the situation."
 
-#: pages/templates/pages/home/home_logged.html:155
-msgid "Pas d'information de facturation"
+#: pages/templates/pages/home/home_logged.html:126
+msgid ""
+"Veuillez vous connecter au réseau ResEl Secure pour procéder au paiement"
+msgstr "Please connect to the ResEl Secure network to proceed to checkout"
+
+#: pages/templates/pages/home/home_logged.html:128
+msgid ""
+"Le paiement nécessite une connexion à Internet active. Veuillez utiliser "
+"votre 4G ou Eduroam pour procéder au paiement."
 msgstr ""
+"The checkout requires an active Internet connection. Please use your 4G or "
+"Eduroam to make the payment."
+
+#: pages/templates/pages/home/home_logged.html:134
+msgid "Effectuer un paiement"
+msgstr "Make a payment"
+
+#: pages/templates/pages/home/home_logged.html:145
+msgid "Pas d'information de facturation"
+msgstr "No billing information"
 
 #: pages/templates/pages/how_to_signup.html:9
-#, fuzzy
-#| msgid "Inscription au ResEl"
 msgid "Inscription ResEl"
-msgstr "Subscription to ResEl"
+msgstr "Subscription to the ResEl"
 
 #: pages/templates/pages/how_to_signup.html:27
 msgid "Avoir Internet au ResEl ? Rien de plus simple !"
-msgstr ""
+msgstr "Getting access to the Internet at the ResEl? Nothing could be easier!"
 
 #: pages/templates/pages/how_to_signup.html:46
 msgid "Vous pouvez également télécharger nos guides de connexion :"
-msgstr ""
-
-#: pages/templates/pages/how_to_signup.html:50
-#, fuzzy
-#| msgid "Veuillez choisir un bâtiment du campus de Brest"
-msgid "Guide connexion campus de Brest"
-msgstr "Choose a building in the Brest campus"
-
-#: pages/templates/pages/how_to_signup.html:53
-#, fuzzy
-#| msgid "Veuillez choisir un bâtiment du campus de Rennes"
-msgid "Guide connexion campus de Rennes"
-msgstr "Choose a building in the Rennes Campus"
+msgstr "You can also download our connection guides:"
 
 #: pages/templates/pages/inscription_zone_info.html:21
 msgid "Votre abonnement est arrivé à expiration"
-msgstr ""
+msgstr "Your subscription has expired"
 
 #: pages/templates/pages/inscription_zone_info.html:27
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "                        Votre machine est actuellement connectée sur la "
-#| "zone inscription. Dans cette zone, vous n'avez pas accès à internet.\n"
-#| "                        Avant d'avoir internet, passez sur notre site "
-#| "pour inscrire votre machine à votre compte sur notre réseau.\n"
-#| "                    "
 msgid ""
 "\n"
 "                        <p>\n"
@@ -4227,18 +4212,16 @@ msgid ""
 "                    "
 msgstr ""
 "\n"
-"Your device is currently connected to Registration subnetwork. This network "
-"does not have access to the Internet. Register your device to get Internet."
+"<p>Your subscription has ended. Please make a payment to continue enjoying "
+"our connection.</p>"
 
 #: pages/templates/pages/inscription_zone_info.html:36
 msgid "Rendez-moi ma connexion !"
-msgstr ""
+msgstr "Give me back my connection!"
 
 #: pages/templates/pages/inscription_zone_info.html:42
-#, fuzzy
-#| msgid "Continuer l'inscription"
 msgid "Zone d'inscription"
-msgstr "Continue registration"
+msgstr "Registration zone"
 
 #: pages/templates/pages/inscription_zone_info.html:48
 #, fuzzy
@@ -4268,21 +4251,19 @@ msgid ""
 "                        </p>\n"
 "                    "
 msgstr ""
-"\n"
-"Even though your device has been registered, it is still in Registration sub "
-"network. You seem to be connected in 'ResEl inscription' Wi-Fi hotspot. You "
-"cannot access the Internet using that hotspot.<br> Please connect to \"ResEl "
-"Secure\" Wi-Fi hotspot."
+"<h2>Welcome to the registration network</h2><p>If you don't have a ResEl "
+"account, you're in the right place! You can click on the button below."
+"<br>You cannot access the internet from this Wi-Fi network for security "
+"reasons. Please login to the <strong>ResEl Secure</strong> Wi-Fi network if "
+"you already have an account.</p>"
 
 #: pages/templates/pages/mentions_legales.html:8
 msgid "Mentions légales"
-msgstr ""
+msgstr "Legal information"
 
 #: pages/templates/pages/mentions_legales.html:12
-#, fuzzy
-#| msgid "Inscription au ResEl"
 msgid "Association Le ResEl"
-msgstr "Subscription to ResEl"
+msgstr ""
 
 #: pages/templates/pages/mentions_legales.html:15
 msgid "Raison sociale :"
@@ -4309,10 +4290,8 @@ msgid "Siège social :"
 msgstr ""
 
 #: pages/templates/pages/mentions_legales.html:22
-#, fuzzy
-#| msgid "Inscription au ResEl"
 msgid "Association 'Le ResEl',"
-msgstr "Subscription to ResEl"
+msgstr ""
 
 #: pages/templates/pages/mentions_legales.html:23
 msgid " 655 Avenue du Technopôle,"
@@ -4323,10 +4302,8 @@ msgid "29280 Plouzané  - FRANCE"
 msgstr ""
 
 #: pages/templates/pages/mentions_legales.html:27
-#, fuzzy
-#| msgid "Facture en génération"
 msgid "Date de création : "
-msgstr "loading invoice"
+msgstr ""
 
 #: pages/templates/pages/mentions_legales.html:28
 msgid "08/10/2002"
@@ -4351,35 +4328,33 @@ msgstr ""
 
 #: pages/templates/pages/network_status.html:5
 msgid "Statut du réseau"
-msgstr ""
+msgstr "Network status"
 
 #: pages/templates/pages/news.html:18
-#, fuzzy
-#| msgid "Les dernières nouvelles"
 msgid "Les dernières Actualités"
-msgstr "Latest news"
+msgstr "The latest News"
 
 #: pages/templates/pages/news.html:19
 msgid "Vous trouverez ici l'intégralité des Actualités ResEl."
-msgstr ""
+msgstr "Here you will find all the ResEl News."
 
 #: pages/templates/pages/news.html:20
 msgid "N'hésitez pas non plus à nous trouver sur "
-msgstr ""
+msgstr "You can also find us on "
 
 #: pages/templates/pages/news.html:21
 #: pages/templates/pages/piece_of_news.html:19
 msgid "Flux RSS"
-msgstr ""
+msgstr "RSS feed"
 
 #: pages/templates/pages/news.html:21
 #: pages/templates/pages/piece_of_news.html:19
 msgid "Flux Atom"
-msgstr ""
+msgstr "Atom feed"
 
 #: pages/templates/pages/news.html:31
 msgid "Lire la suite"
-msgstr ""
+msgstr "Read more"
 
 #: pages/templates/pages/news.html:32
 #: pages/templates/pages/piece_of_news.html:29
@@ -4389,37 +4364,36 @@ msgstr "%(author)s, %(date)s"
 
 #: pages/templates/pages/news.html:35
 msgid "Pas de news à l'horizon"
-msgstr "No fresh news in sight"
+msgstr "No news in sight"
 
 #: pages/templates/pages/news.html:40
 msgid "Précédente"
-msgstr ""
+msgstr "Back"
 
 #: pages/templates/pages/news.html:42
 msgid "Page "
-msgstr ""
+msgstr "Page "
 
 #: pages/templates/pages/news.html:42
 msgid "sur"
-msgstr ""
+msgstr "of"
 
 #: pages/templates/pages/news.html:44
 msgid "Suivante"
-msgstr ""
+msgstr "Next"
 
 #: pages/templates/pages/piece_of_news.html:20
 msgid " Retour"
-msgstr ""
+msgstr " Back"
 
 #: pages/views.py:139
-#, fuzzy
-#| msgid "Les dernières nouvelles ResEl"
 msgid "Les dernières infos ResEl"
-msgstr "Latest news"
+msgstr "Latest ResEl News"
 
 #: pages/views.py:141
 msgid "Des informations sur l'état du réseau sur les campus de Brest et Rennes"
 msgstr ""
+"Information on the state of the network on the Brest and Rennes campuses"
 
 #: pages/views.py:222
 msgid ""
@@ -4992,6 +4966,15 @@ msgstr "Last modification"
 #: wiki/templates/wiki/show-category.html:26
 msgid "Aucun article disponible."
 msgstr "No article is available."
+
+#~| msgid "Veuillez choisir un bâtiment du campus de Brest"
+#~ msgid "Guide connexion campus de Brest"
+#~ msgstr "Choose a building in the Brest campus"
+
+#, fuzzy
+#~| msgid "Veuillez choisir un bâtiment du campus de Rennes"
+#~ msgid "Guide connexion campus de Rennes"
+#~ msgstr "Choose a building in the Rennes Campus"
 
 #~ msgid "Déconnecté"
 #~ msgstr "Logged out"

@@ -39,6 +39,6 @@ class ContactForm(forms.Form):
 
         if captcha not in captcha_answers:
             raise forms.ValidationError(
-                _("Mauvaise résponse au captcha"), code="WRONG CAPTCHA"
+                _("Mauvaise réponse au captcha"), code="WRONG CAPTCHA"
             )
         return captcha
