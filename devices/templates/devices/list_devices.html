@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% load staticfiles %}
 
 {% block titre %}{% trans "Mes machines" %}{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/table-sort.css' %}"/>
+{% endblock %}
 
 {% block content %}
     <div class="container">
@@ -16,10 +21,10 @@
                         <table class="table table-hover" id="devices">
                         <thead>
                         <tr>
-                            <th><i class="fa fa-desktop fa-fw" aria-hidden="true"></i> {% trans "Nom de la machine" %}</th>
-                            <th><i class="fa fa-server fa-fw" aria-hidden="true"></i> {% trans "Adresse MAC" %}</th>
-                            <th><i class="fa fa-info fa-fw" aria-hidden="true"></i> {% trans "Authentification" %}</th>
-                            <th><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> {% trans "Dernière authentification" %}</th>
+                            <th class="sort alpha"><i class="fa fa-desktop fa-fw" aria-hidden="true"></i> {% trans "Nom de la machine" %}</th>
+                            <th class="sort num"><i class="fa fa-server fa-fw" aria-hidden="true"></i> {% trans "Adresse MAC" %}</th>
+                            <th class="sort alpha"><i class="fa fa-info fa-fw" aria-hidden="true"></i> {% trans "Authentification" %}</th>
+                            <th class="sort"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> {% trans "Dernière authentification" %}</th>
                             <th><i class="fa fa-area-chart fa-fw" aria-hidden="true"></i> {% trans "Consommation" %}</th>
                         </tr>
                         </thead>
@@ -40,10 +45,10 @@
                     <td>
                         <span class="label label-info">{{ m.auth_type }}</span>
                     </td>
-                    <td>
-                    {% if m.last_date %}
+                    <td data-value=
+                    {% if m.last_date %}"{{ m.last_date.timestamp }}">
                         {{ m.last_date }}
-                    {% else %}
+                    {% else %}"-1">
                         {% trans "Inconnue" %}
                     {% endif %}
 		    </td>
@@ -95,4 +100,5 @@
             $(this).addClass("active");
         });
     </script>
+    <script src="{% static 'js/table-sort.js' %}"></script>
 {% endblock %}
