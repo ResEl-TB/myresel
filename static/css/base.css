@@ -446,11 +446,23 @@ body {
     height: 50px;
     padding: 0;
     overflow: hidden;
-    width: 300px;
+    width: 230px;
 }
 
 #bandwidth .container {
     width: 100%;
+}
+
+@media screen and (max-width: 380px) {
+    #devices tr td:nth-child(2), #devices tr th:nth-child(2) {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 600px) {
+  #devices th.sort {
+    white-space: revert;
+  }
 }
 
 @media screen and (max-width: 765px) {
@@ -466,6 +478,12 @@ body {
     }
 
     #devices tr td:last-child, #devices tr th:last-child {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    #devices tr td:nth-child(3), #devices tr th:nth-child(3) {
         display: none;
     }
 }

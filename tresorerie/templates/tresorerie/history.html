@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% load staticfiles %}
 
 {% block titre %}{% trans "Historique des paiements" %}{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/table-sort.css' %}"/>
+{% endblock %}
 
 {% block content %}
     <div class="container">
@@ -12,9 +17,9 @@
                     <table class="table table-hover">
                         <thead>
                         <th><i class="fa fa-hashtag" aria-hidden="true"></i> {% trans "Id" %}</th>
-                        <th><i class="fa fa-calendar" aria-hidden="true"></i> {% trans "Date" %}</th>
-                        <th><i class="fa fa-credit-card-alt" aria-hidden="true"></i> {% trans "Moyen de paiement" %}</th>
-                        <th><i class="fa fa-eur" aria-hidden="true"></i> {% trans "Montant" %}</th>
+                        <th class="sort"><i class="fa fa-calendar" aria-hidden="true"></i> {% trans "Date" %}</th>
+                        <th class="sort alpha"><i class="fa fa-credit-card-alt" aria-hidden="true"></i> {% trans "Moyen de paiement" %}</th>
+                        <th class="sort num"><i class="fa fa-eur" aria-hidden="true"></i> {% trans "Montant" %}</th>
                         <th><i class="fa fa-cube" aria-hidden="true"></i> {% trans "Produits" %}</th>
                         </thead>
 
@@ -22,7 +27,7 @@
                         {% for t in transactions %}
                             <tr>
                                 <td><a href="{% url "tresorerie:transaction-detail" t.uuid %}">{{ t.uuid|safe|slice:":8" }}</a></td>
-                                <td>{{ t.date_creation|date:'d/m/Y' }}</td>
+                                <td data-value="{{ t.date_creation.timestamp }}">{{ t.date_creation|date:'d/m/Y' }}</td>
                                 <td>{{ t.get_moyen_display }}</td>
                                 <td>{{ t.total|floatformat }}€</td>
                                 <td>{{ t.produit.all|join:" - " }}</td>
@@ -36,4 +41,8 @@
             </div> <!-- /.col-lg-12 -->
         </div> <!-- /.row -->
     </div> <!-- /.container -->
+{% endblock %}
+
+{% block javascript %}
+    <script src="{% static 'js/table-sort.js' %}"></script>
 {% endblock %}

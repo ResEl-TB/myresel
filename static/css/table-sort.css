@@ -1,0 +1,63 @@
+table thead th.sort {
+  padding-right: 34px;
+}
+
+table thead th.sort {
+  white-space: nowrap;
+}
+
+thead th.sort {
+  position: relative;
+  cursor: pointer;
+}
+
+table {
+  overflow: hidden;
+}
+
+th.sort:hover:after {
+  content: "";
+  background: #5cf2;
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1000px;
+  border-left: 1px solid #0002;
+  border-right: 1px solid #0002;
+}
+
+thead th.sort i.sort {
+  position: absolute;
+  right: 8px;
+  line-height: 1.42857143;
+}
+
+thead th.sort i.sort:before {
+  content: "\f0dc";
+}
+
+thead th.sort.asc i.sort:before {
+  content: "\f0de";
+}
+
+thead th.sort.desc i.sort:before {
+  content: "\f0dd";
+}
+
+thead th.sort.alpha.asc i.sort:before {
+  content: "\f15d";
+}
+
+thead th.sort.alpha.desc i.sort:before {
+  content: "\f15e";
+}
+
+thead th.sort.num.asc i.sort:before {
+  content: "\f162";
+}
+
+thead th.sort.num.desc i.sort:before {
+  content: "\f163";
+}
