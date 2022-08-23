@@ -23,7 +23,7 @@
                     </table>
                     <div class="transaction-resume row">
                         {% for p in products %}
-                            <div class="col-md-4 col-md-offset-1">
+                            <div class="col-md-6">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">{{ p.nom }}</div>
                                     <table class="table">
@@ -37,10 +37,9 @@
                 </div>
             </div>
 
-            <div class="col-md-3 col-md-offset-1">
-                <div class="back"><a href="{% url 'tresorerie:historique' %}"><span class="fa fa-fw fa-long-arrow-left"></span> {% trans "Retour " %}</a></div>
-                <div class="back">{% if invoice_path %}<a href="{% get_media_prefix %}{{ invoice_path }}">{% trans "Télécharger le reçu" %} <span class="fa fa-fw fa-download"></span> </a>{% else %}{% trans "Reçu en génération" %} <span class="fa fa-fw fa-hourglass"></span>{% endif %}</div>
-                <p>{% trans "Le ResEl ne fournit pas de facture, vous pouvez cependant demander un reçu aux administrateurs si vous en avez besoin" %}</p>
+            <div class="col-md-4 side-column">
+                <div class="back"><a href="{% url 'tresorerie:historique' %}"><span class="fa fa-fw fa-long-arrow-left"></span> {% trans "Retour" %}</a></div>
+                <span style="font-size: 1.4em">{% if invoice_path %}<a href="{% get_media_prefix %}{{ invoice_path }}">{% trans "Télécharger la facture" %} <span class="fa fa-fw fa-download"></span> </a>{% else %}{% trans "Facture en génération" %} <span class="fa fa-fw fa-hourglass"></span>{% endif %}</span>
             </div> <!-- /.row -->
         </div> <!-- /.container -->
 {% endblock %}

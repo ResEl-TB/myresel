@@ -24,14 +24,13 @@
 }
 
 .home-fragment {
-    padding-top: 50px;
-    padding-bottom: 50px;
+    padding-top: 25px;
+    padding-bottom: 25px;
 }
 
 .home-user-management {
-    background: #225378;
-    color: #F3FFE2;
-    box-shadow: inset 0 5px 6px 0 #122a3c;
+    background: linear-gradient(135deg, var(--accent-3), var(--accent-5));
+    color: #fff;
 }
 
 @keyframes slideInFromLeft {
@@ -66,26 +65,43 @@
 }
 
 #carousel-quotes {
-    height: 170px;
+    height: 190px;
+    padding-top: 20px;
 }
 
 .carousel-indicators {
     bottom: -20px;
 }
 
+@media screen and (max-width: 860px) {
+    #carousel-quotes {
+        height: 150px;
+        padding-top: 0;
+    }
+    .row h2 {
+        font-size: 25px;
+        line-height: 30px;
+    }
+}
+
 /* évite d'avoir le texte collé sur le côté sur mobile */
-@media screen and (max-width: 765px) {
+@media screen and (max-width: 768px) {
     .home-user-management{
         text-align:center;
     }
     #carousel-quotes {
-        height: 400px;
+        height: 220px;
+    }
+}
+
+@media screen and (max-width:600px) {
+    #carousel-quotes {
+        height: 260px;
     }
 }
 
 .home-user-management .home-login {
     text-align: center;
-
 }
 
 .home-user-management small {
@@ -95,36 +111,35 @@
 .home-user-management .btn {
     margin-bottom: 0px;
     margin-top: 40px;
-    background: rgba(247, 148, 32, .9);
+    border-color: #fff5;
     color: #FFFFFF;
-    border-color: rgba(247, 148, 32, 1);
     text-transform: uppercase;
     font-weight: 600;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 3px 5px -5px #000;
     transition: all 400ms cubic-bezier(0.165, 0.84, 0.44, 1);
     transform: scale(1);
+    background: #fff2;
+    border-radius: 6px;
 }
 
 .home-user-management .btn:hover {
-    background: rgba(247, 148, 32, .95);
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.35);
-    transform: translateY(-2px);
+    box-shadow: 0 3px 8px -3px #0007;
+    background: #fff3;
+    border-color: #fff6;
+    color: #fff;
 }
 
 .home-user-management .btn-outline {
-    color: rgb(244, 240, 235);
-    background: rgba(247, 148, 32, 0);
     box-shadow: none;
+    background: #0000;
 }
 
 .home-user-management .btn-outline:hover {
-    color: rgb(255, 255, 255);
-    background: rgba(247, 148, 32, .90);
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.25);
+    box-shadow: none;
 }
 
 .home-user-management a {
-    color: #FFB300;
+    color: var(--accent-2);
 }
 
 .home-user-management .popover {
@@ -141,21 +156,20 @@
 }
 
 .home-presentation {
-    background: rgba(0, 0, 0, 0) linear-gradient(135deg, rgb(91, 36, 122) 0%, rgb(27, 206, 223) 100%) repeat scroll 0% 0%;
+    background: transparent linear-gradient(135deg, #5b247a 0%, #1bcedf 100%) repeat scroll 0% 0%;
     color: #F3FFE2;
     text-align: center;
-    box-shadow: inset 0 0px 0px 0 #122a3c;
 }
-.home-presentation a{
-    color: #FFB300;
+
+.home-presentation a {
+    color: var(--accent-1);
 }
 
 .home-bg-img {
     background: url("/static/images/IMG_9785_1.jpg") no-repeat fixed center;
     background-size: cover;
-    color: #ffffff;
+    color: #fff;
     text-align: center;
-    /*padding-bottom: 5px;*/
 }
 
 .home-bg-img .row {
@@ -163,35 +177,28 @@
     margin-top: 20px;
 }
 
-.home-user-management~.home-presentation {
-    box-shadow: inset 0 5px 6px 0 #80817b;
-    background: #ffffff;
-    color: #000000;
+.home-user-management ~ .home-presentation {
+    background: initial;
+    color: #000;
 }
 
 .home-user-management~.home-presentation a {
     color: #2b669a;
 }
 
-@media(min-width:768px) {
-    .home-user-management h2 {
-        margin-left: -20px;
-    }
-}
-
 .home-user-management .computer-icon {
-    font-size: 120px;
+    font-size: 100px;
     margin-top: 5px;
-    text-align: right;
+    text-align: center;
     line-height: 0;
 }
 
-.home-user-management .payement-block {
+.home-user-management .payment-block {
     margin-top: 20px;
 }
 
 .home-services {
-    background: rgb(36, 182, 209);
+    background: #24b6d1;
     color: #ffffff;
 }
 
@@ -247,21 +254,17 @@
 
 .bigger {
     transform: scale(1);
-    /*margin-top: 20px;*/
-    /*margin-bottom: 20px;*/
-    /*display: inline-block;*/
-    /*border: 0;*/
-    /*position: relative;*/
     z-index: 2;
     transition: all 1200ms cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 
 .home-blog {
-    box-shadow: inset 0 5px 6px 0 #80817b;
+    box-shadow: inset 0 5px 5px -5px #000c;
     padding-bottom: 60px;
     background-color: #F7F7F7;
 }
+
 .home-blog h2 {
     margin-bottom: 10px;
 }
@@ -333,12 +336,20 @@ iframe {
     top: 0px;
 }
 
+.fa-check {
+    margin-left: -10px;
+}
+
+.fa-exclamation {
+    margin-top: 10px;
+}
+
 .diagram .line {
     height: 2px;
     background-color: #F3FFE2;
-    width: 87%;
     top: 70%;
-    left: 5%;
+    left: calc(2% + 40px);
+    width: calc(98% - 115px);
 }
 
 .diagram .wifi {
@@ -354,48 +365,13 @@ iframe {
 
 @keyframes packet-mover {
     0% {
-        left: 6%;
+        left: calc(2% + 40px);
     }
     20% {
-        left: 90%;
+        left: calc(100% - 82px);
     }
     100% {
-        left: 90%;
-    }
-}
-
-@keyframes wifi-animation {
-    0% {
-        top: 37px;
-        margin-right: 0;
-        width: 25px;
-        height: 25px;
-        border-radius: 25px;
-        opacity: 1;
-    }
-    20% {
-        top: 37px;
-        margin-right: 0;
-        width: 25px;
-        height: 25px;
-        border-radius: 25px;
-        opacity: 1;
-    }
-    40% {
-        top: 14px;
-        margin-right: -23px;
-        width: 70px;
-        height: 70px;
-        border-radius: 70px;
-        opacity: .6;
-    }
-    100% {
-        top: 14px;
-        margin-right: -23px;
-        width: 70px;
-        height: 70px;
-        border-radius: 70px;
-        opacity: 0;
+        left: calc(100% - 82px);
     }
 }
 
@@ -405,19 +381,67 @@ iframe {
     width: 15px;
     height: 2px;
     top: 70%;
-    background: rgba(255, 151, 0, 1);
+    background: var(--accent-1);
     animation-name: packet-mover;
     animation-duration: 4s;
     animation-iteration-count: infinite;
     animation-timing-function: linear;
 }
 
-.diagram .wifi-poper {
-    animation-name: wifi-animation;
-    animation-duration: 4s;
-    animation-iteration-count: infinite;
-    animation-timing-function: ease-out;
-    background: radial-gradient(ellipse at center, rgba(255,255,255,0) 50%,rgba(255,255,255,1) 100%); /* FF3.6-15 */
+.wifi-wave {
+    width: 150px;
+    height: 150px;
+    top: -25px;
+    z-index: 2;
+    right: 0;
+}
+
+.wifi-wave > * {
+    bottom: 50%;
+    left: 50%;
+    transform: translateY(50%) translateX(-50%);
+    border: 10px solid #fff;
+    border-radius: 100%;
+    opacity: 0;
+    animation: wifi 4s infinite;
+}
+
+.wifi-wave > :nth-child(1) {
+    width: 100%;
+    height: 100%;
+    animation-delay: 1200ms;
+}
+
+.wifi-wave > :nth-child(2) {
+    width: 72.5%;
+    height: 72.5%;
+    animation-delay: 1000ms;
+}
+
+.wifi-wave > :nth-child(3) {
+    width: 45%;
+    height: 45%;
+    animation-delay: 800ms;
+}
+
+.wifi-wave > :nth-child(4) {
+    width: 10%;
+    height: 10%;
+    opacity: 1;
+    background-color: var(--color);
+    animation: none;
+}
+
+@keyframes wifi {
+    0% {
+        opacity: 0;
+    }
+    25% {
+        opacity: .5;
+    }
+    75% {
+        opacity: 0;
+    }
 }
 
 .home-campus {

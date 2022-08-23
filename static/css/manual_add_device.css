@@ -73,23 +73,16 @@ hr {
     background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.75), rgba(0, 0, 0, 0));
 }
 
-.main-content {
-}
-
 .contact-zone {
     margin-top: 100px;
 }
 
 
 #warning-overlay strong {
-    color: #FFB300
+    color: #FFB300;
 }
 
 .dropup {
     display: inline;
-    text-align: left    ;
-}
-
-.dropdown-menu {
-    min-width: 0;
+    text-align: left;
 }

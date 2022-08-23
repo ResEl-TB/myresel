@@ -2,7 +2,7 @@
 {% load staticfiles %}
 {% load i18n %}
 
-{% block titre %}{% trans "Statut du réseau" %}{% endblock %}
+{% block titre %}{% trans "État du réseau" %}{% endblock %}
 
 {% block content %}
   <script src="{% static 'js/vendors/vue.js' %}"></script>
@@ -13,12 +13,12 @@
        xmlns:v-bind="http://www.w3.org/1999/xhtml">
     <div class="global-status container" v-bind:class="global_status">
       <div class="row">
-        <div class="col-sm-8">
+        <div class="col-sm-7">
           <div class="global-status-text">
             <span class="fa fa-fw fa-circle" v-bind:class="global_status"></span> [[ global_status_text ]]
           </div>
         </div>
-        <div class="col-sm-4">
+        <div class="col-sm-5">
           <div class="btn-group" v-bind:class="global_status">
             <a v-for="campus in campuses"
                 :href="'#' + campus.name"
@@ -86,7 +86,7 @@
         </div>
       </div>
       <div id="network-core" ref="#network-core">
-        <div class="network-description">Coeur</div>
+        <div class="network-description">Cœur</div>
         <div class="content">
           <div id="rescue-stack">
           <span v-for="service in getServices('rescue-stack')"

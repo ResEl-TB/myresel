@@ -403,8 +403,9 @@ DEBUG_TOOLBAR_CONFIG = {
 
 if DEBUG and not TESTING:
     INSTALLED_APPS += ['debug_toolbar',]
-    MIDDLEWARE = ['debug_toolbar.middleware.DebugToolbarMiddleware',] + MIDDLEWARE
+    MIDDLEWARE = ['debug_toolbar.middleware.DebugToolbarMiddleware', 'django_cprofile_middleware.middleware.ProfilerMiddleware'] + MIDDLEWARE
     # INTERNAL_IPS = ['10.0.3.1']
+    DJANGO_CPROFILE_MIDDLEWARE_REQUIRE_STAFF = False
 
 elif DEBUG or TESTING:
     LOGGING = DEBUG_LOGGING_CONF

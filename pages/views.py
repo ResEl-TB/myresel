@@ -88,16 +88,18 @@ class Home(View):
         args_for_response['campus_events'] = events
 
         # Load some clubs
-        clubs = [c for c in StudentOrganisation.all() if "tbClub" in c.object_classes]
-        if len(clubs) > 3:
-            date = timezone.now()
-            random.seed(a=date.day + 100 * date.month + 10000*date.year)
-            clubs = random.sample(clubs, 3)
-        args_for_response['clubs'] = clubs
+        #clubs = [c for c in StudentOrganisation.all() if "tbClub" in c.object_classes]
+        #if len(clubs) > 3:
+        #    date = timezone.now()
+        #    random.seed(a=date.day + 100 * date.month + 10000*date.year)
+        #    clubs = random.sample(clubs, 3)
+        #args_for_response['clubs'] = clubs
+        clubs = []
 
         # Load some birthdays
-        birthdays_users = ListBirthdays.get_today_birthdays()
-        args_for_response['birthdays_users'] = birthdays_users
+        #birthdays_users = ListBirthdays.get_today_birthdays()
+        #args_for_response['birthdays_users'] = birthdays_users
+        args_for_response['birthdays_users'] = []
 
         # Load some campus mails
         args_for_response['campus_mails'] = Mail.objects.order_by('-date').filter(moderated=True).all()[:settings.NUMBER_NEWS_IN_HOME]
@@ -225,7 +227,8 @@ class Contact(View):
 
 @resel_required
 def inscription_zone_info(request):
-    if request.network_data['is_logged_in']:
+    if (request.network_data['subnet'] not in ['EXPN', 'REGN'] or
+        request.network_data['is_logged_in']):
         return HttpResponseRedirect(reverse('home'))
     return render(
         request,

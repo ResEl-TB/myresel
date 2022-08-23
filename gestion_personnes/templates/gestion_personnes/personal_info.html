@@ -16,34 +16,52 @@
                     {% csrf_token %}
                     <h2>{% trans "Informations personnelles" %}</h2>
                     <div class="form-group">
-                        <label for="uid" class="col-sm-3 control-label">{% trans "Identifiant" %}</label>
-                        <div class="col-sm-8">
+                        <label for="uid" class="col-sm-4 control-label">{% trans "Identifiant" %}</label>
+                        <div class="col-sm-7">
                             <input type="text" class="form-control" id="uid" placeholder="{% trans "Identifiant" %}" value="{{ ldapuser.uid }}" disabled="disabled">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="lastname" class="col-sm-3 control-label">{% trans "Nom" %}</label>
-                        <div class="col-sm-8">
+                        <label for="lastname" class="col-sm-4 control-label">{% trans "Nom" %}</label>
+                        <div class="col-sm-7">
                             <input type="text" class="form-control" id="lastname" placeholder="{% trans "Nom" %}" value="{{ ldapuser.last_name }}" disabled="disabled">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="firstname" class="col-sm-3 control-label">{% trans "Prénom" %}</label>
-                        <div class="col-sm-8">
+                        <label for="firstname" class="col-sm-4 control-label">{% trans "Prénom" %}</label>
+                        <div class="col-sm-7">
                             <input type="text" class="form-control" id="firstname" placeholder="{% trans "Prénom" %}" value="{{ ldapuser.first_name }}" disabled="disabled">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="formation" class="col-sm-3 control-label">{% trans "Formation" %}</label>
-                        <div class="col-sm-8">
+                        <label for="formation" class="col-sm-4 control-label">{% trans "Formation" %}</label>
+                        <div class="col-sm-7">
                             <input type="text" class="form-control" id="formation" placeholder="{% trans "Formation" %}" value="{{ ldapuser.formation }}" disabled="disabled">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="formation" class="col-sm-4 control-label">{% trans "Ville de naissance" %}</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="formation" placeholder="{% trans "Ville de naissance" %}" value="{{ ldapuser.birth_place }}" disabled="disabled">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="formation" class="col-sm-4 control-label">{% trans "Pays de naissance" %}</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="formation" placeholder="{% trans "Pays de naissance" %}" value="{{ ldapuser.birth_country }}" disabled="disabled">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="formation" class="col-sm-4 control-label">{% trans "Date de naissance" %}</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="formation" placeholder="{% trans "Date de naissance" %}" value="{{ ldapuser.freeform_birth_date }}" disabled="disabled">
                         </div>
                     </div>
                     <h3>{% trans "Informations de contact" %}</h3>
                     <p>{% trans "Nous avons de besoin de votre numéro de bâtiment, votre numéro de chambre et votre numéro de téléphone afin de vous contacter" %}</p>
                     <div class="form-group">
-                        <label for="email" class="col-sm-3 control-label">{% trans "E-mail" %}</label>
-                        <div class="col-sm-8">
+                        <label for="email" class="col-sm-4 control-label">{% trans "E-mail" %}</label>
+                        <div class="col-sm-7">
                             {{ form.email }}
                             <fieldset class="form-group col-sm-6 {% if form.email.errors %}has-error{% endif %}">
                                 {% if form.email.errors %}<span class="help-block">{{ form.email.errors }}</span>{% endif %}
@@ -51,8 +69,8 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="phone" class="col-sm-3 control-label">{% trans "Téléphone" %}</label>
-                        <div class="col-sm-8">
+                        <label for="phone" class="col-sm-4 control-label">{% trans "Téléphone" %}</label>
+                        <div class="col-sm-7">
                             {{ form.phone }}
                             <fieldset class="form-group col-sm-6 {% if form.phone.errors %}has-error{% endif %}">
                                 {% if form.phone.errors %}<span class="help-block">{{ form.phone.errors }}</span>{% endif %}
@@ -61,8 +79,8 @@
                     </div>
                     <div class="form-category">
                         <div class="form-group">
-                            <label for="campus" class="col-sm-3 control-label">{% trans "Campus" %}</label>
-                            <div class="col-sm-8">
+                            <label for="campus" class="col-sm-4 control-label">{% trans "Campus" %}</label>
+                            <div class="col-sm-7">
                                 {{ form.campus }}
                                 <fieldset class="form-group col-sm-6 {% if form.campus.errors %}has-error{% endif %}">
                                     {% if form.campus.errors %}<span class="help-block">{{ form.campus.errors }}</span>{% endif %}
@@ -71,8 +89,8 @@
                         </div>
                         <div id="maisel-information" >
                             <div class="form-group">
-                                <label for="building" class="col-sm-3 control-label">{% trans "Bâtiment" %}</label>
-                                <div class="col-sm-8">
+                                <label for="building" class="col-sm-4 control-label">{% trans "Bâtiment" %}</label>
+                                <div class="col-sm-7">
                                     {{ form.building }}
                                     <fieldset class="form-group col-sm-6 {% if form.building.errors %}has-error{% endif %}">
                                         {% if form.building.errors %}<span class="help-block">{{ form.building.errors }}</span>{% endif %}
@@ -80,8 +98,8 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="room" class="col-sm-3 control-label">{% trans "Chambre" %}</label>
-                                <div class="col-sm-8">
+                                <label for="room" class="col-sm-4 control-label">{% trans "Chambre" %}</label>
+                                <div class="col-sm-7">
                                     {{ form.room }}
                                     <fieldset class="form-group col-sm-6 {% if form.room.errors %}has-error{% endif %}">
                                         {% if form.room.errors %}<span class="help-block">{{ form.room.errors }}</span>{% endif %}
@@ -90,8 +108,8 @@
                             </div>
                         </div>
                         <div class="form-group" id="home-address">
-                            <label for="address" class="col-sm-3 control-label">{% trans "Chambre" %}</label>
-                            <div class="col-sm-8">
+                            <label for="address" class="col-sm-4 control-label">{% trans "Chambre" %}</label>
+                            <div class="col-sm-7">
                                 {{ form.address }}
                                 <fieldset class="form-group col-sm-6 {% if form.address.errors %}has-error{% endif %}">
                                     {% if form.address.errors %}<span class="help-block">{{ form.address.errors }}</span>{% endif %}
@@ -121,9 +139,9 @@
                     <br />
                 </form>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 side-column">
                 <a href="{% url 'tresorerie:home' %}"><span class="fa fa-fw fa-long-arrow-left"></span> {% trans "Retour" %}</a>
-                <h3>{% trans "Gardez vos informations à jour !" %}</h3>
+                <h3>{% trans "Gardez vos informations à jour !" %}</h3>
                 <p>{% blocktrans %}
                     Il est important de conserver vos informations personnelles à jour, nous en avons besoin pour vous contacter en cas de problème.
                 {% endblocktrans %}</p>

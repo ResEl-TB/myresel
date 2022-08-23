@@ -24,6 +24,18 @@
 # 22 : Attributs reselSTB
 # 23 : Attributs AE
 
+# Benjamin Somers - 2020
+# 50 : Attributs reselZone
+# 51 : Attributs reselBuilding
+# 52 : Attributs reselPool
+# 53 : Attributs reselDevice
+# 54 : Attributs reselVLAN
+# 55 : Attributs reselParentSw - TEMPORAIRE jusqu'à refacto switch/topo
+# 56 : Attributs reselLease
+# 60 : Attributs IPv4*
+# 61 : Attributs reselWebsite - OC de transition jusqu'à refacto clubs
+# 62 : Attributs websiteCategory
+
 ## Classes
 # enstbPerson : pesonne ayant un compte ecole (tt le monde sur l'annuaire)
 # maiselPerson : personne ayant une chambre a la maisel
@@ -45,7 +57,7 @@
 #attributs enstb MUST
 ######################
 
-attributetype ( 1.3.6.1.4.1.14628.3.0 NAME 'firstName' 
+attributetype ( 1.3.6.1.4.1.14628.3.0 NAME 'firstName'
         DESC 'Prénom'
         EQUALITY caseIgnoreMatch
         ORDERING caseIgnoreOrderingMatch
@@ -61,12 +73,12 @@ attributetype ( 1.3.6.1.4.1.14628.3.1 NAME 'lastName'
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
         SINGLE-VALUE )
 
-attributetype ( 1.3.6.1.4.1.14628.3.2 NAME 'promo' 
+attributetype ( 1.3.6.1.4.1.14628.3.2 NAME 'promo'
         DESC 'Année de sortie'
         EQUALITY numericStringMatch
-	ORDERING numericStringOrderingMatch
-	SUBSTR numericStringSubstringsMatch
-        SYNTAX 1.3.6.1.4.1.1466.115.121.1.36 
+        ORDERING numericStringOrderingMatch
+        SUBSTR numericStringSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.36
         SINGLE-VALUE )
 
 attributetype ( 1.3.6.1.4.1.14628.3.3 NAME 'provenance'
@@ -97,17 +109,17 @@ attributetype ( 1.3.6.1.4.1.14628.3.5 NAME 'publiable'
 attributetype ( 1.3.6.1.4.1.14628.3.6 NAME 'option'
         DESC 'JI, SLR, autre ...'
         EQUALITY caseIgnoreMatch
-	ORDERING caseIgnoreOrderingMatch
+        ORDERING caseIgnoreOrderingMatch
         SUBSTR caseIgnoreSubstringsMatch
-        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
         SINGLE-VALUE )
 
-attributetype ( 1.3.6.1.4.1.14628.3.9 NAME 'idEcole' 
+attributetype ( 1.3.6.1.4.1.14628.3.9 NAME 'idEcole'
         DESC 'ID Ecole'
         EQUALITY numericStringMatch
-	ORDERING numericStringOrderingMatch
-	SUBSTR numericStringSubstringsMatch
-        SYNTAX 1.3.6.1.4.1.1466.115.121.1.36 
+        ORDERING numericStringOrderingMatch
+        SUBSTR numericStringSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.36
         SINGLE-VALUE )
 
 
@@ -117,16 +129,16 @@ attributetype ( 1.3.6.1.4.1.14628.3.9 NAME 'idEcole'
 attributetype ( 1.3.6.1.4.1.14628.4.0 NAME 'photoFile'
         DESC 'Chemin relatif vers le fichier de photo'
         EQUALITY caseExactMatch
-	ORDERING caseExactOrderingMatch
-	SUBSTR caseExactSubstringsMatch
+        ORDERING caseExactOrderingMatch
+        SUBSTR caseExactSubstringsMatch
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
         SINGLE-VALUE )
 
 attributetype ( 1.3.6.1.4.1.14628.4.1 NAME 'birthDate'
         DESC 'Date de naissance'
-	EQUALITY generalizedTimeMatch
-	ORDERING generalizedTimeOrderingMatch
-	SUBSTR caseIgnoreSubstringsMatch
+        EQUALITY generalizedTimeMatch
+        ORDERING generalizedTimeOrderingMatch
+        SUBSTR caseIgnoreSubstringsMatch
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.24
         SINGLE-VALUE )
 
@@ -149,7 +161,7 @@ attributetype ( 1.3.6.1.4.1.14628.4.3 NAME 'nickName'
 attributetype ( 1.3.6.1.4.1.14628.4.4 NAME 'altMail'
         DESC 'Mail extérieur'
         EQUALITY caseIgnoreIA5Match
-	SUBSTR caseIgnoreIA5SubstringsMatch
+        SUBSTR caseIgnoreIA5SubstringsMatch
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.26 )
 
 attributetype ( 1.3.6.1.4.1.14628.4.5 NAME 'webPage'
@@ -248,19 +260,19 @@ attributetype ( 1.3.6.1.4.1.14628.5.2 NAME 'campus'
 attributetype ( 1.3.6.1.4.1.14628.5.3 NAME 'lastUpdate'
         DESC 'Date de dernière MAJ des informations'
         EQUALITY generalizedTimeMatch
-	ORDERING generalizedTimeOrderingMatch
+        ORDERING generalizedTimeOrderingMatch
         SUBSTR caseIgnoreSubstringsMatch
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.24
         SINGLE-VALUE )
 
-attributeType ( 1.3.6.1.4.1.14628.5.4 NAME 'mlCampus' 
-	DESC 'Listes d informations auxquelles l utilisateur est abonné'
-	EQUALITY caseExactMatch
-	ORDERING caseExactOrderingMatch
-	SUBSTR caseExactSubstringsMatch
-	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
+attributeType ( 1.3.6.1.4.1.14628.5.4 NAME 'mlCampus'
+        DESC 'Listes d informations auxquelles l utilisateur est abonné'
+        EQUALITY caseExactMatch
+        ORDERING caseExactOrderingMatch
+        SUBSTR caseExactSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
 #
-# Attributs pour reselClub (deprecated - geekou 17/09/08) 
+# Attributs pour reselClub (deprecated - geekou 17/09/08)
 #########################################################
 
 attributetype ( 1.3.6.1.4.1.14628.14.0 NAME 'visibility'
@@ -268,7 +280,7 @@ attributetype ( 1.3.6.1.4.1.14628.14.0 NAME 'visibility'
         EQUALITY caseIgnoreMatch
         ORDERING caseIgnoreOrderingMatch
         SUBSTR caseIgnoreSubstringsMatch
-        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
         SINGLE-VALUE )
 
 #
@@ -277,126 +289,127 @@ attributetype ( 1.3.6.1.4.1.14628.14.0 NAME 'visibility'
 
 attributeType ( 1.3.6.1.4.1.14628.14.1 NAME 'uidPrezs'
         DESC 'Présidents de club/asso/liste'
-	EQUALITY distinguishedNameMatch
+        EQUALITY distinguishedNameMatch
         SUBSTR caseIgnoreSubstringsMatch
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.12 )
 
 attributeType ( 1.3.6.1.4.1.14628.14.2 NAME 'uidMembres'
         DESC 'Membres de club/asso/liste'
-	EQUALITY distinguishedNameMatch
+        EQUALITY distinguishedNameMatch
         SUBSTR caseIgnoreSubstringsMatch
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.12 )
 
 attributeType ( 1.3.6.1.4.1.14628.17.1 NAME 'mlInfos'
-	DESC 'Dispose d une mailing liste d informations'
-	EQUALITY booleanMatch
+        DESC 'Dispose d une mailing liste d informations'
+        EQUALITY booleanMatch
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
         SINGLE-VALUE )
 
 attributeType ( 1.3.6.1.4.1.14628.17.0 NAME 'orgaName'
         DESC 'Nom d une organisation'
-	EQUALITY caseIgnoreMatch
-        ORDERING caseIgnoreOrderingMatch
-        SUBSTR caseIgnoreSubstringsMatch
-        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 
-	SINGLE-VALUE )
-
-attributeType ( 1.3.6.1.4.1.14628.19.0 NAME 'campagneYear'
-	DESC 'Année de la campagne BdE/BdS'
-	EQUALITY numericStringMatch
-        ORDERING numericStringOrderingMatch
-        SUBSTR numericStringSubstringsMatch
-        SYNTAX 1.3.6.1.4.1.1466.115.121.1.36
-	SINGLE-VALUE )
-
-attributeType ( 1.3.6.1.4.1.14628.17.2 NAME 'mlist'
-        DESC 'Adresse email de la mliste'
-	EQUALITY caseIgnoreMatch
+        EQUALITY caseIgnoreMatch
         ORDERING caseIgnoreOrderingMatch
         SUBSTR caseIgnoreSubstringsMatch
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
-	SINGLE-VALUE )
+        SINGLE-VALUE )
+
+attributeType ( 1.3.6.1.4.1.14628.19.0 NAME 'campagneYear'
+        DESC 'Année de la campagne BdE/BdS'
+        EQUALITY numericStringMatch
+        ORDERING numericStringOrderingMatch
+        SUBSTR numericStringSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.36
+        SINGLE-VALUE )
+
+attributeType ( 1.3.6.1.4.1.14628.17.2 NAME 'mlist'
+        DESC 'Adresse email de la mliste'
+        EQUALITY caseIgnoreMatch
+        ORDERING caseIgnoreOrderingMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE )
 
 attributeType ( 1.3.6.1.4.1.14628.17.3 NAME 'website'
-         DESC 'Site web de lorga'
-	 EQUALITY caseIgnoreMatch
-         ORDERING caseIgnoreOrderingMatch
-         SUBSTR caseIgnoreSubstringsMatch
-         SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
-         SINGLE-VALUE )
+        DESC 'Site web de lorga'
+        EQUALITY caseIgnoreMatch
+        ORDERING caseIgnoreOrderingMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE )
+
 attributeType ( 1.3.6.1.4.1.14628.17.4 NAME 'logo'
-         DESC 'Logo de lorga'
-         EQUALITY caseIgnoreMatch
-         ORDERING caseIgnoreOrderingMatch
-         SUBSTR caseIgnoreSubstringsMatch
-         SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
-         SINGLE-VALUE )
+        DESC 'Logo de lorga'
+        EQUALITY caseIgnoreMatch
+        ORDERING caseIgnoreOrderingMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE )
 #
 # Attributs pour reselSite
 #
 
 attributeType ( 1.3.6.1.4.1.14628.16.0 NAME 'vhosts'
-	DESC 'Virtual hosts suplémentaires pour un site web'
-	EQUALITY caseIgnoreMatch
-	ORDERING caseIgnoreOrderingMatch
-	SUBSTR caseIgnoreSubstringsMatch
-	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
+        DESC 'Virtual hosts suplémentaires pour un site web'
+        EQUALITY caseIgnoreMatch
+        ORDERING caseIgnoreOrderingMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
 
 attributeType ( 1.3.6.1.4.1.14628.16.1 NAME 'mainDir'
-	DESC 'Répertoire où se trouvent les fichiers d un site web'
-	EQUALITY caseExactMatch
-	ORDERING caseExactOrderingMatch
-	SUBSTR caseExactSubstringsMatch
-	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 
-	SINGLE-VALUE )
+        DESC 'Répertoire où se trouvent les fichiers d un site web'
+        EQUALITY caseExactMatch
+        ORDERING caseExactOrderingMatch
+        SUBSTR caseExactSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE )
 
 attributeType ( 1.3.6.1.4.1.14628.16.2 NAME 'cnOrga'
         DESC 'cn d une organisation possédant un site web'
         EQUALITY caseExactMatch
         SUBSTR caseExactSubstringsMatch
-	ORDERING caseExactOrderingMatch
-        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 
-	SINGLE-VALUE )
+        ORDERING caseExactOrderingMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE )
 
 attributeType ( 1.3.6.1.4.1.14628.16.3 NAME 'siteName'
-	DESC 'Nom d un site web (valable pour un site hors-organisation)'
-	EQUALITY caseIgnoreMatch
-	ORDERING caseIgnoreOrderingMatch
-	SUBSTR caseIgnoreSubstringsMatch
-	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
-	SINGLE-VALUE )
+        DESC 'Nom d un site web (valable pour un site hors-organisation)'
+        EQUALITY caseIgnoreMatch
+        ORDERING caseIgnoreOrderingMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE )
 
 attributeType ( 1.3.6.1.4.1.14628.16.4 NAME 'siteAccess'
-	DESC 'Accès d un site a l exterieur, interieur ou exterieur avec auth'
-	EQUALITY caseExactMatch
-	ORDERING caseExactOrderingMatch
-	SUBSTR caseExactSubstringsMatch
-	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
-	SINGLE-VALUE )
+        DESC 'Accès d un site a l exterieur, interieur ou exterieur avec auth'
+        EQUALITY caseExactMatch
+        ORDERING caseExactOrderingMatch
+        SUBSTR caseExactSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE )
 
 attributeType ( 1.3.6.1.4.1.14628.16.5 NAME 'siteVisibility'
-	DESC 'Visibilité sur la liste des sites'
-	EQUALITY caseExactMatch
-	ORDERING caseExactOrderingMatch
-	SUBSTR caseExactSubstringsMatch
-	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
-	SINGLE-VALUE )
+        DESC 'Visibilité sur la liste des sites'
+        EQUALITY caseExactMatch
+        ORDERING caseExactOrderingMatch
+        SUBSTR caseExactSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE )
 
 attributeType ( 1.3.6.1.4.1.14628.16.6 NAME 'allowCGI'
-	DESC 'Autorise l execution de CGI-BIN'
-	EQUALITY booleanMatch
-	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+        DESC 'Autorise l execution de CGI-BIN'
+        EQUALITY booleanMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
         SINGLE-VALUE )
 
 #attributs aePerson
 #########################
 
 attributeType ( 1.3.6.1.4.1.14628.23.2 NAME 'datesMembre'
-	DESC 'Dates entre lesquelles la personne est membre de l AE'
-	EQUALITY caseIgnoreMatch
-	ORDERING caseIgnoreOrderingMatch
-	SUBSTR caseIgnoreSubstringsMatch
-	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
+        DESC 'Dates entre lesquelles la personne est membre de l AE'
+        EQUALITY caseIgnoreMatch
+        ORDERING caseIgnoreOrderingMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
 
 attributetype ( 1.3.6.1.4.1.14628.23.1 NAME 'nAdherent'
         DESC 'numéro d adhérent à l AE'
@@ -407,10 +420,10 @@ attributetype ( 1.3.6.1.4.1.14628.23.1 NAME 'nAdherent'
 
 attributetype ( 1.3.6.1.4.1.14628.23.0 NAME 'aeCotiz'
         DESC 'Montant de la cotisation à l Ae payé'
-	EQUALITY caseIgnoreMatch
-	ORDERING caseIgnoreOrderingMatch
-	SUBSTR caseIgnoreSubstringsMatch
-	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 
+        EQUALITY caseIgnoreMatch
+        ORDERING caseIgnoreOrderingMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
         SINGLE-VALUE )
 
 attributetype ( 1.3.6.1.4.1.14628.23.3 NAME 'uidAdmAdd'
@@ -465,51 +478,51 @@ attributetype ( 1.3.6.1.4.1.14628.23.8 NAME 'aeAdmin'
 attributetype ( 1.3.6.1.4.1.14628.7.0 NAME 'dateInscr'
         DESC 'Date d inscription'
         EQUALITY generalizedTimeMatch
-	ORDERING generalizedTimeOrderingMatch
-	SUBSTR caseIgnoreSubstringsMatch
+        ORDERING generalizedTimeOrderingMatch
+        SUBSTR caseIgnoreSubstringsMatch
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.24
         SINGLE-VALUE )
 
 attributetype ( 1.3.6.1.4.1.14628.7.1 NAME 'cotiz'
         DESC 'Année pour laquelle la cotisation a été payée'
         EQUALITY caseIgnoreMatch
-	ORDERING caseIgnoreOrderingMatch
+        ORDERING caseIgnoreOrderingMatch
         SUBSTR caseIgnoreSubstringsMatch
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
 
 attributetype ( 1.3.6.1.4.1.14628.7.2 NAME 'ban'
-	DESC 'Services pour lesquels l utilisateur est banni'
-	EQUALITY caseExactMatch
-	ORDERING caseExactOrderingMatch
-	SUBSTR caseExactSubstringsMatch
-	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
+        DESC 'Services pour lesquels l utilisateur est banni'
+        EQUALITY caseExactMatch
+        ORDERING caseExactOrderingMatch
+        SUBSTR caseExactSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
 
 attributeType ( 1.3.6.1.4.1.14628.7.3 NAME 'paramConn'
-	DESC 'Paramètres de connexion optionnels'
-	EQUALITY caseIgnoreMatch
-	ORDERING caseIgnoreOrderingMatch
-	SUBSTR caseIgnoreSubstringsMatch
-	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
-
-attributeType (1.3.6.1.4.1.14628.7.4 NAME 'v6Prefix'
-	DESC 'préfixe de de l adresse IPv6 de l utilisateur'
+        DESC 'Paramètres de connexion optionnels'
         EQUALITY caseIgnoreMatch
         ORDERING caseIgnoreOrderingMatch
         SUBSTR caseIgnoreSubstringsMatch
-        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 ) 
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
+
+attributeType (1.3.6.1.4.1.14628.7.4 NAME 'v6Prefix'
+        DESC 'préfixe de de l adresse IPv6 de l utilisateur'
+        EQUALITY caseIgnoreMatch
+        ORDERING caseIgnoreOrderingMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
 
 attributetype ( 1.3.6.1.4.1.14628.7.5 NAME 'days'
         DESC 'Nombre de jours où l utilisateur a été vu connecté'
         EQUALITY caseIgnoreMatch
-	ORDERING caseIgnoreOrderingMatch
+        ORDERING caseIgnoreOrderingMatch
         SUBSTR caseIgnoreSubstringsMatch
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
 
 attributetype ( 1.3.6.1.4.1.14628.7.6 NAME 'endInternet'
         DESC 'Fin des droits de connexion'
         EQUALITY generalizedTimeMatch
-	ORDERING generalizedTimeOrderingMatch
-	SUBSTR caseIgnoreSubstringsMatch
+        ORDERING generalizedTimeOrderingMatch
+        SUBSTR caseIgnoreSubstringsMatch
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.24
         SINGLE-VALUE )
 
@@ -529,6 +542,27 @@ attributetype ( 1.3.6.1.4.1.14628.7.8 NAME 'lastUserDate'
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.24
         SINGLE-VALUE )
 
+attributetype ( 1.3.6.1.4.1.14628.7.9 NAME 'freeformBirthDate'
+        DESC 'Date de naissance libre'
+        EQUALITY caseIgnoreMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15{10}
+        SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.14628.7.10 NAME 'birthPlace'
+        DESC 'Ville de naissance'
+        EQUALITY caseIgnoreMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.14628.7.11 NAME 'birthCountry'
+        DESC 'Pays de naissance'
+        EQUALITY caseIgnoreMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE )
+
 # Proposition ebzao : mettre les annees de cotisation
 #attributetype ( 1.3.6.1.4.1.14628.7.1 NAME 'cotiz'
 #        DESC 'Années de cotisation'
@@ -543,17 +577,17 @@ attributetype ( 1.3.6.1.4.1.14628.7.8 NAME 'lastUserDate'
 attributetype ( 1.3.6.1.4.1.14628.11.0 NAME 'mailDir'
         DESC 'Répertoire de la boîte mail'
         EQUALITY caseIgnoreMatch
-	ORDERING caseIgnoreOrderingMatch
+        ORDERING caseIgnoreOrderingMatch
         SUBSTR caseIgnoreSubstringsMatch
-        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 
-	SINGLE-VALUE )
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE )
 
 attributetype ( 1.3.6.1.4.1.14628.11.1 NAME 'mailDelDate'
         DESC 'Date à laquelle les mails seront supprimés'
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.24
         EQUALITY generalizedTimeMatch
-	ORDERING generalizedTimeOrderingMatch
-	SUBSTR caseIgnoreSubstringsMatch
+        ORDERING generalizedTimeOrderingMatch
+        SUBSTR caseIgnoreSubstringsMatch
         SINGLE-VALUE )
 
 #attributs machine
@@ -562,21 +596,21 @@ attributetype ( 1.3.6.1.4.1.14628.11.1 NAME 'mailDelDate'
 attributetype ( 1.3.6.1.4.1.14628.8.0 NAME 'uidProprio'
         DESC 'Propriétaire de la machine'
         EQUALITY distinguishedNameMatch
-	SUBSTR caseIgnoreSubstringsMatch
+        SUBSTR caseIgnoreSubstringsMatch
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.12
         SINGLE-VALUE )
 
 attributetype ( 1.3.6.1.4.1.14628.8.1 NAME 'ipv6HostNumber'
         DESC 'Adresse IPv6'
         EQUALITY caseIgnoreMatch
-	ORDERING caseIgnoreOrderingMatch
+        ORDERING caseIgnoreOrderingMatch
         SUBSTR caseIgnoreSubstringsMatch
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
 
 attributetype ( 1.3.6.1.4.1.14628.8.2 NAME 'hostAlias'
         DESC 'Alias de la machine'
         EQUALITY caseIgnoreMatch
-	ORDERING caseIgnoreOrderingMatch
+        ORDERING caseIgnoreOrderingMatch
         SUBSTR caseIgnoreSubstringsMatch
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
 
@@ -584,8 +618,8 @@ attributetype ( 1.3.6.1.4.1.14628.8.3 NAME 'lastDate'
         DESC 'Machine vue pour la dernière fois'
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.24
         EQUALITY generalizedTimeMatch
-	ORDERING generalizedTimeOrderingMatch
-	SUBSTR caseIgnoreSubstringsMatch
+        ORDERING generalizedTimeOrderingMatch
+        SUBSTR caseIgnoreSubstringsMatch
         SINGLE-VALUE )
 
 attributetype ( 1.3.6.1.4.1.14628.8.4 NAME 'zone'
@@ -628,16 +662,16 @@ attributetype ( 1.3.6.1.4.1.14628.9.0 NAME 'droit'
 
 # https://blog.shichao.io/2015/04/17/setup_openldap_server_with_openssh_lpk_on_ubuntu.html
 attributetype ( 1.3.6.1.4.1.14628.9.1 NAME 'sshPublicKey'
-	DESC 'OpenSSH Public key'
-	EQUALITY octetStringMatch
-  	SYNTAX 1.3.6.1.4.1.1466.115.121.1.40 )
+        DESC 'OpenSSH Public key'
+        EQUALITY octetStringMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.40 )
 
 # Attributs d'un switch
 ########################
 attributetype ( 1.3.6.1.4.1.14628.10.0 NAME 'machine'
         DESC 'DN de la machine switch'
         EQUALITY distinguishedNameMatch
-	SUBSTR caseIgnoreSubstringsMatch
+        SUBSTR caseIgnoreSubstringsMatch
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.12
         SINGLE-VALUE )
 
@@ -646,7 +680,7 @@ attributetype ( 1.3.6.1.4.1.14628.10.1 NAME 'portNumber'
         EQUALITY numericStringMatch
         ORDERING numericStringOrderingMatch
         SUBSTR numericStringSubstringsMatch
-        SYNTAX 1.3.6.1.4.1.1466.115.121.1.36 
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.36
         SINGLE-VALUE )
 
 attributetype ( 1.3.6.1.4.1.14628.10.2 NAME 'switchType'
@@ -666,7 +700,7 @@ attributetype ( 1.3.6.1.4.1.14628.10.3 NAME 'uplink'
 attributetype ( 1.3.6.1.4.1.14628.10.4 NAME 'unite'
         DESC 'Numéro d unité'
         EQUALITY numericStringMatch
-	ORDERING numericStringOrderingMatch
+        ORDERING numericStringOrderingMatch
         SUBSTR numericStringSubstringsMatch
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.36
         SINGLE-VALUE )
@@ -676,7 +710,7 @@ attributetype ( 1.3.6.1.4.1.14628.10.4 NAME 'unite'
 attributetype ( 1.3.6.1.4.1.14628.21.4 NAME 'channel'
         DESC 'Numéro de canal'
         EQUALITY numericStringMatch
-	ORDERING numericStringOrderingMatch
+        ORDERING numericStringOrderingMatch
         SUBSTR numericStringSubstringsMatch
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.36
         SINGLE-VALUE )
@@ -705,23 +739,23 @@ attributetype ( 1.3.6.1.4.1.14628.22.2 NAME 'stbType'
 attributetype ( 1.3.6.1.4.1.14628.12.0 NAME 'type'
         DESC 'Type de switch'
         EQUALITY caseIgnoreMatch
-	ORDERING caseIgnoreOrderingMatch
+        ORDERING caseIgnoreOrderingMatch
         SUBSTR caseIgnoreSubstringsMatch
-        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
         SINGLE-VALUE )
 
 attributetype ( 1.3.6.1.4.1.14628.12.1 NAME 'value'
         DESC 'Valeur possible d un mib'
         EQUALITY caseExactMatch
-	ORDERING caseExactOrderingMatch
-	SUBSTR caseExactSubstringsMatch 
+        ORDERING caseExactOrderingMatch
+        SUBSTR caseExactSubstringsMatch
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
         SINGLE-VALUE )
 
 attributetype ( 1.3.6.1.4.1.14628.12.2 NAME 'alias'
         DESC 'Nom officiel'
         EQUALITY caseIgnoreMatch
-	ORDERING caseIgnoreOrderingMatch
+        ORDERING caseIgnoreOrderingMatch
         SUBSTR caseIgnoreSubstringsMatch
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
         SINGLE-VALUE )
@@ -729,7 +763,7 @@ attributetype ( 1.3.6.1.4.1.14628.12.2 NAME 'alias'
 attributetype ( 1.3.6.1.4.1.14628.12.3 NAME 'nick'
         DESC 'Nom français'
         EQUALITY caseIgnoreMatch
-	ORDERING caseIgnoreOrderingMatch
+        ORDERING caseIgnoreOrderingMatch
         SUBSTR caseIgnoreSubstringsMatch
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
         SINGLE-VALUE )
@@ -745,7 +779,7 @@ attributetype ( 1.3.6.1.4.1.14628.12.3 NAME 'nick'
 attributetype ( 1.3.6.1.4.1.14628.12.4 NAME 'valueType'
         DESC 'i u t a o s x d'
         EQUALITY caseIgnoreMatch
-	ORDERING caseIgnoreOrderingMatch
+        ORDERING caseIgnoreOrderingMatch
         SUBSTR caseIgnoreSubstringsMatch
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
         SINGLE-VALUE )
@@ -753,7 +787,7 @@ attributetype ( 1.3.6.1.4.1.14628.12.4 NAME 'valueType'
 attributetype ( 1.3.6.1.4.1.14628.12.5 NAME 'oid'
         DESC 'object id du mib'
         EQUALITY caseIgnoreMatch
-	ORDERING caseIgnoreOrderingMatch
+        ORDERING caseIgnoreOrderingMatch
         SUBSTR caseIgnoreSubstringsMatch
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.44
         SINGLE-VALUE )
@@ -780,22 +814,244 @@ attributetype ( 1.3.6.1.4.1.14628.13.0 NAME 'depart'
 ######################################
 
 attributetype ( 1.3.6.1.4.1.14628.3.7 NAME 'lmPassword'
-	DESC 'LanManager Passwd'
-	EQUALITY caseIgnoreIA5Match
-	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26 SINGLE-VALUE )
+        DESC 'LanManager Passwd'
+        EQUALITY caseIgnoreIA5Match
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.26 SINGLE-VALUE )
 
 attributetype ( 1.3.6.1.4.1.14628.3.8 NAME 'ntPassword'
-	DESC 'NT Passwd'
-	EQUALITY caseIgnoreIA5Match
-	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26 SINGLE-VALUE )
+        DESC 'NT Passwd'
+        EQUALITY caseIgnoreIA5Match
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.26 SINGLE-VALUE )
 
-attributetype ( 1.3.6.1.4.1.14628.53.1 NAME 'authType'
-	DESC 'Type d authentification'
+
+# Attributs pour reselZone
+######################################
+
+attributetype ( 1.3.6.1.4.1.14628.50.1 NAME 'zoneID'
+        DESC 'Identifiant de la zone'
+        EQUALITY numericStringMatch
+        ORDERING numericStringOrderingMatch
+        SUBSTR numericStringSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.36
+        SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.14628.50.2 NAME 'zoneName'
+        DESC 'Nom de la zone'
         EQUALITY caseIgnoreMatch
-	ORDERING caseIgnoreOrderingMatch
+        ORDERING caseIgnoreOrderingMatch
         SUBSTR caseIgnoreSubstringsMatch
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
         SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.14628.50.3 NAME 'zoneCode'
+        DESC 'Nom abrege de la zone'
+        EQUALITY caseIgnoreMatch
+        ORDERING caseIgnoreOrderingMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE )
+
+# Attributs pour reselBuilding
+######################################
+
+attributetype ( 1.3.6.1.4.1.14628.51.1 NAME 'buildingID'
+        DESC 'Identifiant du batiment'
+        EQUALITY numericStringMatch
+        ORDERING numericStringOrderingMatch
+        SUBSTR numericStringSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.36
+        SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.14628.51.3 NAME 'buildingCode'
+        DESC 'Nom abrege du batiment'
+        EQUALITY caseIgnoreMatch
+        ORDERING caseIgnoreOrderingMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE )
+
+# Attributs pour reselPool
+######################################
+
+attributetype ( 1.3.6.1.4.1.14628.52.1 NAME 'poolID'
+        DESC 'Identifiant du pool'
+        EQUALITY numericStringMatch
+        ORDERING numericStringOrderingMatch
+        SUBSTR numericStringSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.36
+        SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.14628.52.2 NAME 'poolName'
+        DESC 'Nom du pool'
+        EQUALITY caseIgnoreMatch
+        ORDERING caseIgnoreOrderingMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.14628.52.3 NAME 'poolCode'
+        DESC 'Nom abrege du pool'
+        EQUALITY caseIgnoreMatch
+        ORDERING caseIgnoreOrderingMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE )
+
+
+# Attributs pour reselDevice
+######################################
+
+attributetype ( 1.3.6.1.4.1.14628.53.1 NAME 'authType'
+        DESC 'Type d authentification'
+        EQUALITY caseIgnoreMatch
+        ORDERING caseIgnoreOrderingMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE )
+
+# Attributs pour reselVLAN
+######################################
+
+attributetype ( 1.3.6.1.4.1.14628.54.1 NAME 'vlanOffset'
+        DESC 'Offset de VLAN'
+        EQUALITY numericStringMatch
+        ORDERING numericStringOrderingMatch
+        SUBSTR numericStringSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.36
+        SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.14628.54.2 NAME 'roomName'
+        DESC 'Nom de chambre'
+        EQUALITY caseIgnoreMatch
+        ORDERING caseIgnoreOrderingMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.14628.54.3 NAME 'roomSize'
+        DESC 'Nombre d habitants de la chambre'
+        EQUALITY numericStringMatch
+        ORDERING numericStringOrderingMatch
+        SUBSTR numericStringSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.36
+        SINGLE-VALUE )
+
+
+# Attributs pour reselParentSw
+######################################
+
+attributetype ( 1.3.6.1.4.1.14628.55.1 NAME 'childIP'
+        DESC 'Child IP address'
+        EQUALITY caseIgnoreIA5Match
+        SUBSTR caseIgnoreIA5SubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{128}
+        SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.14628.55.2 NAME 'parentIP'
+        DESC 'Parent IP address'
+        EQUALITY caseIgnoreIA5Match
+        SUBSTR caseIgnoreIA5SubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{128}
+        SINGLE-VALUE )
+
+
+# Attributs pour reselLease
+######################################
+
+attributetype ( 1.3.6.1.4.1.14628.56.1 NAME 'leaseExpiry'
+        DESC 'DHCP lease expiry'
+        EQUALITY generalizedTimeMatch
+        ORDERING generalizedTimeOrderingMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.24
+        SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.14628.56.2 NAME 'leaseID'
+	DESC 'DHCP lease ID (zid-voff-mac)'
+	EQUALITY caseIgnoreIA5Match
+        SUBSTR caseIgnoreIA5SubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26{128}
+        SINGLE-VALUE )
+
+
+# Attributs pour IPv4Branch
+######################################
+
+attributetype ( 1.3.6.1.4.1.14628.60.1 NAME 'bits'
+        DESC 'Bits d adresse'
+        EQUALITY caseIgnoreMatch
+        ORDERING caseIgnoreOrderingMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE )
+
+attributeType ( 1.3.6.1.4.1.14628.60.2 NAME 'tag'
+        DESC 'Tag de zone pour un serveur'
+        EQUALITY caseIgnoreMatch
+        ORDERING caseIgnoreOrderingMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE )
+
+
+# Attributs pour IPv4*
+######################################
+
+attributetype ( 1.3.6.1.4.1.14628.60.11 NAME 'length'
+        DESC 'Bits d adresse'
+        EQUALITY numericStringMatch
+        ORDERING numericStringOrderingMatch
+        SUBSTR numericStringSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.36
+        SINGLE-VALUE )
+
+
+# Attributs pour IPv4Map
+######################################
+
+attributetype ( 1.3.6.1.4.1.14628.60.12 NAME 'target'
+        DESC 'Destination du lien structurel'
+        EQUALITY caseIgnoreMatch
+        ORDERING caseIgnoreOrderingMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.14628.60.13 NAME 'attribute'
+        DESC 'Attribut du lien structurel'
+        EQUALITY caseIgnoreMatch
+        ORDERING caseIgnoreOrderingMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE )
+
+
+# Attributs pour reselWebsite
+######################################
+
+attributeType ( 1.3.6.1.4.1.14628.61.1 NAME 'siteLogo'
+         DESC 'URL du logo du site, absolu ou relatif'
+         EQUALITY caseIgnoreMatch
+         ORDERING caseIgnoreOrderingMatch
+         SUBSTR caseIgnoreSubstringsMatch
+         SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+         SINGLE-VALUE )
+
+attributeType ( 1.3.6.1.4.1.14628.61.2 NAME 'siteURL'
+         DESC 'URL du site, absolu ou relatif'
+         EQUALITY caseIgnoreMatch
+         ORDERING caseIgnoreOrderingMatch
+         SUBSTR caseIgnoreSubstringsMatch
+         SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+         SINGLE-VALUE )
+
+attributeType ( 1.3.6.1.4.1.14628.61.3 NAME 'siteCategory'
+         DESC 'Catégorie du site'
+         EQUALITY caseIgnoreMatch
+         ORDERING caseIgnoreOrderingMatch
+         SUBSTR caseIgnoreSubstringsMatch
+         SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+         SINGLE-VALUE )
 
 
 #############################################################################
@@ -823,7 +1079,7 @@ objectclass ( 1.3.6.1.4.1.14628.1.2 NAME 'maiselPerson' AUXILIARY
 
 ##Club (deprecated - geekou 17/09/08)
 objectclass ( 1.3.6.1.4.1.14628.1.3 NAME 'reselClub'  STRUCTURAL
-	OBSOLETE
+        OBSOLETE
         DESC 'Club ou association ENST Bretagne'
         MUST ( cn )
         MAY ( description $ batiment $ roomNumber $ telephoneNumber $ fax $ webPage $ mail $ visibility $ photoFile ) )
@@ -839,7 +1095,7 @@ objectclass ( 1.3.6.1.4.1.14628.1.23 NAME 'aePerson' AUXILIARY
 objectclass (  1.3.6.1.4.1.14628.1.5 NAME 'reselPerson' AUXILIARY
         DESC 'Personne disposant d une machine'
         MUST ( uid $ firstName $ lastName $ dateInscr )
-        MAY ( cotiz $ endInternet $ days $ startFirstMonth $ lastUserDate $ userPassword $ coupure $ shapePropre $ shapeSale $ ban $ v6Prefix $ campus ) )
+        MAY ( cotiz $ endInternet $ days $ startFirstMonth $ lastUserDate $ userPassword $ coupure $ shapePropre $ shapeSale $ ban $ v6Prefix $ campus $ freeformBirthDate $ birthPlace $ birthCountry ) )
 
 ##Personne ayant un mail au resel
 ## theoriquement ces attributs sont faits pour sendmail
@@ -860,12 +1116,12 @@ objectclass ( 1.3.6.1.4.1.14628.1.7 NAME 'reselMachine'  STRUCTURAL
 objectclass ( 1.3.6.1.4.1.14628.1.8 NAME 'reselAdmin'  STRUCTURAL
         DESC 'Administrateur du ResEl'
         MUST ( uid $ userPassword )
-        MAY ( droit $ sshPublicKey ) )
+        MAY ( droit $ sshPublicKey $ uidNumber ) )
 
 # switch dans ou=In,ou=switchs,dc=resel...
 objectclass ( 1.3.6.1.4.1.14628.1.9 NAME 'reselSwitch'  STRUCTURAL
         DESC 'Switch du ResEl'
-        MUST ( cn $ machine $ switchType ) 
+        MUST ( cn $ machine $ switchType )
         MAY ( unite ) )
 
 # port d'un hub avec sa chambre associee dans cn=x,ou=In,ou=switchs,dc=resel...
@@ -897,7 +1153,7 @@ objectclass ( 1.3.6.1.4.1.14628.1.12 NAME 'mib'  STRUCTURAL
 #d   DECIMAL STRING
 objectclass ( 1.3.6.1.4.1.14628.1.13 NAME 'value'  STRUCTURAL
         DESC 'Valeur possible pour un MIB'
-        MUST ( value $ alias $ nick $ type ) 
+        MUST ( value $ alias $ nick $ type )
         MAY ( description ) )
 
 
@@ -916,28 +1172,28 @@ objectclass ( 1.3.6.1.4.1.14628.1.14 NAME 'guestPerson' AUXILIARY
 #
 
 objectClass ( 1.3.6.1.4.1.14628.1.16 NAME 'reselSite' SUP posixGroup STRUCTURAL
-	DESC 'Site web hébergé sur golf'
-	MUST ( cn $ siteAccess $ siteVisibility $ allowCGI )
-	MAY ( vhosts $ mainDir $ description $ cnOrga $ siteName ) )
+        DESC 'Site web hébergé sur golf'
+        MUST ( cn $ siteAccess $ siteVisibility $ allowCGI )
+        MAY ( vhosts $ mainDir $ description $ cnOrga $ siteName ) )
 
 #
 # studentOrganisation représente un club, une asso. ou une liste de campagne
 # ensuite, tbClub/tbAsso/tbCampagne dérivent de studentOrganistion
 
 objectClass ( 1.3.6.1.4.1.14628.1.17 NAME 'studentOrganisation' STRUCTURAL
-	DESC 'Organisation d étudiants de TELECOM Bretagne'
-	MUST ( cn $ orgaName $ mlInfos )
-	MAY ( uidPrezs $ uidMembres $ description $ mlist $ logo $ website) )
+        DESC 'Organisation d étudiants de TELECOM Bretagne'
+        MUST ( cn $ orgaName $ mlInfos )
+        MAY ( uidPrezs $ uidMembres $ description $ mlist $ logo $ website) )
 
 objectClass ( 1.3.6.1.4.1.14628.1.15 NAME 'tbClub' SUP studentOrganisation STRUCTURAL
         DESC 'Club de TELECOM Bretagne' )
 
 objectClass ( 1.3.6.1.4.1.14628.1.18 NAME 'tbAsso' SUP studentOrganisation STRUCTURAL
-	DESC 'Association de TELECOM Bretagne' )
+        DESC 'Association de TELECOM Bretagne' )
 
 objectClass ( 1.3.6.1.4.14628.1.19 NAME 'tbCampagne' SUP studentOrganisation STRUCTURAL
-	DESC 'Liste de campagne BdE de TELECOM Bretagne'
-	MUST ( campagneYear ) )
+        DESC 'Liste de campagne BdE de TELECOM Bretagne'
+        MUST ( campagneYear ) )
 
 #
 # tbClubSport dérive de tbClub et représente un club sportif (BdS)
@@ -957,7 +1213,55 @@ objectclass ( 1.3.6.1.4.1.14628.1.22 NAME 'reselSTB'  STRUCTURAL
         MUST ( cn $ machine $ stbBrand )
         MAY ( stbType ) )
 
+objectclass ( 1.3.6.1.4.1.14628.50.0 NAME 'reselZone' STRUCTURAL
+        DESC 'Zone du ResEl'
+        MUST ( zoneID $ zoneCode $ vlanOffset )
+        MAY ( zoneName ) )
+
+objectclass ( 1.3.6.1.4.1.14628.51.0 NAME 'reselBuilding' STRUCTURAL
+        DESC 'Batiment du ResEl'
+        MUST ( buildingID $ buildingCode )
+        MAY ( buildingName ) )
+
+objectclass ( 1.3.6.1.4.1.14628.52.0 NAME 'reselPool' STRUCTURAL
+        DESC 'Pool de machines'
+        MUST ( poolID $ poolCode )
+        MAY ( poolName ) )
+
 objectclass ( 1.3.6.1.4.1.14628.53.0 NAME 'reselDevice'  STRUCTURAL
-	DESC 'Machine utilisateur'
-	MUST ( uidProprio $ macAddress $ authType )
-	MAY ( host $ lastDate $ description ) )
+        DESC 'Machine utilisateur'
+        MUST ( uidProprio $ macAddress $ authType )
+        MAY ( host $ hostAlias $ lastDate $ description ) )
+
+objectclass ( 1.3.6.1.4.1.14628.54.0 NAME 'reselVLAN'  STRUCTURAL
+        DESC 'Description de VLAN'
+        MUST ( vlanOffset $ zoneID $ roomName $ roomNumber $ batiment )
+        MAY ( roomSize $ description ) )
+
+objectclass ( 1.3.6.1.4.1.14628.55.0 NAME 'reselParentSw'  STRUCTURAL
+        DESC 'Association de switch parent'
+        MUST ( childIP $ parentIP ) )
+
+objectclass ( 1.3.6.1.4.1.14628.56.0 NAME 'reselLease'  STRUCTURAL
+        DESC 'DHCP lease'
+        MUST ( leaseID $ macAddress $ ipHostNumber $ leaseExpiry ) )
+
+objectclass ( 1.3.6.1.4.1.14628.60.0 NAME 'IPv4Branch'  STRUCTURAL
+        DESC 'Branche IPv4'
+        MUST ( bits )
+        MAY ( description $ tag ) )
+
+objectclass ( 1.3.6.1.4.1.14628.60.10 NAME 'IPv4Map'  STRUCTURAL
+        DESC 'Lien structurel d adresse'
+        MUST ( length $ target $ attribute )
+        MAY ( name $ description ) )
+
+objectclass ( 1.3.6.1.4.1.14628.60.20 NAME 'IPv4Filler'  STRUCTURAL
+        DESC 'Bloc de taille fixe'
+        MUST ( length )
+        MAY ( description ) )
+
+objectclass ( 1.3.6.1.4.1.14628.61.0 NAME 'reselWebsite'  STRUCTURAL
+        DESC 'Site du ResEl'
+        MUST ( siteName $ siteURL )
+        MAY ( siteLogo $ description $ siteCategory ) )

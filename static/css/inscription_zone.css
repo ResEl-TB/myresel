@@ -4,6 +4,7 @@ html, body {
     background-color: #225378;
     color: #ffffff;
     font-family: 'Roboto', 'sans-serif';
+    padding: 0;
 }
 
 * {
@@ -16,19 +17,18 @@ html, body {
 
 .btn {
     background: none;
-    color: #FFB300;
-    border-color: #FFB300;
+    color: var(--accent-4);
+    border-color: var(--accent-4);
     margin: 20px;
 }
 
-.btn:hover {
-    border-color: #b96400;
-    color: #b96400;
-    margin: 20px;
+.btn:hover, .btn:focus, .btn.focus {
+    border-color: var(--accent-4);
+    background-color: var(--accent-2)
 }
 
 a, a:visited {
-    color: #FFB300;
+    color: var(--accent-2);
 }
 
 a:hover, a:active, a:focus{
@@ -54,7 +54,6 @@ a:hover, a:active, a:focus{
 }
 
 .main-content {
-    box-shadow: inset 0 5px 6px 0 #122a3c;
     padding-top: 30px;
 }
 
@@ -64,12 +63,12 @@ a:hover, a:active, a:focus{
 
 
 strong {
-    color: #FFB300
+    color: var(--accent-2);
 }
 
 .dropup {
     display: inline;
-    text-align: left    ;
+    text-align: left;
 }
 
 .dropdown-menu {
