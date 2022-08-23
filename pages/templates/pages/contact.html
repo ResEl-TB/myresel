@@ -11,12 +11,15 @@
         <div class="col-md-6">
             <form action="" method="post">
                 {% csrf_token %}
-                {% for field in form %}
+                {% for field in form.visible_fields %}
                 <fieldset class="form-group">
                     <label>{{ field.label }}</label>
                     {{ field }}
                     {% if field.errors %}{{ field.errors }}{% endif %}
                 </fieldset>
+                {% endfor %}
+		{% for field in form.hidden_fields %}
+                {{ field }}
                 {% endfor %}
                 <div class="form-group text-center">
                     <input type="submit" class="btn btn-info" value="{% trans 'Envoyer' %}">
@@ -24,7 +27,7 @@
             </form>
         </div>
 
-        <div class="col-md-offset-1 col-md-5">
+        <div class="col-md-offset-1 col-md-5 side-column">
             <h2>{% trans "Autrement" %}</h2>
 
             <p>{% trans "Vous pouvez également nous contacter" %}</p>
@@ -35,9 +38,8 @@
             <h3>{% trans "Les permanences" %} <small><span class="label label-default">{% trans "Campus de Brest uniquement" %}</span></small></h3>
 
             <p>{% blocktrans %}
-                Nous tenons (hors vacances) des <b>permanences au Foyer des Élèves
-                de 18h à 19h30 du lundi au vendredi</b>. Un administrateur ResEl pourra venir répondre à vos
-            questions et résoudre vos problèmes de connexion.</p>
+                Nous tenons régulièrement (hors vacances) des <b>permanences au Foyer des Élèves</b>.
+		Un administrateur ResEl pourra venir répondre à vos questions et résoudre vos problèmes de connexion.</p>
             {% endblocktrans %}
             <h3>{% trans "Adresse postale" %}</h3>
             <p>Association ResEl <br />

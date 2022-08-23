@@ -173,6 +173,14 @@ class InscriptionForm(forms.Form):
         validators=[EmailValidator()]
     )
 
+    email_verification = forms.EmailField(
+        widget=forms.EmailInput(attrs={
+            'class': 'form-control',
+            'placeholder': _("Retapez votre adresse e-mail")
+        }),
+        validators=[],
+    )
+
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
@@ -187,6 +195,30 @@ class InscriptionForm(forms.Form):
             'placeholder': _("Retapez votre mot de passe")
         }),
         validators=[],
+    )
+
+    birth_place = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': _("Ville de naissance"),
+        }),
+        validators=[MaxLengthValidator(50)],
+    )
+
+    birth_country = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': _("Pays de naissance"),
+        }),
+        validators=[MaxLengthValidator(50)],
+    )
+
+    birth_date = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': _("Date de naissance"),
+        }),
+        validators=[MaxLengthValidator(10)],
     )
 
     campus = forms.ChoiceField(
@@ -270,6 +302,12 @@ class InscriptionForm(forms.Form):
         if len(LdapUser.filter(mail=email)) > 0:
             raise ValidationError(message=_("L'addresse email est déjà associée à un compte"), code="USED EMAIL")
         return email
+
+    def clean_birth_date(self):
+        birth_date = self.cleaned_data['birth_date']
+        if not re.match(r'(\d{2}|XX)/(\d{2}|XX)/(\d{4}|XXXX)', birth_date):
+            raise ValidationError(message=_("Date de naissance incorrecte"), code="WRONG BIRTHDATE")
+        return birth_date
 
     def clean(self):
         cleaned_data = super(InscriptionForm, self).clean()
@@ -361,6 +399,10 @@ class InscriptionForm(forms.Form):
         user.formation = self.cleaned_data["formation"]
         user.mobile = str(self.cleaned_data["phone"])  # TODO: Phone field not mandatory
         user.option = self.cleaned_data["campus"]
+
+        user.birth_place = self.cleaned_data["birth_place"]
+        user.birth_country = self.cleaned_data["birth_country"]
+        user.freeform_birth_date = self.cleaned_data["birth_date"]
         return user
 
 
@@ -433,9 +475,15 @@ class ResetPwdForm(forms.Form):
 
     def clean(self):
         cleaned_data = super(ResetPwdForm, self).clean()
+
+        email1 = cleaned_data.get('email')
+        email2 = cleaned_data.get('email_verification')
+        if email1 != email2:
+            self.add_error("email",
+                           ValidationError(message=_("Les adresses e-mail sont différentes."), code="DIFFERENT EMAIL"))
+
         password1 = cleaned_data.get('password')
         password2 = cleaned_data.get('password_verification')
-
         if password1 != password2:
             self.add_error("password",
                            ValidationError(message=_("Les mots de passes sont différents."), code="DIFFERENT PASSWORD"))

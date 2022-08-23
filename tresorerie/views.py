@@ -364,7 +364,7 @@ class Pay(View):
 
 class History(ListView):
     """
-    This view show to the user the history of his payements
+    This view show to the user the history of his payments
     """
 
     template_name = 'tresorerie/history.html'
@@ -407,7 +407,7 @@ class TransactionDetailView(DetailView):
                                 ))
 
         if os.path.isfile(filename):
-            context['invoice_path'] = filename
+            context['invoice_path'] = os.path.relpath(filename, settings.MEDIA_ROOT)
 
         else:
             context['invoice_path'] = None

@@ -12,35 +12,35 @@
         <h2 class="part-title">Fonctionnement de la cotisation ResEl</h2>
         <div class="row">
             <div class=" col-sm-offset-1 col-sm-4 working-case">
-                <h3>Adhésion à l'association</h3>
-                <p>Afin de bénéficier des services du ResEl il est obligatoire d'être membre de l'association. Ainsi vous devez vous acquitter de la cotisation ResEl.</p>
+                <h3>Adhésion à l’association</h3>
+                <p>Afin de bénéficier des services du ResEl il est obligatoire d’être membre de l’association. Ainsi vous devez vous acquitter de la cotisation ResEl.</p>
             </div>
             <div class="col-sm-2 working-case">
                 <span class="fa fa-fw fa-plus"></span>
             </div>
             <div class="col-sm-4 working-case">
-                <h3>Accès internet</h3>
-                <p>Pour avoir accès à internet nous devons louer la connexion à un prestataire exterieur. Les frais d'accès internet dépendent du temps que vous passez sur le campus et de votre formation conformément au règlement intérieur.</p>
+                <h3>Accès à Internet</h3>
+                <p>Pour fournir un accès à Internet, nous facturons des frais d’accès dépendant du temps que vous passez sur le campus, conformément au règlement intérieur.</p>
             </div>
         </div>
         <hr />
         <h2 class="part-title">Modes de paiement</h2>
         <div class="payment-type row">
-            <div class="col-sm-1 col-sm-offset-3 fa fa-fw fa-credit-card"></div>
-            <div class="col-sm-5 col-sm-offset-1">
+            <div class="col-xs-1 col-xs-offset-1 col-sm-offset-3 fa fa-fw fa-credit-card"></div>
+            <div class="col-xs-7 col-xs-offset-1 col-sm-5">
                 <h3>Carte de crédit en ligne</h3>
                 <p>Nous acceptons les paiements par carte de crédit depuis le site web du ResEl. Vous pouvez donc obtenir accès aux services du ResEl immédiatement.</p>
             </div>
         </div>
         <div class="payment-type row">
-            <div class="col-sm-1 col-sm-offset-3 fa fa-fw fa-money"></div>
-            <div class="col-sm-5 col-sm-offset-1"><h3>Espèces et par chèque au foyer</h3>
-                <p>Si vous ne désirez pas payer par carte bancaire vous pouvez toujours payer en espèces ou par chèque au foyer. Nous tenons des permanences du lundi au vendredi de 18h à 19h30.</p>
+            <div class="col-xs-1 col-xs-offset-1 col-sm-offset-3 fa fa-fw fa-money"></div>
+            <div class="col-xs-7 col-xs-offset-1 col-sm-5"><h3>Espèces et par chèque au foyer</h3>
+                <p>Si vous ne désirez pas payer par carte bancaire vous pouvez toujours payer en espèces ou par chèque au foyer. Nous y tenons des permanences régulières.</p>
             <p><span class="label label-default">Uniquement sur le campus de Brest</span></p></div>
         </div>
         <hr />
         <h2 class="part-title">Offres</h2>
-        <div class="row">
+        <div class="row offers">
             <div class="col-md-6 {% if user.is_member %}col-md-offset-3{% else %}col-md-offset-1{% endif %}">
                 <div class="panel panel-primary panel-product">
                     <div class="panel-heading">{% trans "Accès au ResEl" %}</div>
@@ -55,7 +55,7 @@
                             <div class="service">Et bien plus...</div>
                         </div>
                         <hr />
-                        <span class="price">{{ adhesion.display_price|floatformat }}€ de cotisation à l'association</span> {% if user.is_member %}<span class="label label-success">{% trans "déjà payé"%}</span>{% endif %}
+                        <span class="price">{{ adhesion.display_price|floatformat }}€ de cotisation à l’association</span> {% if user.is_member %}<span class="label label-success">{% trans "déjà payé"%}</span>{% endif %}
                         <div class="price"><span class="fa fa-plus fa-fw"></span></div>
                         <div class="row text-center">
                         </div>
@@ -70,7 +70,7 @@
                 </div>
             </div>
             {% if user.is_member == False %}
-                <div class="col-md-4 col-md-offset-1">
+                <div class="col-md-4">
                     <div class="panel panel-default panel-product">
                         <div class="panel-heading">{% trans "Adhésion simple" %}</div>
                         <div class="panel-body">
@@ -82,7 +82,7 @@
                                 <div class="service">Gestion des clubs</div>
                             </div>
                             <hr />
-                            <div class="price">{{ adhesion.display_price|floatformat }}€ de cotisation à l'association</div>
+                            <div class="price">{{ adhesion.display_price|floatformat }}€ de cotisation à l’association</div>
                             <div class="pay-btn text-center">
                                 <a class="btn btn-info" href="{% url 'tresorerie:pay' adhesion.id %}">Je préfère<br />une adhésion simple</a>
                             </div>

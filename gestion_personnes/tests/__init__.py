@@ -44,6 +44,9 @@ def create_full_user(uid="amanoury", pwd="blahblah", email="alexandre.manoury@te
     user.building = "I11"
     user.room_number = "123"
     user.postal_address = LdapUser.generate_address(user.campus, user.building, user.room_number)
+    user.birth_place = "Plouzané"
+    user.birth_country = "France"
+    user.freeform_birth_date = "01/01/1995"
 
     user.promo = "2020"
     user.mail = email

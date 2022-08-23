@@ -1,28 +1,19 @@
-/* inscription specific style */
-.form-category {
-    margin-top: 15px;
-    margin-bottom: 15px;
-}
+/* registration specific style */
 
-.form-category fieldset {
-    padding-left: 5px;
-    padding-right: 5px;
+fieldset {
+    box-shadow: 0 1px 8px -6px #000;
+    padding: 10px 15px 0px 15px;
+    border-radius: 15px;
+    margin-top: 20px;
 }
 
 .help-block ul {
     list-style-type: none;
 }
 
-.signup-form {
-    border: #d4d8d2 solid 1px;
-    border-radius: 5px;
-    padding: 15px 15px 15px 30px;
-    margin: 5px 0 30px;
-}
-
 .user-summary {
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
-    border-radius: 5px;
+    box-shadow: 0 2px 10px -5px var(--accent-3);
+    border-radius: 10px;
     padding: 15px 30px;
     margin-top: 40px;
     margin-bottom: 40px;
@@ -33,12 +24,49 @@
     font-size: .8em;
 }
 
-.side-column {
-    padding-left: 40px;
-    margin-bottom: 50px;
+.checkbox {
+    margin: 20px;
+    box-shadow: none;
 }
 
-.checkbox {
-    margin-left: 20px;
-    margin-right: 20px;
+.checkbox-label {
+    padding-left: 10px;
+}
+
+.submit {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+legend {
+  border: none;
+  background: #fff;
+  width: auto;
+  padding: 0 10px;
+  margin-bottom: -10px;
+}
+.required:after {
+  content: "*";
+  font-family: monospace;
+  font-weight: 800;
+  color: var(--safe-pair-1);
+}
+.required.by-law:after {
+  color: var(--safe-pair-2);
+}
+#notice {
+  font-style: italic;
+  padding: 0 30px;
+  display: inline-block;
+  text-align: center;
+}
+.password-strength {
+  height: 16px;
+  border-radius: 8px;
+  margin-top: 5px;
+  margin-bottom: 0;
+}
+.progress-bar {
+  line-height: 16px;
+  font-size: 11px;
 }

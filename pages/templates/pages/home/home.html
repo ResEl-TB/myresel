@@ -70,31 +70,31 @@
                 <div class="carousel-inner" role="listbox">
                     <div class="item active" role="option">
                         <div class="row">
-                            <div class="col-sm-3 col-sm-offset-1">
+                            <div class="col-sm-2 col-sm-offset-1">
                                 <span class="fa fa-heart-o service-icon bigger" aria-hidden="true"></span>
                             </div>
-                            <div class="col-sm-6">
-                                <h2>Le ResEl relie à Internet 600 chambres à Brest et 100 chambres à Rennes</h2>
+                            <div class="col-sm-8 col-sm-offset-0 col-md-7 col-xs-10 col-xs-offset-1">
+                                <h2>Le ResEl relie à Internet 600 chambres à Brest et 100 chambres à Rennes</h2>
                             </div>
                         </div>
                     </div>
                     <div class="item" role="option">
                         <div class="row">
-                            <div class="col-sm-3 col-sm-offset-1">
+                            <div class="col-sm-2 col-sm-offset-1">
                                 <span class="fa fa-graduation-cap service-icon bigger" aria-hidden="true"></span>
                             </div>
-                            <div class="col-sm-6">
-                                <h2>Depuis 1996 l'association a fourni internet à des milliers d'étudiants</h2>
+                            <div class="col-sm-8 col-sm-offset-0 col-md-7 col-xs-10 col-xs-offset-1">
+                                <h2>Depuis 1996, l'association a fourni internet à des milliers d'étudiants</h2>
                             </div>
                         </div>
                     </div>
                     <div class="item" role="option">
                         <div class="row">
-                            <div class="col-sm-3 col-sm-offset-1">
+                            <div class="col-sm-2 col-sm-offset-1">
                                 <span class="fa fa-code-fork service-icon bigger" aria-hidden="true"></span>
                             </div>
-                            <div class="col-sm-6">
-                                <h2>Nous utilisons exclusivement que des logiciels libres, ce qui permet une grande flexibilité</h2>
+                            <div class="col-sm-8 col-sm-offset-0 col-md-7 col-xs-10 col-xs-offset-1">
+                                <h2>Nous utilisons exclusivement des logiciels libres, ce qui permet une grande flexibilité</h2>
                             </div>
                         </div>
                     </div>
@@ -107,7 +107,7 @@
             <h2 class="clickable-title"><a href="{% url 'services'%}">{% trans "Les services du ResEl" %}</a></h2>
             <div class="row">
                 {% for service in services %}
-                    <div class="col-md-4">
+                    <div class="col-sm-4">
                         <a href="{{ service.get_absolute_url }}">
                             <span class="glyphicon {{ service.glyphicon_name }} service-icon dynamic" aria-hidden="true"></span>
                             <h3 class="service-title">{{ service.name }}</h3>
