@@ -34,7 +34,7 @@
 
 </head>
 
-<body>
+<body class="{% block bodyclasses %}{% endblock %}">
 
 <!-- Navigation -->
 <nav class="navbar navbar-main navbar-static-top" role="navigation">
@@ -49,12 +49,10 @@
                     <span class="icon-bar"></span>
                 </span>
             </button>
-            <div>
-              <a class="navbar-brand" href="{% url 'home' %}">
-                <img style="width: auto; height: 45px; margin-top: -13px;"
-                     src="{% static 'images/logo_resel_flat.png' %}" alt="{% trans "Logo ResEl" %}">
-              </a>
-            </div>
+            <a class="navbar-brand" href="{% url 'home' %}">
+              <img style="height: 36px"
+                   src="{% static 'images/logo_resel.png' %}" alt="{% trans "Logo ResEl" %}">
+            </a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-top-links navbar-left navbar-collapse">
@@ -122,10 +120,6 @@
             {% endif %}
         </ul>
         <ul class="nav navbar-top-links navbar-right navbar-collapse">
-			<li>
-            <a href="https://support.resel.fr/help"> Support</a>
-          </li>
-		  
           <li>
             <a href="{% url 'contact' %}"> {% trans "Contact" %}</a>
           </li>
@@ -171,7 +165,7 @@
                     </form>
                 </ul>
             </li>
-          <li class="no-text">
+          <li class="status no-text">
             {% cache 60 i_network_status %}
             <a href="{% url 'network-status' %}" 
               data-toggle="tooltip" 
@@ -198,7 +192,7 @@
     </div>
 {% endif %}
 {% if messages %}
-    <div class="container">
+    <div class="container-fluid">
         {# Gestion des messages d'erreur, d'info et de success #}
         {% for message in messages %}
             {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
@@ -241,7 +235,7 @@
         <div class="row">
             <div class="col-sm-4">
                 <ul>
-                    <li><a href="{% static "files/statuts.pdf" %}">{% trans "Les statuts de l'association" %}</a></li>
+                    <li><a href="{% static "files/statuts.pdf" %}">{% trans "Les statuts de l’association" %}</a></li>
                     <li><a href="{% static "files/reglement-interieur.pdf" %}">{% trans "Le règlement intérieur" %}</a></li>
                     <li><a href="{% url "tresorerie:prices" %}">{% trans "Tarifs et Cotisation" %}</a></li>
                     <li><a href="{% url "mentions_legales" %}">{% trans "Mentions Légales" %}</a></li>
@@ -254,7 +248,7 @@
                     <li><a href="{% url 'network-status' %}">{% trans "État du réseau" %}</a></li>
                     <li><a href="{% url 'gestion-personnes:webmail' %}">Webmail</a></li>
                   <li><a href="{% url 'campus:home' %}">{% trans "Les clubs et la vie du campus" %}</a></li>
-                    <li><a href="{% url 'become-admin' %}">{% trans "Devenez Administrateur ResEl !" %}</a></li>
+                    <li><a href="{% url 'become-admin' %}">{% trans "Devenez Admin ResEl !" %}</a></li>
                     <li><a href="https://old.resel.fr/">{% trans "Ancien site ResEl" %}</a></li>
                 </ul>
             </div>
@@ -262,8 +256,8 @@
                 <ul>
                     <li><a href="https://www.federez.net/">{% trans "FedeRez" %}</a></li>
                     <li><a href="https://www.imt-atlantique.fr/">{% trans "IMT Atlantique" %}</a></li>
-                    <li><a href="http://assos-tb.fr/">{% trans "Associations d'IMT Atlantique" %}</a></li>
-                    <li><a href="http://www.aitb.org/">{% trans "Alumni" %}</a></li>
+                    <li><a href="https://www.imt-atlantique.fr/fr/campus/vie-etudiante/associations">{% trans "Associations d’IMT Atlantique" %}</a></li>
+                    <li><a href="https://www.imt-atlantique.org/association">{% trans "Alumni" %}</a></li>
                 </ul>
             </div>
         </div>

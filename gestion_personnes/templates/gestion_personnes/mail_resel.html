@@ -9,16 +9,16 @@
 
 
   <div class="row">
-  	<div class="col-md-6">
+    <div class="col-md-6">
       <h3>Accès par un logiciel de courrier électronique :</h3>
       <p>
       <em>Par exemple Thunderbird ou Gmail.</em>
-      	<ul>
-         <li> Serveur POP/IMAP (SSL/TLS obligatoire) : mail.resel.fr sur le port 995 (POP) ou 993 (IMAP); </li>
-         <li> Nom d'utilisateur : {{user_mail_address}};</li>
-         <li> Mot de passe : votre mot de passe ResEl;</li>
-         <li> Serveur SMTP (courrier sortant) : mail.resel.fr sur le port 587, en activant le TLS.</li>
-      	</ul>
+        <ul>
+          <li> Serveur POP/IMAP (SSL/TLS obligatoire) : mail.resel.fr sur le port 995 (POP) ou 993 (IMAP); </li>
+          <li> Nom d'utilisateur : {{user_mail_address}};</li>
+          <li> Mot de passe : votre mot de passe ResEl;</li>
+          <li> Serveur SMTP (courrier sortant) : mail.resel.fr sur le port 587, en activant le TLS.</li>
+        </ul>
       </p>
     </div>
     <div class="col-md-5 col-md-offset-1">
@@ -48,16 +48,16 @@
     <div class="col-md-4 center-block">
       <center>
       <a href="{% url 'gestion-personnes:redirect-mail' %}">
-  		<button type="button" class="btn btn-primary btn-lg">Redirection email</button>
+        <button type="button" class="btn btn-primary btn-lg">Redirection d’adresse</button>
       </a>
       </center>
     </div>
 
     <div class="col-md-4 col-md-offset-2">
       <a href="{% url 'gestion-personnes:delete-mail' %}">
-  		<button type="button" class="btn btn-danger btn-lg">Suppression boîte ResEl</button>
+        <button type="button" class="btn btn-danger btn-lg">Suppression boîte ResEl</button>
       </a>
-  	</div>
+    </div>
     <div class="col-md-1"></div>
 
   </div>

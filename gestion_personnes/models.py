@@ -42,6 +42,9 @@ class LdapUser(ldapback.models.LdapModel):
     cotiz = LdapListField(db_column='cotiz', object_classes=['reselPerson'])
     end_cotiz = LdapDatetimeField(db_column='endinternet', object_classes=['reselPerson'])
     campus = LdapCharField(db_column='campus', object_classes=['reselPerson'])
+    birth_place = LdapCharField(db_column='birthplace', object_classes=['reselPerson'])
+    birth_country = LdapCharField(db_column='birthcountry', object_classes=['reselPerson'])
+    freeform_birth_date = LdapCharField(db_column='freeformbirthdate', object_classes=['reselPerson'])
 
     # maiselPerson
     building = LdapCharField(db_column='batiment', object_classes=['maiselPerson'])
@@ -106,9 +109,9 @@ class LdapUser(ldapback.models.LdapModel):
     @staticmethod
     def generate_address(campus, building, room):
         if campus.lower() == "brest":
-            address = "Bâtiment {} Chambre {} Maisel Télécom Bretagne\n 655, avenue du Technopôle 29280 Plouzané"
+            address = "Bâtiment {} Chambre {}\nMaisel IMT Atlantique\n655 avenue du Technopôle\n29280 Plouzané"
         else:
-            address = "Bâtiment {} Chambre {} Maisel Télécom Bretagne\n 2, rue de la Châtaigneraie 35576 Cesson Sévigné"
+            address = "Bâtiment {} Chambre {}\nMaisel IMT Atlantique\n2 rue de la Châtaigneraie\n35576 Cesson-Sévigné"
         address = address.format(
             building,
             room,

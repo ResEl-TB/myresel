@@ -22,6 +22,7 @@
 
 .panel-product .btn {
     margin-top: 10px;
+    margin-bottom: -2px;
 }
 
 .panel-default .pay-btn {
@@ -94,7 +95,7 @@
 }
 
 .transaction-resume {
-    margin-top: 20px;
+    margin: 20px 0 0 0;
 }
 
 .transaction-panel {
@@ -107,7 +108,27 @@
 }
 
 .back {
-    margin-bottom: 25px;
-    font-size: 1.3em;
-    text-align: right;
+    margin-bottom: 15px;
+}
+
+.col-lg-4 {
+    padding: 0 5px;
+}
+
+.offers > :hover {
+    transform: scale(1.03);
+}
+
+.offers > * {
+    transition: transform .2s ease;
+}
+
+@media screen and (max-width: 767px) {
+    .working-case {
+        margin-top: 20px;
+        margin-bottom: 0;
+    }
+    .working-case .fa {
+        margin-top: 0;
+    }
 }

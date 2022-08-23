@@ -3,7 +3,6 @@
 
 .global-status {
     padding: 20px 20px 20px 20px;
-    margin: 0 20% 0 20%;
     font-weight: bolder;
 }
 
@@ -123,16 +122,12 @@ path {
     align-items: start;
 }
 
-.network {
-}
-
 .network-description {
     position: absolute;
     font-size: 5em;
     color: rgba(255, 255, 255, 0.90);
-    margin-left: -30%;
+    left: 1em;
 }
-
 
 
 /* INTERNET ACCESS PANEL */
@@ -140,9 +135,6 @@ path {
 #internet-access {
     padding: 70px 35% 100px  35%;
     background: linear-gradient(to bottom, #cde3ff 40%,#f2f2f2 100%);
-}
-
-#internet-access .network-description {
 }
 
 #internet-access .card {
@@ -192,8 +184,7 @@ path {
 
 #network-core .network-description {
     color: rgba(180, 180, 180, 0.38);
-    margin-left: -20%;
-    margin-top: 90px;
+    margin-top: 150px;
 }
 
 #network-core .content {
@@ -251,7 +242,7 @@ path {
 
 #network-access .network-description {
     color: rgba(180, 180, 180, 0.67);
-    margin-top: 50px;
+    margin-top: 110px;
 }
 
 .building {
@@ -306,7 +297,6 @@ path {
 
     .global-status {
         padding: 20px 20px 20px 20px;
-        margin: 0 0 0 0;
         font-weight: bolder;
     }
     .global-status .btn-group {

@@ -21,7 +21,7 @@
                 <hr />
                 <div>{% trans "Utilisateur :"%} <strong>{{ username }}</strong></div>
                 <hr />
-                <div>{% trans "Mot de passe :" %} <strong>******</strong> <small>{% trans "(précédemment choisi)" %}</small></div>
+                <div>{% trans "Mot de passe :" %} <small><i>{% trans "(précédemment choisi)" %}</i></small></div>
                 <hr />
                 <p><strong>{% trans "Conservez très précieusement ces informations" %}</strong>, {%  trans "elles vous seront nécessaires afin de vous connecter à tous les services du ResEl." %}</p>
             </div>
@@ -31,14 +31,4 @@
         </div>
     </div>
 
-{% endblock %}
-
-{% block javascript %}
-    <script>
-        $("#slowform").submit(function( event ){
-            console.log("HOLA");
-            $("#sender").addClass("hide");
-            $("#waiter").removeClass("hide");
-        });
-    </script>
 {% endblock %}
