@@ -278,7 +278,6 @@ class ResElTV extends HTMLElement {
     /** The Dash.js video player. */
     this.player = dashjs.MediaPlayer().create();
     this.player.initialize(this.videoDiv.querySelector("video"));
-    this.player.setTrackSwitchModeFor('audio', 'alwaysReplace');
 
     ScrollBarX.initEl(this.channelsDiv);
     this.channelsDiv = this.channelsDiv.firstChild.firstChild;
