@@ -2,7 +2,7 @@ Django==2.2.24
 django-ckeditor==6.1.0
 django-modeltranslation==0.17.3
 ldap3==2.5.1
-requests==2.26.0
+requests==2.31.0
 stripe==2.48.0
 django-phonenumber-field==5.2.0
 mysqlclient==2.0.3
