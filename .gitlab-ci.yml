@@ -39,36 +39,36 @@ stages:
 
 Build docker image:
   stage: docker_build
+  image: $DOCKER_IMAGE
   services:
-    - name: docker:dind
-      alias: docker
-  image: docker:stable
+      - name: $RUNNER_IMAGE
+        alias: docker
   before_script: &before_script
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
     - docker build -t $IMAGE:$CI_COMMIT_SHA --build-arg LDAPPASSWD=$LDAP_PASSWORD .
     - docker push $IMAGE:$CI_COMMIT_SHA
-  only:
-   changes:
-     - Dockerfile
+  #only:
+  # changes:
+  #   - Dockerfile
   tags:
     - admin
 
 
 Push docker image:
   stage: docker_push
+  image: $DOCKER_IMAGE
   services:
-    - name: docker:dind
-      alias: docker
-  image: docker:stable
+      - name: $RUNNER_IMAGE
+        alias: docker
   before_script: *before_script
   script:
     - docker pull $IMAGE:$CI_COMMIT_SHA
     - docker tag $IMAGE:$CI_COMMIT_SHA $IMAGE:latest
     - docker push $IMAGE:latest
-  only:
-   changes:
-     - Dockerfile
+  #only:
+  # changes:
+  #   - Dockerfile
   tags:
     - admin
 
