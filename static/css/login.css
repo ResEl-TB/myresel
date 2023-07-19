@@ -1,0 +1,6 @@
+.form-control {
+  height: 40px;
+}
+.form-group:first-of-type {
+  margin-bottom: 8px;
+}

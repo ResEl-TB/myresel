@@ -3,8 +3,8 @@
 import binascii
 import hashlib
 import os
-from base64 import encodestring, decodebytes, encodebytes
-from datetime import datetime, timedelta, time, date
+from base64 import decodebytes, encodebytes
+from datetime import datetime, time, date
 
 
 def current_year():
@@ -17,6 +17,9 @@ def current_year():
         year -= 1
 
     return year
+
+def next_august_fifteenth():
+    return datetime(current_year() + 1, 8, 15).astimezone()
 
 def today():
     """ Returns the current day's date"""

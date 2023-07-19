@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import json
+
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse, Http404
@@ -8,7 +10,6 @@ from django.urls import reverse
 from django.core.mail import EmailMessage
 from django.core.exceptions import ObjectDoesNotExist
 
-import json
 from campus.async_tasks import notify_moderator
 from campus.forms import SendMailForm
 from campus.models import LdapGroup, Mail, LdapUser

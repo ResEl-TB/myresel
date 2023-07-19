@@ -10,73 +10,65 @@
 {% block titre %}Services{% endblock %}
 
 {% block content %}
-    <div>
-        <div>
-            <div class="service-wrapper">
-               <div class="additional-icon">
-                  <img src="{% static 'images/icons/server.png'%}" class="additional-icon-top" />
-               </div>
-               <div class="container service-container">
-                  {% for service in services %}
-                  <div class="service">
-                  {% if forloop.counter|add:-1|divisibleby:2 %}
-                     <div class="col-xs-offset-5 col-xs-2 icon-service">
-                         <a href="{{ service.get_absolute_url }}"><img src="{{service.icon.url}}" alt="{{ service.name }}"></a>
-                     </div>
-                     <div class=" col-xs-5 service-description-right">
-                         <div class="service-content service-right">
-                             <h2 class="service-title">{{ service.name }}</h2>
-                             <p>{{ service.description }}</p>
-                             <a href="{{ service.get_absolute_url }}">En savoir plus</a>
-                         </div>
-                     </div>
-                  {% endif %}
-                  {% if forloop.counter|divisibleby:2 %}
-                     <div class="col-xs-5 service-description-left">
-                         <div class="service-content service-left">
-                             <h2 class="service-title">{{ service.name }}</h2>
-                             <p>{{ service.description }}</p>
-                             <a href="{{ service.get_absolute_url }}">En savoir plus</a>
-                         </div>
-                     </div>
-                     <div class="col-xs-2 icon-service">
-                         <a href="{{ service.get_absolute_url }}"><img src="{{service.icon.url}}" alt="{{ service.name }}"></a>
-                     </div>
-
-                  {% endif %}
-                  </div>
-                  {% endfor%}
-                  <div class="additional-icon">
-                     <img src="{% static 'images/icons/computer.png'%}" />
-                  </div>
-               </div>
-            </div>
-            <div class="home-fragment service-wrapper-mobile">
-                <div class="container">
-                   {% for service in services %}
-                     <div class="row service">
-                        <div class="col-md-2">
-                          <a class="service-link" href="{{ service.get_absolute_url }}">
-                             <span class="glyphicon service-glyphicon {{ service.glyphicon_name }} service-icon revealOnScroll" aria-hidden="true"></span>
-                          </a>
-                      </div>
-                      <div class="col-md-3">
-                         <span class="service-description">
-                           <h3 class="service-title">{{ service.name }}</h3>
-                           <p class="service-description-text">{{ service.description }}</p>
-                           <a href="{{ service.get_absolute_url }}">En savoir plus</a>
-                         </span>
-                      </div>
-                     </div>
-                   {% empty %}
-                   {% endfor %}
-                  </div>
-               </div>
-            </div>
-        </div>
-        <!-- /.col-lg-12 -->
+    <div class="service-wrapper" data-navstyle="darken">
+       <div class="additional-icon">
+          <img src="{% static 'images/icons/cloud.svg'%}" class="additional-icon-top" />
+       </div>
+       <div class="container service-container">
+          {% for service in services %}
+          <div class="service">
+          {% if forloop.counter|divisibleby:2 %}
+             <div class="col-xs-4 col-md-5 service-description-left">
+                 <div class="service-content service-left">
+                     <h2 class="service-title">{{ service.name }}</h2>
+                     <p>{{ service.description }}</p>
+                     <a href="{{ service.get_absolute_url }}">En savoir plus</a>
+                 </div>
+             </div>
+             <div class="col-xs-4 col-md-2 icon-service">
+                 <a href="{{ service.get_absolute_url }}"><img src="{{service.icon.url}}" alt="{{ service.name }}"></a>
+             </div>
+          {% else %}
+             <div class="col-xs-4 col-xs-offset-4 col-md-2 col-md-offset-5 icon-service">
+                 <a href="{{ service.get_absolute_url }}"><img src="{{service.icon.url}}" alt="{{ service.name }}"></a>
+             </div>
+             <div class="col-xs-4 col-md-5 service-description-right">
+                 <div class="service-content service-right">
+                     <h2 class="service-title">{{ service.name }}</h2>
+                     <p>{{ service.description }}</p>
+                     <a href="{{ service.get_absolute_url }}">En savoir plus</a>
+                 </div>
+             </div>
+          {% endif %}
+          </div>
+          {% endfor%}
+          <div class="additional-icon">
+             <img src="{% static 'images/icons/computer.svg'%}" />
+          </div>
+       </div>
     </div>
-    <!-- /.row -->
+    <div class="home-fragment service-wrapper-mobile">
+        <div class="container">
+           {% for service in services %}
+             <div class="row service">
+                <div class="col-md-2">
+                  <a class="service-link" href="{{ service.get_absolute_url }}">
+                     <span class="glyphicon service-glyphicon {{ service.glyphicon_name }} service-icon revealOnScroll" aria-hidden="true"></span>
+                  </a>
+              </div>
+              <div class="col-md-3">
+                 <span class="service-description">
+                   <h3 class="service-title">{{ service.name }}</h3>
+                   <p class="service-description-text">{{ service.description }}</p>
+                   <a href="{{ service.get_absolute_url }}">En savoir plus</a>
+                 </span>
+              </div>
+             </div>
+           {% empty %}
+           {% endfor %}
+          </div>
+       </div>
+    </div>
 {% endblock %}
 
 {% block javascript %}

@@ -2,7 +2,7 @@
 import inspect
 
 from django.core.exceptions import ObjectDoesNotExist
-from ldap3 import ALL_ATTRIBUTES, MODIFY_REPLACE, ALL_OPERATIONAL_ATTRIBUTES
+from ldap3 import ALL_ATTRIBUTES, MODIFY_DELETE, MODIFY_REPLACE, ALL_OPERATIONAL_ATTRIBUTES
 from ldap3.core.exceptions import LDAPAttributeError, LDAPCursorError
 
 from ldapback.backends.ldap.base import Ldap
@@ -11,7 +11,7 @@ from ldapback.models.fields import LdapField
 
 # TODO: create an init function to initalize fields to the right type
 
-class LdapModel(object):
+class LdapModel:
     """
     A Model is related to a dn
     """
@@ -236,7 +236,8 @@ class LdapModel(object):
             field_diff = field.calc_diff(old_val, new_val)
             if field_diff is not None:
                 diff_type, diff_val = field_diff
-                viewed_object_classes = viewed_object_classes.union(set(field.object_classes))
+                if diff_type != MODIFY_DELETE:
+                    viewed_object_classes = viewed_object_classes.union(set(field.object_classes))
                 if isinstance(diff_val, list):
                     diff[db_column] = [(diff_type, diff_val)]
                 else:

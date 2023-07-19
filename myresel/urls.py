@@ -46,6 +46,7 @@ urlpatterns = [
 
     url(r'^machines/', include('devices.urls', namespace='gestion-machines')),
     url(r'^personnes/', include('gestion_personnes.urls', namespace='gestion-personnes')),
+    url(r'^maisel/', include('maisel.urls', namespace='maisel')),
     url(r'^paiement/', include('tresorerie.urls', namespace='tresorerie')),
     url(r'^tarifs/', RedirectView.as_view(pattern_name="tresorerie:prices", permanent=False)),
 

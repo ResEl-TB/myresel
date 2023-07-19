@@ -3,7 +3,7 @@
 
 variables:
  IMAGE: $CI_REGISTRY_IMAGE
- DOCKER_DRIVER: overlay
+ DOCKER_DRIVER: overlay2
   
  MYSQL_HOST: mysql-mysql-server
  MYSQL_USER: resel
@@ -39,10 +39,10 @@ stages:
 
 Build docker image:
   stage: docker_build
+  image: $DOCKER_IMAGE
   services:
-    - name: $RUNNER_IMAGE
-      alias: docker
-  image: docker:stable
+      - name: $RUNNER_IMAGE
+        alias: docker
   before_script: &before_script
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
@@ -57,10 +57,10 @@ Build docker image:
 
 Push docker image:
   stage: docker_push
+  image: $DOCKER_IMAGE
   services:
-    - name: $RUNNER_IMAGE
-      alias: docker
-  image: docker:stable
+      - name: $RUNNER_IMAGE
+        alias: docker
   before_script: *before_script
   script:
     - docker pull $IMAGE:$CI_COMMIT_SHA
@@ -117,7 +117,7 @@ django test suite:
 python linting:
   stage: test
   script:
-    - pylint --rcfile=.pylintrc --django-settings-module=myresel.settings campus fonctions gestion_personnes ldapback myresel pages tresorerie wiki || exit $((35 & $?))
+    - pylint --rcfile=.pylintrc --django-settings-module=myresel.settings campus fonctions gestion_personnes ldapback maisel myresel pages tresorerie wiki || exit $((35 & $?))
   allow_failure: false
   tags:
     - admin

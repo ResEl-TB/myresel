@@ -45,6 +45,7 @@ class InscriptionCase(TestCase):
             data={
                 'last_name': user.last_name,
                 'first_name': user.first_name,
+                'category': user.category,
                 'formation': user.formation,
                 'email': user.mail,
                 'email_verification': user.mail,
@@ -80,10 +81,61 @@ class InscriptionCase(TestCase):
         self.assertEqual(user.building, user_s.building)
         self.assertEqual(user.campus, user_s.campus)
         self.assertEqual(user.end_cotiz.date(), user_s.end_cotiz.date())
+        self.assertEqual(user.employee_type, user_s.employee_type)
 
         # TODO: find a way to check if emails are sent...
         # get_worker().work(burst=True)
         # self.assertEqual(3, len(mail.outbox))
+
+    def test_maisel_signup(self):
+        user = create_full_user(email="maisel@emplo.yee")
+        try_delete_user(user.uid)
+
+        response = self.client.get(reverse("gestion-personnes:inscription"),
+                                   HTTP_HOST="10.0.3.95", ZONE="Brest-any")
+        self.assertEqual(200, response.status_code)
+        self.assertTemplateUsed(response, "gestion_personnes/inscription.html")
+
+        r = self.client.post(reverse(
+            "gestion-personnes:inscription"),
+            data={
+                'last_name': user.last_name,
+                'first_name': user.first_name,
+                'category': "maisel",
+                'formation': "",
+                'email': user.mail,
+                'email_verification': user.mail,
+                'password': user.user_password,
+                'password_verification': user.user_password,
+                'campus': "None",
+                'building': "",
+                'room': "",
+                'address': "Some address",
+                'birth_place': user.birth_place,
+                'birth_country': user.birth_country,
+                'birth_date': user.freeform_birth_date,
+                'phone': user.mobile,
+                'certify_truth': 'certify_truth',
+            },
+            HTTP_HOST="10.0.3.95", ZONE="Brest-any", follow=True)
+        self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed(r, 'gestion_personnes/cgu.html')
+
+        r = self.client.post(
+            reverse("gestion-personnes:cgu"),
+            data={
+                'have_read': 'have_read'
+            },
+            HTTP_HOST="10.0.3.95", ZONE="Brest-any", follow=True)
+        self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed(r, 'gestion_personnes/finalize_signup.html')
+        self.assertContains(r, user.uid)
+
+        user_s = LdapUser.get(pk=user.uid)
+        self.assertEqual(user.uid, user_s.uid)
+        self.assertEqual(user.first_name, user_s.first_name)
+        self.assertEqual(user.last_name, user_s.last_name)
+        self.assertEqual(user_s.employee_type, "staff")
 
 
 class ModPasswdCase(TestCase):
@@ -165,6 +217,7 @@ class TestPersonalInfo(TestCase):
         user.uid = 'lcarr'
         user.first_name = "Loïc"
         user.last_name = "Carr"
+        user.mail = "lcarr@gmail.com"
         user.user_password = "blah"
         user.promo = "2018"
         user.inscr_date = datetime.datetime.now().astimezone()

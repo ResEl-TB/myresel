@@ -1,6 +1,5 @@
-
 from django.conf.urls import url
-from pages.views import NewsListe, FaqList, faqVote, NewsDetail, unsecure_set_language, eggdrop
+from pages.views import FaqList, faqVote, eggdrop
 
 urlpatterns = [
     url(r'^faq/$', FaqList.as_view(), name='faq'),

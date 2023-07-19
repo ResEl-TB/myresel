@@ -1,5 +1,5 @@
-from .models import Category
 from django.core.exceptions import ObjectDoesNotExist
+from .models import Category
 
 def articles_in_menu(request):
     """
@@ -23,5 +23,4 @@ def articles_in_menu(request):
         'association_category': association_category,
         'services_category': services_category,
     }
-
 

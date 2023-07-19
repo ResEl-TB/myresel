@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 
 import django_rq
-from datetime import timedelta
 
 from gestion_personnes.models import LdapUser
 import campus.async_tasks as async_tasks

@@ -4,8 +4,12 @@
 
 {% block titre %}{% trans "Connexion" %}{% endblock %}
 
+{% block css %}
+    <link href="{% static 'css/login.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
-    <div class="container" xmlns="http://www.w3.org/1999/html">
+    <div class="container" data-navstyle="lighten">
                 <h1 class="page-header">{% trans "Veuillez vous connecter" %}</h1>
     <div class="alert alert-info">{% trans "Afin de bénéficier des services du ResEl, vous devez vous connecter." %}
         {% if is_resel %}{% trans "Vous êtes nouveau ?" %} <a href="{% url "gestion-personnes:inscription" %}">{% trans "Créez un compte" %}</a>.{% endif %}

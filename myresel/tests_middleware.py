@@ -30,7 +30,7 @@ class AdminMiddlewareTestCase(TestCase):
         self.admin_user.save()
         self.admin_dn = ldap.create_admin(uid="lcarr")
         self.admin_uid = "lcarr"
-        self.admin_pwd = "blahblah"
+        self.admin_pwd = "BlahBlahBlah"
         admin = User(username="lcarr")
         admin.save()
 
@@ -54,17 +54,20 @@ class AdminMiddlewareTestCase(TestCase):
         self.assertEqual(self.request.user.is_superuser, 0)
 
     def test_full_request_admin(self):
-        self.client.login(username="lcarr", password="blahblah")
+        self.client.login(username="lcarr", password="BlahBlahBlah")
         self.client.get(reverse("home"),
                         HTTP_HOST="10.0.3.94", follow=True)
         # Double request because it is not instant
         r = self.client.get(reverse("home"),
                             HTTP_HOST="10.0.3.94", follow=True)
+        with open('/tmp/dump', 'w') as f:
+            f.write(str(dir(r)))
+            f.write(str(r.content))
         self.assertContains(r, 'href="/gestion"')
 
 
     def test_full_request_not_admin(self):
-        self.client.login(username="amanoury", password="blahblah")
+        self.client.login(username="amanoury", password="BlahBlahBlah")
         r = self.client.get(reverse("home"),
                             HTTP_HOST="10.0.3.94", follow=True)
         self.assertEquals(200, r.status_code)

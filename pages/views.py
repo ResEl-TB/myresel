@@ -1,20 +1,18 @@
 # coding: utf-8
 import os
 import logging
-import random
 import datetime
 
-import yaml
 import json
 import requests
+import yaml
 
 from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.mail import EmailMessage
 from django.urls import reverse
-from django.http import (HttpResponseRedirect, HttpResponse, Http404, HttpResponseServerError,
-                         HttpResponseBadRequest)
+from django.http import HttpResponseRedirect, HttpResponse, Http404, HttpResponseServerError
 from django.shortcuts import render, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -24,20 +22,16 @@ from django.views.i18n import set_language
 from django.utils import timezone
 from django.contrib.syndication.views import Feed
 from django.utils.feedgenerator import Atom1Feed
-from django.views.decorators.cache import cache_page
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
 
-from fonctions import network, decorators
 from fonctions.decorators import resel_required
 from gestion_personnes.models import LdapUser, UserMetaData
 from pages.forms import ContactForm
 from pages.models import News, Faq
 from wiki.models import Category
 from campus.models import RoomBooking
-from campus.models.clubs_models import StudentOrganisation
 from campus.models.mails_models import Mail
-from campus.whoswho.views import ListBirthdays
 
 logger = logging.getLogger("default")
 
@@ -106,6 +100,8 @@ class Home(View):
 
         if request.user.is_authenticated:
             end_fee = request.ldap_user.end_cotiz if request.ldap_user.end_cotiz else False
+            employee_type = request.ldap_user.employee_type
+            args_for_response['employee_type'] = employee_type
 
             # Check email validation:
             user_meta = UserMetaData.objects.get_or_create(uid=request.ldap_user.uid)
@@ -172,7 +168,7 @@ class Services(ListView):
             services = services.get_articles_and_links(self.request.network_data['subnet'] == 'USER')
         except Category.DoesNotExist:
             services = []
-        return(services)
+        return services
 
 class Contact(View):
     """ Vue appelée pour contacter les admin en cas de soucis """

@@ -10,7 +10,6 @@ import django
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
-from django.utils import timezone
 
 
 class Bank(models.Model):

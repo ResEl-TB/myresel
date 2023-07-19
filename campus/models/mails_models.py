@@ -1,11 +1,5 @@
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
-
-import django_rq
-from gestion_personnes.models import LdapUser
 from gestion_personnes.models import LdapGroup
-from campus import async_tasks
 
 class Mail(models.Model):
     sender = models.CharField(

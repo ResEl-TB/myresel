@@ -25,6 +25,9 @@
 # 23 : Attributs AE
 
 # Benjamin Somers - 2020
+# 24 : Attributs maiselEmployee
+# 30 : Attributs partages
+# 31 : Attributs CAS
 # 50 : Attributs reselZone
 # 51 : Attributs reselBuilding
 # 52 : Attributs reselPool
@@ -32,6 +35,7 @@
 # 54 : Attributs reselVLAN
 # 55 : Attributs reselParentSw - TEMPORAIRE jusqu'à refacto switch/topo
 # 56 : Attributs reselLease
+# 57 : Attributs reselTenant - 2022
 # 60 : Attributs IPv4*
 # 61 : Attributs reselWebsite - OC de transition jusqu'à refacto clubs
 # 62 : Attributs websiteCategory
@@ -53,6 +57,7 @@
 # mibValue : valeur possible pour un mib donn?
 
 # guestPerson : personne residant a la MaisEl temporairement mais ne disposant pas de compte ecole
+# maiselEmployee : employe Maisel/MDE
 
 #attributs enstb MUST
 ######################
@@ -824,6 +829,45 @@ attributetype ( 1.3.6.1.4.1.14628.3.8 NAME 'ntPassword'
         SYNTAX 1.3.6.1.4.1.1466.115.121.1.26 SINGLE-VALUE )
 
 
+# Attributs pour maiselEmployee
+###############################
+
+attributetype ( 1.3.6.1.4.1.14628.24.1 NAME 'maiselEmployeeType'
+        DESC 'Type d employe Maisel MDE'
+        EQUALITY caseIgnoreMatch
+        ORDERING caseIgnoreOrderingMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE )
+
+
+# Attributs partages
+####################
+
+attributetype ( 1.3.6.1.4.1.14628.30.1 NAME 'label'
+        DESC 'Label'
+        EQUALITY caseIgnoreMatch
+        ORDERING caseIgnoreOrderingMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 )
+
+attributetype ( 1.3.6.1.4.1.14628.30.2 NAME 'memberDN'
+        DESC 'Member DN'
+	SUP distinguishedName )
+
+
+# Attributs CAS
+###############
+
+attributetype ( 1.3.6.1.4.1.14628.31.1 NAME 'mfa'
+        DESC 'MFA method'
+        EQUALITY caseIgnoreMatch
+        ORDERING caseIgnoreOrderingMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE )
+
+
 # Attributs pour reselZone
 ######################################
 
@@ -974,6 +1018,34 @@ attributetype ( 1.3.6.1.4.1.14628.56.2 NAME 'leaseID'
         SINGLE-VALUE )
 
 
+# Attributs pour reselZone
+######################################
+
+attributetype ( 1.3.6.1.4.1.14628.57.1 NAME 'tenantID'
+        DESC 'Identifiant du tenant'
+        EQUALITY numericStringMatch
+        ORDERING numericStringOrderingMatch
+        SUBSTR numericStringSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.36
+        SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.14628.57.2 NAME 'tenantName'
+        DESC 'Nom du tenant'
+        EQUALITY caseIgnoreMatch
+        ORDERING caseIgnoreOrderingMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.14628.57.3 NAME 'tenantCode'
+        DESC 'Nom abrege du tenant'
+        EQUALITY caseIgnoreMatch
+        ORDERING caseIgnoreOrderingMatch
+        SUBSTR caseIgnoreSubstringsMatch
+        SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+        SINGLE-VALUE )
+
+
 # Attributs pour IPv4Branch
 ######################################
 
@@ -1063,7 +1135,7 @@ attributeType ( 1.3.6.1.4.1.14628.61.3 NAME 'siteCategory'
 objectclass ( 1.3.6.1.4.1.14628.1.0 NAME 'genericPerson' STRUCTURAL
         DESC 'Personne générique'
         MUST ( uid $ firstName $ lastName $ userPassword )
-        MAY ( imAddresses $ lmPassword $ ntPassword $ displayName $ postalAddress $ telephoneNumber ) )
+        MAY ( imAddresses $ lmPassword $ ntPassword $ displayName $ postalAddress $ telephoneNumber $ label $ mfa ) )
 
 ##Personne ayant un compte sun
 objectclass ( 1.3.6.1.4.1.14628.1.1 NAME 'enstbPerson' AUXILIARY
@@ -1094,8 +1166,8 @@ objectclass ( 1.3.6.1.4.1.14628.1.23 NAME 'aePerson' AUXILIARY
 ##personne ayant une machine au resel
 objectclass (  1.3.6.1.4.1.14628.1.5 NAME 'reselPerson' AUXILIARY
         DESC 'Personne disposant d une machine'
-        MUST ( uid $ firstName $ lastName $ dateInscr )
-        MAY ( cotiz $ endInternet $ days $ startFirstMonth $ lastUserDate $ userPassword $ coupure $ shapePropre $ shapeSale $ ban $ v6Prefix $ campus $ freeformBirthDate $ birthPlace $ birthCountry ) )
+        MUST ( uid $ firstName $ lastName $ dateInscr $ mail )
+        MAY ( cotiz $ endInternet $ days $ startFirstMonth $ lastUserDate $ userPassword $ coupure $ shapePropre $ shapeSale $ ban $ v6Prefix $ campus $ freeformBirthDate $ birthPlace $ birthCountry $ mobile ) )
 
 ##Personne ayant un mail au resel
 ## theoriquement ces attributs sont faits pour sendmail
@@ -1213,6 +1285,10 @@ objectclass ( 1.3.6.1.4.1.14628.1.22 NAME 'reselSTB'  STRUCTURAL
         MUST ( cn $ machine $ stbBrand )
         MAY ( stbType ) )
 
+objectclass ( 1.3.6.1.4.1.14628.24.0 NAME 'maiselEmployee' AUXILIARY
+        DESC 'Employe Maisel MDE'
+        MUST ( maiselEmployeeType ) )
+
 objectclass ( 1.3.6.1.4.1.14628.50.0 NAME 'reselZone' STRUCTURAL
         DESC 'Zone du ResEl'
         MUST ( zoneID $ zoneCode $ vlanOffset )
@@ -1245,6 +1321,11 @@ objectclass ( 1.3.6.1.4.1.14628.55.0 NAME 'reselParentSw'  STRUCTURAL
 objectclass ( 1.3.6.1.4.1.14628.56.0 NAME 'reselLease'  STRUCTURAL
         DESC 'DHCP lease'
         MUST ( leaseID $ macAddress $ ipHostNumber $ leaseExpiry ) )
+
+objectclass ( 1.3.6.1.4.1.14628.57.0 NAME 'reselTenant' STRUCTURAL
+        DESC 'Tenant du ResEl'
+        MUST ( tenantID $ tenantCode )
+        MAY ( tenantName ) )
 
 objectclass ( 1.3.6.1.4.1.14628.60.0 NAME 'IPv4Branch'  STRUCTURAL
         DESC 'Branche IPv4'

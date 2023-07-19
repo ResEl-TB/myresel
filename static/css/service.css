@@ -7,18 +7,10 @@
 }
 
 .service-glyphicon {
-    color: #FFB300;
-
-    transform: scale(1.0);
+    color: var(--accent-3);
+    transform: scale(1);
     transition: all 2s;
 }
-
-.service-description-text {
-    color: #262626;
-    text-align: justify;
-    border-bottom: 1px solid #e8e8e8;
-}
-
 
 @media screen and (max-width: 992px) {
     .service-description-text {
@@ -64,106 +56,170 @@ Class is visible
     margin-bottom: 10%;
 }
 
-.service-right::before{
+.service-right::before, .service-left::after {
     content: '';
-    color: white;
     right: 100%;
     height: 0;
     width: 0;
     top: 40px;
-    border: 7px solid transparent;
-    border-right: 7px solid white;
+    border: 7px solid #0000;
     position: absolute;
+}
 
+.service-right::before{
+    border-right: 7px solid var(--description-color);
+    right: 100%;
 }
 
 .service-left::after{
-    content: '';
-    color: white;
+    border-left: 7px solid var(--description-color);
     left: 100%;
-    height: 0;
-    width: 0;
-    top: 40px;
-    border: 7px solid transparent;
-    border-left: 7px solid white;
-    position: absolute;
-
 }
 
 .service-wrapper {
-   background-image:linear-gradient(rgb(14, 135, 204), rgb(159, 212, 228));
    width: 100%;
    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3) inset;
+   --description-color: #fff2;
+   --description-text: #fff;
+   background: linear-gradient(var(--accent-3), #5a7967);
 }
 
 .service-container {
-    background-image: url(../images/service-bg.png);
-    background-repeat: repeat-y;
-    background-position: center;
-    padding-top: 100px;
+  background: linear-gradient(to right, #0000, #0000 calc(50% - 2.5px), #fff calc(50% - 2.5px), #fff calc(50% + 2.5px), #0000 calc(50% + 2.5px), #0000);
+  padding-top: 100px;
+}
+
+.service-description-left, .service-description-right {
+    border-radius: 10px;
+    animation-duration: 2s;
+    background: var(--description-color);
+    color: var(--description-text);
+    box-shadow: 0 2px 10px -8px #000;
 }
 
 .service-description-left {
-    background-color: white;
-    border-radius: 3px;
-    animation-name: description-animation-left;
-    animation-duration: 2s;
-    box-shadow: 0px 0px 8px rgb(200, 200, 200);
-
+  animation-name: description-animation-left;
 }
 
 .service-description-right {
-    background-color: white;
-    border-radius: 3px;
-    animation-name: description-animation-right;
-    animation-duration: 2s;
-    box-shadow: 0px 0px 8px rgb(200, 200, 200);
-
+  animation-name: description-animation-right;
 }
 
-.icon-service{
+.icon-service {
    text-align: center;
 }
 
-.icon-service img{
-   border: 5px solid white;
-   border-radius: 100%;
-   background-color: rgb(37, 183, 211);
-   width: 100px;
-   height: 100px;
-   transition: all 1s;
-   transition-timing-function: cubic-bezier(.01,.66,.28,.64);
-   animation-name: rotation;
-   animation-duration: 2s;
-   animation-timing-function: cubic-bezier(.38,.03,.31,.96);
+.icon-service a {
+  border-radius: 30px;
+  background: #fff;
+  height: 100px;
+  width: 100px;
+  display: inline-block;
+  box-shadow: 0 2px 7px -3px #000;
+  transition: all .1s ease;
 }
 
-.icon-service img:hover {
-   transform: scale(1.2);
-   transition-timing-function: cubic-bezier(0,.64,.38,.99);
-   cursor: pointer;
+.icon-service a:hover {
+  transform: scale(1.05);
+}
+
+.icon-service img {
+  margin-top: 18px;
+  width: 64px;
+  height: 64px;
 }
 
 .service-title {
     text-align: center;
-    border-bottom: 1px solid #eaeaea;
-}
-
-.service-content {
-    margin: 20px;
-}
-
-.service-content h2 {
+    border-bottom: 1px solid var(--description-text);
+    padding-bottom: 4px;
     font-size: 1.7em;
 }
 
-@media screen and (max-width: 992px)  {
+.service-content {
+    margin: 20px 10px;
+}
+
+@media (max-width: 539px)  {
+  .icon-service a {
+    height: 80px;
+    width: 80px;
+    margin-top: 10px;
+  }
+  .icon-service img {
+    margin-top: 16px;
+    width: 48px;
+    height: 48px;
+  }
+  .service-description-right {
+    width: calc(33.33333333% + 20px);
+    margin-left: -20px;
+  }
+  .service-description-left {
+    width: calc(33.33333333% + 20px);
+    margin-right: -20px;
+  }
+}
+
+@media (max-width: 479px)  {
+  .service-title {
+    font-size: 1.4em;
+  }
+  .icon-service a {
+    height: 60px;
+    width: 60px;
+    margin-top: 20px;
+    border-radius: 20px;
+  }
+  .icon-service img {
+    margin-top: 12px;
+    width: 36px;
+    height: 36px;
+  }
+  .service-description-right {
+    width: calc(33.33333333% + 10px);
+    margin-left: -10px;
+  }
+  .service-description-left {
+    width: calc(33.33333333% + 10px);
+    margin-right: -10px;
+  }
+  .service {
+    margin-bottom: 10%;
+    margin-bottom: 5%;
+  }
+  .service-content {
+    margin: 20px 10px;
+    margin: 10px 0;
+  }
+  .service {
+    margin-bottom: 5%;
+    font-size: .9em;
+  }
+  .service-content {
+    margin: 10px 0;
+  }
+}
+
+@media (max-width: 371px)  {
    .service-wrapper {
       display: none;
    }
+  .service-title {
+    border: none;
+    padding: 0;
+    margin: 5px;
+  }
+  .service {
+    margin-bottom: 5%;
+    margin-bottom: 12%;
+  }
+  p {
+    margin-bottom: 2px;
+  }
 }
 
-@media screen and (min-width: 992px)  {
+@media (min-width: 372px)  {
    .service-wrapper-mobile {
       display: none;
    }
@@ -182,23 +238,18 @@ Class is visible
 .additional-icon {
    text-align: center;
    padding-top: 3%;
-   animation-name: rotation;
-   animation-duration: 1s;
-   animation-timing-function: cubic-bezier(.38,.03,.31,.96);
-
 }
 
 .additional-icon img {
-   height: 100px;
+   height: 120px;
    width: auto;
 }
 
 .additional-icon-top {
-   border: 5px solid white;
-   border-radius: 50%;
+  margin-bottom: -10px;
 }
 
-@keyframes rotation {
-   from {transform: rotateY(360deg);}
-   to {transform: rotateY(0deg);}
+.service a {
+  color: var(--description-text);
+  text-decoration: underline;
 }

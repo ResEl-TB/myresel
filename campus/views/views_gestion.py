@@ -3,11 +3,12 @@ from django.contrib import messages
 from django.urls import reverse
 from django.views.generic import View
 from django.http import Http404
-from gestion_personnes.models import LdapGroup, LdapUser
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.translation import ugettext as _
+
+from gestion_personnes.models import LdapGroup, LdapUser
 
 from fonctions.decorators import ae_admin_required
 

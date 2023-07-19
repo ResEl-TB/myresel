@@ -2,13 +2,13 @@
 import uuid
 import os
 from datetime import datetime
-from dateutil.relativedelta import relativedelta
 from urllib.parse import quote_plus
+import logging
+import json
+from dateutil.relativedelta import relativedelta
 
 import django_rq
-import logging
 import stripe
-import json
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -21,9 +21,9 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _, get_language
 from django.views.generic import DetailView, View, ListView
 
-import tresorerie.async_tasks as async_tasks
+from tresorerie import async_tasks
 from fonctions import generic
-from fonctions.decorators import need_to_pay, able_to_pay
+from fonctions.decorators import need_to_pay, able_to_pay, not_maisel
 from tresorerie.models import Transaction, Product, StripeCustomer
 
 logger = logging.getLogger("default")
@@ -39,6 +39,7 @@ class ChooseProduct(View):
     @method_decorator(login_required)
     @method_decorator(able_to_pay)
     @method_decorator(need_to_pay)
+    @method_decorator(not_maisel)
     def dispatch(self, *args, **kwargs):
         return super(ChooseProduct, self).dispatch(*args, **kwargs)
 
@@ -94,6 +95,7 @@ class Pay(View):
     @method_decorator(login_required)
     @method_decorator(able_to_pay)
     @method_decorator(need_to_pay)
+    @method_decorator(not_maisel)
     def dispatch(self, *args, **kwargs):
         return super(Pay, self).dispatch(*args, **kwargs)
 

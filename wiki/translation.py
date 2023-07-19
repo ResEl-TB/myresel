@@ -16,3 +16,4 @@ class CategoryTranslationOptions(TranslationOptions):
 @register(Link)
 class LinkTranslationOptions(TranslationOptions):
     fields = ('name', 'description',)
+

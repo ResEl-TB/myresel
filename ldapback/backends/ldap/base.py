@@ -21,7 +21,7 @@ class SaveError(Exception):
         return self.__str__()
 
 
-class Ldap(object):
+class Ldap:
     """
     Handle every methods related to the ldap
     """

@@ -136,7 +136,7 @@ campuses:
           essential: false
           level: 0
           _hosts:
-            - eris
+            - reaper
             - elliot
         - name: web
           title: Sites web
