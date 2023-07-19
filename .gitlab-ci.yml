@@ -40,9 +40,9 @@ stages:
 Build docker image:
   stage: docker_build
   services:
-    - name: $RUNNER_IMAGE
+    - name: docker:dind
       alias: docker
-  #image: docker:stable
+  image: docker:stable
   before_script: &before_script
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
