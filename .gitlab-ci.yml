@@ -48,9 +48,9 @@ Build docker image:
   script:
     - docker build -t $IMAGE:$CI_COMMIT_SHA --build-arg LDAPPASSWD=$LDAP_PASSWORD .
     - docker push $IMAGE:$CI_COMMIT_SHA
-  only:
-   changes:
-     - Dockerfile
+  #only:
+  # changes:
+  #   - Dockerfile
   tags:
     - admin
 
