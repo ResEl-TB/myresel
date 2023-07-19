@@ -3,7 +3,7 @@
 
 variables:
  IMAGE: $CI_REGISTRY_IMAGE
- DOCKER_DRIVER: overlay
+ DOCKER_DRIVER: overlay2
   
  MYSQL_HOST: mysql-mysql-server
  MYSQL_USER: resel
@@ -42,7 +42,7 @@ Build docker image:
   services:
     - name: $RUNNER_IMAGE
       alias: docker
-  image: docker:stable
+  #image: docker:stable
   before_script: &before_script
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
