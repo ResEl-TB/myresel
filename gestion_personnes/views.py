@@ -2,7 +2,7 @@ import time
 import re
 import unicodedata
 
-from datetime import datetime, timedelta, date
+from datetime import datetime, date
 
 from django.contrib import messages
 from django.contrib.auth import login
@@ -21,10 +21,11 @@ from fonctions import ldap
 from fonctions.decorators import resel_required
 from gestion_personnes.async_tasks import send_mails
 from gestion_personnes.models import LdapUser, LdapOldUser, UserMetaData
-from .forms import InscriptionForm, ModPasswdForm, CGUForm, InvalidUID, PersonnalInfoForm, ResetPwdSendForm, \
-    ResetPwdForm, SendUidForm, RoutingMailForm
 
 from myresel.settings import FREE_DURATION
+
+from .forms import InscriptionForm, ModPasswdForm, CGUForm, InvalidUID, PersonnalInfoForm, ResetPwdSendForm, \
+    ResetPwdForm, SendUidForm, RoutingMailForm
 
 
 class Inscription(View):

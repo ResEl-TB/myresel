@@ -17,10 +17,10 @@ from django.views.generic import View
 
 from ldap3.core.exceptions import LDAPException
 
-from campus.forms import MajPersonnalInfo, SearchSomeone
-
 from gestion_personnes.async_tasks import send_mails
 from gestion_personnes.models import LdapUser, UserMetaData
+
+from campus.forms import MajPersonnalInfo, SearchSomeone
 from campus.models.clubs_models import StudentOrganisation
 
 from fonctions.generic import today

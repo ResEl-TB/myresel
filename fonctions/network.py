@@ -2,12 +2,6 @@
 import logging
 import os
 import re
-import subprocess
-import redis
-from ipaddress import ip_address
-
-from django.core.exceptions import ObjectDoesNotExist
-from rq.decorators import job
 
 from myresel import settings
 

@@ -14,7 +14,7 @@
         <div class="alert alert-warning">{% trans "Vous êtes sur le point de créer un compte ResEl, si vous en possédez déjà un veuillez vous" %} <a href="{% url "login" %}">{% trans "connecter" %}</a>.</div>
 
         <div class="col-md-7 signup-form">
-            <form action="{% url 'gestion-personnes:inscription' %}" method="post" class="form">
+            <form action="{% url 'gestion-personnes:inscription' %}" method="post" class="form" id="form">
                 {% csrf_token %}
                 <span id="notice">{% blocktrans %}Les informations marquées d’un astérisque bleu <span class="required by-law"></span> sont requises par l’<a href="https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000025622766/" target="_blank">article R10-13 du code des postes et des communications électroniques</a>. Les autres informations requises par le ResEl sont marquées d’un astérisque rouge <span class="required"></span>. Toute fausse déclaration peut être punie par la loi.{% endblocktrans %}</span>
                 <fieldset class="row">
@@ -29,13 +29,20 @@
                         {{ form.last_name }}
                         {% if form.last_name.errors %}<span class="help-block">{{ form.last_name.errors }}</span>{% endif %}
                     </div>
-                    <div class="form-group{% if form.formation.errors %} has-error{% endif %}">
+                    <div class="form-group{% if form.category.errors %} has-error{% endif %}">
+                        <label data-toggle="tooltip" title="{% trans "De votre situation dépendent les paramètres de votre compte" %}">{% trans "Vous êtes…" %} <span class="required by-resel"></span></label>
+                        {{ form.category }}
+                        {% if form.category.errors %}<span class="help-block">{{ form.category.errors }}</span>{% endif %}
+                    </div>
+                    <div class="form-group hidden{% if form.formation.errors %} has-error{% endif %}" id="formation">
                         <label for="id_formation" data-toggle="tooltip" title="{% trans "Certains éléments du ResEl sont personnalisés selon votre formation" %}">{% trans "Formation" %} <span class="required"></span></label>
                         {{ form.formation }}
                         {% if form.formation.errors %}<span class="help-block">{{ form.formation.errors }}</span>{% endif %}
                     </div>
+                    <div class="form-group center italic hidden" id="manual-verification">Un accès à Internet à titre gracieux vous sera fourni après vérification.</div>
+                    <div class="form-group center italic hidden" id="no-internet">Vous n’êtes pas éligible à un compte ResEl.</div>
                 </fieldset>
-                <fieldset class="row">
+                <fieldset class="row not-other">
                     <legend data-toggle="tooltip" title="{% trans "Les éléments principaux de votre compte" %}">{% trans "Informations du compte" %}</legend>
                     <div class="row form-group">
                         <div class="col-sm-6{% if form.email.errors %} has-error{% endif %}">
@@ -60,16 +67,16 @@
                             {{ form.password_verification }}
                             {% if form.password_verification.errors %}<span class="help-block">{{ form.password_verification.errors }}</span>{% endif %}
                         </div>
-                        <div class="col-sm-12">
-                            <div class="progress password-strength">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0;">
-                                    <span></span>
-                                </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="progress password-strength">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0;">
+                                <span></span>
                             </div>
                         </div>
                     </div>
                 </fieldset>
-                <fieldset class="row">
+                <fieldset class="row not-other">
                     <legend data-toggle="tooltip" title="{% trans "Les derniers éléments réglementaires sur vous" %}">{% trans "Informations de contact" %} <span class="required by-law"></span></legend>
                     <div class="row form-group">
                         <div class="col-sm-6{% if form.birth_place.errors %} has-error{% endif %}">
@@ -95,7 +102,7 @@
                         {{ form.campus }}
                         {% if form.campus.errors %}<span class="help-block">{{ form.campus.errors }}</span>{% endif %}
                     </div>
-                    <div class="row form-group" id="maisel-information">
+                    <div class="row form-group hidden" id="maisel-information">
                         <div class="col-sm-6{% if form.building.errors %} has-error{% endif %}">
                             <label for="id_building" data-toggle="tooltip" title="{% trans "Votre adresse de résidence est requise" %}">{% trans "Bâtiment" %} <span class="required by-law"></span></label>
                             {{ form.building }}
@@ -107,7 +114,7 @@
                             {% if form.room.errors %}<span class="help-block">{{ form.room.errors }}</span>{% endif %}
                         </div>
                     </div>
-                    <div class="form-group{% if form.address.errors %} has-error{% endif %}" id="home-address">
+                    <div class="form-group hidden{% if form.address.errors %} has-error{% endif %}" id="home-address">
                         <label for="id_address" data-toggle="tooltip" title="{% trans "Votre adresse de résidence est requise" %}">{% trans "Adresse postale" %} <span class="required by-law"></span></label>
                         {{ form.address }}
                         {% if form.address.errors %}<span class="help-block">{{ form.address.errors }}</span>{% endif %}
@@ -119,11 +126,11 @@
                     </div>
                 </fieldset>
 
-                <div class="checkbox form-group{% if form.certify_truth.errors %} has-error{% endif %}">
+                <div class="checkbox form-group not-other{% if form.certify_truth.errors %} has-error{% endif %}">
                     {{ form.certify_truth }}{{ form.certify_truth.label_tag }}
                 </div>
 
-                <div class="submit">
+                <div class="submit not-other">
                     <button type="submit" class="btn btn-lg btn-info">{% trans "Continuer l'inscription" %}</button>
                 </div>
             </form>
@@ -150,43 +157,63 @@
 {% block javascript %}
     <script src="{% static 'js/zxcvbn.js' %}"></script>
     <script>
-        var brest_buildings = ['I1', 'I2', 'I3', 'I4', 'I5', 'I6', 'I7', 'I8', 'I9', 'I10', 'I11', 'I12'];
-        var rennes_buildings = ['Studios', 'Chambres'];
+        const buildings = {'Brest': ['I1', 'I2', 'I3', 'I4', 'I5', 'I6', 'I7', 'I8', 'I9', 'I10', 'I11', 'I12'],
+                           'Rennes': ['Studios', 'Chambres'],
+                           'Nantes': ['Bientôt…']};
 
         function update_buildings() {
-            var selected_campus = $("#id_campus").find("option:selected").text();
-            if (selected_campus === "Brest") {
-                $("#maisel-information").show();
-                $("#home-address").hide();
-                $("#id_building").find("option").each(function () {
-                    if(brest_buildings.indexOf($(this).text()) >= 0){
-                        $(this).show();
-                    } else {
-                        $(this).hide();
-                    }
-                })
-            } else if (selected_campus === "Rennes") {
-                $("#maisel-information").show();
-                $("#home-address").hide();
-                $("#id_building").find("option").each(function () {
-                    if(rennes_buildings.indexOf($(this).text()) >= 0){
-                        $(this).show();
-                    } else {
-                        $(this).hide();
-                    }
-                })
-            } else {
-                $("#maisel-information").hide();
-                $("#home-address").show();
+            const form = document.getElementById('form');
+            const campus = form.campus.value;
+            const maisel_information = document.getElementById('maisel-information');
+            const home_address = document.getElementById('home-address');
+            const enabled_buildings = [...form.building.options];
+            
+            if (campus == "None") {
+                maisel_information.classList.add('hidden');
+                home_address.classList.remove('hidden');
+            }
+            else if (campus) {
+                maisel_information.classList.remove('hidden');
+                home_address.classList.add('hidden');
+                enabled_buildings.forEach(e => {
+                    if (buildings[campus].indexOf(e.text) >= 0)
+                        e.classList.remove('hidden');
+                    else
+                        e.classList.add('hidden');
+                });
             }
         }
 
-        $("#id_campus").on("change", function (event) {
-            update_buildings();
-        });
+        function update_category() {
+            const category = document.getElementById('form').category.value;
+            const formation = document.getElementById('formation');
+            const no_internet = document.getElementById('no-internet');
+            const not_other = [...document.getElementsByClassName('not-other')];
+            const manual_verification = document.getElementById('manual-verification');
+            if (category == 'student')
+                formation.classList.remove('hidden');
+            else
+                formation.classList.add('hidden');
+            if (category == 'maisel')
+                manual_verification.classList.remove('hidden');
+            else
+                manual_verification.classList.add('hidden');
+            if (category == 'other') {
+                not_other.forEach(e => e.classList.add('hidden'));
+                no_internet.classList.remove('hidden');
+            }
+            else {
+                not_other.forEach(e => e.classList.remove('hidden'));
+                no_internet.classList.add('hidden');
+            }
+        }
 
-        $( document ).on("ready", function( event ){
+        document.getElementById('id_campus').addEventListener('change', update_buildings);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            update_category();
             update_buildings();
+            document.getElementById('form').category.forEach(e => e.addEventListener('change', update_category));
             $('[data-toggle="tooltip"]').tooltip();
         });
 
@@ -205,7 +232,7 @@
                         .removeClass("progress-bar-warning")
                         .addClass("progress-bar-danger")
                         .attr("aria-valuenow", "1")
-                        .css("width", Math.ceil(1 / 5 * 100) + "%");
+                        .css("width", "20%");
                 $(".password-strength .progress-bar span").text("{% trans "très faible" %}");
 
             } else if ( result.score == 1 ) {
@@ -215,7 +242,7 @@
                         .addClass("progress-bar-warning")
                         .removeClass("progress-bar-danger")
                         .attr("aria-valuenow", "2")
-                        .css("width", Math.ceil(2 / 5 * 100) + "%");
+                        .css("width", "40%");
                 $(".password-strength .progress-bar span").text("{% trans "faible" %}");
 
             } else if ( result.score == 2 ) {
@@ -225,7 +252,7 @@
                         .removeClass("progress-bar-warning")
                         .removeClass("progress-bar-danger")
                         .attr("aria-valuenow", "3")
-                        .css("width", Math.ceil(3 / 5 * 100) + "%");
+                        .css("width", "60%");
                 $(".password-strength .progress-bar span").text("{% trans "Moyen" %}");
 
             } else if ( result.score == 3 ) {
@@ -235,7 +262,7 @@
                         .removeClass("progress-bar-warning")
                         .removeClass("progress-bar-danger")
                         .attr("aria-valuenow", "4")
-                        .css("width", Math.ceil(4 / 5 * 100) + "%");
+                        .css("width", "80%");
                 $(".password-strength .progress-bar span").text("{% trans "Correct" %}");
 
             } else if ( result.score == 4 ) {
@@ -245,11 +272,10 @@
                         .removeClass("progress-bar-warning")
                         .removeClass("progress-bar-danger")
                         .attr("aria-valuenow", "5")
-                        .css("width", Math.ceil(5 / 5 * 100) + "%");
+                        .css("width", "100%");
                     $(".password-strength .progress-bar span").text("{% trans "Bon" %}");
 
             }
-{#            $("#hack-time").text(result.crack_times_display.offline_slow_hashing_1e4_per_second);#}
         })
 
     </script>

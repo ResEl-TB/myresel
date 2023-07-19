@@ -10,7 +10,7 @@ from fonctions.generic import hash_passwd, hash_to_ntpass
 # Numeric fields
 
 
-class LdapField(object):
+class LdapField:
     def __init__(self, db_column=None, object_classes=None, required=False, pk=False):
         if db_column is None:
             raise AttributeError("No db_column given")

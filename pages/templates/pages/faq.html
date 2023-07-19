@@ -9,40 +9,34 @@
 {% block titre %}F.A.Q.{% endblock %}
 
 {% block content %}
-    <div>
-        <div>
-            {# Affichage normal de la page #}
-            <div class="home-fragment home-user-management">
-                <div class="container">
-                    <div class="row">
-                        <h2>{% trans "Foire aux questions" %}</h2>
-                        <p>{% trans "Vous trouverez ici les réponses aux questions qui nous sont fréquement posées."%}</p>
-                        <p>{% trans "Une question que vous vous posez n'est pas présente ? Vous pensez qu'elle mérite sa place sur cette page ? " %}<a href="{% url 'contact' %}">{% trans "Dites-le nous !" %}</a></p>
-                    </div>
-                </div>
-            </div>
-            <div class="home-fragment home-presentation">
-                <div class="container text-left article">
-{#                    <div class="top-buttons"><span style="cursor: pointer;" >Tout ouvrir</span> <span style="cursor: pointer;" >Tout fermer</span></div>#}
-
-                    {% for question in questions %}
-                        {% if forloop.first %}{% endif %}
-                        <div class="panel panel-info">
-                            <div class="panel-heading"><h3 class="panel-title faq-question" style="cursor: pointer;"><b>{{ question.question_text }}</b></h3></div>
-                            <div class="panel-body">
-                                {{ question.response|safe }}
-                                <a id="{{ question.id }}" class="vote" href="javascript:void(false)" vote="upvote"><span class="fa fa-thumbs-up"></span> {% trans "Cette réponse m'a été utile" %}</a>
-                                <a class="vote" href="{% url "contact" %}" vote="downvote"><span class="fa fa-thumbs-down"></span> Cette réponse est inutile</a> </div>
-                        </div>{% if forloop.last %}{% endif %}
-                    {% empty %}
-                        <p>{% trans "Pas de question à l'horizon" %}</p>
-                    {% endfor %}
-                </div>
+    {# Affichage normal de la page #}
+    <div class="home-fragment home-user-management" data-navstyle="invert">
+        <div class="container">
+            <div class="row">
+                <h2>{% trans "Foire aux questions" %}</h2>
+                <p>{% trans "Vous trouverez ici les réponses aux questions qui nous sont fréquement posées."%}</p>
+                <p>{% trans "Une question que vous vous posez n'est pas présente ? Vous pensez qu'elle mérite sa place sur cette page ? " %}<a href="{% url 'contact' %}">{% trans "Dites-le nous !" %}</a></p>
             </div>
         </div>
-        <!-- /.col-lg-12 -->
     </div>
-    <!-- /.row -->
+    <div class="home-fragment home-presentation">
+        <div class="container text-left article">
+{#            <div class="top-buttons"><span style="cursor: pointer;" >Tout ouvrir</span> <span style="cursor: pointer;" >Tout fermer</span></div>#}
+
+            {% for question in questions %}
+                {% if forloop.first %}{% endif %}
+                <div class="panel panel-info">
+                    <div class="panel-heading"><h3 class="panel-title faq-question" style="cursor: pointer;"><b>{{ question.question_text }}</b></h3></div>
+                    <div class="panel-body">
+                        {{ question.response|safe }}
+                        <a id="{{ question.id }}" class="vote" href="javascript:void(false)" vote="upvote"><span class="fa fa-thumbs-up"></span> {% trans "Cette réponse m'a été utile" %}</a>
+                        <a class="vote" href="{% url "contact" %}" vote="downvote"><span class="fa fa-thumbs-down"></span> Cette réponse est inutile</a> </div>
+                </div>{% if forloop.last %}{% endif %}
+            {% empty %}
+                <p>{% trans "Pas de question à l'horizon" %}</p>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock %}
 
 {% block javascript %}

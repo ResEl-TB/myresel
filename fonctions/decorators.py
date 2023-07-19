@@ -1,16 +1,12 @@
 import logging
-import re
 from datetime import datetime
 from functools import wraps
 
-from django.conf import settings
 from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect
 from django.utils.decorators import available_attrs
 from django.utils.translation import ugettext_lazy as _
-
-from fonctions import ldap, network
 
 logger = logging.getLogger("default")
 
@@ -30,6 +26,64 @@ def resel_required(function=None, redirect_to='home'):
             else:
                 messages.error(request, _("Vous devez vous trouver sur le réseau du ResEl pour accéder à cette page."))
                 return HttpResponseRedirect(reverse(redirect_to))
+
+        return _view
+
+    if function is None:
+        return _dec
+    else:
+        return _dec(function)
+
+
+def maisel_manager_required(function=None, redirect_to='home'):
+    """ Vérifie que l'user est un manager Maisel/MDE
+
+    Ce décorateur s'assure que l'user est bien un manager Maisel/MDE.
+    Si ce n'est pas le cas, il est redirigé vers l'adresse spécifiée dans
+    'redirect_to', sinon vers la page de news.
+    """
+
+    def _dec(view_func):
+        @wraps(view_func, assigned=available_attrs(view_func))
+        def _view(request, *args, **kwargs):
+            try:
+                if not request.ldap_user:
+                    raise AttributeError("The user is not logged in")
+                if request.ldap_user.employee_type != 'manager':
+                    messages.info(request, _("Cette page n’est accessible qu’aux gestionnaires Maisel/MDE"))
+                    return HttpResponseRedirect(reverse(redirect_to))
+            except AttributeError as e:
+                logger.error("An unlogged user tried to access the maisel module")
+                return HttpResponseRedirect(reverse(redirect_to))
+
+            return view_func(request, *args, **kwargs)
+
+        return _view
+
+    if function is None:
+        return _dec
+    else:
+        return _dec(function)
+
+
+def not_maisel(function=None, redirect_to='home'):
+    """Vérifie que l'user n'est pas de la Maisel"""
+
+    def _dec(view_func):
+        @wraps(view_func, assigned=available_attrs(view_func))
+        def _view(request, *args, **kwargs):
+            try:
+                if not request.ldap_user:
+                    raise AttributeError("The user is not logged in")
+                if request.ldap_user.employee_type != '':
+                    messages.info(request, _("Cette page n’est pas accessible aux employés "
+                                             "Maisel/MDE"))
+                    return HttpResponseRedirect(reverse(redirect_to))
+            except AttributeError as e:
+                logger.error("A Maisel user tried to access the payment module")
+                return HttpResponseRedirect(reverse(redirect_to))
+
+            return view_func(request, *args, **kwargs)
 
         return _view
 
@@ -84,8 +138,8 @@ def able_to_pay(function=None, redirect_to='home'):
             subnet = request.network_data['subnet']
             if subnet in ['REGN', 'EXPN']:
                 if request.network_data['subnet'] == 'REGN':
-                    messages.error(request, _('Veuillez vous connecter au réseau ResEl Secure pour '
-                                              'effectuer votre paiement.'))
+                    messages.error(request, _('Veuillez vous connecter au réseau ResEl Secure ou '
+                                              'ResEl Next pour effectuer votre paiement.'))
                 else:
                     messages.error(request, _('Veuillez vous connecter à un réseau connecté à '
                                               'Internet (4G, Eduroam,…) pour effectuer votre '

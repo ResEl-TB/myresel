@@ -1,21 +1,18 @@
 # -*- coding: utf-8 -*-
 import logging
 
-from ldap3.core.exceptions import LDAPSocketOpenError
 from django.conf import settings
-from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist, MiddlewareNotUsed
 from django.urls import resolve, Resolver404, reverse
-from django.http import HttpResponseBadRequest, HttpResponseRedirect
-from django.utils.translation import ugettext_lazy as _
+from django.http import HttpResponseRedirect
 
-from fonctions import ldap, network
+from fonctions import ldap
 from gestion_personnes.models import LdapUser
 
 logger = logging.getLogger("default")
-class IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAResElAdminSoCheckTheLdapBeforeMiddleware(object):
+class IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAResElAdminSoCheckTheLdapBeforeMiddleware:
     @staticmethod
     def make_user_staff(username):
         """
@@ -59,7 +56,7 @@ class IWantToKnowBeforeTheRequestIfThisUserDeserveToBeAdminBecauseItIsAResElAdmi
         return response
 
 
-class NetworkConfiguration(object):
+class NetworkConfiguration:
     """
     Retrieve every useful piece of information about the device network configuration
     To be available in every view
@@ -89,7 +86,7 @@ class NetworkConfiguration(object):
         response = self.get_response(request)
         return response
 
-class InscriptionNetworkHandler(object):
+class InscriptionNetworkHandler:
     """
     Before the request is sent to the website, we need to handle if the user
     is in a registration network
@@ -129,7 +126,7 @@ class InscriptionNetworkHandler(object):
         response = self.get_response(request)
         return response
 
-class SimulateProductionNetwork(object):
+class SimulateProductionNetwork:
     """
     Simulate a production environment for the Vagrant env
     This is because the ResEl is hard

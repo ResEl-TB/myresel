@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+
+{% block titre %}{% trans "Mon équipe" %}{% endblock %}
+
+{% block css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/table-sort.css' %}"/>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">{% trans "Mon équipe" %}</h1>
+        {% for e in employees %}
+            {% if forloop.first %}
+                <table class="table table-hover" id="employees">
+                    <thead>
+                    <tr>
+                        <th class="sort alpha"><i class="fa fa-user fa-fw" aria-hidden="true"></i> {% trans "Nom" %}</th>
+                        <th class="sort alpha"><i class="fa fa-envelope fa-fw" aria-hidden="true"></i> {% trans "Adresse e-mail" %}</th>
+                        <th class="sort"><i class="fa fa-calendar fa-fw" aria-hidden="true"></i> {% trans "Fin d’accès" %}</th>
+                        <th><i class="fa fa-check fa-fw" aria-hidden="true"></i> {% trans "Approbation" %}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+            {% endif %}
+                    <tr>
+                        <td>{% if e.employee_type == "manager" %}<i class="fa fa-star fa-fw" aria-hidden="true"></i> {% endif %}{{ e.display_name }}</td>
+                        <td><a href="mailto:{{ e.mail }}">{{ e.mail }}</a></td>
+                        <td data-value="{{ e.end_cotiz.timestamp }}"{% if e.end_cotiz >= august %} class="text-success"{% endif %}>{{ e.end_cotiz }}</td>
+                        <td>
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="employee" value="{{ e.uid }}">
+                                {% if e.end_cotiz >= august %}
+                                    <button type="submit" name="action" class="btn btn-warning" value="suspend">{% trans 'Suspendre' %}</button>
+                                {% else %}
+                                    <button type="submit" name="action" class="btn btn-success" value="approve">{% trans 'Valider' %}</button>
+                                {% endif %}
+                                <button type="submit" name="action" class="btn btn-danger" value="delete">{% trans 'Révoquer' %}</button>
+                            </form>
+                        </td>
+                    </tr>
+            {% if forloop.last %}
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="employee" value="%all">
+                                <button type="submit" name="action" class="btn btn-success" value="approve">Valider tous</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            {% endif %}
+        {% empty %}
+                <p>{% blocktrans %}Aucun employé trouvé.{% endblocktrans %}</p>
+        {% endfor %}
+            </div> <!-- /.col-lg-12 -->
+        </div> <!-- /.row -->
+    </div> <!-- /.container -->
+{% endblock %}
+
+{% block javascript %}
+<script src="{% static 'js/table-sort.js' %}"></script>
+<script>
+[...document.getElementsByClassName('btn-danger')].forEach(e => e.addEventListener('click', ev => {
+    if (!confirm('Cette action va supprimer l’agent de votre interface. L’opération est irréversible.'))
+        ev.preventDefault();
+}));
+</script>
+{% endblock %}

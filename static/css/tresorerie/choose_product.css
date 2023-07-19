@@ -115,10 +115,6 @@
     padding: 0 5px;
 }
 
-.offers > :hover {
-    transform: scale(1.03);
-}
-
 .offers > * {
     transition: transform .2s ease;
 }

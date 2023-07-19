@@ -42,6 +42,7 @@ class TestGenericPerson(LdapModel):
     altMail = LdapListField(db_column="altMail", object_classes=["enstbPerson"])
 
     # reselPerson
+    mail = LdapCharField(db_column='mail', object_classes=['reselPerson'])
     inscr_date = LdapDatetimeField(db_column='dateinscr', object_classes=['reselPerson'])
     end_cotiz = LdapDatetimeField(db_column='endinternet', object_classes=['reselPerson'])
 
@@ -75,6 +76,7 @@ class LdapModelTestCase(TestCase):
         user.firstname = "Loïc"
         user.lastname = "Carr"
         user.password = "123zizou"
+        user.mail = "lcarr@gmail.com"
 
         user.promo = 2018
         user.altMail = "loic.carr@telecom-bretagne.eu"
@@ -302,6 +304,7 @@ class LdapFieldTestCase(TestCase):
         user.uid = "fdshtlz"
         user.firstname = "Martin"
         user.lastname = "Thomas"
+        user.mail = "mthomas@gmail.com"
         user.password = "Blah"
         user.nt_password = "Blah"
 

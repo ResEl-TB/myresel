@@ -1,22 +1,22 @@
 # -*- coding: utf-8 -*-
 
+from datetime import datetime, date
+import re
+
 from django.views.generic import View, TemplateView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, JsonResponse
 from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
-from gestion_personnes.models import LdapUser
 from django.core.exceptions import ObjectDoesNotExist
 
+from gestion_personnes.models import LdapUser
 from gestion_personnes.forms import InscriptionForm
-from fonctions.decorators import ae_admin_required
 
+from fonctions.decorators import ae_admin_required
 from fonctions import ldap
 from ldapback.backends.ldap.base import Ldap
-from datetime import datetime, date
-
-import re
 
 # Error codes for the frontend
 USER_NOT_FOUND = 1

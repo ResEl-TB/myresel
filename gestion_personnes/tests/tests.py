@@ -53,6 +53,7 @@ class LdapUserTestCase(TestCase):
         user.uid = "amanoury"
         user.first_name = "Alexandre"
         user.last_name = "Manoury"
+        user.mail = "amanoury@gmail.com"
         user.user_password = "blah"
         user.nt_password = "blah"
 

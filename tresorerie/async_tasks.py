@@ -127,7 +127,7 @@ def invoice_laputex_check(user: object, transaction: dict,
 
 @job
 def send_invoice_mail(user, transaction, send_to, invoice=None, errors=""):
-    has_invoice = invoice != None
+    has_invoice = invoice is not None
 
     # Mail for user
     if 'user' in send_to:

@@ -9,13 +9,13 @@ from django.core.mail import EmailMessage
 from django.urls import reverse
 from django.db import models
 
-import ldapback
 from fonctions import generic
+from fonctions import ldap
+import ldapback
 from ldapback.models.fields import LdapCharField, LdapPasswordField, LdapNtPasswordField, LdapListField, \
     LdapDatetimeField, LdapBooleanField
 from myresel.settings import LDAP_DN_PEOPLE
 from myresel.settings_local import LDAP_DN_GROUPS
-from fonctions import ldap
 
 
 class LdapUser(ldapback.models.LdapModel):
@@ -29,15 +29,17 @@ class LdapUser(ldapback.models.LdapModel):
     uid = LdapCharField(db_column='uid', object_classes=['genericPerson'], pk=True)
     first_name = LdapCharField(db_column='firstname', object_classes=['genericPerson'])
     last_name = LdapCharField(db_column='lastname', object_classes=['genericPerson'])
+    display_name = LdapCharField(db_column='displayname', object_classes=['genericPerson'])
     user_password = LdapPasswordField(db_column='userpassword', object_classes=['genericPerson'])
     nt_password = LdapNtPasswordField(db_column='ntpassword', object_classes=['genericPerson'])
-    display_name = LdapCharField(db_column='displayname', object_classes=['genericPerson'])
     postal_address = LdapCharField(db_column='postaladdress', object_classes=['genericPerson'])
 
     # Ldap Groups
     groups = LdapListField(db_column='memberOf')
 
     # reselPerson
+    mail = LdapCharField(db_column='mail', object_classes=['reselPerson'])
+    mobile = LdapCharField(db_column='telephoneNumber', object_classes=['reselPerson'])
     inscr_date = LdapDatetimeField(db_column='dateinscr', object_classes=['reselPerson'])
     cotiz = LdapListField(db_column='cotiz', object_classes=['reselPerson'])
     end_cotiz = LdapDatetimeField(db_column='endinternet', object_classes=['reselPerson'])
@@ -53,9 +55,7 @@ class LdapUser(ldapback.models.LdapModel):
 
     # enstPerson
     promo = LdapCharField(db_column='promo', object_classes=['enstbPerson'])
-    mail = LdapCharField(db_column='mail', object_classes=['enstbPerson'])
     anneeScolaire = LdapCharField(db_column='anneeScolaire', object_classes=['enstbPerson'])
-    mobile = LdapCharField(db_column='telephoneNumber', object_classes=['enstbPerson'])
     option = LdapCharField(db_column='option', object_classes=['enstbPerson'])
     formation = LdapCharField(db_column='formation', object_classes=['enstbPerson'])
     photo_file = LdapCharField(db_column='photoFile', object_classes=['enstbPerson'])
@@ -82,6 +82,9 @@ class LdapUser(ldapback.models.LdapModel):
     home_directory = LdapCharField(db_column='homeDirectory', object_classes=['mailPerson'])
     mail_routing_address = LdapCharField(db_column='mailRoutingAddress', object_classes=['mailPerson'])
     mail_del_date = LdapDatetimeField(db_column='mailDelDate', object_classes=['mailPerson'])
+
+    # maiselEmployee
+    employee_type = LdapCharField(db_column='maiselEmployeeType', object_classes=['maiselEmployee'])
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__,

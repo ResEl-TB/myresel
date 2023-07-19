@@ -4,10 +4,7 @@ from django.views.generic import View
 from django.utils import timezone
 from django.utils.decorators import method_decorator
 
-from django.db.models import Q
-
 from campus.models.rooms_models import RoomBooking
-from campus.models.clubs_models import StudentOrganisation
 from campus.models.mails_models import Mail
 
 from campus.whoswho.views import ListBirthdays

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from unittest import skip
 
+from datetime import date, datetime
 import pytz
 from django.utils import timezone
-from datetime import date, datetime
 
 from django.core import mail
 from django.test import TestCase
@@ -30,6 +30,7 @@ class CreateCampusMail(TestCase):
         user.mail = "loic.carr@resel.fr"
         user.promo = 2016
         user.nt_password = user.user_password
+        user.inscr_date = datetime.now().astimezone()
         user.save()
 
         self.client.login(username="lcarr", password="blah")
@@ -991,6 +992,7 @@ class AEAjaxTestCase(TestCase):
         user.n_adherent = "16156"
         user.dates_membre = ["20160901-20170831"]
         user.nt_password = user.user_password
+        user.inscr_date = datetime.now().astimezone()
         user.save()
 
         user = create_full_user(uid="jbvallad", pwd="blabla")
@@ -1220,7 +1222,7 @@ class AEAjaxTestCase(TestCase):
             HTTP_X_REQUESTED_WITH='XMLHttpRequest',
             ZONE="Brest-any", HTTP_HOST="10.0.3.94"
         )
-        self.assertTrue('jdoe' in [u['uid'] for u in r.json().get('results', [])]);
+        self.assertTrue('jdoe' in [u['uid'] for u in r.json().get('results', [])])
 
     def testSimpleUserAddition(self):
         try_delete_user("mx")
@@ -1260,7 +1262,7 @@ class AEAjaxTestCase(TestCase):
             'n_adherent': "16156",
         }
         for i in range(len(data.keys())):
-            data[list(data)[i]] = "";
+            data[list(data)[i]] = ""
             r = self.client.post(
                 reverse("campus:ae-admin:add-user"),
                 data,

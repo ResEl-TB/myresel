@@ -42,7 +42,7 @@
         <h2 class="part-title">Offres</h2>
         <div class="row offers">
             <div class="col-md-6 {% if user.is_member %}col-md-offset-3{% else %}col-md-offset-1{% endif %}">
-                <div class="panel panel-primary panel-product">
+                <div class="panel panel-primary panel-product halo halo-big">
                     <div class="panel-heading">{% trans "Accès au ResEl" %}</div>
                     <div class="panel-body">
                         <div class="service-list">
@@ -61,9 +61,9 @@
                         </div>
                         <div class="pay-btn btn-group">
                             <div class="row">
-                                <div class="col-lg-4"><a class="btn btn-info" href="{% url 'tresorerie:pay' one_year.id %}">Je choisis <br />1 an pour {{ one_year.display_price|floatformat }}€</a></div>
-                                <div class="col-lg-4"><a class="btn btn-info" href="{% url 'tresorerie:pay' six_month.id %}">Je choisis <br />6 mois pour {{ six_month.display_price|floatformat }}€</a></div>
-                                <div class="col-lg-4"><a class="btn btn-info" href="{% url 'tresorerie:pay' one_month.id %}">Je choisis <br />1 mois pour {{ one_month.display_price|floatformat }}€</a></div>
+                                <div class="col-lg-4"><a class="btn btn-info halo" href="{% url 'tresorerie:pay' one_year.id %}">Je choisis <br />1 an pour {{ one_year.display_price|floatformat }}€</a></div>
+                                <div class="col-lg-4"><a class="btn btn-info halo" href="{% url 'tresorerie:pay' six_month.id %}">Je choisis <br />6 mois pour {{ six_month.display_price|floatformat }}€</a></div>
+                                <div class="col-lg-4"><a class="btn btn-info halo" href="{% url 'tresorerie:pay' one_month.id %}">Je choisis <br />1 mois pour {{ one_month.display_price|floatformat }}€</a></div>
                             </div>
                         </div>
                     </div>
@@ -71,7 +71,7 @@
             </div>
             {% if user.is_member == False %}
                 <div class="col-md-4">
-                    <div class="panel panel-default panel-product">
+                    <div class="panel panel-default panel-product halo halo-big">
                         <div class="panel-heading">{% trans "Adhésion simple" %}</div>
                         <div class="panel-body">
                             <div class="service-list">
@@ -84,7 +84,7 @@
                             <hr />
                             <div class="price">{{ adhesion.display_price|floatformat }}€ de cotisation à l’association</div>
                             <div class="pay-btn text-center">
-                                <a class="btn btn-info" href="{% url 'tresorerie:pay' adhesion.id %}">Je préfère<br />une adhésion simple</a>
+                                <a class="btn btn-info halo" href="{% url 'tresorerie:pay' adhesion.id %}">Je préfère<br />une adhésion simple</a>
                             </div>
                         </div>
                     </div>
