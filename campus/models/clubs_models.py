@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import ldapback
-from ldapback.models.fields import LdapCharField, LdapListField, LdapCharField, LdapBooleanField
+from ldapback.models.fields import LdapListField, LdapCharField, LdapBooleanField
 from myresel.settings import LDAP_OU_CLUBS
 
 

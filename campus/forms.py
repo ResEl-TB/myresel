@@ -1,3 +1,6 @@
+import datetime
+import re
+
 from django import forms
 from django.conf import settings
 from django.core.validators import MaxLengthValidator
@@ -8,16 +11,13 @@ from django.forms.models import ModelMultipleChoiceField
 from django.utils.translation import ugettext_lazy as _
 from django.db.models import Q
 
+from ldap3.core.exceptions import LDAPException
+
 from campus.models import RoomBooking, Room, RoomAdmin, StudentOrganisation, Mail, Association, ListeCampagne
 from gestion_personnes.models import LdapUser
 from gestion_personnes.forms import PersonnalInfoForm
 
-
-from ldap3.core.exceptions import LDAPException
 from fonctions import ldap
-
-import datetime
-import re
 
 class RoomBookingForm(ModelForm):
     class Meta:
@@ -159,7 +159,7 @@ class AddRoomForm(ModelForm):
         email=self.cleaned_data["mailing_list"]
         if not (re.match(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+', email) or email == ""):
             raise ValidationError(message=_("L'adresse email semble être invalide"), code="Bad MAIL")
-        return(email)
+        return email
 
     def clean_clubs(self):
         clubs = ""
@@ -172,7 +172,7 @@ class AddRoomForm(ModelForm):
                     raise ValidationError(message=_("Le club suivant n'existe pas: %s"%(club,)), code="CLUB DOES NOT EXIST")
                 if not re.match(r'^[a-z0-9-]+', club):
                     raise ValidationError(message=_("Le club suivant n'a pas un nom valide: %s"%(club,)), code="BAD CLUB")
-        return(";".join(clubs))
+        return ";".join(clubs)
 
 
 class DisabledCharField(CharField):
@@ -347,11 +347,11 @@ class ClubManagementForm(Form):
 class ClubEditionForm(ClubManagementForm):
 
     def clean_cn(self):
-        return(self.cleaned_data['cn'].lower())
+        return self.cleaned_data['cn'].lower()
 
     def clean_logo(self):
         logo = self.cleaned_data['logo']
-        return(logo)
+        return logo
     def edit_club(self, pk):
         club = StudentOrganisation.get(cn=pk)
 
@@ -472,8 +472,8 @@ class SearchSomeone(forms.Form):
         # Delete duplicates
         results = []
         for r in unsorted:
-           if r.uid not in [u.uid for u in results]:
-               results.append(r)
+            if r.uid not in [u.uid for u in results]:
+                results.append(r)
         for result in results:
             result.promo = self.int_safe(result.promo)
         results.sort(key=lambda u: u.promo, reverse=True)

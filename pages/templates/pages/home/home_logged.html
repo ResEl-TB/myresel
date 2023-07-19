@@ -2,8 +2,6 @@
 {% load i18n %}
 {% load staticfiles %}
 
-{% block bodyclasses %}logged{% endblock %}
-
 {% block myresel %}
     <style>
         .jumbotron {
@@ -11,7 +9,7 @@
         }
     </style>
     {# TODO: add validate email link (show if user_meta.email_validated == False) #}
-    <div class="home-fragment home-user-management">
+    <div class="home-fragment home-user-management" data-navstyle="invert">
         <div class="container">
             <div class="row">
                 <div class="col-sm-5 col-md-6">
@@ -38,7 +36,7 @@
                 <div class="col-sm-7 col-md-6">
                     <div class="row">
                         {% if is_resel %}
-                        {# In the netwok but not saved #}
+                        {# In the network but not saved #}
                             <div class="hidden-xs col-sm-4 col-md-3 computer-icon">
                             {% if subnet == 'FREE' %}
                                 <span class="fa fa-money"></span>
@@ -77,7 +75,56 @@
                     </div>
                 </div>
                 <div class="col-md-4 col-md-offset-1 hidden-xs hidden-sm"><hr /></div>
-                {% if need_to_pay == 'success' %}
+                {% if employee_type == 'manager' %}
+                    <div class="col-sm-7 col-md-6 payment-block">
+                        <div class="row">
+                            <div class="col-sm-4 col-md-3 hidden-xs col-xs-pull-1 col-lg-pull-0 computer-icon">
+                                <span class="fa fa-fw fa-handshake-o"></span>
+                            </div>
+                            <div class="col-sm-7">
+                                <h3>{% trans "Accès manager" %}</h3>
+                                <div><span class="fa fa-fw fa-circle success"></span> {% trans "Cotisation à l'association offerte" %}</div>
+                                <div>
+                                {% if need_to_pay == 'success' %}
+                                    <span class="fa fa-fw fa-circle success"></span> {% trans "Accès accordé jusqu’au" %} {{ end_fee|date:"j F Y" }}
+                                {% elif need_to_pay == 'warning' %}
+                                    <span class="fa fa-fw fa-circle warning"></span> {% trans "Accès accordé jusqu’au" %} {{ end_fee|date:"j F Y" }}
+                                    <div class="warning">{% trans "Veuillez accéder à votre interface de gestion pour prolonger vos accès." %}</div>
+                                {% else %}
+                                    <span class="fa fa-fw fa-circle danger"></span> {% trans "Accès internet expiré le" %} {{ end_fee|date:"j F Y" }}
+                                    <div class="warning">{% trans "Veuillez accéder à votre interface de gestion pour récupérer vos accès." %}</div>
+                                {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <a href="{% url 'maisel:gestion' %}" class="btn btn-default btn-lg halo">{% trans "Gestion du personnel" %}</a>
+                        </div>
+                    </div>
+                {% elif employee_type == 'staff' %}
+                    <div class="col-sm-7 col-md-6 payment-block">
+                        <div class="row">
+                            <div class="col-sm-4 col-md-3 hidden-xs col-xs-pull-1 col-lg-pull-0 computer-icon">
+                                <span class="fa fa-fw fa-handshake-o"></span>
+                            </div>
+                            <div class="col-sm-7">
+                                <h3>{% trans "Accès agent" %}</h3>
+                                <div><span class="fa fa-fw fa-circle success"></span> {% trans "Cotisation à l’association offerte" %}</div>
+                                <div>
+                                {% if need_to_pay == 'success' %}
+                                    <span class="fa fa-fw fa-circle success"></span> {% trans "Accès accordé jusqu’au" %} {{ end_fee|date:"j F Y" }}
+                                {% elif need_to_pay == 'warning' %}
+                                    <span class="fa fa-fw fa-circle warning"></span> {% trans "Accès accordé jusqu’au" %} {{ end_fee|date:"j F Y" }}
+                                    <div class="warning">{% trans "Veuillez contacter votre gestionnaire pour prolonger vos accès." %}</div>
+                                {% else %}
+                                    <span class="fa fa-fw fa-circle danger"></span> {% trans "Accès internet expiré le" %} {{ end_fee|date:"j F Y" }}
+                                    <div class="warning">{% trans "Veuillez contacter votre gestionnaire pour récupérer vos accès." %}</div>
+                                {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% elif need_to_pay == 'success' %}
                     <div class="col-sm-7 col-md-6 payment-block">
                         <div class="row">
                             <div class="col-sm-4 col-md-3 hidden-xs computer-icon">
@@ -94,13 +141,13 @@
                             </div>
                         </div>
                         <div class="text-center">
-                            <a href="{% url 'tresorerie:historique' %}" class="btn btn-default btn-lg">{%  trans "Consulter mes transactions"%}</a>
+                            <a href="{% url 'tresorerie:historique' %}" class="btn btn-default btn-lg halo">{%  trans "Consulter mes transactions"%}</a>
                         </div>
                     </div>
                 {% elif need_to_pay == 'warning' or need_to_pay == 'danger' %}
-                  {% if need_to_pay == 'warning' %}
                     <div class="col-sm-7 col-md-6">
                         <div class="row">
+                        {% if need_to_pay == 'warning' %}
                             <div class="col-sm-4 col-md-3 computer-icon hidden-xs warning"><span class="fa fa-fw fa-exclamation hidden-xs"></span></div>
                             <div class="col-sm-7">
                                 <h3>{% trans "Attention abonnement" %}</h3>
@@ -110,9 +157,7 @@
                                     <div class=""><span class="fa fa-fw fa-circle danger" ></span> {% trans "Cotisation à l'association non payée" %}</div>
                                 {% endif %}
                                 <div><span class="fa fa-fw fa-circle warning"></span> {% trans "Internet jusqu'au" %} {{ end_fee|date:"j F Y" }}</div>
-                  {% else %}
-                    <div class="col-sm-7 col-md-6">
-                        <div class="row">
+                        {% else %}
                             <div class="col-sm-4 col-md-3 computer-icon hidden-xs danger"><span class="fa fa-times"></span></div>
                             <div class="col-sm-7">
                                 <h3>{% trans "Paiement non à jour" %}</h3>
@@ -122,23 +167,23 @@
                                     <div class=""><span class="fa fa-fw fa-circle danger" ></span> {% trans "Cotisation à l'association non payée" %}</div>
                                 {% endif %}
                                 <div><span class="fa fa-fw fa-circle danger"></span> {% trans "Accès internet expiré le" %} {{ end_fee|date:"j F Y" }}</div>
-                                                            <div class="warning">{% trans "Votre abonnement au ResEl a expiré, pour pouvoir à nouveau utiliser nos services vous devez régulariser votre situation." %}</div>
-                  {% endif %}
+                                <div class="warning">{% trans "Votre abonnement au ResEl a expiré, pour pouvoir à nouveau utiliser nos services vous devez régulariser votre situation." %}</div>
+                        {% endif %}
                             </div>
-                            <div class="text-center">
-                                <div class="pay-btn-container"
-                                {% if subnet == 'REGN' %}
-                                    data-trigger="hover" data-placement="top" data-toggle="popover" data-content="{% trans "Veuillez vous connecter au réseau ResEl Secure pour procéder au paiement" %}"
-                                {% elif subnet == 'EXPN' %}
-                                    data-trigger="hover" data-placement="top" data-toggle="popover" data-content="{% trans "Le paiement nécessite une connexion à Internet active. Veuillez utiliser votre 4G ou Eduroam pour procéder au paiement." %}"
-                                {% endif %}>
-                                    <a href="{% url 'tresorerie:home' %}" class="btn btn-default btn-lg
-                                    {% if subnet == 'REGN' or subnet == 'EXPN' %}
-                                        disabled
-                                    {% endif %}">
-                                        {% trans "Effectuer un paiement"%}
-                                    </a>
-                                </div>
+                        </div>
+                        <div class="text-center">
+                            <div class="pay-btn-container"
+                            {% if subnet == 'REGN' %}
+                                data-trigger="hover" data-placement="top" data-toggle="popover" data-content="{% trans "Veuillez vous connecter au réseau ResEl Secure ou ResEl Next pour procéder au paiement" %}"
+                            {% elif subnet == 'EXPN' %}
+                                data-trigger="hover" data-placement="top" data-toggle="popover" data-content="{% trans "Le paiement nécessite une connexion à Internet active. Veuillez utiliser votre 4G ou Eduroam pour procéder au paiement." %}"
+                            {% endif %}>
+                                <a href="{% url 'tresorerie:home' %}" class="btn btn-default btn-lg
+                                {% if subnet == 'REGN' or subnet == 'EXPN' %}
+                                    disabled
+                                {% endif %} halo">
+                                    {% trans "Effectuer un paiement"%}
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -159,6 +204,7 @@
 {% endblock %}
 
 {% block javascript %}
+{{ block.super }}
     <script>
         $(function () {
             $('[data-toggle="popover"]').popover()

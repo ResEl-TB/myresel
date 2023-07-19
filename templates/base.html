@@ -9,14 +9,14 @@
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
     <link rel="icon" type="image/png" sizes="96x96" href="{% static "images/icons/favicon-96x96.png" %}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static "images/icons/favicon-32x32.png" %}">
     <title>Le ResEl | {% block titre %}{% endblock %}</title>
 
     {# Bootstrap #}
-    <link href="{% static 'boostrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 
     {# Custom Fonts #}
     <link href="{% static 'font-awesome/css/font-awesome.min.css' %}" rel="stylesheet" type="text/css">
@@ -34,33 +34,23 @@
 
 </head>
 
-<body class="{% block bodyclasses %}{% endblock %}">
+<body>
 
 <!-- Navigation -->
 <nav class="navbar navbar-main navbar-static-top" role="navigation">
     <div class="container">
-        <div class="nav navbar-left navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="menu-text">Menu</span>
-                <span class="menu-bar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </span>
-            </button>
+        <div id="navbar" class="navbar-collapse collapse">
             <a class="navbar-brand" href="{% url 'home' %}">
               <img style="height: 36px"
                    src="{% static 'images/logo_resel.png' %}" alt="{% trans "Logo ResEl" %}">
             </a>
-        </div>
-        <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-top-links navbar-left navbar-collapse">
             {% if association_category %}
             <li class="dropdown">
                 <a href="{% url 'wiki:show-category' slug='lassociation' %}" class="dropdown-toggle" data-toggle="dropdown"><i class="fa {{ association_category.fa_icon_name }} fa-fw" aria-hidden="true"></i> <span class="hidden-sm">{{ association_category.name }}</span></a>
-                <ul class="dropdown-menu">
-                    {% for stuff in association_category.get_articles_and_links_to_display %}
+                <div class="dropdown-menu">
+                    <ul>
+                      {% for stuff in association_category.get_articles_and_links_to_display %}
                       <li>
                         <a href="{{ stuff.get_absolute_url }}" class="container dropdown-link">
                           <div class="row">
@@ -74,39 +64,42 @@
                           </div>
                         </a>
                       </li>
-                    {% empty %}
-                    <li>
-                        <a>{% trans "Aucun article" %}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
+                      {% empty %}
+                      <li>
+                          <a>{% trans "Aucun article" %}</a>
+                      </li>
+                      {% endfor %}
+                    </ul>
+                </div>
             </li>
             {% endif %}
 
             {% if services_category %}
             <li class="dropdown">
                 <a href="{% url 'wiki:show-category' slug='services' %}" class="dropdown-toggle" data-toggle="dropdown"><i class="fa {{ services_category.fa_icon_name }} fa-fw" aria-hidden="true"></i> <span class="hidden-sm">{{ services_category.name }}</span></a>
-                <ul class="dropdown-menu">
-                    {% for stuff in services_category.get_articles_and_links_to_display %}
-                    <li>
-                      <a href="{{ stuff.get_absolute_url }}" class="container dropdown-link">
-                        <div class="row">
-                          <div class="col-xs-2 icon">
-                            <span class="glyphicon {{ stuff.glyphicon_name }}"></span>
-                          </div>
-                          <div class="col-xs-10">
-                            <div class="link-name">{{ stuff.name }}</div>
-                            <div class="link-description">{{ stuff.description }}</div>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    {% empty %}
-                    <li>
-                        <a>{% trans "Aucun article" %}</a>
-                    </li>
-                    {% endfor %}
-                </ul>
+                <div class="dropdown-menu">
+                    <ul>
+                        {% for stuff in services_category.get_articles_and_links_to_display %}
+                        <li>
+                          <a href="{{ stuff.get_absolute_url }}" class="container dropdown-link">
+                            <div class="row">
+                              <div class="col-xs-2 icon">
+                                <span class="glyphicon {{ stuff.glyphicon_name }}"></span>
+                              </div>
+                              <div class="col-xs-10">
+                                <div class="link-name">{{ stuff.name }}</div>
+                                <div class="link-description">{{ stuff.description }}</div>
+                              </div>
+                            </div>
+                          </a>
+                        </li>
+                        {% empty %}
+                        <li>
+                            <a>{% trans "Aucun article" %}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </li>
             {% endif %}
 
@@ -127,7 +120,8 @@
           {% if request.user.is_authenticated %}
               <li class="dropdown">
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user fa-fw" aria-hidden="true"></i> <span>{{ ldapuser.first_name }} <span class="hidden-sm">({{ ldapuser.uid }})</span> <span class="fa fa-caret-down"></span></span></a>
-                  <ul class="dropdown-menu">
+                  <div class="dropdown-menu">
+                    <ul>
                       <li>
                           <a href="{% url 'gestion-personnes:personal-infos' %}"><i class="fa fa-sliders fa-fw" ></i> {% trans "Paramètres" %}</a>
                       </li>
@@ -144,7 +138,8 @@
                       <li>
                           <a href="/logout"><i class="fa fa-sign-out fa-fw"></i> {% trans "Déconnexion" %}</a>
                       </li>
-                  </ul>
+                    </ul>
+                  </div>
               </li>
 
               {% else %}
@@ -154,16 +149,20 @@
             {% endif %}
             <li class="dropdown no-logo">
                 <a href="" class="dropdown-toggle" data-toggle="dropdown"><span>{% get_current_language as LANGUAGE_CODE %}{{ LANGUAGE_CODE | upper }} <span class="fa fa-caret-down"></span></span></a>
-                <ul class="dropdown-menu">
+                <div class="dropdown-menu">
                     {% get_available_languages as LANGUAGES %}
                     {% get_language_info_list for LANGUAGES as languages %}
                     <form action="{% url 'set_language' %}" method="post">
                         <input name="next" type="hidden" value="{{ request.path }}"/>
-                        {% for language in languages %}
-                        <button class="btn btn-link" name="language" type="submit" value="{{ language.code }}">{{ language.name_local|title }}</button>
-                        {% endfor %}
+                        <ul>
+                            {% for language in languages %}
+                            <li>
+                                <button class="btn btn-link" name="language" type="submit" value="{{ language.code }}">{{ language.name_local|title }}</button>
+                            </li>
+                            {% endfor %}
+                        </ul>
                     </form>
-                </ul>
+                </div>
             </li>
           <li class="status no-text">
             {% cache 60 i_network_status %}
@@ -180,15 +179,36 @@
           </li>
         </ul>
         </div>
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="menu-text">Menu</span>
+            <span class="menu-bar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </span>
+        </button>
     </div><!-- /.container -->
 </nav>
 {% if has_paid_cotiz == "danger" %}
     <div class="container-fluid">
-        <div class="alert alert-danger" role="alert" style="text-align: center"><strong>{% trans "Votre accès internet a expiré :" %}</strong> {% trans "Afin de bénéficier des services du ResEl, vous devez " %} <a style="color: #0f0f0f" href="{% url "tresorerie:home" %}"><strong>{% trans "régulariser votre situation" %}</strong></a>{% trans " !" %}</div>
+    {% if ldapuser.employee_type == '' %}
+        <div class="alert alert-danger" role="alert" style="text-align: center"><strong>{% trans "Votre accès internet a expiré." %}</strong> {% trans "Afin de bénéficier des services du ResEl, vous devez " %} <a style="color: #0f0f0f" href="{% url "tresorerie:home" %}"><strong>{% trans "régulariser votre situation" %}</strong></a>{% trans " !" %}</div>
+    {% elif ldapuser.employee_type == 'manager' %}
+        <div class="alert alert-danger" role="alert" style="text-align: center"><strong>{% trans "Votre accès internet a expiré." %}</strong> {% trans "Veuillez accéder à " %} <a style="color: #0f0f0f" href="{% url "maisel:gestion" %}"<strong>{% trans "votre interface de gestion" %}</strong></a>.</div>
+    {% else %}
+        <div class="alert alert-danger" role="alert" style="text-align: center"><strong>{% trans "Votre accès internet a expiré." %}</strong> {% trans "Veuillez contacter votre gestionnaire." %}</div>
+    {% endif %}
     </div>
 {% elif has_paid_cotiz == "warning" %}
     <div class="container-fluid">
-        <div class="alert alert-warning" role="alert" style="text-align: center"><strong>{% trans "Votre accès internet va bientôt expirer :" %}</strong> {% trans "Afin de continuer à bénéficier des services du ResEl, vous devez " %} <a style="color: #0f0f0f" href="{% url "tresorerie:home" %}"><strong>{% trans "régulariser votre situation" %}</strong></a>{% trans " !" %}</div>
+    {% if ldapuser.employee_type == '' %}
+        <div class="alert alert-warning" role="alert" style="text-align: center"><strong>{% trans "Votre accès internet va bientôt expirer." %}</strong> {% trans "Afin de continuer à bénéficier des services du ResEl, vous devez " %} <a style="color: #0f0f0f" href="{% url "tresorerie:home" %}"><strong>{% trans "régulariser votre situation" %}</strong></a>{% trans " !" %}</div>
+    {% elif ldapuser.employee_type == 'manager' %}
+        <div class="alert alert-warning" role="alert" style="text-align: center"><strong>{% trans "Votre accès internet va bientôt expirer." %}</strong> {% trans "Veuillez accéder à " %} <a style="color: #0f0f0f" href="{% url "maisel:gestion" %}"<strong>{% trans "votre interface de gestion" %}</strong></a>.</div>
+    {% else %}
+        <div class="alert alert-warning" role="alert" style="text-align: center"><strong>{% trans "Votre accès internet va bientôt expirer." %}</strong> {% trans "Veuillez contacter votre gestionnaire." %}</div>
+    {% endif %}
     </div>
 {% endif %}
 {% if messages %}
@@ -224,7 +244,7 @@
     {% block content %}{% endblock %}
 </div>
 
-<footer class="footer">
+<footer class="footer" data-navstyle="invert">
     <!-- Container for setting locale language -->
     <div class="container text-center">
         <div class="row">
@@ -276,10 +296,72 @@
 <script src="{% static 'jquery/jquery.min.js' %}"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="{% static 'boostrap/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
 
 <!-- Custom Theme JavaScript -->
 {#    <script src="{% static 'js/base.js' %}"></script>#}
+
+<script>
+document.addEventListener('scroll', () => {
+  if (window.scrollY)
+    document.body.classList.add('scrolled');
+  else
+    document.body.classList.remove('scrolled');
+  if (window.scrollY <= 50) {
+    document.body.classList.remove('inverted');
+    document.body.classList.remove('lighter');
+    document.body.classList.remove('darker');
+  }
+}, { passive: true });
+
+const observer = new IntersectionObserver((entries, observer) => { 
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      if (entry.target.hasAttribute('data-navstyle')) {
+        switch (entry.target.dataset.navstyle) {
+          case 'invert':
+            document.body.classList.add('inverted');
+            document.body.classList.remove('lighter');
+            document.body.classList.remove('darker');
+            break;
+          case 'lighten':
+            document.body.classList.remove('inverted');
+            document.body.classList.add('lighter');
+            document.body.classList.remove('darker');
+            break;
+          case 'darken':
+            document.body.classList.remove('inverted');
+            document.body.classList.remove('lighter');
+            document.body.classList.add('darker');
+            break;
+          default:
+            document.body.classList.remove('inverted');
+            document.body.classList.remove('lighter');
+            document.body.classList.remove('darker');
+        }
+      }
+      else {
+        document.body.classList.remove('inverted');
+        document.body.classList.remove('lighter');
+        document.body.classList.remove('darker');
+      }
+    }
+  });
+}, {rootMargin: "0px 0px -100% 0px"});
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('#page-wrapper > *, .container-fluid, footer').forEach(e => observer.observe(e));
+  document.querySelectorAll('.halo').forEach(e => e.addEventListener('mousemove', ev => {
+    const target = ev.currentTarget;
+    const rect = target.getBoundingClientRect();
+    const x = ev.clientX - rect.x - rect.width/2;
+    const y = ev.clientY - rect.y - rect.height/2;
+    target.style.setProperty('--x', x);
+    target.style.setProperty('--y', y);
+    target.style.setProperty('--d', Math.hypot(x, y));
+  }));
+});
+</script>
 
 <!-- Custom Javascript -->
 {% block javascript %}{% endblock %}

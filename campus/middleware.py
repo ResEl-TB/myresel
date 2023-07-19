@@ -6,7 +6,7 @@ from django.urls import resolve
 
 from campus.models import StudentOrganisation, RoomAdmin, Room
 
-class RoomAdminMiddleware(object):
+class RoomAdminMiddleware:
     """
     Check if user is a RoomAdmin, and updates his credentials accordingly
     """

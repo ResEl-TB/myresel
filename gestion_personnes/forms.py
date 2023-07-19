@@ -17,12 +17,17 @@ from gestion_personnes.models import LdapUser, LdapOldUser, UserMetaData
 # TODO : merge personnal info form and Inscription form
 
 
+class ToggleSelect(forms.RadioSelect):
+    template_name = 'gestion_personnes/toggle.html'
+
+
 class InvalidUID(Exception):
     pass
 
 
 class PersonnalInfoForm(forms.Form):
-    CAMPUS = [('Brest', "Brest"), ('Rennes', 'Rennes'), ('None', _('Je n\'habite pas à la Maisel'))]
+    CAMPUS = [('Brest', "Brest"), ('Rennes', 'Rennes'), ('Nantes', 'Nantes'),
+              ('None', _('Je n\'habite pas à la Maisel'))]
     BUILDINGS_BREST = [('I%d' % i, 'I%d' % i) for i in range(1, 13)]
     BUILDINGS_RENNES = [('S1', 'Studios'), ('C1', 'Chambres')]
 
@@ -31,10 +36,8 @@ class PersonnalInfoForm(forms.Form):
     BUILDINGS += BUILDINGS_RENNES
 
     FORMATIONS = [
-        (0, _('Indiquez votre formation')),
         ('FIG', _('Ingénieur généraliste (FIG/FISE)')),
         ('FIP', _('Ingénieur par alternance (FIP)')),
-        ('Master', _('Master spécialisé')),
         ('Autre', _('Autre'))
     ]
 
@@ -115,7 +118,7 @@ class PersonnalInfoForm(forms.Form):
         address = cleaned_data.get("address")
         room = cleaned_data.get("room")
 
-        if (campus == "Brest" or campus == "Rennes") and room is None:
+        if campus in ['Brest', 'Rennes', 'Nantes'] and room is None:
             self.add_error("room", _("Ce champ est obligatoire"))
         if campus == "Brest" and building not in [a[0] for a in self.BUILDINGS_BREST]:
             self.add_error('building', _("Veuillez choisir un bâtiment du campus de Brest"))
@@ -126,19 +129,20 @@ class PersonnalInfoForm(forms.Form):
 
 
 class InscriptionForm(forms.Form):
-    CAMPUS = [('Brest', "Brest"), ('Rennes', 'Rennes'), ('None', _('Je n\'habite pas à la Maisel'))]
+    CAMPUS = [('Brest', "Brest"), ('Rennes', 'Rennes'), ('Nantes', 'Nantes'),
+              ('None', _('Je n\'habite pas à la Maisel'))]
     BUILDINGS_BREST = [('I%d' % i, 'I%d' % i) for i in range(1, 13)]
     BUILDINGS_RENNES = [('S1', 'Studios'), ('C1', 'Chambres')]
+    BUILDINGS_NANTES = []
 
-    BUILDINGS = [(0, _("Sélectionnez un bâtiment"))]
-    BUILDINGS += BUILDINGS_BREST
-    BUILDINGS += BUILDINGS_RENNES
+    BUILDINGS = BUILDINGS_BREST + BUILDINGS_RENNES + BUILDINGS_NANTES
+
+    CATEGORIES = [('student', _('Étudiant(e)')), ('employee', _('Personnel IMT Atlantique')),
+                  ('maisel', _('Employé(e) Maisel/MDE')), ('other', _('Autre'))]
 
     FORMATIONS = [
-        (0, _('Indiquez votre formation')),
-        ('FIG', _('Ingénieur généraliste (FIG/FISE)')),
-        ('FIP', _('Ingénieur par alternance (FIP)')),
-        ('Master', _('Master spécialisé')),
+        ('FIG', _('Généraliste (FISE/FIG)')),
+        ('FIP', _('Par alternance (FISA/FIP/FIL/FIT)')),
         ('Autre', _('Autre'))
     ]
 
@@ -158,11 +162,15 @@ class InscriptionForm(forms.Form):
         validators=[MaxLengthValidator(50)],
     )
 
+    category = forms.ChoiceField(
+        choices=CATEGORIES,
+        widget=ToggleSelect()
+    )
+
     formation = forms.ChoiceField(
         choices=FORMATIONS,
-        widget=forms.Select(attrs={
-            'class': 'form-control',
-        })
+        widget=ToggleSelect(),
+        required=False,
     )
 
     email = forms.EmailField(
@@ -186,7 +194,8 @@ class InscriptionForm(forms.Form):
             'class': 'form-control',
             'placeholder': _("Choisissez un mot de passe sécurisé"),
         }),
-        validators=[MinLengthValidator(7),MaxLengthValidator(25)]
+        validators=[MinLengthValidator(10),MaxLengthValidator(63)]
+        # 63 -> Longueur maximum sur certaines implémentations
     )
 
     password_verification = forms.CharField(
@@ -202,7 +211,7 @@ class InscriptionForm(forms.Form):
             'class': 'form-control',
             'placeholder': _("Ville de naissance"),
         }),
-        validators=[MaxLengthValidator(50)],
+        validators=[MaxLengthValidator(60)],
     )
 
     birth_country = forms.CharField(
@@ -223,10 +232,7 @@ class InscriptionForm(forms.Form):
 
     campus = forms.ChoiceField(
         choices=CAMPUS,
-        widget=forms.Select(attrs={
-            'class': 'form-control',
-            'placeholder': _("Campus"),
-        })
+        widget=ToggleSelect()
     )
 
     building = forms.ChoiceField(
@@ -235,6 +241,7 @@ class InscriptionForm(forms.Form):
             'class': 'form-control',
             'placeholder': _("Bâtiment"),
         }),
+        required=False,
     )
 
     room = forms.IntegerField(
@@ -273,40 +280,40 @@ class InscriptionForm(forms.Form):
     def clean_last_name(self):
         last_name = self.cleaned_data['last_name']
         if not re.match(r'\w+.*', last_name):
-            raise ValidationError(message=_("Nom de famille incorrect"), code="WRONG LASTNAME")
+            raise ValidationError(message=_("Nom de famille incorrect"), code="WRONG_LASTNAME")
         return last_name
 
     def clean_first_name(self):
         first_name = self.cleaned_data['first_name']
         if not re.match(r'\w+.*', first_name) or first_name.startswith("_"):
-            raise ValidationError(message=_("Prénom incorrect"), code="WRONG FIRSTNAME")
+            raise ValidationError(message=_("Prénom incorrect"), code="WRONG_FIRSTNAME")
         return first_name
 
     def clean_campus(self):
         campus = self.cleaned_data['campus']
-
-        if campus == '0':
-            raise ValidationError(message=_("Veuillez sélectionner un campus"), code="NO CAMPUS")
+        if campus not in [a[0] for a in self.CAMPUS]:
+            raise ValidationError(message=_("Veuillez sélectionner un campus"), code="NO_CAMPUS")
         return campus
 
-    def clean_formation(self):
-        formation = self.cleaned_data['formation']
-
-        if formation == '0':
-            raise ValidationError(message=_("Veuillez sélectionner une formation"), code="NO FORMATION")
-        return formation
+    def clean_category(self):
+        category = self.cleaned_data['category']
+        if category == "other":
+            raise ValidationError(message=_("Vous n’êtes pas éligible à un compte ResEl"), code="NOT_ELIGIBLE")
+        if category not in [a[0] for a in self.CATEGORIES]:
+            raise ValidationError(message=_("Veuillez sélectionner une catégorie valide"), code="NO_CATEGORY")
+        return category
 
     def clean_email(self):
         email = self.cleaned_data['email']
         # return email # TODO: debug
         if len(LdapUser.filter(mail=email)) > 0:
-            raise ValidationError(message=_("L'addresse email est déjà associée à un compte"), code="USED EMAIL")
+            raise ValidationError(message=_("L'addresse email est déjà associée à un compte"), code="USED_EMAIL")
         return email
 
     def clean_birth_date(self):
         birth_date = self.cleaned_data['birth_date']
         if not re.match(r'(\d{2}|XX)/(\d{2}|XX)/(\d{4}|XXXX)', birth_date):
-            raise ValidationError(message=_("Date de naissance incorrecte"), code="WRONG BIRTHDATE")
+            raise ValidationError(message=_("Date de naissance incorrecte"), code="WRONG_BIRTHDATE")
         return birth_date
 
     def clean(self):
@@ -315,15 +322,23 @@ class InscriptionForm(forms.Form):
         building = cleaned_data.get("building")
         address = cleaned_data.get("address")
         room = cleaned_data.get("room")
+        formation = cleaned_data.get("formation")
+        category = cleaned_data.get("category")
 
-        if (campus == "Brest" or campus == "Rennes") and room is None:
-            self.add_error("room", _("Ce champ est obligatoire"))
-        if campus == "Brest" and building not in [a[0] for a in self.BUILDINGS_BREST]:
-            self.add_error('building', _("Veuillez choisir un bâtiment du campus de Brest"))
-        if campus == "Rennes" and building not in [a[0] for a in self.BUILDINGS_RENNES]:
-            self.add_error('building', _("Veuillez choisir un bâtiment du campus de Rennes"))
-        if campus == "None" and address == "":
+        if (campus in ["Brest", "Rennes", "Nantes"]):
+            if not room:
+                self.add_error("room", _("Ce champ est obligatoire"))
+            if campus == "Brest" and building not in [a[0] for a in self.BUILDINGS_BREST]:
+                self.add_error('building', _("Veuillez choisir un bâtiment du campus de Brest"))
+            if campus == "Rennes" and building not in [a[0] for a in self.BUILDINGS_RENNES]:
+                self.add_error('building', _("Veuillez choisir un bâtiment du campus de Rennes"))
+            if campus == "Nantes" and building not in [a[0] for a in self.BUILDINGS_NANTES]:
+                self.add_error('building', _("Veuillez choisir un bâtiment du campus de Rennes"))
+        elif not address:
             self.add_error('address', _("Veuillez saisir votre addresse postale"))
+
+        if category == "student" and formation not in [a[0] for a in self.FORMATIONS]:
+            self.add_error('formation', _("Veuillez choisir une formation"))
 
         password1 = cleaned_data.get('password')
         password2 = cleaned_data.get('password_verification')
@@ -376,6 +391,7 @@ class InscriptionForm(forms.Form):
         """
         user = LdapUser()
 
+        # genericPerson
         user.uid = self.get_free_uid(self.cleaned_data["first_name"], self.cleaned_data["last_name"])  # TODO: get that in school ldap
         user.first_name = self.cleaned_data["first_name"]
         user.last_name = self.cleaned_data["last_name"]
@@ -383,26 +399,34 @@ class InscriptionForm(forms.Form):
         user.user_password = self.cleaned_data["password"]
         user.nt_password = self.cleaned_data["password"]
 
+        # reselPerson
+        user.mail = self.cleaned_data["email"]
+        user.mobile = str(self.cleaned_data["phone"])
         user.cotiz = ['NONE' + str(current_year())]  # requirement for the admin interface
         user.campus = self.cleaned_data["campus"]
-
-        user.building = self.cleaned_data["building"]
-        user.room_number = str(self.cleaned_data["room"])
-        if self.cleaned_data["address"]:
-            user.postal_address = self.cleaned_data["address"]
-        else:
-            user.postal_address = user.generate_address(user.campus, user.building, user.room_number)
-
-        user.promo = str(current_year() + 3)  # TODO: wtf???
-        user.mail = self.cleaned_data["email"]
-        user.anneeScolaire = ""  # TODO: get that in school ldap
-        user.formation = self.cleaned_data["formation"]
-        user.mobile = str(self.cleaned_data["phone"])  # TODO: Phone field not mandatory
-        user.option = self.cleaned_data["campus"]
-
         user.birth_place = self.cleaned_data["birth_place"]
         user.birth_country = self.cleaned_data["birth_country"]
         user.freeform_birth_date = self.cleaned_data["birth_date"]
+
+        address = self.cleaned_data["address"]
+        if address:
+            user.postal_address = address
+        else:
+            # maiselPerson
+            user.building = self.cleaned_data["building"]
+            user.room_number = str(self.cleaned_data["room"])
+            user.postal_address = user.generate_address(user.campus, user.building, user.room_number)
+
+        category = self.cleaned_data["category"]
+        if category == "student":
+            # enstPerson
+            user.promo = str(current_year() + 3)  # TODO: wtf???
+            user.anneeScolaire = ""  # TODO: get that in school ldap
+            user.option = self.cleaned_data["campus"]
+            user.formation = self.cleaned_data["formation"]
+        elif category == "maisel":
+            user.employee_type = "staff"
+
         return user
 
 

@@ -42,7 +42,7 @@ class RoomAdmin(admin.ModelAdmin):
         """
         List all the clubs allowed to access the Room
         """
-        
+
         html = '<p>'
         for club in room.get_clubs():
             html += '%s<br>' % club
@@ -52,7 +52,7 @@ class RoomAdmin(admin.ModelAdmin):
 
 class RoomAdministratorAdmin(admin.ModelAdmin):
     """
-    Admin configuration for RoomAdmin model 
+    Admin configuration for RoomAdmin model
     """
     list_display = ('user', 'list_rooms')
 

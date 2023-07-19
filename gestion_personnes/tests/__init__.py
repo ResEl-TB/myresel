@@ -26,7 +26,7 @@ def try_delete_old_user(uid):
         return False
 
 
-def create_full_user(uid="amanoury", pwd="blahblah", email="alexandre.manoury@telecom-bretagne.eu"):
+def create_full_user(uid="amanoury", pwd="BlahBlahBlah", email="alexandre.manoury@telecom-bretagne.eu"):
     now = datetime.now().astimezone()
     now = now.replace(microsecond=0)
     user = LdapUser()
@@ -36,6 +36,8 @@ def create_full_user(uid="amanoury", pwd="blahblah", email="alexandre.manoury@te
     user.user_password = pwd
     user.nt_password = pwd
     user.display_name = "Alexandre Manoury"
+    user.category = "student"
+    user.employee_type = ""
 
     user.inscr_date = now
     user.cotiz = ["2016"]

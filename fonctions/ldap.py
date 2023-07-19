@@ -4,11 +4,9 @@ import logging
 from django.conf import settings
 from django.template.defaultfilters import slugify
 from django_python3_ldap.ldap import Connection as UserConnection
-from ldap3 import Server, Connection, MODIFY_REPLACE, ALL_ATTRIBUTES
+from ldap3 import Server, Connection
 
-from fonctions import generic
 from .generic import hash_passwd
-from .network import update_all
 
 logger = logging.getLogger("default")
 
@@ -155,7 +153,7 @@ def get_free_alias(name, prefix='pc'):
     return alias
 
 
-def create_admin(uid='lcarr', pwd="blahblah"):
+def create_admin(uid='lcarr', pwd="BlahBlahBlah"):
     """
     Create a new administrator, should be used for tests only
     :param uid:

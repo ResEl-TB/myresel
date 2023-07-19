@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
+import calendar, datetime, json, copy, pytz
 from dateutil.relativedelta import relativedelta
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
@@ -11,10 +13,8 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.db.models import Q
 from django.http import Http404, JsonResponse
-
-import calendar, datetime, json, copy, pytz
-
 from django.views.generic import DetailView, FormView, View, ListView, DeleteView, UpdateView
+
 from myresel.settings import TIME_ZONE
 
 from campus.forms import RoomBookingForm, AddRoomForm
