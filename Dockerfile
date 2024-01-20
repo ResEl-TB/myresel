@@ -1,4 +1,4 @@
-FROM debian:11
+FROM debian:10
 ARG LDAPPASSWD
 
 ARG DEBIAN_FRONTEND=noninteractive
