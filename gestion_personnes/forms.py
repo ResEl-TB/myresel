@@ -30,10 +30,11 @@ class PersonnalInfoForm(forms.Form):
               ('None', _('Je n\'habite pas à la Maisel'))]
     BUILDINGS_BREST = [('I%d' % i, 'I%d' % i) for i in range(1, 13)]
     BUILDINGS_RENNES = [('S1', 'Studios'), ('C1', 'Chambres')]
+    BUILDINGS_NANTES = [(letter, letter) for letter in ['N', 'P', 'Q', 'R', 'S', 'T']]
+    BUILDINGS_NANTES += [('PC', 'Pitre Chevalier')]
 
     BUILDINGS = [(0, _("Sélectionnez un bâtiment"))]
-    BUILDINGS += BUILDINGS_BREST
-    BUILDINGS += BUILDINGS_RENNES
+    BUILDINGS += BUILDINGS_BREST + BUILDINGS_RENNES + BUILDINGS_NANTES
 
     FORMATIONS = [
         ('FIG', _('Ingénieur généraliste (FIG/FISE)')),
@@ -133,7 +134,8 @@ class InscriptionForm(forms.Form):
               ('None', _('Je n\'habite pas à la Maisel'))]
     BUILDINGS_BREST = [('I%d' % i, 'I%d' % i) for i in range(1, 13)]
     BUILDINGS_RENNES = [('S1', 'Studios'), ('C1', 'Chambres')]
-    BUILDINGS_NANTES = []
+    BUILDINGS_NANTES = [(letter, letter) for letter in ['N', 'P', 'Q', 'R', 'S', 'T']]
+    BUILDINGS_NANTES += [('PC', 'Pitre Chevalier')]
 
     BUILDINGS = BUILDINGS_BREST + BUILDINGS_RENNES + BUILDINGS_NANTES
 

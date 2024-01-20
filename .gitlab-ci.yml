@@ -30,12 +30,35 @@ variables:
 
  DEBIAN_FRONTEND: noninteractive
 
+image: $IMAGE:latest
+services:
+  - redis:stretch
+  - mysql/mysql-server:5.7
+
 stages:
   - docker_build
   - docker_push
   - configure
   - test
   - deploy
+
+before_script:
+#  - source .install/scripts/install_essentials.sh no-upgrade
+  - source .install/scripts/install_essentials.sh
+  - apt-get install -qq default-mysql-client
+  - echo "CREATE DATABASE ${MYSQL_QOS_DATABASE}" | mysql -u${MYSQL_QOS_USER} -p${MYSQL_QOS_PASSWORD} -h ${MYSQL_QOS_HOST}
+  - source .install/scripts/install_openldap.sh
+#  - source .install/scripts/install_latex.sh
+  - pip3 install --upgrade pip
+  - pip3 install -qUr requirements.txt
+  - rm -f -- ${ROOTDIR}myresel/settings_local.py
+  - export MYSQL_USER=root
+  - source .install/scripts/configure.sh
+  - source .install/scripts/populate_db.sh
+  - python3 manage.py populate_redis
+  - python3 manage.py calculate_free_ip
+  - python3 manage.py rqworker &
+  - python3 manage.py rqscheduler &
 
 Build docker image:
   stage: docker_build
@@ -72,30 +95,8 @@ Push docker image:
   tags:
     - admin
 
-image: $IMAGE:latest
-services:
-  - redis:stretch
-  - mysql/mysql-server:5.7
-
-before_script:
-#  - source .install/scripts/install_essentials.sh no-upgrade
-  - source .install/scripts/install_essentials.sh
-  - apt-get install -qq default-mysql-client
-  - echo "CREATE DATABASE ${MYSQL_QOS_DATABASE}" | mysql -u${MYSQL_QOS_USER} -p${MYSQL_QOS_PASSWORD} -h ${MYSQL_QOS_HOST}
-  - source .install/scripts/install_openldap.sh
-#  - source .install/scripts/install_latex.sh
-  - pip3 install --upgrade pip
-  - pip3 install -qUr requirements.txt
-  - rm -f -- ${ROOTDIR}myresel/settings_local.py
-  - export MYSQL_USER=root
-  - source .install/scripts/configure.sh
-  - source .install/scripts/populate_db.sh
-  - python3 manage.py populate_redis
-  - python3 manage.py calculate_free_ip
-  - python3 manage.py rqworker &
-  - python3 manage.py rqscheduler &
-
 django test suite:
+  stage: test
   artifacts:
     paths:
       - htmlcov/
@@ -105,7 +106,6 @@ django test suite:
       - pages/migrations/
       - gestion_personnes/migrations/
       - devices/migrations/
-  stage: test
   script:
     - coverage run --rcfile=.coveragerc manage.py test --noinput
     - coverage report
@@ -140,12 +140,12 @@ deploy to staging:
     - admin
 
 deploy to brest:
+  stage: deploy
   services: []
   before_script:
     - apt-get install -qq openssh-client
     - eval $(ssh-agent -s)
     - bash -c 'ssh-add <(echo "${SKYNET_DEPLOY_KEY}")'
-  stage: deploy
   script:
     - ssh -o "StrictHostKeyChecking=no" -T deploy@skynet
   only:
@@ -157,13 +157,13 @@ deploy to brest:
     - admin
 
 deploy to rennes:
+  stage: deploy
   services: []
   allow_failure: true
   before_script:
     - apt-get install -qq openssh-client
     - eval $(ssh-agent -s)
     - bash -c 'ssh-add <(echo "${DOUBIDOU_DEPLOY_KEY}")'
-  stage: deploy
   script:
     - ssh -o "StrictHostKeyChecking=no" -T deploy@doubidou
   only:
