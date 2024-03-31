@@ -16,7 +16,7 @@ from django.http import HttpResponseRedirect, HttpResponse, Http404, HttpRespons
 JsonResponse
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView, View
 
 from campus.forms import ClubManagementForm, ClubEditionForm

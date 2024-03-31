@@ -7,7 +7,7 @@ from django.core.mail import EmailMessage
 from django.urls import reverse
 from django.core.validators import MaxLengthValidator, MinLengthValidator, EmailValidator
 from django.utils.text import slugify
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from phonenumber_field.formfields import PhoneNumberField
 
 from fonctions.generic import current_year

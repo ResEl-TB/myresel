@@ -16,7 +16,7 @@ from django.http import HttpResponseRedirect, HttpResponse, Http404, HttpRespons
 from django.shortcuts import render, get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import View, ListView, DetailView, TemplateView
 from django.views.i18n import set_language
 from django.utils import timezone
@@ -352,7 +352,7 @@ class StatusPageXhr(View):
         if services is not None:
             return services
         with open('myresel/icinga_status.yml', 'rb') as doc:
-            services = yaml.load(doc)
+            services = yaml.safe_load(doc)
             cache.set('icinga_services',
                       services,
                       settings.ICINGA_SERVICES_CACHE_DURATION)
@@ -395,7 +395,7 @@ class StatusPageXhr(View):
                          "loading default configuration instead: %s " % err)
             result = {}
             with open('myresel/icinga_dummy_resp.yml', 'rb') as dummy_resp:
-                result = yaml.load(dummy_resp)
+                result = yaml.safe_load(dummy_resp)
         StatusPageXhr.calc_scores(services, result)
         cache.set('icinga_services_status',
                   services,

@@ -5,8 +5,7 @@ from functools import wraps
 from django.contrib import messages
 from django.urls import reverse
 from django.http import HttpResponseRedirect
-from django.utils.decorators import available_attrs
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 logger = logging.getLogger("default")
 
@@ -19,7 +18,7 @@ def resel_required(function=None, redirect_to='home'):
     """
 
     def _dec(view_func):
-        @wraps(view_func, assigned=available_attrs(view_func))
+        @wraps(view_func)
         def _view(request, *args, **kwargs):
             if request.network_data['is_resel']:
                 return view_func(request, *args, **kwargs)
@@ -44,7 +43,7 @@ def maisel_manager_required(function=None, redirect_to='home'):
     """
 
     def _dec(view_func):
-        @wraps(view_func, assigned=available_attrs(view_func))
+        @wraps(view_func)
         def _view(request, *args, **kwargs):
             try:
                 if not request.ldap_user:
@@ -70,7 +69,7 @@ def not_maisel(function=None, redirect_to='home'):
     """Vérifie que l'user n'est pas de la Maisel"""
 
     def _dec(view_func):
-        @wraps(view_func, assigned=available_attrs(view_func))
+        @wraps(view_func)
         def _view(request, *args, **kwargs):
             try:
                 if not request.ldap_user:
@@ -102,7 +101,7 @@ def need_to_pay(function=None, redirect_to='home'):
     """
 
     def _dec(view_func):
-        @wraps(view_func, assigned=available_attrs(view_func))
+        @wraps(view_func)
         def _view(request, *args, **kwargs):
             try:
                 if not request.ldap_user:
@@ -133,7 +132,7 @@ def able_to_pay(function=None, redirect_to='home'):
     """
 
     def _dec(view_func):
-        @wraps(view_func, assigned=available_attrs(view_func))
+        @wraps(view_func)
         def _view(request, *args, **kwargs):
             subnet = request.network_data['subnet']
             if subnet in ['REGN', 'EXPN']:
@@ -161,7 +160,7 @@ def ae_required(function, redirect_to='campus:rooms:calendar'):
     """
 
     def _dec(view_func):
-        @wraps(view_func, assigned=available_attrs(view_func))
+        @wraps(view_func)
         def _view(request, *args, **kwargs):
             ae = False
             for period in request.ldap_user.dates_membre:
@@ -184,7 +183,7 @@ def ae_admin_required(function, redirect_to='campus:home'):
     Check if the user has ae_admin attribute
     """
     def _dec(view_func):
-        @wraps(view_func, assigned=available_attrs(view_func))
+        @wraps(view_func)
         def _view(request, *args, **kwargs):
             if (not request.user.is_authenticated):
                 return HttpResponseRedirect(

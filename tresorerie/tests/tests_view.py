@@ -85,9 +85,9 @@ class HomeViewCaseMeta(type):
 
             card = stripe.PaymentMethod.create(type='card',
                                                card={'number': '4242424242424242', 'exp_month': 12,
-                                                     'exp_year': 2025, 'cvc': '314'})
+                                                     'exp_year': 2028, 'cvc': '314'})
             stripe.PaymentIntent.confirm(json.loads(context['payment_intent'])['id'],
-                                         payment_method=card.id)
+                                         payment_method=card.id, return_url='https://resel.fr/')
 
             r = self.client.post(
                 reverse("tresorerie:pay", args=(product.id,)),

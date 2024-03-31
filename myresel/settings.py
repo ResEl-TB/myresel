@@ -11,7 +11,7 @@ import stripe
 from ipaddress import ip_network
 
 from django.test.runner import DiscoverRunner
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from myresel.settings_local import *
 
@@ -121,6 +121,7 @@ CKEDITOR_CONFIGS = {
         'toolbar': 'full',
         'height': 600,
         'width': 1000,
+        'versionCheck': False,
     },
 }
 
@@ -224,6 +225,8 @@ DATABASES = {
         'HOST': DB_HOST,
     },
 }
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
@@ -338,30 +341,20 @@ PROD_LOGGING_CONF = {
             'formatter': 'verbose',
             'include_html': True,
         },
-        'logstash': {
-            'level': 'DEBUG',
-            'class': 'logstash.LogstashHandler',
-            'host': 'orion',
-            'port': 5959,  # Default value: 5959
-            'version': 1,
-            'message_type': 'django',
-            'fqdn': False,  # Fully qualified domain name. Default value: false.
-            'tags': None,  # list of tags. Default: None.
-        },
     },
     'loggers': {
         'default': {
-            'handlers': ['file', 'logstash'],
+            'handlers': ['file'],
             'level': 'DEBUG',
             'propagate': True,
         },
         'django': {
-            'handlers': ['file', 'logstash'],
+            'handlers': ['file'],
             'level': 'DEBUG',
             'propagate': True,
         },
         "rq.worker": {
-            "handlers": ['file', 'logstash'],
+            "handlers": ['file'],
             "level": "DEBUG"
         },
 
