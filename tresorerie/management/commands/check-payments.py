@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.core.mail import EmailMessage
 from django.conf import settings
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from tresorerie.models import MonthlyPayment, Transaction
 from datetime import date, timedelta

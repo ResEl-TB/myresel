@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load staticfiles %}
+{% load static %}
 {% load i18n %}
 
 {% block titre %}{%  trans "Informations personnelles" %}{% endblock %}
@@ -12,7 +12,7 @@
         <h1 class="page-header">{% trans "Informations de compte" %}</h1>
         <div class="row">
             <div class="col-md-8">
-                <form action="" method="post" class="form form-horizontal">
+                <form action="" method="post" class="form form-horizontal" id="form">
                     {% csrf_token %}
                     <h2>{% trans "Informations personnelles" %}</h2>
                     <div class="form-group">
@@ -156,43 +156,38 @@
 
 {% block javascript %}
     <script>
-        var brest_buildings = ['I1', 'I2', 'I3', 'I4', 'I5', 'I6', 'I7', 'I8', 'I9', 'I10', 'I11', 'I12'];
-        var rennes_buildings = ['Studios', 'Chambres'];
+        const buildings = {'Brest': ['I1', 'I2', 'I3', 'I4', 'I5', 'I6', 'I7', 'I8', 'I9', 'I10', 'I11', 'I12'],
+                           'Rennes': ['C1', 'S1'],
+                           'Nantes': ['N', 'P', 'Q', 'R', 'S', 'T', 'PC']};
 
         function update_buildings() {
-            var selected_campus = $("#id_campus").find("option:selected").text();
-            if (selected_campus === "Brest") {
-                $("#maisel-information").show();
-                $("#home-address").hide();
-                $("#id_building").find("option").each(function () {
-                    if(brest_buildings.indexOf($(this).text()) >= 0){
-                        $(this).show();
-                    } else {
-                        $(this).hide();
+            const form = document.getElementById('form');
+            const campus = form.campus.value;
+            const maisel_information = document.getElementById('maisel-information');
+            const home_address = document.getElementById('home-address');
+            const enabled_buildings = [...form.building.options];
+
+            if (campus == "None") {
+                maisel_information.classList.add('hidden');
+                home_address.classList.remove('hidden');
+            }
+            else if (campus) {
+                maisel_information.classList.remove('hidden');
+                home_address.classList.add('hidden');
+                enabled_buildings.forEach(e => {
+                    if (buildings[campus].indexOf(e.value) >= 0) {
+                        e.classList.remove('hidden');
+                        e.disabled = false;
                     }
-                })
-            } else if (selected_campus === "Rennes") {
-                $("#maisel-information").show();
-                $("#home-address").hide();
-                $("#id_building").find("option").each(function () {
-                    if(rennes_buildings.indexOf($(this).text()) >= 0){
-                        $(this).show();
-                    } else {
-                        $(this).hide();
+                    else {
+                        e.classList.add('hidden');
+                        e.disabled = true;
                     }
-                })
-            } else {
-                $("#maisel-information").hide();
-                $("#home-address").show();
+                });
             }
         }
 
-        $("#id_campus").on("change", function (event) {
-            update_buildings();
-        });
-
-        $( document ).on("ready", function( event ){
-            update_buildings();
-        });
+        document.getElementById('id_campus').addEventListener('change', update_buildings);
+        document.addEventListener('DOMContentLoaded', update_buildings);
     </script>
 {% endblock %}

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load i18n %}
-{% load staticfiles %}
+{% load static %}
 
 {% block titre %}{% trans "Mes machines" %}{% endblock %}
 
@@ -71,16 +71,16 @@
     
     <div class="home-fragment" id="bandwidth">
         <div class="container article"><a name="bandwidth">
-                <h1>Consomation de bande passante</h1></a>
+                <h1>{% trans "Consommation de bande passante" %}</h1></a>
             <div class="embed-responsive graph">
                 <iframe id="graph" src="/graph/d-solo/my-netflow?panelId=2&theme=light" width="450" height="200" frameborder="0" style="visibility: hidden; position: absolute; top: 0px;" onload="this.style.position=''; this.style.visibility=''; this.style.top='';"></iframe>
             </div>
             <div class="btn-group">
-            <button class="btn btn-default hdur" x-act="now-12h">12h</button>
-            <button class="btn btn-default active hdur" x-act="now-24h" >24h</button>
-            <button class="btn btn-default hdur" x-act="now-1w">1 semaine</button>
-            <button class="btn btn-default hdur" x-act="now-1M">1 mois</button>
-            <button class="btn btn-default hdur" x-act="now-6M">6 mois</button>
+            <button class="btn btn-default hdur" x-act="now-12h">{% trans "12h" %}</button>
+            <button class="btn btn-default active hdur" x-act="now-24h" >{% trans "24h" %}</button>
+            <button class="btn btn-default hdur" x-act="now-1w">{% trans "1 semaine" %}</button>
+            <button class="btn btn-default hdur" x-act="now-1M">{% trans "1 mois" %}</button>
+            <button class="btn btn-default hdur" x-act="now-6M">{% trans "6 mois" %}</button>
             </div>
         </div>
     </div>

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-23 17:36+0200\n"
+"POT-Creation-Date: 2024-04-01 15:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,6 +53,7 @@ msgstr "Select what you want to create"
 #: campus/templates/campus/whoswho/userHome.html:51
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:25
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:27
+#: maisel/templates/maisel/list_employees.html:21
 #: tresorerie/templates/tresorerie/recap.html:22
 #: tresorerie/templates/tresorerie/transaction_detail.html:16
 msgid "Nom"
@@ -123,13 +124,12 @@ msgstr "Please enter a valid email address"
 msgid "Veuillez entrer une année de campagne valide"
 msgstr "Please enter a valid campaign year"
 
-#: campus/forms.py:382 gestion_personnes/forms.py:25
-#: gestion_personnes/forms.py:129
+#: campus/forms.py:382 gestion_personnes/forms.py:30
+#: gestion_personnes/forms.py:133
 msgid "Je n'habite pas à la Maisel"
 msgstr "I don't live at the Maisel"
 
-#: campus/forms.py:386 gestion_personnes/forms.py:29
-#: gestion_personnes/forms.py:133
+#: campus/forms.py:386
 msgid "Sélectionnez un bâtiment"
 msgstr "Choose a building"
 
@@ -149,220 +149,220 @@ msgstr "Your search"
 msgid "Recherche stricte"
 msgstr "Strict search"
 
-#: campus/models/rooms_models.py:16
+#: campus/models/rooms_models.py:15
 msgid "salle"
 msgstr "room"
 
-#: campus/models/rooms_models.py:19
+#: campus/models/rooms_models.py:18
 #: campus/templates/campus/rooms/room_management.html:53
 msgid "Foyer"
 msgstr "Foyer"
 
-#: campus/models/rooms_models.py:20
+#: campus/models/rooms_models.py:19
 #: campus/templates/campus/ae-admin/add-member.html:52
 #: campus/templates/campus/rooms/room_management.html:54
 msgid "École"
 msgstr "School"
 
-#: campus/models/rooms_models.py:21
+#: campus/models/rooms_models.py:20
 msgid "Extérieur"
 msgstr "Outside"
 
-#: campus/models/rooms_models.py:22
+#: campus/models/rooms_models.py:21
 #: campus/templates/campus/ae-admin/home.html:206
 #: campus/templates/campus/rooms/room_management.html:56
 #: campus/templates/campus/whoswho/userHome.html:82
-#: gestion_personnes/forms.py:52 gestion_personnes/forms.py:228
+#: gestion_personnes/forms.py:55
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:82
-#: templates/base.html:114
+#: templates/base.html:107
 msgid "Campus"
 msgstr "Campus"
 
-#: campus/models/rooms_models.py:28
+#: campus/models/rooms_models.py:27
 msgid "emplacement de la salle"
 msgstr "room location"
 
-#: campus/models/rooms_models.py:29
+#: campus/models/rooms_models.py:28
 #: campus/templates/campus/rooms/room_management.html:31
 msgid "Emplacement"
 msgstr "Location"
 
-#: campus/models/rooms_models.py:34
+#: campus/models/rooms_models.py:33
 msgid "nom de la salle"
 msgstr "room name"
 
-#: campus/models/rooms_models.py:35
+#: campus/models/rooms_models.py:34
 msgid "Nom de la salle"
 msgstr "Room name"
 
-#: campus/models/rooms_models.py:40
+#: campus/models/rooms_models.py:39
 msgid "mailing-list à contacter pour réserver cette salle"
 msgstr "mailing-list to contact to reserve this room"
 
-#: campus/models/rooms_models.py:44
+#: campus/models/rooms_models.py:43
 msgid "indique si la salle est privée ou non"
 msgstr "indicates whether the room is private or not"
 
-#: campus/models/rooms_models.py:46
+#: campus/models/rooms_models.py:45
 msgid "Salle privée / club"
 msgstr "Private/club room"
 
-#: campus/models/rooms_models.py:51
+#: campus/models/rooms_models.py:50
 msgid ""
 "indique à quel(s) club(s) appartient la salle, séparés par un point virgule ;"
 msgstr "indicates to which club(s) the room belongs, split by a colon ;"
 
-#: campus/models/rooms_models.py:122
+#: campus/models/rooms_models.py:121
 msgid "réservation"
 msgstr "booking"
 
-#: campus/models/rooms_models.py:127
+#: campus/models/rooms_models.py:126
 msgid "Soirée"
 msgstr "Party"
 
-#: campus/models/rooms_models.py:128
+#: campus/models/rooms_models.py:127
 msgid "Activité de club"
 msgstr "Club activity"
 
-#: campus/models/rooms_models.py:129
+#: campus/models/rooms_models.py:128
 msgid "Réunion"
 msgstr "Meeting"
 
-#: campus/models/rooms_models.py:130
+#: campus/models/rooms_models.py:129
 #: campus/templates/campus/ae-admin/home.html:205
 #: campus/templates/campus/whoswho/userDetails.html:36
-#: gestion_personnes/templates/gestion_personnes/inscription.html:33
+#: gestion_personnes/templates/gestion_personnes/inscription.html:38
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:37
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:39
 msgid "Formation"
 msgstr "Curriculum"
 
-#: campus/models/rooms_models.py:131
+#: campus/models/rooms_models.py:130
 msgid "Évènement"
 msgstr "Event"
 
-#: campus/models/rooms_models.py:132
+#: campus/models/rooms_models.py:131
 msgid "Sport"
 msgstr "Sport"
 
-#: campus/models/rooms_models.py:133
+#: campus/models/rooms_models.py:132
 msgid "Art et culture"
 msgstr "Art and culture"
 
-#: campus/models/rooms_models.py:134
+#: campus/models/rooms_models.py:133
 msgid "Sortie"
 msgstr "Trip"
 
-#: campus/models/rooms_models.py:135 gestion_personnes/forms.py:38
-#: gestion_personnes/forms.py:142
+#: campus/models/rooms_models.py:134 gestion_personnes/forms.py:41
+#: gestion_personnes/forms.py:142 gestion_personnes/forms.py:147
 msgid "Autre"
 msgstr "Other"
 
-#: campus/models/rooms_models.py:136
+#: campus/models/rooms_models.py:135
 msgid "Ne pas afficher sur le calendrier"
 msgstr "Don't show on the calendar"
 
-#: campus/models/rooms_models.py:140
+#: campus/models/rooms_models.py:139
 msgid "Pas de récurrence"
 msgstr "Not recurring"
 
-#: campus/models/rooms_models.py:141
+#: campus/models/rooms_models.py:140
 msgid "Quotidien"
 msgstr "Daily"
 
-#: campus/models/rooms_models.py:142
+#: campus/models/rooms_models.py:141
 msgid "Hebdomadaire"
 msgstr "Weekly"
 
-#: campus/models/rooms_models.py:143
+#: campus/models/rooms_models.py:142
 msgid "Mensuel"
 msgstr "Monthly"
 
-#: campus/models/rooms_models.py:144
+#: campus/models/rooms_models.py:143
 msgid "Annuel"
 msgstr "Annualy"
 
-#: campus/models/rooms_models.py:148
+#: campus/models/rooms_models.py:147
 msgid "Non validé"
 msgstr "Not validated"
 
-#: campus/models/rooms_models.py:149
+#: campus/models/rooms_models.py:148
 msgid "Validé"
 msgstr "Validated"
 
-#: campus/models/rooms_models.py:150
+#: campus/models/rooms_models.py:149
 msgid "Refusé"
 msgstr "Refused"
 
-#: campus/models/rooms_models.py:151
+#: campus/models/rooms_models.py:150
 msgid "Supprimé"
 msgstr "Deleted"
 
-#: campus/models/rooms_models.py:155
+#: campus/models/rooms_models.py:154
 msgid "nom de l'évènement"
 msgstr "name of the event"
 
-#: campus/models/rooms_models.py:160
+#: campus/models/rooms_models.py:159
 msgid "description de l'évènement"
 msgstr "event description"
 
-#: campus/models/rooms_models.py:166
+#: campus/models/rooms_models.py:165
 msgid "indique dans quelle salle se déroule l'évènement"
 msgstr "indicates in which room the event takes place"
 
-#: campus/models/rooms_models.py:167
+#: campus/models/rooms_models.py:166
 msgid "Salle(s)"
 msgstr "Room(s)"
 
-#: campus/models/rooms_models.py:172
+#: campus/models/rooms_models.py:171
 msgid "début de l'évènement"
 msgstr "start of the event"
 
-#: campus/models/rooms_models.py:173
+#: campus/models/rooms_models.py:172
 msgid "Début de l'evènement"
 msgstr "Start of the event"
 
-#: campus/models/rooms_models.py:178
+#: campus/models/rooms_models.py:177
 msgid "fin de l'évènement"
 msgstr "end of the event"
 
-#: campus/models/rooms_models.py:179
+#: campus/models/rooms_models.py:178
 msgid "Fin de l'évènement"
 msgstr "End of the event"
 
-#: campus/models/rooms_models.py:184
+#: campus/models/rooms_models.py:183
 msgid "utilisateur ayant fait la demande de réservation"
 msgstr "user who made the reservation request"
 
-#: campus/models/rooms_models.py:185
+#: campus/models/rooms_models.py:184
 msgid "Utilisateur"
 msgstr "User"
 
-#: campus/models/rooms_models.py:191
+#: campus/models/rooms_models.py:190
 msgid "type d'évènement"
 msgstr "event type"
 
-#: campus/models/rooms_models.py:196
+#: campus/models/rooms_models.py:195
 msgid "affiche ou non cet évènement sur le calendrier"
 msgstr "displays or not this event on the calendar"
 
-#: campus/models/rooms_models.py:198
+#: campus/models/rooms_models.py:197
 msgid "Affichable"
 msgstr "Displayable"
 
-#: campus/models/rooms_models.py:203
+#: campus/models/rooms_models.py:202
 msgid "Type de recurrence"
 msgstr "Recurrence type"
 
-#: campus/models/rooms_models.py:209
+#: campus/models/rooms_models.py:208
 msgid "fin de la récurrence"
 msgstr "end of the recurrence"
 
-#: campus/models/rooms_models.py:211
+#: campus/models/rooms_models.py:210
 msgid "Cette date est ignorée pour les événements uniques."
 msgstr "This date is ignored for single events."
 
-#: campus/models/rooms_models.py:218
+#: campus/models/rooms_models.py:217
 msgid "Statut"
 msgstr "Status"
 
@@ -897,7 +897,7 @@ msgid "publié par"
 msgstr "published by"
 
 #: campus/templates/campus/home.html:62
-#: pages/templates/pages/home/home.html:214
+#: pages/templates/pages/home/home.html:210
 msgid "Pas de mail campus à l'horizon"
 msgstr "No email in sight"
 
@@ -914,7 +914,7 @@ msgid "PROCHAINS ÉVÉNEMENTS"
 msgstr "UPCOMING EVENTS"
 
 #: campus/templates/campus/home.html:136
-#: pages/templates/pages/home/home.html:182
+#: pages/templates/pages/home/home.html:178
 msgid "Pas d'événements à l'horizon"
 msgstr "No event in sight"
 
@@ -1058,7 +1058,7 @@ msgid "Entrer le nom du parrain que vous souhaitez ajouter :"
 msgstr "Enter the name of the sponsor you wish to add:"
 
 #: campus/templates/campus/whoswho/userHome.html:49
-#: gestion_personnes/forms.py:156
+#: gestion_personnes/forms.py:161
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:31
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:33
 msgid "Prénom"
@@ -1073,21 +1073,21 @@ msgid "Email"
 msgstr "Email"
 
 #: campus/templates/campus/whoswho/userHome.html:90
-#: gestion_personnes/forms.py:60 gestion_personnes/forms.py:236
-#: gestion_personnes/templates/gestion_personnes/inscription.html:100
+#: gestion_personnes/forms.py:63 gestion_personnes/forms.py:243
+#: gestion_personnes/templates/gestion_personnes/inscription.html:107
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:92
 msgid "Bâtiment"
 msgstr "Building"
 
 #: campus/templates/campus/whoswho/userHome.html:97
-#: gestion_personnes/templates/gestion_personnes/inscription.html:105
+#: gestion_personnes/templates/gestion_personnes/inscription.html:112
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:101
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:111
 msgid "Chambre"
 msgstr "Room"
 
 #: campus/templates/campus/whoswho/userHome.html:105
-#: gestion_personnes/forms.py:219
+#: gestion_personnes/forms.py:229
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:55
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:57
 msgid "Date de naissance"
@@ -1125,7 +1125,7 @@ msgid "Vous n'êtes pas modérateur campus ou président(e) de ce club"
 msgstr "You are not a campus moderator or president of this club"
 
 #: campus/views/views_clubs.py:192 campus/views/views_clubs.py:428
-#: campus/views/views_mails.py:75
+#: campus/views/views_mails.py:76
 msgid "Vous n'êtes pas modérateur campus"
 msgstr "You are not a campus moderator"
 
@@ -1172,18 +1172,18 @@ msgstr ""
 msgid "Désinscription terminée avec succès"
 msgstr "Unsubscription completed successfully"
 
-#: campus/views/views_gestion.py:51
+#: campus/views/views_gestion.py:52
 msgid ""
 " n'est pas un uid valide ou n'existe pas.                     Pensez à "
 "utiliser l'autocomplétion."
 msgstr ""
 "is not a valid uid or does not exist. Consider using the autocompletion"
 
-#: campus/views/views_mails.py:58
+#: campus/views/views_mails.py:59
 msgid "Votre mail sera traité par les modérateurs."
 msgstr "Your email will be handled by the moderators."
 
-#: campus/views/views_mails.py:116
+#: campus/views/views_mails.py:117
 msgid ""
 "E-mail modéré, n'oubliez pas d'aller faire la double modération sur https://"
 "mlistes.resel.fr !"
@@ -1211,7 +1211,7 @@ msgstr "You cannot modify this booking"
 msgid "Vous ne pouvez pas supprimer cette réservation"
 msgstr "You cannot delete this booking"
 
-#: campus/whoswho/views.py:134 gestion_personnes/views.py:192
+#: campus/whoswho/views.py:134 gestion_personnes/views.py:193
 msgid "Addresse e-mail déjà utilisée"
 msgstr "Email address already taken"
 
@@ -1330,7 +1330,7 @@ msgid "Modification de machine"
 msgstr "Device modification"
 
 #: devices/templates/devices/list_devices.html:5
-#: devices/templates/devices/list_devices.html:15 templates/base.html:135
+#: devices/templates/devices/list_devices.html:15 templates/base.html:129
 msgid "Mes machines"
 msgstr "My devices"
 
@@ -1365,6 +1365,30 @@ msgstr "Unknown"
 #: devices/templates/devices/list_devices.html:64
 msgid "Aucune machine n'est attachée à votre compte."
 msgstr "No device is linked to your account."
+
+#: devices/templates/devices/list_devices.html:74
+msgid "Consommation de bande passante"
+msgstr "Bandwidth consumption"
+
+#: devices/templates/devices/list_devices.html:79
+msgid "12h"
+msgstr "12h"
+
+#: devices/templates/devices/list_devices.html:80
+msgid "24h"
+msgstr "24h"
+
+#: devices/templates/devices/list_devices.html:81
+msgid "1 semaine"
+msgstr "1 week"
+
+#: devices/templates/devices/list_devices.html:82
+msgid "1 mois"
+msgstr "1 month"
+
+#: devices/templates/devices/list_devices.html:83
+msgid "6 mois"
+msgstr "6 months"
 
 #: devices/templates/devices/manual_add_device.html:5
 msgid "Demande d'enregistrement de machine"
@@ -1423,459 +1447,436 @@ msgid ""
 "tard"
 msgstr "An error has occurred while saving the changes. Please retry later."
 
-#: env/lib/python3.7/site-packages/ckeditor_uploader/forms.py:6
+#: env/lib/python3.11/site-packages/ckeditor_uploader/forms.py:6
 msgid "Search files"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:5
+#: env/lib/python3.11/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:5
 msgid "Select an image to embed"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:27
+#: env/lib/python3.11/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:27
 msgid "Browse for the image you want, then click 'Embed Image' to continue..."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:29
+#: env/lib/python3.11/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:29
 msgid ""
 "No images found. Upload images using the 'Image Button' dialog's 'Upload' "
 "tab."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:50
+#: env/lib/python3.11/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:50
 msgid "Images in: "
 msgstr ""
 
-#: env/lib/python3.7/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:62
-#: env/lib/python3.7/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:80
+#: env/lib/python3.11/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:62
+#: env/lib/python3.11/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:80
 msgid "Embed Image"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:146
+#: env/lib/python3.11/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:146
 msgid "Play Slideshow"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:147
+#: env/lib/python3.11/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:147
 msgid "Pause Slideshow"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:148
+#: env/lib/python3.11/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:148
 msgid "&lsaquo; Previous Photo"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:149
+#: env/lib/python3.11/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:149
 msgid "Next Photo &rsaquo;"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:150
+#: env/lib/python3.11/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:150
 msgid "Next &rsaquo;"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:151
+#: env/lib/python3.11/site-packages/ckeditor_uploader/templates/ckeditor/browse.html:151
 msgid "&lsaquo; Prev"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/_termui_impl.py:495
+#: env/lib/python3.11/site-packages/click/_termui_impl.py:518
 #, python-brace-format
 msgid "{editor}: Editing failed"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/_termui_impl.py:499
+#: env/lib/python3.11/site-packages/click/_termui_impl.py:522
 #, python-brace-format
 msgid "{editor}: Editing failed: {e}"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/_unicodefun.py:20
-msgid ""
-"Click will abort further execution because Python was configured to use "
-"ASCII as encoding for the environment. Consult https://click.palletsprojects."
-"com/unicode-support/ for mitigation steps."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/click/_unicodefun.py:56
-msgid ""
-"Additional information: on this system no suitable UTF-8 locales were "
-"discovered. This most likely requires resolving by reconfiguring the locale "
-"system."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/click/_unicodefun.py:65
-msgid ""
-"This system supports the C.UTF-8 locale which is recommended. You might be "
-"able to resolve your issue by exporting the following environment variables:"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/click/_unicodefun.py:75
-#, python-brace-format
-msgid ""
-"This system lists some UTF-8 supporting locales that you can pick from. The "
-"following suitable locales were discovered: {locales}"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/click/_unicodefun.py:93
-msgid ""
-"Click discovered that you exported a UTF-8 locale but the locale system "
-"could not pick up from it because it does not exist. The exported locale is "
-"{locale!r} but it is not supported."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/click/core.py:1104
+#: env/lib/python3.11/site-packages/click/core.py:1120
 msgid "Aborted!"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/core.py:1288
-#: env/lib/python3.7/site-packages/click/decorators.py:435
+#: env/lib/python3.11/site-packages/click/core.py:1309
+#: env/lib/python3.11/site-packages/click/decorators.py:559
 msgid "Show this message and exit."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/core.py:1317
-#: env/lib/python3.7/site-packages/click/core.py:1343
+#: env/lib/python3.11/site-packages/click/core.py:1340
+#: env/lib/python3.11/site-packages/click/core.py:1370
 #, python-brace-format
 msgid "(Deprecated) {text}"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/core.py:1360
+#: env/lib/python3.11/site-packages/click/core.py:1387
 msgid "Options"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/core.py:1384
+#: env/lib/python3.11/site-packages/click/core.py:1413
 #, python-brace-format
 msgid "Got unexpected extra argument ({args})"
 msgid_plural "Got unexpected extra arguments ({args})"
 msgstr[0] ""
 msgstr[1] ""
 
-#: env/lib/python3.7/site-packages/click/core.py:1399
+#: env/lib/python3.11/site-packages/click/core.py:1429
 msgid "DeprecationWarning: The command {name!r} is deprecated."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/core.py:1616
+#: env/lib/python3.11/site-packages/click/core.py:1636
 msgid "Commands"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/core.py:1648
+#: env/lib/python3.11/site-packages/click/core.py:1668
 msgid "Missing command."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/core.py:1726
+#: env/lib/python3.11/site-packages/click/core.py:1746
 msgid "No such command {name!r}."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/core.py:2274
+#: env/lib/python3.11/site-packages/click/core.py:2310
 msgid "Value must be an iterable."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/core.py:2294
+#: env/lib/python3.11/site-packages/click/core.py:2331
 #, python-brace-format
 msgid "Takes {nargs} values but 1 was given."
 msgid_plural "Takes {nargs} values but {len} were given."
 msgstr[0] ""
 msgstr[1] ""
 
-#: env/lib/python3.7/site-packages/click/core.py:2718
+#: env/lib/python3.11/site-packages/click/core.py:2778
 #, python-brace-format
 msgid "env var: {var}"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/core.py:2741
+#: env/lib/python3.11/site-packages/click/core.py:2808
 msgid "(dynamic)"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/core.py:2751
+#: env/lib/python3.11/site-packages/click/core.py:2821
 #, python-brace-format
 msgid "default: {default}"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/core.py:2760
+#: env/lib/python3.11/site-packages/click/core.py:2834
 msgid "required"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/decorators.py:339
+#: env/lib/python3.11/site-packages/click/decorators.py:465
 #, python-format
 msgid "%(prog)s, version %(version)s"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/decorators.py:404
+#: env/lib/python3.11/site-packages/click/decorators.py:528
 msgid "Show the version and exit."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/exceptions.py:43
-#: env/lib/python3.7/site-packages/click/exceptions.py:79
+#: env/lib/python3.11/site-packages/click/exceptions.py:44
+#: env/lib/python3.11/site-packages/click/exceptions.py:80
 #, python-brace-format
 msgid "Error: {message}"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/exceptions.py:71
+#: env/lib/python3.11/site-packages/click/exceptions.py:72
 #, python-brace-format
 msgid "Try '{command} {option}' for help."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/exceptions.py:120
+#: env/lib/python3.11/site-packages/click/exceptions.py:121
 #, python-brace-format
 msgid "Invalid value: {message}"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/exceptions.py:122
+#: env/lib/python3.11/site-packages/click/exceptions.py:123
 #, python-brace-format
 msgid "Invalid value for {param_hint}: {message}"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/exceptions.py:178
+#: env/lib/python3.11/site-packages/click/exceptions.py:179
 msgid "Missing argument"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/exceptions.py:180
+#: env/lib/python3.11/site-packages/click/exceptions.py:181
 msgid "Missing option"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/exceptions.py:182
+#: env/lib/python3.11/site-packages/click/exceptions.py:183
 msgid "Missing parameter"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/exceptions.py:184
+#: env/lib/python3.11/site-packages/click/exceptions.py:185
 #, python-brace-format
 msgid "Missing {param_type}"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/exceptions.py:191
+#: env/lib/python3.11/site-packages/click/exceptions.py:192
 #, python-brace-format
 msgid "Missing parameter: {param_name}"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/exceptions.py:211
+#: env/lib/python3.11/site-packages/click/exceptions.py:212
 #, python-brace-format
 msgid "No such option: {name}"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/exceptions.py:223
+#: env/lib/python3.11/site-packages/click/exceptions.py:224
 #, python-brace-format
 msgid "Did you mean {possibility}?"
 msgid_plural "(Possible options: {possibilities})"
 msgstr[0] ""
 msgstr[1] ""
 
-#: env/lib/python3.7/site-packages/click/exceptions.py:261
+#: env/lib/python3.11/site-packages/click/exceptions.py:262
 msgid "unknown error"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/exceptions.py:268
+#: env/lib/python3.11/site-packages/click/exceptions.py:269
 msgid "Could not open file {filename!r}: {message}"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/parser.py:231
+#: env/lib/python3.11/site-packages/click/parser.py:231
 msgid "Argument {name!r} takes {nargs} values."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/parser.py:413
+#: env/lib/python3.11/site-packages/click/parser.py:413
 msgid "Option {name!r} does not take a value."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/parser.py:474
+#: env/lib/python3.11/site-packages/click/parser.py:474
 msgid "Option {name!r} requires an argument."
 msgid_plural "Option {name!r} requires {nargs} arguments."
 msgstr[0] ""
 msgstr[1] ""
 
-#: env/lib/python3.7/site-packages/click/shell_completion.py:314
+#: env/lib/python3.11/site-packages/click/shell_completion.py:319
 msgid "Shell completion is not supported for Bash versions older than 4.4."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/shell_completion.py:320
+#: env/lib/python3.11/site-packages/click/shell_completion.py:326
 msgid "Couldn't detect Bash version, shell completion is not supported."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/termui.py:161
+#: env/lib/python3.11/site-packages/click/termui.py:158
 msgid "Repeat for confirmation"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/termui.py:178
+#: env/lib/python3.11/site-packages/click/termui.py:174
 msgid "Error: The value you entered was invalid."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/termui.py:180
+#: env/lib/python3.11/site-packages/click/termui.py:176
 #, python-brace-format
 msgid "Error: {e.message}"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/termui.py:191
+#: env/lib/python3.11/site-packages/click/termui.py:187
 msgid "Error: The two entered values do not match."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/termui.py:245
+#: env/lib/python3.11/site-packages/click/termui.py:243
 msgid "Error: invalid input"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/termui.py:796
+#: env/lib/python3.11/site-packages/click/termui.py:773
 msgid "Press any key to continue..."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/types.py:258
+#: env/lib/python3.11/site-packages/click/types.py:266
 #, python-brace-format
 msgid ""
 "Choose from:\n"
 "\t{choices}"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/types.py:290
+#: env/lib/python3.11/site-packages/click/types.py:298
 msgid "{value!r} is not {choice}."
 msgid_plural "{value!r} is not one of {choices}."
 msgstr[0] ""
 msgstr[1] ""
 
-#: env/lib/python3.7/site-packages/click/types.py:380
+#: env/lib/python3.11/site-packages/click/types.py:392
 msgid "{value!r} does not match the format {format}."
 msgid_plural "{value!r} does not match the formats {formats}."
 msgstr[0] ""
 msgstr[1] ""
 
-#: env/lib/python3.7/site-packages/click/types.py:402
+#: env/lib/python3.11/site-packages/click/types.py:414
 msgid "{value!r} is not a valid {number_type}."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/types.py:458
+#: env/lib/python3.11/site-packages/click/types.py:470
 #, python-brace-format
 msgid "{value} is not in the range {range}."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/types.py:599
+#: env/lib/python3.11/site-packages/click/types.py:611
 msgid "{value!r} is not a valid boolean."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/types.py:623
+#: env/lib/python3.11/site-packages/click/types.py:635
 msgid "{value!r} is not a valid UUID."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/types.py:801
+#: env/lib/python3.11/site-packages/click/types.py:822
 msgid "file"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/types.py:803
+#: env/lib/python3.11/site-packages/click/types.py:824
 msgid "directory"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/types.py:805
+#: env/lib/python3.11/site-packages/click/types.py:826
 msgid "path"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/types.py:851
+#: env/lib/python3.11/site-packages/click/types.py:877
 msgid "{name} {filename!r} does not exist."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/types.py:860
+#: env/lib/python3.11/site-packages/click/types.py:886
 msgid "{name} {filename!r} is a file."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/types.py:868
-msgid "{name} {filename!r} is a directory."
+#: env/lib/python3.11/site-packages/click/types.py:894
+#, python-brace-format
+msgid "{name} '{filename}' is a directory."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/types.py:876
-msgid "{name} {filename!r} is not writable."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/click/types.py:884
+#: env/lib/python3.11/site-packages/click/types.py:903
 msgid "{name} {filename!r} is not readable."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/click/types.py:951
+#: env/lib/python3.11/site-packages/click/types.py:912
+msgid "{name} {filename!r} is not writable."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/click/types.py:921
+msgid "{name} {filename!r} is not executable."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/click/types.py:988
 #, python-brace-format
 msgid "{len_type} values are required, but {len_value} was given."
 msgid_plural "{len_type} values are required, but {len_value} were given."
 msgstr[0] ""
 msgstr[1] ""
 
-#: env/lib/python3.7/site-packages/django/contrib/messages/apps.py:7
+#: env/lib/python3.11/site-packages/django/contrib/messages/apps.py:7
 msgid "Messages"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/contrib/sitemaps/apps.py:7
+#: env/lib/python3.11/site-packages/django/contrib/sitemaps/apps.py:8
 msgid "Site Maps"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/contrib/staticfiles/apps.py:9
+#: env/lib/python3.11/site-packages/django/contrib/staticfiles/apps.py:9
 msgid "Static Files"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/contrib/syndication/apps.py:7
+#: env/lib/python3.11/site-packages/django/contrib/syndication/apps.py:7
 msgid "Syndication"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/core/paginator.py:45
+#. Translators: String used to replace omitted page numbers in elided page
+#. range generated by paginators, e.g. [1, 2, '…', 5, 6, 7, '…', 9, 10].
+#: env/lib/python3.11/site-packages/django/core/paginator.py:30
+msgid "…"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/core/paginator.py:51
 msgid "That page number is not an integer"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/core/paginator.py:47
+#: env/lib/python3.11/site-packages/django/core/paginator.py:53
 msgid "That page number is less than 1"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/core/paginator.py:52
+#: env/lib/python3.11/site-packages/django/core/paginator.py:58
 msgid "That page contains no results"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/core/validators.py:31
+#: env/lib/python3.11/site-packages/django/core/validators.py:22
 msgid "Enter a valid value."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/core/validators.py:102
-#: env/lib/python3.7/site-packages/django/forms/fields.py:658
+#: env/lib/python3.11/site-packages/django/core/validators.py:93
+#: env/lib/python3.11/site-packages/django/forms/fields.py:678
 msgid "Enter a valid URL."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/core/validators.py:157
+#: env/lib/python3.11/site-packages/django/core/validators.py:151
 msgid "Enter a valid integer."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/core/validators.py:168
+#: env/lib/python3.11/site-packages/django/core/validators.py:162
 msgid "Enter a valid email address."
 msgstr ""
 
 #. Translators: "letters" means latin letters: a-z and A-Z.
-#: env/lib/python3.7/site-packages/django/core/validators.py:242
+#: env/lib/python3.11/site-packages/django/core/validators.py:265
 msgid ""
-"Enter a valid 'slug' consisting of letters, numbers, underscores or hyphens."
+"Enter a valid “slug” consisting of letters, numbers, underscores or hyphens."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/core/validators.py:249
+#: env/lib/python3.11/site-packages/django/core/validators.py:272
 msgid ""
-"Enter a valid 'slug' consisting of Unicode letters, numbers, underscores, or "
+"Enter a valid “slug” consisting of Unicode letters, numbers, underscores, or "
 "hyphens."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/core/validators.py:258
-#: env/lib/python3.7/site-packages/django/core/validators.py:268
-#: env/lib/python3.7/site-packages/django/core/validators.py:290
+#: env/lib/python3.11/site-packages/django/core/validators.py:281
+#: env/lib/python3.11/site-packages/django/core/validators.py:291
+#: env/lib/python3.11/site-packages/django/core/validators.py:314
 msgid "Enter a valid IPv4 address."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/core/validators.py:275
-#: env/lib/python3.7/site-packages/django/core/validators.py:291
+#: env/lib/python3.11/site-packages/django/core/validators.py:299
+#: env/lib/python3.11/site-packages/django/core/validators.py:315
 msgid "Enter a valid IPv6 address."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/core/validators.py:285
-#: env/lib/python3.7/site-packages/django/core/validators.py:289
+#: env/lib/python3.11/site-packages/django/core/validators.py:309
+#: env/lib/python3.11/site-packages/django/core/validators.py:313
 msgid "Enter a valid IPv4 or IPv6 address."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/core/validators.py:319
+#: env/lib/python3.11/site-packages/django/core/validators.py:343
 msgid "Enter only digits separated by commas."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/core/validators.py:325
+#: env/lib/python3.11/site-packages/django/core/validators.py:349
 #, python-format
 msgid "Ensure this value is %(limit_value)s (it is %(show_value)s)."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/core/validators.py:357
+#: env/lib/python3.11/site-packages/django/core/validators.py:382
 #, python-format
 msgid "Ensure this value is less than or equal to %(limit_value)s."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/core/validators.py:366
+#: env/lib/python3.11/site-packages/django/core/validators.py:391
 #, python-format
 msgid "Ensure this value is greater than or equal to %(limit_value)s."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/core/validators.py:376
+#: env/lib/python3.11/site-packages/django/core/validators.py:401
 #, python-format
 msgid ""
 "Ensure this value has at least %(limit_value)d character (it has "
@@ -1886,7 +1887,7 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: env/lib/python3.7/site-packages/django/core/validators.py:391
+#: env/lib/python3.11/site-packages/django/core/validators.py:416
 #, python-format
 msgid ""
 "Ensure this value has at most %(limit_value)d character (it has "
@@ -1897,27 +1898,27 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: env/lib/python3.7/site-packages/django/core/validators.py:410
-#: env/lib/python3.7/site-packages/django/forms/fields.py:290
-#: env/lib/python3.7/site-packages/django/forms/fields.py:325
+#: env/lib/python3.11/site-packages/django/core/validators.py:435
+#: env/lib/python3.11/site-packages/django/forms/fields.py:292
+#: env/lib/python3.11/site-packages/django/forms/fields.py:327
 msgid "Enter a number."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/core/validators.py:412
+#: env/lib/python3.11/site-packages/django/core/validators.py:437
 #, python-format
 msgid "Ensure that there are no more than %(max)s digit in total."
 msgid_plural "Ensure that there are no more than %(max)s digits in total."
 msgstr[0] ""
 msgstr[1] ""
 
-#: env/lib/python3.7/site-packages/django/core/validators.py:417
+#: env/lib/python3.11/site-packages/django/core/validators.py:442
 #, python-format
 msgid "Ensure that there are no more than %(max)s decimal place."
 msgid_plural "Ensure that there are no more than %(max)s decimal places."
 msgstr[0] ""
 msgstr[1] ""
 
-#: env/lib/python3.7/site-packages/django/core/validators.py:422
+#: env/lib/python3.11/site-packages/django/core/validators.py:447
 #, python-format
 msgid ""
 "Ensure that there are no more than %(max)s digit before the decimal point."
@@ -1926,330 +1927,339 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: env/lib/python3.7/site-packages/django/core/validators.py:484
+#: env/lib/python3.11/site-packages/django/core/validators.py:509
 #, python-format
 msgid ""
-"File extension '%(extension)s' is not allowed. Allowed extensions are: "
-"'%(allowed_extensions)s'."
+"File extension “%(extension)s” is not allowed. Allowed extensions are: "
+"%(allowed_extensions)s."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/core/validators.py:536
+#: env/lib/python3.11/site-packages/django/core/validators.py:562
 msgid "Null characters are not allowed."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/base.py:1165
-#: env/lib/python3.7/site-packages/django/forms/models.py:756
+#: env/lib/python3.11/site-packages/django/db/models/base.py:1210
+#: env/lib/python3.11/site-packages/django/forms/models.py:768
 msgid "and"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/base.py:1167
+#: env/lib/python3.11/site-packages/django/db/models/base.py:1212
 #, python-format
 msgid "%(model_name)s with this %(field_labels)s already exists."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:104
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:100
 #, python-format
 msgid "Value %(value)r is not a valid choice."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:105
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:101
 msgid "This field cannot be null."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:106
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:102
 msgid "This field cannot be blank."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:107
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:103
 #, python-format
 msgid "%(model_name)s with this %(field_label)s already exists."
 msgstr ""
 
 #. Translators: The 'lookup_type' is one of 'date', 'year' or 'month'.
 #. Eg: "Title must be unique for pub_date year"
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:111
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:107
 #, python-format
 msgid ""
 "%(field_label)s must be unique for %(date_field_label)s %(lookup_type)s."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:128
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:126
 #, python-format
 msgid "Field of type: %(field_type)s"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:905
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1772
-msgid "Integer"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:909
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1770
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:958
 #, python-format
-msgid "'%(value)s' value must be an integer."
+msgid "“%(value)s” value must be either True or False."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:984
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1850
-msgid "Big (8 byte) integer"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:996
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:959
 #, python-format
-msgid "'%(value)s' value must be either True or False."
+msgid "“%(value)s” value must be either True, False, or None."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:997
-#, python-format
-msgid "'%(value)s' value must be either True, False, or None."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:999
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:961
 msgid "Boolean (Either True or False)"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1040
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1002
 #, python-format
 msgid "String (up to %(max_length)s)"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1104
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1096
 msgid "Comma-separated integers"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1153
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1145
 #, python-format
 msgid ""
-"'%(value)s' value has an invalid date format. It must be in YYYY-MM-DD "
+"“%(value)s” value has an invalid date format. It must be in YYYY-MM-DD "
 "format."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1155
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1298
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1147
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1290
 #, python-format
 msgid ""
-"'%(value)s' value has the correct format (YYYY-MM-DD) but it is an invalid "
+"“%(value)s” value has the correct format (YYYY-MM-DD) but it is an invalid "
 "date."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1158
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1150
 msgid "Date (without time)"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1296
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1288
 #, python-format
 msgid ""
-"'%(value)s' value has an invalid format. It must be in YYYY-MM-DD HH:MM[:ss[."
+"“%(value)s” value has an invalid format. It must be in YYYY-MM-DD HH:MM[:ss[."
 "uuuuuu]][TZ] format."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1300
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1292
 #, python-format
 msgid ""
-"'%(value)s' value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]]"
+"“%(value)s” value has the correct format (YYYY-MM-DD HH:MM[:ss[.uuuuuu]]"
 "[TZ]) but it is an invalid date/time."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1304
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1296
 msgid "Date (with time)"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1452
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1444
 #, python-format
-msgid "'%(value)s' value must be a decimal number."
+msgid "“%(value)s” value must be a decimal number."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1454
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1446
 msgid "Decimal number"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1593
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1585
 #, python-format
 msgid ""
-"'%(value)s' value has an invalid format. It must be in [DD] [HH:[MM:]]ss[."
+"“%(value)s” value has an invalid format. It must be in [DD] [[HH:]MM:]ss[."
 "uuuuuu] format."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1596
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1588
 msgid "Duration"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1646
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1638
 msgid "Email address"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1669
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1661
 msgid "File path"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1735
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1727
 #, python-format
-msgid "'%(value)s' value must be a float."
+msgid "“%(value)s” value must be a float."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1737
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1729
 msgid "Floating point number"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1866
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1767
+#, python-format
+msgid "“%(value)s” value must be an integer."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1769
+msgid "Integer"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1852
+msgid "Big (8 byte) integer"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1867
+msgid "Small integer"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1875
 msgid "IPv4 address"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1897
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1906
 msgid "IP address"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1977
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1978
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1986
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1987
 #, python-format
-msgid "'%(value)s' value must be either None, True or False."
+msgid "“%(value)s” value must be either None, True or False."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:1980
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:1989
 msgid "Boolean (Either True, False or None)"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2015
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:2043
+msgid "Positive big integer"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:2056
 msgid "Positive integer"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2028
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:2069
 msgid "Positive small integer"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2042
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:2083
 #, python-format
 msgid "Slug (up to %(max_length)s)"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2074
-msgid "Small integer"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2081
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:2115
 msgid "Text"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2109
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:2181
 #, python-format
 msgid ""
-"'%(value)s' value has an invalid format. It must be in HH:MM[:ss[.uuuuuu]] "
+"“%(value)s” value has an invalid format. It must be in HH:MM[:ss[.uuuuuu]] "
 "format."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2111
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:2183
 #, python-format
 msgid ""
-"'%(value)s' value has the correct format (HH:MM[:ss[.uuuuuu]]) but it is an "
+"“%(value)s” value has the correct format (HH:MM[:ss[.uuuuuu]]) but it is an "
 "invalid time."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2114
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:2186
 msgid "Time"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2240
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:2312
 msgid "URL"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2262
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:2334
 msgid "Raw binary data"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2312
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:2399
 #, python-format
-msgid "'%(value)s' is not a valid UUID."
+msgid "“%(value)s” is not a valid UUID."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/__init__.py:2314
+#: env/lib/python3.11/site-packages/django/db/models/fields/__init__.py:2401
 msgid "Universally unique identifier"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/files.py:222
+#: env/lib/python3.11/site-packages/django/db/models/fields/files.py:226
 msgid "File"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/files.py:362
+#: env/lib/python3.11/site-packages/django/db/models/fields/files.py:375
 msgid "Image"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/related.py:778
+#: env/lib/python3.11/site-packages/django/db/models/fields/json.py:18
+msgid "A JSON object"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/json.py:20
+msgid "Value must be valid JSON."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/django/db/models/fields/related.py:790
 #, python-format
 msgid "%(model)s instance with %(field)s %(value)r does not exist."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/related.py:780
+#: env/lib/python3.11/site-packages/django/db/models/fields/related.py:792
 msgid "Foreign Key (type determined by related field)"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/related.py:1007
+#: env/lib/python3.11/site-packages/django/db/models/fields/related.py:1045
 msgid "One-to-one relationship"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/related.py:1057
+#: env/lib/python3.11/site-packages/django/db/models/fields/related.py:1099
 #, python-format
 msgid "%(from)s-%(to)s relationship"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/related.py:1058
+#: env/lib/python3.11/site-packages/django/db/models/fields/related.py:1100
 #, python-format
 msgid "%(from)s-%(to)s relationships"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/db/models/fields/related.py:1100
+#: env/lib/python3.11/site-packages/django/db/models/fields/related.py:1142
 msgid "Many-to-many relationship"
 msgstr ""
 
 #. Translators: If found as last label character, these punctuation
 #. characters will prevent the default label_suffix to be appended to the label
-#: env/lib/python3.7/site-packages/django/forms/boundfield.py:146
+#: env/lib/python3.11/site-packages/django/forms/boundfield.py:150
 msgid ":?.!"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/fields.py:53
+#: env/lib/python3.11/site-packages/django/forms/fields.py:54
 msgid "This field is required."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/fields.py:245
+#: env/lib/python3.11/site-packages/django/forms/fields.py:247
 msgid "Enter a whole number."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/fields.py:396
-#: env/lib/python3.7/site-packages/django/forms/fields.py:1126
+#: env/lib/python3.11/site-packages/django/forms/fields.py:402
+#: env/lib/python3.11/site-packages/django/forms/fields.py:1146
 msgid "Enter a valid date."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/fields.py:420
-#: env/lib/python3.7/site-packages/django/forms/fields.py:1127
+#: env/lib/python3.11/site-packages/django/forms/fields.py:426
+#: env/lib/python3.11/site-packages/django/forms/fields.py:1147
 msgid "Enter a valid time."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/fields.py:442
+#: env/lib/python3.11/site-packages/django/forms/fields.py:454
 msgid "Enter a valid date/time."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/fields.py:471
+#: env/lib/python3.11/site-packages/django/forms/fields.py:488
 msgid "Enter a valid duration."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/fields.py:472
+#: env/lib/python3.11/site-packages/django/forms/fields.py:489
 #, python-brace-format
 msgid "The number of days must be between {min_days} and {max_days}."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/fields.py:532
+#: env/lib/python3.11/site-packages/django/forms/fields.py:552
 msgid "No file was submitted. Check the encoding type on the form."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/fields.py:533
+#: env/lib/python3.11/site-packages/django/forms/fields.py:553
 msgid "No file was submitted."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/fields.py:534
+#: env/lib/python3.11/site-packages/django/forms/fields.py:554
 msgid "The submitted file is empty."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/fields.py:536
+#: env/lib/python3.11/site-packages/django/forms/fields.py:556
 #, python-format
 msgid "Ensure this filename has at most %(max)d character (it has %(length)d)."
 msgid_plural ""
@@ -2257,984 +2267,969 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: env/lib/python3.7/site-packages/django/forms/fields.py:539
+#: env/lib/python3.11/site-packages/django/forms/fields.py:559
 msgid "Please either submit a file or check the clear checkbox, not both."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/fields.py:600
+#: env/lib/python3.11/site-packages/django/forms/fields.py:620
 msgid ""
 "Upload a valid image. The file you uploaded was either not an image or a "
 "corrupted image."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/fields.py:762
-#: env/lib/python3.7/site-packages/django/forms/fields.py:852
-#: env/lib/python3.7/site-packages/django/forms/models.py:1270
+#: env/lib/python3.11/site-packages/django/forms/fields.py:782
+#: env/lib/python3.11/site-packages/django/forms/fields.py:872
+#: env/lib/python3.11/site-packages/django/forms/models.py:1309
 #, python-format
 msgid "Select a valid choice. %(value)s is not one of the available choices."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/fields.py:853
-#: env/lib/python3.7/site-packages/django/forms/fields.py:968
-#: env/lib/python3.7/site-packages/django/forms/models.py:1269
+#: env/lib/python3.11/site-packages/django/forms/fields.py:873
+#: env/lib/python3.11/site-packages/django/forms/fields.py:988
+#: env/lib/python3.11/site-packages/django/forms/models.py:1308
 msgid "Enter a list of values."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/fields.py:969
+#: env/lib/python3.11/site-packages/django/forms/fields.py:989
 msgid "Enter a complete value."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/fields.py:1185
+#: env/lib/python3.11/site-packages/django/forms/fields.py:1205
 msgid "Enter a valid UUID."
 msgstr ""
 
+#: env/lib/python3.11/site-packages/django/forms/fields.py:1235
+msgid "Enter a valid JSON."
+msgstr ""
+
 #. Translators: This is the default suffix added to form field labels
-#: env/lib/python3.7/site-packages/django/forms/forms.py:86
+#: env/lib/python3.11/site-packages/django/forms/forms.py:76
 msgid ":"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/forms.py:212
+#: env/lib/python3.11/site-packages/django/forms/forms.py:203
 #, python-format
 msgid "(Hidden field %(name)s) %(error)s"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/formsets.py:91
-msgid "ManagementForm data is missing or has been tampered with"
+#: env/lib/python3.11/site-packages/django/forms/formsets.py:61
+#, python-format
+msgid ""
+"ManagementForm data is missing or has been tampered with. Missing fields: "
+"%(field_names)s. You may need to file a bug report if the issue persists."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/formsets.py:338
+#: env/lib/python3.11/site-packages/django/forms/formsets.py:370
 #, python-format
-msgid "Please submit %d or fewer forms."
-msgid_plural "Please submit %d or fewer forms."
+msgid "Please submit at most %d form."
+msgid_plural "Please submit at most %d forms."
 msgstr[0] ""
 msgstr[1] ""
 
-#: env/lib/python3.7/site-packages/django/forms/formsets.py:345
+#: env/lib/python3.11/site-packages/django/forms/formsets.py:377
 #, python-format
-msgid "Please submit %d or more forms."
-msgid_plural "Please submit %d or more forms."
+msgid "Please submit at least %d form."
+msgid_plural "Please submit at least %d forms."
 msgstr[0] ""
 msgstr[1] ""
 
-#: env/lib/python3.7/site-packages/django/forms/formsets.py:371
-#: env/lib/python3.7/site-packages/django/forms/formsets.py:373
+#: env/lib/python3.11/site-packages/django/forms/formsets.py:405
+#: env/lib/python3.11/site-packages/django/forms/formsets.py:412
 msgid "Order"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/formsets.py:375
+#: env/lib/python3.11/site-packages/django/forms/formsets.py:417
 msgid "Delete"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/models.py:751
+#: env/lib/python3.11/site-packages/django/forms/models.py:763
 #, python-format
 msgid "Please correct the duplicate data for %(field)s."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/models.py:755
+#: env/lib/python3.11/site-packages/django/forms/models.py:767
 #, python-format
 msgid "Please correct the duplicate data for %(field)s, which must be unique."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/models.py:761
+#: env/lib/python3.11/site-packages/django/forms/models.py:773
 #, python-format
 msgid ""
 "Please correct the duplicate data for %(field_name)s which must be unique "
 "for the %(lookup)s in %(date_field)s."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/models.py:770
+#: env/lib/python3.11/site-packages/django/forms/models.py:782
 msgid "Please correct the duplicate values below."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/models.py:1091
+#: env/lib/python3.11/site-packages/django/forms/models.py:1109
 msgid "The inline value did not match the parent instance."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/models.py:1158
+#: env/lib/python3.11/site-packages/django/forms/models.py:1193
 msgid "Select a valid choice. That choice is not one of the available choices."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/models.py:1272
+#: env/lib/python3.11/site-packages/django/forms/models.py:1311
 #, python-format
-msgid "\"%(pk)s\" is not a valid value."
+msgid "“%(pk)s” is not a valid value."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/utils.py:162
+#: env/lib/python3.11/site-packages/django/forms/utils.py:172
 #, python-format
 msgid ""
-"%(datetime)s couldn't be interpreted in time zone %(current_timezone)s; it "
+"%(datetime)s couldn’t be interpreted in time zone %(current_timezone)s; it "
 "may be ambiguous or it may not exist."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/widgets.py:395
+#: env/lib/python3.11/site-packages/django/forms/widgets.py:427
 msgid "Clear"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/widgets.py:396
+#: env/lib/python3.11/site-packages/django/forms/widgets.py:428
 msgid "Currently"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/widgets.py:397
+#: env/lib/python3.11/site-packages/django/forms/widgets.py:429
 msgid "Change"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/widgets.py:709
+#: env/lib/python3.11/site-packages/django/forms/widgets.py:738
 msgid "Unknown"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/widgets.py:710
+#: env/lib/python3.11/site-packages/django/forms/widgets.py:739
 msgid "Yes"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/forms/widgets.py:711
+#: env/lib/python3.11/site-packages/django/forms/widgets.py:740
 msgid "No"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/template/defaultfilters.py:788
+#. Translators: Please do not add spaces around commas.
+#: env/lib/python3.11/site-packages/django/template/defaultfilters.py:817
 msgid "yes,no,maybe"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/template/defaultfilters.py:817
-#: env/lib/python3.7/site-packages/django/template/defaultfilters.py:834
+#: env/lib/python3.11/site-packages/django/template/defaultfilters.py:846
+#: env/lib/python3.11/site-packages/django/template/defaultfilters.py:863
 #, python-format
 msgid "%(size)d byte"
 msgid_plural "%(size)d bytes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: env/lib/python3.7/site-packages/django/template/defaultfilters.py:836
+#: env/lib/python3.11/site-packages/django/template/defaultfilters.py:865
 #, python-format
 msgid "%s KB"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/template/defaultfilters.py:838
+#: env/lib/python3.11/site-packages/django/template/defaultfilters.py:867
 #, python-format
 msgid "%s MB"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/template/defaultfilters.py:840
+#: env/lib/python3.11/site-packages/django/template/defaultfilters.py:869
 #, python-format
 msgid "%s GB"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/template/defaultfilters.py:842
+#: env/lib/python3.11/site-packages/django/template/defaultfilters.py:871
 #, python-format
 msgid "%s TB"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/template/defaultfilters.py:844
+#: env/lib/python3.11/site-packages/django/template/defaultfilters.py:873
 #, python-format
 msgid "%s PB"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dateformat.py:62
+#: env/lib/python3.11/site-packages/django/utils/dateformat.py:66
 msgid "p.m."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dateformat.py:63
+#: env/lib/python3.11/site-packages/django/utils/dateformat.py:67
 msgid "a.m."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dateformat.py:68
+#: env/lib/python3.11/site-packages/django/utils/dateformat.py:72
 msgid "PM"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dateformat.py:69
+#: env/lib/python3.11/site-packages/django/utils/dateformat.py:73
 msgid "AM"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dateformat.py:150
+#: env/lib/python3.11/site-packages/django/utils/dateformat.py:146
 msgid "midnight"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dateformat.py:152
+#: env/lib/python3.11/site-packages/django/utils/dateformat.py:148
 msgid "noon"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:6
-#: env/lib/python3.7/site-packages/tornado/locale.py:295
+#: env/lib/python3.11/site-packages/django/utils/dates.py:6
 msgid "Monday"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:6
-#: env/lib/python3.7/site-packages/tornado/locale.py:296
+#: env/lib/python3.11/site-packages/django/utils/dates.py:6
 msgid "Tuesday"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:6
-#: env/lib/python3.7/site-packages/tornado/locale.py:297
+#: env/lib/python3.11/site-packages/django/utils/dates.py:6
 msgid "Wednesday"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:6
-#: env/lib/python3.7/site-packages/tornado/locale.py:298
+#: env/lib/python3.11/site-packages/django/utils/dates.py:6
 msgid "Thursday"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:6
-#: env/lib/python3.7/site-packages/tornado/locale.py:299
+#: env/lib/python3.11/site-packages/django/utils/dates.py:6
 msgid "Friday"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:7
-#: env/lib/python3.7/site-packages/tornado/locale.py:300
+#: env/lib/python3.11/site-packages/django/utils/dates.py:7
 msgid "Saturday"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:7
-#: env/lib/python3.7/site-packages/tornado/locale.py:301
+#: env/lib/python3.11/site-packages/django/utils/dates.py:7
 msgid "Sunday"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:10
+#: env/lib/python3.11/site-packages/django/utils/dates.py:10
 msgid "Mon"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:10
+#: env/lib/python3.11/site-packages/django/utils/dates.py:10
 msgid "Tue"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:10
+#: env/lib/python3.11/site-packages/django/utils/dates.py:10
 msgid "Wed"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:10
+#: env/lib/python3.11/site-packages/django/utils/dates.py:10
 msgid "Thu"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:10
+#: env/lib/python3.11/site-packages/django/utils/dates.py:10
 msgid "Fri"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:11
+#: env/lib/python3.11/site-packages/django/utils/dates.py:11
 msgid "Sat"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:11
+#: env/lib/python3.11/site-packages/django/utils/dates.py:11
 msgid "Sun"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:14
-#: env/lib/python3.7/site-packages/tornado/locale.py:281
+#: env/lib/python3.11/site-packages/django/utils/dates.py:14
 msgid "January"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:14
-#: env/lib/python3.7/site-packages/tornado/locale.py:282
+#: env/lib/python3.11/site-packages/django/utils/dates.py:14
 msgid "February"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:14
-#: env/lib/python3.7/site-packages/tornado/locale.py:283
+#: env/lib/python3.11/site-packages/django/utils/dates.py:14
 msgid "March"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:14
-#: env/lib/python3.7/site-packages/tornado/locale.py:284
+#: env/lib/python3.11/site-packages/django/utils/dates.py:14
 msgid "April"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:14
-#: env/lib/python3.7/site-packages/tornado/locale.py:285
+#: env/lib/python3.11/site-packages/django/utils/dates.py:14
 msgid "May"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:14
-#: env/lib/python3.7/site-packages/tornado/locale.py:286
+#: env/lib/python3.11/site-packages/django/utils/dates.py:14
 msgid "June"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:15
-#: env/lib/python3.7/site-packages/tornado/locale.py:287
+#: env/lib/python3.11/site-packages/django/utils/dates.py:15
 msgid "July"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:15
-#: env/lib/python3.7/site-packages/tornado/locale.py:288
+#: env/lib/python3.11/site-packages/django/utils/dates.py:15
 msgid "August"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:15
-#: env/lib/python3.7/site-packages/tornado/locale.py:289
+#: env/lib/python3.11/site-packages/django/utils/dates.py:15
 msgid "September"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:15
-#: env/lib/python3.7/site-packages/tornado/locale.py:290
+#: env/lib/python3.11/site-packages/django/utils/dates.py:15
 msgid "October"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:15
-#: env/lib/python3.7/site-packages/tornado/locale.py:291
+#: env/lib/python3.11/site-packages/django/utils/dates.py:15
 msgid "November"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:16
-#: env/lib/python3.7/site-packages/tornado/locale.py:292
+#: env/lib/python3.11/site-packages/django/utils/dates.py:16
 msgid "December"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:19
+#: env/lib/python3.11/site-packages/django/utils/dates.py:19
 msgid "jan"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:19
+#: env/lib/python3.11/site-packages/django/utils/dates.py:19
 msgid "feb"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:19
+#: env/lib/python3.11/site-packages/django/utils/dates.py:19
 msgid "mar"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:19
+#: env/lib/python3.11/site-packages/django/utils/dates.py:19
 msgid "apr"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:19
+#: env/lib/python3.11/site-packages/django/utils/dates.py:19
 msgid "may"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:19
+#: env/lib/python3.11/site-packages/django/utils/dates.py:19
 msgid "jun"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:20
+#: env/lib/python3.11/site-packages/django/utils/dates.py:20
 msgid "jul"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:20
+#: env/lib/python3.11/site-packages/django/utils/dates.py:20
 msgid "aug"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:20
+#: env/lib/python3.11/site-packages/django/utils/dates.py:20
 msgid "sep"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:20
+#: env/lib/python3.11/site-packages/django/utils/dates.py:20
 msgid "oct"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:20
+#: env/lib/python3.11/site-packages/django/utils/dates.py:20
 msgid "nov"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:20
+#: env/lib/python3.11/site-packages/django/utils/dates.py:20
 msgid "dec"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:23
+#: env/lib/python3.11/site-packages/django/utils/dates.py:23
 msgctxt "abbrev. month"
 msgid "Jan."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:24
+#: env/lib/python3.11/site-packages/django/utils/dates.py:24
 msgctxt "abbrev. month"
 msgid "Feb."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:25
+#: env/lib/python3.11/site-packages/django/utils/dates.py:25
 msgctxt "abbrev. month"
 msgid "March"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:26
+#: env/lib/python3.11/site-packages/django/utils/dates.py:26
 msgctxt "abbrev. month"
 msgid "April"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:27
+#: env/lib/python3.11/site-packages/django/utils/dates.py:27
 msgctxt "abbrev. month"
 msgid "May"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:28
+#: env/lib/python3.11/site-packages/django/utils/dates.py:28
 msgctxt "abbrev. month"
 msgid "June"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:29
+#: env/lib/python3.11/site-packages/django/utils/dates.py:29
 msgctxt "abbrev. month"
 msgid "July"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:30
+#: env/lib/python3.11/site-packages/django/utils/dates.py:30
 msgctxt "abbrev. month"
 msgid "Aug."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:31
+#: env/lib/python3.11/site-packages/django/utils/dates.py:31
 msgctxt "abbrev. month"
 msgid "Sept."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:32
+#: env/lib/python3.11/site-packages/django/utils/dates.py:32
 msgctxt "abbrev. month"
 msgid "Oct."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:33
+#: env/lib/python3.11/site-packages/django/utils/dates.py:33
 msgctxt "abbrev. month"
 msgid "Nov."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:34
+#: env/lib/python3.11/site-packages/django/utils/dates.py:34
 msgctxt "abbrev. month"
 msgid "Dec."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:37
+#: env/lib/python3.11/site-packages/django/utils/dates.py:37
 msgctxt "alt. month"
 msgid "January"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:38
+#: env/lib/python3.11/site-packages/django/utils/dates.py:38
 msgctxt "alt. month"
 msgid "February"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:39
+#: env/lib/python3.11/site-packages/django/utils/dates.py:39
 msgctxt "alt. month"
 msgid "March"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:40
+#: env/lib/python3.11/site-packages/django/utils/dates.py:40
 msgctxt "alt. month"
 msgid "April"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:41
+#: env/lib/python3.11/site-packages/django/utils/dates.py:41
 msgctxt "alt. month"
 msgid "May"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:42
+#: env/lib/python3.11/site-packages/django/utils/dates.py:42
 msgctxt "alt. month"
 msgid "June"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:43
+#: env/lib/python3.11/site-packages/django/utils/dates.py:43
 msgctxt "alt. month"
 msgid "July"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:44
+#: env/lib/python3.11/site-packages/django/utils/dates.py:44
 msgctxt "alt. month"
 msgid "August"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:45
+#: env/lib/python3.11/site-packages/django/utils/dates.py:45
 msgctxt "alt. month"
 msgid "September"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:46
+#: env/lib/python3.11/site-packages/django/utils/dates.py:46
 msgctxt "alt. month"
 msgid "October"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:47
+#: env/lib/python3.11/site-packages/django/utils/dates.py:47
 msgctxt "alt. month"
 msgid "November"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/dates.py:48
+#: env/lib/python3.11/site-packages/django/utils/dates.py:48
 msgctxt "alt. month"
 msgid "December"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/ipv6.py:8
+#: env/lib/python3.11/site-packages/django/utils/ipv6.py:8
 msgid "This is not a valid IPv6 address."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/text.py:68
+#: env/lib/python3.11/site-packages/django/utils/text.py:78
 #, python-format
 msgctxt "String to return when truncating text"
 msgid "%(truncated_text)s…"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/text.py:237
+#: env/lib/python3.11/site-packages/django/utils/text.py:256
 msgid "or"
 msgstr ""
 
 #. Translators: This string is used as a separator between list elements
-#: env/lib/python3.7/site-packages/django/utils/text.py:256
-#: env/lib/python3.7/site-packages/django/utils/timesince.py:83
+#: env/lib/python3.11/site-packages/django/utils/text.py:275
+#: env/lib/python3.11/site-packages/django/utils/timesince.py:94
 msgid ", "
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/utils/timesince.py:9
+#: env/lib/python3.11/site-packages/django/utils/timesince.py:9
 #, python-format
 msgid "%d year"
 msgid_plural "%d years"
 msgstr[0] ""
 msgstr[1] ""
 
-#: env/lib/python3.7/site-packages/django/utils/timesince.py:10
+#: env/lib/python3.11/site-packages/django/utils/timesince.py:10
 #, python-format
 msgid "%d month"
 msgid_plural "%d months"
 msgstr[0] ""
 msgstr[1] ""
 
-#: env/lib/python3.7/site-packages/django/utils/timesince.py:11
+#: env/lib/python3.11/site-packages/django/utils/timesince.py:11
 #, python-format
 msgid "%d week"
 msgid_plural "%d weeks"
 msgstr[0] ""
 msgstr[1] ""
 
-#: env/lib/python3.7/site-packages/django/utils/timesince.py:12
+#: env/lib/python3.11/site-packages/django/utils/timesince.py:12
 #, python-format
 msgid "%d day"
 msgid_plural "%d days"
 msgstr[0] ""
 msgstr[1] ""
 
-#: env/lib/python3.7/site-packages/django/utils/timesince.py:13
+#: env/lib/python3.11/site-packages/django/utils/timesince.py:13
 #, python-format
 msgid "%d hour"
 msgid_plural "%d hours"
 msgstr[0] ""
 msgstr[1] ""
 
-#: env/lib/python3.7/site-packages/django/utils/timesince.py:14
+#: env/lib/python3.11/site-packages/django/utils/timesince.py:14
 #, python-format
 msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: env/lib/python3.7/site-packages/django/utils/timesince.py:72
-msgid "0 minutes"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/views/csrf.py:110
+#: env/lib/python3.11/site-packages/django/views/csrf.py:110
 msgid "Forbidden"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/views/csrf.py:111
+#: env/lib/python3.11/site-packages/django/views/csrf.py:111
 msgid "CSRF verification failed. Request aborted."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/views/csrf.py:115
+#: env/lib/python3.11/site-packages/django/views/csrf.py:115
 msgid ""
-"You are seeing this message because this HTTPS site requires a 'Referer "
-"header' to be sent by your Web browser, but none was sent. This header is "
+"You are seeing this message because this HTTPS site requires a “Referer "
+"header” to be sent by your Web browser, but none was sent. This header is "
 "required for security reasons, to ensure that your browser is not being "
 "hijacked by third parties."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/views/csrf.py:120
+#: env/lib/python3.11/site-packages/django/views/csrf.py:120
 msgid ""
-"If you have configured your browser to disable 'Referer' headers, please re-"
-"enable them, at least for this site, or for HTTPS connections, or for 'same-"
-"origin' requests."
+"If you have configured your browser to disable “Referer” headers, please re-"
+"enable them, at least for this site, or for HTTPS connections, or for “same-"
+"origin” requests."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/views/csrf.py:124
+#: env/lib/python3.11/site-packages/django/views/csrf.py:124
 msgid ""
 "If you are using the <meta name=\"referrer\" content=\"no-referrer\"> tag or "
-"including the 'Referrer-Policy: no-referrer' header, please remove them. The "
-"CSRF protection requires the 'Referer' header to do strict referer checking. "
-"If you're concerned about privacy, use alternatives like <a rel=\"noreferrer"
-"\" ...> for links to third-party sites."
+"including the “Referrer-Policy: no-referrer” header, please remove them. The "
+"CSRF protection requires the “Referer” header to do strict referer checking. "
+"If you’re concerned about privacy, use alternatives like <a "
+"rel=\"noreferrer\" …> for links to third-party sites."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/views/csrf.py:132
+#: env/lib/python3.11/site-packages/django/views/csrf.py:132
 msgid ""
 "You are seeing this message because this site requires a CSRF cookie when "
 "submitting forms. This cookie is required for security reasons, to ensure "
 "that your browser is not being hijacked by third parties."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/views/csrf.py:137
+#: env/lib/python3.11/site-packages/django/views/csrf.py:137
 msgid ""
 "If you have configured your browser to disable cookies, please re-enable "
-"them, at least for this site, or for 'same-origin' requests."
+"them, at least for this site, or for “same-origin” requests."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/views/csrf.py:142
+#: env/lib/python3.11/site-packages/django/views/csrf.py:142
 msgid "More information is available with DEBUG=True."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/views/generic/dates.py:41
+#: env/lib/python3.11/site-packages/django/views/generic/dates.py:41
 msgid "No year specified"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/views/generic/dates.py:61
-#: env/lib/python3.7/site-packages/django/views/generic/dates.py:111
-#: env/lib/python3.7/site-packages/django/views/generic/dates.py:208
+#: env/lib/python3.11/site-packages/django/views/generic/dates.py:61
+#: env/lib/python3.11/site-packages/django/views/generic/dates.py:111
+#: env/lib/python3.11/site-packages/django/views/generic/dates.py:208
 msgid "Date out of range"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/views/generic/dates.py:90
+#: env/lib/python3.11/site-packages/django/views/generic/dates.py:90
 msgid "No month specified"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/views/generic/dates.py:142
+#: env/lib/python3.11/site-packages/django/views/generic/dates.py:142
 msgid "No day specified"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/views/generic/dates.py:188
+#: env/lib/python3.11/site-packages/django/views/generic/dates.py:188
 msgid "No week specified"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/views/generic/dates.py:338
-#: env/lib/python3.7/site-packages/django/views/generic/dates.py:367
+#: env/lib/python3.11/site-packages/django/views/generic/dates.py:338
+#: env/lib/python3.11/site-packages/django/views/generic/dates.py:367
 #, python-format
 msgid "No %(verbose_name_plural)s available"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/views/generic/dates.py:589
+#: env/lib/python3.11/site-packages/django/views/generic/dates.py:594
 #, python-format
 msgid ""
 "Future %(verbose_name_plural)s not available because %(class_name)s."
 "allow_future is False."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/views/generic/dates.py:623
+#: env/lib/python3.11/site-packages/django/views/generic/dates.py:628
 #, python-format
-msgid "Invalid date string '%(datestr)s' given format '%(format)s'"
+msgid "Invalid date string “%(datestr)s” given format “%(format)s”"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/views/generic/detail.py:54
+#: env/lib/python3.11/site-packages/django/views/generic/detail.py:54
 #, python-format
 msgid "No %(verbose_name)s found matching the query"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/views/generic/list.py:67
-msgid "Page is not 'last', nor can it be converted to an int."
+#: env/lib/python3.11/site-packages/django/views/generic/list.py:67
+msgid "Page is not “last”, nor can it be converted to an int."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/views/generic/list.py:72
+#: env/lib/python3.11/site-packages/django/views/generic/list.py:72
 #, python-format
 msgid "Invalid page (%(page_number)s): %(message)s"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/views/generic/list.py:154
+#: env/lib/python3.11/site-packages/django/views/generic/list.py:154
 #, python-format
-msgid "Empty list and '%(class_name)s.allow_empty' is False."
+msgid "Empty list and “%(class_name)s.allow_empty” is False."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/views/static.py:40
+#: env/lib/python3.11/site-packages/django/views/static.py:40
 msgid "Directory indexes are not allowed here."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/views/static.py:42
+#: env/lib/python3.11/site-packages/django/views/static.py:42
 #, python-format
-msgid "\"%(path)s\" does not exist"
+msgid "“%(path)s” does not exist"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/views/static.py:80
+#: env/lib/python3.11/site-packages/django/views/static.py:80
 #, python-format
 msgid "Index of %(directory)s"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:6
-msgid "Django: the Web framework for perfectionists with deadlines."
+#: env/lib/python3.11/site-packages/django/views/templates/default_urlconf.html:7
+#: env/lib/python3.11/site-packages/django/views/templates/default_urlconf.html:221
+msgid "The install worked successfully! Congratulations!"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:345
+#: env/lib/python3.11/site-packages/django/views/templates/default_urlconf.html:207
 #, python-format
 msgid ""
 "View <a href=\"https://docs.djangoproject.com/en/%(version)s/releases/\" "
 "target=\"_blank\" rel=\"noopener\">release notes</a> for Django %(version)s"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:367
-msgid "The install worked successfully! Congratulations!"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:368
+#: env/lib/python3.11/site-packages/django/views/templates/default_urlconf.html:222
 #, python-format
 msgid ""
 "You are seeing this page because <a href=\"https://docs.djangoproject.com/en/"
-"%(version)s/ref/settings/#debug\" target=\"_blank\" rel=\"noopener"
-"\">DEBUG=True</a> is in your settings file and you have not configured any "
-"URLs."
+"%(version)s/ref/settings/#debug\" target=\"_blank\" "
+"rel=\"noopener\">DEBUG=True</a> is in your settings file and you have not "
+"configured any URLs."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:383
+#: env/lib/python3.11/site-packages/django/views/templates/default_urlconf.html:230
 msgid "Django Documentation"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:384
-msgid "Topics, references, &amp; how-to's"
+#: env/lib/python3.11/site-packages/django/views/templates/default_urlconf.html:231
+msgid "Topics, references, &amp; how-to’s"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:395
+#: env/lib/python3.11/site-packages/django/views/templates/default_urlconf.html:239
 msgid "Tutorial: A Polling App"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:396
+#: env/lib/python3.11/site-packages/django/views/templates/default_urlconf.html:240
 msgid "Get started with Django"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:407
+#: env/lib/python3.11/site-packages/django/views/templates/default_urlconf.html:248
 msgid "Django Community"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/django/views/templates/default_urlconf.html:408
+#: env/lib/python3.11/site-packages/django/views/templates/default_urlconf.html:249
 msgid "Connect, get help, or contribute"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/isort/main.py:157
+#: env/lib/python3.11/site-packages/isort/main.py:158
 msgid "show this help message and exit"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/modeltranslation/widgets.py:25
+#: env/lib/python3.11/site-packages/modeltranslation/widgets.py:24
 msgid "None"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/pylint_django/tests/input/func_noerror_gettext_lazy_format.py:7
-#: env/lib/python3.7/site-packages/pylint_django/tests/input/func_noerror_ugettext_lazy_format.py:7
-#, python-brace-format
-msgid "{something}"
+#: env/lib/python3.11/site-packages/passlib/ext/django/utils.py:1000
+msgid "algorithm"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/scheduler/admin.py:32
-#, python-format
-msgid "Delete selected %(verbose_name_plural)s"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/scheduler/admin.py:47
-#: env/lib/python3.7/site-packages/scheduler/admin.py:73
-#: env/lib/python3.7/site-packages/scheduler/admin.py:100
+#: env/lib/python3.11/site-packages/scheduler/admin/job.py:62
 msgid "RQ Settings"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/scheduler/admin.py:50
-#: env/lib/python3.7/site-packages/scheduler/admin.py:76
-#: env/lib/python3.7/site-packages/scheduler/admin.py:103
+#: env/lib/python3.11/site-packages/scheduler/admin/job.py:75
 msgid "Scheduling"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/scheduler/apps.py:10
+#: env/lib/python3.11/site-packages/scheduler/admin/job.py:115
+#, python-format
+msgid "Disable selected %(verbose_name_plural)s"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/scheduler/admin/job.py:128
+#, python-format
+msgid "Enable selected %(verbose_name_plural)s"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/scheduler/apps.py:8
 msgid "Django RQ Scheduler"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/scheduler/models.py:22
-msgid "name"
+#: env/lib/python3.11/site-packages/scheduler/models/args.py:23
+msgid "string"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/scheduler/models.py:23
+#: env/lib/python3.11/site-packages/scheduler/models/args.py:24
+msgid "int"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/scheduler/models/args.py:25
+msgid "boolean"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/scheduler/models/args.py:26
+msgid "datetime"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/scheduler/models/args.py:27
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:46
 msgid "callable"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/scheduler/models.py:24
+#: env/lib/python3.11/site-packages/scheduler/models/args.py:30
+msgid "Argument Type"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/scheduler/models/args.py:32
+msgid "Argument Value"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/scheduler/models/args.py:41
+msgid ""
+"Could not parse {self.arg_type}, options are: {ARG_TYPE_TYPES_DICT.keys()}"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/scheduler/models/args.py:56
+#, python-brace-format
+msgid "Could not parse {self.val} as {self.arg_type}"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:44
+msgid "name"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:50
 msgid "enabled"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/scheduler/models.py:25
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:51
+msgid ""
+"Should job be scheduled? This field is useful to keep past jobs that should "
+"no longer be scheduled"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:55
 msgid "queue"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/scheduler/models.py:27
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:56
+msgid "Queue name"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:58
 msgid "job id"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/scheduler/models.py:29
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:59
+msgid "Current job_id on queue"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:61
+msgid "repeat"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:62
+msgid ""
+"Number of times to run the job. Leaving this blank means it will run forever."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:64
+msgid "At front"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:65
+msgid "When queuing the job, add it in the front of the queue"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:67
 msgid "timeout"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/scheduler/models.py:31
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:68
 msgid ""
 "Timeout specifies the maximum runtime, in seconds, for the job before it'll "
 "be considered 'lost'. Blank uses the default timeout."
 msgstr ""
 
-#: env/lib/python3.7/site-packages/scheduler/models.py:37
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:72
 msgid "result ttl"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/scheduler/models.py:38
-msgid ""
-"The TTL value (in seconds) of the job result. -1: Result never expires, you "
-"should delete jobs manually. 0: Result gets deleted immediately. >0: Result "
-"expires after n seconds."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/scheduler/models.py:65
-msgid "Invalid callable, must be importable"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/scheduler/models.py:73
-msgid "Invalid queue, must be one of: {}"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/scheduler/models.py:79
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:83
 msgid "is scheduled?"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/scheduler/models.py:130
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:268
+msgid "Invalid callable, must be importable"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:276
+msgid "Invalid queue, must be one of: {}"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:289
 msgid "scheduled time"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/scheduler/models.py:142
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:305
 msgid "Scheduled Job"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/scheduler/models.py:143
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:306
 msgid "Scheduled Jobs"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/scheduler/models.py:150
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:312
+msgid "seconds"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:313
 msgid "minutes"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/scheduler/models.py:151
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:314
 msgid "hours"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/scheduler/models.py:152
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:315
 msgid "days"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/scheduler/models.py:153
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:316
 msgid "weeks"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/scheduler/models.py:156
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:318
 msgid "interval"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/scheduler/models.py:158
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:320
 msgid "interval unit"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/scheduler/models.py:160
-#: env/lib/python3.7/site-packages/scheduler/models.py:201
-msgid "repeat"
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:332
+msgid ""
+"Job interval is set lower than %(queue)r queue's interval. minimum interval "
+"is %(interval)"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/scheduler/models.py:189
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:338
+#, python-format
+msgid ""
+"Job interval is not a multiple of rq_scheduler's interval frequency: "
+"%(interval)ss"
+msgstr ""
+
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:349
+#, python-format
+msgid ""
+"Job result_ttl must be either indefinite (-1) or longer than the interval, "
+"%(interval)s seconds, to ensure rescheduling."
+msgstr ""
+
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:380
 msgid "Repeatable Job"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/scheduler/models.py:190
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:381
 msgid "Repeatable Jobs"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/scheduler/models.py:198
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:389
 msgid "cron string"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/scheduler/models.py:199
-msgid "Define the schedule in a crontab like syntax."
-msgstr ""
-
-#: env/lib/python3.7/site-packages/scheduler/models.py:231
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:409
 msgid "Cron Job"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/scheduler/models.py:232
+#: env/lib/python3.11/site-packages/scheduler/models/scheduled_job.py:410
 msgid "Cron Jobs"
 msgstr ""
 
-#: env/lib/python3.7/site-packages/tornado/locale.py:371
-msgid "1 second ago"
-msgstr ""
+#: env/lib/python3.11/site-packages/scheduler/templates/admin/scheduler/jobs-list.partial.html:63
+msgid ""
+"entry\n"
+"                "
+msgid_plural "entries"
+msgstr[0] ""
+msgstr[1] ""
 
-#: env/lib/python3.7/site-packages/tornado/locale.py:377
-msgid "1 minute ago"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/tornado/locale.py:382
-msgid "1 hour ago"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/tornado/locale.py:385
-#, python-format
-msgid "%(time)s"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/tornado/locale.py:387
-msgid "yesterday"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/tornado/locale.py:387
-#, python-format
-msgid "yesterday at %(time)s"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/tornado/locale.py:389
-#, python-format
-msgid "%(weekday)s"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/tornado/locale.py:389
-#, python-format
-msgid "%(weekday)s at %(time)s"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/tornado/locale.py:392
-#: env/lib/python3.7/site-packages/tornado/locale.py:445
-#, python-format
-msgid "%(month_name)s %(day)s"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/tornado/locale.py:394
-#, python-format
-msgid "%(month_name)s %(day)s at %(time)s"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/tornado/locale.py:399
-#, python-format
-msgid "%(month_name)s %(day)s, %(year)s"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/tornado/locale.py:401
-#, python-format
-msgid "%(month_name)s %(day)s, %(year)s at %(time)s"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/tornado/locale.py:439
-#, python-format
-msgid "%(weekday)s, %(month_name)s %(day)s"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/tornado/locale.py:462
-#, python-format
-msgid "%(commas)s and %(last)s"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/tornado/test/locale_test.py:68
-msgctxt "law"
-msgid "right"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/tornado/test/locale_test.py:69
-msgctxt "good"
-msgid "right"
-msgstr ""
-
-#: env/lib/python3.7/site-packages/tornado/test/locale_test.py:71
-#: env/lib/python3.7/site-packages/tornado/test/locale_test.py:74
-msgctxt "organization"
-msgid "club"
-msgstr "club"
-
-#: env/lib/python3.7/site-packages/tornado/test/locale_test.py:76
-#: env/lib/python3.7/site-packages/tornado/test/locale_test.py:77
-msgctxt "stick"
-msgid "club"
-msgstr "club"
-
-#: fonctions/decorators.py:31
+#: fonctions/decorators.py:26
 msgid ""
 "Vous devez vous trouver sur le réseau du ResEl pour accéder à cette page."
 msgstr "You must be on the ResEl network to access this page."
 
-#: fonctions/decorators.py:57
+#: fonctions/decorators.py:52
+msgid "Cette page n’est accessible qu’aux gestionnaires Maisel/MDE"
+msgstr "This page is only accessible to Maisel/MDE managers"
+
+#: fonctions/decorators.py:78
+msgid "Cette page n’est pas accessible aux employés Maisel/MDE"
+msgstr "This page is not accessible to Maisel/MDE employees"
+
+#: fonctions/decorators.py:110
 msgid "Votre cotisation et vos frais d'accès internet sont à jour."
 msgstr "Your membership and internet access fees are up to date."
 
-#: fonctions/decorators.py:87
+#: fonctions/decorators.py:140 pages/templates/pages/home/home_logged.html:177
 msgid ""
-"Veuillez vous connecter au réseau ResEl Secure pour effectuer votre paiement."
-msgstr "Please log in to the ResEl Secure network to make your payment."
+"Veuillez vous connecter au réseau ResEl Secure ou ResEl Next pour procéder "
+"au paiement."
+msgstr ""
+"Please connect to the ResEl Secure or ResEl Next network to proceed to "
+"checkout."
 
-#: fonctions/decorators.py:90
+#: fonctions/decorators.py:143
 msgid ""
 "Veuillez vous connecter à un réseau connecté à Internet (4G, Eduroam,…) pour "
 "effectuer votre paiement."
@@ -3242,12 +3237,12 @@ msgstr ""
 "Please connect to a network connected to the Internet (4G, Eduroam,...) to "
 "make your payment."
 
-#: fonctions/decorators.py:120
+#: fonctions/decorators.py:173
 msgid ""
 "Vous n'êtes pas membre de l'AE, vous ne pouvez donc pas accéder à cette page."
 msgstr "You are not an AE member, you are not authorized to access this page."
 
-#: fonctions/decorators.py:141
+#: fonctions/decorators.py:194
 msgid "Vous n'êtes pas admin de l'AE."
 msgstr "You are not an AE admin"
 
@@ -3256,139 +3251,156 @@ msgstr "You are not an AE admin"
 msgid "Inscription au ResEl"
 msgstr "Subscription to the ResEl"
 
-#: gestion_personnes/forms.py:34 gestion_personnes/forms.py:138
-msgid "Indiquez votre formation"
-msgstr "Fill in your curriculum"
+#: gestion_personnes/forms.py:39 gestion_personnes/forms.py:145
+msgid "Généraliste (FISE/FIG)"
+msgstr "MEng (FISE/FIG)"
 
-#: gestion_personnes/forms.py:35 gestion_personnes/forms.py:139
-msgid "Ingénieur généraliste (FIG/FISE)"
-msgstr "Master of Engineering (FIG/FISE)"
+#: gestion_personnes/forms.py:40 gestion_personnes/forms.py:146
+msgid "Par alternance (FISA/FIP/FIL/FIT)"
+msgstr "Sandwich degree (FISA/FIP/FIL/FIT)"
 
-#: gestion_personnes/forms.py:36 gestion_personnes/forms.py:140
-msgid "Ingénieur par alternance (FIP)"
-msgstr "Master of Engineering via sandwich course (FIP)"
-
-#: gestion_personnes/forms.py:37 gestion_personnes/forms.py:141
-msgid "Master spécialisé"
-msgstr "Master of Science (MSc)"
-
-#: gestion_personnes/forms.py:44 gestion_personnes/forms.py:171
-#: gestion_personnes/forms.py:530
+#: gestion_personnes/forms.py:47 gestion_personnes/forms.py:180
+#: gestion_personnes/forms.py:555
 msgid "Addresse e-mail"
 msgstr "Email address"
 
-#: gestion_personnes/forms.py:69 gestion_personnes/forms.py:245
+#: gestion_personnes/forms.py:72 gestion_personnes/forms.py:253
 msgid "N° de Chambre"
 msgstr "Room n°"
 
-#: gestion_personnes/forms.py:78 gestion_personnes/forms.py:254
+#: gestion_personnes/forms.py:81 gestion_personnes/forms.py:262
 msgid "Addresse postale complète"
 msgstr "Full postal address"
 
-#: gestion_personnes/forms.py:87 gestion_personnes/forms.py:263
-#: gestion_personnes/templates/gestion_personnes/inscription.html:116
+#: gestion_personnes/forms.py:90 gestion_personnes/forms.py:271
+#: gestion_personnes/templates/gestion_personnes/inscription.html:123
 msgid "Numéro de téléphone"
 msgstr "Phone number"
 
-#: gestion_personnes/forms.py:93 gestion_personnes/forms.py:269
+#: gestion_personnes/forms.py:96 gestion_personnes/forms.py:277
 msgid "Je certifie sur l'honneur que les informations saisies sont correctes."
 msgstr "I hereby certify that the information provided is correct"
 
-#: gestion_personnes/forms.py:101 gestion_personnes/forms.py:289
+#: gestion_personnes/forms.py:104 gestion_personnes/forms.py:296
 msgid "Veuillez sélectionner un campus"
 msgstr "Choose a campus"
 
-#: gestion_personnes/forms.py:108 gestion_personnes/forms.py:296
+#: gestion_personnes/forms.py:111
 msgid "Veuillez sélectionner une formation"
 msgstr "Choose a curriculum"
 
-#: gestion_personnes/forms.py:119 gestion_personnes/forms.py:320
+#: gestion_personnes/forms.py:122 gestion_personnes/forms.py:331
 msgid "Ce champ est obligatoire"
 msgstr "This field is mandatory"
 
-#: gestion_personnes/forms.py:121 gestion_personnes/forms.py:322
+#: gestion_personnes/forms.py:124 gestion_personnes/forms.py:333
 msgid "Veuillez choisir un bâtiment du campus de Brest"
 msgstr "Choose a building in the Brest campus"
 
-#: gestion_personnes/forms.py:123 gestion_personnes/forms.py:324
+#: gestion_personnes/forms.py:126 gestion_personnes/forms.py:335
+#: gestion_personnes/forms.py:337
 msgid "Veuillez choisir un bâtiment du campus de Rennes"
 msgstr "Choose a building in the Rennes Campus"
 
-#: gestion_personnes/forms.py:125 gestion_personnes/forms.py:326
+#: gestion_personnes/forms.py:128 gestion_personnes/forms.py:339
 msgid "Veuillez saisir votre addresse postale"
 msgstr "Type in your postal address"
 
-#: gestion_personnes/forms.py:148
+#: gestion_personnes/forms.py:141
+msgid "Étudiant(e)"
+msgstr "Student"
+
+#: gestion_personnes/forms.py:141
+msgid "Personnel IMT Atlantique"
+msgstr "IMT Atlantique staff"
+
+#: gestion_personnes/forms.py:142
+msgid "Employé(e) Maisel/MDE"
+msgstr "Maisel/MDE employee"
+
+#: gestion_personnes/forms.py:153
 #: gestion_personnes/templates/gestion_personnes/inscription.html:28
 msgid "Nom de famille"
 msgstr "Last name"
 
-#: gestion_personnes/forms.py:179
+#: gestion_personnes/forms.py:188
 msgid "Retapez votre adresse e-mail"
 msgstr "Retype your email address"
 
-#: gestion_personnes/forms.py:187 gestion_personnes/forms.py:463
+#: gestion_personnes/forms.py:196 gestion_personnes/forms.py:488
 msgid "Choisissez un mot de passe sécurisé"
 msgstr "Choose a secure password"
 
-#: gestion_personnes/forms.py:195 gestion_personnes/forms.py:471
+#: gestion_personnes/forms.py:205 gestion_personnes/forms.py:496
 msgid "Retapez votre mot de passe"
 msgstr "Type your password again"
 
-#: gestion_personnes/forms.py:203
-#: gestion_personnes/templates/gestion_personnes/inscription.html:76
+#: gestion_personnes/forms.py:213
+#: gestion_personnes/templates/gestion_personnes/inscription.html:83
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:43
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:45
 msgid "Ville de naissance"
 msgstr "City of birth"
 
-#: gestion_personnes/forms.py:211
-#: gestion_personnes/templates/gestion_personnes/inscription.html:81
+#: gestion_personnes/forms.py:221
+#: gestion_personnes/templates/gestion_personnes/inscription.html:88
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:49
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:51
 msgid "Pays de naissance"
 msgstr "Country of birth"
 
-#: gestion_personnes/forms.py:276
+#: gestion_personnes/forms.py:284
 msgid "Nom de famille incorrect"
 msgstr "Invalid last name"
 
-#: gestion_personnes/forms.py:282
+#: gestion_personnes/forms.py:290
 msgid "Prénom incorrect"
 msgstr "Invalid first name"
 
-#: gestion_personnes/forms.py:303
+#: gestion_personnes/forms.py:302
+msgid "Vous n’êtes pas éligible à un compte ResEl"
+msgstr "You do not qualify for a ResEl account"
+
+#: gestion_personnes/forms.py:304
+msgid "Veuillez sélectionner une catégorie valide"
+msgstr "Please select a valid category"
+
+#: gestion_personnes/forms.py:311
 msgid "L'addresse email est déjà associée à un compte"
 msgstr "This email address is already used"
 
-#: gestion_personnes/forms.py:309
+#: gestion_personnes/forms.py:317
 msgid "Date de naissance incorrecte"
 msgstr "Wrong date of birth"
 
-#: gestion_personnes/forms.py:333 gestion_personnes/forms.py:489
+#: gestion_personnes/forms.py:342
+msgid "Veuillez choisir une formation"
+msgstr "Please choose a curriculum"
+
+#: gestion_personnes/forms.py:349 gestion_personnes/forms.py:514
 msgid "Les mots de passes sont différents."
 msgstr "Passwords do not match."
 
-#: gestion_personnes/forms.py:411
+#: gestion_personnes/forms.py:436
 msgid ""
 "En cochant cette case je certifie avoir lu et accepté le règlement intérieur "
 "de l'association."
 msgstr ""
 "By checking this box I certify having read and accepted the Terms of Use."
 
-#: gestion_personnes/forms.py:420
+#: gestion_personnes/forms.py:445
 msgid "Identifiant ResEl"
 msgstr "ResEl credentials"
 
-#: gestion_personnes/forms.py:430
+#: gestion_personnes/forms.py:455
 msgid "L'identifiant n'existe pas"
 msgstr "The ID does not exist"
 
-#: gestion_personnes/forms.py:441
+#: gestion_personnes/forms.py:466
 msgid "Réinitialisation du mot de passe ResEl"
 msgstr "Reset the ResEl password"
 
-#: gestion_personnes/forms.py:442
+#: gestion_personnes/forms.py:467
 #, python-format
 msgid ""
 "Bonjour,\n"
@@ -3415,15 +3427,15 @@ msgstr ""
 "any case, please feel free to contact us at support@resel.fr should you have "
 "any question."
 
-#: gestion_personnes/forms.py:483
+#: gestion_personnes/forms.py:508
 msgid "Les adresses e-mail sont différentes."
 msgstr "E-mail addresses do not match."
 
-#: gestion_personnes/forms.py:507
+#: gestion_personnes/forms.py:532
 msgid "Mot de passe ResEl réinitialisé"
 msgstr "ResEl password reset"
 
-#: gestion_personnes/forms.py:508
+#: gestion_personnes/forms.py:533
 msgid ""
 "Bonjour,\n"
 "\n"
@@ -3446,15 +3458,15 @@ msgstr ""
 "any case, please feel free to contact us at support@resel.fr should you have "
 "any question."
 
-#: gestion_personnes/forms.py:540
+#: gestion_personnes/forms.py:565
 msgid "Cette addresse e-mail n'est pas enregistrée"
 msgstr "This email address was not registered"
 
-#: gestion_personnes/forms.py:548
+#: gestion_personnes/forms.py:573
 msgid "Identifiants ResEl"
 msgstr "ResEl credentials"
 
-#: gestion_personnes/forms.py:549
+#: gestion_personnes/forms.py:574
 #, python-format
 msgid ""
 "Bonjour,\n"
@@ -3619,20 +3631,20 @@ msgstr "log in"
 
 #: gestion_personnes/templates/gestion_personnes/inscription.html:19
 msgid ""
-"Les informations marquées d’un astérisque bleu <span class=\"required by-law"
-"\"></span> sont requises par l’<a href=\"https://www.legifrance.gouv.fr/"
+"Les informations marquées d’un astérisque bleu <span class=\"required by-"
+"law\"></span> sont requises par l’<a href=\"https://www.legifrance.gouv.fr/"
 "codes/article_lc/LEGIARTI000025622766/\" target=\"_blank\">article R10-13 du "
 "code des postes et des communications électroniques</a>. Les autres "
 "informations requises par le ResEl sont marquées d’un astérisque rouge <span "
 "class=\"required\"></span>. Toute fausse déclaration peut être punie par la "
 "loi."
 msgstr ""
-"The information marked with a blue asterisk <span class=\"required by-law"
-"\"></span> is required by <a href=\"https://www.legifrance.gouv.fr/codes/"
+"The information marked with a blue asterisk <span class=\"required by-"
+"law\"></span> is required by <a href=\"https://www.legifrance.gouv.fr/codes/"
 "article_lc/LEGIARTI000025622766/\" target=\"_blank\">article R10-13 of the "
 "French Post and Electronic Communications Code</a>. The other information "
-"required by the ResEl is marked with a red asterisk <span class=\"required"
-"\"></span>. Any false declaration may be punished by law."
+"required by the ResEl is marked with a red asterisk <span "
+"class=\"required\"></span>. Any false declaration may be punished by law."
 
 #: gestion_personnes/templates/gestion_personnes/inscription.html:21
 msgid "Quelques informations requises sur vous"
@@ -3660,49 +3672,58 @@ msgid ""
 msgstr "We legally need your first name to identify you"
 
 #: gestion_personnes/templates/gestion_personnes/inscription.html:33
+msgid "De votre situation dépendent les paramètres de votre compte"
+msgstr "Your account settings depend on your situation"
+
+#: gestion_personnes/templates/gestion_personnes/inscription.html:33
+msgid "Vous êtes…"
+msgstr "You are…"
+
+#: gestion_personnes/templates/gestion_personnes/inscription.html:38
 msgid "Certains éléments du ResEl sont personnalisés selon votre formation"
 msgstr "Some elements of ResEl are customized to your curriculum"
 
-#: gestion_personnes/templates/gestion_personnes/inscription.html:39
+#: gestion_personnes/templates/gestion_personnes/inscription.html:46
 msgid "Les éléments principaux de votre compte"
 msgstr "The main elements of your account"
 
-#: gestion_personnes/templates/gestion_personnes/inscription.html:39
+#: gestion_personnes/templates/gestion_personnes/inscription.html:46
 msgid "Informations du compte"
 msgstr "Account information"
 
-#: gestion_personnes/templates/gestion_personnes/inscription.html:42
+#: gestion_personnes/templates/gestion_personnes/inscription.html:49
 msgid "Votre adresse mail nous permettra de vous contacter"
 msgstr "Your email address will allow us to contact you"
 
-#: gestion_personnes/templates/gestion_personnes/inscription.html:42
+#: gestion_personnes/templates/gestion_personnes/inscription.html:49
+#: maisel/templates/maisel/list_employees.html:22
 msgid "Adresse e-mail"
 msgstr "Email address"
 
-#: gestion_personnes/templates/gestion_personnes/inscription.html:47
+#: gestion_personnes/templates/gestion_personnes/inscription.html:54
 msgid "Vérification de l’adresse e-mail"
 msgstr "E-mail address verification"
 
-#: gestion_personnes/templates/gestion_personnes/inscription.html:54
-#: templates/registration/login.html:31
+#: gestion_personnes/templates/gestion_personnes/inscription.html:61
+#: templates/registration/login.html:35
 msgid "Mot de passe"
 msgstr "Password"
 
-#: gestion_personnes/templates/gestion_personnes/inscription.html:59
+#: gestion_personnes/templates/gestion_personnes/inscription.html:66
 msgid "Vérification du mot de passe"
 msgstr "Password verification"
 
-#: gestion_personnes/templates/gestion_personnes/inscription.html:73
+#: gestion_personnes/templates/gestion_personnes/inscription.html:80
 msgid "Les derniers éléments réglementaires sur vous"
 msgstr "The last legal elements about you"
 
-#: gestion_personnes/templates/gestion_personnes/inscription.html:73
+#: gestion_personnes/templates/gestion_personnes/inscription.html:80
 #: gestion_personnes/templates/gestion_personnes/personal_info.html:60
 msgid "Informations de contact"
 msgstr "Contact information"
 
-#: gestion_personnes/templates/gestion_personnes/inscription.html:76
-#: gestion_personnes/templates/gestion_personnes/inscription.html:81
+#: gestion_personnes/templates/gestion_personnes/inscription.html:83
+#: gestion_personnes/templates/gestion_personnes/inscription.html:88
 msgid ""
 "La loi exige cette information. Si celle-ci n’est pas connue, indiquer "
 "« XXX »."
@@ -3710,7 +3731,7 @@ msgstr ""
 "The law requires this information. If the information is not known, indicate "
 "“XXX”."
 
-#: gestion_personnes/templates/gestion_personnes/inscription.html:88
+#: gestion_personnes/templates/gestion_personnes/inscription.html:95
 msgid ""
 "La loi exige cette information. En cas d’absence d’information, l’indiquer "
 "avec des « X » (par exemple, XX/XX/2001)."
@@ -3718,92 +3739,92 @@ msgstr ""
 "The law requires this information. If the information is not known, indicate "
 "it with “X”s (e.g., XX/XX/2001)."
 
-#: gestion_personnes/templates/gestion_personnes/inscription.html:88
+#: gestion_personnes/templates/gestion_personnes/inscription.html:95
 msgid "Date de naissance (JJ/MM/AAAA)"
 msgstr "Date of birth (DD/MM/YYYY)"
 
-#: gestion_personnes/templates/gestion_personnes/inscription.html:94
-#: gestion_personnes/templates/gestion_personnes/inscription.html:100
-#: gestion_personnes/templates/gestion_personnes/inscription.html:105
-#: gestion_personnes/templates/gestion_personnes/inscription.html:111
+#: gestion_personnes/templates/gestion_personnes/inscription.html:101
+#: gestion_personnes/templates/gestion_personnes/inscription.html:107
+#: gestion_personnes/templates/gestion_personnes/inscription.html:112
+#: gestion_personnes/templates/gestion_personnes/inscription.html:118
 msgid "Votre adresse de résidence est requise"
 msgstr "Your home address is required"
 
-#: gestion_personnes/templates/gestion_personnes/inscription.html:94
+#: gestion_personnes/templates/gestion_personnes/inscription.html:101
 msgid "Campus de résidence"
 msgstr "Campus of residence"
 
-#: gestion_personnes/templates/gestion_personnes/inscription.html:111
+#: gestion_personnes/templates/gestion_personnes/inscription.html:118
 #: pages/templates/pages/contact.html:44
 #: pages/templates/pages/mentions_legales.html:37
 msgid "Adresse postale"
 msgstr "Postal address"
 
-#: gestion_personnes/templates/gestion_personnes/inscription.html:116
+#: gestion_personnes/templates/gestion_personnes/inscription.html:123
 msgid "Ce numéro permettra de vous contacter en cas d’urgence"
 msgstr "This number will be used to contact you in case of emergency"
 
-#: gestion_personnes/templates/gestion_personnes/inscription.html:127
+#: gestion_personnes/templates/gestion_personnes/inscription.html:134
 msgid "Continuer l'inscription"
 msgstr "Continue the registration"
 
-#: gestion_personnes/templates/gestion_personnes/inscription.html:132
+#: gestion_personnes/templates/gestion_personnes/inscription.html:139
 msgid "En devenant membre de l’association…"
 msgstr "By becoming a member of the association…"
 
-#: gestion_personnes/templates/gestion_personnes/inscription.html:134
+#: gestion_personnes/templates/gestion_personnes/inscription.html:141
 msgid "Vous profiterez des nombreux services du ResEl"
 msgstr "You will enjoy all our services"
 
-#: gestion_personnes/templates/gestion_personnes/inscription.html:135
+#: gestion_personnes/templates/gestion_personnes/inscription.html:142
 msgid "Vous pourrez participer aux événements et aux activités du ResEl"
 msgstr "You will be able to participate in ResEl events and activities"
 
-#: gestion_personnes/templates/gestion_personnes/inscription.html:137
+#: gestion_personnes/templates/gestion_personnes/inscription.html:144
 msgid "Téléchargez :"
 msgstr "Download:"
 
-#: gestion_personnes/templates/gestion_personnes/inscription.html:139
+#: gestion_personnes/templates/gestion_personnes/inscription.html:146
 #: pages/templates/pages/how_to_signup.html:48
-#: templates/registration/login.html:64
+#: templates/registration/login.html:68
 msgid "Flyer de connexion"
 msgstr "Connection flyer"
 
-#: gestion_personnes/templates/gestion_personnes/inscription.html:140
+#: gestion_personnes/templates/gestion_personnes/inscription.html:147
 #: pages/templates/pages/how_to_signup.html:49
-#: templates/registration/login.html:65
+#: templates/registration/login.html:69
 msgid "Guide de connexion filaire"
 msgstr "Wired connection guide"
 
-#: gestion_personnes/templates/gestion_personnes/inscription.html:143
+#: gestion_personnes/templates/gestion_personnes/inscription.html:150
 msgid "Un problème pour vous inscrire ?"
 msgstr "Encountering problems during the registration?"
 
-#: gestion_personnes/templates/gestion_personnes/inscription.html:144
+#: gestion_personnes/templates/gestion_personnes/inscription.html:151
 msgid "Contactez nous !"
 msgstr "Contact us!"
 
-#: gestion_personnes/templates/gestion_personnes/inscription.html:145
+#: gestion_personnes/templates/gestion_personnes/inscription.html:152
 msgid "Consulter la FAQ"
 msgstr "Read the FAQ"
 
-#: gestion_personnes/templates/gestion_personnes/inscription.html:209
+#: gestion_personnes/templates/gestion_personnes/inscription.html:240
 msgid "très faible"
 msgstr "very weak"
 
-#: gestion_personnes/templates/gestion_personnes/inscription.html:219
+#: gestion_personnes/templates/gestion_personnes/inscription.html:250
 msgid "faible"
 msgstr "weak"
 
-#: gestion_personnes/templates/gestion_personnes/inscription.html:229
+#: gestion_personnes/templates/gestion_personnes/inscription.html:260
 msgid "Moyen"
 msgstr "Average"
 
-#: gestion_personnes/templates/gestion_personnes/inscription.html:239
+#: gestion_personnes/templates/gestion_personnes/inscription.html:270
 msgid "Correct"
 msgstr "Ok"
 
-#: gestion_personnes/templates/gestion_personnes/inscription.html:249
+#: gestion_personnes/templates/gestion_personnes/inscription.html:280
 msgid "Bon"
 msgstr "Good"
 
@@ -3813,7 +3834,7 @@ msgstr "ResEl address redirection"
 
 #: gestion_personnes/templates/gestion_personnes/mail_resel.html:4
 #: gestion_personnes/templates/gestion_personnes/mail_resel_new.html:4
-#: templates/base.html:138
+#: templates/base.html:132
 msgid "Email ResEl"
 msgstr "ResEl email"
 
@@ -3956,7 +3977,7 @@ msgid "Paramètres de compte"
 msgstr "Account settings"
 
 #: gestion_personnes/templates/gestion_personnes/settings.html:13
-#: templates/base.html:132
+#: templates/base.html:126
 msgid "Paramètres"
 msgstr "Settings"
 
@@ -3964,7 +3985,7 @@ msgstr "Settings"
 msgid "Page en cours de contruction..."
 msgstr "Page under construction..."
 
-#: gestion_personnes/views.py:56
+#: gestion_personnes/views.py:57
 msgid ""
 "Une erreur s'est produite lors de la création de vos identifiants. Veuillez "
 "contacter un administeur."
@@ -3972,15 +3993,15 @@ msgstr ""
 "An error has occurred while creating your credentials. Please contact an "
 "admin."
 
-#: gestion_personnes/views.py:145
+#: gestion_personnes/views.py:146
 msgid "Votre mot de passe a été modifié"
 msgstr "Your password has been modified."
 
-#: gestion_personnes/views.py:211
+#: gestion_personnes/views.py:212
 msgid "Vos informations ont bien été mises à jour."
 msgstr "Your information have been updated."
 
-#: gestion_personnes/views.py:230
+#: gestion_personnes/views.py:231
 msgid ""
 "Nous venons de vous envoyer un e-mail de réinitialisation que vous devriez "
 "recevoir d'ici peu. Cliquez sur le lien fournit dans l'e-mail pour continuer "
@@ -3989,20 +4010,20 @@ msgstr ""
 "We have just sent you a password reset email that you should receive "
 "shortly. Click on the link provided in the email to continue the process."
 
-#: gestion_personnes/views.py:247
+#: gestion_personnes/views.py:248
 msgid ""
 "Nous venons de vous envoyer un e-mail sur votre addresse avec votre "
 "identifiant ResEl."
 msgstr "We sent you an email to your address with your ResEl ID."
 
-#: gestion_personnes/views.py:281
+#: gestion_personnes/views.py:282
 msgid ""
 "Nous venez de réinitialiser votre mot de passe. Vous pouvez désormais vous "
 "connecter avec le nouveau mot de passe."
 msgstr ""
 "We have just reset your password. You can now login with the new password."
 
-#: gestion_personnes/views.py:301
+#: gestion_personnes/views.py:302
 msgid ""
 "Votre addresse e-mail a déjà été validée, vous n'avez donc pas besoin de la "
 "valider une seconde fois."
@@ -4010,7 +4031,7 @@ msgstr ""
 "Your email address has already been validated, you do not need to validate "
 "it a second time."
 
-#: gestion_personnes/views.py:305
+#: gestion_personnes/views.py:306
 msgid ""
 "Nous venons de vous envoyer un e-mail avec un lien que vous devrez suivre "
 "pour valider votre addresse e-mail."
@@ -4018,49 +4039,102 @@ msgstr ""
 "We sent you an e-mail with a link that you must follow to validate your "
 "email address."
 
-#: gestion_personnes/views.py:311
+#: gestion_personnes/views.py:312
 msgid "Votre addresse e-mail est bien validée."
 msgstr "Your email address has been validated"
 
-#: gestion_personnes/views.py:428
+#: gestion_personnes/views.py:429
 msgid "Impossible de créer correctement l'adresse. Contactez support@resel.fr"
 msgstr "Unable to create the address. Contact support@resel.fr"
 
-#: gestion_personnes/views.py:433
+#: gestion_personnes/views.py:434
 msgid "Vous avez déjà une adresse ResEl."
 msgstr "You already have a ResEl email"
 
-#: gestion_personnes/views.py:450
+#: gestion_personnes/views.py:451
 msgid "Cette adresse email n'existe pas ou plus."
 msgstr "This email address does not exist"
 
-#: gestion_personnes/views.py:464
+#: gestion_personnes/views.py:465
 msgid "Vous n'avez pas d'adresse."
 msgstr "You don't have an address"
 
-#: gestion_personnes/views.py:479
+#: gestion_personnes/views.py:480
 msgid "Votre demande de suppression a bien été enregistrée."
 msgstr "Your deletion request has been submitted."
 
-#: gestion_personnes/views.py:482
+#: gestion_personnes/views.py:483
 msgid "L'adresse entrée ne correspond pas à votre adresse email."
 msgstr "The address entered does not match your email address."
 
-#: gestion_personnes/views.py:497
+#: gestion_personnes/views.py:498
 msgid "Vous n'avez pas ou plus d'adresse email."
 msgstr "You do not have an email address."
 
-#: gestion_personnes/views.py:511
+#: gestion_personnes/views.py:512
 msgid "Vous n'avez pas encore d'adresse email."
 msgstr "You do not have an email address yet."
 
-#: gestion_personnes/views.py:528
+#: gestion_personnes/views.py:529
 msgid "La redirection a bien été supprimée."
 msgstr "The redirection has been deleted"
 
-#: gestion_personnes/views.py:534
+#: gestion_personnes/views.py:535
 msgid "La redirection a bien été créée."
 msgstr "The redirection has been created."
+
+#: maisel/forms.py:11
+msgid "Une erreur est survenue"
+msgstr "An error has occurred"
+
+#: maisel/templates/maisel/list_employees.html:5
+#: maisel/templates/maisel/list_employees.html:15
+msgid "Mon équipe"
+msgstr "My team"
+
+#: maisel/templates/maisel/list_employees.html:23
+msgid "Fin d’accès"
+msgstr "End of access"
+
+#: maisel/templates/maisel/list_employees.html:24
+msgid "Approbation"
+msgstr "Approval"
+
+#: maisel/templates/maisel/list_employees.html:38
+msgid "Suspendre"
+msgstr "Suspend"
+
+#: maisel/templates/maisel/list_employees.html:40
+msgid "Valider"
+msgstr "Validate"
+
+#: maisel/templates/maisel/list_employees.html:42
+msgid "Révoquer"
+msgstr "Revoke"
+
+#: maisel/templates/maisel/list_employees.html:65
+msgid "Aucun employé trouvé."
+msgstr "No employee found."
+
+#: maisel/views.py:39
+msgid "Les agents ont été approuvés."
+msgstr "The agents have been approved."
+
+#: maisel/views.py:44
+msgid "L’agent a été approuvé."
+msgstr "The agent has been approved."
+
+#: maisel/views.py:48
+msgid "Les accès de l’agent ont été suspendus."
+msgstr "The agent’s access has been suspended."
+
+#: maisel/views.py:52
+msgid "L’agent a été supprimé."
+msgstr "The agent has been removed."
+
+#: maisel/views.py:54
+msgid "Une erreur est survenue."
+msgstr "An error has occurred."
 
 #: myresel/settings.py:141
 msgid "Français"
@@ -4152,18 +4226,18 @@ msgstr "ResEl IRC history"
 msgid "Vous trouverez ici l'intégralité des discussions ResEl."
 msgstr "You can find the whole ResEl discussions here."
 
-#: pages/templates/pages/faq.html:18
+#: pages/templates/pages/faq.html:16
 msgid "Foire aux questions"
 msgstr "Frequently asked questions"
 
-#: pages/templates/pages/faq.html:19
+#: pages/templates/pages/faq.html:17
 msgid ""
 "Vous trouverez ici les réponses aux questions qui nous sont fréquement "
 "posées."
 msgstr ""
 "You will find here the answers to the questions we are frequently asked."
 
-#: pages/templates/pages/faq.html:20
+#: pages/templates/pages/faq.html:18
 msgid ""
 "Une question que vous vous posez n'est pas présente ? Vous pensez qu'elle "
 "mérite sa place sur cette page ? "
@@ -4171,15 +4245,15 @@ msgstr ""
 "Is there a question you have that is not present? Do you think it deserves "
 "its place on this page?"
 
-#: pages/templates/pages/faq.html:20
+#: pages/templates/pages/faq.html:18
 msgid "Dites-le nous !"
 msgstr "Let us know!"
 
-#: pages/templates/pages/faq.html:34
+#: pages/templates/pages/faq.html:32
 msgid "Cette réponse m'a été utile"
 msgstr "This answer was helpful"
 
-#: pages/templates/pages/faq.html:38
+#: pages/templates/pages/faq.html:36
 msgid "Pas de question à l'horizon"
 msgstr "No question in sight"
 
@@ -4192,11 +4266,16 @@ msgid "Le Réseau des Élèves d'IMT Atlantique"
 msgstr "IMT Atlantique Student Network"
 
 #: pages/templates/pages/home/home.html:18
-msgid "Le fournisseur d'accès associatif par les teubreux pour les teubreux"
-msgstr "The associative network provider by the students for the students"
+msgid "Le fournisseur d'accès associatif par les étudiants, pour les étudiants"
+msgstr "The associative network provider by the students, for the students"
 
-#: pages/templates/pages/home/home.html:50 templates/base.html:152
-#: templates/registration/login.html:5 templates/registration/login.html:46
+#: pages/templates/pages/home/home.html:36
+msgid "Le ResEl fournit un accès à Internet aux résidences des trois campus d’"
+msgstr ""
+"The ResEl provides Internet access to residences on all three campuses of "
+
+#: pages/templates/pages/home/home.html:50 templates/base.html:147
+#: templates/registration/login.html:5 templates/registration/login.html:50
 msgid "Connexion"
 msgstr "Log in"
 
@@ -4204,13 +4283,37 @@ msgstr "Log in"
 msgid "Comment s'inscrire ?"
 msgstr "How to sign up?"
 
+#: pages/templates/pages/home/home.html:77
+msgid ""
+"Le ResEl relie à Internet 500 chambres à Brest, 170 chambres à Rennes, et "
+"bientôt 640 chambres à Nantes"
+msgstr ""
+"The ResEl connects to the Internet 500 rooms in Brest, 170 rooms in Rennes, "
+"and soon 640 rooms in Nantes"
+
+#: pages/templates/pages/home/home.html:87
+msgid ""
+"Depuis 1990, l’association a fourni internet à plusieurs milliers "
+"d’étudiants et formé une centaine d’administrateurs"
+msgstr ""
+"Since 1990, the association has provided Internet access to several thousand "
+"students and trained around a hundred administrators"
+
+#: pages/templates/pages/home/home.html:97
+msgid ""
+"Nous utilisons et produisons exclusivement du logiciel libre, nous assurant "
+"transparence et flexibilité"
+msgstr ""
+"We use and produce exclusively open source software, ensuring transparency "
+"and flexibility"
+
 #: pages/templates/pages/home/home.html:107
 msgid "Les services du ResEl"
 msgstr "ResEl services"
 
 #: pages/templates/pages/home/home.html:121
 msgid "Et plein d'autres"
-msgstr "And more"
+msgstr "And many more"
 
 #: pages/templates/pages/home/home.html:130
 msgid "Les dernières nouvelles ResEl"
@@ -4232,68 +4335,80 @@ msgstr "No fresh news in sight"
 msgid "Voir l'intégralité des nouvelles"
 msgstr "See all the news"
 
-#: pages/templates/pages/home/home.html:160
+#: pages/templates/pages/home/home.html:156
 msgid "En ce moment sur le campus"
 msgstr "Currently on the campus"
 
-#: pages/templates/pages/home/home.html:184
+#: pages/templates/pages/home/home.html:180
 msgid "Voir tous les événements campus"
 msgstr "See all the campus events"
 
-#: pages/templates/pages/home/home.html:188
+#: pages/templates/pages/home/home.html:184
 msgid "Clubs à l'honneur"
 msgstr "Featured clubs"
 
-#: pages/templates/pages/home/home.html:205
+#: pages/templates/pages/home/home.html:201
 msgid "Les derniers mails campus"
 msgstr "Last campus mails"
 
-#: pages/templates/pages/home/home.html:262
+#: pages/templates/pages/home/home.html:226
+msgid "Bande passante générale"
+msgstr "Overall bandwidth"
+
+#: pages/templates/pages/home/home.html:250
+msgid "Vous souhaitez contribuer au ResEl et monter en compétences ?"
+msgstr "Would you like to contribute to the ResEl and gain new skills?"
+
+#: pages/templates/pages/home/home.html:251
+msgid "Alors n’hésitez pas à"
+msgstr "So don’t hesitate to"
+
+#: pages/templates/pages/home/home.html:252
 #: pages/templates/pages/how_to_signup.html:57
 msgid "devenir administrateur ResEl"
 msgstr "become a ResEl administrator"
 
-#: pages/templates/pages/home/home_logged.html:20
+#: pages/templates/pages/home/home_logged.html:18
 msgid "Gestion de mon compte ResEl"
 msgstr "Manage my ResEl account"
 
-#: pages/templates/pages/home/home_logged.html:23
+#: pages/templates/pages/home/home_logged.html:21
 msgid "Mes services"
 msgstr "My services"
 
-#: pages/templates/pages/home/home_logged.html:25
+#: pages/templates/pages/home/home_logged.html:23
 msgid "Gérer mes clubs et associations"
 msgstr "Manage my clubs and associations"
 
-#: pages/templates/pages/home/home_logged.html:26
+#: pages/templates/pages/home/home_logged.html:24
 msgid "Ma boîte mail ResEl"
 msgstr "My ResEl inbox"
 
-#: pages/templates/pages/home/home_logged.html:27
+#: pages/templates/pages/home/home_logged.html:25
 msgid "Mes listes de diffusion"
 msgstr "My mailing lists"
 
-#: pages/templates/pages/home/home_logged.html:30
+#: pages/templates/pages/home/home_logged.html:28
 msgid "Modifier mes informations personnelles"
 msgstr "Modify personal information"
 
-#: pages/templates/pages/home/home_logged.html:32
+#: pages/templates/pages/home/home_logged.html:30
 msgid "Paramètres de mon compte"
 msgstr "Account settings"
 
-#: pages/templates/pages/home/home_logged.html:33
+#: pages/templates/pages/home/home_logged.html:31
 msgid "Modifier mon mot de passe"
 msgstr "Modify my password"
 
-#: pages/templates/pages/home/home_logged.html:34
+#: pages/templates/pages/home/home_logged.html:32
 msgid "Historique de mes transactions"
 msgstr "Billing history"
 
-#: pages/templates/pages/home/home_logged.html:54
+#: pages/templates/pages/home/home_logged.html:52
 msgid "Bienvenue sur le campus de"
 msgstr "Welcome to the campus of"
 
-#: pages/templates/pages/home/home_logged.html:57
+#: pages/templates/pages/home/home_logged.html:55
 msgid ""
 "Vous vous trouvez sur la zone gratuite. Le débit est fortement réduit, mais "
 "devrait permettre de consulter vos mails et divers services légers."
@@ -4301,7 +4416,7 @@ msgstr ""
 "You are on the free zone. The bandwidth is strongly reduced, but should "
 "allow you to consult your mails and various light services."
 
-#: pages/templates/pages/home/home_logged.html:59
+#: pages/templates/pages/home/home_logged.html:57
 msgid ""
 "Vous vous trouvez sur la zone d'inscription. Pour vous connecter à Internet "
 "ou payer vos frais d'accès, veuillez utiliser un autre réseau."
@@ -4309,7 +4424,7 @@ msgstr ""
 "You are in the registration area. To connect to the Internet or pay your "
 "access fees, please use another network."
 
-#: pages/templates/pages/home/home_logged.html:61
+#: pages/templates/pages/home/home_logged.html:59
 msgid ""
 "Vous vous trouvez sur la zone de renouvellement. Pour vous connecter à "
 "Internet, veuillez vous acquitter des frais d'accès."
@@ -4317,11 +4432,11 @@ msgstr ""
 "You are in the renewal area. To connect to the Internet, please pay your "
 "access fees."
 
-#: pages/templates/pages/home/home_logged.html:63
+#: pages/templates/pages/home/home_logged.html:61
 msgid "Vous êtes correctement connecté au réseau étudiant."
 msgstr "You are correctly connected to the student network."
 
-#: pages/templates/pages/home/home_logged.html:65
+#: pages/templates/pages/home/home_logged.html:63
 msgid ""
 "Vous êtes connecté depuis un serveur interne. Merci de n'utiliser cet accès "
 "qu'à des fins de tests."
@@ -4329,52 +4444,94 @@ msgstr ""
 "You are connected from an internal server. Please use this access for "
 "testing purposes only."
 
-#: pages/templates/pages/home/home_logged.html:73
+#: pages/templates/pages/home/home_logged.html:71
 msgid "Hors campus"
 msgstr "Off campus"
 
-#: pages/templates/pages/home/home_logged.html:74
+#: pages/templates/pages/home/home_logged.html:72
 msgid "Vous êtes actuellement hors des campus d'IMT Atlantique."
 msgstr "You are currently off the IMT Atlantique campuses."
 
-#: pages/templates/pages/home/home_logged.html:87
-msgid "Facturation à jour"
-msgstr "Billing up to date"
+#: pages/templates/pages/home/home_logged.html:85
+msgid "Accès manager"
+msgstr "Manager access"
+
+#: pages/templates/pages/home/home_logged.html:86
+#: pages/templates/pages/home/home_logged.html:112
+msgid "Cotisation à l’association offerte"
+msgstr "Free association membership"
 
 #: pages/templates/pages/home/home_logged.html:89
-#: pages/templates/pages/home/home_logged.html:108
-#: pages/templates/pages/home/home_logged.html:120
-msgid "Cotisation à l'association payée"
-msgstr "Association membership paid"
-
 #: pages/templates/pages/home/home_logged.html:91
-#: pages/templates/pages/home/home_logged.html:110
-#: pages/templates/pages/home/home_logged.html:122
-msgid "Cotisation à l'association non payée"
-msgstr "Association membership not paid"
+#: pages/templates/pages/home/home_logged.html:115
+#: pages/templates/pages/home/home_logged.html:117
+msgid "Accès accordé jusqu’au"
+msgstr "Access granted until"
 
-#: pages/templates/pages/home/home_logged.html:93
-#: pages/templates/pages/home/home_logged.html:112
-msgid "Internet jusqu'au"
-msgstr "Internet until "
+#: pages/templates/pages/home/home_logged.html:92
+msgid "Veuillez accéder à votre interface de gestion pour prolonger vos accès."
+msgstr "Please go to your management interface to extend your access."
 
-#: pages/templates/pages/home/home_logged.html:97
-msgid "Consulter mes transactions"
-msgstr "View my transactions"
-
-#: pages/templates/pages/home/home_logged.html:106
-msgid "Attention abonnement"
-msgstr "Subscription warning"
-
-#: pages/templates/pages/home/home_logged.html:118
-msgid "Paiement non à jour"
-msgstr "Subscription not up to date"
-
-#: pages/templates/pages/home/home_logged.html:124
+#: pages/templates/pages/home/home_logged.html:94
+#: pages/templates/pages/home/home_logged.html:120
+#: pages/templates/pages/home/home_logged.html:169
 msgid "Accès internet expiré le"
 msgstr "Internet access expired on"
 
-#: pages/templates/pages/home/home_logged.html:125
+#: pages/templates/pages/home/home_logged.html:95
+msgid "Veuillez accéder à votre interface de gestion pour récupérer vos accès."
+msgstr "Please go to your management interface to regain your access."
+
+#: pages/templates/pages/home/home_logged.html:101
+msgid "Gestion du personnel"
+msgstr "Personnel management"
+
+#: pages/templates/pages/home/home_logged.html:111
+msgid "Accès agent"
+msgstr "Agent access"
+
+#: pages/templates/pages/home/home_logged.html:118
+msgid "Veuillez contacter votre gestionnaire pour prolonger vos accès."
+msgstr "Please contact your manager to extend your access."
+
+#: pages/templates/pages/home/home_logged.html:121
+msgid "Veuillez contacter votre gestionnaire pour récupérer vos accès."
+msgstr "Please contact your manager to regain your access."
+
+#: pages/templates/pages/home/home_logged.html:134
+msgid "Facturation à jour"
+msgstr "Billing up to date"
+
+#: pages/templates/pages/home/home_logged.html:136
+#: pages/templates/pages/home/home_logged.html:155
+#: pages/templates/pages/home/home_logged.html:165
+msgid "Cotisation à l'association payée"
+msgstr "Association membership paid"
+
+#: pages/templates/pages/home/home_logged.html:138
+#: pages/templates/pages/home/home_logged.html:157
+#: pages/templates/pages/home/home_logged.html:167
+msgid "Cotisation à l'association non payée"
+msgstr "Association membership not paid"
+
+#: pages/templates/pages/home/home_logged.html:140
+#: pages/templates/pages/home/home_logged.html:159
+msgid "Internet jusqu'au"
+msgstr "Internet until "
+
+#: pages/templates/pages/home/home_logged.html:144
+msgid "Consulter mes transactions"
+msgstr "View my transactions"
+
+#: pages/templates/pages/home/home_logged.html:153
+msgid "Attention abonnement"
+msgstr "Subscription warning"
+
+#: pages/templates/pages/home/home_logged.html:163
+msgid "Paiement non à jour"
+msgstr "Subscription not up to date"
+
+#: pages/templates/pages/home/home_logged.html:170
 msgid ""
 "Votre abonnement au ResEl a expiré, pour pouvoir à nouveau utiliser nos "
 "services vous devez régulariser votre situation."
@@ -4382,12 +4539,7 @@ msgstr ""
 "Your ResEl subscription has expired, to be able to use our services again "
 "you must settle the situation."
 
-#: pages/templates/pages/home/home_logged.html:131
-msgid ""
-"Veuillez vous connecter au réseau ResEl Secure pour procéder au paiement"
-msgstr "Please connect to the ResEl Secure network to proceed to checkout"
-
-#: pages/templates/pages/home/home_logged.html:133
+#: pages/templates/pages/home/home_logged.html:179
 msgid ""
 "Le paiement nécessite une connexion à Internet active. Veuillez utiliser "
 "votre 4G ou Eduroam pour procéder au paiement."
@@ -4395,15 +4547,15 @@ msgstr ""
 "The checkout requires an active Internet connection. Please use your 4G or "
 "Eduroam to make the payment."
 
-#: pages/templates/pages/home/home_logged.html:139
+#: pages/templates/pages/home/home_logged.html:185
 msgid "Effectuer un paiement"
 msgstr "Make a payment"
 
-#: pages/templates/pages/home/home_logged.html:150
+#: pages/templates/pages/home/home_logged.html:195
 msgid "Pas d'information de facturation"
 msgstr "No billing information"
 
-#: pages/templates/pages/home/home_logged.html:151
+#: pages/templates/pages/home/home_logged.html:196
 msgid "Vous ne semblez pas éligible à la cotisation ResEl."
 msgstr "You do not seem to qualify for a ResEl membership."
 
@@ -4521,8 +4673,8 @@ msgid ""
 "bon endroit ! Vous pouvez cliquer sur le bouton ci-dessous.<br>\n"
 "                            Il est impossible d'avoir accès à internet "
 "depuis ce réseau Wi-Fi pour des raisons de sécurité. Veuillez vous connecter "
-"sur le réseau Wi-Fi <strong>ResEl Secure</strong> si vous disposez déjà d'un "
-"compte.\n"
+"sur le réseau Wi-Fi <strong>ResEl Secure</strong> ou <strong>ResEl Next</"
+"strong> si vous disposez déjà d'un compte.\n"
 "                        </p>\n"
 "                    "
 msgstr ""
@@ -4530,8 +4682,8 @@ msgstr ""
 "<h2>Welcome to the registration network</h2><p>If you don't have a ResEl "
 "account, you're in the right place! You can click on the button below."
 "<br>You cannot access the internet from this Wi-Fi network for security "
-"reasons. Please login to the <strong>ResEl Secure</strong> Wi-Fi network if "
-"you already have an account.</p>"
+"reasons. Please login to the <strong>ResEl Secure</strong> or <strong>ResEl "
+"Next</strong> Wi-Fi network if you already have an account.</p>"
 
 #: pages/templates/pages/mentions_legales.html:8
 msgid "Mentions légales"
@@ -4602,7 +4754,7 @@ msgid ""
 "                "
 msgstr ""
 
-#: pages/templates/pages/network_status.html:5 templates/base.html:248
+#: pages/templates/pages/network_status.html:5 templates/base.html:268
 msgid "État du réseau"
 msgstr "Network status"
 
@@ -4662,16 +4814,18 @@ msgstr "Next"
 msgid " Retour"
 msgstr " Back"
 
-#: pages/views.py:141
+#: pages/views.py:137
 msgid "Les dernières infos ResEl"
 msgstr "Latest ResEl News"
 
-#: pages/views.py:143
-msgid "Des informations sur l'état du réseau sur les campus de Brest et Rennes"
+#: pages/views.py:139
+msgid ""
+"Des informations sur l'état du réseau sur les campus de Brest, Nantes et "
+"Rennes"
 msgstr ""
-"Information on the state of the network on the Brest and Rennes campuses"
+"Information on the state of the network on the Brest, Nantes and Rennes campuses"
 
-#: pages/views.py:224
+#: pages/views.py:220
 msgid ""
 "Votre demande a bien été envoyée aux administrateurs. L'un d'eux vous "
 "répondra d'ici peu."
@@ -4728,171 +4882,183 @@ msgstr ""
 "An error has occurred. This should not happen... If the problem persists, "
 "contact an administrator."
 
-#: templates/base.html:54
+#: templates/base.html:45
 msgid "Logo ResEl"
 msgstr "ResEl logo"
 
-#: templates/base.html:79 templates/base.html:106
+#: templates/base.html:69 templates/base.html:98
 msgid "Aucun article"
 msgstr "No article"
 
-#: templates/base.html:124 templates/base.html:242
+#: templates/base.html:117 templates/base.html:262
 msgid "Contact"
 msgstr "Contact"
 
-#: templates/base.html:141
+#: templates/base.html:135
 msgid "Listes de diffusion"
 msgstr "Mailing lists"
 
-#: templates/base.html:145
+#: templates/base.html:139
 msgid "Déconnexion"
 msgstr "Log out"
 
-#: templates/base.html:187
-msgid "Votre accès internet a expiré :"
-msgstr "Your Internet access has expired:"
+#: templates/base.html:196 templates/base.html:198 templates/base.html:200
+msgid "Votre accès internet a expiré."
+msgstr "Your Internet access has expired."
 
-#: templates/base.html:187
+#: templates/base.html:196
 msgid "Afin de bénéficier des services du ResEl, vous devez "
 msgstr "To benefit from the ResEl services, you have to "
 
-#: templates/base.html:187 templates/base.html:191
+#: templates/base.html:196 templates/base.html:206
 msgid "régulariser votre situation"
 msgstr "settle the situation"
 
-#: templates/base.html:187 templates/base.html:191
+#: templates/base.html:196 templates/base.html:206
 msgid " !"
 msgstr "!"
 
-#: templates/base.html:191
-msgid "Votre accès internet va bientôt expirer :"
-msgstr "Your internet access will soon expire: "
+#: templates/base.html:198 templates/base.html:208
+msgid "Veuillez accéder à "
+msgstr "Please access "
 
-#: templates/base.html:191
+#: templates/base.html:198 templates/base.html:208
+msgid "votre interface de gestion"
+msgstr "your management interface"
+
+#: templates/base.html:200 templates/base.html:210
+msgid "Veuillez contacter votre gestionnaire."
+msgstr "Please contact your manager."
+
+#: templates/base.html:206 templates/base.html:208 templates/base.html:210
+msgid "Votre accès internet va bientôt expirer."
+msgstr "Your Internet access will soon expire."
+
+#: templates/base.html:206
 msgid "Afin de continuer à bénéficier des services du ResEl, vous devez "
 msgstr "To continue to benefit from the ResEl services, you have to "
 
-#: templates/base.html:200
+#: templates/base.html:220
 msgid "Erreur"
 msgstr "Error"
 
-#: templates/base.html:205
+#: templates/base.html:225
 msgid "Succès"
 msgstr "Success"
 
-#: templates/base.html:210
+#: templates/base.html:230
 msgid "Information"
 msgstr "Information"
 
-#: templates/base.html:215
+#: templates/base.html:235
 msgid "Attention"
 msgstr "Warning"
 
-#: templates/base.html:238
+#: templates/base.html:258
 msgid "Les statuts de l’association"
 msgstr "The association statutes"
 
-#: templates/base.html:239
+#: templates/base.html:259
 msgid "Le règlement intérieur"
 msgstr "The rules of procedure"
 
-#: templates/base.html:240
+#: templates/base.html:260
 msgid "Tarifs et Cotisation"
 msgstr "Prices and Membership fees"
 
-#: templates/base.html:241
+#: templates/base.html:261
 msgid "Mentions Légales"
 msgstr "Legal Information"
 
-#: templates/base.html:250
+#: templates/base.html:270
 msgid "Les clubs et la vie du campus"
 msgstr "Clubs and campus life"
 
-#: templates/base.html:251
+#: templates/base.html:271
 msgid "Devenez Admin ResEl !"
 msgstr "Become a ResEl Admin!"
 
-#: templates/base.html:252
+#: templates/base.html:272
 msgid "Ancien site ResEl"
 msgstr "Former ResEl website"
 
-#: templates/base.html:257
+#: templates/base.html:277
 msgid "FedeRez"
 msgstr "FedeRez"
 
-#: templates/base.html:258
+#: templates/base.html:278
 msgid "IMT Atlantique"
 msgstr "IMT Atlantique"
 
-#: templates/base.html:259
+#: templates/base.html:279
 msgid "Associations d’IMT Atlantique"
 msgstr "IMT Atlantique associations"
 
-#: templates/base.html:260
+#: templates/base.html:280
 msgid "Alumni"
 msgstr "Alumni"
 
-#: templates/base.html:269
+#: templates/base.html:289
 msgid "Code Source"
 msgstr "Source Code"
 
-#: templates/registration/login.html:9
+#: templates/registration/login.html:13
 msgid "Veuillez vous connecter"
 msgstr "Please log in"
 
-#: templates/registration/login.html:10
+#: templates/registration/login.html:14
 msgid "Afin de bénéficier des services du ResEl, vous devez vous connecter."
 msgstr "To benefit from the ResEl services, you have to log in"
 
-#: templates/registration/login.html:11
+#: templates/registration/login.html:15
 msgid "Vous êtes nouveau ?"
 msgstr "Are you new?"
 
-#: templates/registration/login.html:11
+#: templates/registration/login.html:15
 msgid "Créez un compte"
 msgstr "Create an account"
 
-#: templates/registration/login.html:15
+#: templates/registration/login.html:19
 msgid "Connexion au ResEl"
 msgstr "Connection to the ResEl"
 
-#: templates/registration/login.html:24
+#: templates/registration/login.html:28
 msgid "Nom d'utilisateur"
 msgstr "Username"
 
-#: templates/registration/login.html:40
+#: templates/registration/login.html:44
 msgid "Mot de passe oublié ?"
 msgstr "Forgot your password?"
 
-#: templates/registration/login.html:41
+#: templates/registration/login.html:45
 msgid "Pas de compte ?"
 msgstr "Don't have an account?"
 
-#: templates/registration/login.html:54
+#: templates/registration/login.html:58
 msgid "Grâce à votre compte ResEl vous pourrez"
 msgstr "With your ResEl account you can"
 
-#: templates/registration/login.html:56
+#: templates/registration/login.html:60
 msgid "Avoir accès à internet très haut débit sur le campus"
 msgstr "Enjoy a high-speed Internet connection"
 
-#: templates/registration/login.html:57
+#: templates/registration/login.html:61
 msgid "Regarder la télévision sur votre ordinateur"
 msgstr "Watch TV on your computer"
 
-#: templates/registration/login.html:58
+#: templates/registration/login.html:62
 msgid "Accéder aux e-mails de clubs et leurs sites"
 msgstr "Access websites of your clubs"
 
-#: templates/registration/login.html:59
+#: templates/registration/login.html:63
 msgid "Consulter vos statistiques d'utilisation"
 msgstr "Monitor your Internet usage"
 
-#: templates/registration/login.html:60
+#: templates/registration/login.html:64
 msgid "Et plus encore !"
 msgstr "And more!"
 
-#: templates/registration/login.html:62
+#: templates/registration/login.html:66
 msgid "Vous désirez vous connecter ?"
 msgstr "Would you like to log in?"
 
@@ -5033,8 +5199,8 @@ msgstr ""
 
 #: tresorerie/templates/tresorerie/home.html:43
 msgid ""
-"Si vous avez fait une erreur, vous pouvez <a class=\"reset-link"
-"\">recommencer</a>"
+"Si vous avez fait une erreur, vous pouvez <a class=\"reset-"
+"link\">recommencer</a>"
 msgstr "If you made a mistake, you can <a class=\"reset-link\">retry</a>"
 
 #: tresorerie/templates/tresorerie/list_product.html:5
@@ -5128,11 +5294,11 @@ msgstr "Download the invoice"
 msgid "Facture en génération"
 msgstr "Waiting for the invoice"
 
-#: tresorerie/views.py:113
+#: tresorerie/views.py:115
 msgid "Veuillez vérifier que vos informations personnelles soient correctes."
 msgstr "Please check your personal information"
 
-#: tresorerie/views.py:205
+#: tresorerie/views.py:207
 msgid ""
 "Il semblerait que vous ayez tenté de contourner le paiement. Cette action a "
 "été signalée."
@@ -5140,14 +5306,14 @@ msgstr ""
 "It appears that you have attempted to circumvent the payment. This action "
 "has been reported."
 
-#: tresorerie/views.py:221
+#: tresorerie/views.py:223
 msgid ""
 "Une erreur s'est produite lors de la commande. Veuillez contacter un "
 "administrateur."
 msgstr ""
 "An error has occurred during checkout. Please contact an administrator."
 
-#: tresorerie/views.py:291
+#: tresorerie/views.py:293
 msgid ""
 "Vous venez de payer votre accès au ResEl, vous devriez recevoir sous peu un "
 "email avec votre facture."
@@ -5155,33 +5321,33 @@ msgstr ""
 "You have just paid your access to ResEl, you should receive an email with "
 "your invoice shortly."
 
-#: tresorerie/views.py:342 tresorerie/views.py:343
+#: tresorerie/views.py:344 tresorerie/views.py:345
 msgid "Le paiement n'a pas été effectué"
 msgstr "The payment has not been made"
 
-#: tresorerie/views.py:344
+#: tresorerie/views.py:346
 msgid "Le paiement n'a pas été confirmé"
 msgstr "Your password has been modified."
 
-#: tresorerie/views.py:345 tresorerie/views.py:346
+#: tresorerie/views.py:347 tresorerie/views.py:348
 msgid "Le paiement n'a pas été authentifié"
 msgstr "The payment has not been confirmed"
 
-#: tresorerie/views.py:347
+#: tresorerie/views.py:349
 msgid ""
 "Le paiement est en attente. Veuillez contacter un administrateur dans une "
 "heure."
 msgstr "The payment is pending. Please contact an administrator in an hour."
 
-#: tresorerie/views.py:348
+#: tresorerie/views.py:350
 msgid "Une erreur est survenue. Veuillez contacter un administrateur."
 msgstr "An error has occurred. Please contact an administrator."
 
-#: tresorerie/views.py:349
+#: tresorerie/views.py:351
 msgid "Le paiement a été annulé"
 msgstr "The payment has been cancelled"
 
-#: tresorerie/views.py:393
+#: tresorerie/views.py:395
 msgid "Aucune transaction trouvée"
 msgstr "No transaction found"
 
@@ -5193,27 +5359,12 @@ msgstr "Published"
 msgid "Dernière modification"
 msgstr "Last modification"
 
-#: wiki/templates/wiki/show-category.html:26
+#: wiki/templates/wiki/show-category.html:24
 msgid "Aucun article disponible."
 msgstr "No article is available."
 
-#~ msgid "Consommation de bande passante"
-#~ msgstr "Bandwidth usage"
+#~ msgid "Ingénieur généraliste (FIG/FISE)"
+#~ msgstr "Master of Engineering (FIG/FISE)"
 
-#~ msgid "Veuillez renseigner vos informations personnelles"
-#~ msgstr "Please fill in your personal information"
-
-#~ msgid "Veuillez renseigner vos informations de compte"
-#~ msgstr "Please fill in your account information"
-
-#~ msgid "Password strength"
-#~ msgstr "Password strength"
-
-#~ msgid "En vous inscrivant..."
-#~ msgstr "By registering"
-
-#~ msgid "Statut du réseau"
-#~ msgstr "Network status"
-
-#~ msgid "Retour "
-#~ msgstr "Back "
+#~ msgid "Ingénieur par alternance (FIP)"
+#~ msgstr "Master of Engineering via sandwich course (FIP)"

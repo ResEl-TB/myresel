@@ -62,38 +62,10 @@
 
 #carousel-quotes {
     height: 190px;
-    padding-top: 20px;
 }
 
 .carousel-indicators {
     bottom: -20px;
-}
-
-@media screen and (max-width: 860px) {
-    #carousel-quotes {
-        height: 150px;
-        padding-top: 0;
-    }
-    .row h2 {
-        font-size: 25px;
-        line-height: 30px;
-    }
-}
-
-/* évite d'avoir le texte collé sur le côté sur mobile */
-@media screen and (max-width: 768px) {
-    .home-user-management{
-        text-align:center;
-    }
-    #carousel-quotes {
-        height: 220px;
-    }
-}
-
-@media screen and (max-width:600px) {
-    #carousel-quotes {
-        height: 260px;
-    }
 }
 
 .home-user-management .home-login {
@@ -170,8 +142,58 @@
 }
 
 .home-bg-img .row {
-    margin-bottom: 20px;
-    margin-top: 20px;
+    line-height: 170px;
+}
+
+.home-bg-img .row > div > * {
+    vertical-align: middle;
+    display: inline-block;
+    line-height: normal;
+    margin: 0;
+}
+
+@media screen and (max-width: 860px) {
+    #carousel-quotes {
+        height: 150px;
+        padding-top: 0;
+    }
+    .home-bg-img .row > div > .fa {
+        font-size: 90px;
+    }
+    .home-bg-img .row {
+        line-height: 140px;
+    }
+    .row h2 {
+        font-size: 25px;
+    }
+}
+
+/* évite d'avoir le texte collé sur le côté sur mobile */
+@media screen and (max-width: 768px) {
+    .home-user-management {
+        text-align: center;
+    }
+    .home-bg-img .row > div > .fa {
+        font-size: 70px;
+    }
+    .home-bg-img .row {
+        line-height: 100px;
+    }
+    #carousel-quotes {
+        height: 220px;
+    }
+}
+
+@media screen and (max-width:599px) {
+    #carousel-quotes {
+        height: 260px;
+    }
+    .home-bg-img .row {
+        line-height: 140px;
+    }
+    .home-bg-img .row > div:first-child {
+        margin: -25px 0;
+    }
 }
 
 .home-user-management ~ .home-presentation {
@@ -643,11 +665,17 @@ iframe {
   .category-item {
     margin: 5px 0;
   }
+  .home-bg-img .row > div > .fa {
+    font-size: 60px;
+  }
 }
 
 @media(max-width:371px) {
   .category-item {
     height: auto;
     width: calc(100% - 50px);
+  }
+  .home-bg-img .row > div > * {
+    font-size: 2.2rem;
   }
 }

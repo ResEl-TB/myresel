@@ -49,8 +49,7 @@ before_script:
   - echo "CREATE DATABASE ${MYSQL_QOS_DATABASE}" | mysql -u${MYSQL_QOS_USER} -p${MYSQL_QOS_PASSWORD} -h ${MYSQL_QOS_HOST}
   - source .install/scripts/install_openldap.sh
 #  - source .install/scripts/install_latex.sh
-  - pip3 install --upgrade pip
-  - pip3 install -qUr requirements.txt
+  - pip3 install --break-system-packages -qUr requirements.txt
   - rm -f -- ${ROOTDIR}myresel/settings_local.py
   - export MYSQL_USER=root
   - source .install/scripts/configure.sh

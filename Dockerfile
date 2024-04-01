@@ -1,4 +1,4 @@
-FROM debian:10
+FROM debian:12
 ARG LDAPPASSWD
 
 ARG DEBIAN_FRONTEND=noninteractive
@@ -15,8 +15,7 @@ RUN chmod +x install_essentials.sh && ./install_essentials.sh
 RUN apt -qq update && apt -qq upgrade -y
 
 COPY requirements.txt requirements.txt
-RUN pip3 install --upgrade pip
-RUN pip3 install -qr requirements.txt
+RUN pip3 install --break-system-packages -qr requirements.txt
 
 # LDAP
 RUN apt -qq install expect ldap-utils libldap2-dev libsasl2-dev libssl-dev ldapvi -y

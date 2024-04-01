@@ -3,7 +3,7 @@ from django.views.generic import ListView
 from django.views.generic.edit import FormMixin
 from django.utils.decorators import method_decorator
 from django.contrib import messages
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from fonctions.decorators import maisel_manager_required
 from fonctions.generic import next_august_fifteenth
 from gestion_personnes.models import LdapUser

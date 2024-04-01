@@ -5,6 +5,7 @@ import hashlib
 import os
 from base64 import decodebytes, encodebytes
 from datetime import datetime, time, date
+from passlib.hash import nthash
 
 
 def current_year():
@@ -50,7 +51,7 @@ def compare_passwd(passwd, hsh):
 def hash_to_ntpass(password):
     """ Fourni un hash du mdp pour correspondre avec le loggin over Wi-Fi """
 
-    return str(binascii.hexlify(hashlib.new('md4', password.encode('utf-16le')).digest()).upper()).split('\'')[1]
+    return nthash.hash(password).upper()
 
 
 def sizeof_fmt(num, suffix='o'):

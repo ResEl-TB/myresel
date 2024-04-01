@@ -8,14 +8,14 @@ from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.forms import ModelForm, CharField, TextInput, Form, Textarea, ChoiceField,\
                                     EmailField, IntegerField, Select, CheckboxInput, SelectMultiple
 from django.forms.models import ModelMultipleChoiceField
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.db.models import Q
 
 from ldap3.core.exceptions import LDAPException
 
 from campus.models import RoomBooking, Room, RoomAdmin, StudentOrganisation, Mail, Association, ListeCampagne
 from gestion_personnes.models import LdapUser
-from gestion_personnes.forms import PersonnalInfoForm
+from gestion_personnes.forms import PersonalInfoForm
 
 from fonctions import ldap
 
@@ -378,14 +378,15 @@ class ClubEditionForm(ClubManagementForm):
 
 
 
-class MajPersonnalInfo(PersonnalInfoForm):
-    CAMPUS = [('Brest', "Brest"), ('Rennes', 'Rennes'), ('None', _('Je n\'habite pas à la Maisel'))]
+class MajPersonalInfo(PersonalInfoForm):
+    CAMPUS = [('Brest', "Brest"), ('Rennes', 'Rennes'), ('Nantes', 'Nantes'),
+              ('None', _('Je n\'habite pas à la Maisel'))]
     BUILDINGS_BREST = [('I%d' % i, 'I%d' % i) for i in range(1, 13)]
     BUILDINGS_RENNES = [('S1', 'Studios'), ('C1', 'Chambres')]
+    BUILDINGS_NANTES = [(letter, letter) for letter in ['N', 'P', 'Q', 'R', 'S', 'T']]
+    BUILDINGS_NANTES += [('PC', 'Pitre Chevalier')]
 
-    BUILDINGS = [(0, _("Sélectionnez un bâtiment"))]
-    BUILDINGS += BUILDINGS_BREST
-    BUILDINGS += BUILDINGS_RENNES
+    BUILDINGS = BUILDINGS_BREST + BUILDINGS_RENNES + BUILDINGS_NANTES
 
     photo = forms.ImageField(
         widget = forms.ClearableFileInput(),
