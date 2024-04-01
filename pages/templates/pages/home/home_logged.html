@@ -83,7 +83,7 @@
                             </div>
                             <div class="col-sm-7">
                                 <h3>{% trans "Accès manager" %}</h3>
-                                <div><span class="fa fa-fw fa-circle success"></span> {% trans "Cotisation à l'association offerte" %}</div>
+                                <div><span class="fa fa-fw fa-circle success"></span> {% trans "Cotisation à l’association offerte" %}</div>
                                 <div>
                                 {% if need_to_pay == 'success' %}
                                     <span class="fa fa-fw fa-circle success"></span> {% trans "Accès accordé jusqu’au" %} {{ end_fee|date:"j F Y" }}
@@ -174,7 +174,7 @@
                         <div class="text-center">
                             <div class="pay-btn-container"
                             {% if subnet == 'REGN' %}
-                                data-trigger="hover" data-placement="top" data-toggle="popover" data-content="{% trans "Veuillez vous connecter au réseau ResEl Secure ou ResEl Next pour procéder au paiement" %}"
+                                data-trigger="hover" data-placement="top" data-toggle="popover" data-content="{% trans "Veuillez vous connecter au réseau ResEl Secure ou ResEl Next pour procéder au paiement." %}"
                             {% elif subnet == 'EXPN' %}
                                 data-trigger="hover" data-placement="top" data-toggle="popover" data-content="{% trans "Le paiement nécessite une connexion à Internet active. Veuillez utiliser votre 4G ou Eduroam pour procéder au paiement." %}"
                             {% endif %}>

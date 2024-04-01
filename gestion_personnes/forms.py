@@ -14,7 +14,7 @@ from fonctions.generic import current_year
 from gestion_personnes.models import LdapUser, LdapOldUser, UserMetaData
 
 
-# TODO : merge personnal info form and Inscription form
+# TODO : merge personal info form and Inscription form
 
 
 class ToggleSelect(forms.RadioSelect):
@@ -25,7 +25,7 @@ class InvalidUID(Exception):
     pass
 
 
-class PersonnalInfoForm(forms.Form):
+class PersonalInfoForm(forms.Form):
     CAMPUS = [('Brest', "Brest"), ('Rennes', 'Rennes'), ('Nantes', 'Nantes'),
               ('None', _('Je n\'habite pas à la Maisel'))]
     BUILDINGS_BREST = [('I%d' % i, 'I%d' % i) for i in range(1, 13)]
@@ -33,12 +33,11 @@ class PersonnalInfoForm(forms.Form):
     BUILDINGS_NANTES = [(letter, letter) for letter in ['N', 'P', 'Q', 'R', 'S', 'T']]
     BUILDINGS_NANTES += [('PC', 'Pitre Chevalier')]
 
-    BUILDINGS = [(0, _("Sélectionnez un bâtiment"))]
-    BUILDINGS += BUILDINGS_BREST + BUILDINGS_RENNES + BUILDINGS_NANTES
+    BUILDINGS = BUILDINGS_BREST + BUILDINGS_RENNES + BUILDINGS_NANTES
 
     FORMATIONS = [
-        ('FIG', _('Ingénieur généraliste (FIG/FISE)')),
-        ('FIP', _('Ingénieur par alternance (FIP)')),
+        ('FIG', _('Généraliste (FISE/FIG)')),
+        ('FIP', _('Par alternance (FISA/FIP/FIL/FIT)')),
         ('Autre', _('Autre'))
     ]
 
@@ -113,7 +112,7 @@ class PersonnalInfoForm(forms.Form):
         return formation
 
     def clean(self):
-        cleaned_data = super(PersonnalInfoForm, self).clean()
+        cleaned_data = super(PersonalInfoForm, self).clean()
         campus = cleaned_data.get("campus")
         building = cleaned_data.get("building")
         address = cleaned_data.get("address")

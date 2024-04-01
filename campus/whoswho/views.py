@@ -20,7 +20,7 @@ from ldap3.core.exceptions import LDAPException
 from gestion_personnes.async_tasks import send_mails
 from gestion_personnes.models import LdapUser, UserMetaData
 
-from campus.forms import MajPersonnalInfo, SearchSomeone
+from campus.forms import MajPersonalInfo, SearchSomeone
 from campus.models.clubs_models import StudentOrganisation
 
 from fonctions.generic import today
@@ -88,7 +88,7 @@ class UserHome(View):
     """
 
     template_name = 'campus/whoswho/userHome.html'
-    form_class = MajPersonnalInfo
+    form_class = MajPersonalInfo
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):

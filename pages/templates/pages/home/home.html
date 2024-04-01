@@ -15,7 +15,7 @@
       <div class="row">
         <div class="col-md-4 col-md-offset-1">
           <h2 class="assos-title">{% trans "Le Réseau des Élèves d'IMT Atlantique" %}</h2>
-          <p class="assos-slogan">{% trans "Le fournisseur d'accès associatif par les teubreux pour les teubreux" %}</p>
+          <p class="assos-slogan">{% trans "Le fournisseur d'accès associatif par les étudiants, pour les étudiants" %}</p>
         </div>
         <div class="col-md-offset-1 col-md-6">
           <img src="{% static "images/logo_resel.png" %}" alt="logo ResEl" class="img-responsive logo">
@@ -33,7 +33,7 @@
             <div class="home-fragment home-presentation home-user-management" data-navstyle="invert">
               <div class="jumbotron-sep hidden-xs"></div>
                 <div class="container article">
-                    <h2>Le ResEl fournit un accès Internet aux campus brestois et rennais d'<a href="https://www.imt-atlantique.fr/">IMT Atlantique</a></h2>
+                    <h2>{% trans "Le ResEl fournit un accès à Internet aux résidences des trois campus d’" %}<a href="https://www.imt-atlantique.fr/">IMT Atlantique</a></h2>
                     <div class="diagram">
                         <div class="fa fa-cloud"></div>
                         <div class="line"></div>
@@ -47,12 +47,12 @@
                     <div class="row home-login">
                         <div class="col-xs-4 col-xs-offset-2 col-md-3 col-md-offset-3">
                             <a href="{% url 'login' %}" class="btn btn-default halo">
-                              {%  trans "Connexion"%}
+                              {% trans "Connexion" %}
                             </a>
                         </div>
                         <div class="col-xs-4 col-md-3">
                             <a href="{% url 'how-to-signup' %}" class="btn btn-default btn-outline halo">
-                              {%  trans "Comment s'inscrire ?"%}
+                              {% trans "Comment s'inscrire ?" %}
                             </a>
                         </div>
                     </div>
@@ -74,7 +74,7 @@
                                 <span class="fa fa-heart-o service-icon bigger" aria-hidden="true"></span>
                             </div>
                             <div class="col-sm-8 col-sm-offset-0 col-md-7 col-xs-10 col-xs-offset-1">
-                                <h2>Le ResEl relie à Internet 600 chambres à Brest et 100 chambres à Rennes</h2>
+                                <h2>{% trans "Le ResEl relie à Internet 500 chambres à Brest, 170 chambres à Rennes, et bientôt 640 chambres à Nantes" %}</h2>
                             </div>
                         </div>
                     </div>
@@ -84,7 +84,7 @@
                                 <span class="fa fa-graduation-cap service-icon bigger" aria-hidden="true"></span>
                             </div>
                             <div class="col-sm-8 col-sm-offset-0 col-md-7 col-xs-10 col-xs-offset-1">
-                                <h2>Depuis 1996, l'association a fourni internet à des milliers d'étudiants</h2>
+                                <h2>{% trans "Depuis 1990, l’association a fourni internet à plusieurs milliers d’étudiants et formé une centaine d’administrateurs" %}</h2>
                             </div>
                         </div>
                     </div>
@@ -94,7 +94,7 @@
                                 <span class="fa fa-code-fork service-icon bigger" aria-hidden="true"></span>
                             </div>
                             <div class="col-sm-8 col-sm-offset-0 col-md-7 col-xs-10 col-xs-offset-1">
-                                <h2>Nous utilisons exclusivement des logiciels libres, ce qui permet une grande flexibilité</h2>
+                                <h2>{% trans "Nous utilisons et produisons exclusivement du logiciel libre, nous assurant transparence et flexibilité" %}</h2>
                             </div>
                         </div>
                     </div>
@@ -223,7 +223,7 @@
     </div>
     <div class="home-fragment">
         <div id="graph" class="container article">
-          <h1>Bande passante générale <a href="/graph/d/netflow?var-_campus=All&kiosk=tv" aria-label="Plus d'infos sur la bande passante"><small><i class="fa fa-fw fa-plus"></i></small></a></h1>
+          <h1>{% trans "Bande passante générale" %}</h1>
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="graph-brest">
                     <img src="https://open.resel.fr/static/nms/brest-1d.svg">
@@ -247,8 +247,8 @@
     <div class="home-fragment">
         <div class="container centered article">
             <h4>
-                Vous souhaitez contribuer au ResEl et monter en compétences ? <br />
-                Alors n'hésitez pas à
+                {% trans "Vous souhaitez contribuer au ResEl et monter en compétences ?" %}<br>
+                {% trans "Alors n’hésitez pas à" %}
                 <b><a class="" href="{% url 'become-admin' %}">{% trans "devenir administrateur ResEl" %}</a></b>.
             </h4>
         </div>

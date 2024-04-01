@@ -24,7 +24,7 @@ from gestion_personnes.models import LdapUser, LdapOldUser, UserMetaData
 
 from myresel.settings import FREE_DURATION
 
-from .forms import InscriptionForm, ModPasswdForm, CGUForm, InvalidUID, PersonnalInfoForm, ResetPwdSendForm, \
+from .forms import InscriptionForm, ModPasswdForm, CGUForm, InvalidUID, PersonalInfoForm, ResetPwdSendForm, \
     ResetPwdForm, SendUidForm, RoutingMailForm
 
 
@@ -161,7 +161,7 @@ class Settings(View):
 
 class PersonalInfo(View):
     template_name = 'gestion_personnes/personal_info.html'
-    form_class = PersonnalInfoForm
+    form_class = PersonalInfoForm
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):

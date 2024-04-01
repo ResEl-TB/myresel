@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from django.urls import reverse
 
-from campus.forms import MajPersonnalInfo
+from campus.forms import MajPersonalInfo
 
 from gestion_personnes.tests import create_full_user, try_delete_user
 from gestion_personnes.models import LdapUser
@@ -44,7 +44,7 @@ class HomeTestCase(TestCase):
 '''
     def testInvalidInfo(self):
         user = LdapUser.get(pk="jbvallad")
-        form = MajPersonnalInfo(initial={
+        form = MajPersonalInfo(initial={
                 'email' : user.mail,
                 'campus' : "Brest",
                 'building' : "I1",

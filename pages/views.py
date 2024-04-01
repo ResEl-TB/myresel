@@ -136,7 +136,7 @@ class NewsDetail(DetailView):
 class NewsRSS(Feed):
     title = _("Les dernières infos ResEl")
     link = "/rss-news/"
-    description = _("Des informations sur l'état du réseau sur les campus de Brest et Rennes")
+    description = _("Des informations sur l'état du réseau sur les campus de Brest, Nantes et Rennes")
 
     def items(self):
         return News.objects.order_by('-date')[:5]

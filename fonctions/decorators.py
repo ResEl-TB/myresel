@@ -138,7 +138,7 @@ def able_to_pay(function=None, redirect_to='home'):
             if subnet in ['REGN', 'EXPN']:
                 if request.network_data['subnet'] == 'REGN':
                     messages.error(request, _('Veuillez vous connecter au réseau ResEl Secure ou '
-                                              'ResEl Next pour effectuer votre paiement.'))
+                                              'ResEl Next pour procéder au paiement.'))
                 else:
                     messages.error(request, _('Veuillez vous connecter à un réseau connecté à '
                                               'Internet (4G, Eduroam,…) pour effectuer votre '
