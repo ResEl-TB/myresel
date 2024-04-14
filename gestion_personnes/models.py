@@ -111,16 +111,22 @@ class LdapUser(ldapback.models.LdapModel):
 
     @staticmethod
     def generate_address(campus, building, room):
-        if campus.lower() == "brest":
-            address = "Bâtiment {} Chambre {}\nMaisel IMT Atlantique\n655 avenue du Technopôle\n29280 Plouzané"
-        else:
-            address = "Bâtiment {} Chambre {}\nMaisel IMT Atlantique\n2 rue de la Châtaigneraie\n35576 Cesson-Sévigné"
-        address = address.format(
-            building,
-            room,
-        )
-
-        return address
+        campus = campus.lower()
+        if campus == 'brest':
+            return ("Bâtiment {}, Chambre {}\nMaisel IMT Atlantique\n655 avenue du Technopôle\n"
+                    "29280 Plouzané").format(building, room)
+        if campus == 'rennes':
+            if building == 'C1':
+                return "Chambre {}\n1 rue de la Châtaigneraie\n35510 Cesson-Sévigné".format(room)
+            return "Logement {}\n3 rue de la Châtaigneraie\n35510 Cesson-Sévigné".format(room)
+        if campus == 'nantes':
+            if building == 'PC':
+                return "Chambre {}\n13 rue Pitre Chevalier\n44000 Nantes".format(room)
+            numbers = {'N': 2, 'P': 4, 'Q': 6, 'R': 5, 'S': 7, 'T': 9}
+            if building in numbers:
+                return ("Bâtiment {}, Chambre {}\nMDE IMT Atlantique\n{} allée Jean Baptiste "
+                        "Fourier\n44300 Nantes").format(building, room, numbers[building])
+        return "Adresse inconnue"
 
     def is_member(self):
         if isinstance(self.cotiz, list):
