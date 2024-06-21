@@ -40,7 +40,7 @@ campuses:
         - name: kim
           title: Firewall Kim
           text: Kim est le firewall principal à Brest. Il permet de
-            contrôler l'accès à Internet.
+            contrôler l’accès à Internet.
           icon: fa-server
           essential: true
           level: 1
@@ -59,7 +59,7 @@ campuses:
       rescue-stack:
         - name: radius2
           title: RADIUS de secours
-          text: Le RADIUS de secours permet l'authentification en Wi-Fi et en
+          text: Le RADIUS de secours permet l’authentification en Wi-Fi et en
             filaire en cas de panne du RADIUS principal.
           icon: fa-wifi
           essential: false
@@ -68,7 +68,7 @@ campuses:
             - the-ting-goes-skrrrahh
         - name: dhcp2
           title: DHCP de secours
-          text: Le DHCP de secours permet d'attribuer des adresses
+          text: Le DHCP de secours permet d’attribuer des adresses
             IP si le DHCP principal est en panne.
           icon: fa-legal
           essential: false
@@ -91,7 +91,7 @@ campuses:
       main-stack:
         - name: radius
           title: RADIUS principal
-          text: Le RADIUS permet l'authentification en Wi-Fi et en filaire.
+          text: Le RADIUS permet l’authentification en Wi-Fi et en filaire.
           icon: fa-wifi
           essential: true
           level: 2
@@ -112,7 +112,7 @@ campuses:
             - palpatine
         - name: dhcp
           title: DHCP principal
-          text: Le DHCP principal permet d'attribuer des adresses
+          text: Le DHCP principal permet d’attribuer des adresses
             IP aux appareils qui se connectent.
           icon: fa-legal
           essential: true
@@ -139,7 +139,7 @@ campuses:
         - name: monitoring
           title: Monitoring
           text: Les services de monitoring permettent aux administrateurs de
-            bien vérifier l'état du réseau.
+            bien vérifier l’état du réseau.
           icon: fa-area-chart
           essential: false
           level: 0
@@ -149,7 +149,7 @@ campuses:
         - name: web
           title: Sites web
           text: Le ResEl héberge différents services web afin de faciliter
-            les opérations de l'associations et des clubs.
+            les opérations de l’associations et des clubs.
           icon: fa-internet-explorer
           essential: false
           level: 0
@@ -169,7 +169,7 @@ campuses:
             - quadria
         - name: backup
           title: Sauvegarde principale
-          text: Le système de sauvegarde est essentiel en cas d'incident majeur afin de récupérer les données.
+          text: Le système de sauvegarde est essentiel en cas d’incident majeur afin de récupérer les données.
           icon: fa-floppy-o
           essential: false
           level: 1
@@ -177,7 +177,7 @@ campuses:
             - xana
         - name: mail
           title: Mails
-          text: Le service de couriel permet l'hébergement des listes de
+          text: Le service de couriel permet l’hébergement des listes de
             diffusions essentiels aux clubs du campus.
           icon: fa-envelope
           essential: true
@@ -195,7 +195,7 @@ campuses:
       network-access:
         - name: i1
           title: Bâtiment I1
-          text: Switch d'accès au I1 et bornes Wi-Fi du I1
+          text: Switch d’accès au I1 et bornes Wi-Fi du I1
           icon: fa-building building
           essential: false
           level: 1
@@ -213,7 +213,7 @@ campuses:
             - i01-219.ap.br.resel.fr
         - name: i2
           title: Bâtiment I2
-          text: Switch d'accès au I2 et bornes Wi-Fi du I2
+          text: Switch d’accès au I2 et bornes Wi-Fi du I2
           icon: fa-building building
           essential: false
           level: 1
@@ -231,7 +231,7 @@ campuses:
             - i02-209.ap.br.resel.fr
         - name: i3
           title: Bâtiment I3
-          text: Switch d'accès au I3 et bornes Wi-Fi du I3
+          text: Switch d’accès au I3 et bornes Wi-Fi du I3
           icon: fa-building building
           essential: false
           level: 1
@@ -252,7 +252,7 @@ campuses:
             - i03-309.ap.br.resel.fr
         - name: i4
           title: Bâtiment I4
-          text: Switch d'accès au I4 et bornes Wi-Fi du I4
+          text: Switch d’accès au I4 et bornes Wi-Fi du I4
           icon: fa-building building
           essential: false
           level: 1
@@ -273,7 +273,7 @@ campuses:
             - i04-303.ap.br.resel.fr
         - name: i5
           title: Bâtiment I5
-          text: Switch d'accès au I5 et bornes Wi-Fi du I5
+          text: Switch d’accès au I5 et bornes Wi-Fi du I5
           icon: fa-building building
           essential: false
           level: 1
@@ -290,7 +290,7 @@ campuses:
             - i05-213.ap.br.resel.fr
         - name: i6
           title: Bâtiment I6
-          text: Switch d'accès au I6 et bornes Wi-Fi du I6
+          text: Switch d’accès au I6 et bornes Wi-Fi du I6
           icon: fa-building building
           essential: false
           level: 1
@@ -308,7 +308,7 @@ campuses:
             - i06-207.ap.br.resel.fr
         - name: i7
           title: Bâtiment I7
-          text: Switch d'accès au I7 et bornes Wi-Fi du I7
+          text: Switch d’accès au I7 et bornes Wi-Fi du I7
           icon: fa-building building
           essential: false
           level: 1
@@ -317,7 +317,7 @@ campuses:
             - i07-002.sw.br.resel.fr
         - name: i8
           title: Bâtiment I8
-          text: Switch d'accès au I8 et bornes Wi-Fi du I8
+          text: Switch d’accès au I8 et bornes Wi-Fi du I8
           icon: fa-building building
           essential: false
           level: 1
@@ -335,7 +335,7 @@ campuses:
             - i08-207.ap.br.resel.fr
         - name: i9
           title: Bâtiment I9
-          text: Switch d'accès au I9 et bornes Wi-Fi du I9
+          text: Switch d’accès au I9 et bornes Wi-Fi du I9
           icon: fa-building building
           essential: false
           level: 1
@@ -354,7 +354,7 @@ campuses:
             - i09-208.ap.br.resel.fr
         - name: i10
           title: Bâtiment I10
-          text: Switch d'accès au I10 et bornes Wi-Fi du I10
+          text: Switch d’accès au I10 et bornes Wi-Fi du I10
           icon: fa-building building
           essential: false
           level: 1
@@ -369,7 +369,7 @@ campuses:
             - i10-114.ap.br.resel.fr
         - name: i11
           title: Bâtiment I11
-          text: Switch d'accès au I11 et bornes Wi-Fi du I11
+          text: Switch d’accès au I11 et bornes Wi-Fi du I11
           icon: fa-building building
           essential: false
           level: 1
@@ -384,7 +384,7 @@ campuses:
             - i11-115.ap.br.resel.fr
         - name: i12
           title: Bâtiment I12
-          text: Switch d'accès au I12 et bornes Wi-Fi du I12
+          text: Switch d’accès au I12 et bornes Wi-Fi du I12
           icon: fa-building building
           essential: false
           level: 1
@@ -399,7 +399,7 @@ campuses:
             - i12-011.ap.br.resel.fr
         - name: i14
           title: Bâtiment I14
-          text: Switch d'accès au I14 et bornes Wi-Fi du I14
+          text: Switch d’accès au I14 et bornes Wi-Fi du I14
           icon: fa-building building
           essential: false
           level: 1
@@ -408,7 +408,7 @@ campuses:
             - i14-002.sw.br.resel.fr
         - name: i15
           title: Bâtiment I15
-          text: Switch d'accès au I15 et bornes Wi-Fi du I15
+          text: Switch d’accès au I15 et bornes Wi-Fi du I15
           icon: fa-building building
           essential: false
           level: 1
@@ -417,7 +417,7 @@ campuses:
             - i15-002.sw.br.resel.fr
         - name: foyer
           title: Foyer
-          text: Switch d'accès au foyer (H02) et bornes Wi-Fi du foyer.
+          text: Switch d’accès au foyer (H02) et bornes Wi-Fi du foyer.
           icon: fa-building building
           essential: false
           level: 1
@@ -429,7 +429,7 @@ campuses:
             - h02-004.ap.br.resel.fr
         - name: datacenter
           title: Datacenter
-          text: Switch d'accès au D01 (Datacenter IMT Atlantique).
+          text: Switch d’accès au D01 (Datacenter IMT Atlantique).
           icon: fa-building building
           essential: false
           level: 1
@@ -469,7 +469,7 @@ campuses:
       network-edge:
         - name: peach
           title: Firewall Peach
-          text: Peach l'unique mur-de-feu du campus de Rennes.
+          text: Peach l’unique mur-de-feu du campus de Rennes.
           icon: fa-server
           essential: true
           level: 2
@@ -533,7 +533,7 @@ campuses:
             - mower
         - name: backup
           title: Sauvegardes
-          text: Le système de sauvegarde est essentiel en cas d'incident majeur afin de récupérer les données.
+          text: Le système de sauvegarde est essentiel en cas d’incident majeur afin de récupérer les données.
           icon: fa-floppy-o
           essential: false
           level: 1
@@ -542,7 +542,7 @@ campuses:
       network-access:
         - name: chambres
           title: Chambres
-          text: Switch d'accès et les bornes Wi-Fi du bâtiment des chambres
+          text: Switch d’accès et les bornes Wi-Fi du bâtiment des chambres
           icon: fa-building building
           essential: false
           level: 1
@@ -559,7 +559,7 @@ campuses:
             - c01-104.ap.re.resel.fr
         - name: studios
           title: Studios
-          text: Switch d'accès et les bornes Wi-Fi du bâtiment des studios
+          text: Switch d’accès et les bornes Wi-Fi du bâtiment des studios
           icon: fa-building building
           essential: false
           level: 1
@@ -614,8 +614,8 @@ campuses:
             - internet-nantes
       network-edge:
         - name: edge1-noda.na
-          title: Firewall Peach
-          text: Peach l'unique mur-de-feu du campus de Nantes.
+          title: Firewall
+          text: Edge1 l’unique mur-de-feu du campus de Nantes.
           icon: fa-server
           essential: true
           level: 2
@@ -686,7 +686,7 @@ campuses:
             - jacqueline
         - name: backup
           title: Sauvegardes
-          text: Le système de sauvegarde est essentiel en cas d'incident majeur afin de récupérer les données.
+          text: Le système de sauvegarde est essentiel en cas d’incident majeur afin de récupérer les données.
           icon: fa-floppy-o
           essential: false
           level: 1
@@ -695,7 +695,7 @@ campuses:
       network-access:
         - name: pc
           title: Pitre Chevalier
-          text: Switch d'accès et les bornes Wi-Fi du site "Pitre Chevalier"
+          text: Switch d’accès et les bornes Wi-Fi du site "Pitre Chevalier"
           icon: fa-building building
           essential: false
           level: 1
@@ -737,64 +737,64 @@ campuses:
             - pc-507.ap.na.resel.fr
         - name: mde-m
           title: Bâtiment M
-          text: Switch d'accès et les bornes Wi-Fi du bâtiment M de la MDE
+          text: Switch d’accès et les bornes Wi-Fi du bâtiment M de la MDE
           icon: fa-building building
           essential: false
           level: 1
           _hosts: []
         - name: mde-n
           title: Bâtiment N
-          text: Switch d'accès et les bornes Wi-Fi du bâtiment N de la MDE
+          text: Switch d’accès et les bornes Wi-Fi du bâtiment N de la MDE
           icon: fa-building building
           essential: false
           level: 1
           _hosts: []
         - name: mde-p
           title: Bâtiment P
-          text: Switch d'accès et les bornes Wi-Fi du bâtiment P de la MDE
+          text: Switch d’accès et les bornes Wi-Fi du bâtiment P de la MDE
           icon: fa-building building
           essential: false
           level: 1
           _hosts: []
         - name: mde-q
           title: Bâtiment Q
-          text: Switch d'accès et les bornes Wi-Fi du bâtiment Q de la MDE
+          text: Switch d’accès et les bornes Wi-Fi du bâtiment Q de la MDE
           icon: fa-building building
           essential: false
           level: 1
           _hosts: []
         - name: mde-r
           title: Bâtiment R
-          text: Switch d'accès et les bornes Wi-Fi du bâtiment R de la MDE
+          text: Switch d’accès et les bornes Wi-Fi du bâtiment R de la MDE
           icon: fa-building building
           essential: false
           level: 1
           _hosts: []
         - name: mde-s
           title: Bâtiment S
-          text: Switch d'accès et les bornes Wi-Fi du bâtiment S de la MDE
+          text: Switch d’accès et les bornes Wi-Fi du bâtiment S de la MDE
           icon: fa-building building
           essential: false
           level: 1
           _hosts: []
         - name: mde-t
           title: Bâtiment T
-          text: Switch d'accès et les bornes Wi-Fi du bâtiment T de la MDE
+          text: Switch d’accès et les bornes Wi-Fi du bâtiment T de la MDE
           icon: fa-building building
           essential: false
           level: 1
           _hosts: []
-        ################ POUR L'INSTANT PAS DE VILLA DANS LE MONITORING
+        ################ POUR L’INSTANT PAS DE VILLA DANS LE MONITORING
         # - name: villa-b
         #   title: Villa B
-        #   text: Switch d'accès et les bornes Wi-Fi des villas B de la MDE
+        #   text: Switch d’accès et les bornes Wi-Fi des villas B de la MDE
         #   icon: fa-building building
         #   essential: false
         #   level: 1
         #   _hosts: []
         # - name: villa-M
         #   title: Villa M
-        #   text: Switch d'accès et les bornes Wi-Fi des villas M de la MDE
+        #   text: Switch d’accès et les bornes Wi-Fi des villas M de la MDE
         #   icon: fa-building building
         #   essential: false
         #   level: 1
