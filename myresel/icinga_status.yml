@@ -587,10 +587,10 @@ campuses:
       - start: moji
         end: network-edge
       - start: internet-access
+        end: edge1-noda.na
+      - start: edge1-noda.na
         end: core1-nodal.na
       - start: core1-nodal.na
-        end: pessac
-      - start: pessac
         end: network-access
     services:
       internet-access:
