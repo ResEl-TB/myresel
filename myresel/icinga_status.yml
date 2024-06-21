@@ -83,7 +83,11 @@ campuses:
           essential: false
           level: 2
           _hosts:
-            - helios-brest-rescue-usr
+            - anakin-bck-br
+            - luke-bck-br
+            - chewbacca-bck-br
+            - darthvader-bck-br
+            - palpatine-bck-br
       main-stack:
         - name: radius
           title: RADIUS principal
@@ -101,7 +105,11 @@ campuses:
           essential: true
           level: 1
           _hosts:
-            - helios-brest-usr
+            - anakin
+            - luke
+            - chewbacca
+            - darthvader
+            - palpatine
         - name: dhcp
           title: DHCP principal
           text: Le DHCP principal permet d'attribuer des adresses
@@ -149,6 +157,15 @@ campuses:
             - flea
             - skynet
             - teia
+            - chamoix
+            - agda-master-01
+            - agda-master-02
+            - agda-master-03
+            - agda-worker-01
+            - agda-worker-02
+            - agda-worker-03
+            - agda-worker-04
+            - agda-worker-05       
         - name: tv
           title: Télévision
           text: Le service de télévision permet de regarder les chaines de la TNT depuis le réseau du ResEl. 
@@ -165,7 +182,7 @@ campuses:
           essential: false
           level: 1
           _hosts:
-            - padova
+            - xana
         - name: mail
           title: Mails
           text: Le service de couriel permet l'hébergement des listes de
@@ -174,8 +191,7 @@ campuses:
           essential: true
           level: 1
           _hosts:
-            #- luigi
-            - toad
+            - amateria
         - name: garbage
           title: Garbage
           text: Garbage
@@ -192,8 +208,8 @@ campuses:
           essential: false
           level: 1
           _hosts:
-           - romane
-           - romane1
+           - i01-001.sw.br.resel.fr
+           - i01-002.sw.br.resel.fr
            - ap-i1-01
            - ap-i1-02
         - name: i2
@@ -203,8 +219,8 @@ campuses:
           essential: false
           level: 1
           _hosts:
-           - gepetto
-           - gepetto1
+           - i02-001.sw.br.resel.fr
+           - i02-002.sw.br.resel.fr
            - ap-i2-01
            - ap-i2-02
         - name: i3
@@ -214,8 +230,8 @@ campuses:
           essential: false
           level: 1
           _hosts:
-           - lea
-           - lea1
+           - i03-001.sw.br.resel.fr
+           - i03-002.sw.br.resel.fr
            - ap-i3-01
            - ap-i3-02
         - name: i4
@@ -225,8 +241,8 @@ campuses:
           essential: false
           level: 1
           _hosts:
-           - jacky
-           - bruce
+           - i04-001.sw.br.resel.fr
+           - i04-002.sw.br.resel.fr
            - ap-i4-01
            - ap-i4-02
            - ap-i4-03
@@ -237,8 +253,8 @@ campuses:
           essential: false
           level: 1
           _hosts:
-           - zoe
-           - zoe1
+           - i05-001.sw.br.resel.fr
+           - i05-002.sw.br.resel.fr
            - ap-i5-01
            - ap-i5-02
         - name: i6
@@ -248,8 +264,8 @@ campuses:
           essential: false
           level: 1
           _hosts:
-           - caroline
-           - caroline1
+           - i06-001.sw.br.resel.fr
+           - i06-002.sw.br.resel.fr
            - ap-i6-01
            - ap-i6-02
         - name: i7
@@ -259,8 +275,8 @@ campuses:
           essential: false
           level: 1
           _hosts:
-           - marion
-           - marion1
+           - i07-001.sw.br.resel.fr
+           - i07-002.sw.br.resel.fr
            - ap-i7-01
            - ap-i7-02
         - name: i8
@@ -270,8 +286,8 @@ campuses:
           essential: false
           level: 1
           _hosts:
-           - cloe
-           - cloe1
+           - i08-001.sw.br.resel.fr
+           - i08-002.sw.br.resel.fr
            - ap-i8-01
            - ap-i8-02
            - ap-i8-03
@@ -282,11 +298,11 @@ campuses:
           essential: false
           level: 1
           _hosts:
-           - elric
-           - elric1
-           #- ap-i9-01
-           #- ap-i9-02
-           #- ap-i9-03
+           - i09-001.sw.br.resel.fr
+           - i09-002.sw.br.resel.fr
+           - ap-i9-01
+           - ap-i9-02
+           - ap-i9-03
         - name: i10
           title: Bâtiment I10
           text: Switch d'accès au I10 et bornes Wi-Fi du I10
@@ -294,7 +310,8 @@ campuses:
           essential: false
           level: 1
           _hosts:
-           - elise
+           - i10-001.sw.br.resel.fr
+           - i10-002.sw.br.resel.fr
            - ap-i10-01
            - ap-i10-02
         - name: i11
@@ -304,8 +321,8 @@ campuses:
           essential: false
           level: 1
           _hosts:
-           - romane
-           - romane1
+           - i11-001.sw.br.resel.fr
+           - i11-002.sw.br.resel.fr
            - ap-i11-01
            - ap-i11-02
         - name: i12
@@ -315,18 +332,47 @@ campuses:
           essential: false
           level: 1
           _hosts:
-           - clara
+           - i12-001.sw.br.resel.fr
+           - i12-002.sw.br.resel.fr
            - ap-i12-01
-        - name: foyer
-          title: Foyer
-          text: Switch d'accès au foyer et bornes Wi-Fi du foyer.
+        - name: i14
+          title: Bâtiment I14
+          text: Switch d'accès au I14 et bornes Wi-Fi du I14
           icon: fa-building building
           essential: false
           level: 1
           _hosts:
-           - guacamolcacao
+           - i14-001.sw.br.resel.fr
+           - i14-002.sw.br.resel.fr
+           - ap-i14-01
+        - name: i15
+          title: Bâtiment I15
+          text: Switch d'accès au I15 et bornes Wi-Fi du I15
+          icon: fa-building building
+          essential: false
+          level: 1
+          _hosts:
+           - i15-001.sw.br.resel.fr
+           - i15-002.sw.br.resel.fr
+           - ap-i15-01
+        - name: foyer
+          title: Foyer
+          text: Switch d'accès au foyer (H02) et bornes Wi-Fi du foyer.
+          icon: fa-building building
+          essential: false
+          level: 1
+          _hosts:
+           - h02-001.sw.br.resel.fr
            - ap-foyer-bar
            - ap-foyer-troll
+        - name: datacenter
+          title: Datacenter
+          text: Switch d'accès au D01 (Datacenter IMT Atlantique).
+          icon: fa-building building
+          essential: false
+          level: 1
+          _hosts:
+           - swbr-stack-d01-138
   - name: rennes
     enabled: true
     connections:
@@ -347,7 +393,8 @@ campuses:
           icon: fa-cloud
           essential: true
           level: 2
-          _hosts: []
+          _hosts: 
+            - internet-rennes
         - name: renater
           title: Renater
           text: La connexion Renater est la connexion de secours du ResEl sur
@@ -355,7 +402,8 @@ campuses:
           icon: fa-cloud
           essential: true
           level: 1
-          _hosts: []
+          _hosts: 
+            - internet-rennes
       network-edge:
         - name: peach
           title: Firewall Peach
@@ -382,7 +430,7 @@ campuses:
           essential: true
           level: 2
           _hosts:
-            - wifiradix
+            - old-father-eternity
         - name: dns
           title: DNS
           text: Le DNS principal
@@ -390,7 +438,11 @@ campuses:
           essential: true
           level: 2
           _hosts:
-            - loupiac
+            - anakin-bck-re
+            - luke-bck-re
+            - chewbacca-bck-re
+            - darthvader-bck-re
+            - palpatine-bck-re
         - name: dhcp
           title: DHCP
           text: Le DHCP principal
@@ -406,7 +458,7 @@ campuses:
           essential: true
           level: 1
           _hosts:
-            - lussac
+            - perlimpinpin
         - name: monitoring
           title: Monitoring
           text: Le monitoring principal
@@ -425,16 +477,14 @@ campuses:
             - xana
       network-access:
         - name: chambres
-          title: Chambress
+          title: Chambres
           text: Switch d'accès et les bornes Wi-Fi du bâtiment des chambres
           icon: fa-building building
           essential: false
           level: 1
           _hosts:
-           - rouky
-           - germaine
-           - germaine1
-           - erdgardpoe
+           - c01-001.sw.re.resel.fr
+           - c01-002.sw.re.resel.fr
            - ap-c1-01
            - ap-c1-02
            - ap-c1-03
@@ -450,9 +500,9 @@ campuses:
           essential: false
           level: 1
           _hosts:
-           - rox
-           - lysiane
-           - lysiane1
+           - s01-001.sw.re.resel.fr
+           - s01-002.sw.re.resel.fr
+           - s01-003.sw.re.resel.fr
            - ap-s1-01
            - ap-s1-02
            - ap-s1-11
@@ -481,7 +531,8 @@ campuses:
           icon: fa-cloud
           essential: true
           level: 2
-          _hosts: []
+          _hosts:
+            - internet-nantes
         - name: renater
           title: Renater
           text: La connexion Renater est la connexion de secours du ResEl sur
@@ -489,7 +540,8 @@ campuses:
           icon: fa-cloud
           essential: true
           level: 1
-          _hosts: []
+          _hosts:
+            - internet-nantes
       network-edge:
         - name: peach
           title: Firewall Peach
