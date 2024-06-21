@@ -398,7 +398,7 @@ campuses:
           essential: true
           level: 2
           _hosts:
-            - loupiac
+            - favonius
         - name: ldap
           title: LDAP
           text: LDAP
@@ -407,14 +407,6 @@ campuses:
           level: 1
           _hosts:
             - lussac
-        - name: mysql
-          title: MariaDB
-          text: La base de données MariaDB principale
-          icon: fa-database
-          essential: true
-          level: 1
-          _hosts:
-            - nairac
         - name: monitoring
           title: Monitoring
           text: Le monitoring principal
@@ -422,24 +414,7 @@ campuses:
           essential: false
           level: 0
           _hosts:
-            - harmonia
-        - name: web
-          title: Sites web
-          text: Le campus de rennes propose de la haute disponibilité pour certains services web du ResEl.
-          icon: fa-internet-explorer
-          essential: false
-          level: 0
-          _hosts:
-            - doubidou
-            - tamere
-#        - name: tv
-#          title: Les services TV
-#          text: Le tv principal
-#          icon: fa-television
-#          essential: false
-#          level: 0
-#          _hosts:
-#            - foucault
+            - mower
         - name: backup
           title: Sauvegardes
           text: Le système de sauvegarde est essentiel en cas d'incident majeur afin de récupérer les données.
@@ -447,15 +422,7 @@ campuses:
           essential: false
           level: 1
           _hosts:
-            - gargantua
-#         - name: garbage
-#           title: Garbage
-#           text: Le garbage principal
-#           icon: fa-film
-#           essential: false
-#           level: 1
-#           _hosts:
-#             - alphabet
+            - xana
       network-access:
         - name: chambres
           title: Chambress
@@ -549,7 +516,7 @@ campuses:
           essential: true
           level: 2
           _hosts:
-            - wifiradix
+            - old-man-of-the-desert
         - name: dns
           title: DNS
           text: Le DNS principal
@@ -557,7 +524,11 @@ campuses:
           essential: true
           level: 2
           _hosts:
-            - loupiac
+            - anakin-bck-na
+            - luke-bck-na
+            - chewbacca-bck-na
+            - darthvader-bck-na
+            - palpatine-bck-na
         - name: dhcp
           title: DHCP
           text: Le DHCP principal
@@ -565,7 +536,7 @@ campuses:
           essential: true
           level: 2
           _hosts:
-            - loupiac
+            - hraesvelg
         - name: ldap
           title: LDAP
           text: LDAP
@@ -573,7 +544,7 @@ campuses:
           essential: true
           level: 1
           _hosts:
-            - lussac
+            - spartacus
         - name: monitoring
           title: Monitoring
           text: Le monitoring principal
@@ -581,7 +552,7 @@ campuses:
           essential: false
           level: 0
           _hosts:
-            - harmonia
+            - jacqueline
         - name: backup
           title: Sauvegardes
           text: Le système de sauvegarde est essentiel en cas d'incident majeur afin de récupérer les données.
@@ -589,7 +560,7 @@ campuses:
           essential: false
           level: 1
           _hosts:
-            - gargantua
+            - xana
       network-access:
         - name: pc
           title: Pitre Chevalier
@@ -610,23 +581,76 @@ campuses:
            - ap-c1-12
            - ap-c1-13
            - ap-c1-14
-        - name: studios
-          title: Studios
-          text: Switch d'accès et les bornes Wi-Fi du bâtiment des studios
+        - name: mde-m
+          title: Bâtiment M
+          text: Switch d'accès et les bornes Wi-Fi du bâtiment M de la MDE
           icon: fa-building building
           essential: false
           level: 1
           _hosts:
-           - rox
-           - lysiane
-           - lysiane1
-           - ap-s1-01
-           - ap-s1-02
-           - ap-s1-11
-           - ap-s1-12
-           - ap-s1-13
-           - ap-s1-21
-           - ap-s1-22
-           - ap-c1-23
-
-
+            - 
+        - name: mde-n
+          title: Bâtiment N
+          text: Switch d'accès et les bornes Wi-Fi du bâtiment N de la MDE
+          icon: fa-building building
+          essential: false
+          level: 1
+          _hosts:
+            - 
+        - name: mde-p
+          title: Bâtiment P
+          text: Switch d'accès et les bornes Wi-Fi du bâtiment P de la MDE
+          icon: fa-building building
+          essential: false
+          level: 1
+          _hosts:
+            - 
+        - name: mde-q
+          title: Bâtiment Q
+          text: Switch d'accès et les bornes Wi-Fi du bâtiment Q de la MDE
+          icon: fa-building building
+          essential: false
+          level: 1
+          _hosts:
+            - 
+        - name: mde-r
+          title: Bâtiment R
+          text: Switch d'accès et les bornes Wi-Fi du bâtiment R de la MDE
+          icon: fa-building building
+          essential: false
+          level: 1
+          _hosts:
+            - 
+        - name: mde-s
+          title: Bâtiment S
+          text: Switch d'accès et les bornes Wi-Fi du bâtiment S de la MDE
+          icon: fa-building building
+          essential: false
+          level: 1
+          _hosts:
+            - 
+        - name: mde-t
+          title: Bâtiment T
+          text: Switch d'accès et les bornes Wi-Fi du bâtiment T de la MDE
+          icon: fa-building building
+          essential: false
+          level: 1
+          _hosts:
+            - 
+        ################ POUR L'INSTANT PAS DE VILLA DANS LE MONITORING
+        # - name: villa-b
+        #   title: Villa B
+        #   text: Switch d'accès et les bornes Wi-Fi des villas B de la MDE
+        #   icon: fa-building building
+        #   essential: false
+        #   level: 1
+        #   _hosts:
+        #     - 
+        # - name: villa-n
+        #   title: Villa M
+        #   text: Switch d'accès et les bornes Wi-Fi des villas N de la MDE
+        #   icon: fa-building building
+        #   essential: false
+        #   level: 1
+        #   _hosts:
+        #     - 
