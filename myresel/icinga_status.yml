@@ -157,15 +157,7 @@ campuses:
             - flea
             - skynet
             - teia
-            - chamoix
-            - agda-master-01
-            - agda-master-02
-            - agda-master-03
-            - agda-worker-01
-            - agda-worker-02
-            - agda-worker-03
-            - agda-worker-04
-            - agda-worker-05       
+            - chamoix    
         - name: tv
           title: Télévision
           text: Le service de télévision permet de regarder les chaines de la TNT depuis le réseau du ResEl. 
