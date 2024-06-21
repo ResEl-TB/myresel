@@ -301,7 +301,7 @@ campuses:
             - i06-008.ap.br.resel.fr
             - i06-014.ap.br.resel.fr
             - i06-103.ap.br.resel.fr
-            - i06-105.ap.br.resel.fr-iw
+            - i06-105.ap.br.resel.fr
             - i06-115.ap.br.resel.fr
             - i06-120.ap.br.resel.fr
             - i06-203.ap.br.resel.fr
@@ -350,7 +350,7 @@ campuses:
             - i09-113.ap.br.resel.fr
             - i09-120.ap.br.resel.fr
             - i09-202.ap.br.resel.fr
-            - i09-204.ap.br.resel.fr-iw
+            - i09-204.ap.br.resel.fr
             - i09-208.ap.br.resel.fr
         - name: i10
           title: Bâtiment I10
@@ -391,12 +391,12 @@ campuses:
           _hosts:
             - i12-001.sw.br.resel.fr
             - i12-002.sw.br.resel.fr
-            - i12-001.ap.br.resel.fr-iw
-            - i12-003.ap.br.resel.fr-iw
-            - i12-005.ap.br.resel.fr-iw
-            - i12-007.ap.br.resel.fr-iw
-            - i12-009.ap.br.resel.fr-iw
-            - i12-011.ap.br.resel.fr-iw
+            - i12-001.ap.br.resel.fr
+            - i12-003.ap.br.resel.fr
+            - i12-005.ap.br.resel.fr
+            - i12-007.ap.br.resel.fr
+            - i12-009.ap.br.resel.fr
+            - i12-011.ap.br.resel.fr
         - name: i14
           title: Bâtiment I14
           text: Switch d'accès au I14 et bornes Wi-Fi du I14
@@ -422,11 +422,11 @@ campuses:
           essential: false
           level: 1
           _hosts:
-           - h02-001.sw.br.resel.fr
-           - h02-001.ap.br.resel.fr
-           - h02-002.ap.br.resel.fr
-           - h02-003.ap.br.resel.fr
-           - h02-004.ap.br.resel.fr
+            - h02-001.sw.br.resel.fr
+            - h02-001.ap.br.resel.fr
+            - h02-002.ap.br.resel.fr
+            - h02-003.ap.br.resel.fr
+            - h02-004.ap.br.resel.fr
         - name: datacenter
           title: Datacenter
           text: Switch d'accès au D01 (Datacenter IMT Atlantique).
@@ -434,7 +434,7 @@ campuses:
           essential: false
           level: 1
           _hosts:
-           - swbr-stack-d01-138
+            - swbr-stack-d01-138
   - name: rennes
     enabled: true
     connections:
@@ -547,16 +547,16 @@ campuses:
           essential: false
           level: 1
           _hosts:
-           - c01-001.sw.re.resel.fr
-           - c01-002.sw.re.resel.fr
-           - c01-001.ap.re.resel.fr
-           - c01-002.ap.re.resel.fr
-           - c01-003.ap.re.resel.fr
-           - c01-004.ap.re.resel.fr
-           - c01-101.ap.re.resel.fr
-           - c01-102.ap.re.resel.fr
-           - c01-103.ap.re.resel.fr
-           - c01-104.ap.re.resel.fr
+            - c01-001.sw.re.resel.fr
+            - c01-002.sw.re.resel.fr
+            - c01-001.ap.re.resel.fr
+            - c01-002.ap.re.resel.fr
+            - c01-003.ap.re.resel.fr
+            - c01-004.ap.re.resel.fr
+            - c01-101.ap.re.resel.fr
+            - c01-102.ap.re.resel.fr
+            - c01-103.ap.re.resel.fr
+            - c01-104.ap.re.resel.fr
         - name: studios
           title: Studios
           text: Switch d'accès et les bornes Wi-Fi du bâtiment des studios
@@ -564,23 +564,23 @@ campuses:
           essential: false
           level: 1
           _hosts:
-           - s01-001.sw.re.resel.fr
-           - s01-002.sw.re.resel.fr
-           - s01-003.sw.re.resel.fr
-           - s01-005.ap.re.resel.fr
-           - s01-011.ap.re.resel.fr
-           - s01-020.ap.re.resel.fr
-           - s01-031.ap.re.resel.fr
-           - s01-105.ap.re.resel.fr
-           - s01-111.ap.re.resel.fr
-           - s01-119.ap.re.resel.fr
-           - s01-126.ap.re.resel.fr
-           - s01-137.ap.re.resel.fr
-           - s01-205.ap.re.resel.fr
-           - s01-211.ap.re.resel.fr
-           - s01-219.ap.re.resel.fr
-           - s01-226.ap.re.resel.fr
-           - s01-237.ap.re.resel.fr
+            - s01-001.sw.re.resel.fr
+            - s01-002.sw.re.resel.fr
+            - s01-003.sw.re.resel.fr
+            - s01-005.ap.re.resel.fr
+            - s01-011.ap.re.resel.fr
+            - s01-020.ap.re.resel.fr
+            - s01-031.ap.re.resel.fr
+            - s01-105.ap.re.resel.fr
+            - s01-111.ap.re.resel.fr
+            - s01-119.ap.re.resel.fr
+            - s01-126.ap.re.resel.fr
+            - s01-137.ap.re.resel.fr
+            - s01-205.ap.re.resel.fr
+            - s01-211.ap.re.resel.fr
+            - s01-219.ap.re.resel.fr
+            - s01-226.ap.re.resel.fr
+            - s01-237.ap.re.resel.fr
   - name: nantes
     enabled: true
     connections:
@@ -613,7 +613,7 @@ campuses:
           _hosts:
             - internet-nantes
       network-edge:
-        - name: peach
+        - name: edge1-noda.na
           title: Firewall Peach
           text: Peach l'unique mur-de-feu du campus de Nantes.
           icon: fa-server
@@ -622,20 +622,18 @@ campuses:
           _hosts:
             - edge1-noda.na
       network-core:
-        - name: pessac
-          title: Routeur de coeur Pessac
-          text: Pessac est le routeur de coeur du campus de Nantes, il permet de router les paquets
-            entre les différents réseaux
+        - name: core1-nodal.na
+          title: Routeur de coeur
+          text: Permet de router les paquets entre les différents réseaux
           icon: fa-circle-o
           essential: true
           level: 2
           _hosts:
             - core1-nodal.na
       rescue-stack:
-        - name: pessac-bck
-          title: Routeur de coeur Pessac (bck)
-          text: Pessac est le routeur backup du campus de Nantes, il permet de router les paquets
-            entre les différents réseaux
+        - name: core1-m002.na
+          title: Routeur de coeur (secours)
+          text: Permet de router les paquets entre les différents réseaux
           icon: fa-circle-o
           essential: true
           level: 2
