@@ -144,7 +144,7 @@ campuses:
           essential: false
           level: 0
           _hosts:
-            - reaper
+            - djibril
             - elliot
         - name: web
           title: Sites web
@@ -429,8 +429,9 @@ campuses:
             - h02-004.ap.br.resel.fr
         - name: datacenter
           title: Datacenter
-          text: Switch d’accès au D01 (Datacenter IMT Atlantique).
-          icon: fa-building building
+          text: Une salle dédiée au ResEl permet d'héberger nos serveurs
+            non critiques
+          icon: fa-server
           essential: false
           level: 1
           _hosts:
@@ -530,7 +531,7 @@ campuses:
           essential: false
           level: 0
           _hosts:
-            - mower
+            - djibril
         - name: backup
           title: Sauvegardes
           text: Le système de sauvegarde est essentiel en cas d’incident majeur afin de récupérer les données.
