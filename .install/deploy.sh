@@ -16,6 +16,7 @@ echo ''
 echo '======================================================================'
 echo '> Téléchargement de la dernière version de myresel'
 cd ${ROOT}
+sudo chown -R www-data:www-data .git/
 git pull
 
 echo ''
