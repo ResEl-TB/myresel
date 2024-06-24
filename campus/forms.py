@@ -402,7 +402,9 @@ class ClubEditionForm(ClubManagementForm):
 class MajPersonalInfo(PersonalInfoForm):
     CAMPUS = [('Brest', "Brest"), ('Rennes', 'Rennes'), ('Nantes', 'Nantes'),
               ('None', _('Je n\'habite pas à la Maisel'))]
-    BUILDINGS_BREST = [('I%d' % i, 'I%d' % i) for i in range(1, 15)]
+    BUILDINGS_BREST = [('I%d' % i, 'I%d' % i) for i in range(1, 13)]
+    BUILDINGS_BREST += [('I14', 'I14'), ('I15', 'I15')]
+
     BUILDINGS_RENNES = [('S1', 'Studios'), ('C1', 'Chambres')]
     BUILDINGS_NANTES = [(letter, letter)
                         for letter in ['N', 'P', 'Q', 'R', 'S', 'T']]
