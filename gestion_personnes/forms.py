@@ -144,8 +144,12 @@ class PersonalInfoForm(forms.Form):
         address = cleaned_data.get("address")
         room = cleaned_data.get("room")
 
-        if campus in ['Brest', 'Rennes', 'Nantes'] and room is None:
-            self.add_error("room", _("Ce champ est obligatoire"))
+        if campus in ['Brest', 'Rennes', 'Nantes']:
+            if room is None:
+                self.add_error("room", _("Ce champ est obligatoire"))
+            if LdapRoom.does_room_exist(room, building) is False:
+                self.add_error('room', _("Ce numéro de chambre est inconnu. \
+                          Contactez-nous si vous pensez que c'est une erreur."))
         if campus == "Brest" and building not in [a[0] for a in self.BUILDINGS_BREST]:
             self.add_error('building', _(
                 "Veuillez choisir un bâtiment du campus de Brest"))
@@ -155,10 +159,6 @@ class PersonalInfoForm(forms.Form):
         if campus == "None" and address == "":
             self.add_error('address', _(
                 "Veuillez saisir votre addresse postale"))
-
-        if LdapRoom.does_room_exist(room, building) is False:
-            self.add_error('room', _("Ce numéro de chambre est inconnu. \
-                          Contactez-nous si vous pensez que c'est une erreur."))
 
 
 class InscriptionForm(forms.Form):
@@ -373,6 +373,9 @@ class InscriptionForm(forms.Form):
         if (campus in ["Brest", "Rennes", "Nantes"]):
             if not room:
                 self.add_error("room", _("Ce champ est obligatoire"))
+            if LdapRoom.does_room_exist(room, building) is False:
+                self.add_error('room', _("Ce numéro de chambre est inconnu. \
+                            Contactez-nous si vous pensez que c'est une erreur."))
             if campus == "Brest" and building not in [a[0] for a in self.BUILDINGS_BREST]:
                 self.add_error('building', _(
                     "Veuillez choisir un bâtiment du campus de Brest"))
@@ -385,10 +388,6 @@ class InscriptionForm(forms.Form):
         elif not address:
             self.add_error('address', _(
                 "Veuillez saisir votre addresse postale"))
-
-        if LdapRoom.does_room_exist(room, building) is False:
-            self.add_error('room', _("Ce numéro de chambre est inconnu. \
-                          Contactez-nous si vous pensez que c'est une erreur."))
 
         if category == "student" and formation not in [a[0] for a in self.FORMATIONS]:
             self.add_error('formation', _("Veuillez choisir une formation"))
