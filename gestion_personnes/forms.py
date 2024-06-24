@@ -11,7 +11,7 @@ from django.utils.translation import gettext_lazy as _
 from phonenumber_field.formfields import PhoneNumberField
 
 from fonctions.generic import current_year
-from gestion_personnes.models import LdapUser, LdapOldUser, UserMetaData
+from gestion_personnes.models import LdapUser, LdapOldUser, UserMetaData, LdapRoom
 
 
 # TODO : merge personal info form and Inscription form
@@ -40,7 +40,7 @@ class ResElEmailValidator:
         domain = value.split('@')[-1]
         if domain in self.restricted_domains:
             raise ValidationError(
-                _("Les adresses e-mail de ce domaine ne sont pas autorisées : %(domain)s"),
+                _("Les adresses e-mail du domaine %(domain)s ne sont pas autorisées"),
                 params={'domain': domain},
             )
 
@@ -155,11 +155,15 @@ class PersonalInfoForm(forms.Form):
             self.add_error('address', _(
                 "Veuillez saisir votre addresse postale"))
 
+        if LdapRoom.does_room_exist(room, building) is False:
+            self.add_error('room', _("Ce numéro de chambre est inconnu. \
+                          Contactez-nous si vous pensez que c'est une erreur."))
+
 
 class InscriptionForm(forms.Form):
     CAMPUS = [('Brest', "Brest"), ('Rennes', 'Rennes'), ('Nantes', 'Nantes'),
               ('None', _('Je n\'habite pas à la Maisel'))]
-    BUILDINGS_BREST = [('I%d' % i, 'I%d' % i) for i in range(1, 13)]
+    BUILDINGS_BREST = [('I%d' % i, 'I%d' % i) for i in range(1, 15)]
     BUILDINGS_RENNES = [('S1', 'Studios'), ('C1', 'Chambres')]
     BUILDINGS_NANTES = [(letter, letter)
                         for letter in ['N', 'P', 'Q', 'R', 'S', 'T']]
@@ -379,6 +383,10 @@ class InscriptionForm(forms.Form):
             self.add_error('address', _(
                 "Veuillez saisir votre addresse postale"))
 
+        if LdapRoom.does_room_exist(room, building) is False:
+            self.add_error('room', _("Ce numéro de chambre est inconnu. \
+                          Contactez-nous si vous pensez que c'est une erreur."))
+
         if category == "student" and formation not in [a[0] for a in self.FORMATIONS]:
             self.add_error('formation', _("Veuillez choisir une formation"))
 
@@ -396,7 +404,7 @@ class InscriptionForm(forms.Form):
             self.add_error('password',
                            ValidationError(message=_("Les mots de passes sont différents."), code="NOT SAME PASSWORD"))
 
-    @staticmethod
+    @ staticmethod
     def get_free_uid(first_name, last_name):
         """
         Check the ldap to get a free uid in the form

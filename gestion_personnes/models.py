@@ -15,7 +15,7 @@ import ldapback
 from ldapback.models.fields import LdapCharField, LdapPasswordField, LdapNtPasswordField, LdapListField, \
     LdapDatetimeField, LdapBooleanField
 from myresel.settings import LDAP_DN_PEOPLE
-from myresel.settings_local import LDAP_DN_GROUPS
+from myresel.settings_local import LDAP_DN_GROUPS, LDAP_DN_ROOMS
 
 
 class LdapUser(ldapback.models.LdapModel):
@@ -23,68 +23,101 @@ class LdapUser(ldapback.models.LdapModel):
     The class having all the element for a user
     """
     base_dn = LDAP_DN_PEOPLE
-    #object_classes = ['genericPerson', 'enstbPerson', 'reselPerson', 'maiselPerson', 'aePerson', 'mailPerson']
+    # object_classes = ['genericPerson', 'enstbPerson', 'reselPerson', 'maiselPerson', 'aePerson', 'mailPerson']
 
     # genericPerson
-    uid = LdapCharField(db_column='uid', object_classes=['genericPerson'], pk=True)
-    first_name = LdapCharField(db_column='firstname', object_classes=['genericPerson'])
-    last_name = LdapCharField(db_column='lastname', object_classes=['genericPerson'])
-    display_name = LdapCharField(db_column='displayname', object_classes=['genericPerson'])
-    user_password = LdapPasswordField(db_column='userpassword', object_classes=['genericPerson'])
-    nt_password = LdapNtPasswordField(db_column='ntpassword', object_classes=['genericPerson'])
-    postal_address = LdapCharField(db_column='postaladdress', object_classes=['genericPerson'])
+    uid = LdapCharField(db_column='uid', object_classes=[
+                        'genericPerson'], pk=True)
+    first_name = LdapCharField(
+        db_column='firstname', object_classes=['genericPerson'])
+    last_name = LdapCharField(db_column='lastname',
+                              object_classes=['genericPerson'])
+    display_name = LdapCharField(
+        db_column='displayname', object_classes=['genericPerson'])
+    user_password = LdapPasswordField(
+        db_column='userpassword', object_classes=['genericPerson'])
+    nt_password = LdapNtPasswordField(
+        db_column='ntpassword', object_classes=['genericPerson'])
+    postal_address = LdapCharField(
+        db_column='postaladdress', object_classes=['genericPerson'])
 
     # Ldap Groups
     groups = LdapListField(db_column='memberOf')
 
     # reselPerson
     mail = LdapCharField(db_column='mail', object_classes=['reselPerson'])
-    mobile = LdapCharField(db_column='telephoneNumber', object_classes=['reselPerson'])
-    inscr_date = LdapDatetimeField(db_column='dateinscr', object_classes=['reselPerson'])
+    mobile = LdapCharField(db_column='telephoneNumber',
+                           object_classes=['reselPerson'])
+    inscr_date = LdapDatetimeField(
+        db_column='dateinscr', object_classes=['reselPerson'])
     cotiz = LdapListField(db_column='cotiz', object_classes=['reselPerson'])
-    end_cotiz = LdapDatetimeField(db_column='endinternet', object_classes=['reselPerson'])
+    end_cotiz = LdapDatetimeField(
+        db_column='endinternet', object_classes=['reselPerson'])
     campus = LdapCharField(db_column='campus', object_classes=['reselPerson'])
-    birth_place = LdapCharField(db_column='birthplace', object_classes=['reselPerson'])
-    birth_country = LdapCharField(db_column='birthcountry', object_classes=['reselPerson'])
-    freeform_birth_date = LdapCharField(db_column='freeformbirthdate', object_classes=['reselPerson'])
+    birth_place = LdapCharField(
+        db_column='birthplace', object_classes=['reselPerson'])
+    birth_country = LdapCharField(
+        db_column='birthcountry', object_classes=['reselPerson'])
+    freeform_birth_date = LdapCharField(
+        db_column='freeformbirthdate', object_classes=['reselPerson'])
 
     # maiselPerson
-    building = LdapCharField(db_column='batiment', object_classes=['maiselPerson'])
-    room_number = LdapCharField(db_column='roomnumber', object_classes=['reselPerson'])
+    building = LdapCharField(db_column='batiment',
+                             object_classes=['maiselPerson'])
+    room_number = LdapCharField(
+        db_column='roomnumber', object_classes=['reselPerson'])
     # TODO: coupure
 
     # enstPerson
     promo = LdapCharField(db_column='promo', object_classes=['enstbPerson'])
-    anneeScolaire = LdapCharField(db_column='anneeScolaire', object_classes=['enstbPerson'])
+    anneeScolaire = LdapCharField(
+        db_column='anneeScolaire', object_classes=['enstbPerson'])
     option = LdapCharField(db_column='option', object_classes=['enstbPerson'])
-    formation = LdapCharField(db_column='formation', object_classes=['enstbPerson'])
-    photo_file = LdapCharField(db_column='photoFile', object_classes=['enstbPerson'])
-    uid_godchildren = LdapListField(db_column='uidFillot', object_classes=['enstbPerson'])
-    uid_godparents = LdapListField(db_column='uidParrain', object_classes=['enstbPerson'])
-    origin = LdapCharField(db_column='provenance', object_classes=['enstbPerson'])
-    is_public = LdapBooleanField(db_column='publiable', object_classes=['enstbPerson'])
-    birth_date = LdapDatetimeField(db_column='birthDate', object_classes=['enstbPerson'])
+    formation = LdapCharField(db_column='formation',
+                              object_classes=['enstbPerson'])
+    photo_file = LdapCharField(
+        db_column='photoFile', object_classes=['enstbPerson'])
+    uid_godchildren = LdapListField(
+        db_column='uidFillot', object_classes=['enstbPerson'])
+    uid_godparents = LdapListField(
+        db_column='uidParrain', object_classes=['enstbPerson'])
+    origin = LdapCharField(db_column='provenance',
+                           object_classes=['enstbPerson'])
+    is_public = LdapBooleanField(
+        db_column='publiable', object_classes=['enstbPerson'])
+    birth_date = LdapDatetimeField(
+        db_column='birthDate', object_classes=['enstbPerson'])
     # TODO : altmail
-
 
     # aePerson
     ae_cotiz = LdapCharField(db_column='aeCotiz', object_classes=['aePerson'])
-    ae_nature = LdapCharField(db_column='aeNature', object_classes=['aePerson'])
-    n_adherent = LdapCharField(db_column='nAdherent', object_classes=['aePerson'])
-    dates_membre = LdapListField(db_column='datesMembre', object_classes=['aePerson'])
-    mode_paiement = LdapCharField(db_column='aeModePaiement', object_classes=['aePerson'])
-    ae_admin = LdapBooleanField(db_column='aeAdmin', object_classes=['aePerson'])
+    ae_nature = LdapCharField(db_column='aeNature',
+                              object_classes=['aePerson'])
+    n_adherent = LdapCharField(
+        db_column='nAdherent', object_classes=['aePerson'])
+    dates_membre = LdapListField(
+        db_column='datesMembre', object_classes=['aePerson'])
+    mode_paiement = LdapCharField(
+        db_column='aeModePaiement', object_classes=['aePerson'])
+    ae_admin = LdapBooleanField(
+        db_column='aeAdmin', object_classes=['aePerson'])
     # TODO: other fields
 
     # mailPerson
-    mail_local_address = LdapListField(db_column='mailLocalAddress', object_classes=['mailPerson'])
-    mail_dir = LdapCharField(db_column='mailDir', object_classes=['mailPerson'])
-    home_directory = LdapCharField(db_column='homeDirectory', object_classes=['mailPerson'])
-    mail_routing_address = LdapCharField(db_column='mailRoutingAddress', object_classes=['mailPerson'])
-    mail_del_date = LdapDatetimeField(db_column='mailDelDate', object_classes=['mailPerson'])
+    mail_local_address = LdapListField(
+        db_column='mailLocalAddress', object_classes=['mailPerson'])
+    mail_dir = LdapCharField(
+        db_column='mailDir', object_classes=['mailPerson'])
+    home_directory = LdapCharField(
+        db_column='homeDirectory', object_classes=['mailPerson'])
+    mail_routing_address = LdapCharField(
+        db_column='mailRoutingAddress', object_classes=['mailPerson'])
+    mail_del_date = LdapDatetimeField(
+        db_column='mailDelDate', object_classes=['mailPerson'])
 
     # maiselEmployee
-    employee_type = LdapCharField(db_column='maiselEmployeeType', object_classes=['maiselEmployee'])
+    employee_type = LdapCharField(
+        db_column='maiselEmployeeType', object_classes=['maiselEmployee'])
 
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__,
@@ -207,8 +240,8 @@ class UserMetaData(models.Model):
                   "Il est important de garder vos informations personnelles à jour.\n\n"
                   "Si vous pensez que vous recevez cet e-mail par erreur, veuillez l'ignorer. Dans tous les cas, n'hésitez pas à nous contacter " +
                   "à support@resel.fr pour toute question.") % (
-                     link_builder(reverse('gestion-personnes:check-email',
-                                          kwargs={'key': self.email_validation_code}))
+                link_builder(reverse('gestion-personnes:check-email',
+                                     kwargs={'key': self.email_validation_code}))
             ),
             from_email="secretaire@resel.fr",
             reply_to=["support@resel.fr"],
@@ -226,8 +259,10 @@ class LdapGroup(ldapback.models.LdapModel):
     base_dn = LDAP_DN_GROUPS
     object_classes = ['groupOfNames']
 
-    cn = LdapCharField(db_column='cn', object_classes=['groupOfNames'], pk=True)
-    members = LdapListField(db_column='member', object_classes=['groupOfNames'])
+    cn = LdapCharField(db_column='cn', object_classes=[
+                       'groupOfNames'], pk=True)
+    members = LdapListField(
+        db_column='member', object_classes=['groupOfNames'])
 
     def is_member(self, uid):
         if isinstance(self.members, list):
@@ -254,7 +289,25 @@ class LdapGroup(ldapback.models.LdapModel):
     def remove_member(self, uid):
         uid = "uid="+uid+",ou=people,dc=maisel,dc=enst-bretagne,dc=fr"
         # pylint: disable=unsupported-membership-test
-        if uid in self.members and len(self.members) > 1: #Avoid error if there is no member
+        # Avoid error if there is no member
+        if uid in self.members and len(self.members) > 1:
             # pylint: disable=unsupported-membership-test,no-member
             self.members.remove(uid)
             self.save()
+
+
+class LdapRoom(ldapback.models.LdapModel):
+
+    @staticmethod
+    def does_room_exist(room, building):
+        """Permet de chercher dans le LDAP si une chambre existe
+
+        Returns:
+            bool -- False si la chambre n'existe pas, le réstulat de la
+            requête LDAP sinon.
+        """
+
+        base_dn = LDAP_DN_ROOMS
+        searchPattern = '(&(roomNumber=' + str(room) + \
+            ')(batiment=' + str(building) + '))'
+        return ldap.search(base_dn,  searchPattern)
