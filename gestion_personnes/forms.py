@@ -406,7 +406,7 @@ class InscriptionForm(forms.Form):
             self.add_error('password',
                            ValidationError(message=_("Les mots de passes sont différents."), code="NOT SAME PASSWORD"))
 
-    @ staticmethod
+    @staticmethod
     def get_free_uid(first_name, last_name):
         """
         Check the ldap to get a free uid in the form
