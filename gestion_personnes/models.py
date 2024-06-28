@@ -262,7 +262,7 @@ class LdapGroup(ldapback.models.LdapModel):
 class LdapRoom(ldapback.models.LdapModel):
 
     @staticmethod
-    def does_room_exists(room, building):
+    def exists(room, building):
         """Permet de chercher dans le LDAP si une chambre existe
 
         Returns:
