@@ -31,12 +31,11 @@ class RoomBookingForm(ModelForm):
         super(RoomBookingForm, self).__init__(*args, **kwargs)
 
         # Display the rooms the user is allowed to book
-        if user:  #Otherwise the test crashes
+        if user: # Otherwise the test crashes
             self.user = user
             if not RoomAdmin.objects.filter(user__username=user.uid):
                 del self.fields['user']
-                clubs = StudentOrganisation.filter(
-                    members__contains='uid=%s' % user.uid)
+                clubs = StudentOrganisation.filter(members__contains='uid=%s' % user.uid)
                 queryset = Q(private=False)
                 for club in clubs:
                     queryset |= Q(private=True, clubs__contains=club.cn)
@@ -61,18 +60,18 @@ class RoomBookingForm(ModelForm):
 
         m.save()
 
-        # piano, created = Room.objects.get_or_create(
+        #piano, created = Room.objects.get_or_create(
         #    name='Salle piano',
         #    defaults={'location': 'F', 'private': True},
-        # )
-        # meeting, created = Room.objects.get_or_create(
+        #)
+        #meeting, created = Room.objects.get_or_create(
         #    name='Salle réunion',
         #    defaults={'location': 'F', 'private': False},
-        # )
+        #)
 
-        # pr = False    # Detects is the piano or réunion room is selected
-        # rooms = []
-        # for room in self.cleaned_data['room']:
+        #pr = False    # Detects is the piano or réunion room is selected
+        #rooms = []
+        #for room in self.cleaned_data['room']:
         #    if 'piano' in room.name.lower() or 'réunion' in room.name.lower():
         #        pr = True
         #    else:
@@ -98,7 +97,7 @@ class RoomBookingForm(ModelForm):
         rooms = cleaned_data.get('room', None)
 
         # DAT HACK
-        # piano, created = Room.objects.get_or_create(
+        #piano, created = Room.objects.get_or_create(
         #    name='Salle piano',
         #    defaults={'location': 'F', 'private': True},
         #)
@@ -125,7 +124,7 @@ class RoomBookingForm(ModelForm):
             for room in rooms:
                 if not room.user_can_access(self.user):
                     self.add_error('room', _("Vous ne pouvez pas gérer cette salle"))
-        elif rooms:  # Needed for testing purpose, otherwise it crashes
+        elif rooms: #Needed for testing purpose, otherwise it crashes
             for room in rooms:
                 if room.private:
                     self.add_error('room', _("Vous ne pouvez pas gérer cette salle"))
@@ -161,24 +160,20 @@ class AddRoomForm(ModelForm):
     def clean_mailing_list(self):
         email = self.cleaned_data["mailing_list"]
         if not (re.match(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+', email) or email == ""):
-            raise ValidationError(
-                message=_("L'adresse email semble être invalide"), code="Bad MAIL")
+            raise ValidationError(message=_("L'adresse email semble être invalide"), code="Bad MAIL")
         return email
 
     def clean_clubs(self):
         clubs = ""
         if self.cleaned_data["clubs"] != '':
-            # deletes duplicates
-            clubs = list(set(self.cleaned_data["clubs"].split(";")))
+            clubs = list(set(self.cleaned_data["clubs"].split(";"))) #deletes duplicates
             for club in clubs:
                 try:
                     StudentOrganisation.get(cn=club)
                 except ObjectDoesNotExist:
-                    raise ValidationError(message=_(
-                        "Le club suivant n'existe pas: %s" % (club,)), code="CLUB DOES NOT EXIST")
+                    raise ValidationError(message=_("Le club suivant n'existe pas: %s" % (club,)), code="CLUB DOES NOT EXIST")
                 if not re.match(r'^[a-z0-9-]+', club):
-                    raise ValidationError(message=_(
-                        "Le club suivant n'a pas un nom valide: %s" % (club,)), code="BAD CLUB")
+                    raise ValidationError(message=_("Le club suivant n'a pas un nom valide: %s" % (club,)), code="BAD CLUB")
         return ";".join(clubs)
 
 
@@ -191,9 +186,8 @@ class SendMailForm(ModelForm):
     class Meta:
         model = Mail
         fields = ("sender", "subject", "content")
-        widgets = {'sender': TextInput(
-            attrs={'readonly': 'readonly', 'class': 'form-control'}), }
-        field_classes = {'sender': DisabledCharField, }
+        widgets = {'sender': TextInput(attrs={'readonly':'readonly', 'class': 'form-control'}),}
+        field_classes = {'sender': DisabledCharField,}
 
 
 class ClubManagementForm(Form):
@@ -241,7 +235,7 @@ class ClubManagementForm(Form):
         label=_("Description"),
     )
 
-    logo = forms.ImageField(  # logo
+    logo = forms.ImageField( # logo
         widget=forms.ClearableFileInput(),
         label='Logo',
         required=False,
@@ -267,7 +261,7 @@ class ClubManagementForm(Form):
         required=False,
     )
 
-    campagneYear = forms.IntegerField(  # Année de campagne
+    campagneYear = forms.IntegerField( # Année de campagne
         min_value=1997,
         widget=forms.NumberInput(attrs={
             'class': 'form-control',
@@ -290,36 +284,31 @@ class ClubManagementForm(Form):
             raise ValidationError(
                 _("Ce nom existe déjà, assurez vous de créer un club/asso qui n'existe pas déjà"), code="CN EXISTS")
         elif not re.match(r'^[a-z0-9-]+$', cn):
-            raise ValidationError(message=_(
-                "Le nom court ne doit être composé que de lettres et de chiffres sans espaces"))
+            raise ValidationError(message=_("Le nom court ne doit être composé que de lettres et de chiffres sans espaces"))
         return cn
 
     def clean_logo(self):
         logo = self.cleaned_data['logo']
         if self.cleaned_data['type'] != 'CLUB' and logo is None:
-            raise ValidationError(message=_(
-                "Merci de renseigner un logo pour votre association/liste"), code="NO LOGO")
+            raise ValidationError(message=_("Merci de renseigner un logo pour votre association/liste"), code="NO LOGO")
         return logo
 
     def clean_website(self):
         website = self.cleaned_data['website'].lower().strip()
         if not re.match(r'^(http(s)*:\/\/)*[a-z0-9.-]+\.[a-z0-9]+', website) and website != "":
-            raise ValidationError(
-                message=_("Veuillez rentrer une adresse web valide"), code="BAD WEBSITE")
+            raise ValidationError(message=_("Veuillez rentrer une adresse web valide"), code="BAD WEBSITE")
         return website
 
     def clean_email(self):
         email = self.cleaned_data['email'].lower().strip()
         if not re.match(r'^[a-z1-9-_.+]+\@[a-z1-9-]+\.[a-z0-9-]+', email) and email != "":
-            raise ValidationError(
-                message=_("Veuillez saisir une adresse mail valide"), code="BAD EMAIL")
+            raise ValidationError(message=_("Veuillez saisir une adresse mail valide"), code="BAD EMAIL")
         return email
 
     def clean_campagneYear(self):
         year = self.cleaned_data['campagneYear']
         if self.cleaned_data['type'] == "LIST" and year is None:
-            raise ValidationError(
-                _("Veuillez entrer une année de campagne valide"), code="WRONG YEAR")
+            raise ValidationError(_("Veuillez entrer une année de campagne valide"), code="WRONG YEAR")
         return year
 
     def clean(self):
@@ -340,8 +329,7 @@ class ClubManagementForm(Form):
             new_club.object_classes = ["tbCampagne"]
             new_club.campagneYear = self.cleaned_data['campagneYear']
         else:
-            raise ValueError("Invalid club type: %s " %
-                             self.cleaned_data['type'])
+            raise ValueError("Invalid club type: %s " % self.cleaned_data['type'])
 
         new_club.name = self.cleaned_data['name']
         new_club.cn = self.cleaned_data['cn']
@@ -375,7 +363,7 @@ class ClubEditionForm(ClubManagementForm):
     def edit_club(self, pk):
         club = StudentOrganisation.get(cn=pk)
 
-        # If we don't do this we get an error cuz our LDAP scheme does not allow
+        #If we don't do this we get an error cuz our LDAP scheme does not allow
         # a single model for each type of organisation
         if "tbCampagne" in club.object_classes:
             club = ListeCampagne.get(cn=pk)
