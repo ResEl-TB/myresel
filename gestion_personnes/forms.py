@@ -120,8 +120,7 @@ class PersonalInfoForm(forms.Form):
     )
 
     certify_truth = forms.BooleanField(
-        label=_(
-            "Je certifie sur l'honneur que les informations saisies sont correctes."),
+        label=_("Je certifie sur l'honneur que les informations saisies sont correctes."),
         widget=forms.CheckboxInput()
     )
 
@@ -309,7 +308,7 @@ class InscriptionForm(forms.Form):
         required=False,
     )
 
-    ccertify_truth = forms.BooleanField(
+    certify_truth = forms.BooleanField(
         label=_("Je certifie sur l'honneur que les informations saisies sont correctes."),
         widget=forms.CheckboxInput()
     )
@@ -375,8 +374,7 @@ class InscriptionForm(forms.Form):
             if campus == "Nantes" and building not in [a[0] for a in self.BUILDINGS_NANTES]:
                 self.add_error('building', _("Veuillez choisir un bâtiment du campus de Nantes"))
         elif not address:
-            self.add_error('address', _(
-                "Veuillez saisir votre addresse postale"))
+            self.add_error('address', _("Veuillez saisir votre addresse postale"))
 
         if category == "student" and formation not in [a[0] for a in self.FORMATIONS]:
             self.add_error('formation', _("Veuillez choisir une formation"))
@@ -440,19 +438,17 @@ class InscriptionForm(forms.Form):
         user = LdapUser()
 
         # genericPerson
-        # TODO: get that in school ldap
-        user.uid = self.get_free_uid(self.cleaned_data["first_name"], self.cleaned_data["last_name"])
+        user.uid = self.get_free_uid(self.cleaned_data["first_name"], self.cleaned_data["last_name"])  # TODO: get that in school ldap
         user.first_name = self.cleaned_data["first_name"]
         user.last_name = self.cleaned_data["last_name"]
-        user.display_name = self.cleaned_data["first_name"] + \
-            ' ' + self.cleaned_data["last_name"]
+        user.display_name = self.cleaned_data["first_name"] + ' ' + self.cleaned_data["last_name"]
         user.user_password = self.cleaned_data["password"]
         user.nt_password = self.cleaned_data["password"]
 
         # reselPerson
         user.mail = self.cleaned_data["email"]
         user.mobile = str(self.cleaned_data["phone"])
-        user.cotiz = ['NONE' + str(current_year())] # requirement for the admin interface
+        user.cotiz = ['NONE' + str(current_year())]  # requirement for the admin interface
         user.campus = self.cleaned_data["campus"]
         user.birth_place = self.cleaned_data["birth_place"]
         user.birth_country = self.cleaned_data["birth_country"]
@@ -521,7 +517,7 @@ class ResetPwdSendForm(forms.Form):
                  "à support@resel.fr pour toute question.") % request.build_absolute_uri(
                      reverse('gestion-personnes:reset-pwd',
                              kwargs={'key': user_meta.reset_pwd_code,})
-            ),
+                 ),
             from_email="secretaire@resel.fr",
             reply_to=["support@resel.fr"],
             to=[user.mail],

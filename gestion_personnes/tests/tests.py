@@ -131,8 +131,7 @@ class InscriptionFormTestCase(TestCase):
 
         old_user.save()
 
-        uid = InscriptionForm.get_free_uid(
-            old_user.first_name, old_user.last_name)
+        uid = InscriptionForm.get_free_uid(old_user.first_name, old_user.last_name)
         self.assertEqual("amartine01", uid)
 
 

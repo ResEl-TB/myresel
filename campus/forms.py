@@ -31,7 +31,7 @@ class RoomBookingForm(ModelForm):
         super(RoomBookingForm, self).__init__(*args, **kwargs)
 
         # Display the rooms the user is allowed to book
-        if user:  # Otherwise the test crashes
+        if user:  #Otherwise the test crashes
             self.user = user
             if not RoomAdmin.objects.filter(user__username=user.uid):
                 del self.fields['user']
@@ -78,13 +78,13 @@ class RoomBookingForm(ModelForm):
         #    else:
         #        rooms.append(room)
         #
-        # if m.pk:
+        #if m.pk:
         #    m.room.clear()
         #
-        # if pr:
+        #if pr:
         #    m.room.add(piano)
         #    m.room.add(meeting)
-        # for room in rooms:
+        #for room in rooms:
         #    m.room.add(room)
         m.room.set(self.cleaned_data['room'])
         m.notify_mailing_list()
@@ -101,43 +101,41 @@ class RoomBookingForm(ModelForm):
         # piano, created = Room.objects.get_or_create(
         #    name='Salle piano',
         #    defaults={'location': 'F', 'private': True},
-        # )
-        # meeting, created = Room.objects.get_or_create(
+        #)
+        #meeting, created = Room.objects.get_or_create(
         #    name='Salle réunion',
         #    defaults={'location': 'F', 'private': False},
-        # )
+        #)
 
         # Deactivated because it is possible to add past events for record
         # if start_time < datetime.datetime.now():
         #     self.add_error('start_time', _('La date de début est antérieure à aujourd\'hui'))
 
-        # If a user disable JS, he can send empty fields
+        #If a user disable JS, he can send empty fields
         if end_time and start_time:
             if end_time < start_time:
-                self.add_error('end_time', _(
-                    'La date de fin est avant la date de début de l\'évènement'))
+                self.add_error('end_time',
+                               _('La date de fin est avant la date de début de l\'évènement'))
 
         if recurring_rule != "NONE" and not cleaned_data.get('end_recurring_period', None):
-            self.add_error('end_recurring_period', _(
-                'La date de fin de la récurrence est invalide'))
+            self.add_error('end_recurring_period', 
+                           _('La date de fin de la récurrence est invalide'))
 
         if rooms and self.user:
             for room in rooms:
                 if not room.user_can_access(self.user):
-                    self.add_error(
-                        'room', _("Vous ne pouvez pas gérer cette salle"))
+                    self.add_error('room', _("Vous ne pouvez pas gérer cette salle"))
         elif rooms:  # Needed for testing purpose, otherwise it crashes
             for room in rooms:
                 if room.private:
-                    self.add_error(
-                        'room', _("Vous ne pouvez pas gérer cette salle"))
+                    self.add_error('room', _("Vous ne pouvez pas gérer cette salle"))
 
         # Deactivated because why hu ??
         # if start_time.date() != end_time.date():
         #     self.add_error('end_time', _('Vous ne pouvez réserver sur plusieurs jours'))
 
         # Check if room are available
-        # for room in cleaned_data['room']:
+        #for room in cleaned_data['room']:
         #    # DAT HACK BIS
         #    if 'piano' in room.name.lower() or 'réunion' in room.name.lower():
         #        if not piano.is_free(start_time, end_time) or \
@@ -406,8 +404,7 @@ class MajPersonalInfo(PersonalInfoForm):
     BUILDINGS_BREST += [('I14', 'I14'), ('I15', 'I15')]
 
     BUILDINGS_RENNES = [('S1', 'Studios'), ('C1', 'Chambres')]
-    BUILDINGS_NANTES = [(letter, letter)
-                        for letter in ['N', 'P', 'Q', 'R', 'S', 'T']]
+    BUILDINGS_NANTES = [(letter, letter) for letter in ['N', 'P', 'Q', 'R', 'S', 'T']]
     BUILDINGS_NANTES += [('PC', 'Pitre Chevalier')]
 
     BUILDINGS = BUILDINGS_BREST + BUILDINGS_RENNES + BUILDINGS_NANTES

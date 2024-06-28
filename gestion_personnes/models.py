@@ -63,7 +63,8 @@ class LdapUser(ldapback.models.LdapModel):
     uid_godparents = LdapListField(db_column='uidParrain', object_classes=['enstbPerson'])
     origin = LdapCharField(db_column='provenance', object_classes=['enstbPerson'])
     is_public = LdapBooleanField(db_column='publiable', object_classes=['enstbPerson'])
-    birth_date = LdapDatetimeField(db_column='birthDate', object_classes=['enstbPerson'])    # TODO : altmail
+    birth_date = LdapDatetimeField(db_column='birthDate', object_classes=['enstbPerson'])
+    # TODO : altmail
 
     # aePerson
     ae_cotiz = LdapCharField(db_column='aeCotiz', object_classes=['aePerson'])
@@ -205,8 +206,8 @@ class UserMetaData(models.Model):
                   "Il est important de garder vos informations personnelles à jour.\n\n"
                   "Si vous pensez que vous recevez cet e-mail par erreur, veuillez l'ignorer. Dans tous les cas, n'hésitez pas à nous contacter " +
                   "à support@resel.fr pour toute question.") % (
-                link_builder(reverse('gestion-personnes:check-email',
-                                     kwargs={'key': self.email_validation_code}))
+                     link_builder(reverse('gestion-personnes:check-email',
+                                          kwargs={'key': self.email_validation_code}))
             ),
             from_email="secretaire@resel.fr",
             reply_to=["support@resel.fr"],
@@ -224,10 +225,8 @@ class LdapGroup(ldapback.models.LdapModel):
     base_dn = LDAP_DN_GROUPS
     object_classes = ['groupOfNames']
 
-    cn = LdapCharField(db_column='cn', object_classes=[
-                       'groupOfNames'], pk=True)
-    members = LdapListField(
-        db_column='member', object_classes=['groupOfNames'])
+    cn = LdapCharField(db_column='cn', object_classes=['groupOfNames'], pk=True)
+    members = LdapListField(db_column='member', object_classes=['groupOfNames'])
 
     def is_member(self, uid):
         if isinstance(self.members, list):
@@ -254,8 +253,7 @@ class LdapGroup(ldapback.models.LdapModel):
     def remove_member(self, uid):
         uid = "uid="+uid+",ou=people,dc=maisel,dc=enst-bretagne,dc=fr"
         # pylint: disable=unsupported-membership-test
-        # Avoid error if there is no member
-        if uid in self.members and len(self.members) > 1:
+        if uid in self.members and len(self.members) > 1: #Avoid error if there is no member
             # pylint: disable=unsupported-membership-test,no-member
             self.members.remove(uid)
             self.save()
