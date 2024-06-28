@@ -148,7 +148,7 @@ class PersonalInfoForm(forms.Form):
         if campus in ['Brest', 'Rennes', 'Nantes']:
             if room is None:
                 self.add_error("room", _("Ce champ est obligatoire"))
-            if LdapRoom.does_room_exist(room, building) is False:
+            if LdapRoom.does_room_exists(room, building) is False:
                 self.add_error('room', _("Ce numéro de chambre est inconnu. \
                           Contactez-nous si vous pensez que c'est une erreur."))
         if campus == "Brest" and building not in [a[0] for a in self.BUILDINGS_BREST]:
@@ -364,7 +364,7 @@ class InscriptionForm(forms.Form):
         if (campus in ["Brest", "Rennes", "Nantes"]):
             if not room:
                 self.add_error("room", _("Ce champ est obligatoire"))
-            if LdapRoom.does_room_exist(room, building) is False:
+            if LdapRoom.does_room_exists(room, building) is False:
                 self.add_error('room', _("Ce numéro de chambre est inconnu. \
                             Contactez-nous si vous pensez que c'est une erreur."))
             if campus == "Brest" and building not in [a[0] for a in self.BUILDINGS_BREST]:
