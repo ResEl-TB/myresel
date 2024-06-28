@@ -3264,6 +3264,10 @@ msgstr "Sandwich degree (FISA/FIP/FIL/FIT)"
 msgid "Addresse e-mail"
 msgstr "Email address"
 
+#: gestion_personnes/forms.py:48
+msgid "Les adresses e-mail du domaine %(domain)s ne sont pas autorisées"
+msgstr "Email adresses from the domain %(domain)s are forbidden."
+
 #: gestion_personnes/forms.py:72 gestion_personnes/forms.py:253
 msgid "N° de Chambre"
 msgstr "Room n°"
@@ -3293,6 +3297,12 @@ msgstr "Choose a curriculum"
 msgid "Ce champ est obligatoire"
 msgstr "This field is mandatory"
 
+#: gestion_personnes/forms.py:152 gestion_personnes/forms.py:368
+msgid "Ce numéro de chambre est inconnu.\n"
+"Contactez-nous si vous pensez que c'est une erreur."
+msgstr "This room number is unknown.\n"
+"Please contact us if you think this is a mistake."
+
 #: gestion_personnes/forms.py:124 gestion_personnes/forms.py:333
 msgid "Veuillez choisir un bâtiment du campus de Brest"
 msgstr "Choose a building in the Brest campus"
@@ -3301,6 +3311,10 @@ msgstr "Choose a building in the Brest campus"
 #: gestion_personnes/forms.py:337
 msgid "Veuillez choisir un bâtiment du campus de Rennes"
 msgstr "Choose a building in the Rennes Campus"
+
+#: gestion_personnes/forms.py:159 gestion_personnes/forms.py:375 
+msgid "Veuillez choisir un bâtiment du campus de Nantes"
+msgstr "Choose a building in the Nantes Campus"
 
 #: gestion_personnes/forms.py:128 gestion_personnes/forms.py:339
 msgid "Veuillez saisir votre addresse postale"

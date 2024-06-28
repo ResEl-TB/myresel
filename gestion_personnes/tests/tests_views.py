@@ -137,6 +137,41 @@ class InscriptionCase(TestCase):
         self.assertEqual(user.last_name, user_s.last_name)
         self.assertEqual(user_s.employee_type, "staff")
 
+    def test_wrong_email(self):
+        user = create_full_user(email="sdlfskdfjh@hotmail.com")
+        try_delete_user(user.uid)
+
+        response = self.client.get(reverse("gestion-personnes:inscription"),
+                                   HTTP_HOST="10.0.3.95", ZONE="Brest-any")
+        self.assertEqual(200, response.status_code)
+        self.assertTemplateUsed(response, "gestion_personnes/inscription.html")
+
+        r = self.client.post(reverse(
+            "gestion-personnes:inscription"),
+            data={
+                'last_name': user.last_name,
+                'first_name': user.first_name,
+                'category': user.category,
+                'formation': user.formation,
+                'email': "sdlfskdfjh@hotmail.com",
+                'email_verification': "sdlfskdfjh@hotmail.com",
+                'password': user.user_password,
+                'password_verification': user.user_password,
+                'campus': user.campus,
+                'building': user.building,
+                'room': user.room_number,
+                'birth_place': user.birth_place,
+                'birth_country': user.birth_country,
+                'birth_date': user.freeform_birth_date,
+                'phone': user.mobile,
+                'certify_truth': 'certify_truth',
+            },
+            HTTP_HOST="10.0.3.95", ZONE="Brest-any", follow=True)
+        self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed(r, 'gestion_personnes/inscription.html')
+        self.assertContains(r, "Les adresses e-mail du domaine hotmail.com ne sont pas autorisées")
+
+
 
 class ModPasswdCase(TestCase):
     def setUp(self):
@@ -230,6 +265,7 @@ class TestPersonalInfo(TestCase):
         r = self.client.get(reverse("gestion-personnes:personal-infos"),
                             HTTP_HOST="10.0.3.99", follow=True)
         self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed(r, "gestion_personnes/personal_info.html")
 
         r = self.client.post(
             reverse("gestion-personnes:personal-infos"),
