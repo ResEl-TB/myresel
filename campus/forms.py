@@ -5,8 +5,8 @@ from django import forms
 from django.conf import settings
 from django.core.validators import MaxLengthValidator
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
-from django.forms import ModelForm, CharField, TextInput, Form, Textarea, ChoiceField, \
-    EmailField, IntegerField, Select, CheckboxInput, SelectMultiple
+from django.forms import ModelForm, CharField, TextInput, Form, Textarea, ChoiceField,\
+                                    EmailField, IntegerField, Select, CheckboxInput, SelectMultiple
 from django.forms.models import ModelMultipleChoiceField
 from django.utils.translation import gettext_lazy as _
 from django.db.models import Q

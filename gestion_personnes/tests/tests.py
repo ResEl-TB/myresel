@@ -25,7 +25,7 @@ class LdapUserTestCase(TestCase):
         self.assertEqual(user_s.last_name, "Manoury")
         self.assertEqual(user_s.display_name, "Alexandre Manoury")
         self.assertEqual(user_s.postal_address,
-                         "Bâtiment I11, Chambre 11\nMaisel IMT Atlantique\n655 avenue du Technopôle\n29280 Plouzané")
+                         "Bâtiment I11, Chambre 115\nMaisel IMT Atlantique\n655 avenue du Technopôle\n29280 Plouzané")
         self.assertEqual(user_s.inscr_date, user.inscr_date)
         self.assertListEqual(user_s.cotiz, ["2016"])
         self.assertEqual(user_s.end_cotiz, user.end_cotiz)
@@ -34,7 +34,7 @@ class LdapUserTestCase(TestCase):
         self.assertEqual(user.birth_country, "France")
         self.assertEqual(user.freeform_birth_date, "01/01/1995")
         self.assertEqual(user_s.building, "I11")
-        self.assertEqual(user_s.room_number, "11")
+        self.assertEqual(user_s.room_number, "115")
         self.assertEqual(user_s.promo, "2020")
         self.assertEqual(user_s.mail, "alexandre.manoury@telecom-bretagne.eu")
         self.assertEqual(user_s.anneeScolaire, "2015")
