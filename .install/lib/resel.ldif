@@ -15,6 +15,19 @@ hasSubordinates: TRUE
 contextCSN: 20120207212144.783710Z#000000#000#000000
 contextCSN: 20160805120727.404646Z#000000#001#000000
 
+dn: ou=vlans,dc=resel,dc=enst-bretagne,dc=fr
+objectClass: organizationalUnit
+ou: vlans
+creatorsName: cn=admin,dc=maisel,dc=enst-bretagne,dc=fr
+createTimestamp: 20030812121622Z
+modifiersName: cn=admin,dc=maisel,dc=enst-bretagne,dc=fr
+modifyTimestamp: 20030812121622Z
+structuralObjectClass: organizationalUnit
+subschemaSubentry: cn=Subschema
+hasSubordinates: TRUE
+entryUUID: c5e8c6a8-b19a-1028-9fd3-eda77459ad13
+entryCSN: 20041013193524.000001Z#00004f#000#000000
+
 dn: ou=admins,dc=resel,dc=enst-bretagne,dc=fr
 ou: admins
 objectClass: organizationalUnit
@@ -79,3 +92,21 @@ entryUUID: c6a60ce4-b19a-1028-8189-eda77459ad13
 entryCSN: 20041013193525.000000Z#00010e#000#000000
 subschemaSubentry: cn=Subschema
 hasSubordinates: TRUE
+
+dn: roomName=I10-014,ou=vlans,dc=resel,dc=enst-bretagne,dc=fr
+objectClass: reselVLAN
+roomName: I10-014
+vlanOffset: 478
+zoneID: 0
+roomNumber: 14
+batiment: I10
+roomSize: 4
+
+dn: roomName=I11-115,ou=vlans,dc=resel,dc=enst-bretagne,dc=fr
+objectClass: reselVLAN
+roomName: I11-115
+vlanOffset: 487
+zoneID: 0
+roomNumber: 115
+batiment: I11
+roomSize: 4

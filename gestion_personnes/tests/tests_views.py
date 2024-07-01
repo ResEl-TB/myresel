@@ -169,7 +169,41 @@ class InscriptionCase(TestCase):
             HTTP_HOST="10.0.3.95", ZONE="Brest-any", follow=True)
         self.assertEqual(200, r.status_code)
         self.assertTemplateUsed(r, 'gestion_personnes/inscription.html')
-        self.assertContains(r, "Les adresses e-mail du domaine hotmail.com ne sont pas autorisées")
+        self.assertContains(r, "Les adresses e-mail du domaine hotmail.com ne sont pas autorisées.")
+        
+    def test_two_different_emails(self):
+        user = create_full_user(email="dsqfsdfjnsdfs@fdsfsdf.qsd")
+        try_delete_user(user.uid)
+
+        response = self.client.get(reverse("gestion-personnes:inscription"),
+                                   HTTP_HOST="10.0.3.95", ZONE="Brest-any")
+        self.assertEqual(200, response.status_code)
+        self.assertTemplateUsed(response, "gestion_personnes/inscription.html")
+
+        r = self.client.post(reverse(
+            "gestion-personnes:inscription"),
+            data={
+                'last_name': user.last_name,
+                'first_name': user.first_name,
+                'category': user.category,
+                'formation': user.formation,
+                'email': user.mail,
+                'email_verification': "test@test.com",
+                'password': user.user_password,
+                'password_verification': user.user_password,
+                'campus': user.campus,
+                'building': user.building,
+                'room': user.room_number,
+                'birth_place': user.birth_place,
+                'birth_country': user.birth_country,
+                'birth_date': user.freeform_birth_date,
+                'phone': user.mobile,
+                'certify_truth': 'certify_truth',
+            },
+            HTTP_HOST="10.0.3.95", ZONE="Brest-any", follow=True)
+        self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed(r, 'gestion_personnes/inscription.html')
+        self.assertContains(r, "Les adresses e-mail sont différentes.")
 
 
 
@@ -270,21 +304,20 @@ class TestPersonalInfo(TestCase):
         r = self.client.post(
             reverse("gestion-personnes:personal-infos"),
             data={
-                'email': "email@email.fr",
+                'email': "email@email.com",
                 'phone': "0123456789",
                 'campus': "Brest",
                 'building': "I10",
                 'room': "14",
-                'certify_truth': "certify_truth"
-        },
+                'certify_truth': "certify_truth",
+            },
             HTTP_HOST="10.0.3.99",
             follow=True
         )
-
         self.assertEqual(200, r.status_code)
         self.assertContains(r, "Vos informations ont bien été mises à jour.")
         u = LdapUser.get(pk="lcarr")
-        self.assertEqual(u.mail, "email@email.fr")
+        self.assertEqual(u.mail, "email@email.com")
         self.assertEqual(u.mobile, "+33123456789")
         self.assertEqual(u.campus, "Brest")
         self.assertEqual(u.building, "I10")
