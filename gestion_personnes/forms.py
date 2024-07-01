@@ -10,6 +10,7 @@ from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.formfields import PhoneNumberField
 
+from myresel.settings import FORBIDDEN_EMAIL_DOMAINS
 from fonctions.generic import current_year
 from gestion_personnes.models import LdapUser, LdapOldUser, UserMetaData, LdapRoom
 
@@ -32,18 +33,9 @@ class EmailValidatorNotMicrosoft:
 
     """
 
-    # From a csv file we get forbidden domains
-    def __init__(self):
-        self.restricted_domains = set()
-        with open('myresel/forbidden_domains.csv', encoding='utf-8') as file:
-            for line in file:
-                domain = line.strip()
-                if domain:
-                    self.restricted_domains.add(domain)
-
     def __call__(self, value):
         domain = value.split('@')[-1].lower()
-        if domain in self.restricted_domains:
+        if domain in FORBIDDEN_EMAIL_DOMAINS:
             raise ValidationError(
                 _("Les adresses e-mail du domaine %(domain)s ne sont pas autorisées"),
                 params={'domain': domain},
@@ -53,8 +45,8 @@ class EmailValidatorNotMicrosoft:
 class PersonalInfoForm(forms.Form):
     CAMPUS = [('Brest', "Brest"), ('Rennes', 'Rennes'), ('Nantes', 'Nantes'),
               ('None', _('Je n\'habite pas à la Maisel'))]
-    BUILDINGS_BREST = [('I%d' % i, 'I%d' % i) for i in range(1, 13)]
-    BUILDINGS_BREST += [('I14', 'I14'), ('I15', 'I15')]
+    BUILDINGS_BREST = [('I%d' % i, 'I%d' % i) for i in range(1, 16) if i != 13]
+    
     BUILDINGS_RENNES = [('S1', 'Studios'), ('C1', 'Chambres')]
     BUILDINGS_NANTES = [(letter, letter) for letter in ['N', 'P', 'Q', 'R', 'S', 'T']]
     BUILDINGS_NANTES += [('PC', 'Pitre Chevalier')]
@@ -144,13 +136,17 @@ class PersonalInfoForm(forms.Form):
         building = cleaned_data.get("building")
         address = cleaned_data.get("address")
         room = cleaned_data.get("room")
+        room_obj = LdapRoom()
+        room_obj.number = str(room)
+        room_obj.building = building
+        
 
         if campus in ['Brest', 'Rennes', 'Nantes']:
             if room is None:
                 self.add_error("room", _("Ce champ est obligatoire"))
-            if LdapRoom.exists(room, building) is False:
-                self.add_error('room', _("Ce numéro de chambre est inconnu. \
-                          Contactez-nous si vous pensez que c'est une erreur."))
+            if room_obj.exists() is False:
+                self.add_error('room', _("Ce numéro de chambre est inconnu.\n"
+                                        "Contactez-nous si vous pensez que c'est une erreur."))
         if campus == "Brest" and building not in [a[0] for a in self.BUILDINGS_BREST]:
             self.add_error('building', _("Veuillez choisir un bâtiment du campus de Brest"))
         if campus == "Rennes" and building not in [a[0] for a in self.BUILDINGS_RENNES]:
@@ -164,8 +160,7 @@ class PersonalInfoForm(forms.Form):
 class InscriptionForm(forms.Form):
     CAMPUS = [('Brest', "Brest"), ('Rennes', 'Rennes'), ('Nantes', 'Nantes'),
               ('None', _('Je n\'habite pas à la Maisel'))]
-    BUILDINGS_BREST = [('I%d' % i, 'I%d' % i) for i in range(1, 13)]
-    BUILDINGS_BREST += [('I14', 'I14'), ('I15', 'I15')]
+    BUILDINGS_BREST = [('I%d' % i, 'I%d' % i) for i in range(1, 16) if i != 13]
 
     BUILDINGS_RENNES = [('S1', 'Studios'), ('C1', 'Chambres')]
     BUILDINGS_NANTES = [(letter, letter) for letter in ['N', 'P', 'Q', 'R', 'S', 'T']]
@@ -358,15 +353,19 @@ class InscriptionForm(forms.Form):
         building = cleaned_data.get("building")
         address = cleaned_data.get("address")
         room = cleaned_data.get("room")
+        room_obj = LdapRoom()
+        room_obj.number = str(room)
+        room_obj.building = building
+
         formation = cleaned_data.get("formation")
         category = cleaned_data.get("category")
 
         if (campus in ["Brest", "Rennes", "Nantes"]):
             if not room:
                 self.add_error("room", _("Ce champ est obligatoire"))
-            if LdapRoom.exists(room, building) is False:
-                self.add_error('room', _("Ce numéro de chambre est inconnu. \
-                            Contactez-nous si vous pensez que c'est une erreur."))
+            if room_obj.exists() is False:
+                self.add_error('room', _("Ce numéro de chambre est inconnu.\n"
+                                         "Contactez-nous si vous pensez que c'est une erreur."))
             if campus == "Brest" and building not in [a[0] for a in self.BUILDINGS_BREST]:
                 self.add_error('building', _("Veuillez choisir un bâtiment du campus de Brest"))
             if campus == "Rennes" and building not in [a[0] for a in self.BUILDINGS_RENNES]:

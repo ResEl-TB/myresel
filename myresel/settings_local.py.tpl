@@ -165,3 +165,32 @@ if DEBUG or TESTING:
 
 # Language switch hack
 # CSRF_COOKIE_DOMAIN = '.resel.fr'
+
+FORBIDDEN_EMAIL_DOMAINS = [
+    "hotmail.com",
+    "live.com",
+    "msn.com",
+    "outlook.com",
+    "windows.live",
+    "dbmail.com",
+    "hotmail.fr",
+    "live.fr",
+    "msn.fr",
+    "hotmail.be",
+    "msn.be",
+    "live.be",
+    "hotmail.de",
+    "hotmail.it",
+    "hotmail.co.uk",
+    "hotmail.es",
+    "live.co.uk",
+    "live.it",
+    "live.nl",
+    "live.se",
+    "live.de",
+    "hotmail.nl",
+    "outlook.fr",
+    "hotmail.se",
+    "live.dk",
+    "live.com.pt"
+]

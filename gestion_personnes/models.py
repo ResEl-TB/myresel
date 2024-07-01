@@ -15,7 +15,7 @@ import ldapback
 from ldapback.models.fields import LdapCharField, LdapPasswordField, LdapNtPasswordField, LdapListField, \
     LdapDatetimeField, LdapBooleanField
 from myresel.settings import LDAP_DN_PEOPLE
-from myresel.settings_local import LDAP_DN_GROUPS, LDAP_DN_ROOMS
+from myresel.settings_local import LDAP_DN_GROUPS
 
 
 class LdapUser(ldapback.models.LdapModel):
@@ -260,17 +260,31 @@ class LdapGroup(ldapback.models.LdapModel):
 
 
 class LdapRoom(ldapback.models.LdapModel):
+    """
+        Class to manage the rooms in the LDAP :
+            dn: roomName=[roomName],settings.LDAP_DN_ROOMS
+            objectClass: reselVLAN
+            roomName: [batiment]-[roomNumber]
+            vlanOffset: [decalage par rapport au premier VLAN du campus]
+            zoneID: [campus]
+            roomNumber: [numero de la chambre]
+            batiment: [nom du batiment]
+            roomSize: [taille de la chambre]
+    """
 
-    @staticmethod
-    def exists(room, building):
+    base_dn = settings.LDAP_DN_ROOMS
+    object_classes = ["reselVLAN"]
+
+    number = LdapCharField(db_column='roomNumber', object_classes=object_classes)
+    building = LdapCharField(db_column='batiment', object_classes=object_classes)
+
+    def exists(self):
         """Permet de chercher dans le LDAP si une chambre existe
 
         Returns:
             bool -- False si la chambre n'existe pas, le réstulat de la
             requête LDAP sinon.
         """
+        res = LdapRoom._search(('number', '', '=', str(self.number)), ('building', '', '=', str(self.building)))
 
-        base_dn = LDAP_DN_ROOMS
-        searchPattern = '(&(roomNumber=' + str(room) + \
-            ')(batiment=' + str(building) + '))'
-        return ldap.search(base_dn,  searchPattern)
+        return len(res) > 0
