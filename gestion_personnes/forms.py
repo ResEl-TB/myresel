@@ -37,7 +37,7 @@ class EmailValidatorNotMicrosoft:
         domain = value.split('@')[-1].lower()
         if domain in FORBIDDEN_EMAIL_DOMAINS:
             raise ValidationError(
-                _("Les adresses e-mail du domaine %(domain)s ne sont pas autorisées"),
+                _("Les adresses e-mail du domaine %(domain)s ne sont pas autorisées."),
                 params={'domain': domain},
             )
 

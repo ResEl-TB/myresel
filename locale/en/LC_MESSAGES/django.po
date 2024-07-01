@@ -3265,7 +3265,7 @@ msgid "Addresse e-mail"
 msgstr "Email address"
 
 #: gestion_personnes/forms.py:48
-msgid "Les adresses e-mail du domaine %(domain)s ne sont pas autorisées"
+msgid "Les adresses e-mail du domaine %(domain)s ne sont pas autorisées."
 msgstr "Email adresses from the domain %(domain)s are forbidden."
 
 #: gestion_personnes/forms.py:72 gestion_personnes/forms.py:253
@@ -3615,7 +3615,7 @@ msgid ""
 msgstr ""
 "\n"
 "                <p>With your email address, we will be able to send your "
-"ResEl IP.</p>\n"
+"ResEl ID.</p>\n"
 "                <p>Note : The ResEl cannot recover your password. However, "
 "you can always ask to reset it.</p>\n"
 "            "
