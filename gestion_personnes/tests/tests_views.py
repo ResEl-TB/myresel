@@ -326,6 +326,42 @@ class TestPersonalInfo(TestCase):
         # Test a bug which would modify wrongly the password
         self.assertTrue(compare_passwd("blah", u.user_password))
 
+    def test_mod_wrong_room(self):
+        r = self.client.get(reverse("gestion-personnes:personal-infos"),
+                            HTTP_HOST="10.0.3.99", follow=True)
+        self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed(r, "gestion_personnes/personal_info.html")
+
+        r = self.client.post(
+            reverse("gestion-personnes:personal-infos"),
+            data={
+                'email': "email@email.com",
+                'phone': "0123456789",
+                'campus': "Brest",
+                'building': "I10",
+                'room': "702",
+                'certify_truth': "certify_truth",
+            },
+            HTTP_HOST="10.0.3.99",
+            follow=True
+        )
+        """
+            This test should not pass because the room number is not a real room
+        """
+        self.assertEqual(200, r.status_code)
+        self.assertContains(r, "Ce numéro de chambre est inconnu. Contactez-nous si vous pensez que c'est une erreur.")
+
+        u = LdapUser.get(pk="lcarr")
+        self.assertEqual(u.mail, "email@email.com")
+        self.assertEqual(u.mobile, "+33123456789")
+        self.assertEqual(u.campus, "Brest")
+        self.assertEqual(u.building, "I10")
+        # Room should not have been changed
+        self.assertEqual(u.room_number, "14")
+
+        # Test a bug which would modify wrongly the password
+        self.assertTrue(compare_passwd("blah", u.user_password))
+
 
 class TestResetPasswd(TestCase):
     def setUp(self):
