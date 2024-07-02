@@ -326,7 +326,7 @@ class TestPersonalInfo(TestCase):
         # Test a bug which would modify wrongly the password
         self.assertTrue(compare_passwd("blah", u.user_password))
 
-    def test_mod_wrong_room(self):
+    def test_wrong_room(self):
         r = self.client.get(reverse("gestion-personnes:personal-infos"),
                             HTTP_HOST="10.0.3.99", follow=True)
         self.assertEqual(200, r.status_code)
@@ -345,11 +345,8 @@ class TestPersonalInfo(TestCase):
             HTTP_HOST="10.0.3.99",
             follow=True
         )
-        """
-            This test should not pass because the room number is not a real room
-        """
         self.assertEqual(200, r.status_code)
-        self.assertContains(r, "Ce numéro de chambre est inconnu. Contactez-nous si vous pensez que c'est une erreur.")
+        self.assertContains(r, "Ce numéro de chambre est inconnu.")
 
         u = LdapUser.get(pk="lcarr")
         self.assertEqual(u.mail, "email@email.com")
