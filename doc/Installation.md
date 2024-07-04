@@ -9,7 +9,7 @@ Actuellement le site est fonctionnel sur les serveurs `skynet` à Brest et
 par le biais de la branche `deploy` et des runners Gitlab.
 
 
-## Configuration matérielle
+## Configuration matérielle (_**obsolète**_?)
 
 Pour que le site puisse facilement détecter les addresses MAC des machines lors
 de l'inscription, celui-ci a besoin de plusieurs interfaces réseau :
@@ -53,9 +53,10 @@ ferez ça avec Ansible, mais je ne me fais pas trop d'illusions non plus...
 
 Installez les paquets nécessaires :
 ```bash
-apt install build-essential nginx
-apt install python-software-properties python3 python3-dev python3-pip
-apt install libmysqlclient-dev ldap-utils libldap2-dev libsasl2-dev libssl-dev libjpeg-dev libssl-dev gettext
+apt install build-essential nginx pkg-config \
+    software-properties-common python3 python3-dev python3-pip \
+    python3.11-venv libmariadb-dev-compat libmariadb-dev ldap-utils \
+    libldap2-dev libsasl2-dev libssl-dev libjpeg-dev libssl-dev gettext -y
 ```
 
 ### Installation du site
@@ -64,6 +65,9 @@ Créez un dossier `/srv/www/resel.fr/`, donnez-le à l'utilisateur `www-data`:
 ```bash
 mkdir -p /srv/www/resel.fr/
 chown www-data:www-data /srv/www/resel.fr/
+mkdir -p /var/log/nginx/{default,resel.fr,stages.resel.fr}/
+touch /var/log/nginx/{default,resel.fr,stages.resel.fr}/{access.log,error.log}
+chown www-data:www-data -R /var/log/nginx
 ```
 
 Téléchargez le site:
@@ -79,13 +83,14 @@ exit
 
 #### Configuration nginx du site
 Vous trouverez dans le fichier  `.install/etc/nginx.conf` un exemple de la
-configuration nginx à placer dans : `/etc/nginx/sites-available/resel.fr`.
+configuration nginx à placer dans : `/etc/nginx/` ainsi que la configuration
+uwsgi `.install/etc/resel.fr` à placer dans `/etc/nginx/sites-available`
 
 N'oubliez pas de changer les interfaces d'évoute pour correspondre à ceux de
 votre VM.
 ```bash
-cp /srv/www/resel.fr/.install/etc/nginx.conf /etc/nginx/sites-available/resel.fr
-vim /etc/nginx/sites-available/resel.fr
+cp /srv/www/resel.fr/.install/etc/nginx.conf /etc/nginx/nginx.conf
+cp /srv/www/resel.fr/.install/etc/resel.conf /etc/nginx/sites-available/resel.fr
 ln -s /etc/nginx/sites-available/resel.fr /etc/nginx/sites-enabled/resel.fr
 ```
 On redémarrera nginx plus tard
@@ -98,9 +103,8 @@ Les hooks permettent de  mettre à jour automatique l'installation sans avoir
 
 Créez un utilisateur `deploy` :
 ```bash
-adduser deploy
-adduser deploy sshusers
-adduser deploy www-data
+useradd -m deploy
+usermod -aG www-data deploy 
 ```
 
 
@@ -160,7 +164,6 @@ pip3 install uwsgi
 
 Configurer le service
 ```bash
-rm /etc/init.d/uwsgi  # On est plus en 2016 putain
 cp /srv/www/resel.fr/.install/etc/uwsgi.service /etc/systemd/system/uwsgi.service
 chmod +r /etc/systemd/system/uwsgi.service
 mkdir touch /var/log/uwsgi/
@@ -187,14 +190,14 @@ de donnée REDIS pour choisir une adresse ip.
 
 Il suffit de simplement copier le fichier de cron :
 ```bash
-cp .install/etc/cronfile /etc/cron.d/myresel
+cp /srv/www/resel.fr/.install/etc/cronfile /etc/cron.d/myresel
 ```
 
 Pour les services de tâche de fond, comme la création de factures, créez les
 services systemd en copiant les fichiers suivants :
 ```bash
-cp .install/etc/rq-worker.service /etc/systemd/system/rq-worker.service
-cp .install/etc/rq-scheduler.service /etc/systemd/system/rq-scheduler.service
+cp /srv/www/resel.fr/.install/etc/rq-worker.service /etc/systemd/system/rq-worker.service
+cp /srv/www/resel.fr/.install/etc/rq-scheduler.service /etc/systemd/system/rq-scheduler.service
 ```
 
 
@@ -202,9 +205,9 @@ cp .install/etc/rq-scheduler.service /etc/systemd/system/rq-scheduler.service
 
 Créez le fichier `myresel/settings_local.py` et remplissez-le convenablement en vous inspirant du fichier `myresel/settings_local.py.tpl`.
 ```bash
-cp myresel/settings_local.py.tpl myresel/settings_local.py
-vim myresel/settings_local.py
-chmod -R www-data .
+cp /srv/www/resel.fr/myresel/settings_local.py.tpl /srv/www/resel.fr/myresel/settings_local.py
+vim /srv/www/resel.fr/myresel/settings_local.py
+chown -R www-data .
 ```
 
 Ne pas oublier en créant la configuration :
@@ -219,17 +222,23 @@ Ne pas oublier en créant la configuration :
 ### Création du virtual env python
 
 ```bash
-pip3 install virtualenv
 cd /srv/www/resel.fr/
 su -- www-data
-virtualenv env -p /usr/bin/python3
+python3 -m venv env/
 source env/bin/activate
 pip3 install -Ur requirements.txt
 ```
 
+### Ajout des certificats SSL
+
+TODO
+
+- /var/lib/resel/certs/
+- /etc/nginx/ssl/2017/resel-fr.conf
+
 ### Lancement du service
 
-[obsolète] Lancer les services en tache de fond :
+_**[obsolète]**_ Lancer les services en tache de fond :
 ```
 supervisorctl
 start rqworker
@@ -242,8 +251,9 @@ systemctl start rq-worker.service
 systemctl start rq-scheduler.service
 ```
 
-Démarrez nginx :
+Démarrez nginx et uwsgi:
 ```
+systemctl start uwsgi
 systemctl start nginx
 ```
 
@@ -336,4 +346,3 @@ python manage.py collectstatic
 python manage.py migrate
 touch uwsgi.ini
 ```
-
