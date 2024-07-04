@@ -72,9 +72,10 @@ chown www-data:www-data -R /var/log/nginx
 
 Téléchargez le site:
 ```bash
+nano /etc/passwd
 su -- www-data
 cd /srv/www/resel.fr/
-git clone ssh://git@git.resel.fr:43000/resel/myresel.git .
+git clone https://git.resel.fr/resel/applications-utilisateurs/myresel.git .
 git checkout deploy
 exit
 ```
@@ -86,8 +87,6 @@ Vous trouverez dans le fichier  `.install/etc/nginx.conf` un exemple de la
 configuration nginx à placer dans : `/etc/nginx/` ainsi que la configuration
 uwsgi `.install/etc/resel.fr` à placer dans `/etc/nginx/sites-available`
 
-N'oubliez pas de changer les interfaces d'évoute pour correspondre à ceux de
-votre VM.
 ```bash
 cp /srv/www/resel.fr/.install/etc/nginx.conf /etc/nginx/nginx.conf
 cp /srv/www/resel.fr/.install/etc/resel.conf /etc/nginx/sites-available/resel.fr
@@ -101,10 +100,10 @@ On redémarrera nginx plus tard
 Les hooks permettent de  mettre à jour automatique l'installation sans avoir
 à puller le code à la main.
 
-Créez un utilisateur `deploy` :
+Créez un utilisateur `deploy` et l'affecter aux bons groupes :
 ```bash
 useradd -m deploy
-usermod -aG www-data deploy 
+usermod -aG www-data deploy
 ```
 
 
@@ -116,7 +115,7 @@ deploy:x:1004:1005::/home/deploy:/srv/www/resel.fr/.install/deploy.sh
 
 Lui créer une clé SSH sans mot de passe:
 ```bash
-ssh-keygen -t rsa -b 4096 -f /home/deploy/.ssh/id_rsa
+ssh-keygen -t ed25519 -f /home/deploy/.ssh/id_rsa
 cat /home/deploy/.ssh/id_rsa.pub
 exit
 ```
@@ -156,6 +155,8 @@ cp /srv/www/resel.fr/.install/etc/nginx-hook.conf /etc/nginx/sites-available/hoo
 vim /etc/nginx/sites-available/hook
 ln -s /etc/nginx/sites-available/hook /etc/nginx/sites-enabled/hook
 ```
+
+
 ### Configuration de uwsgi
 Installer uwsgi:
 ```bash
@@ -173,7 +174,7 @@ chown -R www-data:www-data /var/log/uwsgi
 
 Le configurer en copiant les fichiers proposés:
 ```bash
-mkdir /etc/uwsgi/vassals
+mkdir -p /etc/uwsgi/vassals
 cp /srv/www/resel.fr/.install/etc/uwsgi-emperor.ini /etc/uwsgi/emperor.ini
 cp /srv/www/resel.fr/.install/etc/uwsgi-vassal.ini /srv/www/resel.fr/uwsgi.ini
 ln -s /srv/www/resel.fr/uwsgi.ini /etc/uwsgi/vassals/resel.fr.ini
@@ -183,6 +184,7 @@ Configurer nginx pour utiliser uwsgi:
 ```bash
 cp /srv/www/resel.fr/.install/etc/nginx-uwsgi.conf /etc/nginx/conf.d/uwsgi_params.conf
 ```
+
 ### Ajout des cron jobs nécessaires et des services
 
 Nous avons actuellement un job qui tourne régulièrement pour repopuler la base
@@ -207,13 +209,13 @@ Créez le fichier `myresel/settings_local.py` et remplissez-le convenablement en
 ```bash
 cp /srv/www/resel.fr/myresel/settings_local.py.tpl /srv/www/resel.fr/myresel/settings_local.py
 vim /srv/www/resel.fr/myresel/settings_local.py
-chown -R www-data .
+chmod -R www-data .
 ```
 
 Ne pas oublier en créant la configuration :
 * De changer la clé secrête
 * De passer `DEBUG` à False
-* De bien choisir le campus sur lequel est le site `Brest` ou `Rennes`
+* De bien choisir le campus sur lequel est le site `Brest` ou `Rennes` ou `Nantes`
 * D'ajouter les commandes de rechargement du firewall et du DNS
 * De configurer les bases de données (ldap, MySQL, QOS, REDIS)
 * D'ajouter les clés Stripe (de prod pour la prod)
