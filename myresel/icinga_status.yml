@@ -426,14 +426,6 @@ campuses:
             - h02-002.ap.br.resel.fr
             - h02-003.ap.br.resel.fr
             - h02-004.ap.br.resel.fr
-        - name: datacenter
-          title: Datacenter
-          text: Switch d’accès au D01 (Datacenter IMT Atlantique).
-          icon: fa-building building
-          essential: false
-          level: 1
-          _hosts:
-            - swbr-stack-d01-138
   - name: rennes
     enabled: true
     connections:
