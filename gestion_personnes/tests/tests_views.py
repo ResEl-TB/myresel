@@ -137,6 +137,46 @@ class InscriptionCase(TestCase):
         self.assertEqual(user.last_name, user_s.last_name)
         self.assertEqual(user_s.employee_type, "staff")
 
+    def test_wrong_room(self):
+        user = create_full_user()
+        try_delete_user(user.uid)
+
+        response = self.client.get(reverse("gestion-personnes:inscription"),
+                                   HTTP_HOST="10.0.3.95", ZONE="Brest-any")
+        self.assertEqual(200, response.status_code)
+        self.assertTemplateUsed(response, "gestion_personnes/inscription.html")
+
+        r = self.client.post(reverse(
+            "gestion-personnes:inscription"),
+            data={
+                'last_name': user.last_name,
+                'first_name': user.first_name,
+                'category': user.category,
+                'formation': user.formation,
+                'email': user.mail,
+                'email_verification': user.mail,
+                'password': user.user_password,
+                'password_verification': user.user_password,
+                'campus': user.campus,
+                'building': user.building,
+                'room': "702",
+                'birth_place': user.birth_place,
+                'birth_country': user.birth_country,
+                'birth_date': user.freeform_birth_date,
+                'phone': user.mobile,
+                'certify_truth': 'certify_truth',
+            },
+            HTTP_HOST="10.0.3.95", ZONE="Brest-any", follow=True)
+        self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed(r, 'gestion_personnes/inscription.html')
+        self.assertContains(r, "Ce numéro de chambre est inconnu.")
+        
+        try:
+            r = LdapUser.get(pk=user.uid)
+        except ObjectDoesNotExist:
+            r = None
+        self.assertEqual(r, None)
+
     def test_wrong_email(self):
         user = create_full_user(email="sdlfskdfjh@hotmail.com")
         try_delete_user(user.uid)
@@ -171,6 +211,13 @@ class InscriptionCase(TestCase):
         self.assertTemplateUsed(r, 'gestion_personnes/inscription.html')
         self.assertContains(r, "Les adresses e-mail du domaine hotmail.com ne sont pas autorisées.")
         
+        try:
+            r = LdapUser.get(pk=user.uid)
+        except ObjectDoesNotExist:
+            r = None
+        self.assertEqual(r, None)
+
+
     def test_two_different_emails(self):
         user = create_full_user(email="dsqfsdfjnsdfs@fdsfsdf.qsd")
         try_delete_user(user.uid)
@@ -204,8 +251,12 @@ class InscriptionCase(TestCase):
         self.assertEqual(200, r.status_code)
         self.assertTemplateUsed(r, 'gestion_personnes/inscription.html')
         self.assertContains(r, "Les adresses e-mail sont différentes.")
-
-
+        
+        try:
+            r = LdapUser.get(pk=user.uid)
+        except ObjectDoesNotExist:
+            r = None
+        self.assertEqual(r, None)
 
 class ModPasswdCase(TestCase):
     def setUp(self):
@@ -359,6 +410,38 @@ class TestPersonalInfo(TestCase):
         # Test a bug which would modify wrongly the password
         self.assertTrue(compare_passwd("blah", u.user_password))
 
+    def test_wrong_email(self):
+        r = self.client.get(reverse("gestion-personnes:personal-infos"),
+                            HTTP_HOST="10.0.3.99", follow=True)
+        self.assertEqual(200, r.status_code)
+        self.assertTemplateUsed(r, "gestion_personnes/personal_info.html")
+
+        r = self.client.post(
+            reverse("gestion-personnes:personal-infos"),
+            data={
+                'email': "email@hotmail.com",
+                'phone': "0123456789",
+                'campus': "Brest",
+                'building': "I10",
+                'room': "14",
+                'certify_truth': "certify_truth",
+            },
+            HTTP_HOST="10.0.3.99",
+            follow=True
+        )
+        self.assertEqual(200, r.status_code)
+        self.assertContains(r, "Les adresses e-mail du domaine hotmail.com ne sont pas autorisées.")
+
+        u = LdapUser.get(pk="lcarr")
+        # Nothing should have been updated
+        self.assertEqual(u.mail, "lcarr@gmail.com")
+        self.assertEqual(u.mobile, "")
+        self.assertEqual(u.campus, "")
+        self.assertEqual(u.building, "")
+        self.assertEqual(u.room_number, "")
+
+        # Test a bug which would modify wrongly the password
+        self.assertTrue(compare_passwd("blah", u.user_password))
 
 class TestResetPasswd(TestCase):
     def setUp(self):
