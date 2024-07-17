@@ -335,8 +335,8 @@ class TestPersonalInfo(TestCase):
         r = self.client.post(
             reverse("gestion-personnes:personal-infos"),
             data={
-                'email': "email@email.com",
-                'phone': "0123456789",
+                'email': "email@email.fr",
+                'phone': "+33123456789",
                 'campus': "Brest",
                 'building': "I10",
                 'room': "702",
@@ -349,12 +349,12 @@ class TestPersonalInfo(TestCase):
         self.assertContains(r, "Ce numéro de chambre est inconnu.")
 
         u = LdapUser.get(pk="lcarr")
+        # Nothing should have been updated
         self.assertEqual(u.mail, "lcarr@gmail.com")
-        self.assertEqual(u.mobile, "+33123456789")
-        self.assertEqual(u.campus, "Brest")
-        self.assertEqual(u.building, "I10")
-        # Room should not have been changed
-        self.assertEqual(u.room_number, "14")
+        self.assertEqual(u.mobile, "")
+        self.assertEqual(u.campus, "")
+        self.assertEqual(u.building, "")
+        self.assertEqual(u.room_number, "")
 
         # Test a bug which would modify wrongly the password
         self.assertTrue(compare_passwd("blah", u.user_password))
