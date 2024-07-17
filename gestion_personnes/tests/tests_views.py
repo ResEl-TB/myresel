@@ -349,7 +349,7 @@ class TestPersonalInfo(TestCase):
         self.assertContains(r, "Ce numéro de chambre est inconnu.")
 
         u = LdapUser.get(pk="lcarr")
-        self.assertEqual(u.mail, "email@email.com")
+        self.assertEqual(u.mail, "lcarr@gmail.com")
         self.assertEqual(u.mobile, "+33123456789")
         self.assertEqual(u.campus, "Brest")
         self.assertEqual(u.building, "I10")
