@@ -173,9 +173,6 @@
                 home_address.classList.remove('hidden');
             }
             else if (campus) {
-                // Emptying selected building and room
-                form.building.value = '';
-                form.room.value = '';
 
                 maisel_information.classList.remove('hidden');
                 home_address.classList.add('hidden');
@@ -190,6 +187,11 @@
                     }
                 });
             }
+        }
+
+        function reset_building_and_room() {
+            form.building.value = '';
+            form.room.value = '';
         }
 
         function update_category() {
@@ -217,6 +219,7 @@
         }
 
         document.getElementById('id_campus').addEventListener('change', update_buildings);
+        document.getElementById('id_campus').addEventListener('change', reset_building_and_room);
 
         document.addEventListener('DOMContentLoaded', () => {
             update_category();
