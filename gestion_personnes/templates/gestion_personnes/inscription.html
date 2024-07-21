@@ -173,6 +173,10 @@
                 home_address.classList.remove('hidden');
             }
             else if (campus) {
+                // Emptying selected building and room
+                form.building.value = '';
+                form.room.value = '';
+
                 maisel_information.classList.remove('hidden');
                 home_address.classList.add('hidden');
                 enabled_buildings.forEach(e => {
