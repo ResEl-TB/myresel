@@ -4194,6 +4194,10 @@ msgstr "Become a ResEl Admin!"
 msgid "Nous contacter"
 msgstr "Contact us"
 
+#: pages/templates/pages/contact.html:9
+msgid "Pensez à consulter <a href=\"https://support.resel.fr\">nos guides d'aide</a> avant de nous contacter."
+msgstr "Don't forget to check <a href=\"https://support.resel.fr\">our help guides</a> before contacting us."
+
 #: pages/templates/pages/contact.html:31
 msgid "Autrement"
 msgstr "Otherwise"
@@ -4905,8 +4909,8 @@ msgid "Aucun article"
 msgstr "No article"
 
 #: templates/base.html:117 templates/base.html:262
-msgid "Contact"
-msgstr "Contact"
+msgid "Assistance"
+msgstr "Support"
 
 #: templates/base.html:135
 msgid "Listes de diffusion"

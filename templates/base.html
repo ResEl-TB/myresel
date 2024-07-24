@@ -103,9 +103,16 @@
             </li>
             {% endif %}
 
+            {% comment %} 
             <li>
-                <a class="btn-campus" href="{% url 'campus:home' %}"><i class="fa fa-bicycle fa-fw"></i> <span class="hidden-sm btn-campus-text">{% trans "Campus" %}</span></a>
+              <a class="btn-campus" href="{% url 'campus:home' %}"><i class="fa fa-bicycle fa-fw"></i> <span class="hidden-sm btn-campus-text">{% trans "Campus" %}</span></a>
+            </li> 
+            {% endcomment %}
+
+            <li>
+              <a href="https://support.resel.fr/help"><i class="fa fa-info"></i> {% trans "Assistance" %}</a>
             </li>
+            
             {% if request.user.is_staff %}
             <li class="no-text">
                 <a href="/gestion"><i class="fa fa-gears fa-fw"></i></a>
@@ -113,9 +120,6 @@
             {% endif %}
         </ul>
         <ul class="nav navbar-top-links navbar-right navbar-collapse">
-          <li>
-            <a href="{% url 'contact' %}"> {% trans "Contact" %}</a>
-          </li>
 
           {% if request.user.is_authenticated %}
               <li class="dropdown">
@@ -123,20 +127,20 @@
                   <div class="dropdown-menu">
                     <ul>
                       <li>
-                          <a href="{% url 'gestion-personnes:personal-infos' %}"><i class="fa fa-sliders fa-fw" ></i> {% trans "Paramètres" %}</a>
+                        <a href="{% url 'gestion-personnes:personal-infos' %}"><i class="fa fa-sliders fa-fw" ></i> {% trans "Paramètres" %}</a>
                       </li>
                       <li>
-	      	    <a href="{% url 'gestion-machines:liste' %}"><i class="fa fa-cubes fa-fw"></i> {% trans "Mes machines" %}</a>
+                        <a href="{% url 'gestion-machines:liste' %}"><i class="fa fa-cubes fa-fw"></i> {% trans "Mes machines" %}</a>
                       </li>
                       <li>
-                          <a href="{% url 'gestion-personnes:mail' %}"><i class="fa fa-envelope-o fa-fw"></i> {% trans "Email ResEl" %}</a>
+                        <a href="{% url 'gestion-personnes:mail' %}"><i class="fa fa-envelope-o fa-fw"></i> {% trans "Email ResEl" %}</a>
                       </li>
                       <li>
-                          <a href="https://mlistes.resel.fr"><i class="fa fa-rss fa-fw"></i> {% trans "Listes de diffusion" %}</a>
+                        <a href="https://mlistes.resel.fr"><i class="fa fa-rss fa-fw"></i> {% trans "Listes de diffusion" %}</a>
                       </li>
                       <hr />
                       <li>
-                          <a href="/logout"><i class="fa fa-sign-out fa-fw"></i> {% trans "Déconnexion" %}</a>
+                        <a href="/logout"><i class="fa fa-sign-out fa-fw"></i> {% trans "Déconnexion" %}</a>
                       </li>
                     </ul>
                   </div>
