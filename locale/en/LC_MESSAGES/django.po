@@ -4219,20 +4219,20 @@ msgid "Les permanences"
 msgstr "Meet us in person"
 
 #: pages/templates/pages/contact.html:38
-msgid "Campus de Brest uniquement"
-msgstr "Brest campus only"
+msgid "Campus de Brest et de Nantes uniquement"
+msgstr "Brest and Nantes campuses only"
 
 #: pages/templates/pages/contact.html:40
 msgid ""
 "\n"
 "                Nous tenons régulièrement (hors vacances) des <b>permanences "
-"au Foyer des Élèves</b>.\n"
+"au Foyer des Élèves (Brest) et à la Maison des Élèves (Nantes)</b>.\n"
 "\t\tUn administrateur ResEl pourra venir répondre à vos questions et "
 "résoudre vos problèmes de connexion.</p>\n"
 "            "
 msgstr ""
 "\n"
-"You can <b>meet us at the Foyer des Élèves</b> (outside school vacations). A "
+"You can <b>meet us at the Foyer des Élèves (Brest) and at the Maison des Élèves (Nantes)</b> (outside school vacations). A "
 "ResEl administrator will come and answer your questions and solve your "
 "connection problems.</p>"
 
