@@ -1,8 +1,8 @@
 Le site resel.fr
 ================
 
-[![build status](https://git.resel.fr/resel/myresel/badges/master/build.svg)](https://git.resel.fr/resel/myresel/commits/master)
-[![coverage report](https://git.resel.fr/resel/myresel/badges/master/coverage.svg)](https://git.resel.fr/resel/myresel/commits/master)
+[![build status](https://git.resel.fr/resel/applications-utilisateurs/myresel/badges/master/build.svg)](https://git.resel.fr/resel/applications-utilisateurs/myresel/commits/master)
+[![coverage report](https://git.resel.fr/resel/applications-utilisateurs/myresel/badges/master/coverage.svg)](https://git.resel.fr/resel/applications-utilisateurs/myresel/commits/master)
 
 
 Ceci est le code pour le site ResEl [resel.fr](resel.fr) il est développé en
@@ -33,7 +33,7 @@ sudo apt install vagrant  # On a Debian-based distribution
 
 Installer l'environement de développement :
 ```
-git clone https://git.resel.fr/resel/myresel
+git clone https://git.resel.fr/resel/applications-utilisateurs/myresel
 cd myresel/
 vagrant up  # It might take a while the first time
 ```
@@ -69,7 +69,7 @@ dans le fichier `myresel/settings_local.py`.
  
 Clonez le repo sur votre ordinateur :
 ```bash
-git clone https://git.resel.fr/resel/myresel
+git clone https://git.resel.fr/resel/applications-utilisateurs/myresel
 ```
 
 Faites les modifications nécessaires dans le repo. Si les modifications que
@@ -88,11 +88,11 @@ git push --set-upstream branch_name
 Ou alors plus simplement si vous n'avez pas créé de branche : `git push`
 
 Si vous avez créé une branche n'oubliez pas de [créer une merge request depuis
-votre branche vers `master`](https://git.resel.fr/resel/myresel/merge_requests/new?merge_request%5Btarget_branch%5D=master).
+votre branche vers `master`](https://git.resel.fr/resel/applications-utilisateurs/myresel/merge_requests/new?merge_request%5Btarget_branch%5D=master).
 Et demandez à faire un code review ! Puis mergez la branche.
 
 Il faut ensuite pusher le code en production, pour ceci il suffit de [créer une
-merge request de `master` vers `deploy`](https://git.resel.fr/resel/myresel/merge_requests/new?utf8=✓&merge_request[source_branch]=master&merge_request[target_branch]=deploy)
+merge request de `master` vers `deploy`](https://git.resel.fr/resel/applications-utilisateurs/myresel/merge_requests/new?utf8=✓&merge_request[source_branch]=master&merge_request[target_branch]=deploy)
 à la suite de quoi, si les tests passent, le code sera automatiquement pushé
 sur les serveurs de production.
 
@@ -171,8 +171,8 @@ dans la barre de navigation.
 
 Deux modules : la génération automatique de facture et l'affichage des
 documents de l'association, reposent sur un service
-[LaPuTeX](https://git.resel.fr/resel/laputex/).  Pour mettre le mettre en
-place, suivez les détails du [README](https://git.resel.fr/resel/laputex/) puis
+[LaPuTeX](https://git.resel.fr/resel/applications-admins/LaPuTeX).  Pour mettre le mettre en
+place, suivez les détails du [README](https://git.resel.fr/resel/applications-admins/LaPuTeX) puis
 configurer le `settings_local.py` ou bien utilisez l'installateur automatique :
 
 ```python
