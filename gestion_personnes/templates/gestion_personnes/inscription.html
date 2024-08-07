@@ -157,7 +157,7 @@
 {% block javascript %}
     <script src="{% static 'js/zxcvbn.js' %}"></script>
     <script>
-        const buildings = {'Brest': ['I1', 'I2', 'I3', 'I4', 'I5', 'I6', 'I7', 'I8', 'I9', 'I10', 'I11', 'I12'],
+        const buildings = {'Brest': ['I1', 'I2', 'I3', 'I4', 'I5', 'I6', 'I7', 'I8', 'I9', 'I10', 'I11', 'I12', 'I14', 'I15'],
                            'Rennes': ['C1', 'S1'],
                            'Nantes': ['N', 'P', 'Q', 'R', 'S', 'T', 'PC']};
 
@@ -173,6 +173,7 @@
                 home_address.classList.remove('hidden');
             }
             else if (campus) {
+
                 maisel_information.classList.remove('hidden');
                 home_address.classList.add('hidden');
                 enabled_buildings.forEach(e => {
@@ -186,6 +187,11 @@
                     }
                 });
             }
+        }
+
+        function reset_building_and_room() {
+            form.building.value = '';
+            form.room.value = '';
         }
 
         function update_category() {
@@ -213,6 +219,7 @@
         }
 
         document.getElementById('id_campus').addEventListener('change', update_buildings);
+        document.getElementById('id_campus').addEventListener('change', reset_building_and_room);
 
         document.addEventListener('DOMContentLoaded', () => {
             update_category();

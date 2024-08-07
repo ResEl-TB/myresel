@@ -19,6 +19,7 @@ from gestion_personnes.forms import PersonalInfoForm
 
 from fonctions import ldap
 
+
 class RoomBookingForm(ModelForm):
     class Meta:
         model = RoomBooking
@@ -88,7 +89,6 @@ class RoomBookingForm(ModelForm):
         m.notify_mailing_list()
         return m
 
-
     def clean(self):
         cleaned_data = super(RoomBookingForm, self).clean()
         start_time = cleaned_data.get('start_time', None)
@@ -113,10 +113,12 @@ class RoomBookingForm(ModelForm):
         #If a user disable JS, he can send empty fields
         if end_time and start_time:
             if end_time < start_time:
-                self.add_error('end_time', _('La date de fin est avant la date de début de l\'évènement'))
+                self.add_error('end_time',
+                               _('La date de fin est avant la date de début de l\'évènement'))
 
         if recurring_rule != "NONE" and not cleaned_data.get('end_recurring_period', None):
-            self.add_error('end_recurring_period', _('La date de fin de la récurrence est invalide'))
+            self.add_error('end_recurring_period', 
+                           _('La date de fin de la récurrence est invalide'))
 
         if rooms and self.user:
             for room in rooms:
@@ -126,7 +128,6 @@ class RoomBookingForm(ModelForm):
             for room in rooms:
                 if room.private:
                     self.add_error('room', _("Vous ne pouvez pas gérer cette salle"))
-
 
         # Deactivated because why hu ??
         # if start_time.date() != end_time.date():
@@ -143,6 +144,7 @@ class RoomBookingForm(ModelForm):
         #        self.add_error('room', _("La salle %s n'est pas disponible") % room)
         return self.cleaned_data
 
+
 class AddRoomForm(ModelForm):
     class Meta:
         model = Room
@@ -156,7 +158,7 @@ class AddRoomForm(ModelForm):
         }
 
     def clean_mailing_list(self):
-        email=self.cleaned_data["mailing_list"]
+        email = self.cleaned_data["mailing_list"]
         if not (re.match(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+', email) or email == ""):
             raise ValidationError(message=_("L'adresse email semble être invalide"), code="Bad MAIL")
         return email
@@ -169,9 +171,9 @@ class AddRoomForm(ModelForm):
                 try:
                     StudentOrganisation.get(cn=club)
                 except ObjectDoesNotExist:
-                    raise ValidationError(message=_("Le club suivant n'existe pas: %s"%(club,)), code="CLUB DOES NOT EXIST")
+                    raise ValidationError(message=_("Le club suivant n'existe pas: %s" % (club,)), code="CLUB DOES NOT EXIST")
                 if not re.match(r'^[a-z0-9-]+', club):
-                    raise ValidationError(message=_("Le club suivant n'a pas un nom valide: %s"%(club,)), code="BAD CLUB")
+                    raise ValidationError(message=_("Le club suivant n'a pas un nom valide: %s" % (club,)), code="BAD CLUB")
         return ";".join(clubs)
 
 
@@ -179,12 +181,14 @@ class DisabledCharField(CharField):
     def __init__(self, disabled=True, *args, **kwargs):
         super(DisabledCharField, self).__init__(disabled=True, *args, **kwargs)
 
+
 class SendMailForm(ModelForm):
     class Meta:
         model = Mail
         fields = ("sender", "subject", "content")
         widgets = {'sender': TextInput(attrs={'readonly':'readonly', 'class': 'form-control'}),}
         field_classes = {'sender': DisabledCharField,}
+
 
 class ClubManagementForm(Form):
 
@@ -196,8 +200,8 @@ class ClubManagementForm(Form):
 
     type = ChoiceField(
         widget=forms.Select(attrs={
-            'class':'form-control',
-            'id':'type',
+            'class': 'form-control',
+            'id': 'type',
         }),
         choices=ORGA_TYPE,
         label=_("Sélectionner ce que vous souhaitez créer"),
@@ -232,9 +236,9 @@ class ClubManagementForm(Form):
     )
 
     logo = forms.ImageField( # logo
-        widget = forms.ClearableFileInput(),
-        label = 'Logo',
-        required = False,
+        widget=forms.ClearableFileInput(),
+        label='Logo',
+        required=False,
 
     )
 
@@ -270,13 +274,15 @@ class ClubManagementForm(Form):
     def clean_type(self):
         type = self.cleaned_data['type']
         if type not in [o[0] for o in self.ORGA_TYPE]:
-            raise ValidationError(message=_("Merci de sélectionner un choix valide"), code="BAD TYPE")
+            raise ValidationError(
+                message=_("Merci de sélectionner un choix valide"), code="BAD TYPE")
         return type
 
     def clean_cn(self):
         cn = self.cleaned_data['cn'].lower().strip()
         if StudentOrganisation.filter(cn=cn):
-            raise ValidationError(_("Ce nom existe déjà, assurez vous de créer un club/asso qui n'existe pas déjà"), code="CN EXISTS")
+            raise ValidationError(
+                _("Ce nom existe déjà, assurez vous de créer un club/asso qui n'existe pas déjà"), code="CN EXISTS")
         elif not re.match(r'^[a-z0-9-]+$', cn):
             raise ValidationError(message=_("Le nom court ne doit être composé que de lettres et de chiffres sans espaces"))
         return cn
@@ -344,6 +350,7 @@ class ClubManagementForm(Form):
 
         new_club.save()
 
+
 class ClubEditionForm(ClubManagementForm):
 
     def clean_cn(self):
@@ -352,15 +359,16 @@ class ClubEditionForm(ClubManagementForm):
     def clean_logo(self):
         logo = self.cleaned_data['logo']
         return logo
+
     def edit_club(self, pk):
         club = StudentOrganisation.get(cn=pk)
 
         #If we don't do this we get an error cuz our LDAP scheme does not allow
         # a single model for each type of organisation
         if "tbCampagne" in club.object_classes:
-            club=ListeCampagne.get(cn=pk)
+            club = ListeCampagne.get(cn=pk)
         elif "tbAsso" in club.object_classes:
-            club=Association.get(cn=pk)
+            club = Association.get(cn=pk)
 
         club.name = self.cleaned_data['name']
         club.description = self.cleaned_data['description']
@@ -377,11 +385,11 @@ class ClubEditionForm(ClubManagementForm):
         club.save()
 
 
-
 class MajPersonalInfo(PersonalInfoForm):
     CAMPUS = [('Brest', "Brest"), ('Rennes', 'Rennes'), ('Nantes', 'Nantes'),
               ('None', _('Je n\'habite pas à la Maisel'))]
-    BUILDINGS_BREST = [('I%d' % i, 'I%d' % i) for i in range(1, 13)]
+    BUILDINGS_BREST = [('I%d' % i, 'I%d' % i) for i in range(1, 16) if i != 13]
+
     BUILDINGS_RENNES = [('S1', 'Studios'), ('C1', 'Chambres')]
     BUILDINGS_NANTES = [(letter, letter) for letter in ['N', 'P', 'Q', 'R', 'S', 'T']]
     BUILDINGS_NANTES += [('PC', 'Pitre Chevalier')]
@@ -389,35 +397,35 @@ class MajPersonalInfo(PersonalInfoForm):
     BUILDINGS = BUILDINGS_BREST + BUILDINGS_RENNES + BUILDINGS_NANTES
 
     photo = forms.ImageField(
-        widget = forms.ClearableFileInput(),
-        label = 'Photo',
-        label_suffix = '',
-        required = False,
+        widget=forms.ClearableFileInput(),
+        label='Photo',
+        label_suffix='',
+        required=False,
 
     )
 
     remove_photo = forms.BooleanField(
-        widget = forms.CheckboxInput(),
-        label = _("Supprimer ma photo"),
-        label_suffix = '',
-        required = False,
+        widget=forms.CheckboxInput(),
+        label=_("Supprimer ma photo"),
+        label_suffix='',
+        required=False,
     )
 
     is_public = forms.BooleanField(
-        widget = forms.CheckboxInput(),
-        label = _("Rendre publics les details de mon profil"),
-        label_suffix = '',
-        initial = False,
-        required = False,
+        widget=forms.CheckboxInput(),
+        label=_("Rendre publics les details de mon profil"),
+        label_suffix='',
+        initial=False,
+        required=False,
     )
 
     birth_date = forms.DateField(
-        widget = forms.DateInput(attrs={
-            'class' : 'form-control',
-            'id' : 'datePicker'
+        widget=forms.DateInput(attrs={
+            'class': 'form-control',
+            'id': 'datePicker'
         }),
-        required = False,
-        input_formats = [
+        required=False,
+        input_formats=[
             '%Y-%m-%d',      # '2006-10-25'
             '%d/%m/%Y',      # '10/25/2006'
             '%d/%m/%y'
@@ -425,25 +433,26 @@ class MajPersonalInfo(PersonalInfoForm):
     )
 
     certify_truth = forms.BooleanField(
-        required = False
+        required=False
     )
+
 
 class SearchSomeone(forms.Form):
 
     search_keys = ['first_name', 'last_name', 'mail', 'promo']
 
     what = forms.CharField(
-        widget = forms.TextInput(attrs={
+        widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': _('Votre recherche')
         }),
     )
 
     strict = forms.BooleanField(
-        widget = forms.CheckboxInput(),
-        label = _('Recherche stricte'),
-        label_suffix = '',
-        required = False,
+        widget=forms.CheckboxInput(),
+        label=_('Recherche stricte'),
+        label_suffix='',
+        required=False,
     )
 
     def clean_what(self):

@@ -1,5 +1,4 @@
 ---
-
 exclusions:
   - apt
   - disks
@@ -26,10 +25,10 @@ campuses:
           level: 2
           _hosts:
             - internet
-          _hosts_failover: true  # true if the hosts act as failovers, false by default
+          _hosts_failover: true # true if the hosts act as failovers, false by default
         - name: renater
           title: Renater
-          text: La connexion Renater est la connexion de secours du ResEl 
+          text: La connexion Renater est la connexion de secours du ResEl
             sur le campus de Brest
           icon: fa-cloud
           essential: true
@@ -49,7 +48,7 @@ campuses:
       network-core:
         - name: kuma
           title: Routeur de coeur
-          text: Kuma est le routeur de coeur du campus de Brest, il permet de 
+          text: Kuma est le routeur de coeur du campus de Brest, il permet de
             router les packets entre les différents réseaux du campus.
           icon: fa-circle-o
           essential: true
@@ -157,10 +156,10 @@ campuses:
             - flea
             - skynet
             - teia
-            - chamoix    
+            - chamoix
         - name: tv
           title: Télévision
-          text: Le service de télévision permet de regarder les chaines de la TNT depuis le réseau du ResEl. 
+          text: Le service de télévision permet de regarder les chaines de la TNT depuis le réseau du ResEl.
           icon: fa-television
           essential: false
           level: 0
@@ -312,7 +311,7 @@ campuses:
           icon: fa-building building
           essential: false
           level: 1
-          _hosts: 
+          _hosts:
             - i07-001.sw.br.resel.fr
             - i07-002.sw.br.resel.fr
         - name: i8
@@ -427,14 +426,6 @@ campuses:
             - h02-002.ap.br.resel.fr
             - h02-003.ap.br.resel.fr
             - h02-004.ap.br.resel.fr
-        - name: datacenter
-          title: Datacenter
-          text: Switch d’accès au D01 (Datacenter IMT Atlantique).
-          icon: fa-building building
-          essential: false
-          level: 1
-          _hosts:
-            - swbr-stack-d01-138
   - name: rennes
     enabled: true
     connections:
@@ -449,13 +440,13 @@ campuses:
     services:
       internet-access:
         - name: quantic
-          title: Quantic Télécom
+          title: Quantic Telecom
           text: La connexion Quantic est la connexion principale du ResEl à sur
             le campus de Rennes
           icon: fa-cloud
           essential: true
           level: 2
-          _hosts: 
+          _hosts:
             - internet-rennes
         - name: renater
           title: Renater
@@ -464,7 +455,7 @@ campuses:
           icon: fa-cloud
           essential: true
           level: 1
-          _hosts: 
+          _hosts:
             - internet-rennes
       network-edge:
         - name: peach
@@ -478,7 +469,8 @@ campuses:
       network-core:
         - name: pessac
           title: Routeur de coeur Pessac
-          text: Pessac est le routeur de coeur du campus de Rennes, il permet de router les paquets
+          text:
+            Pessac est le routeur de coeur du campus de Rennes, il permet de router les paquets
             entre les différents réseaux
           icon: fa-circle-o
           essential: true

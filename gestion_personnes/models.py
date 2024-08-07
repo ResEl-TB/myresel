@@ -66,7 +66,6 @@ class LdapUser(ldapback.models.LdapModel):
     birth_date = LdapDatetimeField(db_column='birthDate', object_classes=['enstbPerson'])
     # TODO : altmail
 
-
     # aePerson
     ae_cotiz = LdapCharField(db_column='aeCotiz', object_classes=['aePerson'])
     ae_nature = LdapCharField(db_column='aeNature', object_classes=['aePerson'])
@@ -258,3 +257,34 @@ class LdapGroup(ldapback.models.LdapModel):
             # pylint: disable=unsupported-membership-test,no-member
             self.members.remove(uid)
             self.save()
+
+
+class LdapRoom(ldapback.models.LdapModel):
+    """
+        Class to manage the rooms in the LDAP :
+            dn: roomName=[roomName],settings.LDAP_DN_ROOMS
+            objectClass: reselVLAN
+            roomName: [batiment]-[roomNumber]
+            vlanOffset: [decalage par rapport au premier VLAN du campus]
+            zoneID: [campus]
+            roomNumber: [numero de la chambre]
+            batiment: [nom du batiment]
+            roomSize: [taille de la chambre]
+    """
+
+    base_dn = settings.LDAP_DN_ROOMS
+    object_classes = ["reselVLAN"]
+
+    number = LdapCharField(db_column='roomNumber', object_classes=object_classes)
+    building = LdapCharField(db_column='batiment', object_classes=object_classes)
+
+    def exists(self):
+        """Permet de chercher dans le LDAP si une chambre existe
+
+        Returns:
+            bool -- False si la chambre n'existe pas, le réstulat de la
+            requête LDAP sinon.
+        """
+        res = LdapRoom._search(('number', '', '=', str(self.number)), ('building', '', '=', str(self.building)))
+
+        return len(res) > 0

@@ -24,7 +24,8 @@ class LdapUserTestCase(TestCase):
         self.assertEqual(user_s.first_name, "Alexandre")
         self.assertEqual(user_s.last_name, "Manoury")
         self.assertEqual(user_s.display_name, "Alexandre Manoury")
-        self.assertEqual(user_s.postal_address, "Bâtiment I11, Chambre 123\nMaisel IMT Atlantique\n655 avenue du Technopôle\n29280 Plouzané")
+        self.assertEqual(user_s.postal_address,
+                         "Bâtiment I11, Chambre 115\nMaisel IMT Atlantique\n655 avenue du Technopôle\n29280 Plouzané")
         self.assertEqual(user_s.inscr_date, user.inscr_date)
         self.assertListEqual(user_s.cotiz, ["2016"])
         self.assertEqual(user_s.end_cotiz, user.end_cotiz)
@@ -33,7 +34,7 @@ class LdapUserTestCase(TestCase):
         self.assertEqual(user.birth_country, "France")
         self.assertEqual(user.freeform_birth_date, "01/01/1995")
         self.assertEqual(user_s.building, "I11")
-        self.assertEqual(user_s.room_number, "123")
+        self.assertEqual(user_s.room_number, "115")
         self.assertEqual(user_s.promo, "2020")
         self.assertEqual(user_s.mail, "alexandre.manoury@telecom-bretagne.eu")
         self.assertEqual(user_s.anneeScolaire, "2015")
@@ -74,13 +75,13 @@ class LdapUserTestCase(TestCase):
 
         # Now lets add a maisel field :
         user_s.building = "I11"
-        user_s.room_number = "203"
+        user_s.room_number = "13"
         user_s.save()
 
         user_t = LdapUser.get(pk=user.uid)
         self.assertIsInstance(user_t, LdapUser)
         self.assertEqual(user_t.building, "I11")
-        self.assertEqual(user_t.room_number, "203")
+        self.assertEqual(user_t.room_number, "13")
 
     def test_old_user_creation(self):
         try_delete_old_user("amartine")
@@ -155,6 +156,7 @@ class AsyncTasksTestCase(TestCase):
     """
     Test the functions defined asyncally
     """
+
     def test_send_mails(self):
         user = create_full_user()
         send_mails(user)

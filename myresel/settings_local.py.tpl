@@ -50,6 +50,7 @@ LDAP_AUTO_BIND = AUTO_BIND_NO_TLS  # or AUTO_BIND_TLS_BEFORE_BIND for production
 LDAP_DC_MAISEL = "dc=maisel,dc=enst-bretagne,dc=fr"
 LDAP_DC_RESEL = "dc=resel,dc=enst-bretagne,dc=fr"
 LDAP_DN_PEOPLE = 'ou=people,%s' % LDAP_DC_MAISEL
+LDAP_DN_ROOMS = 'ou=vlans,%s' % LDAP_DC_RESEL
 LDAP_DN_GROUPS = 'ou=groups,%s' % LDAP_DC_MAISEL
 LDAP_DN_MACHINES = 'ou=machines,%s' % LDAP_DC_RESEL
 LDAP_OU_ADMIN = 'ou=admins,%s' % LDAP_DC_RESEL
