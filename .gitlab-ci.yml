@@ -2,35 +2,35 @@
 # TODO: do not delete migrations
 
 variables:
- IMAGE: $CI_REGISTRY_IMAGE
- DOCKER_DRIVER: overlay2
-  
- MYSQL_HOST: mysql-mysql-server
- MYSQL_USER: resel
- MYSQL_PASSWORD: blah
- MYSQL_DATABASE: resel
- MYSQL_ROOT_PASSWORD: blah
- MYSQL_ROOT_HOST: '%'
+  IMAGE: $CI_REGISTRY_IMAGE
+  DOCKER_DRIVER: overlay2
 
- REDIS_HOST: redis
+  MYSQL_HOST: mysql-mysql-server
+  MYSQL_USER: resel
+  MYSQL_PASSWORD: blah
+  MYSQL_DATABASE: resel
+  MYSQL_ROOT_PASSWORD: blah
+  MYSQL_ROOT_HOST: "%"
 
- MYSQL_QOS_DATABASE: qos
- MYSQL_QOS_HOST: mysql-mysql-server
- MYSQL_QOS_USER: root
- MYSQL_QOS_PASSWORD: blah
+  REDIS_HOST: redis
 
- ROOTDIR: ./
- CONFDIR: myresel/
- ETCDIR: .install/etc/
- LIBDIR: .install/lib/
- LDAP_PASSWORD: blah
+  MYSQL_QOS_DATABASE: qos
+  MYSQL_QOS_HOST: mysql-mysql-server
+  MYSQL_QOS_USER: root
+  MYSQL_QOS_PASSWORD: blah
 
- LAPUTEX_HOST: http:\/\/laputex\/
- #LAPUTEX_PWD in gitlab secrets
+  ROOTDIR: ./
+  CONFDIR: myresel/
+  ETCDIR: .install/etc/
+  LIBDIR: .install/lib/
+  LDAP_PASSWORD: blah
 
- DEBIAN_FRONTEND: noninteractive
+  LAPUTEX_HOST: http:\/\/laputex\/
+  #LAPUTEX_PWD in gitlab secrets
 
-image: $IMAGE:latest
+  DEBIAN_FRONTEND: noninteractive
+
+image: $IMAGE:$CI_COMMIT_SHA
 services:
   - redis:stretch
   - mysql/mysql-server:5.7
@@ -43,12 +43,12 @@ stages:
   - deploy
 
 before_script:
-#  - source .install/scripts/install_essentials.sh no-upgrade
+  # - source .install/scripts/install_essentials.sh no-upgrade
   - source .install/scripts/install_essentials.sh
   - apt-get install -qq default-mysql-client
   - echo "CREATE DATABASE ${MYSQL_QOS_DATABASE}" | mysql -u${MYSQL_QOS_USER} -p${MYSQL_QOS_PASSWORD} -h ${MYSQL_QOS_HOST}
   - source .install/scripts/install_openldap.sh
-#  - source .install/scripts/install_latex.sh
+  # - source .install/scripts/install_latex.sh
   - pip3 install --break-system-packages -qUr requirements.txt
   - rm -f -- ${ROOTDIR}myresel/settings_local.py
   - export MYSQL_USER=root
@@ -63,34 +63,18 @@ Build docker image:
   stage: docker_build
   image: $DOCKER_IMAGE
   services:
-      - name: $RUNNER_IMAGE
-        alias: docker
-  before_script: &before_script
+    - name: $RUNNER_IMAGE
+      alias: docker
+  before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:
     - docker build -t $IMAGE:$CI_COMMIT_SHA --build-arg LDAPPASSWD=$LDAP_PASSWORD .
     - docker push $IMAGE:$CI_COMMIT_SHA
   only:
-   changes:
-     - Dockerfile
-  tags:
-    - admin
-
-
-Push docker image:
-  stage: docker_push
-  image: $DOCKER_IMAGE
-  services:
-      - name: $RUNNER_IMAGE
-        alias: docker
-  before_script: *before_script
-  script:
-    - docker pull $IMAGE:$CI_COMMIT_SHA
-    - docker tag $IMAGE:$CI_COMMIT_SHA $IMAGE:latest
-    - docker push $IMAGE:latest
-  only:
-   changes:
-     - Dockerfile
+    changes:
+      - Dockerfile
+      - .install/
+      - requirements.txt
   tags:
     - admin
 
