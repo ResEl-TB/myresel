@@ -23,6 +23,7 @@ RUN apt -qq install expect ldap-utils libldap2-dev libsasl2-dev libssl-dev ldapv
 COPY .install/scripts/install_slapd.sh install_slapd.sh
 RUN chmod +x install_slapd.sh && ./install_slapd.sh $LDAPPASSWD
 
+
 # Latex
 # RUN apt-get -qq upgrade && apt-get -qq install texlive-latex-extra
 # RUN apt-get -qq upgrade && apt-get -qq install libjpeg-dev gettext
