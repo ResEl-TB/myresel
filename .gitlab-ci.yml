@@ -73,7 +73,7 @@ Build docker image:
   only:
     changes:
       - Dockerfile
-      - .install/
+      - .install/**/*
       - requirements.txt
   tags:
     - admin
