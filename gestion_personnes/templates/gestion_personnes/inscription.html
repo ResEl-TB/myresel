@@ -144,12 +144,10 @@
                 <h3>{% trans "Téléchargez :" %}</h3>
                 <ul>
                     <li><a href="{% static "files/"|add:request.LANGUAGE_CODE|add:"/Flyer_ResEl_2024.pdf" %}">{% trans "Flyer de connexion" %}</a></li>
-                    <li><a href="{% static "files/"|add:request.LANGUAGE_CODE|add:"/Guide.pdf" %}">{% trans "Guide de connexion filaire" %}</a></li>
                 </ul>
             <hr />
             <h3>{% trans "Un problème pour vous inscrire ?" %}</h3>
             <div><a href="{% url "contact" %}">{% trans "Contactez nous !" %}</a></div>
-            <div><a href="{% url "faq" %}">{% trans "Consulter la FAQ" %}</a></div>
         </div>
     </div>
 {% endblock %}
