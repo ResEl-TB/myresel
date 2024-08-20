@@ -56,7 +56,6 @@ urlpatterns = [
     url(r'^favicon.ico', RedirectView.as_view(url='/static/images/icons/favicon-96x96.png', permanent=False), name="favicon"),
 
     url(r'^inscription_zone/', inscription_zone_info, name="inscription-zone"),
-    url(r'^captive-portal/api', captive_portal_api, name="captive-portal-api"),
 
     url(r'^tv', Television.as_view(), name="tv-index"),
     url(r'^help-needed/', TemplateView.as_view(template_name='help_needed.html'), name="help-needed"),
@@ -70,6 +69,7 @@ urlpatterns = [
     # FIXME: For the moment we keep the API here, in the future we might make that
     # cleaner
     url(r'^_api/v1/status/$', StatusPageXhr.as_view(), name='network-status-xhr'),
+    url(r'^_api/v1/captive-portal', captive_portal_api, name="captive-portal-api"),
 
     url(r'^$', Home.as_view(), name='home'),
 
