@@ -8,8 +8,9 @@ from django.contrib.auth.decorators import user_passes_test
 from django.views.generic import RedirectView
 from django.views.generic import TemplateView
 from django.views.i18n import JavaScriptCatalog
-from pages.views import Home, Contact, NewsListe, inscription_zone_info, FaqList, faqVote, NewsDetail, Services, \
-    unsecure_set_language, NewsRSS, NewsAtom, StatusPageXhr, eggdrop, Television, graph_api
+from pages.views import Home, Contact, NewsListe, inscription_zone_info, captive_portal_api, \
+    FaqList, faqVote, NewsDetail, Services, unsecure_set_language, NewsRSS, NewsAtom, \
+    StatusPageXhr, eggdrop, Television, graph_api
 
 from myresel import settings
 
@@ -55,6 +56,7 @@ urlpatterns = [
     url(r'^favicon.ico', RedirectView.as_view(url='/static/images/icons/favicon-96x96.png', permanent=False), name="favicon"),
 
     url(r'^inscription_zone/', inscription_zone_info, name="inscription-zone"),
+    url(r'^captive-portal/api', captive_portal_api, name="captive-portal-api"),
 
     url(r'^tv', Television.as_view(), name="tv-index"),
     url(r'^help-needed/', TemplateView.as_view(template_name='help_needed.html'), name="help-needed"),
