@@ -10,8 +10,9 @@ from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.formfields import PhoneNumberField
 
+from myresel.settings import FORBIDDEN_EMAIL_DOMAINS
 from fonctions.generic import current_year
-from gestion_personnes.models import LdapUser, LdapOldUser, UserMetaData
+from gestion_personnes.models import LdapUser, LdapOldUser, UserMetaData, LdapRoom
 
 
 # TODO : merge personal info form and Inscription form
@@ -25,10 +26,27 @@ class InvalidUID(Exception):
     pass
 
 
+class EmailValidatorNotMicrosoft:
+    """
+    Permet d'interdire aux utilisateurs l'inscription ou la modification de leur
+    email de contact par un domaine Microsoft.
+
+    """
+
+    def __call__(self, value):
+        domain = value.split('@')[-1].lower()
+        if domain in FORBIDDEN_EMAIL_DOMAINS:
+            raise ValidationError(
+                _("Les adresses e-mail du domaine %(domain)s ne sont pas autorisées."),
+                params={'domain': domain},
+            )
+
+
 class PersonalInfoForm(forms.Form):
     CAMPUS = [('Brest', "Brest"), ('Rennes', 'Rennes'), ('Nantes', 'Nantes'),
               ('None', _('Je n\'habite pas à la Maisel'))]
-    BUILDINGS_BREST = [('I%d' % i, 'I%d' % i) for i in range(1, 13)]
+    BUILDINGS_BREST = [('I%d' % i, 'I%d' % i) for i in range(1, 16) if i != 13]
+    
     BUILDINGS_RENNES = [('S1', 'Studios'), ('C1', 'Chambres')]
     BUILDINGS_NANTES = [(letter, letter) for letter in ['N', 'P', 'Q', 'R', 'S', 'T']]
     BUILDINGS_NANTES += [('PC', 'Pitre Chevalier')]
@@ -46,6 +64,7 @@ class PersonalInfoForm(forms.Form):
             'class': 'form-control',
             'placeholder': _("Addresse e-mail"),
         }),
+        validators=[EmailValidator(), EmailValidatorNotMicrosoft()]
     )
 
     campus = forms.ChoiceField(
@@ -89,7 +108,7 @@ class PersonalInfoForm(forms.Form):
             'class': 'form-control',
             'placeholder': _("Numéro de téléphone"),
         }),
-        required = False
+        required=False
     )
 
     certify_truth = forms.BooleanField(
@@ -117,13 +136,23 @@ class PersonalInfoForm(forms.Form):
         building = cleaned_data.get("building")
         address = cleaned_data.get("address")
         room = cleaned_data.get("room")
+        room_obj = LdapRoom()
+        room_obj.number = str(room)
+        room_obj.building = building
+        
 
-        if campus in ['Brest', 'Rennes', 'Nantes'] and room is None:
-            self.add_error("room", _("Ce champ est obligatoire"))
+        if campus in ['Brest', 'Rennes', 'Nantes']:
+            if room is None:
+                self.add_error("room", _("Ce champ est obligatoire"))
+            if room_obj.exists() is False:
+                self.add_error('room', _("Ce numéro de chambre est inconnu.\n"
+                                        "Contactez-nous si vous pensez que c'est une erreur."))
         if campus == "Brest" and building not in [a[0] for a in self.BUILDINGS_BREST]:
             self.add_error('building', _("Veuillez choisir un bâtiment du campus de Brest"))
         if campus == "Rennes" and building not in [a[0] for a in self.BUILDINGS_RENNES]:
             self.add_error('building', _("Veuillez choisir un bâtiment du campus de Rennes"))
+        if campus == "Nantes" and building not in [a[0] for a in self.BUILDINGS_NANTES]:
+            self.add_error('building', _("Veuillez choisir un bâtiment du campus de Nantes"))
         if campus == "None" and address == "":
             self.add_error('address', _("Veuillez saisir votre addresse postale"))
 
@@ -131,7 +160,8 @@ class PersonalInfoForm(forms.Form):
 class InscriptionForm(forms.Form):
     CAMPUS = [('Brest', "Brest"), ('Rennes', 'Rennes'), ('Nantes', 'Nantes'),
               ('None', _('Je n\'habite pas à la Maisel'))]
-    BUILDINGS_BREST = [('I%d' % i, 'I%d' % i) for i in range(1, 13)]
+    BUILDINGS_BREST = [('I%d' % i, 'I%d' % i) for i in range(1, 16) if i != 13]
+
     BUILDINGS_RENNES = [('S1', 'Studios'), ('C1', 'Chambres')]
     BUILDINGS_NANTES = [(letter, letter) for letter in ['N', 'P', 'Q', 'R', 'S', 'T']]
     BUILDINGS_NANTES += [('PC', 'Pitre Chevalier')]
@@ -179,7 +209,7 @@ class InscriptionForm(forms.Form):
             'class': 'form-control',
             'placeholder': _("Addresse e-mail"),
         }),
-        validators=[EmailValidator()]
+        validators=[EmailValidator(), EmailValidatorNotMicrosoft()]
     )
 
     email_verification = forms.EmailField(
@@ -195,7 +225,7 @@ class InscriptionForm(forms.Form):
             'class': 'form-control',
             'placeholder': _("Choisissez un mot de passe sécurisé"),
         }),
-        validators=[MinLengthValidator(10),MaxLengthValidator(63)]
+        validators=[MinLengthValidator(10), MaxLengthValidator(63)]
         # 63 -> Longueur maximum sur certaines implémentations
     )
 
@@ -323,18 +353,25 @@ class InscriptionForm(forms.Form):
         building = cleaned_data.get("building")
         address = cleaned_data.get("address")
         room = cleaned_data.get("room")
+        room_obj = LdapRoom()
+        room_obj.number = str(room)
+        room_obj.building = building
+
         formation = cleaned_data.get("formation")
         category = cleaned_data.get("category")
 
         if (campus in ["Brest", "Rennes", "Nantes"]):
             if not room:
                 self.add_error("room", _("Ce champ est obligatoire"))
+            if room_obj.exists() is False:
+                self.add_error('room', _("Ce numéro de chambre est inconnu.\n"
+                                         "Contactez-nous si vous pensez que c'est une erreur."))
             if campus == "Brest" and building not in [a[0] for a in self.BUILDINGS_BREST]:
                 self.add_error('building', _("Veuillez choisir un bâtiment du campus de Brest"))
             if campus == "Rennes" and building not in [a[0] for a in self.BUILDINGS_RENNES]:
                 self.add_error('building', _("Veuillez choisir un bâtiment du campus de Rennes"))
             if campus == "Nantes" and building not in [a[0] for a in self.BUILDINGS_NANTES]:
-                self.add_error('building', _("Veuillez choisir un bâtiment du campus de Rennes"))
+                self.add_error('building', _("Veuillez choisir un bâtiment du campus de Nantes"))
         elif not address:
             self.add_error('address', _("Veuillez saisir votre addresse postale"))
 
@@ -343,6 +380,13 @@ class InscriptionForm(forms.Form):
 
         password1 = cleaned_data.get('password')
         password2 = cleaned_data.get('password_verification')
+
+        email1 = cleaned_data.get("email")
+        email2 = cleaned_data.get("email_verification")
+
+        if email1 is not None and email1 != email2:
+            self.add_error("email",
+                           ValidationError(message=_("Les adresses e-mail sont différentes."), code="DIFFERENT EMAIL"))
 
         if password1 is not None and password1 != password2:
             self.add_error('password',
@@ -487,7 +531,7 @@ class ResetPwdForm(forms.Form):
             'class': 'form-control',
             'placeholder': _("Choisissez un mot de passe sécurisé"),
         }),
-        validators=[MinLengthValidator(7),MaxLengthValidator(50)]
+        validators=[MinLengthValidator(7), MaxLengthValidator(50)]
     )
 
     password_verification = forms.CharField(
@@ -500,12 +544,6 @@ class ResetPwdForm(forms.Form):
 
     def clean(self):
         cleaned_data = super(ResetPwdForm, self).clean()
-
-        email1 = cleaned_data.get('email')
-        email2 = cleaned_data.get('email_verification')
-        if email1 != email2:
-            self.add_error("email",
-                           ValidationError(message=_("Les adresses e-mail sont différentes."), code="DIFFERENT EMAIL"))
 
         password1 = cleaned_data.get('password')
         password2 = cleaned_data.get('password_verification')
@@ -578,14 +616,14 @@ class SendUidForm(forms.Form):
                    "Vous pourrez vous connecter à votre tableau de bord en cliquant sur le lien suiviant : %(url)s\n\n" +
                    "------------------------\n\n" +
                    "Si vous pensez que vous recevez cet e-mail par erreur, veuillez l'ignorer. Dans tous les cas, n'hésitez pas à nous contacter " +
-                   "à support@resel.fr pour toute question.") % {'uid': user.uid, 'url': request.build_absolute_uri(reverse('login'))}
-            ,
+                   "à support@resel.fr pour toute question.") % {'uid': user.uid, 'url': request.build_absolute_uri(reverse('login'))},
             from_email="secretaire@resel.fr",
             reply_to=["support@resel.fr"],
             to=[user.mail],
         )
 
         user_email.send()
+
 
 class RoutingMailForm(forms.Form):
     new_routing_address = forms.EmailField(label='', required=False)

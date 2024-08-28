@@ -7,7 +7,7 @@
 <div class="container">
 <h1 class="page-header">{% trans "Nous contacter" %}</h1>
     <div class="row">
-
+        <p>{% trans "Pensez à consulter <a href=\"https://support.resel.fr/help\">nos guides d'aide</a> avant de nous contacter." %}</p>
         <div class="col-md-6">
             <form action="" method="post">
                 {% csrf_token %}
@@ -35,10 +35,10 @@
                 <li>{% trans "Par e-mail : " %}<a href="mailto:support@resel.fr">support@resel.fr</a></li>
                 <li>{% trans "Sur IRC sur le réseau " %}<a href="https://www.rezosup.org/">RezoSup</a> channel #ResEl</li>
             </ul>
-            <h3>{% trans "Les permanences" %} <small><span class="label label-default">{% trans "Campus de Brest uniquement" %}</span></small></h3>
+            <h3>{% trans "Les permanences" %} <small><span class="label label-default">{% trans "Campus de Brest et de Nantes uniquement" %}</span></small></h3>
 
             <p>{% blocktrans %}
-                Nous tenons régulièrement (hors vacances) des <b>permanences au Foyer des Élèves</b>.
+                Nous tenons régulièrement (hors vacances) des <b>permanences au Foyer des Élèves (Brest) et à la Maison des Élèves (Nantes)</b>.
 		Un administrateur ResEl pourra venir répondre à vos questions et résoudre vos problèmes de connexion.</p>
             {% endblocktrans %}
             <h3>{% trans "Adresse postale" %}</h3>

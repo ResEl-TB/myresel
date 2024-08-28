@@ -5,32 +5,12 @@ set -e
 ROOT=/srv/www/resel.fr/
 PYTHON=/srv/www/resel.fr/env/bin/python
 PIP=/srv/www/resel.fr/env/bin/pip
-
-echo ''
-echo '======================================================================'
-echo '               script de déployement v2.3                             '
-echo '======================================================================'
-echo ''
-
-echo ''
-echo '======================================================================'
-echo '> Téléchargement de la dernière version de myresel'
 cd ${ROOT}
-sudo chown -R www-data:www-data .git/
-git pull
 
 echo ''
 echo '======================================================================'
 echo '> Mise à jour des dépendances python'
 ${PIP} install -Uqr requirements.txt
-
-echo ''
-echo '======================================================================'
-echo '> Mise à jour de la base de données'
-echo '>> Désactivé car risqué, faites-le à la main si vous le désirez'
-echo '>> Par exemple faites sur skynet:'
-echo '>> `\$ python manage.py migrate`'
-# ${PYTHON} manage.py migrate --noinput
 
 echo ''
 echo '======================================================================'
@@ -60,4 +40,4 @@ sudo systemctl restart rq-scheduler.service
 sudo systemctl restart rq-worker.service
 
 echo ''
-echo '> Déployement done'
+echo '> Reloading done'

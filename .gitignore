@@ -1,4 +1,5 @@
 # Config file
+**/.vscode
 
 # Python related stuff
 __pycache__
@@ -37,3 +38,10 @@ media/eggdrop/
 
 .coverage
 /node_modules
+
+# Deploy related stuf
+**/env
+**/_env
+*.log
+*.sql
+*.ldif

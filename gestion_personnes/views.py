@@ -55,7 +55,7 @@ class Inscription(View):
                 user = form.to_ldap_user()
             except InvalidUID:
                 messages.error(request, _("Une erreur s'est produite lors de la création de vos identifiants. "
-                                          "Veuillez contacter un administeur."))
+                                          "Veuillez contacter un administrateur."))
                 return render(request, self.template_name, {'form': form})
             request.session['logup_user'] = user.to_json()
             return HttpResponseRedirect(reverse('gestion-personnes:cgu'))

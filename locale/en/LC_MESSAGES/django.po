@@ -3264,6 +3264,10 @@ msgstr "Sandwich degree (FISA/FIP/FIL/FIT)"
 msgid "Addresse e-mail"
 msgstr "Email address"
 
+#: gestion_personnes/forms.py:48
+msgid "Les adresses e-mail du domaine %(domain)s ne sont pas autorisées."
+msgstr "Email adresses from the domain %(domain)s are forbidden."
+
 #: gestion_personnes/forms.py:72 gestion_personnes/forms.py:253
 msgid "N° de Chambre"
 msgstr "Room n°"
@@ -3293,6 +3297,12 @@ msgstr "Choose a curriculum"
 msgid "Ce champ est obligatoire"
 msgstr "This field is mandatory"
 
+#: gestion_personnes/forms.py:152 gestion_personnes/forms.py:368
+msgid "Ce numéro de chambre est inconnu.\n"
+"Contactez-nous si vous pensez que c'est une erreur."
+msgstr "This room number is unknown.\n"
+"Please contact us if you think this is a mistake."
+
 #: gestion_personnes/forms.py:124 gestion_personnes/forms.py:333
 msgid "Veuillez choisir un bâtiment du campus de Brest"
 msgstr "Choose a building in the Brest campus"
@@ -3301,6 +3311,10 @@ msgstr "Choose a building in the Brest campus"
 #: gestion_personnes/forms.py:337
 msgid "Veuillez choisir un bâtiment du campus de Rennes"
 msgstr "Choose a building in the Rennes Campus"
+
+#: gestion_personnes/forms.py:159 gestion_personnes/forms.py:375 
+msgid "Veuillez choisir un bâtiment du campus de Nantes"
+msgstr "Choose a building in the Nantes Campus"
 
 #: gestion_personnes/forms.py:128 gestion_personnes/forms.py:339
 msgid "Veuillez saisir votre addresse postale"
@@ -3601,7 +3615,7 @@ msgid ""
 msgstr ""
 "\n"
 "                <p>With your email address, we will be able to send your "
-"ResEl IP.</p>\n"
+"ResEl ID.</p>\n"
 "                <p>Note : The ResEl cannot recover your password. However, "
 "you can always ask to reset it.</p>\n"
 "            "
@@ -4180,6 +4194,10 @@ msgstr "Become a ResEl Admin!"
 msgid "Nous contacter"
 msgstr "Contact us"
 
+#: pages/templates/pages/contact.html:9
+msgid "Pensez à consulter <a href=\"https://support.resel.fr/help\">nos guides d'aide</a> avant de nous contacter."
+msgstr "Don't forget to check <a href=\"https://support.resel.fr/help\">our help guides</a> before contacting us."
+
 #: pages/templates/pages/contact.html:31
 msgid "Autrement"
 msgstr "Otherwise"
@@ -4201,20 +4219,20 @@ msgid "Les permanences"
 msgstr "Meet us in person"
 
 #: pages/templates/pages/contact.html:38
-msgid "Campus de Brest uniquement"
-msgstr "Brest campus only"
+msgid "Campus de Brest et de Nantes uniquement"
+msgstr "Brest and Nantes campuses only"
 
 #: pages/templates/pages/contact.html:40
 msgid ""
 "\n"
 "                Nous tenons régulièrement (hors vacances) des <b>permanences "
-"au Foyer des Élèves</b>.\n"
+"au Foyer des Élèves (Brest) et à la Maison des Élèves (Nantes)</b>.\n"
 "\t\tUn administrateur ResEl pourra venir répondre à vos questions et "
 "résoudre vos problèmes de connexion.</p>\n"
 "            "
 msgstr ""
 "\n"
-"You can <b>meet us at the Foyer des Élèves</b> (outside school vacations). A "
+"You can <b>meet us at the Foyer des Élèves (Brest) and at the Maison des Élèves (Nantes)</b> (outside school vacations). A "
 "ResEl administrator will come and answer your questions and solve your "
 "connection problems.</p>"
 
@@ -4285,11 +4303,11 @@ msgstr "How to sign up?"
 
 #: pages/templates/pages/home/home.html:77
 msgid ""
-"Le ResEl relie à Internet 500 chambres à Brest, 170 chambres à Rennes, et "
-"bientôt 640 chambres à Nantes"
+"Le ResEl relie à Internet 570 chambres à Brest, 170 chambres à Rennes, et "
+"640 chambres à Nantes"
 msgstr ""
-"The ResEl connects to the Internet 500 rooms in Brest, 170 rooms in Rennes, "
-"and soon 640 rooms in Nantes"
+"The ResEl connects to the Internet 570 rooms in Brest, 170 rooms in Rennes, "
+"and 640 rooms in Nantes"
 
 #: pages/templates/pages/home/home.html:87
 msgid ""
@@ -4891,8 +4909,8 @@ msgid "Aucun article"
 msgstr "No article"
 
 #: templates/base.html:117 templates/base.html:262
-msgid "Contact"
-msgstr "Contact"
+msgid "Assistance"
+msgstr "Support"
 
 #: templates/base.html:135
 msgid "Listes de diffusion"

@@ -34,7 +34,8 @@ Et si vraiment la nuit vous ne voulez plus dormir :
 
 
 À noter également qu'une connaissance de l'architecture du ResEl vous est nécessaire.
-Vous pouvez trouver toutes les infos sur le [wiki administrateur](https://wiki.resel.fr)
+Vous pouvez trouver toutes les infos sur le [wiki administrateur](https://wiki.resel.fr) ou 
+sur la nouvelle documentation [en cours de réalisation](https://doc.resel.fr).
 
 
 # Tests
@@ -79,7 +80,7 @@ que fait le code, mais pourquoi ce bout de code existe.
 Vous venez de faire une modification du code et vous désirez voir la
 modification sur le site ? 
 
-Pour cela il faut que votre code passe les [tests automatisés](https://git.resel.fr/resel/myresel/pipelines). Ensuite [créez une merge request](https://git.resel.fr/resel/myresel/merge_requests/new?merge_request[source_branch]=master&merge_request[source_project_id]=2&merge_request[target_branch]=deploy&merge_request[target_project_id]=2) de la branche [master](https://git.resel.fr/resel/myresel/tree/master) vers la branche [deploy](https://git.resel.fr/resel/myresel/tree/deploy).
+Pour cela il faut que votre code passe les [tests automatisés](https://git.resel.fr/resel/applications-utilisateurs/myresel/pipelines). Ensuite [créez une merge request](https://git.resel.fr/resel/applications-utilisateurs/myresel/merge_requests/new?merge_request[source_branch]=master&merge_request[source_project_id]=2&merge_request[target_branch]=deploy&merge_request[target_project_id]=2) de la branche [master](https://git.resel.fr/resel/applications-utilisateurs/myresel/tree/master) vers la branche [deploy](https://git.resel.fr/resel/applications-utilisateurs/myresel/tree/deploy).
 
 Si tous les tests se passent bien, un hook sera executé pour demander aux
 serveurs de puller le nouveau code de la branche `deploy`. 
