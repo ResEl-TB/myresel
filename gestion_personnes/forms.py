@@ -83,10 +83,9 @@ class PersonalInfoForm(forms.Form):
         }),
     )
 
-    room = forms.IntegerField(
-        min_value=0,
-        max_value=799,
-        widget=forms.NumberInput(attrs={
+    room = forms.CharField(
+        max_length=4,
+        widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': _("N° de Chambre"),
         }),
@@ -275,10 +274,9 @@ class InscriptionForm(forms.Form):
         required=False,
     )
 
-    room = forms.IntegerField(
-        min_value=0,
-        max_value=799,
-        widget=forms.NumberInput(attrs={
+    room = forms.CharField(
+        max_length=4,
+        widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': _("N° de Chambre"),
         }),
