@@ -4908,7 +4908,11 @@ msgstr "ResEl logo"
 msgid "Aucun article"
 msgstr "No article"
 
-#: templates/base.html:117 templates/base.html:262
+#: templates/base.html:266
+msgid "Contact"
+msgstr "Contact"
+
+#: templates/base.html:121
 msgid "Assistance"
 msgstr "Support"
 
