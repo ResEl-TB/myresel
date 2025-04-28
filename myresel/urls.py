@@ -8,8 +8,9 @@ from django.contrib.auth.decorators import user_passes_test
 from django.views.generic import RedirectView
 from django.views.generic import TemplateView
 from django.views.i18n import JavaScriptCatalog
-from pages.views import Home, Contact, NewsListe, inscription_zone_info, FaqList, faqVote, NewsDetail, Services, \
-    unsecure_set_language, NewsRSS, NewsAtom, StatusPageXhr, eggdrop, Television, graph_api
+from pages.views import Home, Contact, NewsListe, inscription_zone_info, captive_portal_api, \
+    FaqList, faqVote, NewsDetail, Services, unsecure_set_language, NewsRSS, NewsAtom, \
+    StatusPageXhr, eggdrop, Television, graph_api
 
 from myresel import settings
 
@@ -68,6 +69,7 @@ urlpatterns = [
     # FIXME: For the moment we keep the API here, in the future we might make that
     # cleaner
     url(r'^_api/v1/status/$', StatusPageXhr.as_view(), name='network-status-xhr'),
+    url(r'^_api/v1/captive-portal', captive_portal_api, name="captive-portal-api"),
 
     url(r'^$', Home.as_view(), name='home'),
 
