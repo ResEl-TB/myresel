@@ -113,7 +113,7 @@ LAPUTEX_WAITING_TIME = 5    # In seconds
 LAPUTEX_MAX_ATTEMPTS = 5
 
 # ICINGA CONF
-ICINGA_BASE_URL = "https://icinga.resel.fr"
+ICINGA_BASE_URL = "https://icinga.resel.fr:5666"
 ICINGA_AUTH = ('testuser', 'testpass')
 
 ####
