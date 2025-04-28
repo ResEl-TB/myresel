@@ -88,7 +88,7 @@ class Home(View):
         #    random.seed(a=date.day + 100 * date.month + 10000*date.year)
         #    clubs = random.sample(clubs, 3)
         #args_for_response['clubs'] = clubs
-        clubs = []
+        args_for_response["clubs"] = []
 
         # Load some birthdays
         #birthdays_users = ListBirthdays.get_today_birthdays()
