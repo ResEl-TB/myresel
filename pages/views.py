@@ -88,7 +88,7 @@ class Home(View):
         #    random.seed(a=date.day + 100 * date.month + 10000*date.year)
         #    clubs = random.sample(clubs, 3)
         #args_for_response['clubs'] = clubs
-        clubs = []
+        args_for_response["clubs"] = []
 
         # Load some birthdays
         #birthdays_users = ListBirthdays.get_today_birthdays()
@@ -231,6 +231,27 @@ def inscription_zone_info(request):
         'pages/inscription_zone_info.html',
         {}
     )
+
+
+@resel_required
+def captive_portal_api(request):
+    """ 
+    This view is used for RFC 8908 compliance.
+    The JSON response is used to determine where is the captive portal
+    for the device to fetch it (i.e : inscription_zone).
+    """
+    if (request.network_data['subnet'] not in ['EXPN', 'REGN'] or
+            request.network_data['is_logged_in']):
+        return HttpResponseRedirect(reverse('home'))
+    response_data = {
+        "captive": True,
+        "user-portal-url": request.build_absolute_uri(reverse(settings.INSCRIPTION_ZONE_FALLBACK_URLNAME)),
+        "venue-info-url": request.build_absolute_uri(reverse('home')),
+        "seconds-remaining": 7200,
+        "can-extend-session": True
+    }
+    return HttpResponse(json.dumps(response_data), content_type="application/json")
+
 
 class FaqList(ListView):
     """ Vue appelée pour afficher les F.A.Q. au niveau du ResEl """
