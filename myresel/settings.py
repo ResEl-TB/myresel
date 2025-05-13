@@ -65,6 +65,7 @@ INSCRIPTION_ZONE_ALLOWED_URLNAME = [
     'logout',
     'contact',
     'set_language',
+    'captive-portal-api',
     INSCRIPTION_ZONE_FALLBACK_URLNAME]
 INSCRIPTION_ZONE_ALLOWED_URLNAMESPACE = [
     'gestion-machines',
