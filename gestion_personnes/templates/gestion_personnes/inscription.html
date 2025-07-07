@@ -39,6 +39,11 @@
                         {{ form.formation }}
                         {% if form.formation.errors %}<span class="help-block">{{ form.formation.errors }}</span>{% endif %}
                     </div>
+                    <div class="form-group hidden{% if form.voucher.errors %} has-error{% endif %}" id="voucher">
+                        <label for="id_voucher" data-toggle="tooltip" title="{% trans "Un numéro de coupon est nécessaire pour valider votre inscription" %}">{% trans "Numéro de coupon" %} <span class="required"></span></label>
+                        {{ form.voucher }}
+                        {% if form.voucher.errors %}<span class="help-block">{{ form.voucher.errors }}</span>{% endif %}
+                    </div>
                     <div class="form-group center italic hidden" id="manual-verification">Un accès à Internet à titre gracieux vous sera fourni après vérification.</div>
                     <div class="form-group center italic hidden" id="no-internet">Vous n’êtes pas éligible à un compte ResEl.</div>
                 </fieldset>
@@ -197,6 +202,7 @@
         function update_category() {
             const category = document.getElementById('form').category.value;
             const formation = document.getElementById('formation');
+            const voucher = document.getElementById('voucher');
             const no_internet = document.getElementById('no-internet');
             const not_other = [...document.getElementsByClassName('not-other')];
             const manual_verification = document.getElementById('manual-verification');
@@ -208,6 +214,10 @@
                 manual_verification.classList.remove('hidden');
             else
                 manual_verification.classList.add('hidden');
+            if (category == 'event')
+                voucher.classList.remove('hidden');
+            else
+                voucher.classList.add('hidden');
             if (category == 'other') {
                 not_other.forEach(e => e.classList.add('hidden'));
                 no_internet.classList.remove('hidden');
