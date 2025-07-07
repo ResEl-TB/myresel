@@ -211,6 +211,7 @@ class InscriptionForm(forms.Form):
             'placeholder': _("Numéro de coupon"),
         }),
         validators=[MaxLengthValidator(50)],
+        required=False,
     )
 
     email = forms.EmailField(
