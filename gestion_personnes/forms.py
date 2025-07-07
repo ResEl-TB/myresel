@@ -12,7 +12,7 @@ from phonenumber_field.formfields import PhoneNumberField
 
 from myresel.settings import FORBIDDEN_EMAIL_DOMAINS
 from fonctions.generic import current_year
-from gestion_personnes.models import LdapUser, LdapOldUser, UserMetaData, LdapRoom
+from gestion_personnes.models import LdapUser, LdapOldUser, UserMetaData, LdapRoom, LdapVoucher
 
 
 # TODO : merge personal info form and Inscription form
@@ -169,7 +169,8 @@ class InscriptionForm(forms.Form):
     BUILDINGS = BUILDINGS_BREST + BUILDINGS_RENNES + BUILDINGS_NANTES
 
     CATEGORIES = [('student', _('Étudiant(e)')), ('employee', _('Personnel IMT Atlantique')),
-                  ('maisel', _('Employé(e) Maisel/MDE')), ('other', _('Autre'))]
+                  ('maisel', _('Employé(e) Maisel/MDE')), ('event', _('Invité(e)')),
+                  ('other', _('Autre'))]
 
     FORMATIONS = [
         ('FIG', _('Généraliste (FISE/FIG)')),
@@ -201,6 +202,15 @@ class InscriptionForm(forms.Form):
     formation = forms.ChoiceField(
         choices=FORMATIONS,
         widget=ToggleSelect(),
+        required=False,
+    )
+
+    voucher = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': _("Numéro de coupon"),
+        }),
+        validators=[MaxLengthValidator(50)],
         required=False,
     )
 
@@ -343,7 +353,7 @@ class InscriptionForm(forms.Form):
 
     def clean_birth_date(self):
         birth_date = self.cleaned_data['birth_date']
-        if not re.match(r'(\d{2}|XX)/(\d{2}|XX)/(\d{4}|XXXX)', birth_date):
+        if not re.match(r'(\d{2}|XX)/(\d{2}|XX)/(\d{4}|XXXX)', birth_date, re.IGNORECASE):
             raise ValidationError(message=_("Date de naissance incorrecte"), code="WRONG_BIRTHDATE")
         return birth_date
 
@@ -359,6 +369,7 @@ class InscriptionForm(forms.Form):
 
         formation = cleaned_data.get("formation")
         category = cleaned_data.get("category")
+        voucher = cleaned_data.get("voucher")
 
         if (campus in ["Brest", "Rennes", "Nantes"]):
             if not room:
@@ -378,6 +389,12 @@ class InscriptionForm(forms.Form):
         if category == "student" and formation not in [a[0] for a in self.FORMATIONS]:
             self.add_error('formation', _("Veuillez choisir une formation"))
 
+        if category == "event":
+            self.check_voucher(voucher)
+            self.voucher_id = voucher
+        else:
+            self.voucher_id = None
+
         password1 = cleaned_data.get('password')
         password2 = cleaned_data.get('password_verification')
 
@@ -391,6 +408,19 @@ class InscriptionForm(forms.Form):
         if password1 is not None and password1 != password2:
             self.add_error('password',
                            ValidationError(message=_("Les mots de passes sont différents."), code="NOT SAME PASSWORD"))
+
+    def check_voucher(self, voucher_id):
+        """
+        Check whether the given voucher exists in the LDAP
+        :param voucher_id: The voucher ID
+        :return: Whether the voucher is valid
+        """
+        for voucher in LdapVoucher.filter(pk=voucher_id):
+            if voucher.owner == '':
+                return None
+            self.add_error('voucher', _("Ce coupon a déjà été utilisé"))
+            return None
+        self.add_error('voucher', _("Veuillez entrer un numéro de coupon valide"))
 
     @staticmethod
     def get_free_uid(first_name, last_name):

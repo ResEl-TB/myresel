@@ -20,7 +20,7 @@ from django.views.generic import FormView, View
 from fonctions import ldap
 from fonctions.decorators import resel_required
 from gestion_personnes.async_tasks import send_mails
-from gestion_personnes.models import LdapUser, LdapOldUser, UserMetaData
+from gestion_personnes.models import LdapUser, LdapOldUser, LdapVoucher, UserMetaData
 
 from myresel.settings import FREE_DURATION
 
@@ -58,6 +58,7 @@ class Inscription(View):
                                           "Veuillez contacter un administrateur."))
                 return render(request, self.template_name, {'form': form})
             request.session['logup_user'] = user.to_json()
+            request.session['logup_user_voucher'] = form.voucher_id
             return HttpResponseRedirect(reverse('gestion-personnes:cgu'))
 
         return render(request, self.template_name, {'form': form})
@@ -105,6 +106,11 @@ class InscriptionCGU(View):
             # Add 3 free weeks :
             user.end_cotiz = datetime.now().astimezone() + FREE_DURATION  # That does not survive the json parser
             user.save()
+
+            if request.session['logup_user_voucher']:
+                voucher = LdapVoucher.get(pk=request.session['logup_user_voucher'])
+                voucher.owner = user.uid
+                voucher.save()
 
             user_meta, __ = UserMetaData.objects.get_or_create(uid=user.uid)
             user_meta.send_email_validation(user.mail, request.build_absolute_uri)

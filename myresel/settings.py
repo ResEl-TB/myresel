@@ -65,6 +65,7 @@ INSCRIPTION_ZONE_ALLOWED_URLNAME = [
     'logout',
     'contact',
     'set_language',
+    'captive-portal-api',
     INSCRIPTION_ZONE_FALLBACK_URLNAME]
 INSCRIPTION_ZONE_ALLOWED_URLNAMESPACE = [
     'gestion-machines',
@@ -75,7 +76,7 @@ INSCRIPTION_ZONE_ALLOWED_URLNAMESPACE = [
 #
 
 NUMBER_NEWS_IN_HOME = 4
-FREE_DURATION = timedelta(days=7)
+FREE_DURATION = timedelta(days=15)
 
 # Cookies settings
 SESSION_COOKIE_AGE = 365 * 24 * 60 * 60

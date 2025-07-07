@@ -288,3 +288,16 @@ class LdapRoom(ldapback.models.LdapModel):
         res = LdapRoom._search(('number', '', '=', str(self.number)), ('building', '', '=', str(self.building)))
 
         return len(res) > 0
+
+
+class LdapVoucher(ldapback.models.LdapModel):
+    """
+    The class for event vouchers
+    """
+
+    base_dn = settings.LDAP_DN_VOUCHERS
+    object_classes = ["reselVoucher"]
+
+    id_ = LdapCharField(db_column='voucherid', object_classes=object_classes, pk=True)
+    owner = LdapCharField(db_column='voucherowner', object_classes=object_classes)
+    expiry = LdapDatetimeField(db_column='endinternet', object_classes=object_classes)
