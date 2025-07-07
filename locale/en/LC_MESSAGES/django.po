@@ -4517,7 +4517,7 @@ msgstr "Maisel/MDE employee"
 
 #: gestion_personnes/forms.py:172
 msgid "Invité(e)"
-msgstr ""
+msgstr "Guest"
 
 #: gestion_personnes/forms.py:184
 #: gestion_personnes/templates/gestion_personnes/inscription.html:28
