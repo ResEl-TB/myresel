@@ -352,7 +352,7 @@ class InscriptionForm(forms.Form):
 
     def clean_birth_date(self):
         birth_date = self.cleaned_data['birth_date']
-        if not re.match(r'(\d{2}|XX)/(\d{2}|XX)/(\d{4}|XXXX)', birth_date):
+        if not re.match(r'(\d{2}|XX)/(\d{2}|XX)/(\d{4}|XXXX)', birth_date, re.IGNORECASE):
             raise ValidationError(message=_("Date de naissance incorrecte"), code="WRONG_BIRTHDATE")
         return birth_date
 
