@@ -12,7 +12,7 @@ import stripe
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
+from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.urls import reverse
 from django.http import HttpResponseRedirect, Http404, HttpResponse
@@ -27,7 +27,6 @@ from django.views.decorators.csrf import csrf_exempt
 from tresorerie import async_tasks
 from fonctions import generic
 from fonctions.decorators import need_to_pay, able_to_pay, not_maisel
-from fonctions.ldap import get_user
 from tresorerie.models import Transaction, Product, StripeCustomer
 from gestion_personnes.models import LdapUser
 
