@@ -97,7 +97,7 @@ WARP10_TOKENS = {}
 
 STRIPE_API_KEY = "sk_test_Uk3Qcg8o0OTj8VHAG6NovqR9"
 STRIPE_PUBLIC_KEY = "pk_test_KE9qQquz3hhdRI54CcfBaukl"
-
+STRIPE_WEBHOOK_SECRET = "whsec_8bf654dg4dg5fd4fd68df4sdf6s8"
 
 # TRESO
 

@@ -13,18 +13,23 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
+from django.db import transaction
 from django.urls import reverse
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render, get_object_or_404
 from django.utils.datastructures import MultiValueDictKeyError
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _, get_language
 from django.views.generic import DetailView, View, ListView
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
 
 from tresorerie import async_tasks
 from fonctions import generic
 from fonctions.decorators import need_to_pay, able_to_pay, not_maisel
+from fonctions.ldap import get_user
 from tresorerie.models import Transaction, Product, StripeCustomer
+from gestion_personnes.models import LdapUser
 
 logger = logging.getLogger("default")
 
@@ -153,6 +158,16 @@ class Pay(View):
             currency="eur",
             description=transaction.full_name,
             customer=customer.id,
+            metadata={ # User info for the new webhook processing
+                'transaction_uuid': str(transaction.uuid),
+                'user_uid': request.ldap_user.uid,
+                'products_ids': ','.join(str(p.id) for p in products),
+                
+                'user_first_name': request.ldap_user.first_name,
+                'user_last_name': request.ldap_user.last_name,
+                'user_email': request.ldap_user.mail,
+                'user_address': request.ldap_user.postal_address,
+            }
         )
 
         c = {
@@ -173,196 +188,46 @@ class Pay(View):
         return render(request, self.template_name, c)
 
     def post(self, request, *args, **kwargs):
+        """Triggered when the user submits the payment form, main logic moved to webhooks"""
         user = request.ldap_user
-
-        transaction_uuid = uuid.UUID(request.session['transaction_uuid'])
-        transaction_total = request.session['transaction_total_stripe']
-        transaction_full_name = request.session['transaction_full_name']
-        payment_intent = stripe.PaymentIntent.retrieve(request.session['payment_intent'])
-        products_id = request.session['products_id']
-        main_product_id = self.kwargs["product_id"]
-        products = []
-
-        try:
-            Transaction.objects.get(uuid=transaction_uuid)
-            return HttpResponseRedirect(reverse('tresorerie:historique'))
-        except ObjectDoesNotExist as e:
-            pass
-
-        for pk in products_id:
-            products.append(Product.objects.get(pk=pk))
-
+        
         try:
             given_uuid = uuid.UUID(request.POST['uuid'])
-        except MultiValueDictKeyError as e:
-            logger.error("%s a tenté de contourner le paiement. Erreur: %s" % (user.uid, e),
-                    extra={
-                        "transaction_uuid": transaction_uuid,
-                        "transaction_name": transaction_full_name,
-                        "uid": user.uid,
-                        "ip": request.network_data['ip'],
-                        "end_internet": user.end_cotiz,
-                        'message_code': 'STRIPE_FIREWALL_ERROR',
-                    })
-            messages.error(request, _("Il semblerait que vous ayez tenté de contourner le "
-                                      "paiement. Cette action a été signalée."))
-            return HttpResponseRedirect(reverse('tresorerie:pay', kwargs={'product_id': main_product_id}))
-
-        adhere = 'A' in (p.type_produit for p in products)
-
-        if given_uuid != transaction_uuid:
-            # TODO: show error message
-            logger.warning(
-                "L'uuid d'une transaction n'est pas correct. donné : %s attendu : %s" % (given_uuid, transaction_uuid),
-                extra={
-                    "given_uuid": given_uuid,
-                    "transaction_uuid": transaction_uuid,
-                    'message_code': 'INVALID_TRANSACTION_UUID',
-                }
-            )
-            messages.error(request, _("Une erreur s'est produite lors de la commande. Veuillez contacter un administrateur."))
-            return HttpResponseRedirect(reverse('tresorerie:pay', kwargs={'product_id': main_product_id}))
-
-        payment_status = payment_intent.status
-
-        if payment_status == 'succeeded':
-
-            # TODO: move everything here somewhere more appropriate
-            # Update the user internet access
-            if adhere:
-                year = generic.current_year()
-                # Delete blacklist and add this year:
-                user.cotiz = [c for c in user.cotiz if c.lower() != "none" + str(year)] + [str(year)]
-
-            month_numbers = sum(p.duree for p in products if p.type_produit == 'F')
-
-            # For users who don't have an end_cotiz field
-            if user.end_cotiz is None:
-                user.end_cotiz = datetime.now().astimezone()
-
-            start = max(user.end_cotiz, datetime.now().astimezone())
-            user.end_cotiz = start + relativedelta(months=month_numbers)
-            user.save()
-
-            # Insert the transaction in the database
-            transaction = Transaction()
-            transaction.uuid = transaction_uuid
-            transaction.moyen = "CB"
-            transaction.utilisateur = user.uid
-            transaction.total = transaction_total / 100
-            transaction.stripe_id = payment_intent.id
-            transaction.save()  # Because a UUID is needed before adding products
-            for p in products:
-                # pylint: disable=no-member
-                transaction.produit.add(p)
-
-            transaction.save()
-
-
-            # Gather information and launch tasks for sending invoice
-            user_datas = {
-                'first_name': request.ldap_user.first_name,
-                'last_name' : request.ldap_user.last_name,
-                'uid': request.ldap_user.uid,
-                'email' : request.ldap_user.mail,
-                'address' : request.ldap_user.postal_address,
+            session_uuid = uuid.UUID(request.session['transaction_uuid'])
+        except (MultiValueDictKeyError, ValueError, KeyError):
+            messages.error(request, _("Payment validation error."))
+            return HttpResponseRedirect(reverse('tresorerie:choose-product'))
+        
+        if given_uuid != session_uuid:
+            messages.error(request, _("Payment validation error."))
+            return HttpResponseRedirect(reverse('tresorerie:choose-product'))
+        
+        # Verify that the PaymentIntent exists and belongs to us
+        try:
+            payment_intent = stripe.PaymentIntent.retrieve(request.session['payment_intent'])
+            if payment_intent.metadata.get('user_uid') != user.uid:
+                messages.error(request, _("Security error detected."))
+                return HttpResponseRedirect(reverse('tresorerie:choose-product'))
+        except stripe.error.InvalidRequestError:
+            messages.error(request, _("Invalid payment."))
+            return HttpResponseRedirect(reverse('tresorerie:choose-product'))
+        
+        # if we don't detect any message, we assume the payment is being processed
+        messages.info(request, _(
+            "Your payment is being processed. "
+            "You will receive a confirmation email within a few minutes."
+        ))
+        
+        logger.info(
+            f"Payment submitted: uid={user.uid}, uuid={session_uuid}",
+            extra={
+                'uid': user.uid,
+                'transaction_uuid': str(session_uuid),
+                'message_code': 'PAYMENT_SUBMITTED'
             }
-            transaction_datas = {
-                'uuid': transaction.uuid,
-                'date_creation': transaction.date_creation,
-                'date_paiement': transaction.date_creation,
-                'statut': transaction.statut,
-                'moyen': transaction.get_moyen_display(),
-                'total': transaction.total,
-                'admin': transaction.admin,
-                'categories': [
-                    {'name': cat, 'products': prods} for cat, prods in transaction.get_products_by_cat()
-                ],
-            }
-            user_lang = get_language().split('-')[0]
-
-            logger.info(
-                "Paiement validé par le système, uid: %s, uuid: %s, stripe id : %s" %(request.ldap_user.uid, transaction.uuid, transaction.stripe_id),
-                extra={
-                    "uid": request.ldap_user.uid,
-                    "transaction_uuid": transaction.uuid,
-                    "transaction_stripe_id": transaction.stripe_id,
-                    'message_code': 'SUCCESSFUL_PAYMENT',
-                }
-            )
-            messages.success(request, _("Vous venez de payer votre accès au ResEl, vous devriez recevoir sous peu un email avec votre facture."))
-
-            # Send a french version for treasurer and one in the user's language
-            try:
-                queue = django_rq.get_queue()
-                if user_lang == 'fr':
-                    queue.enqueue_call(
-                        async_tasks.generate_and_email_invoice,
-                        args=(user_datas, transaction_datas,
-                            'fr', 'user-treasurer'),
-                    )
-                else:
-                    queue.enqueue_call(
-                        async_tasks.generate_and_email_invoice,
-                        args=(user_datas, transaction_datas,
-                            'fr', 'treasurer'),
-                    )
-                    queue.enqueue_call(
-                        async_tasks.generate_and_email_invoice,
-                        args=(user_datas, transaction_datas,
-                            user_lang, 'user'),
-                    )
-            except Exception as e:
-                logger.error(
-                    "ERROR_ENQUEING_INVOICE: "
-                    "Une erreur s'est produite lors de l'ajout de la facture "
-                    "à la queue de facturation. L'utilisateur sera bien "
-                    "débité, mais il ne recevra pas de facture par mail. "
-                    "uid: %s "
-                    "uuid: %s "
-                    "stripe_id: %s "
-                    "error: %s " % (
-                        request.ldap_user.uid,
-                        transaction.uuid,
-                        transaction.stripe_id,
-                        e,
-                    ),
-                    extra={
-                        'uid': request.ldap_user.uid,
-                        'transaction_uuid': transaction.uuid,
-                        'transaction_stripe_id': transaction.stripe_id,
-                        'error': e,
-                        'message_code': 'ERROR_ENQUEING_INVOICE',
-                    }
-                )
-
-
-            return HttpResponseRedirect(reverse('tresorerie:historique'))
-
-        else:
-            ERRORS = {
-                'requires_source': _("Le paiement n'a pas été effectué"),
-                'requires_payment_method': _("Le paiement n'a pas été effectué"),
-                'requires_confirmation': _("Le paiement n'a pas été confirmé"),
-                'requires_source_action': _("Le paiement n'a pas été authentifié"),
-                'requires_action': _("Le paiement n'a pas été authentifié"),
-                'processing': _("Le paiement est en attente. Veuillez contacter un administrateur dans une heure."),
-                'requires_capture': _("Une erreur est survenue. Veuillez contacter un administrateur."),
-                'canceled': _("Le paiement a été annulé"),
-            }
-
-            logger.error(
-                "Paiement échoué, erreur : %s, uid : %s" % (payment_status,
-                                                            request.ldap_user.uid),
-                extra={
-                    "error_code": payment_status,
-                    "uid": request.ldap_user.uid,
-                    'message_code': 'STRIPE_PAYMENT_ERROR',
-                }
-            )
-            messages.error(request, ERRORS[payment_status])
-            return HttpResponseRedirect(reverse('tresorerie:pay', kwargs={'product_id': main_product_id}))
-
+        )
+        
+        return HttpResponseRedirect(reverse('tresorerie:historique'))
 
 class History(ListView):
     """
@@ -378,6 +243,225 @@ class History(ListView):
 
     def get_queryset(self):
         return Transaction.objects.all().filter(utilisateur__exact=self.request.user).order_by('date_creation')
+
+
+@method_decorator(csrf_exempt, name='dispatch') # this is an api so we don't want CSRF (im not CSRF-ist I promise)
+@method_decorator(require_POST, name='dispatch')
+class StripeWebhookView(View):
+    """
+    Stripe webhook handler to improve payment security & reliability
+    """
+    
+    def dispatch(self, *args, **kwargs):
+        return super(StripeWebhookView, self).dispatch(*args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        """Handle Stripe webhook events"""
+
+        # check signature
+        payload = request.body
+        sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
+        
+        try:
+            event = stripe.Webhook.construct_event(
+                payload, sig_header, settings.STRIPE_WEBHOOK_SECRET
+            )
+        except ValueError as e:
+            logger.error(f"Webhook invalid payload: {e}")
+            return HttpResponse(status=400)
+        except stripe.error.SignatureVerificationError as e:
+            logger.error(f"Webhook invalid signature: {e}")
+            return HttpResponse(status=400)
+        
+        # Process events
+        if event['type'] == 'payment_intent.succeeded':
+            payment_intent = event['data']['object']
+            
+            try:
+                with transaction.atomic():
+                    self.process_successful_payment(payment_intent)
+            except ValueError as e:
+                # Client errors (invalid data) - don't retry
+                logger.error(
+                    f"Webhook validation error: {e}",
+                    extra={
+                        'stripe_payment_intent': payment_intent.id,
+                        'payment_intent_metadata': payment_intent.metadata,
+                        'message_code': 'WEBHOOK_VALIDATION_ERROR'
+                    }
+                )
+                return HttpResponse(status=400)
+            except Exception as e:
+                # Server errors (LDAP down, DB issues) - retry
+                logger.error(
+                    f"Webhook processing error: {e}",
+                    extra={
+                        'stripe_payment_intent': payment_intent.id,
+                        'payment_intent_metadata': payment_intent.metadata,
+                        'message_code': 'WEBHOOK_PROCESSING_ERROR'
+                    }
+                )
+                return HttpResponse(status=500)
+        
+        elif event['type'] == 'payment_intent.payment_failed':
+            payment_intent = event['data']['object']
+            logger.warning(
+                f"Payment failed via webhook: {payment_intent.id}",
+                extra={'stripe_payment_intent': payment_intent.id}
+            )
+        
+        return HttpResponse(status=200)
+    
+    def process_successful_payment(self, payment_intent):
+        """Process a successful payment via webhook"""
+        
+        # Retrieve metadata
+        metadata = payment_intent.metadata
+        transaction_uuid = uuid.UUID(metadata.get('transaction_uuid'))
+        user_uid = metadata.get('user_uid')
+        products_ids = [int(pid) for pid in metadata.get('products_ids', '').split(',') if pid]
+        
+        # Basic validation
+        if not all([transaction_uuid, user_uid, products_ids]):
+            raise ValueError("Incomplete metadata in PaymentIntent")
+   
+
+        # Check if this Stripe payment id has already been processed, we don't like replay attacks here sorry
+        existing_stripe_transaction = Transaction.objects.filter(stripe_id=payment_intent.id).first()
+        if existing_stripe_transaction:
+            logger.warning(
+                f"Stripe payment {payment_intent.id} already processed for transaction {existing_stripe_transaction.uuid}",
+                extra={
+                    'stripe_payment_intent': payment_intent.id,
+                    'existing_transaction_uuid': str(existing_stripe_transaction.uuid),
+                    'new_transaction_uuid': str(transaction_uuid),
+                    'message_code': 'WEBHOOK_DUPLICATE_STRIPE_ID'
+                }
+            )
+            return  
+
+
+
+        # Idempotent transaction uuid check
+        transaction_obj, created = Transaction.objects.get_or_create(
+            uuid=transaction_uuid,
+            defaults={
+                'moyen': "CB",
+                'utilisateur': user_uid,
+                'total': payment_intent.amount / 100,
+                'stripe_id': payment_intent.id,
+            }
+        )
+        
+        if not created:
+            logger.info(f"Transaction {transaction_uuid} already processed via webhook")
+            return  
+        
+        # Retrieve objects
+        try:
+            products = Product.objects.filter(id__in=products_ids)
+        except Exception as e:
+            raise ValueError(f"Products not found: {e}")
+    
+  
+        
+        # This is to ensure that the amount matches the products selected
+        expected_amount = sum(p.prix for p in products)
+        if payment_intent.amount != expected_amount:
+            raise ValueError(
+                f"Amount mismatch: received {payment_intent.amount}, "
+                f"expected {expected_amount}"
+            )
+        
+        
+        # Add products to transaction
+        for product in products:
+            transaction_obj.produit.add(product)
+        transaction_obj.save()
+
+        # Get user from LDAP
+        try:
+            user = LdapUser.get(uid=user_uid)
+            if not user:
+                # This is likely a temporary LDAP issue or potential security issue
+                raise Exception(f"User {user_uid} not found in LDAP - could be LDAP connectivity issue or invalid user")
+        except Exception as e:
+            logger.error(
+                f"LDAP user retrieval failed: {e}",
+                extra={
+                    'uid': user_uid,
+                    'transaction_uuid': str(transaction_uuid),
+                    'stripe_payment_intent': payment_intent.id,
+                    'ldap_error_type': type(e).__name__,
+                    'message_code': 'WEBHOOK_LDAP_USER_ERROR'
+                }
+            )
+            # Re-raise to trigger webhook retry
+            raise Exception(f"LDAP user retrieval failed for {user_uid}: {e}") 
+        
+
+        # Update user (login remained unchanged from previous system)
+        adhere = any(p.type_produit == 'A' for p in products)
+        if adhere:
+            year = generic.current_year()
+            user.cotiz = [c for c in user.cotiz if c.lower() != f"none{year}"] + [str(year)]
+        
+        month_numbers = sum(p.duree for p in products if p.type_produit == 'F')
+        if month_numbers > 0:
+            if user.end_cotiz is None:
+                user.end_cotiz = datetime.now().astimezone()
+            start = max(user.end_cotiz, datetime.now().astimezone())
+            user.end_cotiz = start + relativedelta(months=month_numbers)
+        
+        user.save()
+    
+
+        
+        # Generate invoice asynchronously
+        self.enqueue_invoice_generation(user, transaction_obj)
+        
+        logger.info(
+            f"Payment processed successfully via webhook: {user_uid}, {transaction_uuid}",
+            extra={
+                'uid': user_uid,
+                'transaction_uuid': str(transaction_uuid),
+                'transaction_stripe_id': payment_intent.id,
+                'message_code': 'WEBHOOK_PAYMENT_SUCCESS'
+            }
+        )
+    
+    def enqueue_invoice_generation(self, user, transaction_obj):
+        """Generate invoice in queue"""
+        user_datas = {
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'uid': user.uid,
+            'email': user.mail,
+            'address': user.postal_address,
+        }
+        transaction_datas = {
+            'uuid': transaction_obj.uuid,
+            'date_creation': transaction_obj.date_creation,
+            'date_paiement': transaction_obj.date_creation,
+            'statut': transaction_obj.statut,
+            'moyen': transaction_obj.get_moyen_display(),
+            'total': transaction_obj.total,
+            'admin': transaction_obj.admin,
+            'categories': [
+                {'name': cat, 'products': prods} 
+                for cat, prods in transaction_obj.get_products_by_cat()
+            ],
+        }
+        
+        try:
+            queue = django_rq.get_queue()
+            queue.enqueue_call(
+                async_tasks.generate_and_email_invoice,
+                args=(user_datas, transaction_datas, 'fr', 'user-treasurer'),
+            )
+        except Exception as e:
+            logger.error(f"Invoice generation error: {e}")
+
 
 
 @method_decorator(login_required, name="dispatch")
