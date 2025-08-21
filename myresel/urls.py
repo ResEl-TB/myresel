@@ -46,6 +46,7 @@ urlpatterns = [
     url(r'^faq/$', FaqList.as_view(), name='faq'),
     url(r'^faq/upvote/$', faqVote, name='upvote'),
     url(r'^contact/', Contact.as_view(), name='contact'),
+    url(r'^discord/', RedirectView.as_view(url="https://discord.gg/A3xYnC4uh5", permanent=False)),
     url(r'^mentions_legales/', TemplateView.as_view(template_name='pages/mentions_legales.html'), name="mentions_legales"),
     url(r'^services/', Services.as_view(), name='services'),
     url(r'^campus/', include('campus.urls', namespace='campus')),
