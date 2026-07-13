@@ -18,27 +18,28 @@ campuses:
     services:
       internet-access:
         - name: quantic-brest
-          title: Quantic Telecom
-          text: La connexion Quantic Telecom est la connexion principale du ResEl
+          title: Ielo
+          text: La fibre Ielo est la connexion principale du ResEl
           icon: fa-cloud
-          essential: true
+          essential: false
           level: 2
           _hosts:
-            - internet
+            - gw-ielo-br
           _hosts_failover: true # true if the hosts act as failovers, false by default
-        - name: renater
-          title: Renater
-          text: La connexion Renater est la connexion de secours du ResEl
+        - name: moji-brest
+          title: Moji
+          text: La fibre Moji est la connexion de secours du ResEl
             sur le campus de Brest
           icon: fa-cloud
-          essential: true
+          essential: false
           level: 1
           _hosts:
-            - internet
+            - gw-moji-br
+          _hosts_failover: true # true if the hosts act as failovers, false by default
       network-edge:
         - name: kim
-          title: Firewall Kim
-          text: Kim est le firewall principal à Brest. Il permet de
+          title: Firewall
+          text: Le firewall principal à Brest. Il permet de
             contrôler l’accès à Internet.
           icon: fa-server
           essential: true
@@ -183,14 +184,6 @@ campuses:
           level: 1
           _hosts:
             - amateria
-        - name: garbage
-          title: Garbage
-          text: Garbage
-          icon: fa-film
-          essential: false
-          level: 1
-          _hosts:
-            - alphabet
       network-access:
         - name: i1
           title: Bâtiment I1
@@ -429,7 +422,7 @@ campuses:
   - name: rennes
     enabled: true
     connections:
-      - start: quantic
+      - start: quantic-rennes
         end: network-edge
       - start: internet-access
         end: peach
@@ -439,28 +432,28 @@ campuses:
         end: network-access
     services:
       internet-access:
-        - name: quantic
-          title: Quantic Telecom
-          text: La connexion Quantic est la connexion principale du ResEl à sur
+        - name: quantic-rennes
+          title: Ielo
+          text: La fibre Ielo est la connexion principale du ResEl à sur
             le campus de Rennes
           icon: fa-cloud
-          essential: true
+          essential: false
           level: 2
           _hosts:
-            - internet-rennes
-        - name: renater
-          title: Renater
-          text: La connexion Renater est la connexion de secours du ResEl sur
+            - gw-ielo-re
+        - name: moji-rennes
+          title: Moji
+          text: La fibre Moji est la connexion de secours du ResEl sur
             le campus de Rennes
           icon: fa-cloud
-          essential: true
+          essential: false
           level: 1
           _hosts:
-            - internet-rennes
+            - gw-moji-re
       network-edge:
         - name: peach
-          title: Firewall Peach
-          text: Peach l’unique mur-de-feu du campus de Rennes.
+          title: Firewall Rennes
+          text: Firewall du campus de Rennes.
           icon: fa-server
           essential: true
           level: 2
