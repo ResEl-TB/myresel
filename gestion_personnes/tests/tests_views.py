@@ -47,6 +47,7 @@ class InscriptionCase(TestCase):
                 'first_name': user.first_name,
                 'category': user.category,
                 'formation': user.formation,
+                'study_year': '1A',
                 'email': user.mail,
                 'email_verification': user.mail,
                 'password': user.user_password,
@@ -82,6 +83,38 @@ class InscriptionCase(TestCase):
         self.assertEqual(user.campus, user_s.campus)
         self.assertEqual(user.end_cotiz.date(), user_s.end_cotiz.date())
         self.assertEqual(user.employee_type, user_s.employee_type)
+
+    def test_promo_study_years(self):
+        from fonctions.generic import current_year
+        curr_yr = current_year()
+        cases = [('1A', curr_yr + 3), ('2A', curr_yr + 2), ('3A', curr_yr + 1)]
+        for study_year, expected_promo in cases:
+            user = create_full_user(email="test_%s@example.com" % study_year)
+            try_delete_user(user.uid)
+            r = self.client.post(reverse("gestion-personnes:inscription"), data={
+                'last_name': user.last_name,
+                'first_name': user.first_name,
+                'category': 'student',
+                'formation': 'FIG',
+                'study_year': study_year,
+                'email': user.mail,
+                'email_verification': user.mail,
+                'password': user.user_password,
+                'password_verification': user.user_password,
+                'campus': user.campus,
+                'building': user.building,
+                'room': user.room_number,
+                'birth_place': user.birth_place,
+                'birth_country': user.birth_country,
+                'birth_date': user.freeform_birth_date,
+                'phone': user.mobile,
+                'certify_truth': 'certify_truth',
+            }, HTTP_HOST="10.0.3.95", ZONE="Brest-any", follow=True)
+            self.assertEqual(200, r.status_code)
+            self.client.post(reverse("gestion-personnes:cgu"), data={'have_read': 'have_read'}, HTTP_HOST="10.0.3.95", ZONE="Brest-any", follow=True)
+            user_s = LdapUser.get(pk=user.uid)
+            self.assertEqual(user_s.promo, str(expected_promo))
+            try_delete_user(user.uid)
 
         # TODO: find a way to check if emails are sent...
         # get_worker().work(burst=True)
