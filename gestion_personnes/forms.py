@@ -178,6 +178,12 @@ class InscriptionForm(forms.Form):
         ('Autre', _('Autre'))
     ]
 
+    STUDY_YEARS = [
+        ('1A', _('1ère année (1A)')),
+        ('2A', _('2ème année (2A)')),
+        ('3A', _('3ème année (3A)')),
+    ]
+
     last_name = forms.CharField(
         widget=forms.TextInput(attrs={
             'class': 'form-control',
@@ -203,6 +209,13 @@ class InscriptionForm(forms.Form):
         choices=FORMATIONS,
         widget=ToggleSelect(),
         required=False,
+    )
+
+    study_year = forms.ChoiceField(
+        choices=STUDY_YEARS,
+        widget=ToggleSelect(),
+        required=False,
+        initial='1A',
     )
 
     voucher = forms.CharField(
@@ -368,6 +381,7 @@ class InscriptionForm(forms.Form):
         room_obj.building = building
 
         formation = cleaned_data.get("formation")
+        study_year = cleaned_data.get("study_year")
         category = cleaned_data.get("category")
         voucher = cleaned_data.get("voucher")
 
@@ -386,8 +400,11 @@ class InscriptionForm(forms.Form):
         elif not address:
             self.add_error('address', _("Veuillez saisir votre addresse postale"))
 
-        if category == "student" and formation not in [a[0] for a in self.FORMATIONS]:
-            self.add_error('formation', _("Veuillez choisir une formation"))
+        if category == "student":
+            if formation not in [a[0] for a in self.FORMATIONS]:
+                self.add_error('formation', _("Veuillez choisir une formation"))
+            if study_year not in [a[0] for a in self.STUDY_YEARS]:
+                self.add_error('study_year', _("Veuillez choisir une année d'études"))
 
         if category == "event":
             self.check_voucher(voucher)
@@ -495,7 +512,14 @@ class InscriptionForm(forms.Form):
         category = self.cleaned_data["category"]
         if category == "student":
             # enstPerson
-            user.promo = str(current_year() + 3)  # TODO: wtf???
+            study_year = self.cleaned_data.get("study_year", "1A")
+            if study_year == "3A":
+                promo_offset = 1
+            elif study_year == "2A":
+                promo_offset = 2
+            else:
+                promo_offset = 3
+            user.promo = str(current_year() + promo_offset)
             user.anneeScolaire = ""  # TODO: get that in school ldap
             user.option = self.cleaned_data["campus"]
             user.formation = self.cleaned_data["formation"]

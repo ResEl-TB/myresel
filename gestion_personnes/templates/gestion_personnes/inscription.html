@@ -39,6 +39,11 @@
                         {{ form.formation }}
                         {% if form.formation.errors %}<span class="help-block">{{ form.formation.errors }}</span>{% endif %}
                     </div>
+                    <div class="form-group hidden{% if form.study_year.errors %} has-error{% endif %}" id="study_year">
+                        <label for="id_study_year" data-toggle="tooltip" title="{% trans "Votre année d'études permet d'attribuer la bonne promotion" %}">{% trans "Année d'études" %} <span class="required"></span></label>
+                        {{ form.study_year }}
+                        {% if form.study_year.errors %}<span class="help-block">{{ form.study_year.errors }}</span>{% endif %}
+                    </div>
                     <div class="form-group hidden{% if form.voucher.errors %} has-error{% endif %}" id="voucher">
                         <label for="id_voucher" data-toggle="tooltip" title="{% trans "Un numéro de coupon est nécessaire pour valider votre inscription" %}">{% trans "Numéro de coupon" %} <span class="required"></span></label>
                         {{ form.voucher }}
@@ -202,14 +207,19 @@
         function update_category() {
             const category = document.getElementById('form').category.value;
             const formation = document.getElementById('formation');
+            const study_year = document.getElementById('study_year');
             const voucher = document.getElementById('voucher');
             const no_internet = document.getElementById('no-internet');
             const not_other = [...document.getElementsByClassName('not-other')];
             const manual_verification = document.getElementById('manual-verification');
-            if (category == 'student')
+            if (category == 'student') {
                 formation.classList.remove('hidden');
-            else
+                study_year.classList.remove('hidden');
+            }
+            else {
                 formation.classList.add('hidden');
+                study_year.classList.add('hidden');
+            }
             if (category == 'maisel')
                 manual_verification.classList.remove('hidden');
             else
