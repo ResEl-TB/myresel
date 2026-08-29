@@ -1,8 +1,8 @@
 Le site resel.fr
 ================
 
-[![build status](https://git.resel.fr/resel/applications-utilisateurs/myresel/badges/master/build.svg)](https://git.resel.fr/resel/applications-utilisateurs/myresel/commits/master)
-[![coverage report](https://git.resel.fr/resel/applications-utilisateurs/myresel/badges/master/coverage.svg)](https://git.resel.fr/resel/applications-utilisateurs/myresel/commits/master)
+[![build status](https://git.resel.fr/resel/applications-utilisateurs/myresel/badges/deploy/pipeline.svg?ignore_skipped=true)](https://git.resel.fr/resel/applications-utilisateurs/myresel/-/pipelines)
+[![coverage report](https://git.resel.fr/resel/applications-utilisateurs/myresel/badges/master/coverage.svg)](https://git.resel.fr/resel/applications-utilisateurs/myresel/-/jobs?kind=BUILD)
 
 
 Ceci est le code pour le site ResEl [resel.fr](resel.fr) il est développé en
