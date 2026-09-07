@@ -19,7 +19,7 @@ coverage==7.4.4
 django_coverage_plugin==3.1.0
 django-debug-toolbar==4.3.0
 django-redis==5.4.0
-phonenumbers==8.13.33
+phonenumbers==8.13.55
 PyYAML==6.0.1
 irclog2html==3.0.0
 pylint==3.1.0
