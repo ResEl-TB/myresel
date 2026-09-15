@@ -1,4 +1,4 @@
-Django==3.2.23
+Django==3.2.25
 django-ckeditor==6.7.1
 django-modeltranslation==0.18.11
 ldap3==2.9.1
