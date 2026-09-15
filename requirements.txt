@@ -12,7 +12,7 @@ uWSGI==2.0.24
 redis==5.0.3
 rq==1.16.1
 rq-scheduler==0.13.1
-django-rq==2.10.2
+django-rq==2.10.3
 django-rq-scheduler==2023.9.0
 python-dateutil==2.9.0
 coverage==7.4.4
