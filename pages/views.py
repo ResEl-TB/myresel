@@ -282,10 +282,13 @@ def unsecure_set_language(request):
 class StatusPageXhr(View):
 
     @staticmethod
-    def set_service_status(icinga_rsp, service, excl):
+    def set_service_status(icinga_rsp, service, excl, icinga_hosts=None):
         service_score = 0
         lvl = service.get('level', 1)  # Default to warning
-        hosts_max_score = {}
+        host_states = {
+            host['attrs']['name']: host['attrs']['state']
+            for host in (icinga_hosts or {}).get('results', [])
+        }
 
         if service.get('_hosts', None) is None:
             service['status_text'] = 'Pas de métriques'
@@ -293,6 +296,8 @@ class StatusPageXhr(View):
             return -1
 
 
+        # The API only returns incidents; healthy hosts must count in failover.
+        hosts_max_score = dict.fromkeys(service['_hosts'], 0)
         for icn_service in icinga_rsp['results']:
             host = icn_service['joins']['host']['name']
             if host in service.get('_hosts', []) \
@@ -301,6 +306,10 @@ class StatusPageXhr(View):
                     hosts_max_score.get(host, 0),
                     icn_service['attrs']['state'],
                 )
+
+        for host in service.get('_hosts', []):
+            if host_states.get(host, 0) != 0:
+                hosts_max_score[host] = max(hosts_max_score.get(host, 0), 2)
 
         if hosts_max_score:
             if service.get('_hosts_failover', False):
@@ -321,7 +330,16 @@ class StatusPageXhr(View):
         return lvl * service_score
 
     @staticmethod
-    def calc_scores(services, result):
+    def calc_internet_score(providers):
+        statuses = [provider['status'] for provider in providers]
+        if statuses and all(status == 'danger' for status in statuses):
+            return 4  # No provider is available on this campus.
+        if any(status in ('warning', 'danger') for status in statuses):
+            return 2  # Internet access is degraded, including loss of redundancy.
+        return 0
+
+    @staticmethod
+    def calc_scores(services, result, hosts=None):
         max_score = 0
         for campus in services['campuses']:
             for section in campus['services']:
@@ -330,13 +348,20 @@ class StatusPageXhr(View):
                             result,
                             service,
                             services['exclusions'],
+                            hosts,
                     )
+                    if section == 'internet-access':
+                        # Providers contribute together, independently of their level.
+                        continue
                     if service.get('essential', False):
                         max_score = max(max_score, score)
                     else:
                         # If a service is non essential, no need to escalate
                         # higher than the level 1
                         max_score = max(max_score, min(score, 1))
+            max_score = max(max_score, StatusPageXhr.calc_internet_score(
+                campus['services'].get('internet-access', []),
+            ))
 
         services['global_status_score'] = max_score
         if max_score <= 0:
@@ -369,14 +394,15 @@ class StatusPageXhr(View):
 
     @staticmethod
     def get_services():
-        services = cache.get('icinga_services')
+        services = cache.get('icinga_services', version=settings.ICINGA_STATUS_CACHE_VERSION)
         if services is not None:
             return services
         with open('myresel/icinga_status.yml', 'rb') as doc:
             services = yaml.safe_load(doc)
             cache.set('icinga_services',
                       services,
-                      settings.ICINGA_SERVICES_CACHE_DURATION)
+                      settings.ICINGA_SERVICES_CACHE_DURATION,
+                      version=settings.ICINGA_STATUS_CACHE_VERSION)
             return services
 
     @staticmethod
@@ -410,6 +436,28 @@ class StatusPageXhr(View):
             if r.status_code != 200:
                 raise ValueError('Icinga responded with %i status code' % r.status_code)
             result = r.json()
+            r = requests.post(
+                url=settings.ICINGA_BASE_URL + "/v1/objects/hosts",
+                auth=settings.ICINGA_AUTH,
+                headers={
+                    'Accept': 'application/json',
+                    'X-HTTP-Method-Override': 'GET',
+                },
+                data=json.dumps({
+                    "attrs": [
+                        "name",
+                        "state",
+                        "downtime_depth",
+                        "acknowledgement"
+                    ],
+                    "filter": ("host.state != HostUp && "
+                        "host.downtime_depth == 0.0 && "
+                        "host.acknowledgement == 0.0")
+                })
+            )
+            if r.status_code != 200:
+                raise ValueError('Icinga responded with %i status code' % r.status_code)
+            hosts = r.json()
         except (requests.exceptions.RequestException, ValueError, TypeError) as err:
             # TODO: create a nice fallback template
             logger.error("Could not load icinga, "
@@ -417,7 +465,8 @@ class StatusPageXhr(View):
             result = {}
             with open('myresel/icinga_dummy_resp.yml', 'rb') as dummy_resp:
                 result = yaml.safe_load(dummy_resp)
-        StatusPageXhr.calc_scores(services, result)
+            hosts = {}
+        StatusPageXhr.calc_scores(services, result, hosts)
         cache.set('icinga_services_status',
                   services,
                   settings.ICINGA_STATUS_CACHE_DURATION,
