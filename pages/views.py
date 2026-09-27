@@ -285,7 +285,6 @@ class StatusPageXhr(View):
     def set_service_status(icinga_rsp, service, excl, icinga_hosts=None):
         service_score = 0
         lvl = service.get('level', 1)  # Default to warning
-        hosts_max_score = {}
         host_states = {
             host['attrs']['name']: host['attrs']['state']
             for host in (icinga_hosts or {}).get('results', [])
@@ -297,6 +296,8 @@ class StatusPageXhr(View):
             return -1
 
 
+        # The API only returns incidents; healthy hosts must count in failover.
+        hosts_max_score = dict.fromkeys(service['_hosts'], 0)
         for icn_service in icinga_rsp['results']:
             host = icn_service['joins']['host']['name']
             if host in service.get('_hosts', []) \
@@ -329,6 +330,15 @@ class StatusPageXhr(View):
         return lvl * service_score
 
     @staticmethod
+    def calc_internet_score(providers):
+        statuses = [provider['status'] for provider in providers]
+        if statuses and all(status == 'danger' for status in statuses):
+            return 4  # No provider is available on this campus.
+        if any(status in ('warning', 'danger') for status in statuses):
+            return 2  # Internet access is degraded, including loss of redundancy.
+        return 0
+
+    @staticmethod
     def calc_scores(services, result, hosts=None):
         max_score = 0
         for campus in services['campuses']:
@@ -340,12 +350,18 @@ class StatusPageXhr(View):
                             services['exclusions'],
                             hosts,
                     )
+                    if section == 'internet-access':
+                        # Providers contribute together, independently of their level.
+                        continue
                     if service.get('essential', False):
                         max_score = max(max_score, score)
                     else:
                         # If a service is non essential, no need to escalate
                         # higher than the level 1
                         max_score = max(max_score, min(score, 1))
+            max_score = max(max_score, StatusPageXhr.calc_internet_score(
+                campus['services'].get('internet-access', []),
+            ))
 
         services['global_status_score'] = max_score
         if max_score <= 0:
@@ -378,14 +394,15 @@ class StatusPageXhr(View):
 
     @staticmethod
     def get_services():
-        services = cache.get('icinga_services')
+        services = cache.get('icinga_services', version=settings.ICINGA_STATUS_CACHE_VERSION)
         if services is not None:
             return services
         with open('myresel/icinga_status.yml', 'rb') as doc:
             services = yaml.safe_load(doc)
             cache.set('icinga_services',
                       services,
-                      settings.ICINGA_SERVICES_CACHE_DURATION)
+                      settings.ICINGA_SERVICES_CACHE_DURATION,
+                      version=settings.ICINGA_STATUS_CACHE_VERSION)
             return services
 
     @staticmethod
