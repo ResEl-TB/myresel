@@ -4,6 +4,7 @@ from django.test import TestCase
 
 from gestion_personnes.tests import try_delete_user, try_delete_old_user, create_full_user
 from pages.models import News
+from pages.views import StatusPageXhr
 from wiki.models import Category, Link
 
 
@@ -145,6 +146,28 @@ class ServiceViewCase(TestCase):
         self.assertContains(r, self.ln.url)
 
 class StatusViewCase(TestCase):
+
+    def test_host_status_is_included_in_service_status(self):
+        service = {
+            'name': 'moji-brest',
+            'level': 1,
+            '_hosts': ['gw-moji-br'],
+        }
+        hosts = {
+            'results': [{
+                'attrs': {'name': 'gw-moji-br', 'state': 1},
+            }],
+        }
+
+        score = StatusPageXhr.set_service_status(
+            {'results': []},
+            service,
+            [],
+            hosts,
+        )
+
+        self.assertEqual(2, score)
+        self.assertEqual('danger', service['status'])
 
     def test_simple_load(self):
         r = self.client.get(reverse("network-status"),
