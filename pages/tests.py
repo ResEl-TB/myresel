@@ -151,8 +151,16 @@ class StatusInternetFailoverCase(SimpleTestCase):
     def calculate_status(self, down_hosts=(), service_incidents=()):
         with open('myresel/icinga_status.yml', 'rb') as config:
             services = yaml.safe_load(config)
+        configured_hosts = {
+            host for campus in services['campuses']
+            for section in campus['services'].values()
+            for service in section for host in service.get('_hosts', [])
+        }
         hosts = {
-            'results': [{'attrs': {'name': host, 'state': 1}} for host in down_hosts],
+            'results': [
+                {'attrs': {'name': host, 'state': int(host in down_hosts)}}
+                for host in configured_hosts
+            ],
         }
         incidents = {
             'results': [
@@ -231,6 +239,39 @@ class StatusInternetFailoverCase(SimpleTestCase):
                 self.assertEqual(0, services['global_status_score'])
 
 
+class StatusMissingMetricsCase(SimpleTestCase):
+    def test_missing_hosts_are_unknown(self):
+        for configured_hosts in (None, [], ['missing'], ['healthy', 'missing']):
+            with self.subTest(hosts=configured_hosts):
+                service = {'_hosts': configured_hosts}
+                score = StatusPageXhr.set_service_status(
+                    {'results': []}, service, [],
+                    {'results': [{'attrs': {'name': 'healthy', 'state': 0}}]},
+                )
+                self.assertEqual(-1, score)
+                self.assertEqual('default', service['status'])
+                self.assertEqual('Pas de métriques', service['status_text'])
+                self.assertNotIn('_hosts', service)
+
+    def test_unknown_host_does_not_provide_failover(self):
+        for state, expected_status in [(0, 'success'), (1, 'default')]:
+            with self.subTest(state=state):
+                service = {'_hosts': ['known', 'missing'], '_hosts_failover': True}
+                StatusPageXhr.set_service_status(
+                    {'results': []}, service, [],
+                    {'results': [{'attrs': {'name': 'known', 'state': state}}]},
+                )
+                self.assertEqual(expected_status, service['status'])
+
+    def test_unavailable_supervision_is_unknown_globally(self):
+        services = {'exclusions': [], 'campuses': [{
+            'services': {'internet-access': [{'_hosts': ['isp']}]}},
+        ]}
+        StatusPageXhr.calc_scores(services, {'results': []}, {})
+        self.assertEqual('default', services['global_status'])
+        self.assertEqual('Pas de métriques', services['global_status_text'])
+
+
 class StatusViewCase(TestCase):
 
     def test_host_status_is_included_in_service_status(self):
@@ -263,7 +304,7 @@ class StatusViewCase(TestCase):
             (True, ['isp-a', 'isp-b'], ['isp-a', 'isp-b'], 2, 'danger'),
             (True, ['isp-a'], ['isp-a'], 2, 'danger'),
             (False, ['isp-a', 'isp-b'], ['isp-a'], 2, 'danger'),
-            (True, [], [], 0, 'success'),
+            (True, [], [], -1, 'default'),
         ]
         for failover, configured_hosts, down_hosts, expected_score, expected_status in cases:
             with self.subTest(failover=failover, hosts=configured_hosts, down=down_hosts):
@@ -275,8 +316,8 @@ class StatusViewCase(TestCase):
                 }
                 hosts = {
                     'results': [
-                        {'attrs': {'name': host, 'state': 1}}
-                        for host in down_hosts
+                        {'attrs': {'name': host, 'state': int(host in down_hosts)}}
+                        for host in configured_hosts
                     ],
                 }
 
@@ -303,7 +344,10 @@ class StatusViewCase(TestCase):
                         'joins': {'host': {'name': 'isp-b'}},
                     })
                 hosts = {
-                    'results': [{'attrs': {'name': 'isp-a', 'state': 1}}],
+                    'results': [
+                        {'attrs': {'name': 'isp-a', 'state': 1}},
+                        {'attrs': {'name': 'isp-b', 'state': 0}},
+                    ],
                 }
 
                 score = StatusPageXhr.set_service_status(
