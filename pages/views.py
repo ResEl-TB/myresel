@@ -285,19 +285,22 @@ class StatusPageXhr(View):
     def set_service_status(icinga_rsp, service, excl, icinga_hosts=None):
         service_score = 0
         lvl = service.get('level', 1)  # Default to warning
-        host_states = {
-            host['attrs']['name']: host['attrs']['state']
+        host_attrs = {
+            host['attrs']['name']: host['attrs']
             for host in (icinga_hosts or {}).get('results', [])
         }
 
-        if service.get('_hosts', None) is None:
+        if not service.get('_hosts'):
+            StatusPageXhr.cleanup(service)
             service['status_text'] = 'Pas de métriques'
             service['status'] = 'default'
             return -1
 
 
-        # The API only returns incidents; healthy hosts must count in failover.
-        hosts_max_score = dict.fromkeys(service['_hosts'], 0)
+        # Only hosts present in the supervision inventory can be assumed healthy.
+        hosts_max_score = {
+            host: 0 for host in service['_hosts'] if host in host_attrs
+        }
         for icn_service in icinga_rsp['results']:
             host = icn_service['joins']['host']['name']
             if host in service.get('_hosts', []) \
@@ -308,7 +311,9 @@ class StatusPageXhr(View):
                 )
 
         for host in service.get('_hosts', []):
-            if host_states.get(host, 0) != 0:
+            attrs = host_attrs.get(host, {})
+            if attrs.get('state', 0) != 0 and not (
+                    attrs.get('downtime_depth', 0) or attrs.get('acknowledgement', 0)):
                 hosts_max_score[host] = max(hosts_max_score.get(host, 0), 2)
 
         if hosts_max_score:
@@ -317,7 +322,16 @@ class StatusPageXhr(View):
             else:
                 service_score = max(hosts_max_score.values())
 
+        missing_hosts = len(hosts_max_score) < len(set(service['_hosts']))
+        unknown = not hosts_max_score or (missing_hosts and (
+            service_score == 0 and not service.get('_hosts_failover', False)
+            or service_score != 0 and service.get('_hosts_failover', False)
+        ))
         StatusPageXhr.cleanup(service)
+        if unknown:
+            service['status_text'] = 'Pas de métriques'
+            service['status'] = 'default'
+            return -1
         if service_score == 0:
             service['status_text'] = 'Système nominal'
             service['status'] = 'success'
@@ -341,6 +355,7 @@ class StatusPageXhr(View):
     @staticmethod
     def calc_scores(services, result, hosts=None):
         max_score = 0
+        statuses = []
         for campus in services['campuses']:
             for section in campus['services']:
                 for service in campus['services'][section]:
@@ -350,6 +365,7 @@ class StatusPageXhr(View):
                             services['exclusions'],
                             hosts,
                     )
+                    statuses.append(service['status'])
                     if section == 'internet-access':
                         # Providers contribute together, independently of their level.
                         continue
@@ -364,9 +380,14 @@ class StatusPageXhr(View):
             ))
 
         services['global_status_score'] = max_score
-        if max_score <= 0:
+        if max_score <= 0 and not any(status != 'default' for status in statuses):
+            services['global_status'] = 'default'
+            services['global_status_text'] = 'Pas de métriques'
+        elif max_score <= 0:
             services['global_status'] = 'success'
-            services['global_status_text'] = 'Tous les services sont nominaux'
+            services['global_status_text'] = (
+                'Les services supervisés sont nominaux ; certaines métriques sont indisponibles'
+                if 'default' in statuses else 'Tous les services sont nominaux')
         elif max_score <= 1:
             services['global_status'] = 'success'
             services['global_status_text'] = (
@@ -450,21 +471,15 @@ class StatusPageXhr(View):
                         "downtime_depth",
                         "acknowledgement"
                     ],
-                    "filter": ("host.state != HostUp && "
-                        "host.downtime_depth == 0.0 && "
-                        "host.acknowledgement == 0.0")
                 })
             )
             if r.status_code != 200:
                 raise ValueError('Icinga responded with %i status code' % r.status_code)
             hosts = r.json()
         except (requests.exceptions.RequestException, ValueError, TypeError) as err:
-            # TODO: create a nice fallback template
             logger.error("Could not load icinga, "
-                         "loading default configuration instead: %s " % err)
-            result = {}
-            with open('myresel/icinga_dummy_resp.yml', 'rb') as dummy_resp:
-                result = yaml.safe_load(dummy_resp)
+                         "metrics unavailable: %s " % err)
+            result = {'results': []}
             hosts = {}
         StatusPageXhr.calc_scores(services, result, hosts)
         cache.set('icinga_services_status',
