@@ -209,6 +209,22 @@
       }
    },
    {
+      "model": "wiki.category",
+      "pk": 4,
+      "fields": {
+         "priority": 0,
+         "nbToDisplay": 0,
+         "name": "Hébergement",
+         "name_fr": "Hébergement",
+         "name_en": "Hosting",
+         "description": "<p>Sites et services hébergés par le ResEl pour la vie associative du campus.<\/p>",
+         "description_fr": "<p>Sites et services hébergés par le ResEl pour la vie associative du campus.<\/p>",
+         "description_en": "<p>Websites and services hosted by ResEl for campus associations.<\/p>",
+         "fa_icon_name": "fa-server",
+         "slug": "hebergement"
+      }
+   },
+   {
       "model": "wiki.article",
       "pk": 1,
       "fields": {
@@ -589,6 +605,66 @@
          "glyphicon_name": "glyphicon-console",
          "icon": "image/service_icons/git.png",
          "slug": "gitlab"
+      }
+   },
+   {
+      "model": "wiki.link",
+      "pk": 9,
+      "fields": {
+         "priority": 1,
+         "category": 4,
+         "show_only_if_in_resel": false,
+         "name": "Junior Atlantique",
+         "name_fr": "Junior Atlantique",
+         "name_en": "Junior Atlantique",
+         "description": "Junior-Entreprise d'IMT Atlantique",
+         "description_fr": "Junior-Entreprise d'IMT Atlantique",
+         "description_en": "IMT Atlantique Junior Enterprise",
+         "url": "https://junior-atlantique.fr/",
+         "fa_icon_name": "",
+         "glyphicon_name": "glyphicon-globe",
+         "icon": "image/service_icons/junior_atlantique.png",
+         "slug": "junior-atlantique"
+      }
+   },
+   {
+      "model": "wiki.link",
+      "pk": 10,
+      "fields": {
+         "priority": 2,
+         "category": 4,
+         "show_only_if_in_resel": false,
+         "name": "BDD Nantes",
+         "name_fr": "BDD Nantes",
+         "name_en": "BDD Nantes",
+         "description": "Bureau du Développement Durable - Nantes",
+         "description_fr": "Bureau du Développement Durable - Nantes",
+         "description_en": "Sustainable Development Office - Nantes",
+         "url": "https://bdd-imt-atlantique-nantes.fr/",
+         "fa_icon_name": "",
+         "glyphicon_name": "glyphicon-globe",
+         "icon": "image/service_icons/bdd_nantes.png",
+         "slug": "bdd-nantes"
+      }
+   },
+   {
+      "model": "wiki.link",
+      "pk": 11,
+      "fields": {
+         "priority": 3,
+         "category": 4,
+         "show_only_if_in_resel": false,
+         "name": "Intégration IMT Atlantique",
+         "name_fr": "Intégration IMT Atlantique",
+         "name_en": "Integration IMT Atlantique",
+         "description": "Site d'intégration des étudiants",
+         "description_fr": "Site d'intégration des étudiants",
+         "description_en": "Student integration website",
+         "url": "https://inteimtatlantique.resel.fr/",
+         "fa_icon_name": "",
+         "glyphicon_name": "glyphicon-globe",
+         "icon": "image/service_icons/inte_imt.png",
+         "slug": "integration-imt-atlantique"
       }
    }
 ]

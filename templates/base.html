@@ -103,6 +103,43 @@
             </li>
             {% endif %}
 
+            {% if hosting_category %}
+            <li class="dropdown">
+                <a href="{% url 'wiki:show-category' slug=hosting_category.slug %}" class="dropdown-toggle" data-toggle="dropdown"><i class="fa {{ hosting_category.fa_icon_name|default:'fa-server' }} fa-fw" aria-hidden="true"></i> <span class="hidden-sm">{{ hosting_category.name }}</span></a>
+                <div class="dropdown-menu">
+                    <ul>
+                        {% for stuff in hosting_category.get_articles_and_links_to_display %}
+                        <li>
+                          <a href="{{ stuff.get_absolute_url }}" class="container dropdown-link">
+                            <div class="row">
+                              <div class="col-xs-2 icon">
+                                {% if stuff.has_custom_icon %}
+                                  <img src="{{ stuff.icon.url }}" alt="{{ stuff.name }}" class="dropdown-site-icon">
+                                {% elif stuff.favicon_url %}
+                                  <img src="{{ stuff.favicon_url }}" alt="{{ stuff.name }}" class="dropdown-site-icon">
+                                {% elif stuff.glyphicon_name %}
+                                  <span class="glyphicon {{ stuff.glyphicon_name }}"></span>
+                                {% else %}
+                                  <span class="glyphicon glyphicon-globe"></span>
+                                {% endif %}
+                              </div>
+                              <div class="col-xs-10">
+                                <div class="link-name">{{ stuff.name }}</div>
+                                <div class="link-description">{{ stuff.description }}</div>
+                              </div>
+                            </div>
+                          </a>
+                        </li>
+                        {% empty %}
+                        <li>
+                            <a>{% trans "Aucun site hébergé" %}</a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </li>
+            {% endif %}
+
             {% comment %} 
             <li>
               <a class="btn-campus" href="{% url 'campus:home' %}"><i class="fa fa-bicycle fa-fw"></i> <span class="hidden-sm btn-campus-text">{% trans "Campus" %}</span></a>
