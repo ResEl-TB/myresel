@@ -533,26 +533,6 @@
    },
    {
       "model": "wiki.link",
-      "pk": 5,
-      "fields": {
-         "priority": 1,
-         "category": 3,
-         "show_only_if_in_resel": false,
-         "name": "La Télévision",
-         "name_fr": "La Télévision",
-         "name_en": "La Télévision",
-         "description": "Grâce au ResEl il est possible de regarder plus de 30 chaines en direct sur son ordinateur",
-         "description_fr": "Grâce au ResEl il est possible de regarder plus de 30 chaines en direct sur son ordinateur",
-         "description_en": "Grâce au ResEl il est possible de regarder plus de 30 chaines en direct sur son ordinateur",
-         "url": "https://tv.resel.fr/",
-         "fa_icon_name": "",
-         "glyphicon_name": "glyphicon-film",
-         "icon": "image/service_icons/tv.png",
-         "slug": "la-television"
-      }
-   },
-   {
-      "model": "wiki.link",
       "pk": 6,
       "fields": {
          "priority": 10,
