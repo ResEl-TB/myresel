@@ -130,18 +130,6 @@ class Link(models.Model):
     def has_custom_icon(self):
         return bool(self.icon and 'placeholder.png' not in self.icon.name)
 
-    @property
-    def favicon_url(self):
-        if self.url:
-            try:
-                from urllib.parse import urlparse
-                parsed = urlparse(self.url)
-                if parsed.netloc:
-                    return "https://www.google.com/s2/favicons?domain={}&sz=64".format(parsed.netloc)
-            except Exception:
-                pass
-        return None
-
     def __str__(self):
         return self.name
 

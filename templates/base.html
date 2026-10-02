@@ -110,24 +110,9 @@
                     <ul>
                         {% for stuff in hosting_category.get_articles_and_links_to_display %}
                         <li>
-                          <a href="{{ stuff.get_absolute_url }}" class="container dropdown-link">
-                            <div class="row">
-                              <div class="col-xs-2 icon">
-                                {% if stuff.has_custom_icon %}
-                                  <img src="{{ stuff.icon.url }}" alt="{{ stuff.name }}" class="dropdown-site-icon">
-                                {% elif stuff.favicon_url %}
-                                  <img src="{{ stuff.favicon_url }}" alt="{{ stuff.name }}" class="dropdown-site-icon">
-                                {% elif stuff.glyphicon_name %}
-                                  <span class="glyphicon {{ stuff.glyphicon_name }}"></span>
-                                {% else %}
-                                  <span class="glyphicon glyphicon-globe"></span>
-                                {% endif %}
-                              </div>
-                              <div class="col-xs-10">
-                                <div class="link-name">{{ stuff.name }}</div>
-                                <div class="link-description">{{ stuff.description }}</div>
-                              </div>
-                            </div>
+                          <a href="{{ stuff.get_absolute_url }}" class="dropdown-link">
+                            <div class="link-name" style="white-space: nowrap;">{{ stuff.name }}</div>
+                            <div class="link-description">{{ stuff.description }}</div>
                           </a>
                         </li>
                         {% empty %}
@@ -135,6 +120,9 @@
                             <a>{% trans "Aucun site hébergé" %}</a>
                         </li>
                         {% endfor %}
+                        <li class="dropdown-disclaimer" style="padding: 8px 15px; font-size: 0.7em; line-height: 1.3; font-weight: bold; font-family: 'Roboto Medium', sans-serif; color: #444; border-top: 1px solid rgba(0, 0, 0, 0.08); white-space: normal; cursor: default;">
+                          <strong>{% trans "Le ResEl agit en tant que simple hébergeur technique et n'assure pas le développement des sites ci-dessus." %}</strong>
+                        </li>
                     </ul>
                 </div>
             </li>
