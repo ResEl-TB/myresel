@@ -621,7 +621,7 @@
          "url": "https://junior-atlantique.fr/",
          "fa_icon_name": "",
          "glyphicon_name": "glyphicon-globe",
-         "icon": "image/service_icons/junior_atlantique.png",
+         "icon": "",
          "slug": "junior-atlantique"
       }
    },
@@ -641,7 +641,7 @@
          "url": "https://bdd-imt-atlantique-nantes.fr/",
          "fa_icon_name": "",
          "glyphicon_name": "glyphicon-globe",
-         "icon": "image/service_icons/bdd_nantes.png",
+         "icon": "",
          "slug": "bdd-nantes"
       }
    },
@@ -661,7 +661,7 @@
          "url": "https://inteimtatlantique.resel.fr/",
          "fa_icon_name": "",
          "glyphicon_name": "glyphicon-globe",
-         "icon": "image/service_icons/inte_imt.png",
+         "icon": "",
          "slug": "integration-imt-atlantique"
       }
    },
