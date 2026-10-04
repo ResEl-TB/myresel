@@ -114,7 +114,7 @@ path {
 }
 
 /* GENERAL */
-.content {
+#network-status-app .content {
     padding: 20px 20px 20px 10px;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -150,7 +150,9 @@ path {
     width: 100%;
 }
 
-.fa-cloud, .fa-server, .fa-circle-o {
+#network-status-app .fa-cloud,
+#network-status-app .fa-server,
+#network-status-app .fa-circle-o {
     font-size: 75px;
     height: 70px;
     width: 70px;
@@ -223,7 +225,7 @@ path {
     grid-row-gap: 10px;
 }
 
-.service {
+#network-status-app .service {
     font-size: 40px;
     height: 40px;
     margin-top: 20px;
@@ -245,7 +247,7 @@ path {
     margin-top: 110px;
 }
 
-.building {
+#network-status-app .building {
     font-size: 40px;
     height: 40px;
     margin-top: 20px;
@@ -253,7 +255,7 @@ path {
     text-align: center;
 }
 
-.sep {
+#network-status-app .sep {
     height: 70px;
     background-color: #f9f9f9;
 }
@@ -316,7 +318,9 @@ path {
         padding: 50px 2% 50px 2%;
     }
 
-    .fa-cloud, .fa-server, .fa-circle-o {
+    #network-status-app .fa-cloud,
+    #network-status-app .fa-server,
+    #network-status-app .fa-circle-o {
         font-size: 50px;
         height: 50px;
         width: 50px;
@@ -324,7 +328,7 @@ path {
         margin-bottom: -20px;
     }
 
-    .service {
+    #network-status-app .service {
         font-size: 20px;
         height: 20px;
         margin-top: 10px;
