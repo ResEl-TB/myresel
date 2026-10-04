@@ -25,7 +25,6 @@ campuses:
           level: 2
           _hosts:
             - gw-ielo-br
-          _hosts_failover: true # true if the hosts act as failovers, false by default
         - name: moji-brest
           title: Moji
           text: La fibre Moji est la connexion de secours du ResEl
@@ -35,7 +34,6 @@ campuses:
           level: 1
           _hosts:
             - gw-moji-br
-          _hosts_failover: true # true if the hosts act as failovers, false by default
       network-edge:
         - name: kim
           title: Firewall
@@ -187,120 +185,62 @@ campuses:
       network-access:
         - name: i1
           title: Bâtiment I1
-          text: Switch d’accès au I1 et bornes Wi-Fi du I1
+          text: Switch d’accès au I1
           icon: fa-building building
           essential: false
           level: 1
           _hosts:
             - i01-001.sw.br.resel.fr
             - i01-002.sw.br.resel.fr
-            - i01-001.ap.br.resel.fr
-            - i01-006.ap.br.resel.fr
-            - i01-017.ap.br.resel.fr
-            - i01-031.ap.br.resel.fr
-            - i01-110.ap.br.resel.fr
-            - i01-111.ap.br.resel.fr
-            - i01-207.ap.br.resel.fr
-            - i01-208.ap.br.resel.fr
-            - i01-219.ap.br.resel.fr
+            - i01-003.sw.br.resel.fr
         - name: i2
           title: Bâtiment I2
-          text: Switch d’accès au I2 et bornes Wi-Fi du I2
+          text: Switch d’accès au I2
           icon: fa-building building
           essential: false
           level: 1
           _hosts:
             - i02-001.sw.br.resel.fr
             - i02-002.sw.br.resel.fr
-            - i02-001.ap.br.resel.fr
-            - i02-005.ap.br.resel.fr
-            - i02-015.ap.br.resel.fr
-            - i02-103.ap.br.resel.fr
-            - i02-106.ap.br.resel.fr
-            - i02-108.ap.br.resel.fr
-            - i02-201.ap.br.resel.fr
-            - i02-206.ap.br.resel.fr
-            - i02-209.ap.br.resel.fr
         - name: i3
           title: Bâtiment I3
-          text: Switch d’accès au I3 et bornes Wi-Fi du I3
+          text: Switch d’accès au I3
           icon: fa-building building
           essential: false
           level: 1
           _hosts:
             - i03-001.sw.br.resel.fr
             - i03-002.sw.br.resel.fr
-            - i03-007.ap.br.resel.fr
-            - i03-101.ap.br.resel.fr
-            - i03-113.ap.br.resel.fr
-            - i03-116.ap.br.resel.fr
-            - i03-126.ap.br.resel.fr
-            - i03-205.ap.br.resel.fr
-            - i03-209.ap.br.resel.fr
-            - i03-214.ap.br.resel.fr
-            - i03-220.ap.br.resel.fr
-            - i03-232.ap.br.resel.fr
-            - i03-304.ap.br.resel.fr
-            - i03-309.ap.br.resel.fr
         - name: i4
           title: Bâtiment I4
-          text: Switch d’accès au I4 et bornes Wi-Fi du I4
+          text: Switch d’accès au I4
           icon: fa-building building
           essential: false
           level: 1
           _hosts:
             - i04-001.sw.br.resel.fr
             - i04-002.sw.br.resel.fr
-            - i04-001.ap.br.resel.fr
-            - i04-012.ap.br.resel.fr
-            - i04-111.ap.br.resel.fr
-            - i04-114.ap.br.resel.fr
-            - i04-115.ap.br.resel.fr
-            - i04-205.ap.br.resel.fr
-            - i04-207.ap.br.resel.fr
-            - i04-209.ap.br.resel.fr
-            - i04-216.ap.br.resel.fr
-            - i04-217.ap.br.resel.fr
-            - i04-302.ap.br.resel.fr
-            - i04-303.ap.br.resel.fr
         - name: i5
           title: Bâtiment I5
-          text: Switch d’accès au I5 et bornes Wi-Fi du I5
+          text: Switch d’accès au I5
           icon: fa-building building
           essential: false
           level: 1
           _hosts:
             - i05-001.sw.br.resel.fr
             - i05-002.sw.br.resel.fr
-            - i05-007.ap.br.resel.fr
-            - i05-018.ap.br.resel.fr
-            - i05-023.ap.br.resel.fr
-            - i05-108.ap.br.resel.fr
-            - i05-115.ap.br.resel.fr
-            - i05-204.ap.br.resel.fr
-            - i05-212.ap.br.resel.fr
-            - i05-213.ap.br.resel.fr
         - name: i6
           title: Bâtiment I6
-          text: Switch d’accès au I6 et bornes Wi-Fi du I6
+          text: Switch d’accès au I6
           icon: fa-building building
           essential: false
           level: 1
           _hosts:
             - i06-001.sw.br.resel.fr
             - i06-002.sw.br.resel.fr
-            - i06-003.ap.br.resel.fr
-            - i06-008.ap.br.resel.fr
-            - i06-014.ap.br.resel.fr
-            - i06-103.ap.br.resel.fr
-            - i06-105.ap.br.resel.fr
-            - i06-115.ap.br.resel.fr
-            - i06-120.ap.br.resel.fr
-            - i06-203.ap.br.resel.fr
-            - i06-207.ap.br.resel.fr
         - name: i7
           title: Bâtiment I7
-          text: Switch d’accès au I7 et bornes Wi-Fi du I7
+          text: Switch d’accès au I7
           icon: fa-building building
           essential: false
           level: 1
@@ -309,116 +249,79 @@ campuses:
             - i07-002.sw.br.resel.fr
         - name: i8
           title: Bâtiment I8
-          text: Switch d’accès au I8 et bornes Wi-Fi du I8
+          text: Switch d’accès au I8
           icon: fa-building building
           essential: false
           level: 1
           _hosts:
             - i08-001.sw.br.resel.fr
             - i08-002.sw.br.resel.fr
-            - i08-004.ap.br.resel.fr
-            - i08-014.ap.br.resel.fr
-            - i08-019.ap.br.resel.fr
-            - i08-102.ap.br.resel.fr
-            - i08-106.ap.br.resel.fr
-            - i08-111.ap.br.resel.fr
-            - i08-116.ap.br.resel.fr
-            - i08-202.ap.br.resel.fr
-            - i08-207.ap.br.resel.fr
         - name: i9
           title: Bâtiment I9
-          text: Switch d’accès au I9 et bornes Wi-Fi du I9
+          text: Switch d’accès au I9
           icon: fa-building building
           essential: false
           level: 1
           _hosts:
             - i09-001.sw.br.resel.fr
             - i09-002.sw.br.resel.fr
-            - i09-004.ap.br.resel.fr
-            - i09-010.ap.br.resel.fr
-            - i09-019.ap.br.resel.fr
-            - i09-102.ap.br.resel.fr
-            - i09-107.ap.br.resel.fr
-            - i09-113.ap.br.resel.fr
-            - i09-120.ap.br.resel.fr
-            - i09-202.ap.br.resel.fr
-            - i09-204.ap.br.resel.fr
-            - i09-208.ap.br.resel.fr
         - name: i10
           title: Bâtiment I10
-          text: Switch d’accès au I10 et bornes Wi-Fi du I10
+          text: Switch d’accès au I10
           icon: fa-building building
           essential: false
           level: 1
           _hosts:
             - i10-001.sw.br.resel.fr
             - i10-002.sw.br.resel.fr
-            - i10-010.ap.br.resel.fr
-            - i10-012.ap.br.resel.fr
-            - i10-014.ap.br.resel.fr
-            - i10-110.ap.br.resel.fr
-            - i10-112.ap.br.resel.fr
-            - i10-114.ap.br.resel.fr
         - name: i11
           title: Bâtiment I11
-          text: Switch d’accès au I11 et bornes Wi-Fi du I11
+          text: Switch d’accès au I11
           icon: fa-building building
           essential: false
           level: 1
           _hosts:
             - i11-001.sw.br.resel.fr
             - i11-002.sw.br.resel.fr
-            - i11-011.ap.br.resel.fr
-            - i11-013.ap.br.resel.fr
-            - i11-015.ap.br.resel.fr
-            - i11-111.ap.br.resel.fr
-            - i11-113.ap.br.resel.fr
-            - i11-115.ap.br.resel.fr
         - name: i12
           title: Bâtiment I12
-          text: Switch d’accès au I12 et bornes Wi-Fi du I12
+          text: Switch d’accès au I12
           icon: fa-building building
           essential: false
           level: 1
           _hosts:
             - i12-001.sw.br.resel.fr
             - i12-002.sw.br.resel.fr
-            - i12-001.ap.br.resel.fr
-            - i12-003.ap.br.resel.fr
-            - i12-005.ap.br.resel.fr
-            - i12-007.ap.br.resel.fr
-            - i12-009.ap.br.resel.fr
-            - i12-011.ap.br.resel.fr
         - name: i14
           title: Bâtiment I14
-          text: Switch d’accès au I14 et bornes Wi-Fi du I14
+          text: Switch d’accès au I14
           icon: fa-building building
           essential: false
           level: 1
           _hosts:
             - i14-001.sw.br.resel.fr
             - i14-002.sw.br.resel.fr
+            - i14-301.sw.br.resel.fr
+            - i14-302.sw.br.resel.fr
         - name: i15
           title: Bâtiment I15
-          text: Switch d’accès au I15 et bornes Wi-Fi du I15
+          text: Switch d’accès au I15
           icon: fa-building building
           essential: false
           level: 1
           _hosts:
             - i15-001.sw.br.resel.fr
             - i15-002.sw.br.resel.fr
+            - i15-301.sw.br.resel.fr
+            - i15-302.sw.br.resel.fr
         - name: foyer
           title: Foyer
-          text: Switch d’accès au foyer (H02) et bornes Wi-Fi du foyer.
+          text: Switch d’accès au foyer (H02)
           icon: fa-building building
           essential: false
           level: 1
           _hosts:
             - h02-001.sw.br.resel.fr
-            - h02-001.ap.br.resel.fr
-            - h02-002.ap.br.resel.fr
-            - h02-003.ap.br.resel.fr
-            - h02-004.ap.br.resel.fr
   - name: rennes
     enabled: true
     connections:
@@ -527,24 +430,16 @@ campuses:
       network-access:
         - name: chambres
           title: Chambres
-          text: Switch d’accès et les bornes Wi-Fi du bâtiment des chambres
+          text: Switch d’accès du bâtiment des chambres
           icon: fa-building building
           essential: false
           level: 1
           _hosts:
             - c01-001.sw.re.resel.fr
             - c01-002.sw.re.resel.fr
-            - c01-001.ap.re.resel.fr
-            - c01-002.ap.re.resel.fr
-            - c01-003.ap.re.resel.fr
-            - c01-004.ap.re.resel.fr
-            - c01-101.ap.re.resel.fr
-            - c01-102.ap.re.resel.fr
-            - c01-103.ap.re.resel.fr
-            - c01-104.ap.re.resel.fr
         - name: studios
           title: Studios
-          text: Switch d’accès et les bornes Wi-Fi du bâtiment des studios
+          text: Switch d’accès du bâtiment des studios
           icon: fa-building building
           essential: false
           level: 1
@@ -552,20 +447,6 @@ campuses:
             - s01-001.sw.re.resel.fr
             - s01-002.sw.re.resel.fr
             - s01-003.sw.re.resel.fr
-            - s01-005.ap.re.resel.fr
-            - s01-011.ap.re.resel.fr
-            - s01-020.ap.re.resel.fr
-            - s01-031.ap.re.resel.fr
-            - s01-105.ap.re.resel.fr
-            - s01-111.ap.re.resel.fr
-            - s01-119.ap.re.resel.fr
-            - s01-126.ap.re.resel.fr
-            - s01-137.ap.re.resel.fr
-            - s01-205.ap.re.resel.fr
-            - s01-211.ap.re.resel.fr
-            - s01-219.ap.re.resel.fr
-            - s01-226.ap.re.resel.fr
-            - s01-237.ap.re.resel.fr
   - name: nantes
     enabled: true
     connections:
@@ -586,15 +467,6 @@ campuses:
           icon: fa-cloud
           essential: true
           level: 2
-          _hosts:
-            - internet-nantes
-        - name: renater
-          title: Renater
-          text: La connexion Renater est la connexion de secours du ResEl sur
-            le campus de Nantes
-          icon: fa-cloud
-          essential: true
-          level: 1
           _hosts:
             - internet-nantes
       network-edge:
@@ -680,7 +552,7 @@ campuses:
       network-access:
         - name: pc
           title: Pitre Chevalier
-          text: Switch d’accès et les bornes Wi-Fi du site "Pitre Chevalier"
+          text: Switch d’accès du site "Pitre Chevalier"
           icon: fa-building building
           essential: false
           level: 1
@@ -689,97 +561,91 @@ campuses:
             - pc-002.sw.na.resel.fr
             - pc-003.sw.na.resel.fr
             - pc-004.sw.na.resel.fr
-            - pc-001.ap.na.resel.fr
-            - pc-003.ap.na.resel.fr
-            - pc-012.ap.na.resel.fr
-            - pc-018.ap.na.resel.fr
-            - pc-025.ap.na.resel.fr
-            - pc-102.ap.na.resel.fr
-            - pc-104.ap.na.resel.fr
-            - pc-112.ap.na.resel.fr
-            - pc-125.ap.na.resel.fr
-            - pc-129.ap.na.resel.fr
-            - pc-136.ap.na.resel.fr
-            - pc-141.ap.na.resel.fr
-            - pc-202.ap.na.resel.fr
-            - pc-204.ap.na.resel.fr
-            - pc-212.ap.na.resel.fr
-            - pc-252.ap.na.resel.fr
-            - pc-236.ap.na.resel.fr
-            - pc-242b.ap.na.resel.fr
-            - pc-246.ap.na.resel.fr
-            - pc-202.ap.na.resel.fr
-            - pc-304.ap.na.resel.fr
-            - pc-317.ap.na.resel.fr
-            - pc-325.ap.na.resel.fr
-            - pc-336.ap.na.resel.fr
-            - pc-342b.ap.na.resel.fr
-            - pc-346.ap.na.resel.fr
-            - pc-402.ap.na.resel.fr
-            - pc-410.ap.na.resel.fr
-            - pc-421.ap.na.resel.fr
-            - pc-423.ap.na.resel.fr
-            - pc-507.ap.na.resel.fr
+            - pc-005.sw.na.resel.fr
         - name: mde-m
           title: Bâtiment M
-          text: Switch d’accès et les bornes Wi-Fi du bâtiment M de la MDE
+          text: Switch d’accès du bâtiment M de la MDE
           icon: fa-building building
           essential: false
           level: 1
-          _hosts: []
+          _hosts:
+            - m-001.sw.na.resel.fr
         - name: mde-n
           title: Bâtiment N
-          text: Switch d’accès et les bornes Wi-Fi du bâtiment N de la MDE
+          text: Switch d’accès du bâtiment N de la MDE
           icon: fa-building building
           essential: false
           level: 1
-          _hosts: []
+          _hosts:
+            - n-001.sw.na.resel.fr
+            - n-002.sw.na.resel.fr
+            - n-003.sw.na.resel.fr
         - name: mde-p
           title: Bâtiment P
-          text: Switch d’accès et les bornes Wi-Fi du bâtiment P de la MDE
+          text: Switch d’accès du bâtiment P de la MDE
           icon: fa-building building
           essential: false
           level: 1
-          _hosts: []
+          _hosts:
+            - p-001.sw.na.resel.fr
+            - p-002.sw.na.resel.fr
+            - p-003.sw.na.resel.fr
         - name: mde-q
           title: Bâtiment Q
-          text: Switch d’accès et les bornes Wi-Fi du bâtiment Q de la MDE
+          text: Switch d’accès du bâtiment Q de la MDE
           icon: fa-building building
           essential: false
           level: 1
-          _hosts: []
+          _hosts:
+            - q-001.sw.na.resel.fr
+            - q-002.sw.na.resel.fr
+            - q-003.sw.na.resel.fr
         - name: mde-r
           title: Bâtiment R
-          text: Switch d’accès et les bornes Wi-Fi du bâtiment R de la MDE
+          text: Switch d’accès du bâtiment R de la MDE
           icon: fa-building building
           essential: false
           level: 1
-          _hosts: []
+          _hosts:
+            - r002-001.sw.na.resel.fr
+            - r002-002.sw.na.resel.fr
+            - r002-003.sw.na.resel.fr
+            - r008-001.sw.na.resel.fr
+            - r008-002.sw.na.resel.fr
+            - r008-003.sw.na.resel.fr
         - name: mde-s
           title: Bâtiment S
-          text: Switch d’accès et les bornes Wi-Fi du bâtiment S de la MDE
+          text: Switch d’accès du bâtiment S de la MDE
           icon: fa-building building
           essential: false
           level: 1
-          _hosts: []
+          _hosts:
+            - s-001.sw.na.resel.fr
+            - s-002.sw.na.resel.fr
+            - s-003.sw.na.resel.fr
         - name: mde-t
           title: Bâtiment T
-          text: Switch d’accès et les bornes Wi-Fi du bâtiment T de la MDE
+          text: Switch d’accès du bâtiment T de la MDE
           icon: fa-building building
           essential: false
           level: 1
-          _hosts: []
+          _hosts:
+            - t002-001.sw.na.resel.fr
+            - t002-002.sw.na.resel.fr
+            - t008-001.sw.na.resel.fr
+            - t008-002.sw.na.resel.fr
+            - t008-003.sw.na.resel.fr
         ################ POUR L’INSTANT PAS DE VILLA DANS LE MONITORING
         # - name: villa-b
         #   title: Villa B
-        #   text: Switch d’accès et les bornes Wi-Fi des villas B de la MDE
+        #   text: Switch d’accès des villas B de la MDE
         #   icon: fa-building building
         #   essential: false
         #   level: 1
         #   _hosts: []
         # - name: villa-M
         #   title: Villa M
-        #   text: Switch d’accès et les bornes Wi-Fi des villas M de la MDE
+        #   text: Switch d’accès des villas M de la MDE
         #   icon: fa-building building
         #   essential: false
         #   level: 1

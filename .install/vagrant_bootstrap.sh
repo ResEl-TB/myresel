@@ -47,7 +47,7 @@ echo ">>> Installing redis <<<"
 apt-get -qq install redis-server
 
 echo ">>> Installing Python requirements <<<"
-pip3 install -qUr ${ROOTDIR}requirements.txt
+pip3 install --break-system-packages --ignore-installed -qUr ${ROOTDIR}requirements.txt || pip3 install -qUr ${ROOTDIR}requirements.txt
 
 echo ">>> Initializing repo <<<"
 source ${ROOTDIR}.install/scripts/configure.sh

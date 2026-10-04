@@ -19,7 +19,7 @@
     <div class="home-fragment home-presentation">
         <div class="container">
             {% for stuff in category.get_articles_and_links %}
-            <a href="{{ stuff.get_absolute_url }}"><div class="category-item halo">{% if stuff.glyphicon_name %}<span class="glyphicon {{ stuff.glyphicon_name }}"></span>{% endif %}<div><span class="item-title">{{ stuff.name }}</span><span>{{ stuff.description }}</span></div></div></a>
+            <a href="{{ stuff.get_absolute_url }}"><div class="category-item halo">{% if stuff.has_custom_icon %}<img src="{{ stuff.icon.url }}" alt="{{ stuff.name }}" class="dropdown-site-icon" style="max-width: 32px; max-height: 32px; object-fit: contain; margin-right: 15px; border-radius: 4px; display: inline-block;">{% elif stuff.glyphicon_name %}<span class="glyphicon {{ stuff.glyphicon_name }}"></span>{% endif %}<div><span class="item-title">{{ stuff.name }}</span><span>{{ stuff.description }}</span></div></div></a>
             {% empty %}
             <p>{% trans "Aucun article disponible." %}</p>
             {% endfor %}
