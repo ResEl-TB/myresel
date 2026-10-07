@@ -18,9 +18,15 @@ def articles_in_menu(request):
     except ObjectDoesNotExist:
         services_category = None
 
+    try:
+        hosting_category = Category.objects.get(slug='hebergement')
+    except ObjectDoesNotExist:
+        hosting_category = None
+
     return {
         'categories': categories,
         'association_category': association_category,
         'services_category': services_category,
+        'hosting_category': hosting_category,
     }
 

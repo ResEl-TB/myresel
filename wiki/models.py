@@ -88,6 +88,10 @@ class Article(models.Model):
     def get_absolute_url(self):
         return reverse('wiki:show-article', args=[self.category.slug, self.slug])
 
+    @property
+    def has_custom_icon(self):
+        return bool(self.icon and 'placeholder.png' not in self.icon.name)
+
     def __str__(self):
         return self.name
 
@@ -121,6 +125,10 @@ class Link(models.Model):
 
     def get_absolute_url(self):
         return self.url
+
+    @property
+    def has_custom_icon(self):
+        return bool(self.icon and 'placeholder.png' not in self.icon.name)
 
     def __str__(self):
         return self.name
