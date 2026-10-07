@@ -152,6 +152,15 @@ body {
     font-size:30px;
 }
 
+.dropdown-link .dropdown-site-icon {
+    max-width: 28px;
+    max-height: 28px;
+    margin: 6px 0 0 auto;
+    border-radius: 4px;
+    object-fit: contain;
+    display: block;
+}
+
 .dropdown-link .icon {
     text-align:right
 }
@@ -162,10 +171,23 @@ body {
     text-transform:uppercase;
     font-weight:500;
     font-family:'Roboto Medium', sans-serif;
+    white-space:nowrap!important;
 }
 
 .dropdown-link .link-description {
     color:#555
+}
+
+.dropdown-disclaimer {
+    padding: 8px 15px;
+    font-size: 0.7em;
+    line-height: 1.3;
+    font-weight: bold;
+    font-family: 'Roboto Medium', sans-serif;
+    color: #444;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    white-space: normal;
+    cursor: default;
 }
 
 .dropdown-menu {
