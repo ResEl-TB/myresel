@@ -117,8 +117,6 @@ python linting:
   script:
     - pylint --rcfile=.pylintrc --django-settings-module=myresel.settings campus fonctions gestion_personnes ldapback maisel myresel pages tresorerie wiki || exit $((35 & $?))
   allow_failure: false
-  tags:
-    - admin
 
 deploy to staging:
   services: []
