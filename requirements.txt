@@ -10,14 +10,14 @@ Pillow>=10.2.0
 django-python3-ldap==0.15.6
 uWSGI==2.0.31; python_version < '3.13'
 legacy-cgi>=2.6.0; python_version >= '3.13'
-redis==5.0.3
+redis==5.3.1
 rq==1.16.2
 rq-scheduler==0.13.1
-django-rq==2.10.2
+django-rq==2.10.3
 django-rq-scheduler==2023.9.0
-python-dateutil==2.9.0
+python-dateutil==2.9.0.post0
 coverage==7.16.2
-django_coverage_plugin==3.1.0
+django_coverage_plugin==3.2.2
 django-debug-toolbar==4.3.0
 django-cprofile-middleware>=1.0.5
 django-redis==5.4.0
@@ -25,5 +25,5 @@ phonenumbers==8.13.55
 PyYAML==6.0.3
 irclog2html==3.0.0
 pylint==3.1.0
-pylint-django==2.5.5
+pylint-django==2.8.0
 passlib==1.7.4
