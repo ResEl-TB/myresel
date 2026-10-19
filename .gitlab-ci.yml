@@ -33,7 +33,10 @@ variables:
 image: $IMAGE:latest
 services:
   - redis:stretch
-  - mysql/mysql-server:5.7
+  # Django 4.2 requires MySQL 8; native password auth because the CI image's MariaDB client can't do caching_sha2 without TLS
+  - name: mysql:8.4
+    alias: mysql-mysql-server
+    command: ["--mysql-native-password=ON", "--authentication-policy=mysql_native_password,,"]
 
 stages:
   - docker_build
