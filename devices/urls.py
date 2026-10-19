@@ -13,14 +13,14 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.urls import re_path
 
 from .views import ManualAddDeviceView, ListDevicesView, EditDeviceView
 
 app_name = 'devices'
 
 urlpatterns = [
-    url(r'^ajout-manuel$', ManualAddDeviceView.as_view(), name='ajout-manuel'),
-    url(r'^liste$', ListDevicesView.as_view(), name='liste'),
-    url(r'^modifier/(?P<mac>[A-Za-z0-9-]{2,})$', EditDeviceView.as_view(), name='modifier'),
+    re_path(r'^ajout-manuel$', ManualAddDeviceView.as_view(), name='ajout-manuel'),
+    re_path(r'^liste$', ListDevicesView.as_view(), name='liste'),
+    re_path(r'^modifier/(?P<mac>[A-Za-z0-9-]{2,})$', EditDeviceView.as_view(), name='modifier'),
 ]
