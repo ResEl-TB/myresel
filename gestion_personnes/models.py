@@ -146,13 +146,6 @@ class LdapUser(ldapback.models.LdapModel):
         else:
             return False
 
-    def is_campus_moderator(self):
-        """
-        Tells whether the user is allowed to moderate campus emails
-        :return: bool
-        """
-        return LdapGroup.get(pk='campusmodo').is_member(self.uid)
-
     def is_staff(self):
         """
         Tells if the user is part of the ResEl staff

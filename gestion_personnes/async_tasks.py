@@ -7,7 +7,7 @@ rq : http://python-rq.org/
 django-rq : https://github.com/ui/django-rq
 """
 from django.core.mail import EmailMessage, mail_admins
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 from django_rq import job
 
 from myresel import settings

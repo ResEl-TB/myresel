@@ -30,8 +30,6 @@ from gestion_personnes.models import LdapUser, UserMetaData
 from pages.forms import ContactForm
 from pages.models import News, Faq
 from wiki.models import Category
-from campus.models import RoomBooking
-from campus.models.mails_models import Mail
 
 logger = logging.getLogger("default")
 
@@ -76,27 +74,6 @@ class Home(View):
         # Load some news
         news = News.objects.order_by('-date').all()[:settings.NUMBER_NEWS_IN_HOME]
         args_for_response['news'] = news
-
-        # Load some campus events
-        events = RoomBooking.objects.order_by('start_time').filter(start_time__gt=timezone.now(), displayable=True).all()[:4]
-        args_for_response['campus_events'] = events
-
-        # Load some clubs
-        #clubs = [c for c in StudentOrganisation.all() if "tbClub" in c.object_classes]
-        #if len(clubs) > 3:
-        #    date = timezone.now()
-        #    random.seed(a=date.day + 100 * date.month + 10000*date.year)
-        #    clubs = random.sample(clubs, 3)
-        #args_for_response['clubs'] = clubs
-        args_for_response["clubs"] = []
-
-        # Load some birthdays
-        #birthdays_users = ListBirthdays.get_today_birthdays()
-        #args_for_response['birthdays_users'] = birthdays_users
-        args_for_response['birthdays_users'] = []
-
-        # Load some campus mails
-        args_for_response['campus_mails'] = Mail.objects.order_by('-date').filter(moderated=True).all()[:settings.NUMBER_NEWS_IN_HOME]
 
         if request.user.is_authenticated:
             end_fee = request.ldap_user.end_cotiz if request.ldap_user.end_cotiz else False
