@@ -13,7 +13,7 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.urls import re_path
 
 from gestion_personnes.views import ResetPwd, CheckEmail
 from .views import Inscription, ModPasswd, InscriptionCGU, Settings
@@ -22,18 +22,18 @@ from .views import PersonalInfo, ResetPwdSend, SendUid, MailResEl, DeleteMailRes
 app_name = 'gestion_personnes'
 
 urlpatterns = [
-    url(r'^inscription$', Inscription.as_view(), name='inscription'),
-    url(r'^cgu$', InscriptionCGU.as_view(), name='cgu'),
-    url(r'^modification-passwd$', ModPasswd.as_view(), name='mod-passwd'),
-    url(r'^parametres$', Settings.as_view(), name='settings'),
-    url(r'^mail$', MailResEl.as_view(), name='mail'),
-    url(r'^mail/delete$', DeleteMailResEl.as_view(), name='delete-mail'),
-    url(r'^webmail$', Webmail.as_view(), name='webmail'),
-    url(r'^mail/redirect$', RedirectMailResEl.as_view(), name='redirect-mail'),
-    url(r'^reset-pwd/(?P<key>[-\w]+)$', ResetPwd.as_view(), name='reset-pwd'),
-    url(r'^reset-pwd$', ResetPwdSend.as_view(), name='reset-pwd-send'),
-    url('^send-uid$', SendUid.as_view(), name='send-uid'),
-    url('^check-email$', CheckEmail.as_view(), name='check-email'),
-    url('^check-email/(?P<key>[-\w]+)$', CheckEmail.as_view(), name='check-email'),
-    url(r'^$', PersonalInfo.as_view(), name='personal-infos'),
+    re_path(r'^inscription$', Inscription.as_view(), name='inscription'),
+    re_path(r'^cgu$', InscriptionCGU.as_view(), name='cgu'),
+    re_path(r'^modification-passwd$', ModPasswd.as_view(), name='mod-passwd'),
+    re_path(r'^parametres$', Settings.as_view(), name='settings'),
+    re_path(r'^mail$', MailResEl.as_view(), name='mail'),
+    re_path(r'^mail/delete$', DeleteMailResEl.as_view(), name='delete-mail'),
+    re_path(r'^webmail$', Webmail.as_view(), name='webmail'),
+    re_path(r'^mail/redirect$', RedirectMailResEl.as_view(), name='redirect-mail'),
+    re_path(r'^reset-pwd/(?P<key>[-\w]+)$', ResetPwd.as_view(), name='reset-pwd'),
+    re_path(r'^reset-pwd$', ResetPwdSend.as_view(), name='reset-pwd-send'),
+    re_path('^send-uid$', SendUid.as_view(), name='send-uid'),
+    re_path('^check-email$', CheckEmail.as_view(), name='check-email'),
+    re_path('^check-email/(?P<key>[-\w]+)$', CheckEmail.as_view(), name='check-email'),
+    re_path(r'^$', PersonalInfo.as_view(), name='personal-infos'),
 ]
