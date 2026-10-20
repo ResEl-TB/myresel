@@ -45,3 +45,6 @@ media/eggdrop/
 *.log
 *.sql
 *.ldif
+
+# Gitlab-local-ci
+.gitlab-ci-local
