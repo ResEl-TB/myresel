@@ -5,6 +5,8 @@ variables:
  IMAGE: $CI_REGISTRY_IMAGE
  DOCKER_DRIVER: overlay2
   
+ IMAGE_TAG: latest
+
  MYSQL_HOST: mysql-mysql-server
  MYSQL_USER: resel
  MYSQL_PASSWORD: blah
@@ -30,7 +32,16 @@ variables:
 
  DEBIAN_FRONTEND: noninteractive
 
-image: $IMAGE:latest
+# image built by this pipeline when the Dockerfile changes, latest otherwise
+workflow:
+  rules:
+    - changes:
+        - Dockerfile
+      variables:
+        IMAGE_TAG: $CI_COMMIT_SHA
+    - when: always
+
+image: $IMAGE:$IMAGE_TAG
 services:
   - redis:8.0
   # same versions as flea (preprod)
@@ -91,6 +102,8 @@ Push docker image:
     - docker tag $IMAGE:$CI_COMMIT_SHA $IMAGE:latest
     - docker push $IMAGE:latest
   only:
+   refs:
+     - master
    changes:
      - Dockerfile
   tags:
