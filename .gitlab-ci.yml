@@ -7,7 +7,7 @@ variables:
   
  IMAGE_TAG: latest
 
- MYSQL_HOST: mysql-mysql-server
+ MYSQL_HOST: mariadb
  MYSQL_USER: resel
  MYSQL_PASSWORD: blah
  MYSQL_DATABASE: resel
@@ -17,7 +17,7 @@ variables:
  REDIS_HOST: redis
 
  MYSQL_QOS_DATABASE: qos
- MYSQL_QOS_HOST: mysql-mysql-server
+ MYSQL_QOS_HOST: mariadb
  MYSQL_QOS_USER: root
  MYSQL_QOS_PASSWORD: blah
 
@@ -49,7 +49,9 @@ services:
   - redis:8.0
   # same versions as flea (preprod)
   - name: mariadb:11.8
-    alias: mysql-mysql-server
+    alias: mariadb
+    # flea's myresel database is utf8mb4_general_ci, not the 11.8 server default (uca1400)
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_general_ci"]
 
 stages:
   - docker_build
@@ -124,7 +126,14 @@ django test suite:
       - gestion_personnes/migrations/
       - devices/migrations/
   script:
-    - coverage run --rcfile=.coveragerc manage.py test --noinput
+    - echo "CREATE DATABASE test_${MYSQL_DATABASE}" | mysql -u${MYSQL_USER} -p${MYSQL_ROOT_PASSWORD} -h ${MYSQL_HOST}
+    - >-
+      DJANGO_SETTINGS_MODULE=myresel.settings python3 -c "import django; django.setup();
+      from django.db import connection; from django.core.management import call_command;
+      connection.settings_dict['NAME'] = 'test_${MYSQL_DATABASE}';
+      call_command('migrate', verbosity=0);
+      connection.cursor().execute('ALTER TABLE tresorerie_product CONVERT TO CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci')"
+    - coverage run --rcfile=.coveragerc manage.py test --noinput --keepdb
     - coverage report
     - coverage html
     - grep pc_cov htmlcov/index.html | egrep -o "[0-9]+\%" | awk '{ print "covered " $1;}'
