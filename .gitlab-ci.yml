@@ -35,6 +35,9 @@ variables:
 # image built by this pipeline when the Dockerfile changes, latest otherwise
 workflow:
   rules:
+    # branch pipelines only: build jobs (only: changes) never run in MR pipelines
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: never
     - changes:
         - Dockerfile
       variables:
