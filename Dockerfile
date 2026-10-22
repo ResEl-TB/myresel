@@ -1,4 +1,4 @@
-FROM debian:12
+FROM python:3.11-trixie
 ARG LDAPPASSWD
 
 ARG DEBIAN_FRONTEND=noninteractive
