@@ -2,11 +2,11 @@ Django==4.2.30
 django-ckeditor==6.7.3
 django-modeltranslation==0.18.11
 ldap3==2.9.1
-requests>=2.31.0
+requests==2.34.2
 stripe==8.9.0
 django-phonenumber-field==7.3.0
 mysqlclient==2.3.0
-Pillow>=10.2.0
+Pillow==13.0.0
 django-python3-ldap==0.15.6
 uWSGI==2.0.31; python_version < '3.13'
 legacy-cgi>=2.6.0; python_version >= '3.13'
@@ -19,7 +19,7 @@ python-dateutil==2.9.0.post0
 coverage==7.16.2
 django_coverage_plugin==3.2.2
 django-debug-toolbar==4.3.0
-django-cprofile-middleware>=1.0.5
+django-cprofile-middleware==1.0.5
 django-redis==5.4.0
 phonenumbers==8.13.55
 PyYAML==6.0.3
