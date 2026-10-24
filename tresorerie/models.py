@@ -10,6 +10,7 @@ import django
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from fonctions.fields import Char32UUIDField
 
 
 class Bank(models.Model):
@@ -143,7 +144,7 @@ class Transaction(models.Model):
         ('E', 'Erreur'),
     )
 
-    uuid = models.UUIDField(
+    uuid = Char32UUIDField(
         unique=True,
         default=uuid.uuid4,
     )
