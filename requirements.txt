@@ -16,7 +16,7 @@ rq-scheduler==0.13.1
 django-rq==2.10.3
 django-rq-scheduler==2023.9.0
 python-dateutil==2.9.0.post0
-coverage==7.16.2
+coverage==7.17.0
 django_coverage_plugin==3.2.2
 django-debug-toolbar==4.3.0
 django-cprofile-middleware==1.0.5
