@@ -11,6 +11,7 @@ from django.db import models
 
 from fonctions import generic
 from fonctions import ldap
+from fonctions.fields import Char32UUIDField
 import ldapback
 from ldapback.models.fields import LdapCharField, LdapPasswordField, LdapNtPasswordField, LdapListField, \
     LdapDatetimeField, LdapBooleanField
@@ -169,9 +170,9 @@ class UserMetaData(models.Model):
     this site, and not all the ResEl
     """
     uid = models.CharField(max_length=64, primary_key=True)
-    email_validation_code = models.UUIDField(default=uuid.uuid4)
+    email_validation_code = Char32UUIDField(default=uuid.uuid4)
     email_validated = models.BooleanField(default=False)
-    reset_pwd_code = models.UUIDField(default=uuid.uuid4)
+    reset_pwd_code = Char32UUIDField(default=uuid.uuid4)
 
     def do_reset_pwd_code(self):
         self.reset_pwd_code = uuid.uuid4()

@@ -26,11 +26,11 @@
                  </div>
              </div>
              <div class="col-xs-4 col-md-2 icon-service">
-                 <a href="{{ service.get_absolute_url }}"><img src="{{service.icon.url}}" alt="{{ service.name }}"></a>
+                 <a href="{{ service.get_absolute_url }}"><img src="{% if service.icon %}{{ service.icon.url }}{% else %}{% static 'images/icons/placeholder.png' %}{% endif %}" alt="{{ service.name }}"></a>
              </div>
           {% else %}
              <div class="col-xs-4 col-xs-offset-4 col-md-2 col-md-offset-5 icon-service">
-                 <a href="{{ service.get_absolute_url }}"><img src="{{service.icon.url}}" alt="{{ service.name }}"></a>
+                 <a href="{{ service.get_absolute_url }}"><img src="{% if service.icon %}{{ service.icon.url }}{% else %}{% static 'images/icons/placeholder.png' %}{% endif %}" alt="{{ service.name }}"></a>
              </div>
              <div class="col-xs-4 col-md-5 service-description-right">
                  <div class="service-content service-right">
