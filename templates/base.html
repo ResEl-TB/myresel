@@ -160,7 +160,10 @@
                       </li>
                       <hr />
                       <li>
-                        <a href="/logout"><i class="fa fa-sign-out fa-fw"></i> {% trans "Déconnexion" %}</a>
+                        {# Django 5 : la déconnexion se fait en POST #}
+                        <form method="post" action="{% url 'logout' %}">{% csrf_token %}
+                          <a href="{% url 'logout' %}" onclick="this.closest('form').submit(); return false;"><i class="fa fa-sign-out fa-fw"></i> {% trans "Déconnexion" %}</a>
+                        </form>
                       </li>
                     </ul>
                   </div>
