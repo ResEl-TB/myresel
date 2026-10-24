@@ -192,6 +192,9 @@ python3 -m laputex
 
 Bugs connu : 
  * La facture générée automatiquement ne peut pas gérer des prix supérieurs à 1 million 70 mille €.
+
+Historique :
+ * 2026-10-19 : Suppression de l'application `campus` (salles, clubs, mails campus, annuaire) car non utilisée. Author: @ymalgorn
  
 -----------------------
 

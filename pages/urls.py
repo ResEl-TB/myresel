@@ -1,8 +1,8 @@
-from django.conf.urls import url
+from django.urls import re_path
 from pages.views import FaqList, faqVote, eggdrop
 
 urlpatterns = [
-    url(r'^faq/$', FaqList.as_view(), name='faq'),
-    url(r'^faq/upvote/$', faqVote, name='upvote'),
-    url(r'^eggdrop/$', eggdrop, name='eggdrop'),
+    re_path(r'^faq/$', FaqList.as_view(), name='faq'),
+    re_path(r'^faq/upvote/$', faqVote, name='upvote'),
+    re_path(r'^eggdrop/$', eggdrop, name='eggdrop'),
     ]

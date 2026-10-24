@@ -68,14 +68,11 @@
                     <div class="pay-btn btn-group">
                         <div class="row">
                             <div class="col-lg-4"><a class="btn btn-info halo"
-                                    href="{% url 'tresorerie:pay' one_year.id %}">Je choisis <br />1 an pour {{
-                                    one_year.display_price|floatformat }}€</a></div>
+                                    href="{% url 'tresorerie:pay' one_year.id %}">Je choisis <br />1 an pour {{ one_year.display_price|floatformat }}€</a></div>
                             <div class="col-lg-4"><a class="btn btn-info halo"
-                                    href="{% url 'tresorerie:pay' six_month.id %}">Je choisis <br />6 mois pour {{
-                                    six_month.display_price|floatformat }}€</a></div>
+                                    href="{% url 'tresorerie:pay' six_month.id %}">Je choisis <br />6 mois pour {{ six_month.display_price|floatformat }}€</a></div>
                             <div class="col-lg-4"><a class="btn btn-info halo"
-                                    href="{% url 'tresorerie:pay' one_month.id %}">Je choisis <br />1 mois pour {{
-                                    one_month.display_price|floatformat }}€</a></div>
+                                    href="{% url 'tresorerie:pay' one_month.id %}">Je choisis <br />1 mois pour {{ one_month.display_price|floatformat }}€</a></div>
                         </div>
                     </div>
                 </div>

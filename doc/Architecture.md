@@ -17,8 +17,6 @@ chacune des fonctionnalités du site.
  utilisateurs
  - `devices/` :  tout ce qui touche à la gestion des machines
  - `tresorerie/` : la tréso obvously
- - `clubs/` : Gestion des clubs
- - `whoswho/` : La gestion de l'annuaire
  - `wiki/` :  le wiki destiné aux utilisateurs. Actuellement il est éditable 
  uniquement par les administrateurs
  - `pages/` : les pages statiques et principales

@@ -1,5 +1,4 @@
 import logging
-from datetime import datetime
 from functools import wraps
 
 from django.contrib import messages
@@ -152,48 +151,3 @@ def able_to_pay(function=None, redirect_to='home'):
         return _dec
     else:
         return _dec(function)
-
-
-def ae_required(function, redirect_to='campus:rooms:calendar'):
-    """
-    Checks if the user is a valid ae member
-    """
-
-    def _dec(view_func):
-        @wraps(view_func)
-        def _view(request, *args, **kwargs):
-            ae = False
-            for period in request.ldap_user.dates_membre:
-                [start, end] = list(map(lambda x: datetime.strptime(x, '%Y%m%d').date(), period.split('-')))
-                if start <= datetime.now().date() <= end:
-                    ae = True
-                    break
-
-            if not ae:
-                messages.error(request, _('Vous n\'êtes pas membre de l\'AE, vous ne pouvez donc pas accéder à cette page.'))
-                return HttpResponseRedirect(reverse(redirect_to))
-
-            return view_func(request, *args, **kwargs)
-        return _view
-
-    return _dec(function)
-
-def ae_admin_required(function, redirect_to='campus:home'):
-    """
-    Check if the user has ae_admin attribute
-    """
-    def _dec(view_func):
-        @wraps(view_func)
-        def _view(request, *args, **kwargs):
-            if (not request.user.is_authenticated):
-                return HttpResponseRedirect(
-                    reverse("login")+"?next="+request.path
-                )
-
-            if (not request.ldap_user.ae_admin) and (not request.user.is_staff):
-                messages.error(request, _('Vous n\'êtes pas admin de l\'AE.'))
-                return HttpResponseRedirect(reverse(redirect_to))
-
-            return view_func(request, *args, **kwargs)
-        return _view
-    return _dec(function)

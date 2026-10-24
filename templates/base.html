@@ -128,11 +128,6 @@
             </li>
             {% endif %}
 
-            {% comment %} 
-            <li>
-              <a class="btn-campus" href="{% url 'campus:home' %}"><i class="fa fa-bicycle fa-fw"></i> <span class="hidden-sm btn-campus-text">{% trans "Campus" %}</span></a>
-            </li> 
-            {% endcomment %}
 
             
             {% if request.user.is_staff %}
@@ -296,7 +291,6 @@
                     {#                        <li><a href="https://status.resel.fr">{% trans "État du réseau" %}</a></li>#}
                     <li><a href="{% url 'network-status' %}">{% trans "État du réseau" %}</a></li>
                     <li><a href="{% url 'gestion-personnes:webmail' %}">Webmail</a></li>
-                  <li><a href="{% url 'campus:home' %}">{% trans "Les clubs et la vie du campus" %}</a></li>
                     <li><a href="{% url 'become-admin' %}">{% trans "Devenez Admin ResEl !" %}</a></li>
                     <li><a href="https://old.resel.fr/">{% trans "Ancien site ResEl" %}</a></li>
                 </ul>
