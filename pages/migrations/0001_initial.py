@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 
 import datetime
 
-from django.utils.timezone import utc
 import ckeditor.fields
 from django.conf import settings
 from django.db import migrations, models
