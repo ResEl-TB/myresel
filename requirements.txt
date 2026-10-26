@@ -23,7 +23,7 @@ django-cprofile-middleware==1.0.5
 django-redis==6.0.0
 phonenumbers==8.13.55
 PyYAML==6.0.3
-irclog2html==3.0.0
+irclog2html==4.1.0
 pylint==3.3.9
 pylint-django==2.8.0
 passlib==1.7.4
