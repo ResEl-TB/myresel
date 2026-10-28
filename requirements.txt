@@ -21,7 +21,7 @@ django_coverage_plugin==3.2.2
 django-debug-toolbar==8.0.0
 django-cprofile-middleware==1.0.5
 django-redis==6.0.0
-phonenumbers==8.13.55
+phonenumbers==9.0.42
 PyYAML==6.0.3
 irclog2html==3.0.0
 pylint==3.3.9
