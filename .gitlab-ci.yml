@@ -46,7 +46,7 @@ workflow:
 
 image: $IMAGE:$IMAGE_TAG
 services:
-  - redis:8.0
+  - redis:8.10
   # same versions as flea (preprod)
   - name: mariadb:11.8
     alias: mariadb
