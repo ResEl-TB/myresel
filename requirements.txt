@@ -10,7 +10,7 @@ Pillow==13.0.0
 django-python3-ldap==0.16.1
 uWSGI==2.0.31; python_version < '3.13'
 legacy-cgi>=2.6.0; python_version >= '3.13'
-redis==5.3.1
+redis==8.1.0
 rq==1.16.2
 rq-scheduler==0.13.1
 django-rq==2.10.3
