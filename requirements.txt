@@ -1,6 +1,6 @@
 Django==5.2.18
 django-ckeditor==6.7.4
-django-modeltranslation==0.19.17
+django-modeltranslation==0.20.6
 ldap3==2.9.1
 requests==2.34.2
 stripe==8.11.1
