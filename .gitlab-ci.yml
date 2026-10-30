@@ -48,7 +48,7 @@ image: $IMAGE:$IMAGE_TAG
 services:
   - redis:8.10
   # same versions as flea (preprod)
-  - name: mariadb:11.8
+  - name: mariadb:13.0
     alias: mariadb
     # flea's myresel database is utf8mb4_general_ci, not the 11.8 server default (uca1400)
     command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_general_ci"]
