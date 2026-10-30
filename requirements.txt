@@ -24,6 +24,6 @@ django-redis==7.0.0
 phonenumbers==9.0.42
 PyYAML==6.0.3
 irclog2html==4.1.0
-pylint==3.3.9
+pylint==4.1.3
 pylint-django==2.8.0
 passlib==1.7.4
