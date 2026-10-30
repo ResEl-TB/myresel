@@ -13,7 +13,7 @@ legacy-cgi>=2.6.0; python_version >= '3.13'
 redis==8.1.0
 rq==1.16.2
 rq-scheduler==0.13.1
-django-rq==2.10.3
+django-rq==4.2.0
 django-rq-scheduler==2023.9.0
 python-dateutil==2.9.0.post0
 coverage==7.17.0
