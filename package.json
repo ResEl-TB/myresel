@@ -12,7 +12,7 @@
   },
   "homepage": "https://git.resel.fr/resel/myresel",
   "dependencies": {
-    "chart.js": "^2.4.0"
+    "chart.js": "^4.0.0"
   },
   "devDependencies": {}
 }
