@@ -293,6 +293,8 @@ RQ_QUEUES = {
        'PORT': REDIS_PORT,
        'DB': REDIS_DB,
        'PASSWORD': REDIS_PASSWORD,
+       # redis-py 8 sets a 5 s socket timeout by default, which kills the rq 1.x worker during its blocking wait
+       'REDIS_CLIENT_KWARGS': {'socket_timeout': None},
    },
 }
 RQ_SHOW_ADMIN_LINK = True
