@@ -2,5 +2,20 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended"
+  ],
+  "packageRules": [
+    {
+      "description": "CI services and image must match flea/skynet: bumped by hand with the servers",
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["mariadb", "redis", "python"],
+      "matchUpdateTypes": ["major", "minor"],
+      "enabled": false
+    },
+    {
+      "description": "rq and redis-py depend on each other: update them together",
+      "matchDatasources": ["pypi"],
+      "matchPackageNames": ["redis", "rq", "rq-scheduler", "django-rq", "django-rq-scheduler"],
+      "groupName": "rq stack"
+    }
   ]
 }
