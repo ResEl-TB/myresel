@@ -1,11 +1,11 @@
-Django==5.2.18
+Django==5.2.19
 django-ckeditor==6.7.4
 django-modeltranslation==0.20.6
 ldap3==2.9.1
 requests==2.34.2
 stripe==8.11.1
 django-phonenumber-field==9.0.0
-mysqlclient==2.3.0
+mysqlclient==2.3.1
 Pillow==13.0.0
 django-python3-ldap==0.16.1
 uWSGI==2.0.31; python_version < '3.13'
@@ -16,12 +16,12 @@ rq-scheduler==0.13.1
 django-rq==2.10.3
 django-rq-scheduler==2023.9.0
 python-dateutil==3.0.0
-coverage==7.17.0
+coverage==7.17.2
 django_coverage_plugin==3.2.2
 django-debug-toolbar==8.0.0
 django-cprofile-middleware==1.0.5
 django-redis==7.0.0
-phonenumbers==9.0.42
+phonenumbers==9.0.43
 PyYAML==6.0.3
 irclog2html==4.1.0
 pylint==3.3.9
