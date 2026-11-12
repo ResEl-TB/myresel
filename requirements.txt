@@ -3,7 +3,7 @@ django-ckeditor==6.7.4
 django-modeltranslation==0.20.6
 ldap3==2.9.1
 requests==2.34.2
-stripe==8.11.1
+stripe==17.0.0
 django-phonenumber-field==9.0.0
 mysqlclient==2.3.1
 Pillow==13.0.0
