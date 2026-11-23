@@ -1,6 +1,9 @@
 from django.db import models
 
 
+# pylint-django 2.8 + astroid 4 remplacent la MRO des sous-classes de champs par uuid.UUID (faux positifs
+# no-member / unexpected-keyword-arg), cf. pylint-dev/pylint-django#477.
+# shortcut: disables locaux, à retirer quand pylint-django#488 sera publié
 class Char32UUIDField(models.UUIDField):
     """
     UUIDField stocké en char(32), comme avant Django 5.0.
@@ -13,7 +16,7 @@ class Char32UUIDField(models.UUIDField):
         return "char(32)"
 
     def get_db_prep_value(self, value, connection, prepared=False):
-        value = super().get_db_prep_value(value, connection, prepared)
+        value = super().get_db_prep_value(value, connection, prepared)  # pylint: disable=no-member
         if value is not None:
             value = value.hex
         return value

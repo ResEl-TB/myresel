@@ -170,9 +170,9 @@ class UserMetaData(models.Model):
     this site, and not all the ResEl
     """
     uid = models.CharField(max_length=64, primary_key=True)
-    email_validation_code = Char32UUIDField(default=uuid.uuid4)
+    email_validation_code = Char32UUIDField(default=uuid.uuid4)  # pylint: disable=unexpected-keyword-arg
     email_validated = models.BooleanField(default=False)
-    reset_pwd_code = Char32UUIDField(default=uuid.uuid4)
+    reset_pwd_code = Char32UUIDField(default=uuid.uuid4)  # pylint: disable=unexpected-keyword-arg
 
     def do_reset_pwd_code(self):
         self.reset_pwd_code = uuid.uuid4()
