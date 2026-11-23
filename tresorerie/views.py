@@ -161,7 +161,7 @@ class Pay(View):
             'transaction': transaction,
             'user': request.ldap_user,
             'public_key': settings.STRIPE_PUBLIC_KEY,
-            'payment_intent': json.dumps(payment_intent)
+            'payment_intent': json.dumps(payment_intent.to_dict())
         }
 
         request.session['transaction_uuid'] = str(transaction.uuid)
