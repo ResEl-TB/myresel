@@ -16,6 +16,12 @@
       "matchDatasources": ["pypi"],
       "matchPackageNames": ["redis", "rq", "rq-scheduler", "django-rq", "django-rq-scheduler"],
       "groupName": "rq stack"
+    },
+    {
+      "description": "Built from source on skynet, which has no python3.11-dev: bumped by hand with the Python 3.13 migration",
+      "matchDatasources": ["pypi"],
+      "matchPackageNames": ["mysqlclient", "uWSGI"],
+      "enabled": false
     }
   ]
 }
