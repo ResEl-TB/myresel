@@ -144,7 +144,7 @@ class Transaction(models.Model):
         ('E', 'Erreur'),
     )
 
-    uuid = Char32UUIDField(
+    uuid = Char32UUIDField(  # pylint: disable=unexpected-keyword-arg
         unique=True,
         default=uuid.uuid4,
     )
