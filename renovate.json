@@ -14,7 +14,7 @@
     {
       "description": "rq and redis-py depend on each other: update them together",
       "matchDatasources": ["pypi"],
-      "matchPackageNames": ["redis", "rq", "rq-scheduler", "django-rq", "django-rq-scheduler"],
+      "matchPackageNames": ["redis", "rq", "rq-scheduler", "django-rq"],
       "groupName": "rq stack"
     },
     {
